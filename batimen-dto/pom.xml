@@ -28,7 +28,7 @@
 	<scm>
 		<connection>${git.repository}</connection>
 		<developerConnection>${git.repository}</developerConnection>
-		<url>url du depot git sur redmine</url>
+		<url>${redmine.depot.address}</url>
 	</scm>
 
 	<build>

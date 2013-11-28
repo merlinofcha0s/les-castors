@@ -11,9 +11,10 @@
 	<packaging>pom</packaging>
 
 	<properties>
-		<redmine.address>http://88.191.186.210/redmine/projects/paye-ton</redmine.address>
-		<jenkins.address>http://88.191.186.210:8080</jenkins.address>
-		<git.repository>scm:git:http://raiden@88.191.186.210:7070/git/blank.git</git.repository>
+		<redmine.address>https://88.191.186.210/redmine/projects/batimen</redmine.address>
+		<redmine.depot.address>https://88.191.186.210/redmine/projects/batimen/repository</redmine.depot.address>
+		<jenkins.address>http://88.191.186.210:9090/</jenkins.address>
+		<git.repository>scm:git:https://raiden@88.191.186.210:8181/git/batimen.git </git.repository>
 		<app.version>0.0.1-SNAPSHOT</app.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -33,7 +34,7 @@
 	<scm>
 		<connection>${git.repository}</connection>
 		<developerConnection>${git.repository}</developerConnection>
-		<url>url du depot git sur redmine</url>
+		<url>${redmine.depot.address}</url>
 	</scm>
 
 	<repositories>

@@ -37,7 +37,7 @@
 	<scm>
 		<connection>${git.repository}</connection>
 		<developerConnection>${git.repository}</developerConnection>
-		<url>url du depot git sur redmine</url>
+		<url>${redmine.depot.address}</url>
 	</scm>
 
 	<build>
@@ -381,6 +381,18 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+
+	<profiles>
+		<profile>
+			<id>integration</id>
+			<properties>
+				<database.address>127.0.0.1</database.address>
+				<database.name>batimen</database.name>
+				<database.login>batimen_usr</database.login>
+				<database.password>mdrlol06</database.password>
+			</properties>
+		</profile>
+	</profiles>
 
 
 	<repositories>

@@ -28,7 +28,7 @@
 	<scm>
 		<connection>${git.repository}</connection>
 		<developerConnection>${git.repository}</developerConnection>
-		<url>url du depot git sur redmine</url>
+		<url>${redmine.depot.address}</url>
 	</scm>
 
 	<properties>
@@ -335,6 +335,22 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+
+	<profiles>
+		<profile>
+			<id>integration</id>
+			<properties>
+				<!-- Adresse du WS -->
+				<ws.ip>127.0.0.1</ws.ip>
+				<ws.port>8080</ws.port>
+				<ws.name>batimen-ws</ws.name>
+				<!-- Infos App -->
+				<app.ip>127.0.0.1</app.ip>
+				<app.port>8080</app.port>
+				<app.name>batimen-web</app.name>
+			</properties>
+		</profile>
+	</profiles>
 
 
 </project>
