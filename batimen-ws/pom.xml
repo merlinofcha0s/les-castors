@@ -387,7 +387,7 @@
 			<id>integration</id>
 			<properties>
 				<database.address>127.0.0.1</database.address>
-				<database.name>batimen</database.name>
+				<database.name>batimen_test</database.name>
 				<database.login>raiden</database.login>
 				<database.password>lolmdr06</database.password>
 			</properties>
