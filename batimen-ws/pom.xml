@@ -389,7 +389,7 @@
 				<database.address>127.0.0.1</database.address>
 				<database.name>batimen</database.name>
 				<database.login>batimen_usr</database.login>
-				<database.password>mdrlol06</database.password>
+				<database.password>lolmdr06</database.password>
 			</properties>
 		</profile>
 	</profiles>
