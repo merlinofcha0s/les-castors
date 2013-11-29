@@ -147,6 +147,22 @@
 					<show>public</show>
 					<nohelp>false</nohelp>
 				</configuration>
+				<executions>
+					<execution>
+						<id>aggregate</id>
+						<goals>
+							<goal>aggregate</goal>
+						</goals>
+						<phase>install</phase>
+					</execution>
+					<execution>
+						<id>generate-javadoc</id>
+						<goals>
+							<goal>javadoc</goal>
+						</goals>
+						<phase>install</phase>
+					</execution>
+				</executions>
 			</plugin>
 
 			<!--This plugin's configuration is used to store Eclipse m2e settings 
