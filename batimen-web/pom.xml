@@ -375,7 +375,7 @@
 						<executions>
 							<execution>
 								<id>deploy-web-app</id>
-								<phase>deploy</phase>
+								<phase>pre-integration-test</phase>
 								<goals>
 									<goal>deploy</goal>
 								</goals>

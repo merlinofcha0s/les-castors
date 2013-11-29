@@ -418,7 +418,7 @@
 						<executions>
 							<execution>
 								<id>deploy-ws</id>
-								<phase>deploy</phase>
+								<phase>pre-integration-test</phase>
 								<goals>
 									<goal>deploy</goal>
 								</goals>
