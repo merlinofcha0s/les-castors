@@ -57,7 +57,7 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<version>2.4</version>
 				<configuration>
-					<warName>batimen-ws</warName>
+					<warName>${project.artifactId}</warName>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 				</configuration>
 			</plugin>
@@ -386,11 +386,38 @@
 		<profile>
 			<id>integration</id>
 			<properties>
+				<!-- BDD pour les tests -->
 				<database.address>127.0.0.1</database.address>
 				<database.name>batimen_test</database.name>
 				<database.login>raiden</database.login>
 				<database.password>lolmdr06</database.password>
 			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.glassfish.maven.plugin</groupId>
+						<artifactId>maven-glassfish-plugin</artifactId>
+						<version>2.1</version>
+						<configuration>
+							<user>admin</user>
+							<adminPassword>OIOIUenobueno</adminPassword>
+							<glassfishDirectory>/usr/share/glassfish3</glassfishDirectory>
+							<components>
+								<component>
+									<name>${project.artifactId}</name>
+									<artifact>${project.build.directory}/${project.artifactId}.war</artifact>
+								</component>
+							</components>
+							<domain>
+								<name>${project.artifactId}</name>
+								<adminPort>4848</adminPort>
+								<httpPort>6060</httpPort>
+								<httpsPort>6161</httpsPort>
+							</domain>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 	</profiles>
 

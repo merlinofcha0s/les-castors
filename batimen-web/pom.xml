@@ -342,15 +342,39 @@
 			<properties>
 				<!-- Adresse du WS -->
 				<ws.ip>127.0.0.1</ws.ip>
-				<ws.port>8080</ws.port>
+				<ws.port>6060</ws.port>
 				<ws.name>batimen-ws</ws.name>
 				<!-- Infos App -->
 				<app.ip>127.0.0.1</app.ip>
-				<app.port>8080</app.port>
-				<app.name>batimen-web</app.name>
+				<app.port>6060</app.port>
+				<app.name>${project.artifactId}</app.name>
 			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.glassfish.maven.plugin</groupId>
+						<artifactId>maven-glassfish-plugin</artifactId>
+						<version>2.1</version>
+						<configuration>
+							<user>admin</user>
+							<adminPassword>OIOIUenobueno</adminPassword>
+							<glassfishDirectory>/usr/share/glassfish3</glassfishDirectory>
+							<components>
+								<component>
+									<name>${project.artifactId}</name>
+									<artifact>${project.build.directory}/${project.artifactId}.war</artifact>
+								</component>
+							</components>
+							<domain>
+								<name>${project.artifactId}</name>
+								<adminPort>4848</adminPort>
+								<httpPort>6060</httpPort>
+								<httpsPort>6161</httpsPort>
+							</domain>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 	</profiles>
-
-
 </project>
