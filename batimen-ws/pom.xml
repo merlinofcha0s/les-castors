@@ -415,6 +415,15 @@
 								<httpsPort>6161</httpsPort>
 							</domain>
 						</configuration>
+						<executions>
+							<execution>
+								<id>deploy-ws</id>
+								<phase>deploy</phase>
+								<goals>
+									<goal>deploy</goal>
+								</goals>
+							</execution>
+						</executions>
 					</plugin>
 				</plugins>
 			</build>
