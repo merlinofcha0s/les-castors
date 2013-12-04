@@ -406,7 +406,7 @@
 				<database.address>127.0.0.1</database.address>
 				<database.name>batimen_test</database.name>
 				<database.login>raiden</database.login>
-				<database.password>lolmdr06</database.password>
+				<database.password>M0ntaleign3</database.password>
 			</properties>
 			<build>
 				<plugins>
