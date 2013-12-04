@@ -68,7 +68,7 @@
 				<configuration>
 					<skipTests>false</skipTests>
 					<testFailureIgnore>true</testFailureIgnore>
-					<!-- <argLine>${jacoco.agent.argLine}</argLine> -->
+					<argLine>${jacoco.agent.argLine}</argLine>
 				</configuration>
 			</plugin>
 			<!-- Javadoc -->
@@ -444,15 +444,18 @@
 					<plugin>
 						<groupId>org.jacoco</groupId>
 						<artifactId>jacoco-maven-plugin</artifactId>
+						<version>0.6.3.201306030806</version>
 						<configuration>
-							<destFile>${project.basedir}/../target/jacoco-it.exec</destFile>
+							<propertyName>jacoco.agent.argLine</propertyName>
+							<destFile>${sonar.jacoco.itReportPath}</destFile>
+							<dataFile>${sonar.jacoco.itReportPath}</dataFile>
 						</configuration>
 						<executions>
 							<execution>
-								<id>post-test</id>
-								<configuration>
-									<skip>true</skip>
-								</configuration>
+								<id>agent</id>
+								<goals>
+									<goal>prepare-agent</goal>
+								</goals>
 							</execution>
 						</executions>
 					</plugin>
