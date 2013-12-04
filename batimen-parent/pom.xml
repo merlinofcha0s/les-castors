@@ -43,44 +43,6 @@
 		<url>${redmine.depot.address}</url>
 	</scm>
 
-	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.jacoco</groupId>
-					<artifactId>jacoco-maven-plugin</artifactId>
-					<version>0.6.3.201306030806</version>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-
-		<plugins>
-		<!--  Permet d'agréger la couverture dans tous les modules pour sonar -->
-			<plugin>
-				<groupId>org.jacoco</groupId>
-				<artifactId>jacoco-maven-plugin</artifactId>
-				<configuration>
-					<includes>fr.batimen.*</includes>
-				</configuration>
-				<executions>
-					<execution>
-						<id>pre-test</id>
-						<goals>
-							<goal>prepare-agent</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>post-test</id>
-						<phase>test</phase>
-						<goals>
-							<goal>report</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-		</plugins>
-	</build>
-
 	<repositories>
 		<repository>
 			<id>Nexus JBoss</id>
