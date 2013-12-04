@@ -7,12 +7,12 @@
 		<artifactId>batimen-parent</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 	</parent>
-	
+
 	<artifactId>batimen-module</artifactId>
 	<name>batimen-module</name>
 	<description>Projet principal de Batimen</description>
 	<packaging>pom</packaging>
-	
+
 	<modules>
 		<module>../batimen-parent</module>
 		<module>../batimen-core</module>
@@ -20,7 +20,7 @@
 		<module>../batimen-ws</module>
 		<module>../batimen-web</module>
 	</modules>
-	
+
 	<build>
 		<pluginManagement>
 			<plugins>
@@ -33,10 +33,15 @@
 		</pluginManagement>
 
 		<plugins>
-		<!--  Permet d'agréger la couverture dans tous les modules pour sonar -->
+			<!-- Permet d'agréger la couverture dans tous les modules pour sonar -->
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
+				<configuration>
+					<includes>
+						<include>fr.batimen.*</include>
+					</includes>
+				</configuration>
 				<executions>
 					<execution>
 						<id>pre-test</id>
