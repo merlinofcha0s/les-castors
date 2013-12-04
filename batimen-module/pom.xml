@@ -37,9 +37,6 @@
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
-				<configuration>
-					<includes>fr.batimen.*</includes>
-				</configuration>
 				<executions>
 					<execution>
 						<id>pre-test</id>
