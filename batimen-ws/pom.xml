@@ -447,8 +447,8 @@
 						<version>0.6.3.201306030806</version>
 						<configuration>
 							<propertyName>jacoco.agent.argLine</propertyName>
-							<destFile>${sonar.jacoco.itReportPath}</destFile>
-							<dataFile>${sonar.jacoco.itReportPath}</dataFile>
+							<destFile>${sonar.jacoco.reportPath}</destFile>
+							<dataFile>${sonar.jacoco.reportPath}</dataFile>
 						</configuration>
 						<executions>
 							<execution>
