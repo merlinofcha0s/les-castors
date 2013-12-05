@@ -19,6 +19,9 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
+
+import fr.batimen.core.constant.Constant;
 
 /**
  * Classe qui permet de préparer les requètes qui seront envoyées pour
@@ -52,6 +55,8 @@ public class WsConnector {
 			// en singleton
 			client = Client.create();
 			client.setFollowRedirects(true);
+			// Authentification du client
+			client.addFilter(new HTTPBasicAuthFilter(Constant.BATIMEN_USERS_WS, Constant.BATIMEN_PWD_WS));
 		}
 		return wsConnector;
 	}
@@ -86,6 +91,8 @@ public class WsConnector {
 
 		WebResource call = client.resource(adresseService.toString());
 
+		// Au cas ou : dans le cas d'une requete en get ne pas oublier de faire
+		// un response.readentity pour fermer la requete HTTP
 		return call.accept(MediaType.APPLICATION_JSON_TYPE).header("ACCEPT-CHARSET", "UTF-8")
 				.entity(serializeToJSON(object), MediaType.APPLICATION_JSON_TYPE).post(String.class);
 

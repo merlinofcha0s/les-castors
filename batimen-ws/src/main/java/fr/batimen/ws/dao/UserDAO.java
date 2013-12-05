@@ -1,5 +1,6 @@
 package fr.batimen.ws.dao;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
 import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
@@ -15,6 +16,7 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.QueryJPQL;
 import fr.batimen.core.constant.WsPath;
 import fr.batimen.dto.LoginDTO;
@@ -31,6 +33,7 @@ import fr.batimen.ws.interceptor.BatimenInterceptor;
  */
 @Stateless(name = "UserDAO")
 @Path(WsPath.USER_SERVICE_PATH)
+@RolesAllowed(Constant.USERS_ROLE)
 @Produces(JsonHelper.JSON_MEDIA_TYPE_AND_UTF_8_CHARSET)
 @Consumes(JsonHelper.JSON_MEDIA_TYPE_AND_UTF_8_CHARSET)
 @Interceptors(value = { BatimenInterceptor.class })
