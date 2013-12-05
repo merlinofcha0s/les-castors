@@ -12,9 +12,11 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import fr.batimen.core.constant.QueryJPQL;
+
 @Entity
 @Table(name = "Users")
-@NamedQueries(value = { @NamedQuery(name = "login", query = "SELECT u FROM User AS u WHERE u.login = :login") })
+@NamedQueries(value = { @NamedQuery(name = QueryJPQL.USER_LOGIN, query = "SELECT u FROM User AS u WHERE u.login = :login") })
 public class User extends AbstractEntity implements Serializable {
 
 	/**

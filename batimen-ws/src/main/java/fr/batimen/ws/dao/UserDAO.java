@@ -15,6 +15,7 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.batimen.core.constant.QueryJPQL;
 import fr.batimen.core.constant.WsPath;
 import fr.batimen.dto.LoginDTO;
 import fr.batimen.dto.UserDTO;
@@ -56,8 +57,8 @@ public class UserDAO {
 		ModelMapper modelMapper = new ModelMapper();
 
 		try {
-			Query query = em.createNamedQuery("login");
-			query.setParameter("login", toLogin.getLogin());
+			Query query = em.createNamedQuery(QueryJPQL.USER_LOGIN);
+			query.setParameter(QueryJPQL.USER_LOGIN, toLogin.getLogin());
 
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Chargement requete JPQL OK ");
@@ -77,6 +78,7 @@ public class UserDAO {
 			}
 
 			if (passwordMatch) {
+				// Si le password match on transforme l'entité en DTO
 				return modelMapper.map(userFinded, UserDTO.class);
 			} else {
 				return new UserDTO();
