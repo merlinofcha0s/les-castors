@@ -21,7 +21,7 @@ public abstract class MasterPage extends WebPage {
 	 * 
 	 */
 	private static final long serialVersionUID = 6955108821767948992L;
-	private static final Logger logger = LoggerFactory.getLogger(MasterPage.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(MasterPage.class);
 
 	public MasterPage() {
 		super();
@@ -47,8 +47,8 @@ public abstract class MasterPage extends WebPage {
 				"css/page.css");
 		CssHeaderItem cssItem = CssHeaderItem.forReference(cssFile);
 		response.render(cssItem);
-		if (logger.isDebugEnabled()) {
-			logger.debug("Ajout du css.....OK");
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Ajout du css.....OK");
 		}
 	}
 

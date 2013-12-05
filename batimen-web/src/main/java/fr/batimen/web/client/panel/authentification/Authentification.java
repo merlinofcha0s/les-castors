@@ -29,7 +29,7 @@ public final class Authentification extends MasterPage {
 	 * 
 	 */
 	private static final long serialVersionUID = 1451418474286472533L;
-	private static final Logger logger = LoggerFactory.getLogger(Authentification.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(Authentification.class);
 
 	private Label hello;
 	private Form<Authentification> loginForm;
@@ -50,8 +50,8 @@ public final class Authentification extends MasterPage {
 
 	private void initForm() {
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("Initialisation du form");
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Initialisation du form");
 		}
 
 		hello = new Label("loginHello", "Bienvenue sur Batimen.fr veuillez vous identifier.");
@@ -111,8 +111,8 @@ public final class Authentification extends MasterPage {
 		this.add(loginForm);
 		this.add(feedBackLogin);
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("Fin initialisation du form");
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Fin initialisation du form");
 		}
 
 	}

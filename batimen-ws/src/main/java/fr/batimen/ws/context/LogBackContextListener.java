@@ -15,7 +15,7 @@ import ch.qos.logback.core.util.StatusPrinter;
 
 public class LogBackContextListener implements ServletContextListener {
 
-	private static final Logger logger = LoggerFactory.getLogger(LogBackContextListener.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(LogBackContextListener.class);
 
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
@@ -37,18 +37,17 @@ public class LogBackContextListener implements ServletContextListener {
 		try {
 			InputStream is = getClass().getClassLoader().getResourceAsStream("logback.xml");
 			if (is == null) {
-				if (logger.isErrorEnabled()) {
-					logger.error("Logback xml file finded");
+				if (LOGGER.isErrorEnabled()) {
+					LOGGER.error("Logback xml file finded");
 				}
 			} else {
 				jc.doConfigure(is);
 			}
 		} catch (JoranException ex) {
-			if (logger.isErrorEnabled()) {
-				logger.error("Logback contextInitialized error");
+			if (LOGGER.isErrorEnabled()) {
+				LOGGER.error("Logback contextInitialized error", ex);
 			}
 			StatusPrinter.print(context);
-			ex.printStackTrace();
 		}
 	}
 }

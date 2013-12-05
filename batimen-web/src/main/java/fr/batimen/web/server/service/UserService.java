@@ -17,7 +17,11 @@ import fr.batimen.web.server.WsConnector;
  */
 public class UserService {
 
-	private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
+
+	private UserService() {
+
+	}
 
 	/**
 	 * Verification nom utilisateur / mdp
@@ -28,8 +32,8 @@ public class UserService {
 	 */
 	public static boolean login(LoginDTO loginDTO) {
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("Début appel service login + deserialization");
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Début appel service login + deserialization");
 		}
 
 		String objectInJSON = WsConnector.getInstance().sendRequest(WsPath.USER_SERVICE_PATH,
@@ -37,11 +41,11 @@ public class UserService {
 
 		UserDTO userDTO = UserDTO.deserializeUserDTO(objectInJSON);
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("Fin appel service login + deserialization");
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Fin appel service login + deserialization");
 		}
 
-		if (userDTO.getLogin().equals("")) {
+		if ("".equals(userDTO.getLogin())) {
 			return false;
 		} else {
 			// TODO Mettre en session l'userDTO

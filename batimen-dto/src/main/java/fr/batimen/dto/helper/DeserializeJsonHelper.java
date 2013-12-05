@@ -18,6 +18,10 @@ import com.google.gson.JsonParseException;
  */
 public class DeserializeJsonHelper {
 
+	private DeserializeJsonHelper() {
+
+	}
+
 	public static Gson createGsonObject() {
 
 		GsonBuilder builder = new GsonBuilder().serializeNulls();

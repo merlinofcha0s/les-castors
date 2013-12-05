@@ -23,7 +23,7 @@ public class BatimenSession extends AuthenticatedWebSession {
 	 * 
 	 */
 	private static final long serialVersionUID = -3460138748198816904L;
-	private static final Logger logger = LoggerFactory.getLogger(BatimenSession.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(BatimenSession.class);
 
 	private UserDTO user;
 
@@ -41,8 +41,8 @@ public class BatimenSession extends AuthenticatedWebSession {
 
 	@Override
 	public boolean authenticate(String username, String password) {
-		if (logger.isDebugEnabled()) {
-			logger.debug("Préparation appel ws pour : " + username + "et" + password);
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Préparation appel ws pour : " + username + "et" + password);
 		}
 		LoginDTO loginDTO = new LoginDTO();
 		loginDTO.setLogin(username);

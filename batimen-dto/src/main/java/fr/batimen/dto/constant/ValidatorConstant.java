@@ -13,4 +13,8 @@ public class ValidatorConstant {
 	public static final int LOGIN_DTO_PASSWORD_RANGE_MIN = 8;
 	public static final int LOGIN_DTO_PASSWORD_RANGE_MAX = 40;
 
+	private ValidatorConstant() {
+
+	}
+
 }

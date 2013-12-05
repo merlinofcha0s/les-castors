@@ -4,6 +4,10 @@ import com.lambdaworks.crypto.SCryptUtil;
 
 public class HashHelper {
 
+	private HashHelper() {
+
+	}
+
 	private static int CPU_COST = 32;
 	private static int MEMORY_COST = 64;
 	private static int PARALLELIZATION_COST = 64;

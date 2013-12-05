@@ -58,8 +58,10 @@ public abstract class SecuredPage extends MasterPage {
 	protected void onConfigure() {
 		AuthenticatedWebApplication app = (AuthenticatedWebApplication) Application.get();
 		// if user is not signed in, redirect him to sign in page
-		if (!AuthenticatedWebSession.get().isSignedIn())
+		if (!AuthenticatedWebSession.get().isSignedIn()) {
 			app.restartResponseAtSignInPage();
+		}
+
 	}
 
 }

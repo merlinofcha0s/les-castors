@@ -29,22 +29,22 @@ import com.sun.jersey.api.client.WebResource;
  */
 public class WsConnector {
 
-	public static WsConnector wsConnector;
+	private static WsConnector wsConnector;
 	private static Client client;
 	private String ipServeur;
 	private String portServeur;
 	private String nomWs;
 
-	private static final Logger logger = LoggerFactory.getLogger(WsConnector.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(WsConnector.class);
 
-	{
+	public WsConnector() {
 		getWsProperties();
 	}
 
 	public static WsConnector getInstance() {
 		if (wsConnector == null) {
-			if (logger.isDebugEnabled()) {
-				logger.debug("Initialisation du singleton....");
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Initialisation du singleton....");
 			}
 			wsConnector = new WsConnector();
 			// Consomme bcp de ressource pour creer le client, il est thread
@@ -69,8 +69,8 @@ public class WsConnector {
 	 */
 	public String sendRequest(String controller, String method, Object object) {
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("Construction de la requete ws....");
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Construction de la requete ws....");
 		}
 
 		StringBuilder adresseService = new StringBuilder("http://");
@@ -93,8 +93,8 @@ public class WsConnector {
 
 	private String serializeToJSON(Object object) {
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("Serialization en json.....");
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Serialization en json.....");
 		}
 
 		// Preparation à la serialization en JSON
@@ -117,8 +117,8 @@ public class WsConnector {
 
 	private void getWsProperties() {
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("Récuperation des properties....");
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Récuperation des properties....");
 		}
 		Properties wsProperties = new Properties();
 		try {
@@ -127,8 +127,8 @@ public class WsConnector {
 			portServeur = wsProperties.getProperty("ws.port");
 			nomWs = wsProperties.getProperty("ws.name");
 		} catch (IOException e) {
-			if (logger.isErrorEnabled()) {
-				logger.error("Erreur de récupération des properties ws: " + e.getMessage());
+			if (LOGGER.isErrorEnabled()) {
+				LOGGER.error("Erreur de récupération des properties ws", e);
 			}
 		}
 	}

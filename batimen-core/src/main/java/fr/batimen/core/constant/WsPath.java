@@ -13,4 +13,8 @@ public class WsPath {
 	public static final String USER_SERVICE_PATH = "userDao";
 	public static final String USER_SERVICE_LOGIN = "login";
 
+	private WsPath() {
+
+	}
+
 }

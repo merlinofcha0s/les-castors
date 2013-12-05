@@ -38,7 +38,7 @@ public class UserDAO {
 	@PersistenceContext
 	private EntityManager em;
 
-	private static final Logger logger = LoggerFactory.getLogger(UserDAO.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(UserDAO.class);
 
 	/**
 	 * Methode de login des utilisateurs
@@ -59,21 +59,21 @@ public class UserDAO {
 			Query query = em.createNamedQuery("login");
 			query.setParameter("login", toLogin.getLogin());
 
-			if (logger.isDebugEnabled()) {
-				logger.debug("Chargement requete JPQL OK ");
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Chargement requete JPQL OK ");
 			}
 
 			userFinded = (User) query.getSingleResult();
 
-			if (logger.isDebugEnabled()) {
-				logger.debug("Récuperation resultat requete JPQL OK ");
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Récuperation resultat requete JPQL OK ");
 			}
 
 			// Vérification du password avec le hash qui se trouve dans la bdd
 			boolean passwordMatch = HashHelper.check(toLogin.getPassword(), userFinded.getPassword());
 
-			if (logger.isDebugEnabled()) {
-				logger.debug("Verification du password : " + passwordMatch);
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Verification du password : " + passwordMatch);
 			}
 
 			if (passwordMatch) {
@@ -83,8 +83,8 @@ public class UserDAO {
 			}
 
 		} catch (NoResultException nre) {
-			if (logger.isDebugEnabled()) {
-				logger.debug("Aucune correspondance trouvées dans la BDD");
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Aucune correspondance trouvées dans la BDD", nre);
 			}
 			return new UserDTO();
 		}

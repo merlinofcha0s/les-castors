@@ -18,13 +18,13 @@ import fr.batimen.dto.AbstractDTO;
 
 public class BatimenInterceptor {
 
-	private static final Logger logger = LoggerFactory.getLogger(BatimenInterceptor.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(BatimenInterceptor.class);
 
 	@AroundInvoke
 	public Object validateDTO(InvocationContext ctx) throws Exception {
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("Debut de validation des DTO pour la méthode :" + ctx.getMethod().getName());
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Debut de validation des DTO pour la méthode :" + ctx.getMethod().getName());
 		}
 
 		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
@@ -54,14 +54,14 @@ public class BatimenInterceptor {
 			throw new ValidationDTOBatimenException(message.toString());
 		}
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("Debut de la méthode :" + ctx.getMethod().getName());
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Debut de la méthode :" + ctx.getMethod().getName());
 		}
 
 		Object results = ctx.proceed();
 
-		if (logger.isDebugEnabled()) {
-			logger.debug("Fin de la méthode :" + ctx.getMethod().getName());
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Fin de la méthode :" + ctx.getMethod().getName());
 		}
 
 		return results;
@@ -70,9 +70,9 @@ public class BatimenInterceptor {
 	private StringBuilder validateObject(Validator validator, StringBuilder message, Object param) {
 		Set<ConstraintViolation<Object>> violations = validator.validate(param);
 		for (ConstraintViolation<Object> violation : violations) {
-			message.append((violation.getRootBeanClass() != null ? violation.getRootBeanClass() : "Inconnue"));
+			message.append(violation.getRootBeanClass() != null ? violation.getRootBeanClass() : "Inconnue");
 			message.append(".");
-			message.append((violation.getPropertyPath() != null ? violation.getPropertyPath() : "Inconnue"));
+			message.append(violation.getPropertyPath() != null ? violation.getPropertyPath() : "Inconnue");
 			message.append(" : ");
 			message.append(violation.getMessage());
 			message.append(". ");
