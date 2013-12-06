@@ -2,10 +2,16 @@ package fr.batimen.web.server;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Properties;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
 import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
@@ -19,7 +25,10 @@ import com.google.gson.JsonSerializationContext;
 import com.google.gson.JsonSerializer;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.api.client.config.ClientConfig;
+import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
+import com.sun.jersey.client.urlconnection.HTTPSProperties;
 
 import fr.batimen.core.constant.Constant;
 
@@ -53,10 +62,11 @@ public class WsConnector {
 			// Consomme bcp de ressource pour creer le client, il est thread
 			// safe. Voir si ca ne pose pas de probleme de perf de l'avoir mis
 			// en singleton
-			client = Client.create();
+			client = Client.create(configSSL());
 			client.setFollowRedirects(true);
 			// Authentification du client
 			client.addFilter(new HTTPBasicAuthFilter(Constant.BATIMEN_USERS_WS, Constant.BATIMEN_PWD_WS));
+			client.setConnectTimeout(Constant.CONNECT_TIMEOUT);
 		}
 		return wsConnector;
 	}
@@ -78,7 +88,7 @@ public class WsConnector {
 			LOGGER.debug("Construction de la requete ws....");
 		}
 
-		StringBuilder adresseService = new StringBuilder("http://");
+		StringBuilder adresseService = new StringBuilder("https://");
 		adresseService.append(ipServeur);
 		adresseService.append(":");
 		adresseService.append(portServeur);
@@ -91,10 +101,14 @@ public class WsConnector {
 
 		WebResource call = client.resource(adresseService.toString());
 
+		String json = serializeToJSON(object);
+
+		String reponse = call.accept(MediaType.APPLICATION_JSON_TYPE).header("ACCEPT-CHARSET", "UTF-8")
+				.entity(json, MediaType.APPLICATION_JSON_TYPE).post(String.class);
+
 		// Au cas ou : dans le cas d'une requete en get ne pas oublier de faire
 		// un response.readentity pour fermer la requete HTTP
-		return call.accept(MediaType.APPLICATION_JSON_TYPE).header("ACCEPT-CHARSET", "UTF-8")
-				.entity(serializeToJSON(object), MediaType.APPLICATION_JSON_TYPE).post(String.class);
+		return reponse;
 
 	}
 
@@ -138,5 +152,46 @@ public class WsConnector {
 				LOGGER.error("Erreur de récupération des properties ws", e);
 			}
 		}
+	}
+
+	private static ClientConfig configSSL() {
+
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Début de la configuration du SSL (init du context).....");
+		}
+
+		SSLContext context = null;
+		try {
+			context = SSLContext.getInstance("SSLv3");
+		} catch (NoSuchAlgorithmException e) {
+			if (LOGGER.isErrorEnabled()) {
+				LOGGER.error("Algorithme SSL introuvable", e);
+			}
+		}
+
+		try {
+			context.init(null, TrustManagerSingleton.getTrustedCertificate(), TrustManagerSingleton.secureRandomOrNot());
+		} catch (KeyManagementException e) {
+			if (LOGGER.isErrorEnabled()) {
+				LOGGER.error("Problème de chargement de certificat", e);
+			}
+		}
+
+		HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
+
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Config de client config.....");
+		}
+
+		ClientConfig config = new DefaultClientConfig();
+		config.getProperties().put(HTTPSProperties.PROPERTY_HTTPS_PROPERTIES,
+				new HTTPSProperties(new HostnameVerifier() {
+					@Override
+					public boolean verify(String s, SSLSession sslSession) {
+						return true;
+					}
+				}, context));
+
+		return config;
 	}
 }
