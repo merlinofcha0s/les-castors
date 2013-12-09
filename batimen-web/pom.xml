@@ -376,7 +376,7 @@
 						<version>2.1</version>
 						<configuration>
 							<user>admin</user>
-							<adminPassword>OIOIUenobueno</adminPassword>
+							<adminPassword>OIOIUenoBueno</adminPassword>
 							<glassfishDirectory>/usr/share/glassfish3</glassfishDirectory>
 							<components>
 								<component>
