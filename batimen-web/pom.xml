@@ -365,7 +365,7 @@
 				<ws.name>batimen-ws</ws.name>
 				<!-- Infos App -->
 				<app.ip>127.0.0.1</app.ip>
-				<app.port>6060</app.port>
+				<app.port>6161</app.port>
 				<app.name>${project.artifactId}</app.name>
 			</properties>
 			<build>
