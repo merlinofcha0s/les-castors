@@ -396,7 +396,7 @@
 								<id>deploy-web-app</id>
 								<phase>pre-integration-test</phase>
 								<goals>
-									<goal>deploy</goal>
+									<goal>redeploy</goal>
 								</goals>
 							</execution>
 						</executions>
