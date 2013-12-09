@@ -436,7 +436,7 @@
 							</components>
 							<domain>
 								<name>${project.artifactId}</name>
-								<adminPort>4848</adminPort>
+								<adminPort>4949</adminPort>
 								<httpPort>6060</httpPort>
 								<httpsPort>6161</httpsPort>
 							</domain>
@@ -446,7 +446,7 @@
 								<id>deploy-ws</id>
 								<phase>pre-integration-test</phase>
 								<goals>
-									<goal>redeploy</goal>
+									<goal>deploy</goal>
 								</goals>
 							</execution>
 						</executions>
