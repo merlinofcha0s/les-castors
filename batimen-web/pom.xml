@@ -385,7 +385,7 @@
 								</component>
 							</components>
 							<domain>
-								<name>${project.artifactId}</name>
+								<name>batimendomain</name>
 								<adminPort>4949</adminPort>
 								<httpPort>6060</httpPort>
 								<httpsPort>6161</httpsPort>
