@@ -33,7 +33,7 @@ public abstract class AbstractSeleniumTest {
 	protected StringBuilder verificationErrors = new StringBuilder();
 	private String ipServeur;
 	private String portServeur;
-	private String nomWs;
+	private String nomApp;
 
 	private static final Logger logger = LoggerFactory.getLogger(AbstractSeleniumTest.class);
 
@@ -45,19 +45,19 @@ public abstract class AbstractSeleniumTest {
 			wsProperties.load(getClass().getClassLoader().getResourceAsStream("selenium.properties"));
 			ipServeur = wsProperties.getProperty("app.ip");
 			portServeur = wsProperties.getProperty("app.port");
-			nomWs = wsProperties.getProperty("app.name");
+			nomApp = wsProperties.getProperty("app.name");
 		} catch (IOException e) {
 			if (logger.isErrorEnabled()) {
 				logger.error("Erreur de récupération des properties de l'application web : " + e.getMessage());
 			}
 		}
 
-		StringBuilder sbUrlApp = new StringBuilder("http://");
+		StringBuilder sbUrlApp = new StringBuilder("https://");
 		sbUrlApp.append(ipServeur);
 		sbUrlApp.append(":");
 		sbUrlApp.append(portServeur);
 		sbUrlApp.append("/");
-		sbUrlApp.append(nomWs);
+		sbUrlApp.append(nomApp);
 
 		driver = new FirefoxDriver();
 		appUrl = sbUrlApp.toString();

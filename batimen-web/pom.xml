@@ -47,7 +47,7 @@
 
 		<!-- Infos Web App -->
 		<app.ip>127.0.0.1</app.ip>
-		<app.port>8080</app.port>
+		<app.port>8181</app.port>
 		<app.name>batimen-web</app.name>
 
 		<!-- Logs -->
@@ -388,7 +388,7 @@
 
 				<!-- Infos Web App -->
 				<app.ip>127.0.0.1</app.ip>
-				<app.port>6060</app.port>
+				<app.port>6161</app.port>
 				<app.name>${project.artifactId}</app.name>
 
 				<!-- Logs -->
