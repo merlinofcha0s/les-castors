@@ -38,12 +38,17 @@
 		<ws.ip>127.0.0.1</ws.ip>
 		<ws.port>8181</ws.port>
 		<ws.name>batimen-ws</ws.name>
-		<!-- Utilisé pour activer la verification du certificat du serveur obligatoirement mettre a true en prod -->
+		<!-- Utilisé pour activer la verification du certificat du serveur obligatoirement 
+			mettre a true en prod -->
 		<ws.isprod>false</ws.isprod>
-		<!-- Infos App -->
+		<!-- Infos Web App -->
 		<app.ip>127.0.0.1</app.ip>
 		<app.port>8080</app.port>
 		<app.name>batimen-web</app.name>
+
+		<!-- Logs -->
+		<logs.address>c:/logs/log-batimen</logs.address>
+		<logs.archives>${logs.address}/archived</logs.archives>
 	</properties>
 
 	<build>
@@ -109,7 +114,7 @@
 					<excludes>
 						<exclude>**/selenium/**/*.java</exclude>
 					</excludes>
-					<!-- <argLine>${jacoco.agent.argLine}</argLine> -->
+					<argLine>${jacoco.agent.argLine}</argLine>
 				</configuration>
 			</plugin>
 
@@ -363,10 +368,14 @@
 				<ws.ip>127.0.0.1</ws.ip>
 				<ws.port>6161</ws.port>
 				<ws.name>batimen-ws</ws.name>
-				<!-- Infos App -->
+				<!-- Infos Web App -->
 				<app.ip>127.0.0.1</app.ip>
 				<app.port>6060</app.port>
 				<app.name>${project.artifactId}</app.name>
+
+				<!-- Logs -->
+				<logs.address>/usr/share/log-batimen</logs.address>
+				<logs.archives>${logs.address}/archived</logs.archives>
 			</properties>
 			<build>
 				<plugins>

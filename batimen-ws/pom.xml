@@ -24,6 +24,10 @@
 		<database.name>batimen</database.name>
 		<database.login>postgres</database.login>
 		<database.password>123456</database.password>
+
+		<!-- Logs -->
+		<logs.address>c:/logs/log-batimen</logs.address>
+		<logs.archives>${logs.address}/archived</logs.archives>
 	</properties>
 
 	<issueManagement>
@@ -417,6 +421,10 @@
 				<database.name>batimen_test</database.name>
 				<database.login>raiden</database.login>
 				<database.password>M0ntaleign3</database.password>
+
+				<!-- Logs -->
+				<logs.address>/usr/share/log-batimen</logs.address>
+				<logs.archives>${logs.address}/archived</logs.archives>
 			</properties>
 			<build>
 				<plugins>
