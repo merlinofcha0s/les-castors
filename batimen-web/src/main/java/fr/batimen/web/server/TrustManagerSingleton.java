@@ -41,7 +41,7 @@ public class TrustManagerSingleton {
 
 			// Si on est en prod, on active la verification de l'identité du
 			// serveur (ws)
-			if (isProd != null && isProd == true) {
+			if (isProd) {
 
 				try {
 					trustedCertificate[0] = new TrustManagerForProduction();
@@ -52,7 +52,7 @@ public class TrustManagerSingleton {
 				}
 				// on est pas en prod donc : on desactive la vérification des
 				// certificats
-			} else if (isProd != null && isProd == false) {
+			} else if (!isProd) {
 				trustedCertificate[0] = (TrustManager) trustManagerWithoutCertificatCheck();
 			}
 		}
@@ -66,7 +66,7 @@ public class TrustManagerSingleton {
 	private static X509TrustManager trustManagerWithoutCertificatCheck() {
 		X509TrustManager trustAllCerts = new X509TrustManager() {
 			public X509Certificate[] getAcceptedIssuers() {
-				return null;
+				return new X509Certificate[1];
 			}
 
 			public void checkClientTrusted(X509Certificate[] certs, String authType) {

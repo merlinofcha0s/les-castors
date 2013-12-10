@@ -2,6 +2,10 @@ package fr.batimen.core.constant;
 
 public class Constant {
 
+	private Constant() {
+
+	}
+
 	// Roles accés WS
 	public static final String USERS_ROLE = "users";
 	public static final String ADMIN_ROLE = "admins";
