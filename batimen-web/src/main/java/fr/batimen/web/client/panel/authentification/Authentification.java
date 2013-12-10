@@ -100,6 +100,8 @@ public final class Authentification extends MasterPage {
 			}
 		};
 
+		signIn.setMarkupId("signInButton");
+
 		feedBackLogin = new FeedbackPanel("feedBackLogin");
 
 		loginForm.add(error);
