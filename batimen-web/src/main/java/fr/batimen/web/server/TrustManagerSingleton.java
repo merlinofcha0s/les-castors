@@ -20,9 +20,15 @@ public class TrustManagerSingleton {
 	private static final Logger LOGGER = LoggerFactory.getLogger(WsConnector.class);
 
 	private TrustManagerSingleton() {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Constructeur singleton trust manager....");
+		}
 		// On regarde dans quelle environement on se trouve
 		Properties wsProperties = new Properties();
 		try {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Récuperation de la properties pour connaitre l'environement..");
+			}
 			wsProperties.load(getClass().getClassLoader().getResourceAsStream("ws.properties"));
 			isProd = Boolean.valueOf(wsProperties.getProperty("ws.isprod"));
 		} catch (IOException e) {
@@ -34,6 +40,9 @@ public class TrustManagerSingleton {
 
 	private static void initTrustManagerSingleton() {
 		if (trustManagerSingleton == null) {
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Instantiation du trust manager....");
+			}
 			trustManagerSingleton = new TrustManagerSingleton();
 
 			trustedCertificate = new TrustManager[1];
@@ -42,6 +51,10 @@ public class TrustManagerSingleton {
 			// Si on est en prod, on active la verification de l'identité du
 			// serveur (ws)
 			if (isProd) {
+
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Prod => la verif du certificat est active");
+				}
 
 				try {
 					trustedCertificate[0] = new TrustManagerForProduction();
@@ -53,6 +66,9 @@ public class TrustManagerSingleton {
 				// on est pas en prod donc : on desactive la vérification des
 				// certificats
 			} else if (!isProd) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Pas en prod => pas de verification du certificat");
+				}
 				trustedCertificate[0] = (TrustManager) trustManagerWithoutCertificatCheck();
 			}
 		}
@@ -105,7 +121,7 @@ public class TrustManagerSingleton {
 	 * @param trustedCertificate
 	 *            the trustedCertificate to set
 	 */
-	public static void setTrustedCertificate(TrustManager[] trustedCertificate) {
+	private static void setTrustedCertificate(TrustManager[] trustedCertificate) {
 		TrustManagerSingleton.trustedCertificate = trustedCertificate;
 	}
 

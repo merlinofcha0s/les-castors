@@ -9,12 +9,12 @@ package fr.batimen.core.constant;
  */
 public class WsPath {
 
-	// Path UserDAO
-	public static final String USER_SERVICE_PATH = "userDao";
-	public static final String USER_SERVICE_LOGIN = "login";
-
 	private WsPath() {
 
 	}
+
+	// Path UserDAO
+	public static final String USER_SERVICE_PATH = "userDao";
+	public static final String USER_SERVICE_LOGIN = "login";
 
 }

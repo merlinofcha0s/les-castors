@@ -8,13 +8,13 @@ package fr.batimen.dto.constant;
  */
 public class ValidatorConstant {
 
+	private ValidatorConstant() {
+
+	}
+
 	public static final int LOGIN_DTO_LOGIN_RANGE_MIN = 3;
 	public static final int LOGIN_DTO_LOGIN_RANGE_MAX = 25;
 	public static final int LOGIN_DTO_PASSWORD_RANGE_MIN = 8;
 	public static final int LOGIN_DTO_PASSWORD_RANGE_MAX = 40;
-
-	private ValidatorConstant() {
-
-	}
 
 }

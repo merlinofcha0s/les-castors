@@ -1,5 +1,12 @@
 package fr.batimen.core.constant;
 
+/**
+ * Contient toutes les constantes comunes aux deux application frontend /
+ * backend de batimen.
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class Constant {
 
 	private Constant() {

@@ -49,10 +49,16 @@ public class WsConnector {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(WsConnector.class);
 
-	public WsConnector() {
+	private WsConnector() {
 		getWsProperties();
 	}
 
+	/**
+	 * Instancie une seule fois le Wsconnector et le configure dans le but
+	 * d'appeler le webservice de batimen
+	 * 
+	 * @return le WsConnector correctement configuré
+	 */
 	public static WsConnector getInstance() {
 		if (wsConnector == null) {
 			if (LOGGER.isDebugEnabled()) {
@@ -132,6 +138,10 @@ public class WsConnector {
 		Gson gson = builder.create();
 		String jsonRequest = gson.toJson(object);
 
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Serialization en json.....OK");
+		}
+
 		return jsonRequest;
 
 	}
@@ -154,6 +164,12 @@ public class WsConnector {
 		}
 	}
 
+	/**
+	 * Configure et initialise les differents composants permettant de
+	 * comuniquer en SSL avec le webservice
+	 * 
+	 * @return Le ClientConfig avec le SSL correctement configurer
+	 */
 	private static ClientConfig configSSL() {
 
 		if (LOGGER.isDebugEnabled()) {
@@ -169,6 +185,8 @@ public class WsConnector {
 			}
 		}
 
+		// On initialise le context avec le bon trust manager qui activera ou
+		// non la verification du certificat.
 		try {
 			context.init(null, TrustManagerSingleton.getTrustedCertificate(), TrustManagerSingleton.secureRandomOrNot());
 		} catch (KeyManagementException e) {
@@ -191,6 +209,10 @@ public class WsConnector {
 						return true;
 					}
 				}, context));
+
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Config de client config.....OK");
+		}
 
 		return config;
 	}
