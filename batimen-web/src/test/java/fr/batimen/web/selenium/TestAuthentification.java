@@ -13,7 +13,7 @@ public class TestAuthentification extends AbstractSeleniumTest {
 		driver.findElement(By.name("login")).sendKeys("raiden");
 		driver.findElement(By.name("password")).clear();
 		driver.findElement(By.name("password")).sendKeys("lollollol");
-		driver.findElement(By.id("signIn2")).click();
+		driver.findElement(By.id("signInButton")).click();
 	}
 
 }
