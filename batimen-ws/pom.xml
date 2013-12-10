@@ -20,14 +20,19 @@
 
 		<!-- Propriétés de la BDD pour les tests -->
 		<database.address>127.0.0.1</database.address>
-		<datasource.url>jdbc:postgresql://${database.address}:5432/batimen</datasource.url>
 		<database.name>batimen</database.name>
+		<datasource.url>jdbc:postgresql://${database.address}:5432/${database.name}</datasource.url>
 		<database.login>postgres</database.login>
 		<database.password>123456</database.password>
 
 		<!-- Logs -->
 		<logs.address>c:/logs/log-batimen</logs.address>
 		<logs.archives>${logs.address}/archived</logs.archives>
+
+		<!-- Hibernate -->
+		<hibernate.show_sql>true</hibernate.show_sql>
+		<hibernate.format_sql>true</hibernate.format_sql>
+		<hibernate.use_sql_comments>true</hibernate.use_sql_comments>
 	</properties>
 
 	<issueManagement>
@@ -68,6 +73,14 @@
 							<directory>${basedir}/src/main/webapp/WEB-INF</directory>
 							<filtering>true</filtering>
 							<targetPath>WEB-INF</targetPath>
+							<includes>
+								<include>**/*.xml</include>
+							</includes>
+						</resource>
+						<resource>
+							<directory>${basedir}/src/main/resources/META-INF</directory>
+							<filtering>true</filtering>
+							<targetPath>META-INF</targetPath>
 							<includes>
 								<include>**/*.xml</include>
 							</includes>
@@ -425,6 +438,11 @@
 				<!-- Logs -->
 				<logs.address>/usr/share/log-batimen</logs.address>
 				<logs.archives>${logs.address}/archived</logs.archives>
+
+				<!-- Hibernate -->
+				<hibernate.show_sql>false</hibernate.show_sql>
+				<hibernate.format_sql>false</hibernate.format_sql>
+				<hibernate.use_sql_comments>false</hibernate.use_sql_comments>
 			</properties>
 			<build>
 				<plugins>

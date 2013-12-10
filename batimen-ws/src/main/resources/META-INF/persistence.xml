@@ -11,15 +11,16 @@
 			<!-- on doit mettre on_close pour pouvoir changer le niveau d'isolation 
 				d'une transaction -->
 			<property name="hibernate.connection.release_mode" value="on_close" />
+			
 			<!-- Pour que Glassfish charge hibernate -->
 			<property name="hibernate.transaction.jta.platform"
 				value="org.hibernate.service.jta.platform.internal.SunOneJtaPlatform" />
 			<property name="hibernate.transaction.auto_close_session"
 				value="false" />
 			<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect" />
-			<property name="hibernate.show_sql" value="true" />
-			<property name="hibernate.format_sql" value="true" />
-			<property name="hibernate.use_sql_comments" value="true" />
+			<property name="hibernate.show_sql" value="${hibernate.show_sql}" />
+			<property name="hibernate.format_sql" value="${hibernate.format_sql}" />
+			<property name="hibernate.use_sql_comments" value="${hibernate.use_sql_comments}" />
 			<property name="hibernate.cache.use_second_level_cache"
 				value="false" />
 			<property name="hibernate.cache.use_query_cache" value="false" />

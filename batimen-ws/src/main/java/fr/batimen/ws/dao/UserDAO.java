@@ -2,6 +2,10 @@ package fr.batimen.ws.dao;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
@@ -37,6 +41,7 @@ import fr.batimen.ws.interceptor.BatimenInterceptor;
 @Produces(JsonHelper.JSON_MEDIA_TYPE_AND_UTF_8_CHARSET)
 @Consumes(JsonHelper.JSON_MEDIA_TYPE_AND_UTF_8_CHARSET)
 @Interceptors(value = { BatimenInterceptor.class })
+@TransactionManagement(TransactionManagementType.CONTAINER)
 public class UserDAO {
 
 	@PersistenceContext
@@ -54,6 +59,7 @@ public class UserDAO {
 	 */
 	@POST
 	@Path(WsPath.USER_SERVICE_LOGIN)
+	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
 	public UserDTO login(LoginDTO toLogin) {
 
 		User userFinded = null;
