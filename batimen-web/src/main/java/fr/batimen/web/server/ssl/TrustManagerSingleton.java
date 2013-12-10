@@ -1,4 +1,4 @@
-package fr.batimen.web.server;
+package fr.batimen.web.server.ssl;
 
 import java.io.IOException;
 import java.security.SecureRandom;
@@ -17,7 +17,7 @@ public class TrustManagerSingleton {
 	private static TrustManager[] trustedCertificate;
 	private static Boolean isProd;
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(WsConnector.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TrustManagerSingleton.class);
 
 	private TrustManagerSingleton() {
 		if (LOGGER.isDebugEnabled()) {
@@ -114,7 +114,9 @@ public class TrustManagerSingleton {
 	 */
 	public static TrustManager[] getTrustedCertificate() {
 		initTrustManagerSingleton();
-		return trustedCertificate;
+		// Clone car sinon probleme de sécurité : le tableau pourrait etre
+		// modifié plus tard
+		return trustedCertificate.clone();
 	}
 
 	/**
@@ -122,7 +124,8 @@ public class TrustManagerSingleton {
 	 *            the trustedCertificate to set
 	 */
 	private static void setTrustedCertificate(TrustManager[] trustedCertificate) {
-		TrustManagerSingleton.trustedCertificate = trustedCertificate;
+		// Même raison que pour le getter on enregistre seulement la copie
+		TrustManagerSingleton.trustedCertificate = trustedCertificate.clone();
 	}
 
 }

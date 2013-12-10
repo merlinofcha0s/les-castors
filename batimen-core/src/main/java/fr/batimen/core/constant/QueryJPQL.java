@@ -3,7 +3,7 @@ package fr.batimen.core.constant;
 /**
  * Contient le nom des requetes JPQL dans le but d'aidé la partie WS
  * 
- * @author Casaucau
+ * @author Casaucau Cyril
  * 
  */
 public class QueryJPQL {

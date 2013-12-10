@@ -31,6 +31,7 @@ import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
 import com.sun.jersey.client.urlconnection.HTTPSProperties;
 
 import fr.batimen.core.constant.Constant;
+import fr.batimen.web.server.ssl.TrustManagerSingleton;
 
 /**
  * Classe qui permet de préparer les requètes qui seront envoyées pour

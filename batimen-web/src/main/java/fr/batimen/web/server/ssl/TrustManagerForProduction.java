@@ -1,6 +1,7 @@
-package fr.batimen.web.server;
+package fr.batimen.web.server.ssl;
 
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.security.KeyStore;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -8,6 +9,9 @@ import java.security.cert.X509Certificate;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Classe qui instantie un trustmanager qui verifira l'indentité du serveur
@@ -23,12 +27,19 @@ import javax.net.ssl.X509TrustManager;
  */
 public class TrustManagerForProduction implements X509TrustManager {
 
-	X509TrustManager pkixTrustManager;
+	private X509TrustManager pkixTrustManager;
+	private static final Logger LOGGER = LoggerFactory.getLogger(TrustManagerForProduction.class);
 
 	public TrustManagerForProduction() throws Exception {
+
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Début de l'instatiation du trustmanager de la production...");
+		}
+
 		// String certFile = "/certificates/MyCertFile.cer";
 		String keystoreFile = "";
 		String password = "lolmdr";
+
 		/*
 		 * Certificate myCert =
 		 * CertificateFactory.getInstance("X509").generateCertificate(
@@ -36,7 +47,18 @@ public class TrustManagerForProduction implements X509TrustManager {
 		 */
 
 		KeyStore keyStore = KeyStore.getInstance("JKS");
-		keyStore.load(new FileInputStream(keystoreFile), password.toCharArray());
+		FileInputStream keyStoreStream = null;
+		try {
+			keyStoreStream = new FileInputStream(keystoreFile);
+			keyStore.load(keyStoreStream, password.toCharArray());
+		} catch (FileNotFoundException fne) {
+			if (LOGGER.isErrorEnabled()) {
+				LOGGER.error("Impossible de trouver le fichier keystore contenant les clés SSL", fne);
+			}
+		} finally {
+			keyStoreStream.close();
+		}
+
 		// keyStore.setCertificateEntry("myCert", myCert);
 
 		TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance("PKIX");
