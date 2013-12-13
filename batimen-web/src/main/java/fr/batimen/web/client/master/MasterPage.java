@@ -6,6 +6,7 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.StringHeaderItem;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
@@ -19,6 +20,7 @@ import org.apache.wicket.request.resource.PackageResourceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.batimen.web.client.panel.HomePage;
 import fr.batimen.web.client.panel.authentification.Authentification;
 import fr.batimen.web.client.session.BatimenSession;
 
@@ -56,7 +58,42 @@ public abstract class MasterPage extends WebPage {
 		this.metaDescription = metaDescription;
 		this.metaKeywords = metaKeywords;
 
-		initLabel(title);
+		Label titleLbl = new Label("title", new Model<String>(title));
+		this.add(titleLbl);
+
+		initComponentConnexion();
+
+	}
+
+	private void initComponentConnexion() {
+
+		WebMarkupContainer connectedContainer = new WebMarkupContainer("connected") {
+
+			private static final long serialVersionUID = 109100381329795557L;
+
+			@Override
+			public boolean isVisible() {
+				return BatimenSession.get().isSignedIn();
+			}
+
+		};
+
+		Link<String> monCompte = new Link<String>("monCompte") {
+
+			/**
+			 * 
+			 */
+			private static final long serialVersionUID = -9076993269716924371L;
+
+			@Override
+			public void onClick() {
+				setResponsePage(HomePage.class);
+
+			}
+
+		};
+
+		connectedContainer.add(monCompte);
 
 		// Lien qui amene à la page de connexion
 		Link<String> connexion = new Link<String>("connexion") {
@@ -74,14 +111,8 @@ public abstract class MasterPage extends WebPage {
 
 		};
 
+		this.add(connectedContainer);
 		this.add(connexion);
-	}
-
-	private void initLabel(String title) {
-
-		Label titleLbl = new Label("title");
-		titleLbl.setDefaultModel(new Model<String>(title));
-		this.add(titleLbl);
 
 	}
 
