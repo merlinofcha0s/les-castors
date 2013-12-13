@@ -16,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.web.client.master.MasterPage;
+import fr.batimen.web.client.panel.HomePage;
 
 /**
  * Panel Wicket servant à authentifier l'utilisateur
@@ -40,7 +41,7 @@ public final class Authentification extends MasterPage {
 	private FeedbackPanel feedBackLogin;
 
 	public Authentification() {
-		super();
+		super("Connexion à batimen", "lol", "Connexion à batimen.fr");
 		initForm();
 	}
 
@@ -71,21 +72,13 @@ public final class Authentification extends MasterPage {
 				ValidatorConstant.LOGIN_DTO_PASSWORD_RANGE_MAX));
 
 		error = new Label("error", new Model<String>());
-		error.setDefaultModelObject("Compte inexistant ou mot de passe incorrect");
+		error.setDefaultModelObject("Compte inexistant / mot de passe incorrect");
 		error.setVisible(false);
 
 		signIn = new Button("signIn") {
 
-			private static final long serialVersionUID = 975834590754460546L;
+			private static final long serialVersionUID = 3183458686534816645L;
 
-			/*
-			 * (non-Javadoc)
-			 * 
-			 * @see
-			 * org.apache.wicket.ajax.markup.html.form.AjaxButton#onSubmit(org
-			 * .apache.wicket.ajax.AjaxRequestTarget,
-			 * org.apache.wicket.markup.html.form.Form)
-			 */
 			@Override
 			public void onSubmit() {
 				boolean authResult = AuthenticatedWebSession.get().signIn(login.getInput(),
@@ -93,7 +86,11 @@ public final class Authentification extends MasterPage {
 				// if authentication succeeds redirect user to the requested
 				// page
 				if (authResult) {
+					// Si il voulait aller sur une page en particulier, on le
+					// redirige vers celle ci
 					continueToOriginalDestination();
+					// Sinon on le redirige vers la page de son compte.
+					setResponsePage(HomePage.class);
 				} else {
 					error.setVisible(true);
 				}

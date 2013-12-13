@@ -1,3 +1,7 @@
 @CHARSET "ISO-8859-1";
 
-body{background-color: #F2F2F2;}
+#connexion{
+	float: left;
+	padding-left:700px;
+	padding-top:12px;
+}

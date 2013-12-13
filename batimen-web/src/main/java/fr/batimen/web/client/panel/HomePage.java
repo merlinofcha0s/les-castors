@@ -10,7 +10,7 @@ public final class HomePage extends SecuredPage {
 	private static final long serialVersionUID = 1L;
 
 	public HomePage() {
-		super();
+		super("Page accueil de batimen", "lol", "Bienvenue sur batimen.fr");
 		add(new Label("version", getApplication().getFrameworkSettings().getVersion()));
 	}
 

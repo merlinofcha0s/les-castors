@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import fr.batimen.core.constant.WsPath;
 import fr.batimen.dto.LoginDTO;
 import fr.batimen.dto.UserDTO;
+import fr.batimen.web.client.session.BatimenSession;
 import fr.batimen.web.server.WsConnector;
 
 /**
@@ -45,10 +46,14 @@ public class UserService {
 			LOGGER.debug("Fin appel service login + deserialization");
 		}
 
+		// Si l'user dto est vide cela veut dire que l'authentification n'a pas
+		// reussi
 		if ("".equals(userDTO.getLogin())) {
 			return false;
 		} else {
-			// TODO Mettre en session l'userDTO
+			// On enregistre les infos de l'utilisateur dans la session
+			BatimenSession session = (BatimenSession) BatimenSession.get();
+			session.placeUserInSession(userDTO);
 			return true;
 		}
 	}

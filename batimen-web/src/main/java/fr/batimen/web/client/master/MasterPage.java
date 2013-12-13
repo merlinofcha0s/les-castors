@@ -7,14 +7,20 @@ import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.StringHeaderItem;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.http.ClientProperties;
 import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import fr.batimen.web.client.panel.authentification.Authentification;
+import fr.batimen.web.client.session.BatimenSession;
 
 /**
  * Page principal de l'application dans laquelle tous les autres panels seront
@@ -45,10 +51,38 @@ public abstract class MasterPage extends WebPage {
 		this();
 	}
 
-	public MasterPage(String metaDescription, String metaKeywords) {
+	public MasterPage(String metaDescription, String metaKeywords, String title) {
 		this();
 		this.metaDescription = metaDescription;
 		this.metaKeywords = metaKeywords;
+
+		initLabel(title);
+
+		// Lien qui amene à la page de connexion
+		Link<String> connexion = new Link<String>("connexion") {
+			private static final long serialVersionUID = -5109878814704325528L;
+
+			@Override
+			public void onClick() {
+				setResponsePage(Authentification.class);
+			}
+
+			@Override
+			public boolean isVisible() {
+				return !BatimenSession.get().isSignedIn();
+			}
+
+		};
+
+		this.add(connexion);
+	}
+
+	private void initLabel(String title) {
+
+		Label titleLbl = new Label("title");
+		titleLbl.setDefaultModel(new Model<String>(title));
+		this.add(titleLbl);
+
 	}
 
 	private IModel<String> getHtmlTagClass() {

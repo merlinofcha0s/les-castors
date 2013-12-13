@@ -22,7 +22,15 @@ public abstract class SecuredPage extends MasterPage {
 
 	public SecuredPage() {
 		super();
-		add(new Link("goToHomePage") {
+	}
+
+	public SecuredPage(final PageParameters parameters) {
+		this();
+	}
+
+	public SecuredPage(String metaDescription, String metaKeywords, String title) {
+		super(metaDescription, metaKeywords, title);
+		add(new Link<String>("goToHomePage") {
 			private static final long serialVersionUID = -6480263784484841724L;
 
 			@Override
@@ -31,7 +39,7 @@ public abstract class SecuredPage extends MasterPage {
 			}
 		});
 
-		add(new Link("logOut") {
+		add(new Link<String>("logOut") {
 			private static final long serialVersionUID = 5031796613478728383L;
 
 			@Override
@@ -40,10 +48,6 @@ public abstract class SecuredPage extends MasterPage {
 				setResponsePage(getApplication().getHomePage());
 			}
 		});
-	}
-
-	public SecuredPage(final PageParameters parameters) {
-		this();
 	}
 
 	@Override
@@ -55,5 +59,4 @@ public abstract class SecuredPage extends MasterPage {
 		}
 
 	}
-
 }

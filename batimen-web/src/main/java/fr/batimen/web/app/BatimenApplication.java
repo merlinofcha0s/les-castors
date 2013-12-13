@@ -7,7 +7,7 @@ import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
 
-import fr.batimen.web.client.panel.HomePage;
+import fr.batimen.web.client.panel.Accueil;
 import fr.batimen.web.client.panel.authentification.Authentification;
 import fr.batimen.web.client.session.BatimenSession;
 
@@ -22,7 +22,7 @@ public class BatimenApplication extends AuthenticatedWebApplication {
 	 */
 	@Override
 	public Class<? extends WebPage> getHomePage() {
-		return HomePage.class;
+		return Accueil.class;
 	}
 
 	/**
@@ -32,6 +32,7 @@ public class BatimenApplication extends AuthenticatedWebApplication {
 	public void init() {
 		super.init();
 		getMarkupSettings().setDefaultMarkupEncoding("UTF-8");
+		getMarkupSettings().setCompressWhitespace(true);
 	}
 
 	@Override
