@@ -1,16 +1,203 @@
 <!DOCTYPE html>
-<html>
+<html lang="fr" class="ie ie9" wicket:id="htmlTag">
+
 <head>
-<meta charset="ISO-8859-1">
-<title>Batimen</title>
+
+<!-- Mobile Specific Metas
+    +++++++++++++++++++++++++++ -->
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, maximum-scale=1" />
+<!--[if IE ]><meta http-equiv="X-UA-Compatible" content="IE=Edge"><![endif]-->
+
+<link rel="shortcut icon" href="img/favico.ico">
+
+<link rel="apple-touch-icon" href="img/apple_icons_57x57.png">
+<link rel="apple-touch-icon" sizes="72x72"
+	href="img/apple_icons_72x72.png">
+<link rel="apple-touch-icon" sizes="114x114"
+	href="img/apple_icons_114x114.png">
+
+
+<title>Dixit - HTML5&amp;CSS3 business theme</title>
+
+<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+<link rel="stylesheet" type="text/css"
+	href="css/bootstrap-responsive.css">
+<link rel="stylesheet" type="text/css" href="css/plugins.css">
+<link rel="stylesheet" type="text/css" href="css/theme.css">
+<link rel="stylesheet" type="text/css" href="css/responsive.css">
+<link rel="stylesheet" type="text/css" href="css/theme_settings.css">
+<link rel="stylesheet" type="text/css" href="css/rs-settings.css">
+<link rel="stylesheet" type="text/css" href="css/color_theme.css"
+	id="theme_color">
+
+<!--[if IE 8 ]><script>
+        var e = ("article,aside,figcaption,figure,footer,header,hgroup,nav,section,time").split(',');
+        for (var i = 0; i < e.length; i++) {
+            document.createElement(e[i]);
+        }		
+    </script><![endif]-->
+
+<script src="js/jquery-1.9.1.js" type="text/javascript"></script>
+<script src="js/jquery-ui.min.js" type="text/javascript"></script>
+<script src="js/theme.js" type="text/javascript"></script>
+
 </head>
+
 <body>
-	HELLO MASTER PAGE !!!
-	<div class="globalContent">
-		<!--  <h1 wicket:id="panelTitleLabel"></h1>  -->
-		<div class="contentBlock">
-			<wicket:child />
+	<header>
+		<div class="top_line">
+			<div class="container">
+				<div class="call_us">
+					<span class="ico">p</span>Call us toll free:&nbsp; +1 800 546 35 48
+				</div>
+				<div class="socials">
+					<ul class="socials_list">
+						<li><a href="#" class="ico_social-facebook"></a></li>
+						<li><a href="#" class="ico_social-twitter"></a></li>
+						<li><a href="#" class="ico_social-youtube"></a></li>
+						<li><a href="#" class="ico_social-gplus"></a></li>
+						<li><a href="#" class="ico_social-dribbble"></a></li>
+						<li><a href="#" class="ico_social-delicious"></a></li>
+						<li><a href="#" class="ico_social-tumblr"></a></li>
+					</ul>
+				</div>
+				<div class="clear"></div>
+			</div>
 		</div>
+		<!-- .top_line -->
+		<div class="header_wrapper container">
+			<a href="index.html" class="logo"> <img src="img/logo.png"
+				alt="logo" width="115" height="30" class="logo_def" /><img alt=""
+				src="img/retina/logo.png" width="115" height="30"
+				class="logo_retina" /></a>
+			<nav>
+				<ul class="menu">
+					<li class="current-menu-parent"><a href="javascript:void(0)">HOME</a>
+						<ul class="sub-menu">
+							<li><a href="index.html">Clean Style With Fullwidth
+									Slider</a></li>
+							<li class="current-menu-item"><a href="home2.html">Clean
+									Style</a></li>
+							<li><a href="home3.html">Background Color With Fullwidth
+									Slider</a></li>
+							<li><a href="home4.html">Background Color</a></li>
+							<li><a href="home5.html">Background Image</a></li>
+						</ul></li>
+					<li><a href="javascript:void(0)">PAGES</a>
+						<ul class="sub-menu">
+							<li><a href="about.html">About</a></li>
+							<li><a href="full-width.html">Full Width</a></li>
+							<li><a href="faq.html">FAQ</a></li>
+							<li><a href="404.html">404 Page</a></li>
+							<li><a href="sitemap.html">Sitemap</a></li>
+						</ul></li>
+					<li><a href="javascript:void(0)">FEATURES</a>
+						<ul class="sub-menu">
+							<li><a href="typography.html">Typography</a></li>
+							<li><a href="shortcodes.html">Shortcodes</a></li>
+						</ul></li>
+					<li><a href="javascript:void(0)">PORTFOLIO</a>
+						<ul class="sub-menu">
+							<li><a href="portfolio1.html">1 Column</a></li>
+							<li><a href="portfolio2.html">2 Columns</a></li>
+							<li><a href="portfolio3.html">3 Columns</a></li>
+							<li><a href="portfolio4.html">4 Columns</a></li>
+							<li><a href="portfolio_post.html">Portfolio Post</a></li>
+						</ul></li>
+					<li><a href="javascript:void(0)">BLOG</a>
+						<ul class="sub-menu">
+							<li><a href="blog_full.html">Full Width</a></li>
+							<li><a href="blogpost_full.html">Blog Post</a></li>
+							<li><a href="javascript:void(0)">With Sidebar</a>
+								<ul class="sub-menu">
+									<li><a href="blog_left.html">Left Sidebar</a></li>
+									<li><a href="blog_right.html">Right Sidebar</a></li>
+									<li><a href="blogpost_sidebar.html">Blog Post</a></li>
+								</ul></li>
+						</ul></li>
+					<li><a href="javascript:void(0)">SHOP</a>
+						<ul class="sub-menu">
+							<li><a href="shop_products.html">All Products</a></li>
+							<li><a href="shop_item.html">Shop Item</a></li>
+						</ul></li>
+					<li><a href="javascript:void(0)">CONTACTS</a>
+						<ul class="sub-menu">
+							<li><a href="contact_full.html">Full Width</a></li>
+							<li><a href="contact_sidebar.html">With Sidebar</a></li>
+						</ul></li>
+				</ul>
+				<!-- .menu -->
+				<div class="clear"></div>
+			</nav>
+			<div class="head_search">
+				<form class="search_form" method="get" name="search_form">
+					<input type="text" class="field_search" title="Search..."
+						value="Search..." name="s">
+				</form>
+			</div>
+		</div>
+	</header>
+
+	<div class="main_wrapper">
+		<!-- C O N T E N T -->
+		<div class="content_wrapper">
+			<div class="container">
+				<div class="content_block no-sidebar row">
+					<div class="fl-container span12">
+						<div class="row">
+							<div class="posts-block span12">
+								<div class="contentarea">
+									<wicket:child />
+								</div>
+							</div>
+							<div class="left-sidebar-block span3">//Sidebar Text</div>
+							<!-- .left-sidebar -->
+						</div>
+						<div class="clear">
+							<!-- ClearFix -->
+						</div>
+					</div>
+					<!-- .fl-container -->
+					<div class="right-sidebar-block span3">
+						<aside class="sidebar"></aside>
+					</div>
+					<!-- .right-sidebar -->
+					<div class="clear">
+						<!-- ClearFix -->
+					</div>
+				</div>
+			</div>
+			<!-- .container -->
+		</div>
+		<!-- .content_wrapper -->
+
 	</div>
+	<!-- .main_wrapper -->
+
+	<footer>
+		<div class="footer_line container">
+			<div class="copyright">&copy; 2020 Dixit Wordpress Theme. All
+				Rights Reserved.</div>
+			<div class="socials">
+				<ul class="socials_list">
+					<li><a href="#" class="ico_social-facebook"></a></li>
+					<li><a href="#" class="ico_social-twitter"></a></li>
+					<li><a href="#" class="ico_social-youtube"></a></li>
+					<li><a href="#" class="ico_social-gplus"></a></li>
+					<li><a href="#" class="ico_social-dribbble"></a></li>
+					<li><a href="#" class="ico_social-delicious"></a></li>
+					<li><a href="#" class="ico_social-tumblr"></a></li>
+				</ul>
+			</div>
+			<div class="clear"></div>
+			<a href="javascript:void(0)" class="btn2top"></a>
+		</div>
+		<div class="footer_border"></div>
+	</footer>
+
+	<header class="fixed-menu"></header>
+	<div class="layout_trigger clean_bg_cont"
+		style="background-color: #ffffff;"></div>
 </body>
 </html>

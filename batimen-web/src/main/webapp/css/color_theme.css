@@ -1,0 +1,68 @@
+/* *** MAIN COLOR: #95ba00 *** */
+
+::selection {background:#95ba00;}
+::-moz-selection {background:#95ba00;}
+
+blockquote.type1:before,
+.highlighted_colored {
+	background-color:#95ba00;
+}
+.view-tenth .mask {
+	background-color:#95ba00!important;
+}
+
+a,
+a em,
+a strong,
+ul.menu li.current-menu-parent > a,
+ul.menu li.current-menu-item > a,
+ul.menu li > a:hover,
+ul.menu li:hover > a,
+ul.menu li .sub-menu li:hover > a,
+header nav ul li .sub-menu li:hover > a,
+header nav ul li .sub-menu li:hover .sub-menu li:hover > a,
+ul.mobile_menu li.current-menu-parent > a,
+ul.mobile_menu li.current-menu-item > a,
+ul.mobile_menu li > a:hover,
+ul.mobile_menu li:hover > a,
+ul.mobile_menu li .sub-menu li:hover > a,
+ul.mobile_menu li .sub-menu li:hover .sub-menu li:hover > a,
+blockquote .author,
+.dropcap.colored,
+.shortcode_accordion_item_title:hover, 
+.shortcode_toggles_item_title:hover,
+.shortcode_iconbox:hover .iconbox_title,
+.carousel_title a:hover,
+.colored_italic,
+.testimonials_list .author,
+.most_popular .price_item_cost h1,
+.footer_twitter ul li a,
+.most_popular .price_item_cost h1 span,
+.sitemap_list li a,
+.twitter_list li a,
+.left-sidebar .recent_posts_content .post_title,
+.right-sidebar .recent_posts_content .post_title,
+.filter_navigation ul li ul li a:hover,
+.filter_navigation ul li ul li.selected a,
+.continfo_item a,
+.blog_info_block div a:hover,
+.shop_list_title a:hover,
+.shop_list_price,
+.total_price span,
+.product_title_price,
+.review_body a { 
+	color:#95ba00;
+}
+.shortcode_tab_item_title:hover,
+ul.menu li .sub-menu li.current-menu-parent > a,
+ul.menu li .sub-menu li.current-menu-item > a,
+ul.menu li .sub-menu li > a:hover {
+	color:#95ba00!important;
+}
+
+hr.colored {
+	border-color:#95ba00;
+}
+.class {
+	border-color:#95ba00!important;
+}
