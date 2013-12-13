@@ -8,6 +8,7 @@ import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
 
 import fr.batimen.web.client.panel.Accueil;
+import fr.batimen.web.client.panel.HomePage;
 import fr.batimen.web.client.panel.authentification.Authentification;
 import fr.batimen.web.client.session.BatimenSession;
 
@@ -31,8 +32,14 @@ public class BatimenApplication extends AuthenticatedWebApplication {
 	@Override
 	public void init() {
 		super.init();
+
 		getMarkupSettings().setDefaultMarkupEncoding("UTF-8");
 		getMarkupSettings().setCompressWhitespace(true);
+
+		// Cfg urls des pages principales
+		mountPage("/accueil", Accueil.class);
+		mountPage("/connexion", Authentification.class);
+		mountPage("/moncompte", HomePage.class);
 	}
 
 	@Override

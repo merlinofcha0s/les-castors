@@ -26,9 +26,6 @@ import fr.batimen.web.client.panel.HomePage;
  */
 public final class Authentification extends MasterPage {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1451418474286472533L;
 	private static final Logger LOGGER = LoggerFactory.getLogger(Authentification.class);
 
