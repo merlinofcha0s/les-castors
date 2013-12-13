@@ -23,10 +23,6 @@ public abstract class SecuredPage extends MasterPage {
 	public SecuredPage() {
 		super();
 		add(new Link("goToHomePage") {
-
-			/**
-			 * 
-			 */
 			private static final long serialVersionUID = -6480263784484841724L;
 
 			@Override
@@ -36,10 +32,6 @@ public abstract class SecuredPage extends MasterPage {
 		});
 
 		add(new Link("logOut") {
-
-			/**
-			 * 
-			 */
 			private static final long serialVersionUID = 5031796613478728383L;
 
 			@Override

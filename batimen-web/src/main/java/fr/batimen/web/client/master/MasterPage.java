@@ -93,19 +93,7 @@ public abstract class MasterPage extends WebPage {
 		response.render(addStringToMetaResourcesToHeader("text/html; charset=utf-8", "content-type", ""));
 		response.render(addStringToMetaResourcesToHeader(metaDescription, "", "description"));
 		response.render(addStringToMetaResourcesToHeader(metaKeywords, "", "keywords"));
-		// Balise link resources
-		/*
-		 * response.render(addStringToLinkResourcesToHeader("img/favicon.ico",
-		 * "shortcut icon", "", "", ""));
-		 * response.render(addStringToLinkResourcesToHeader
-		 * ("img/apple_icons_57x57.png", "apple-touch-icon", "", "", ""));
-		 * response
-		 * .render(addStringToLinkResourcesToHeader("img/apple_icons_72x72.png",
-		 * "apple-touch-icon", "72x72", "", ""));
-		 * response.render(addStringToLinkResourcesToHeader
-		 * ("img/apple_icons_114x114.png", "apple-touch-icon", "114x114", "",
-		 * ""));
-		 */
+
 		// Custom css File
 		response.render(addCssFileToHeader("css/page.css"));
 
@@ -146,55 +134,6 @@ public abstract class MasterPage extends WebPage {
 				address);
 
 		return CssHeaderItem.forReference(cssFile);
-	}
-
-	/**
-	 * Génére une balise link de maniere custom : permet de charger n'importe
-	 * quel type de ressources html.
-	 * 
-	 * Eviter de l'utiliser pour js / css
-	 * 
-	 * @param address
-	 *            L'adresse de la ressource
-	 * @param rel
-	 *            type de ressource
-	 * @param sizes
-	 *            taille de l'icone (dans le cas d'une icone)
-	 * @param type
-	 *            type de ressources
-	 * @param id
-	 *            l'id de la ressources
-	 * @return objet wicket qui permet de generer la balise link
-	 */
-	private StringHeaderItem addStringToLinkResourcesToHeader(String address, String rel, String sizes, String type,
-			String id) {
-		// On recupere la ressource
-		PackageResourceReference resourceFile = new PackageResourceReference(
-				fr.batimen.web.client.master.MasterPage.class, address);
-
-		// On crée la balise de type : <link rel="shortcut icon"
-		// href="img/favico.ico">
-		StringBuilder balise = new StringBuilder("<link rel=\"");
-		balise.append(rel);
-		balise.append("\" href=\"");
-		balise.append("../resource/");
-		balise.append(resourceFile.getScope().getCanonicalName());
-		balise.append("/");
-		balise.append(resourceFile.getName());
-		balise.append("\"");
-		if (!"".equals(sizes)) {
-			balise.append(generateAttribute("sizes", sizes));
-		}
-		if (!"".equals(type)) {
-			balise.append(generateAttribute("type", type));
-		}
-		if (!"".equals(id)) {
-			balise.append(generateAttribute("id", id));
-		}
-		balise.append(">");
-
-		// On dit à wicket de la placer dans le header de la master page
-		return StringHeaderItem.forString(balise.toString());
 	}
 
 	/**
