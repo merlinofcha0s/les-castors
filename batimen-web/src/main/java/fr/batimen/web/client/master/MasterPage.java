@@ -20,7 +20,7 @@ import org.apache.wicket.request.resource.PackageResourceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.batimen.web.client.panel.HomePage;
+import fr.batimen.web.client.panel.MonCompte;
 import fr.batimen.web.client.panel.authentification.Authentification;
 import fr.batimen.web.client.session.BatimenSession;
 
@@ -58,15 +58,27 @@ public abstract class MasterPage extends WebPage {
 		this.metaDescription = metaDescription;
 		this.metaKeywords = metaKeywords;
 
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Début instantiation de la master page.....");
+		}
+
 		Label titleLbl = new Label("title", new Model<String>(title));
 		this.add(titleLbl);
 
 		initComponentConnexion();
 
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Instantiation de la master page.....OK");
+		}
 	}
 
 	private void initComponentConnexion() {
 
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Initialisation du composant de connexion.....");
+		}
+
+		// N'est visible que quand l'utilisateur est connecté
 		WebMarkupContainer connectedContainer = new WebMarkupContainer("connected") {
 
 			private static final long serialVersionUID = 109100381329795557L;
@@ -80,14 +92,11 @@ public abstract class MasterPage extends WebPage {
 
 		Link<String> monCompte = new Link<String>("monCompte") {
 
-			/**
-			 * 
-			 */
 			private static final long serialVersionUID = -9076993269716924371L;
 
 			@Override
 			public void onClick() {
-				setResponsePage(HomePage.class);
+				setResponsePage(MonCompte.class);
 
 			}
 
@@ -95,7 +104,8 @@ public abstract class MasterPage extends WebPage {
 
 		connectedContainer.add(monCompte);
 
-		// Lien qui amene à la page de connexion
+		// Lien qui amene à la page de connexion : n'est visible que quand
+		// l'utilisateur n'est pas encore loggé
 		Link<String> connexion = new Link<String>("connexion") {
 			private static final long serialVersionUID = -5109878814704325528L;
 
@@ -114,8 +124,18 @@ public abstract class MasterPage extends WebPage {
 		this.add(connectedContainer);
 		this.add(connexion);
 
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Initialisation du composant de connexion.....OK");
+		}
+
 	}
 
+	/**
+	 * Fix wicket : prends en charge les <!--[if IE 7 ]><html class="ie ie7"
+	 * lang="en"> <![endif]--> du template de maniere programmatic
+	 * 
+	 * @return
+	 */
 	private IModel<String> getHtmlTagClass() {
 		return new LoadableDetachableModel<String>() {
 
@@ -123,6 +143,9 @@ public abstract class MasterPage extends WebPage {
 
 			@Override
 			protected String load() {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("Définition du navigateur.....");
+				}
 				StringBuilder sb = new StringBuilder("");
 				WebSession session = (WebSession) getSession();
 

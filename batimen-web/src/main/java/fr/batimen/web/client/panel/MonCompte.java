@@ -5,16 +5,23 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import fr.batimen.web.client.master.SecuredPage;
 
-public final class HomePage extends SecuredPage {
+/**
+ * Page ou l'utilisateur pourra consulter son compte ainsi que l'avancement de
+ * ces differents boulot/devis/notes, etc
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
+public final class MonCompte extends SecuredPage {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1902734649854998120L;
 
-	public HomePage() {
+	public MonCompte() {
 		super("Page accueil de batimen", "lol", "Bienvenue sur batimen.fr");
 		add(new Label("version", getApplication().getFrameworkSettings().getVersion()));
 	}
 
-	public HomePage(final PageParameters parameters) {
+	public MonCompte(final PageParameters parameters) {
 		this();
 	}
 }

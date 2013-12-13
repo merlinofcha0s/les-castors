@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.web.client.master.MasterPage;
-import fr.batimen.web.client.panel.HomePage;
+import fr.batimen.web.client.panel.MonCompte;
 
 /**
  * Panel Wicket servant à authentifier l'utilisateur
@@ -49,7 +49,7 @@ public final class Authentification extends MasterPage {
 	private void initForm() {
 
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Initialisation du form");
+			LOGGER.debug("Initialisation du form d'authentification");
 		}
 
 		hello = new Label("loginHello", "Bienvenue sur Batimen.fr veuillez vous identifier.");
@@ -87,7 +87,7 @@ public final class Authentification extends MasterPage {
 					// redirige vers celle ci
 					continueToOriginalDestination();
 					// Sinon on le redirige vers la page de son compte.
-					setResponsePage(HomePage.class);
+					setResponsePage(MonCompte.class);
 				} else {
 					error.setVisible(true);
 				}
@@ -108,7 +108,7 @@ public final class Authentification extends MasterPage {
 		this.add(feedBackLogin);
 
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Fin initialisation du form");
+			LOGGER.debug("Fin initialisation du form d'authentification");
 		}
 
 	}
