@@ -14,5 +14,6 @@ public class Contact extends MasterPage {
 
 	public Contact() {
 		super("Contact de batimen.fr", "", "Nous contacter");
+		super.setActiveMenu(MasterPage.CONTACT);
 	}
 }

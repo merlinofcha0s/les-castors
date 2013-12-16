@@ -1,5 +1,6 @@
 package fr.batimen.web.client.master;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
@@ -35,10 +36,25 @@ import fr.batimen.web.client.session.BatimenSession;
  */
 public abstract class MasterPage extends WebPage {
 
+	// Général
 	private static final long serialVersionUID = 6955108821767948992L;
 	private static final Logger LOGGER = LoggerFactory.getLogger(MasterPage.class);
 	private String metaDescription = "";
 	private String metaKeywords = "";
+
+	// Menu
+	private final WebMarkupContainer containerLinkMenuAccueil = new WebMarkupContainer("selectAccueil");
+	private final WebMarkupContainer containerLinkMenuQuiSommesNous = new WebMarkupContainer("selectQuiSommesNous");
+	private final WebMarkupContainer containerLinkMenuContact = new WebMarkupContainer("selectContact");
+
+	private final AttributeModifier activateMenuCss = new AttributeModifier("class", new Model<String>(
+			"current-menu-parent"));
+	private final AttributeModifier deactivateMenuCss = new AttributeModifier("class", new Model<String>(""));
+
+	// Nom Pages Principales Static
+	public static String QUI_SOMMES_NOUS = "quiSommesNous";
+	public static String CONTACT = "contact";
+	public static String ACCUEIL = "Accueil";
 
 	public MasterPage() {
 		super();
@@ -75,6 +91,7 @@ public abstract class MasterPage extends WebPage {
 	}
 
 	private void initMenu() {
+
 		Link<String> accueilLink = new Link<String>("accueilLink") {
 
 			private static final long serialVersionUID = -5109878814704325528L;
@@ -105,9 +122,33 @@ public abstract class MasterPage extends WebPage {
 			}
 		};
 
-		this.add(accueilLink);
-		this.add(quiSommesNousLink);
-		this.add(contactLink);
+		containerLinkMenuAccueil.add(accueilLink);
+		containerLinkMenuContact.add(contactLink);
+		containerLinkMenuQuiSommesNous.add(quiSommesNousLink);
+
+		this.add(containerLinkMenuAccueil);
+		this.add(containerLinkMenuQuiSommesNous);
+		this.add(containerLinkMenuContact);
+	}
+
+	public void setActiveMenu(String nomPage) {
+
+		if (QUI_SOMMES_NOUS.equals(nomPage)) {
+			containerLinkMenuQuiSommesNous.add(activateMenuCss);
+			containerLinkMenuAccueil.add(deactivateMenuCss);
+			containerLinkMenuContact.add(deactivateMenuCss);
+		}
+		if (CONTACT.equals(nomPage)) {
+			containerLinkMenuContact.add(activateMenuCss);
+			containerLinkMenuAccueil.add(deactivateMenuCss);
+			containerLinkMenuQuiSommesNous.add(deactivateMenuCss);
+		}
+
+		if (ACCUEIL.equals(nomPage)) {
+			containerLinkMenuAccueil.add(activateMenuCss);
+			containerLinkMenuContact.add(deactivateMenuCss);
+			containerLinkMenuQuiSommesNous.add(deactivateMenuCss);
+		}
 	}
 
 	private void initComponentConnexion() {
@@ -284,4 +325,5 @@ public abstract class MasterPage extends WebPage {
 		attribute.append("\"");
 		return attribute.toString();
 	}
+
 }

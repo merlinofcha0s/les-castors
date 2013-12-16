@@ -14,6 +14,7 @@ public class QuiSommeNous extends MasterPage {
 
 	public QuiSommeNous() {
 		super("Qui sommes nous ?", "", "Qui sommes nous ?");
+		super.setActiveMenu(MasterPage.QUI_SOMMES_NOUS);
 	}
 
 }
