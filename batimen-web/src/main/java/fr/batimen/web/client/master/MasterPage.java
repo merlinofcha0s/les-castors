@@ -121,6 +121,8 @@ public abstract class MasterPage extends WebPage {
 
 		};
 
+		connexion.setMarkupId("connexionLink");
+
 		this.add(connectedContainer);
 		this.add(connexion);
 
