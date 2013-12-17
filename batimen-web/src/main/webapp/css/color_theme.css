@@ -1,14 +1,14 @@
 /* *** MAIN COLOR: #95ba00 *** */
 
-::selection {background:#95ba00;}
-::-moz-selection {background:#95ba00;}
+::selection {background:#25B8E2;}
+::-moz-selection {background:#25B8E2;}
 
 blockquote.type1:before,
 .highlighted_colored {
-	background-color:#95ba00;
+	background-color:#25B8E2;
 }
 .view-tenth .mask {
-	background-color:#95ba00!important;
+	background-color:#25B8E2!important;
 }
 
 a,
@@ -51,18 +51,18 @@ blockquote .author,
 .total_price span,
 .product_title_price,
 .review_body a { 
-	color:#95ba00;
+	color:#25B8E2;
 }
 .shortcode_tab_item_title:hover,
 ul.menu li .sub-menu li.current-menu-parent > a,
 ul.menu li .sub-menu li.current-menu-item > a,
 ul.menu li .sub-menu li > a:hover {
-	color:#95ba00!important;
+	color:#25B8E2!important;
 }
 
 hr.colored {
-	border-color:#95ba00;
+	border-color:#25B8E2;
 }
 .class {
-	border-color:#95ba00!important;
+	border-color:#25B8E2!important;
 }

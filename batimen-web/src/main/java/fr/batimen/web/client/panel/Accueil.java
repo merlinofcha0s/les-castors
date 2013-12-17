@@ -16,4 +16,5 @@ public class Accueil extends MasterPage {
 	public Accueil() {
 		super("Page d'accueil de batimen.fr", "lol", "Accueil batimen");
 	}
+
 }
