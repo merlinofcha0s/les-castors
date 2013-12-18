@@ -54,7 +54,9 @@
 	</appender>
 
 
-	<root level="DEBUG">
+	<root level="${logs.lvl}">
 		<appender-ref ref="stdout" />
+		<appender-ref ref="log-file" />
+		<appender-ref ref="troubleshooting-file" />
 	</root>
 </configuration>
