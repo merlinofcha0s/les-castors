@@ -28,6 +28,7 @@
 		<!-- Logs -->
 		<logs.address>c:/logs/log-batimen</logs.address>
 		<logs.archives>${logs.address}/archived</logs.archives>
+		<logs.lvl>DEBUG</logs.lvl>
 
 		<!-- Hibernate -->
 		<hibernate.show_sql>true</hibernate.show_sql>
@@ -438,6 +439,7 @@
 				<!-- Logs -->
 				<logs.address>/usr/share/log-batimen</logs.address>
 				<logs.archives>${logs.address}/archived</logs.archives>
+				<logs.lvl>DEBUG</logs.lvl>
 
 				<!-- Hibernate -->
 				<hibernate.show_sql>false</hibernate.show_sql>

@@ -10,7 +10,7 @@
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>${LOGS_FOLDER}/batimen_ws.log</file>
 		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-			<level>WARN</level>
+			<level>${logs.lvl}</level>
 		</filter>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<fileNamePattern>${LOGS_TO_COLLECT_FOLDER}/batimen_ws.%d{yyyyMMdd}.log
