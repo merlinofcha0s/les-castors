@@ -1,11 +1,15 @@
 @CHARSET "ISO-8859-1";
 
-#connexion{
+#connexion {
 	float: left;
-	padding-left:700px;
-	padding-top:12px;
+	padding-left: 700px;
+	padding-top: 12px;
 }
 
-.erreur{
+.erreur {
 	color: red;
+}
+
+#canvas_france {
+	width: 600px;
 }

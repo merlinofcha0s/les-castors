@@ -17,7 +17,7 @@ public class Accueil extends MasterPage {
 	private static final long serialVersionUID = -690817359101639588L;
 
 	public Accueil() {
-		super("Page d'accueil de batimen.fr", "lol", "Accueil batimen");
+		super("Page d'accueil de batimen.fr", "lol", "Accueil batimen", false);
 
 		initLink();
 	}

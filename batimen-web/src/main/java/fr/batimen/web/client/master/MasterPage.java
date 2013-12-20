@@ -42,6 +42,9 @@ public abstract class MasterPage extends WebPage {
 	private String metaDescription = "";
 	private String metaKeywords = "";
 
+	// Controle le tag HTML
+	private TransparentWebMarkupContainer htmlTag;
+
 	// Menu
 	private final WebMarkupContainer containerLinkMenuAccueil = new WebMarkupContainer("selectAccueil");
 	private final WebMarkupContainer containerLinkMenuQuiSommesNous = new WebMarkupContainer("selectQuiSommesNous");
@@ -59,6 +62,10 @@ public abstract class MasterPage extends WebPage {
 	// Feedback panel général
 	protected BatimenFeedbackPanel feedBackPanelGeneral;
 
+	/**
+	 * Constructeur par defaut, initialise les composants de base de la page
+	 * 
+	 */
 	public MasterPage() {
 		super();
 
@@ -69,7 +76,7 @@ public abstract class MasterPage extends WebPage {
 		// Fix wicket : prends en charge les <!--[if IE 7 ]><html
 		// class="ie ie7" lang="en"> <![endif]--> du template de maniere
 		// programmatic
-		TransparentWebMarkupContainer htmlTag = new TransparentWebMarkupContainer("htmlTag");
+		htmlTag = new TransparentWebMarkupContainer("htmlTag");
 		this.add(htmlTag);
 		htmlTag.add(AttributeAppender.replace("class", getCSSHtmlTagClass()));
 
@@ -77,23 +84,60 @@ public abstract class MasterPage extends WebPage {
 		// utilisateur de maniere centralisé
 		feedBackPanelGeneral = new BatimenFeedbackPanel("feedBackPanelGeneral");
 		htmlTag.add(feedBackPanelGeneral);
-
 	}
 
-	public MasterPage(String metaDescription, String metaKeywords, String title) {
+	/**
+	 * Constructeur a utiliser obligatoirement quand on instantie une page
+	 * 
+	 * @param metaDescription
+	 *            rempli le contenue de la balise meta content de la page
+	 * @param metaKeywords
+	 *            Rempli le contenu de la balise meta keyword
+	 * @param title
+	 *            Utilisé pour remplir la balise title et le titre principal de
+	 *            la page
+	 * @param isPageWithTitleHeader
+	 *            est ce que la page doit avoir un bandeau en dessous du menu
+	 *            avec le titre de la page ?
+	 */
+	public MasterPage(String metaDescription, String metaKeywords, String title, boolean isPageWithTitleHeader) {
 		this();
 		this.metaDescription = metaDescription;
 		this.metaKeywords = metaKeywords;
 
-		Label titleLbl = new Label("title", new Model<String>(title));
+		StringBuilder titleInHeader = new StringBuilder(title);
+		titleInHeader.append(" - Bati-men.fr");
+
+		// Le titre qui se trouve dans la balise title (et donc qui s'affiche
+		// dans l'onglet du navigateur)
+		Label titleLbl = new Label("title", new Model<String>(titleInHeader.toString()));
 		this.add(titleLbl);
 
 		initComponentConnexion();
 		initMenu();
+		initTitleHeader(isPageWithTitleHeader, title);
 
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Instantiation de la master page.....OK");
 		}
+	}
+
+	private void initTitleHeader(final boolean isPageWithTitleHeader, String title) {
+		WebMarkupContainer containerTitleHeader = new WebMarkupContainer("containerTitleHeader") {
+
+			private static final long serialVersionUID = -8794910421721268035L;
+
+			@Override
+			public boolean isVisible() {
+				return isPageWithTitleHeader;
+			}
+
+		};
+
+		htmlTag.add(containerTitleHeader);
+
+		Label titleHeader = new Label("titleHeader", new Model<String>(title));
+		containerTitleHeader.add(titleHeader);
 	}
 
 	private void initMenu() {

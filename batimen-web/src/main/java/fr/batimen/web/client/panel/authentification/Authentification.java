@@ -35,7 +35,7 @@ public final class Authentification extends MasterPage {
 	private Button signIn;
 
 	public Authentification() {
-		super("Connexion à batimen", "lol", "Connexion à batimen.fr");
+		super("Connexion à batimen", "lol", "Connexion à batimen.fr", true);
 		initForm();
 	}
 
