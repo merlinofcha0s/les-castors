@@ -13,7 +13,7 @@ public class Contact extends MasterPage {
 	private static final long serialVersionUID = -2549295715502248172L;
 
 	public Contact() {
-		super("Contact de batimen.fr", "", "Nous contacter");
+		super("Contact de batimen.fr", "", "Nous contacter", true);
 		super.setActiveMenu(MasterPage.CONTACT);
 	}
 }

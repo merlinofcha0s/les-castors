@@ -13,7 +13,7 @@ public class QuiSommeNous extends MasterPage {
 	private static final long serialVersionUID = -3366422085477423896L;
 
 	public QuiSommeNous() {
-		super("Qui sommes nous ?", "", "Qui sommes nous ?");
+		super("Qui sommes nous ?", "", "Qui sommes nous ?", true);
 		super.setActiveMenu(MasterPage.QUI_SOMMES_NOUS);
 	}
 

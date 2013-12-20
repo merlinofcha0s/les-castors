@@ -13,6 +13,7 @@ public class NouveauDevis extends MasterPage {
 	private static final long serialVersionUID = -7595966450246951918L;
 
 	public NouveauDevis() {
-		super("Demande de nouveau devis", "devis batiment renovation", "Demande de devis");
+		super("Nouveau devis", "devis batiment renovation", "Nouveau devis", true);
 	}
+
 }

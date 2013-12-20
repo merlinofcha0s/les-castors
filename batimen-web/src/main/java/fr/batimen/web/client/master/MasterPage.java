@@ -15,11 +15,11 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.http.ClientProperties;
 import org.apache.wicket.protocol.http.WebSession;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.batimen.web.client.component.BatimenFeedbackPanel;
 import fr.batimen.web.client.panel.Accueil;
 import fr.batimen.web.client.panel.Contact;
 import fr.batimen.web.client.panel.MonCompte;
@@ -42,6 +42,9 @@ public abstract class MasterPage extends WebPage {
 	private String metaDescription = "";
 	private String metaKeywords = "";
 
+	// Controle le tag HTML
+	private TransparentWebMarkupContainer htmlTag;
+
 	// Menu
 	private final WebMarkupContainer containerLinkMenuAccueil = new WebMarkupContainer("selectAccueil");
 	private final WebMarkupContainer containerLinkMenuQuiSommesNous = new WebMarkupContainer("selectQuiSommesNous");
@@ -56,38 +59,85 @@ public abstract class MasterPage extends WebPage {
 	public static String CONTACT = "contact";
 	public static String ACCUEIL = "Accueil";
 
+	// Feedback panel général
+	protected BatimenFeedbackPanel feedBackPanelGeneral;
+
+	/**
+	 * Constructeur par defaut, initialise les composants de base de la page
+	 * 
+	 */
 	public MasterPage() {
 		super();
-		// Fix wicket : prends en charge les <!--[if IE 7 ]><html
-		// class="ie ie7" lang="en"> <![endif]--> du template de maniere
-		// programmatic
-		TransparentWebMarkupContainer htmlTag = new TransparentWebMarkupContainer("htmlTag");
-		add(htmlTag);
-		htmlTag.add(AttributeAppender.replace("class", getHtmlTagClass()));
-	}
-
-	public MasterPage(PageParameters params) {
-		this();
-	}
-
-	public MasterPage(String metaDescription, String metaKeywords, String title) {
-		this();
-		this.metaDescription = metaDescription;
-		this.metaKeywords = metaKeywords;
 
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Début instantiation de la master page.....");
 		}
 
-		Label titleLbl = new Label("title", new Model<String>(title));
+		// Fix wicket : prends en charge les <!--[if IE 7 ]><html
+		// class="ie ie7" lang="en"> <![endif]--> du template de maniere
+		// programmatic
+		htmlTag = new TransparentWebMarkupContainer("htmlTag");
+		this.add(htmlTag);
+		htmlTag.add(AttributeAppender.replace("class", getCSSHtmlTagClass()));
+
+		// Instantiation du composant qui permet d'afficher des messages aux
+		// utilisateur de maniere centralisé
+		feedBackPanelGeneral = new BatimenFeedbackPanel("feedBackPanelGeneral");
+		htmlTag.add(feedBackPanelGeneral);
+	}
+
+	/**
+	 * Constructeur a utiliser obligatoirement quand on instantie une page
+	 * 
+	 * @param metaDescription
+	 *            rempli le contenue de la balise meta content de la page
+	 * @param metaKeywords
+	 *            Rempli le contenu de la balise meta keyword
+	 * @param title
+	 *            Utilisé pour remplir la balise title et le titre principal de
+	 *            la page
+	 * @param isPageWithTitleHeader
+	 *            est ce que la page doit avoir un bandeau en dessous du menu
+	 *            avec le titre de la page ?
+	 */
+	public MasterPage(String metaDescription, String metaKeywords, String title, boolean isPageWithTitleHeader) {
+		this();
+		this.metaDescription = metaDescription;
+		this.metaKeywords = metaKeywords;
+
+		StringBuilder titleInHeader = new StringBuilder(title);
+		titleInHeader.append(" - Bati-men.fr");
+
+		// Le titre qui se trouve dans la balise title (et donc qui s'affiche
+		// dans l'onglet du navigateur)
+		Label titleLbl = new Label("title", new Model<String>(titleInHeader.toString()));
 		this.add(titleLbl);
 
 		initComponentConnexion();
 		initMenu();
+		initTitleHeader(isPageWithTitleHeader, title);
 
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Instantiation de la master page.....OK");
 		}
+	}
+
+	private void initTitleHeader(final boolean isPageWithTitleHeader, String title) {
+		WebMarkupContainer containerTitleHeader = new WebMarkupContainer("containerTitleHeader") {
+
+			private static final long serialVersionUID = -8794910421721268035L;
+
+			@Override
+			public boolean isVisible() {
+				return isPageWithTitleHeader;
+			}
+
+		};
+
+		htmlTag.add(containerTitleHeader);
+
+		Label titleHeader = new Label("titleHeader", new Model<String>(title));
+		containerTitleHeader.add(titleHeader);
 	}
 
 	private void initMenu() {
@@ -215,9 +265,9 @@ public abstract class MasterPage extends WebPage {
 	 * Fix wicket : prends en charge les <!--[if IE 7 ]><html class="ie ie7"
 	 * lang="en"> <![endif]--> du template de maniere programmatic
 	 * 
-	 * @return
+	 * @return les classes CSS qui vont bien avec le navigateur
 	 */
-	private IModel<String> getHtmlTagClass() {
+	private IModel<String> getCSSHtmlTagClass() {
 		return new LoadableDetachableModel<String>() {
 
 			private static final long serialVersionUID = 1502969877304945599L;

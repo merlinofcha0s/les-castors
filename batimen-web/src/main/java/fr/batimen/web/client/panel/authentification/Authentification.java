@@ -14,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.batimen.dto.constant.ValidatorConstant;
-import fr.batimen.web.app.component.BatimenFeedbackPanel;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.web.client.panel.MonCompte;
 
@@ -34,10 +33,9 @@ public final class Authentification extends MasterPage {
 	private TextField<String> login;
 	private PasswordTextField password;
 	private Button signIn;
-	private BatimenFeedbackPanel feedBackLogin;
 
 	public Authentification() {
-		super("Connexion à batimen", "lol", "Connexion à batimen.fr");
+		super("Connexion à batimen", "lol", "Connexion à batimen.fr", true);
 		initForm();
 	}
 
@@ -84,14 +82,12 @@ public final class Authentification extends MasterPage {
 					// Sinon on le redirige vers la page de son compte.
 					setResponsePage(MonCompte.class);
 				} else {
-					feedBackLogin.error("Compte inexistant / mot de passe incorrect");
+					feedBackPanelGeneral.error("Compte inexistant / mot de passe incorrect");
 				}
 			}
 		};
 
 		signIn.setMarkupId("signInButton");
-
-		feedBackLogin = new BatimenFeedbackPanel("feedBackLogin");
 
 		loginForm.add(signIn);
 		loginForm.add(login);
@@ -99,7 +95,6 @@ public final class Authentification extends MasterPage {
 
 		this.add(hello);
 		this.add(loginForm);
-		this.add(feedBackLogin);
 
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Fin initialisation du form d'authentification");
