@@ -1,15 +1,16 @@
 <wicket:extend>
-<div class="row-fluid">
-	<div wicket:id="loginHello"></div>
+	<div class="row-fluid">
+		<div wicket:id="loginHello"></div>
 
-	<form wicket:id="loginForm">
-		<input type="text" wicket:id="login"
-			onClick="if(this.value=='Identifiant'){this.value=''}"
-			onblur="if(this.value==''){this.value='Identifiant'}" /> 
-			<input type="password" wicket:id="password" onClick="if(this.value=='Password'){this.value=''}" onblur="if(this.value==''){this.value='Password'}" /> 
-			<input type="submit" wicket:id="signIn" class="shortcode_button btn_small btn_type1" value="Go" onsubmit="" />
-	</form>
-	
-	<ul wicket:id="feedBackLogin"> </ul>
+		<form wicket:id="loginForm">
+			<input type="text" wicket:id="login"
+				onClick="if(this.value=='Identifiant'){this.value=''}"
+				onblur="if(this.value==''){this.value='Identifiant'}" /> <input
+				type="password" wicket:id="password"
+				onClick="if(this.value=='Password'){this.value=''}"
+				onblur="if(this.value==''){this.value='Password'}" /> <input
+				type="submit" wicket:id="signIn"
+				class="shortcode_button btn_small btn_type1" value="Go" onsubmit="" />
+		</form>
 	</div>
 </wicket:extend>

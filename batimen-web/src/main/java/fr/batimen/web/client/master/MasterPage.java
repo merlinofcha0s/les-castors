@@ -20,6 +20,7 @@ import org.apache.wicket.request.resource.PackageResourceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.batimen.web.app.component.BatimenFeedbackPanel;
 import fr.batimen.web.client.panel.Accueil;
 import fr.batimen.web.client.panel.Contact;
 import fr.batimen.web.client.panel.MonCompte;
@@ -56,6 +57,9 @@ public abstract class MasterPage extends WebPage {
 	public static String CONTACT = "contact";
 	public static String ACCUEIL = "Accueil";
 
+	// Feedback panel général
+	protected BatimenFeedbackPanel feedBackPanelGeneral;
+
 	public MasterPage() {
 		super();
 		// Fix wicket : prends en charge les <!--[if IE 7 ]><html
@@ -64,6 +68,10 @@ public abstract class MasterPage extends WebPage {
 		TransparentWebMarkupContainer htmlTag = new TransparentWebMarkupContainer("htmlTag");
 		add(htmlTag);
 		htmlTag.add(AttributeAppender.replace("class", getHtmlTagClass()));
+
+		feedBackPanelGeneral = new BatimenFeedbackPanel("feedBackPanelGeneral");
+		htmlTag.add(feedBackPanelGeneral);
+
 	}
 
 	public MasterPage(PageParameters params) {
