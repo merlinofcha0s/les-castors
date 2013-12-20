@@ -15,12 +15,11 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.http.ClientProperties;
 import org.apache.wicket.protocol.http.WebSession;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.batimen.web.app.component.BatimenFeedbackPanel;
+import fr.batimen.web.client.component.BatimenFeedbackPanel;
 import fr.batimen.web.client.panel.Accueil;
 import fr.batimen.web.client.panel.Contact;
 import fr.batimen.web.client.panel.MonCompte;
@@ -62,30 +61,29 @@ public abstract class MasterPage extends WebPage {
 
 	public MasterPage() {
 		super();
+
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Début instantiation de la master page.....");
+		}
+
 		// Fix wicket : prends en charge les <!--[if IE 7 ]><html
 		// class="ie ie7" lang="en"> <![endif]--> du template de maniere
 		// programmatic
 		TransparentWebMarkupContainer htmlTag = new TransparentWebMarkupContainer("htmlTag");
-		add(htmlTag);
-		htmlTag.add(AttributeAppender.replace("class", getHtmlTagClass()));
+		this.add(htmlTag);
+		htmlTag.add(AttributeAppender.replace("class", getCSSHtmlTagClass()));
 
+		// Instantiation du composant qui permet d'afficher des messages aux
+		// utilisateur de maniere centralisé
 		feedBackPanelGeneral = new BatimenFeedbackPanel("feedBackPanelGeneral");
 		htmlTag.add(feedBackPanelGeneral);
 
-	}
-
-	public MasterPage(PageParameters params) {
-		this();
 	}
 
 	public MasterPage(String metaDescription, String metaKeywords, String title) {
 		this();
 		this.metaDescription = metaDescription;
 		this.metaKeywords = metaKeywords;
-
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Début instantiation de la master page.....");
-		}
 
 		Label titleLbl = new Label("title", new Model<String>(title));
 		this.add(titleLbl);
@@ -223,9 +221,9 @@ public abstract class MasterPage extends WebPage {
 	 * Fix wicket : prends en charge les <!--[if IE 7 ]><html class="ie ie7"
 	 * lang="en"> <![endif]--> du template de maniere programmatic
 	 * 
-	 * @return
+	 * @return les classes CSS qui vont bien avec le navigateur
 	 */
-	private IModel<String> getHtmlTagClass() {
+	private IModel<String> getCSSHtmlTagClass() {
 		return new LoadableDetachableModel<String>() {
 
 			private static final long serialVersionUID = 1502969877304945599L;

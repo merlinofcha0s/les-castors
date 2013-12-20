@@ -1,4 +1,4 @@
-package fr.batimen.web.app.component;
+package fr.batimen.web.client.component;
 
 import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
