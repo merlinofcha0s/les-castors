@@ -8,7 +8,9 @@ import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
 
 import fr.batimen.web.client.panel.Accueil;
+import fr.batimen.web.client.panel.Contact;
 import fr.batimen.web.client.panel.MonCompte;
+import fr.batimen.web.client.panel.QuiSommeNous;
 import fr.batimen.web.client.panel.authentification.Authentification;
 import fr.batimen.web.client.session.BatimenSession;
 
@@ -40,6 +42,8 @@ public class BatimenApplication extends AuthenticatedWebApplication {
 		mountPage("/accueil", Accueil.class);
 		mountPage("/connexion", Authentification.class);
 		mountPage("/moncompte", MonCompte.class);
+		mountPage("/quisommesnous", QuiSommeNous.class);
+		mountPage("/contact", Contact.class);
 	}
 
 	@Override

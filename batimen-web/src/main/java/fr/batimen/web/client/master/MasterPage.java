@@ -1,9 +1,9 @@
 package fr.batimen.web.client.master;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.StringHeaderItem;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -20,7 +20,10 @@ import org.apache.wicket.request.resource.PackageResourceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.batimen.web.client.panel.Accueil;
+import fr.batimen.web.client.panel.Contact;
 import fr.batimen.web.client.panel.MonCompte;
+import fr.batimen.web.client.panel.QuiSommeNous;
 import fr.batimen.web.client.panel.authentification.Authentification;
 import fr.batimen.web.client.session.BatimenSession;
 
@@ -33,10 +36,25 @@ import fr.batimen.web.client.session.BatimenSession;
  */
 public abstract class MasterPage extends WebPage {
 
+	// Général
 	private static final long serialVersionUID = 6955108821767948992L;
 	private static final Logger LOGGER = LoggerFactory.getLogger(MasterPage.class);
 	private String metaDescription = "";
 	private String metaKeywords = "";
+
+	// Menu
+	private final WebMarkupContainer containerLinkMenuAccueil = new WebMarkupContainer("selectAccueil");
+	private final WebMarkupContainer containerLinkMenuQuiSommesNous = new WebMarkupContainer("selectQuiSommesNous");
+	private final WebMarkupContainer containerLinkMenuContact = new WebMarkupContainer("selectContact");
+
+	private final AttributeModifier activateMenuCss = new AttributeModifier("class", new Model<String>(
+			"current-menu-parent"));
+	private final AttributeModifier deactivateMenuCss = new AttributeModifier("class", new Model<String>(""));
+
+	// Nom Pages Principales Static
+	public static String QUI_SOMMES_NOUS = "quiSommesNous";
+	public static String CONTACT = "contact";
+	public static String ACCUEIL = "Accueil";
 
 	public MasterPage() {
 		super();
@@ -46,7 +64,6 @@ public abstract class MasterPage extends WebPage {
 		TransparentWebMarkupContainer htmlTag = new TransparentWebMarkupContainer("htmlTag");
 		add(htmlTag);
 		htmlTag.add(AttributeAppender.replace("class", getHtmlTagClass()));
-
 	}
 
 	public MasterPage(PageParameters params) {
@@ -66,9 +83,71 @@ public abstract class MasterPage extends WebPage {
 		this.add(titleLbl);
 
 		initComponentConnexion();
+		initMenu();
 
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Instantiation de la master page.....OK");
+		}
+	}
+
+	private void initMenu() {
+
+		Link<String> accueilLink = new Link<String>("accueilLink") {
+
+			private static final long serialVersionUID = -5109878814704325528L;
+
+			@Override
+			public void onClick() {
+				this.setResponsePage(Accueil.class);
+			}
+		};
+
+		Link<String> quiSommesNousLink = new Link<String>("quiSommesNousLink") {
+
+			private static final long serialVersionUID = -9076993269716924371L;
+
+			@Override
+			public void onClick() {
+				this.setResponsePage(QuiSommeNous.class);
+			}
+		};
+
+		Link<String> contactLink = new Link<String>("contactLink") {
+
+			private static final long serialVersionUID = 3349463856140732172L;
+
+			@Override
+			public void onClick() {
+				this.setResponsePage(Contact.class);
+			}
+		};
+
+		containerLinkMenuAccueil.add(accueilLink);
+		containerLinkMenuContact.add(contactLink);
+		containerLinkMenuQuiSommesNous.add(quiSommesNousLink);
+
+		this.add(containerLinkMenuAccueil);
+		this.add(containerLinkMenuQuiSommesNous);
+		this.add(containerLinkMenuContact);
+	}
+
+	public void setActiveMenu(String nomPage) {
+
+		if (QUI_SOMMES_NOUS.equals(nomPage)) {
+			containerLinkMenuQuiSommesNous.add(activateMenuCss);
+			containerLinkMenuAccueil.add(deactivateMenuCss);
+			containerLinkMenuContact.add(deactivateMenuCss);
+		}
+		if (CONTACT.equals(nomPage)) {
+			containerLinkMenuContact.add(activateMenuCss);
+			containerLinkMenuAccueil.add(deactivateMenuCss);
+			containerLinkMenuQuiSommesNous.add(deactivateMenuCss);
+		}
+
+		if (ACCUEIL.equals(nomPage)) {
+			containerLinkMenuAccueil.add(activateMenuCss);
+			containerLinkMenuContact.add(deactivateMenuCss);
+			containerLinkMenuQuiSommesNous.add(deactivateMenuCss);
 		}
 	}
 
@@ -120,6 +199,8 @@ public abstract class MasterPage extends WebPage {
 			}
 
 		};
+
+		connexion.setMarkupId("connexionLink");
 
 		this.add(connectedContainer);
 		this.add(connexion);
@@ -191,22 +272,6 @@ public abstract class MasterPage extends WebPage {
 	}
 
 	/**
-	 * Ajoute les fichier JS pour qu'il soit global à l'application
-	 * 
-	 * @param address
-	 *            localisation du fichier js
-	 * 
-	 * @return objet wicket qui permet de generer la balise link
-	 */
-	private JavaScriptHeaderItem addJsFileToHeader(String address) {
-
-		PackageResourceReference jsFile = new PackageResourceReference(fr.batimen.web.client.master.MasterPage.class,
-				address);
-
-		return JavaScriptHeaderItem.forReference(jsFile);
-	}
-
-	/**
 	 * Ajoute les fichier CSS pour qu'il soit global à l'application
 	 * 
 	 * @param address
@@ -260,4 +325,5 @@ public abstract class MasterPage extends WebPage {
 		attribute.append("\"");
 		return attribute.toString();
 	}
+
 }

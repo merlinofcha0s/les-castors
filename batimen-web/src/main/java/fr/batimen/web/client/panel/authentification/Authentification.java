@@ -6,7 +6,6 @@ import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.panel.FeedbackPanel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -15,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.batimen.dto.constant.ValidatorConstant;
+import fr.batimen.web.app.component.BatimenFeedbackPanel;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.web.client.panel.MonCompte;
 
@@ -34,8 +34,7 @@ public final class Authentification extends MasterPage {
 	private TextField<String> login;
 	private PasswordTextField password;
 	private Button signIn;
-	private Label error;
-	private FeedbackPanel feedBackLogin;
+	private BatimenFeedbackPanel feedBackLogin;
 
 	public Authentification() {
 		super("Connexion à batimen", "lol", "Connexion à batimen.fr");
@@ -68,10 +67,6 @@ public final class Authentification extends MasterPage {
 		password.add(new StringValidator(ValidatorConstant.LOGIN_DTO_PASSWORD_RANGE_MIN,
 				ValidatorConstant.LOGIN_DTO_PASSWORD_RANGE_MAX));
 
-		error = new Label("error", new Model<String>());
-		error.setDefaultModelObject("Compte inexistant / mot de passe incorrect");
-		error.setVisible(false);
-
 		signIn = new Button("signIn") {
 
 			private static final long serialVersionUID = 3183458686534816645L;
@@ -89,16 +84,15 @@ public final class Authentification extends MasterPage {
 					// Sinon on le redirige vers la page de son compte.
 					setResponsePage(MonCompte.class);
 				} else {
-					error.setVisible(true);
+					feedBackLogin.error("Compte inexistant / mot de passe incorrect");
 				}
 			}
 		};
 
 		signIn.setMarkupId("signInButton");
 
-		feedBackLogin = new FeedbackPanel("feedBackLogin");
+		feedBackLogin = new BatimenFeedbackPanel("feedBackLogin");
 
-		loginForm.add(error);
 		loginForm.add(signIn);
 		loginForm.add(login);
 		loginForm.add(password);

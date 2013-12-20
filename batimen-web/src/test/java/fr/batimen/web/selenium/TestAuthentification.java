@@ -10,7 +10,7 @@ public class TestAuthentification extends AbstractSeleniumTest {
 	@Test
 	public void testAuthentificationSuccess() throws Exception {
 		driver.get(appUrl);
-		driver.findElement(By.id("connexion")).click();
+		driver.findElement(By.id("connexionLink")).click();
 		driver.findElement(By.name("login")).click();
 		driver.findElement(By.name("login")).clear();
 		driver.findElement(By.name("login")).sendKeys("raiden");

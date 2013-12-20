@@ -53,6 +53,7 @@
 		<!-- Logs -->
 		<logs.address>c:/logs/log-batimen</logs.address>
 		<logs.archives>${logs.address}/archived</logs.archives>
+		<logs.lvl>DEBUG</logs.lvl>
 	</properties>
 
 	<build>
@@ -369,7 +370,7 @@
 			<dependency>
 				<groupId>org.seleniumhq.selenium</groupId>
 				<artifactId>selenium-java</artifactId>
-				<version>2.35.0</version>
+				<version>2.39.0</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -394,6 +395,7 @@
 				<!-- Logs -->
 				<logs.address>/usr/share/log-batimen</logs.address>
 				<logs.archives>${logs.address}/archived</logs.archives>
+				<logs.lvl>DEBUG</logs.lvl>
 			</properties>
 			<build>
 				<plugins>

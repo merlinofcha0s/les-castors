@@ -18,6 +18,7 @@
 
 <title wicket:id="title" ></title>
 
+<link rel="stylesheet" type="text/css" href="css/google_font.css">
 <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
 <link rel="stylesheet" type="text/css" href="css/bootstrap-responsive.css">
 <link rel="stylesheet" type="text/css" href="css/plugins.css">
@@ -42,7 +43,7 @@
 </head>
 
 <body>
-	<header>
+	<header  class="type2">
 		<div class="top_line">
 			<div class="container">
 				<div class="call_us">
@@ -76,59 +77,15 @@
 				class="logo_retina" /></a>
 			<nav>
 				<ul class="menu">
-					<li class="current-menu-parent"><a href="javascript:void(0)">HOME</a>
-						<ul class="sub-menu">
-							<li><a href="index.html">Clean Style With Fullwidth
-									Slider</a></li>
-							<li class="current-menu-item"><a href="home2.html">Clean
-									Style</a></li>
-							<li><a href="home3.html">Background Color With Fullwidth
-									Slider</a></li>
-							<li><a href="home4.html">Background Color</a></li>
-							<li><a href="home5.html">Background Image</a></li>
-						</ul></li>
-					<li><a href="javascript:void(0)">PAGES</a>
-						<ul class="sub-menu">
-							<li><a href="about.html">About</a></li>
-							<li><a href="full-width.html">Full Width</a></li>
-							<li><a href="faq.html">FAQ</a></li>
-							<li><a href="404.html">404 Page</a></li>
-							<li><a href="sitemap.html">Sitemap</a></li>
-						</ul></li>
-					<li><a href="javascript:void(0)">FEATURES</a>
-						<ul class="sub-menu">
-							<li><a href="typography.html">Typography</a></li>
-							<li><a href="shortcodes.html">Shortcodes</a></li>
-						</ul></li>
-					<li><a href="javascript:void(0)">PORTFOLIO</a>
-						<ul class="sub-menu">
-							<li><a href="portfolio1.html">1 Column</a></li>
-							<li><a href="portfolio2.html">2 Columns</a></li>
-							<li><a href="portfolio3.html">3 Columns</a></li>
-							<li><a href="portfolio4.html">4 Columns</a></li>
-							<li><a href="portfolio_post.html">Portfolio Post</a></li>
-						</ul></li>
-					<li><a href="javascript:void(0)">BLOG</a>
-						<ul class="sub-menu">
-							<li><a href="blog_full.html">Full Width</a></li>
-							<li><a href="blogpost_full.html">Blog Post</a></li>
-							<li><a href="javascript:void(0)">With Sidebar</a>
-								<ul class="sub-menu">
-									<li><a href="blog_left.html">Left Sidebar</a></li>
-									<li><a href="blog_right.html">Right Sidebar</a></li>
-									<li><a href="blogpost_sidebar.html">Blog Post</a></li>
-								</ul></li>
-						</ul></li>
-					<li><a href="javascript:void(0)">SHOP</a>
-						<ul class="sub-menu">
-							<li><a href="shop_products.html">All Products</a></li>
-							<li><a href="shop_item.html">Shop Item</a></li>
-						</ul></li>
-					<li><a href="javascript:void(0)">CONTACTS</a>
-						<ul class="sub-menu">
-							<li><a href="contact_full.html">Full Width</a></li>
-							<li><a href="contact_sidebar.html">With Sidebar</a></li>
-						</ul></li>
+					<li wicket:id="selectAccueil" class="current-menu-parent">
+						<a wicket:id="accueilLink">Accueil</a>
+					</li>
+					<li wicket:id="selectQuiSommesNous">
+						<a wicket:id="quiSommesNousLink">Qui sommes nous ?</a>
+					</li>
+					<li wicket:id="selectContact">
+						<a wicket:id="contactLink">Nous contacter</a>
+					</li>
 				</ul>
 				<!-- .menu -->
 				<div class="clear"></div>
@@ -180,7 +137,7 @@
 
 	<footer>
 		<div class="footer_line container">
-			<div class="copyright">&copy; 2020 Dixit Wordpress Theme. All
+			<div class="copyright">&copy; 2013 Batimen Team. All
 				Rights Reserved.</div>
 			<div class="socials">
 				<ul class="socials_list">
