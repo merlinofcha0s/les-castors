@@ -1,14 +1,25 @@
 package fr.batimen.web.app.component;
 
 import org.apache.wicket.feedback.FeedbackMessage;
-import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
 
+/**
+ * Version custom du feedback panel provenant de wicket Cette version prends en
+ * charge les specificités du template html5 dixit
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class BatimenFeedbackPanel extends FeedbackPanel {
 
 	private static final long serialVersionUID = -919099060805273405L;
-	private Label msgLvl;
 
+	/**
+	 * Constructeur par défaut
+	 * 
+	 * @param id
+	 *            l'id html du feedbackPanel
+	 */
 	public BatimenFeedbackPanel(String id) {
 		super(id);
 	}
@@ -36,6 +47,7 @@ public class BatimenFeedbackPanel extends FeedbackPanel {
 			break;
 		default:
 			css = "box_type2";
+			break;
 		}
 
 		return css;
