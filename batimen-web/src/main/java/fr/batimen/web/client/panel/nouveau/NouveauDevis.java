@@ -1,5 +1,6 @@
 package fr.batimen.web.client.panel.nouveau;
 
+import fr.batimen.web.client.component.MapFrance;
 import fr.batimen.web.client.master.MasterPage;
 
 /**
@@ -14,6 +15,8 @@ public class NouveauDevis extends MasterPage {
 
 	public NouveauDevis() {
 		super("Nouveau devis", "devis batiment renovation", "Nouveau devis", true);
+		MapFrance carteFrance = new MapFrance("mapFrance");
+		this.add(carteFrance);
 	}
 
 }

@@ -8,6 +8,7 @@ window.onload = function() {
 		'stroke-width' : 1,
 		'stroke-linejoin' : 'round'
 	};
+
 	
 	fr.departement2a = paper
 			.path(

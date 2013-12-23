@@ -10,6 +10,8 @@
 	color: red;
 }
 
-#canvas_france {
+#mapFrance {
 	width: 600px;
+	padding-left: 310px;
+	padding-top: 20px;
 }
