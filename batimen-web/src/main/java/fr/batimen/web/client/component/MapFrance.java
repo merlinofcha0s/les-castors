@@ -330,7 +330,9 @@ public class MapFrance extends Panel {
 		carteFranceJS.append("st[0].onmouseout = function() {st.animate({fill : '#f5f5f5',stroke : '#000000'}, 300);");
 		carteFranceJS.append("paper.safari();};})(fr[state], state);}");
 
+		carteFranceJS.append("fr.departement2a.attr({title: '2a – Corse', href: 'http://www.google.fr?q=Herault'});");
 		carteFranceJS.append("fr.departement2b.attr({title: '2b – Corse'});");
+		carteFranceJS.append("fr.departement13.attr({title: '13 – Bouches-du-Rhône'});");
 
 		carteFranceJS.append("}");
 
