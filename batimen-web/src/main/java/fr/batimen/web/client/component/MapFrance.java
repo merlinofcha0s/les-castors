@@ -4,6 +4,7 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import fr.batimen.web.client.panel.nouveau.NouveauDevis;
@@ -17,8 +18,19 @@ public class MapFrance extends Panel {
 
 	public MapFrance(String id) {
 		super(id);
+
 		canvasFrance = new WebMarkupContainer(containerMapFranceName);
 		this.add(canvasFrance);
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see org.apache.wicket.Component#isVisible()
+	 */
+	@Override
+	public boolean isVisible() {
+		return !RequestCycle.get().getRequest().getUrl().getPath().contains("departement");
 	}
 
 	private String initCarteFrance() {
