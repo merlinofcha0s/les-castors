@@ -6,7 +6,7 @@ import fr.batimen.web.client.component.MapFrance;
 import fr.batimen.web.client.master.MasterPage;
 
 /**
- * Permet la création de nouveau devis par un client demandeur de travaux.
+ * Permet la création de nouveau devis par un client.
  * 
  * @author Casaucau Cyril
  * 
@@ -24,7 +24,6 @@ public class NouveauDevis extends MasterPage {
 
 	public NouveauDevis(PageParameters parameters) {
 		this();
-
 		// On récupere le departement qu'a choisi l'utilisateur
 		String departement = parameters.get("departement").toString();
 

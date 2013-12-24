@@ -9,6 +9,13 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import fr.batimen.web.client.panel.nouveau.NouveauDevis;
 
+/**
+ * Panel wicket qui permet de sélectionner un departement a l'aide d'une carte
+ * de france généré en SVG
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class MapFrance extends Panel {
 
 	private static final long serialVersionUID = 2865328261053993119L;
@@ -345,6 +352,7 @@ public class MapFrance extends Panel {
 		carteFranceJS.append("st[0].onmouseout = function() {st.animate({fill : '#f5f5f5',stroke : '#000000'}, 300);");
 		carteFranceJS.append("paper.safari();};})(fr[state], state);}");
 
+		// Ajout du tooltip + generation de l'url
 		carteFranceJS.append("fr.departement2a.attr({title: '2a – Corse-du-Sud', href:");
 		carteFranceJS.append(" '");
 		carteFranceJS.append(computeURLWithDepartmentParam("2a"));
@@ -840,6 +848,14 @@ public class MapFrance extends Panel {
 		response.render(JavaScriptHeaderItem.forScript(initCarteFrance(), "carteFranceJS"));
 	}
 
+	/**
+	 * Génére l'url qui permettra de passer à l'étape 2 du nouveau devis
+	 * 
+	 * @param departementNb
+	 *            le numéro du dpt qui a été selectionnée
+	 * 
+	 * @return l'url généré correctement
+	 */
 	private String computeURLWithDepartmentParam(String departementNb) {
 
 		PageParameters parametersDept = new PageParameters();
