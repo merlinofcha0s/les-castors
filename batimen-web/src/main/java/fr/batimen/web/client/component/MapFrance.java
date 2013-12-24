@@ -333,13 +333,490 @@ public class MapFrance extends Panel {
 		carteFranceJS.append("st[0].onmouseout = function() {st.animate({fill : '#f5f5f5',stroke : '#000000'}, 300);");
 		carteFranceJS.append("paper.safari();};})(fr[state], state);}");
 
-		carteFranceJS.append("fr.departement2a.attr({title: '2a – Corse', href:");
+		carteFranceJS.append("fr.departement2a.attr({title: '2a – Corse-du-Sud', href:");
 		carteFranceJS.append(" '");
 		carteFranceJS.append(computeURLWithDepartmentParam("2a"));
 		carteFranceJS.append("'});");
 
-		carteFranceJS.append("fr.departement2b.attr({title: '2b – Corse'});");
-		carteFranceJS.append("fr.departement13.attr({title: '13 – Bouches-du-Rhône'});");
+		carteFranceJS.append("fr.departement2b.attr({title: '2b – Haute-Corse', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("2a"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement13.attr({title: '13 – Bouches-du-Rhône', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("13"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement13.attr({title: '13 – Bouches-du-Rhône', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("13"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement84.attr({title: '84 – Vaucluse', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("84"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement83.attr({title: '83 – Var', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("83"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement04.attr({title: '04 – Alpes-de-Haute-Provence', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("04"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement06.attr({title: '06 – Alpes-Maritimes', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("06"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement05.attr({title: '05 – Hautes-Alpes', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("05"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement48.attr({title: '48 – Lozère', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("48"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement03.attr({title: '03 – Allier', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("03"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement30.attr({title: '30 – Gard', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("30"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement11.attr({title: '11 – Aude', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("11"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement34.attr({title: '34 – Hérault', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("34"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement66.attr({title: '66 – Pyrénées-Orientales', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("66"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement15.attr({title: '15 – Cantal', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("15"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement43.attr({title: '43 – Haute-Loire', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("43"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement63.attr({title: '63 – Puy-de-Dôme', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("63"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement65.attr({title: '65 – Hautes-Pyrénées', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("65"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement64.attr({title: '64 – Pyrénées-Atlantiques', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("64"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement40.attr({title: '40 – Landes', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("40"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement33.attr({title: '33 – Gironde', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("33"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement24.attr({title: '24 – Dordogne', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("24"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement47.attr({title: '47 – Lot-et-Garonne', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("24"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement46.attr({title: '46 – Lot', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("46"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement09.attr({title: '09 – Ariège', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("09"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement32.attr({title: '32 – Gers', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("32"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement31.attr({title: '31 – Haute-Garonne', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("31"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement82.attr({title: '82 – Tarn-et-Garonne', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("82"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement12.attr({title: '12 – Aveyron', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("12"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement81.attr({title: '81 – Tarn', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("81"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement01.attr({title: '01 – Ain', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("01"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement38.attr({title: '38 – Isère', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("38"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement74.attr({title: '74 – Haute-Savoie', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("38"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement42.attr({title: '42 – Loire', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("42"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement73.attr({title: '73 – Savoie', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("73"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement69.attr({title: '69 – Rhône', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("69"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement07.attr({title: '07 – Rhône', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("07"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement26.attr({title: '26 – Drôme', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("26"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement17.attr({title: '17 – Charente-Maritime', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("17"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement19.attr({title: '19 – Corrèze', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("19"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement23.attr({title: '23 – Creuse', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("23"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement87.attr({title: '87 – Haute-Vienne', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("87"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement86.attr({title: '86 – Haute-Vienne', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("86"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement16.attr({title: '16 – Charente', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("16"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement79.attr({title: '79 – Deux-Sèvres', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("79"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement22.attr({title: '22 – Côtes d\\'Armor', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("22"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement85.attr({title: '85 – Vendée', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("85"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement50.attr({title: '50 – Manche', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("50"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement56.attr({title: '56 – Morbihan', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("56"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement29.attr({title: '29 – Finistère', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("29"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement35.attr({title: '35 – Ille-et-Vilaines', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("35"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement44.attr({title: '44 – Loire-Atlantique', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("44"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement49.attr({title: '49 – Maine-et-Loire', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("49"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement72.attr({title: '72 – Sarthe', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("72"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement53.attr({title: '53 – Mayenne', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("53"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement14.attr({title: '14 – Calvados', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("14"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement61.attr({title: '61 – Calvados', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("61"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement28.attr({title: '28 – Eure-et-Loir', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("28"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement89.attr({title: '89 – Yonne', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("89"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement70.attr({title: '70 – Haute-Saône', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("70"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement76.attr({title: '76 – Seine-Maritime', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("76"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement27.attr({title: '27 – Eure', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("27"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement37.attr({title: '37 – Indre-et-Loire', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("37"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement45.attr({title: '45 – Loiret', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("45"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement36.attr({title: '36 – Indre', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("36"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement41.attr({title: '41 – Loir-et-Cher', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("41"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement18.attr({title: '18 – Cher', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("18"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement21.attr({title: '21 – Côte-d\\'Or', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("21"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement58.attr({title: '58 – Nièvre', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("58"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement71.attr({title: '71 – Saône-et-Loire', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("71"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement39.attr({title: '39 – Jura', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("39"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement51.attr({title: '51 – Marne', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("51"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement60.attr({title: '60 – Oise', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("60"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement62.attr({title: '62 – Pas-de-Calais', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("62"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement59.attr({title: '59 – Nord', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("59"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement02.attr({title: '02 – Aisne', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("02"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement80.attr({title: '80 – Somme', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("80"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement08.attr({title: '08 – Ardennes', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("08"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement10.attr({title: '10 – Aube', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("10"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement52.attr({title: '52 – Haute-Marne', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("52"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement67.attr({title: '67 – Bas-Rhin', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("67"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement54.attr({title: '54 – Meurthe-et-Moselle', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("54"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement77.attr({title: '77 – Meurthe-et-Moselle', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("77"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement68.attr({title: '68 – Meurthe-et-Moselle', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("68"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement55.attr({title: '55 – Meuse', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("55"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement57.attr({title: '57 – Moselle', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("57"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement88.attr({title: '88 – Vosges', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("88"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement91.attr({title: '91 – Essonne', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("91"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement78.attr({title: '78 – Yvelines', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("78"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement95.attr({title: '95 – Val-D\\'Oise', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("95"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement93.attr({title: '93 – Seine-St-Denis', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("93"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement75.attr({title: '75 – Paris', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("75"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement92.attr({title: '92 – Hauts-de-Seine', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("92"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement94.attr({title: '94 – Val-de-Marne', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("94"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement25.attr({title: '25 – Doubs', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("25"));
+		carteFranceJS.append("'});");
+
+		carteFranceJS.append("fr.departement90.attr({title: '90 – Terr. de Belfort', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("90"));
+		carteFranceJS.append("'});");
 
 		carteFranceJS.append("}");
 
