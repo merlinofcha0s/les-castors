@@ -4,6 +4,9 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+
+import fr.batimen.web.client.panel.nouveau.NouveauDevis;
 
 public class MapFrance extends Panel {
 
@@ -330,7 +333,11 @@ public class MapFrance extends Panel {
 		carteFranceJS.append("st[0].onmouseout = function() {st.animate({fill : '#f5f5f5',stroke : '#000000'}, 300);");
 		carteFranceJS.append("paper.safari();};})(fr[state], state);}");
 
-		carteFranceJS.append("fr.departement2a.attr({title: '2a – Corse', href: 'http://www.google.fr?q=Herault'});");
+		carteFranceJS.append("fr.departement2a.attr({title: '2a – Corse', href:");
+		carteFranceJS.append(" '");
+		carteFranceJS.append(computeURLWithDepartmentParam("2a"));
+		carteFranceJS.append("'});");
+
 		carteFranceJS.append("fr.departement2b.attr({title: '2b – Corse'});");
 		carteFranceJS.append("fr.departement13.attr({title: '13 – Bouches-du-Rhône'});");
 
@@ -342,5 +349,13 @@ public class MapFrance extends Panel {
 	@Override
 	public void renderHead(IHeaderResponse response) {
 		response.render(JavaScriptHeaderItem.forScript(initCarteFrance(), "carteFranceJS"));
+	}
+
+	private String computeURLWithDepartmentParam(String departementNb) {
+
+		PageParameters parametersDept = new PageParameters();
+		parametersDept.add("departement", departementNb);
+
+		return urlFor(NouveauDevis.class, parametersDept).toString();
 	}
 }
