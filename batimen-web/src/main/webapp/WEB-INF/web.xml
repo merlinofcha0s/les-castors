@@ -42,6 +42,6 @@
 	</filter-mapping>
 
 	<listener>
-		<listener-class>fr.batimen.web.context.LogBackContextListener</listener-class>
+		<listener-class>fr.batimen.web.app.context.LogBackContextListener</listener-class>
 	</listener>
 </web-app>

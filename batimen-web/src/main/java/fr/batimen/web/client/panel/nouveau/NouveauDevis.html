@@ -11,6 +11,18 @@
 		</li>
 	</ul>
 	<div wicket:id="mapFrance"></div>
-	<div wicket:id="containerQualification"></div>
+	<div wicket:id="containerQualification">
+		<div class="row-fluid">
+			<div class="span12 module_cont module_text_area module_small_padding">
+				<div class="bg_title">
+					<h4 class="headInModule">Renseignez les caracteristiques du Devis</h4>
+				</div>
+				Type de travaux : 
+				<select wicket:id="corpsMetierSelect" name="corpsMetierSelect" id="corpsMetierSelect"></select>
+				Sous Categorie :
+				<select wicket:id="sousCorpsMetierSelect" name="sousCorpsMetierSelect" id="sousCorpsMetierSelect"></select>
+			</div>
+		</div>
+	</div>
 	<div wicket:id="containerInscription"></div>
 </wicket:extend>

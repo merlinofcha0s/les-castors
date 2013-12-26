@@ -3,9 +3,13 @@ package fr.batimen.web.client.panel.nouveau;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import fr.batimen.core.metier.CorpsMetier;
+import fr.batimen.core.metier.SousCorpsMetier;
+import fr.batimen.web.app.BatimenApplication;
 import fr.batimen.web.client.component.MapFrance;
 import fr.batimen.web.client.master.MasterPage;
 
@@ -25,6 +29,10 @@ public class NouveauDevis extends MasterPage {
 	private MapFrance carteFrance;
 	private Label etape;
 
+	// Composant étape 2
+	private DropDownChoice<CorpsMetier> corpsMetierSelect;
+	private DropDownChoice<SousCorpsMetier> sousCorpsMetierSelect;
+
 	public NouveauDevis() {
 		super("Nouveau devis", "devis batiment renovation", "Nouveau devis", true);
 
@@ -34,6 +42,15 @@ public class NouveauDevis extends MasterPage {
 		// Affiche l'étape 2
 		containerQualification = new WebMarkupContainer("containerQualification");
 		containerQualification.setVisible(false);
+
+		corpsMetierSelect = new DropDownChoice<CorpsMetier>("corpsMetierSelect", new Model<CorpsMetier>(),
+				BatimenApplication.getCorpsMetier());
+		corpsMetierSelect.setRequired(true);
+		containerQualification.add(corpsMetierSelect);
+
+		sousCorpsMetierSelect = new DropDownChoice<SousCorpsMetier>("sousCorpsMetierSelect");
+		corpsMetierSelect.setRequired(true);
+		containerQualification.add(sousCorpsMetierSelect);
 
 		// Affiche l'étape 3
 		containerInscription = new WebMarkupContainer("containerInscription");
@@ -50,7 +67,6 @@ public class NouveauDevis extends MasterPage {
 		this.add(etape);
 
 		changementEtape("10", "Etape 1/3");
-
 	}
 
 	public NouveauDevis(PageParameters parameters) {

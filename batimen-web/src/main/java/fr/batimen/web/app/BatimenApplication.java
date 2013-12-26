@@ -1,5 +1,7 @@
 package fr.batimen.web.app;
 
+import java.util.List;
+
 import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
@@ -10,6 +12,8 @@ import org.apache.wicket.request.Response;
 import org.apache.wicket.request.mapper.parameter.UrlPathPageParametersEncoder;
 
 import fr.batimen.core.constant.Constant;
+import fr.batimen.core.helper.CorpsMetierHelper;
+import fr.batimen.core.metier.CorpsMetier;
 import fr.batimen.web.client.panel.Accueil;
 import fr.batimen.web.client.panel.Contact;
 import fr.batimen.web.client.panel.MonCompte;
@@ -24,6 +28,9 @@ import fr.batimen.web.client.session.BatimenSession;
  * @author Casaucau Cyril
  */
 public class BatimenApplication extends AuthenticatedWebApplication {
+
+	private static List<CorpsMetier> CORPS_METIER;
+
 	/**
 	 * @see org.apache.wicket.Application#getHomePage()
 	 */
@@ -50,6 +57,9 @@ public class BatimenApplication extends AuthenticatedWebApplication {
 		mountPage(Constant.CONTACT_URL, Contact.class);
 		// Encode la page de cette maniere : nouveaudevis/departement/06
 		mount(new MountedMapper("/nouveaudevis", NouveauDevis.class, new UrlPathPageParametersEncoder()));
+
+		// Initialise toutes la liste des corps de metier
+		CORPS_METIER = CorpsMetierHelper.init();
 	}
 
 	@Override
@@ -73,6 +83,13 @@ public class BatimenApplication extends AuthenticatedWebApplication {
 	@Override
 	public Session newSession(Request request, Response response) {
 		return new BatimenSession(request);
+	}
+
+	/**
+	 * @return the corpsMetier
+	 */
+	public static List<CorpsMetier> getCorpsMetier() {
+		return CORPS_METIER;
 	}
 
 }

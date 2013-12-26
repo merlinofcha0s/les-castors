@@ -1,4 +1,4 @@
-package fr.batimen.web.context;
+package fr.batimen.web.app.context;
 
 import java.io.InputStream;
 
