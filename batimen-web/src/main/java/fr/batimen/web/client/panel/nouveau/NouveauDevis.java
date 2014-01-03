@@ -23,23 +23,23 @@ public class NouveauDevis extends MasterPage {
 
 	private static final long serialVersionUID = -7595966450246951918L;
 
-	private WebMarkupContainer containerQualification;
 	private WebMarkupContainer containerInscription;
 	private WebMarkupContainer progressBar;
 	private MapFrance carteFrance;
 	private Label etape;
 
 	// Composant étape 2
+	private WebMarkupContainer containerQualification;
 	private DropDownChoice<CorpsMetier> corpsMetierSelect;
 	private DropDownChoice<SousCorpsMetier> sousCorpsMetierSelect;
 
 	public NouveauDevis() {
-		super("Nouveau devis", "devis batiment renovation", "Nouveau devis", true);
+		super("Nouveau devis", "devis batiment renovation", "Nouveau devis", true, "img/bg_title1.jpg");
 
 		// Etape 1 : selection du departement avec la carte de la france
 		carteFrance = new MapFrance("mapFrance");
 
-		// Affiche l'étape 2
+		// Init l'étape 2
 		containerQualification = new WebMarkupContainer("containerQualification");
 		containerQualification.setVisible(false);
 
@@ -52,7 +52,7 @@ public class NouveauDevis extends MasterPage {
 		corpsMetierSelect.setRequired(true);
 		containerQualification.add(sousCorpsMetierSelect);
 
-		// Affiche l'étape 3
+		// Init l'étape 3
 		containerInscription = new WebMarkupContainer("containerInscription");
 		containerInscription.setVisible(false);
 

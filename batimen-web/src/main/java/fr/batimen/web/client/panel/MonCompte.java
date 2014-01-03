@@ -17,7 +17,7 @@ public final class MonCompte extends SecuredPage {
 	private static final long serialVersionUID = 1902734649854998120L;
 
 	public MonCompte() {
-		super("Page accueil de batimen", "lol", "Bienvenue sur batimen.fr", true);
+		super("Page accueil de batimen", "lol", "Bienvenue sur batimen.fr", true, "img/bg_title1.jpg");
 		add(new Label("version", getApplication().getFrameworkSettings().getVersion()));
 	}
 

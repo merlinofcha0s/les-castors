@@ -100,7 +100,8 @@ public abstract class MasterPage extends WebPage {
 	 *            est ce que la page doit avoir un bandeau en dessous du menu
 	 *            avec le titre de la page ?
 	 */
-	public MasterPage(String metaDescription, String metaKeywords, String title, boolean isPageWithTitleHeader) {
+	public MasterPage(String metaDescription, String metaKeywords, String title, boolean isPageWithTitleHeader,
+			String adresseImgBackground) {
 		this();
 		this.metaDescription = metaDescription;
 		this.metaKeywords = metaKeywords;
@@ -115,14 +116,14 @@ public abstract class MasterPage extends WebPage {
 
 		initComponentConnexion();
 		initMenu();
-		initTitleHeader(isPageWithTitleHeader, title);
+		initTitleHeader(isPageWithTitleHeader, title, adresseImgBackground);
 
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Instantiation de la master page.....OK");
 		}
 	}
 
-	private void initTitleHeader(final boolean isPageWithTitleHeader, String title) {
+	private void initTitleHeader(final boolean isPageWithTitleHeader, String title, String adresseImgBackGround) {
 		WebMarkupContainer containerTitleHeader = new WebMarkupContainer("containerTitleHeader") {
 
 			private static final long serialVersionUID = -8794910421721268035L;
@@ -138,6 +139,13 @@ public abstract class MasterPage extends WebPage {
 
 		Label titleHeader = new Label("titleHeader", new Model<String>(title));
 		containerTitleHeader.add(titleHeader);
+
+		// On charge l'image de fond du titre qui a été passé en parametre
+		StringBuilder bgImageAdresseCSS = new StringBuilder("background:url(");
+		bgImageAdresseCSS.append(adresseImgBackGround);
+		bgImageAdresseCSS.append(") no-repeat center top;");
+
+		containerTitleHeader.add(new AttributeModifier("style", bgImageAdresseCSS.toString()));
 	}
 
 	private void initMenu() {
