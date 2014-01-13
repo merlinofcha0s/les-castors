@@ -16,7 +16,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 
-import fr.batimen.core.enums.EtatAnnonce;
+import fr.batimen.dto.enums.EtatAnnonce;
 
 /**
  * Entité Annonce, est utilisée pour symbolisé l'annonce d'un particulier en

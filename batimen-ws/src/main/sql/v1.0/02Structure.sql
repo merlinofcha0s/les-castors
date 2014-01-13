@@ -29,7 +29,7 @@ create table Annonce (
     create table Artisan (
         id int8 not null,
         activitePrincipale varchar(255) not null,
-        civilite varchar(4),
+        civilite int4,
         dateInscription timestamp not null,
         domaineActivite varchar(255) not null,
         email varchar(128) not null,
@@ -37,7 +37,7 @@ create table Annonce (
         metier int4 not null,
         nbAnnonce int4 not null,
         nom varchar(20),
-        numeroTel int4 not null,
+        numeroTel varchar(10) not null,
         password varchar(80) not null,
         prenom varchar(20),
         siret int4 not null,
@@ -77,12 +77,12 @@ create table Annonce (
     
      create table Users (
         id int8 not null,
-        civilite varchar(4),
+        civilite int4,
         dateInscription timestamp not null,
         email varchar(128) not null,
         login varchar(25) not null,
         nom varchar(20),
-        numeroTel int4 not null,
+        numeroTel varchar(10) not null,
         password varchar(80) not null,
         prenom varchar(20),
         primary key (id)

@@ -18,6 +18,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 
 import fr.batimen.core.constant.QueryJPQL;
+import fr.batimen.dto.enums.Civilite;
 
 /**
  * Entité user : symbolise un particulier en base de données.
@@ -39,13 +40,13 @@ public class User extends AbstractEntity implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	@Column(length = 4)
-	private String civilite;
+	private Civilite civilite;
 	@Column(length = 20)
 	private String nom;
 	@Column(length = 20)
 	private String prenom;
 	@Column(length = 10, nullable = false)
-	private Integer numeroTel;
+	private String numeroTel;
 	@Column(length = 25, nullable = false)
 	private String login;
 	@Column(length = 80, nullable = false)
@@ -136,7 +137,7 @@ public class User extends AbstractEntity implements Serializable {
 	/**
 	 * @return the civilite
 	 */
-	public String getCivilite() {
+	public Civilite getCivilite() {
 		return civilite;
 	}
 
@@ -144,7 +145,7 @@ public class User extends AbstractEntity implements Serializable {
 	 * @param civilite
 	 *            the civilite to set
 	 */
-	public void setCivilite(String civilite) {
+	public void setCivilite(Civilite civilite) {
 		this.civilite = civilite;
 	}
 
@@ -181,7 +182,7 @@ public class User extends AbstractEntity implements Serializable {
 	/**
 	 * @return the numeroTel
 	 */
-	public Integer getNumeroTel() {
+	public String getNumeroTel() {
 		return numeroTel;
 	}
 
@@ -189,7 +190,7 @@ public class User extends AbstractEntity implements Serializable {
 	 * @param numeroTel
 	 *            the numeroTel to set
 	 */
-	public void setNumeroTel(Integer numeroTel) {
+	public void setNumeroTel(String numeroTel) {
 		this.numeroTel = numeroTel;
 	}
 

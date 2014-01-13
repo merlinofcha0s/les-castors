@@ -1,10 +1,10 @@
-package fr.batimen.core.enums;
+package fr.batimen.dto.enums;
 
-public enum EtatAnnonce {
+public enum Civilite {
 
-	ACTIVE("Active"), DESACTIVE("Désactive"), A_NOTER("A Noter");
+	MONSIEUR("Monsieur"), MADAME("Madame"), MADEMOISELLE("Mademoiselle");
 
-	private EtatAnnonce(String affichage) {
+	private Civilite(String affichage) {
 		this.affichage = affichage;
 	}
 

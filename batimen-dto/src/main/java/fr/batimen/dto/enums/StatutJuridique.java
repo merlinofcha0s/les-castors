@@ -1,4 +1,4 @@
-package fr.batimen.core.enums;
+package fr.batimen.dto.enums;
 
 public enum StatutJuridique {
 

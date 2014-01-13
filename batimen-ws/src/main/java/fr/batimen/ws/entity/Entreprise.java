@@ -12,7 +12,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import fr.batimen.core.enums.StatutJuridique;
+import fr.batimen.dto.enums.StatutJuridique;
 
 /**
  * Entité Entreprise : Symbolise l'entreprise de l'artisan en base de données.

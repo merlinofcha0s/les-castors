@@ -17,7 +17,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 
-import fr.batimen.core.enums.Metier;
+import fr.batimen.dto.enums.Civilite;
+import fr.batimen.dto.enums.Metier;
 
 /**
  * Entité Artisan : symbolise un artisan en base de données.
@@ -45,13 +46,13 @@ public class Artisan extends AbstractEntity implements Serializable {
 	@Column(nullable = false)
 	private String domaineActivite;
 	@Column(length = 4)
-	private String civilite;
+	private Civilite civilite;
 	@Column(length = 20)
 	private String nom;
 	@Column(length = 20)
 	private String prenom;
 	@Column(length = 10, nullable = false)
-	private Integer numeroTel;
+	private String numeroTel;
 	@Column(length = 25, nullable = false)
 	private String login;
 	@Column(length = 80, nullable = false)
@@ -159,7 +160,7 @@ public class Artisan extends AbstractEntity implements Serializable {
 	/**
 	 * @return the civilite
 	 */
-	public String getCivilite() {
+	public Civilite getCivilite() {
 		return civilite;
 	}
 
@@ -167,7 +168,7 @@ public class Artisan extends AbstractEntity implements Serializable {
 	 * @param civilite
 	 *            the civilite to set
 	 */
-	public void setCivilite(String civilite) {
+	public void setCivilite(Civilite civilite) {
 		this.civilite = civilite;
 	}
 
@@ -204,7 +205,7 @@ public class Artisan extends AbstractEntity implements Serializable {
 	/**
 	 * @return the numeroTel
 	 */
-	public Integer getNumeroTel() {
+	public String getNumeroTel() {
 		return numeroTel;
 	}
 
@@ -212,7 +213,7 @@ public class Artisan extends AbstractEntity implements Serializable {
 	 * @param numeroTel
 	 *            the numeroTel to set
 	 */
-	public void setNumeroTel(Integer numeroTel) {
+	public void setNumeroTel(String numeroTel) {
 		this.numeroTel = numeroTel;
 	}
 
