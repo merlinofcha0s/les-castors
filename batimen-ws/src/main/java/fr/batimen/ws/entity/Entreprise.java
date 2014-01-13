@@ -14,6 +14,12 @@ import javax.persistence.Table;
 
 import fr.batimen.core.enums.StatutJuridique;
 
+/**
+ * Entité Entreprise : Symbolise l'entreprise de l'artisan en base de données.
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 @Entity
 @Table(name = "Entreprise")
 public class Entreprise extends AbstractEntity implements Serializable {

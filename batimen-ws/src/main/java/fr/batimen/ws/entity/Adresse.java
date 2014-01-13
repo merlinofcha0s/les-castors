@@ -12,6 +12,12 @@ import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+/**
+ * Entité qui symbolise l'adresse en base de données.
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 @Entity
 @Table(name = "Adresse")
 public class Adresse extends AbstractEntity implements Serializable {

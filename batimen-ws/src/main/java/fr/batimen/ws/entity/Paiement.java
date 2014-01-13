@@ -14,6 +14,13 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 
+/**
+ * Entité Paiement : symbolise les informations de paiement de l'entreprise dans
+ * la base de données.
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 @Entity
 @Table(name = "Paiement")
 public class Paiement extends AbstractEntity implements Serializable {

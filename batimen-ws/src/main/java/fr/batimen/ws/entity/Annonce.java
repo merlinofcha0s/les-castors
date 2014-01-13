@@ -18,6 +18,13 @@ import javax.persistence.Temporal;
 
 import fr.batimen.core.enums.EtatAnnonce;
 
+/**
+ * Entité Annonce, est utilisée pour symbolisé l'annonce d'un particulier en
+ * base de données.
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 @Entity
 @Table(name = "Annonce")
 public class Annonce extends AbstractEntity implements Serializable {

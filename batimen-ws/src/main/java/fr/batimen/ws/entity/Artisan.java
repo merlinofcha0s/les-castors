@@ -19,6 +19,12 @@ import javax.persistence.Temporal;
 
 import fr.batimen.core.enums.Metier;
 
+/**
+ * Entité Artisan : symbolise un artisan en base de données.
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 @Entity
 @Table(name = "Artisan")
 public class Artisan extends AbstractEntity implements Serializable {

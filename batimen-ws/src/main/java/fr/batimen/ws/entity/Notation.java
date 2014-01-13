@@ -14,6 +14,13 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+/**
+ * Entité Notation : Symbolise la notation en base de données. Permet de noté le
+ * travail effectué par l'artisan.
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 @Entity
 @Table(name = "Notation")
 public class Notation extends AbstractEntity implements Serializable {

@@ -19,6 +19,12 @@ import javax.persistence.Temporal;
 
 import fr.batimen.core.constant.QueryJPQL;
 
+/**
+ * Entité user : symbolise un particulier en base de données.
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 @Entity
 @Table(name = "Users")
 @NamedQueries(value = { @NamedQuery(name = QueryJPQL.USER_LOGIN, query = "SELECT u FROM User AS u WHERE u.login = :login") })
