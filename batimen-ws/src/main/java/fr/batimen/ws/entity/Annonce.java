@@ -17,6 +17,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 
 import fr.batimen.dto.enums.EtatAnnonce;
+import fr.batimen.dto.enums.Metier;
 
 /**
  * Entité Annonce, est utilisée pour symbolisé l'annonce d'un particulier en
@@ -54,8 +55,8 @@ public class Annonce extends AbstractEntity implements Serializable {
 	private Integer nbDevis;
 	@Column(length = 255, nullable = false)
 	private String photo;
-	@Column(length = 45, nullable = false)
-	private String metier;
+	@Column(nullable = false)
+	private Metier metier;
 	@Column(nullable = false)
 	private EtatAnnonce etatAnnonce;
 	@ManyToOne
@@ -234,7 +235,7 @@ public class Annonce extends AbstractEntity implements Serializable {
 	/**
 	 * @return the metier
 	 */
-	public String getMetier() {
+	public Metier getMetier() {
 		return metier;
 	}
 
@@ -242,7 +243,7 @@ public class Annonce extends AbstractEntity implements Serializable {
 	 * @param metier
 	 *            the metier to set
 	 */
-	public void setMetier(String metier) {
+	public void setMetier(Metier metier) {
 		this.metier = metier;
 	}
 

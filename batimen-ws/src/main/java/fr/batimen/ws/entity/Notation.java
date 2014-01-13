@@ -31,7 +31,7 @@ public class Notation extends AbstractEntity implements Serializable {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 	@Column(nullable = false)
-	private Integer score;
+	private Double score;
 	@Column(length = 500, nullable = false)
 	private String commentaire;
 	@OneToOne(cascade = CascadeType.REMOVE)
@@ -58,7 +58,7 @@ public class Notation extends AbstractEntity implements Serializable {
 	/**
 	 * @return the score
 	 */
-	public Integer getScore() {
+	public Double getScore() {
 		return score;
 	}
 
@@ -66,7 +66,7 @@ public class Notation extends AbstractEntity implements Serializable {
 	 * @param score
 	 *            the score to set
 	 */
-	public void setScore(Integer score) {
+	public void setScore(Double score) {
 		this.score = score;
 	}
 

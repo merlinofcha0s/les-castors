@@ -15,7 +15,7 @@ create table Annonce (
         delaiIntervention varchar(15) not null,
         description varchar(500) not null,
         etatAnnonce int4 not null,
-        metier varchar(45) not null,
+        metier int4 not null,
         nbConsultation int4 not null,
         nbDevis int4 not null,
         photo varchar(255) not null,
@@ -29,17 +29,17 @@ create table Annonce (
     create table Artisan (
         id int8 not null,
         activitePrincipale varchar(255) not null,
-        civilite int4,
+        civilite int4 not null,
         dateInscription timestamp not null,
         domaineActivite varchar(255) not null,
         email varchar(128) not null,
         login varchar(25) not null,
         metier int4 not null,
         nbAnnonce int4 not null,
-        nom varchar(20),
+        nom varchar(20) not null,
         numeroTel varchar(10) not null,
         password varchar(80) not null,
-        prenom varchar(20),
+        prenom varchar(20) not null,
         siret int4 not null,
         entreprise_id int8,
         primary key (id)
@@ -57,10 +57,10 @@ create table Annonce (
         primary key (id)
     );
     
- create table Notation (
+    create table Notation (
         id int8 not null,
         commentaire varchar(500) not null,
-        score int4 not null,
+        score float8 not null,
         annonce_id int8,
         artisan_fk int8,
         primary key (id)

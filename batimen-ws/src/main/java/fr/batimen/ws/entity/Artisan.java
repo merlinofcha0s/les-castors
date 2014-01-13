@@ -45,11 +45,11 @@ public class Artisan extends AbstractEntity implements Serializable {
 	private String activitePrincipale;
 	@Column(nullable = false)
 	private String domaineActivite;
-	@Column(length = 4)
+	@Column(length = 4, nullable = false)
 	private Civilite civilite;
-	@Column(length = 20)
+	@Column(length = 20, nullable = false)
 	private String nom;
-	@Column(length = 20)
+	@Column(length = 20, nullable = false)
 	private String prenom;
 	@Column(length = 10, nullable = false)
 	private String numeroTel;
