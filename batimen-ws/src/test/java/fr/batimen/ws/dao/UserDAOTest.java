@@ -32,7 +32,6 @@ public class UserDAOTest extends AbstractBatimenTest {
 	public void init() throws Exception {
 
 		userToRec.setEmail("lol@lol.com");
-		userToRec.setFullname("Pebron de la pebronne");
 		userToRec.setLogin("pebron");
 		userToRec.setPassword(HashHelper.hashString("lollollol"));
 
