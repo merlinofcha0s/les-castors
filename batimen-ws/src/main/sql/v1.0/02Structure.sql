@@ -20,7 +20,7 @@ create table Annonce (
         nbDevis int4 not null,
         photo varchar(255) not null,
         titre varchar(45) not null,
-        typeContact varchar(45) not null,
+        typeContact int4 not null,
         adresseChantier_id int8,
         demandeur_fk int8,
         primary key (id)

@@ -7,6 +7,7 @@ import javax.validation.constraints.Size;
 
 import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.dto.enums.Metier;
+import fr.batimen.dto.enums.TypeContact;
 
 public class CreationAnnonceDTO extends AbstractDTO {
 
@@ -20,9 +21,8 @@ public class CreationAnnonceDTO extends AbstractDTO {
 	@NotNull
 	@Size(min = ValidatorConstant.CREATION_ANNONCE_DESCRIPTION_MIN, max = ValidatorConstant.CREATION_ANNONCE_DESCRIPTION_MAX)
 	private String description;
-	// TODO Commit avec l'autre ordi pour enum
 	@NotNull
-	private String typeContact;
+	private TypeContact typeContact;
 	@Size(max = ValidatorConstant.CREATION_ANNONCE_DELAI_INTERVENTION_MAX)
 	@NotNull
 	private String delaiIntervention;
@@ -38,7 +38,7 @@ public class CreationAnnonceDTO extends AbstractDTO {
 	@Size(max = ValidatorConstant.CREATION_ANNONCE_COMPLEMENT_ADRESSE_MAX)
 	private String complementAdresse;
 	@NotNull
-	@Size(max = ValidatorConstant.CREATION_ANNONCE_CODEPOSTAL_MAX)
+	@Size(min = ValidatorConstant.CREATION_ANNONCE_CODEPOSTAL_MAX, max = ValidatorConstant.CREATION_ANNONCE_CODEPOSTAL_MAX)
 	private String codePostal;
 	@NotNull
 	@Size(max = ValidatorConstant.CREATION_ANNONCE_VILLE_MAX)
@@ -68,11 +68,11 @@ public class CreationAnnonceDTO extends AbstractDTO {
 		this.description = description;
 	}
 
-	public String getTypeContact() {
+	public TypeContact getTypeContact() {
 		return typeContact;
 	}
 
-	public void setTypeContact(String typeContact) {
+	public void setTypeContact(TypeContact typeContact) {
 		this.typeContact = typeContact;
 	}
 

@@ -18,6 +18,7 @@ import javax.persistence.Temporal;
 
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.Metier;
+import fr.batimen.dto.enums.TypeContact;
 
 /**
  * Entité Annonce, est utilisée pour symbolisé l'annonce d'un particulier en
@@ -39,8 +40,8 @@ public class Annonce extends AbstractEntity implements Serializable {
 	private String titre;
 	@Column(length = 500, nullable = false)
 	private String description;
-	@Column(length = 45, nullable = false)
-	private String typeContact;
+	@Column(nullable = false)
+	private TypeContact typeContact;
 	@Column(length = 15, nullable = false)
 	private String delaiIntervention;
 	@Temporal(javax.persistence.TemporalType.TIMESTAMP)
@@ -115,7 +116,7 @@ public class Annonce extends AbstractEntity implements Serializable {
 	/**
 	 * @return the typeContact
 	 */
-	public String getTypeContact() {
+	public TypeContact getTypeContact() {
 		return typeContact;
 	}
 
@@ -123,7 +124,7 @@ public class Annonce extends AbstractEntity implements Serializable {
 	 * @param typeContact
 	 *            the typeContact to set
 	 */
-	public void setTypeContact(String typeContact) {
+	public void setTypeContact(TypeContact typeContact) {
 		this.typeContact = typeContact;
 	}
 
