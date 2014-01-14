@@ -17,10 +17,14 @@
 				<div class="bg_title">
 					<h4 class="headInModule">Renseignez les caracteristiques du Devis</h4>
 				</div>
-				Type de travaux : 
-				<select wicket:id="corpsMetierSelect" name="corpsMetierSelect" id="corpsMetierSelect"></select>
-				Sous Categorie :
-				<select wicket:id="sousCorpsMetierSelect" name="sousCorpsMetierSelect" id="sousCorpsMetierSelect"></select>
+				<div>
+					Quels corps de métier recherchez vous ?
+					<select wicket:id="corpsMetierSelect" name="corpsMetierSelect" id="corpsMetierSelect"></select>
+				</div>
+				<div>
+					Quel est l'objet de votre devis ?
+					<input wicket:id="objetDevisField" type="text" name="objetDevisField" id="objetDevisField" value="" />
+				</div>
 			</div>
 		</div>
 	</div>

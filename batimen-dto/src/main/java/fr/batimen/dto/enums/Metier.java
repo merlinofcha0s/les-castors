@@ -2,7 +2,7 @@ package fr.batimen.dto.enums;
 
 public enum Metier {
 
-	ELECTRICIEN("Electricien"), PLOMBIER("Plombier"), COUVREUR("Couvreur");
+	ELECTRICIEN("Electricien"), PLOMBIER("Plombier"), COUVREUR("Couvreur"), PEINTRE("Peintre");
 
 	private Metier(String nomMetier) {
 		this.nomMetier = nomMetier;

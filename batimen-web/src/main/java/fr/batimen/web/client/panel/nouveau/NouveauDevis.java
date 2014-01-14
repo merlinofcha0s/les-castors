@@ -1,15 +1,18 @@
 package fr.batimen.web.client.panel.nouveau;
 
+import java.util.Arrays;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.validation.validator.StringValidator;
 
-import fr.batimen.core.metier.CorpsMetier;
-import fr.batimen.core.metier.SousCorpsMetier;
-import fr.batimen.web.app.BatimenApplication;
+import fr.batimen.dto.constant.ValidatorConstant;
+import fr.batimen.dto.enums.Metier;
 import fr.batimen.web.client.component.MapFrance;
 import fr.batimen.web.client.master.MasterPage;
 
@@ -30,8 +33,8 @@ public class NouveauDevis extends MasterPage {
 
 	// Composant étape 2
 	private WebMarkupContainer containerQualification;
-	private DropDownChoice<CorpsMetier> corpsMetierSelect;
-	private DropDownChoice<SousCorpsMetier> sousCorpsMetierSelect;
+	private DropDownChoice<Metier> corpsMetierSelect;
+	private TextField<String> objetDevisField;
 
 	public NouveauDevis() {
 		super("Nouveau devis", "devis batiment renovation", "Nouveau devis", true, "img/bg_title1.jpg");
@@ -43,14 +46,19 @@ public class NouveauDevis extends MasterPage {
 		containerQualification = new WebMarkupContainer("containerQualification");
 		containerQualification.setVisible(false);
 
-		corpsMetierSelect = new DropDownChoice<CorpsMetier>("corpsMetierSelect", new Model<CorpsMetier>(),
-				BatimenApplication.getCorpsMetier());
+		corpsMetierSelect = new DropDownChoice<Metier>("corpsMetierSelect", new Model<Metier>(), Arrays.asList(Metier
+				.values()));
 		corpsMetierSelect.setRequired(true);
-		containerQualification.add(corpsMetierSelect);
+		corpsMetierSelect.setMarkupId("corpsMetierSelect");
 
-		sousCorpsMetierSelect = new DropDownChoice<SousCorpsMetier>("sousCorpsMetierSelect");
-		corpsMetierSelect.setRequired(true);
-		containerQualification.add(sousCorpsMetierSelect);
+		objetDevisField = new TextField<String>("objetDevisField");
+		objetDevisField.setRequired(true);
+		objetDevisField.add(StringValidator.lengthBetween(ValidatorConstant.CREATION_ANNONCE_TITRE_MIN,
+				ValidatorConstant.CREATION_ANNONCE_TITRE_MAX));
+		objetDevisField.setMarkupId("objetDevisField");
+
+		containerQualification.add(corpsMetierSelect);
+		containerQualification.add(objetDevisField);
 
 		// Init l'étape 3
 		containerInscription = new WebMarkupContainer("containerInscription");
