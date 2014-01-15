@@ -60,6 +60,8 @@ public class Annonce extends AbstractEntity implements Serializable {
 	private Metier metier;
 	@Column(nullable = false)
 	private EtatAnnonce etatAnnonce;
+	@Column(nullable = false, length = 2)
+	private Integer departement;
 	@ManyToOne
 	@JoinColumn(name = "demandeur_fk")
 	private User demandeur;
@@ -306,6 +308,14 @@ public class Annonce extends AbstractEntity implements Serializable {
 	 */
 	public void setAdresseChantier(Adresse adresseChantier) {
 		this.adresseChantier = adresseChantier;
+	}
+
+	public Integer getDepartement() {
+		return departement;
+	}
+
+	public void setDepartement(Integer departement) {
+		this.departement = departement;
 	}
 
 	/*

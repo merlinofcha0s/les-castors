@@ -19,53 +19,65 @@
 				</div>
 				<form wicket:id="formQualification">
 					<div>
-						Quels corps de métier recherchez vous ?
-						<select wicket:id="corpsMetierSelect" name="corpsMetierSelect" id="corpsMetierSelect"></select>
+						Quels corps de métier recherchez vous ? <select wicket:id="metier" name="corpsMetierSelect"
+							id="corpsMetierSelect"
+						></select>
 					</div>
 					<div>
-						Quel est l'objet de votre devis ?
-						<input wicket:id="objetDevisField" type="text" name="objetDevisField" id="objetDevisField" value="" />
+						Quel est l'objet de votre devis ? <input wicket:id="titre" type="text" name="objetDevisField"
+							id="objetDevisField" value=""
+						/>
 					</div>
 					<div>
 						Quelle est la description du chantier ?
-						<textarea wicket:id="descriptionDevisField" rows="6" cols="110" type="text" name="descriptionDevisField" id="descriptionDevisField" value="" />
+						<textarea wicket:id="description" rows="6" cols="110" type="text" name="descriptionDevisField"
+							id="descriptionDevisField" value=""
+						/>
 					</div>
 					<div>
-						Comment souhaitez-vous être contacté ?
-						<select wicket:id="typeContactField" name="typeContactField" id="typeContactField"></select>
+						Comment souhaitez-vous être contacté ? <select wicket:id="typeContact" name="typeContactField"
+							id="typeContactField"
+						></select>
 					</div>
 					<div>
-						Quel est le délai d'intervention ?
-						<input wicket:id="delaiInterventionField" type="text" name="delaiInterventionField" id="delaiInterventionField" value="" />
+						Quel est le délai d'intervention ? <input wicket:id="delaiIntervention" type="text"
+							name="delaiInterventionField" id="delaiInterventionField" value=""
+						/>
 					</div>
 					<div>
-						Combien voulez-vous de devis ?
-						<input wicket:id="nbDevisField" type="number"  min="1" max="10" step="1" name="nbDevisField" id="nbDevisField" value="" />
+						Combien voulez-vous de devis ? <input wicket:id="nbDevis" type="number" min="1" max="10" step="1"
+							name="nbDevisField" id="nbDevisField" value=""
+						/>
 					</div>
 					<div>
-						Souhaitez-vous ajouter des photos a votre devis ?
-						<input wicket:id="photoField" type="file" name="photoField" id="photoField" value="" />
+						Souhaitez-vous ajouter des photos a votre devis ? <input wicket:id="photo" type="file" name="photoField"
+							id="photoField" value=""
+						/>
 					</div>
 					<div>
-						Quelle est l'adresse du chantier ?
-						<input wicket:id="adresseField" type="text" name="adresseField" id="adresseField" value="" />
+						Quelle est l'adresse du chantier ? <input wicket:id="adresse" type="text" name="adresseField"
+							id="adresseField" value=""
+						/>
 					</div>
 					<div>
-						Quelle est le complément d'adresse du chantier ?
-						<input wicket:id="adresseComplementField" type="text" name="adresseComplementField" id="adresseComplementField" value="" />
+						Quelle est le complément d'adresse du chantier ? <input wicket:id="complementAdresse" type="text"
+							name="adresseComplementField" id="adresseComplementField" value=""
+						/>
 					</div>
 					<div>
-						Quelle est le code postal du chantier ?
-						<input wicket:id="codePostalField" type="text" name="codePostalField" id="codePostalField" value="" />
+						Quelle est le code postal du chantier ? <input wicket:id="codePostal" type="text" name="codePostalField"
+							id="codePostalField" value=""
+						/>
 					</div>
 					<div>
-						Quelle est la ville du chantier ?
-						<input wicket:id="villeField" type="text" name="villeField" id="villeField" value="" />
+						Quelle est la ville du chantier ? <input wicket:id="ville" type="text" name="villeField" id="villeField"
+							value=""
+						/>
 					</div>
 					<div>
-						<input type="submit" wicket:id="validateQualification" value="Etape suivante"/>
+						<input type="submit" wicket:id="validateQualification" value="Etape suivante" />
 					</div>
-				 </form>
+				</form>
 			</div>
 		</div>
 	</div>

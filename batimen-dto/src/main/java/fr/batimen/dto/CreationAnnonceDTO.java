@@ -43,6 +43,12 @@ public class CreationAnnonceDTO extends AbstractDTO {
 	@NotNull
 	@Size(max = ValidatorConstant.CREATION_ANNONCE_VILLE_MAX)
 	private String ville;
+	@NotNull
+	private Boolean isEtape2 = true;
+	@NotNull
+	@Min(value = 01)
+	@Max(value = 100)
+	private Integer departement;
 
 	public Metier getMetier() {
 		return metier;
@@ -130,6 +136,22 @@ public class CreationAnnonceDTO extends AbstractDTO {
 
 	public void setVille(String ville) {
 		this.ville = ville;
+	}
+
+	public Boolean getIsEtape2() {
+		return isEtape2;
+	}
+
+	public void setIsEtape2(Boolean isEtape2) {
+		this.isEtape2 = isEtape2;
+	}
+
+	public Integer getDepartement() {
+		return departement;
+	}
+
+	public void setDepartement(Integer departement) {
+		this.departement = departement;
 	}
 
 }

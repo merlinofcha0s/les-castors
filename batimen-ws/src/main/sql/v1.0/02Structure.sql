@@ -13,6 +13,7 @@ create table Annonce (
         dateCreation timestamp,
         dateMAJ timestamp,
         delaiIntervention varchar(15) not null,
+        departement int4 not null,
         description varchar(500) not null,
         etatAnnonce int4 not null,
         metier int4 not null,
