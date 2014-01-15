@@ -2,10 +2,10 @@ package fr.batimen.web.client.panel.nouveau;
 
 import java.util.Arrays;
 
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.NumberTextField;
+import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
@@ -33,7 +33,7 @@ public class Etape2AnnonceForm extends Form<CreationAnnonceDTO> {
 	private TextField<String> adresseComplementField;
 	private TextField<String> codePostalField;
 	private TextField<String> villeField;
-	private Button validateQualification;
+	private SubmitLink validateQualification;
 
 	public Etape2AnnonceForm(String id, IModel<CreationAnnonceDTO> model) {
 		super(id, model);
@@ -85,7 +85,6 @@ public class Etape2AnnonceForm extends Form<CreationAnnonceDTO> {
 				ValidatorConstant.CREATION_ANNONCE_ADRESSE_MAX));
 
 		adresseComplementField = new TextField<String>("complementAdresse");
-		adresseComplementField.setRequired(true);
 		adresseComplementField.setMarkupId("adresseComplementField");
 		adresseComplementField.add(StringValidator
 				.maximumLength(ValidatorConstant.CREATION_ANNONCE_COMPLEMENT_ADRESSE_MAX));
@@ -100,7 +99,7 @@ public class Etape2AnnonceForm extends Form<CreationAnnonceDTO> {
 		villeField.setMarkupId("villeField");
 		villeField.add(StringValidator.maximumLength(ValidatorConstant.CREATION_ANNONCE_VILLE_MAX));
 
-		validateQualification = new Button("validateQualification");
+		validateQualification = new SubmitLink("validateQualification");
 
 		this.add(corpsMetierSelect);
 		this.add(objetDevisField);

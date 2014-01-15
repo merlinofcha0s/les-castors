@@ -17,7 +17,7 @@ import fr.batimen.web.client.master.MasterPage;
  * @author Casaucau Cyril
  * 
  */
-// TODO : Faire les messages de feedback.
+// TODO : Message pour nb devis quand integer puis CSS
 public class NouveauDevis extends MasterPage {
 
 	private static final long serialVersionUID = -7595966450246951918L;
