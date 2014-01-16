@@ -15,6 +15,9 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.http.ClientProperties;
 import org.apache.wicket.protocol.http.WebSession;
+import org.apache.wicket.request.Url;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.PackageResourceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -140,9 +143,19 @@ public abstract class MasterPage extends WebPage {
 		Label titleHeader = new Label("titleHeader", new Model<String>(title));
 		containerTitleHeader.add(titleHeader);
 
+		// On prends l'url complete de la page d'accueil avec l'image de fonds
+		StringBuilder generatedAdresseForImage = new StringBuilder(RequestCycle.get().getUrlRenderer()
+				.renderFullUrl(Url.parse(urlFor(Accueil.class, new PageParameters()).toString())));
+		generatedAdresseForImage.append("/");
+		generatedAdresseForImage.append(adresseImgBackGround);
+
+		// On efface 'accueil' pour que le chemin vers l'image soit correct
+		generatedAdresseForImage.delete(generatedAdresseForImage.indexOf("accueil"),
+				generatedAdresseForImage.indexOf("accueil") + 8);
+
 		// On charge l'image de fond du titre qui a été passé en parametre
 		StringBuilder bgImageAdresseCSS = new StringBuilder("background:url(");
-		bgImageAdresseCSS.append(adresseImgBackGround);
+		bgImageAdresseCSS.append(generatedAdresseForImage.toString());
 		bgImageAdresseCSS.append(") no-repeat center top;");
 
 		containerTitleHeader.add(new AttributeModifier("style", bgImageAdresseCSS.toString()));
