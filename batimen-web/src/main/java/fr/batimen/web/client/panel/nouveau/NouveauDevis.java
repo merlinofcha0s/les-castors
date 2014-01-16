@@ -17,11 +17,12 @@ import fr.batimen.web.client.master.MasterPage;
  * @author Casaucau Cyril
  * 
  */
-// TODO : CSS
+// TODO : Etape 3
 public class NouveauDevis extends MasterPage {
 
 	private static final long serialVersionUID = -7595966450246951918L;
 
+	// Composants Généraux
 	private WebMarkupContainer containerInscription;
 	private WebMarkupContainer progressBar;
 	private Label etape;
@@ -66,8 +67,8 @@ public class NouveauDevis extends MasterPage {
 		containerInscription = new WebMarkupContainer("containerInscription");
 		containerInscription.setVisible(false);
 
+		// Composant généraux
 		progressBar = new WebMarkupContainer("progressBar");
-
 		etape = new Label("etape", new Model<String>());
 
 		this.add(carteFrance);
