@@ -1,13 +1,22 @@
 package fr.batimen.dto;
 
+import java.lang.reflect.Type;
+import java.util.List;
+import java.util.Objects;
+
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.dto.enums.Metier;
 import fr.batimen.dto.enums.TypeContact;
+import fr.batimen.dto.helper.DeserializeJsonHelper;
 
 public class CreationAnnonceDTO extends AbstractDTO {
 
@@ -38,7 +47,7 @@ public class CreationAnnonceDTO extends AbstractDTO {
 	@Size(max = ValidatorConstant.CREATION_ANNONCE_COMPLEMENT_ADRESSE_MAX)
 	private String complementAdresse;
 	@NotNull
-	@Size(min = ValidatorConstant.CREATION_ANNONCE_CODEPOSTAL_MAX, max = ValidatorConstant.CREATION_ANNONCE_CODEPOSTAL_MAX)
+	@Pattern(message = "Format code postal invalide", regexp = ValidatorConstant.CREATION_ANNONCE_CODE_POSTAL_REGEX)
 	private String codePostal;
 	@NotNull
 	@Size(max = ValidatorConstant.CREATION_ANNONCE_VILLE_MAX)
@@ -152,6 +161,48 @@ public class CreationAnnonceDTO extends AbstractDTO {
 
 	public void setDepartement(Integer departement) {
 		this.departement = departement;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return Objects.hashCode(Objects.hash(this.titre, this.metier, this.description, this.codePostal, this.ville));
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object object) {
+		if (this == object) {
+			return true;
+		}
+
+		if (object instanceof LoginDTO) {
+			CreationAnnonceDTO other = (CreationAnnonceDTO) object;
+			return Objects.equals(this.titre, other.titre) && Objects.equals(this.metier, other.metier)
+					&& Objects.equals(this.description, other.description)
+					&& Objects.equals(this.codePostal, other.codePostal) && Objects.equals(this.ville, other.ville);
+		}
+		return false;
+	}
+
+	public static CreationAnnonceDTO deserializeCreationAnnonceDTO(String json) {
+		Gson gson = DeserializeJsonHelper.createGsonObject();
+		return gson.fromJson(json, CreationAnnonceDTO.class);
+	}
+
+	public static List<CreationAnnonceDTO> deserializeCreationAnnonceDTOList(String json) {
+		Gson gson = DeserializeJsonHelper.createGsonObject();
+		Type collectionType = new TypeToken<List<CreationAnnonceDTO>>() {
+		}.getType();
+		return gson.fromJson(json, collectionType);
 	}
 
 }

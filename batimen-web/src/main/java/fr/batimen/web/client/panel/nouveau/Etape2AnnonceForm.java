@@ -10,6 +10,7 @@ import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.validation.validator.PatternValidator;
 import org.apache.wicket.validation.validator.RangeValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 
@@ -92,9 +93,9 @@ public class Etape2AnnonceForm extends Form<CreationAnnonceDTO> {
 		codePostalField = new TextField<String>("codePostal");
 		codePostalField.setRequired(true);
 		codePostalField.setMarkupId("codePostalField");
-		codePostalField.add(StringValidator.exactLength(ValidatorConstant.CREATION_ANNONCE_CODEPOSTAL_MAX));
+		codePostalField.add(new PatternValidator(ValidatorConstant.CREATION_ANNONCE_CODE_POSTAL_REGEX));
 
-		villeField = new TextField<>("ville");
+		villeField = new TextField<String>("ville");
 		villeField.setRequired(true);
 		villeField.setMarkupId("villeField");
 		villeField.add(StringValidator.maximumLength(ValidatorConstant.CREATION_ANNONCE_VILLE_MAX));

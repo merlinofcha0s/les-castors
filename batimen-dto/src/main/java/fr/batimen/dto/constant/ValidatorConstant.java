@@ -32,4 +32,7 @@ public class ValidatorConstant {
 	public static final int CREATION_ANNONCE_CODEPOSTAL_MAX = 5;
 	public static final int CREATION_ANNONCE_VILLE_MAX = 45;
 
+	// Regex
+	public static final String CREATION_ANNONCE_CODE_POSTAL_REGEX = "^[0-9]{5}$";
+
 }
