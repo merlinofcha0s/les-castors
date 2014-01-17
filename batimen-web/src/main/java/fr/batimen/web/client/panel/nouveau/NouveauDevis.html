@@ -58,12 +58,6 @@
                     	</td>
                 	</tr>
                 	<tr>
-                   	 <th>Souhaitez-vous ajouter des photos a votre devis ?</th>
-                    	<td>
-                      	    <input wicket:id="photo" type="file" name="photoField" id="photoField" value="" />
-                    	</td>
-                	</tr>
-                	<tr>
                    	 <th>Quelle est l'adresse du chantier ?</th>
                     	<td>
                       	    <input wicket:id="adresse" type="text" name="adresseField" id="adresseField" value="" />
@@ -88,6 +82,12 @@
                     	</td>
                 	</tr>
                 	<tr>
+                   	 <th>Souhaitez-vous ajouter des photos a votre devis ?</th>
+                    	<td>
+                    		<div wicket:id="photo"></div>
+                    	</td>
+                	</tr>
+                	<tr>
                    	 <th></th>
                     	<td>
                       	    <a class="shortcode_button btn_small btn_type1" wicket:id="validateQualification">Etape suivante</a>
@@ -95,6 +95,9 @@
                 	</tr>
                 </table>
 				</form>
+				<div id="champsObligatoire">
+					<span class='required'>*</span> : champs obligatoires
+				</div>
 			</div>
 		</div>
 	</div>

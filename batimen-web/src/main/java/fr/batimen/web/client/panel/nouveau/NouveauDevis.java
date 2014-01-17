@@ -17,7 +17,7 @@ import fr.batimen.web.client.master.MasterPage;
  * @author Casaucau Cyril
  * 
  */
-// TODO : Etape 3
+// TODO : CSSer le bouton supprimer et potentiellement tous les autres.
 public class NouveauDevis extends MasterPage {
 
 	private static final long serialVersionUID = -7595966450246951918L;

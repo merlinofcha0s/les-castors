@@ -11,38 +11,60 @@
 }
 
 /* Creation d'annonce */
-
 #mapFrance {
 	width: 600px;
 	padding-left: 310px;
 	padding-top: 20px;
 }
 
-#formEtape2{
+#formEtape2 {
 	margin-left: 300px;
 	margin-top: 45px;
 }
 
-#formEtape2 table th{
+#formEtape2 table th {
 	padding-left: 20px;
 	padding-bottom: 20px;
 }
 
-#formEtape2 table td{
+#formEtape2 table td {
 	padding-left: 20px;
 	padding-bottom: 8px;
 }
 
-#formEtape2 table td a{
+#formEtape2 table td a {
 	float: right;
 	margin-right: 39px;
 }
 
-.imgHelp{
+.imgHelp {
 	padding-bottom: 8px;
 }
 
-#photoField{
+#photoField {
 	margin-bottom: 7px;
 }
 
+.required {
+	color: red;
+	font-size: 1.3em;
+	padding-left: 5px;
+}
+
+#formEtape2 .error {
+	border: 1px solid red;
+}
+
+#champsObligatoire {
+	margin-left: 300px;
+}
+
+/* Composant Wicket */
+.wicket-mfu-container tr td input {
+	background-image: url(img/remove.png);
+	background-repeat: no-repeat;
+}
+
+.wicket-mfu-caption {
+	padding-top: 5px;
+}
