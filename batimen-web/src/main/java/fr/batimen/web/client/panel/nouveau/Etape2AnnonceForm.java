@@ -19,7 +19,7 @@ import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.dto.enums.Metier;
 import fr.batimen.dto.enums.TypeContact;
 import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
-import fr.batimen.web.client.border.RequiredBorder;
+import fr.batimen.web.client.border.RequiredBorderBehaviour;
 
 public class Etape2AnnonceForm extends Form<CreationAnnonceDTO> {
 
@@ -48,7 +48,7 @@ public class Etape2AnnonceForm extends Form<CreationAnnonceDTO> {
 		corpsMetierSelect = new DropDownChoice<Metier>("metier", Arrays.asList(Metier.values()));
 		corpsMetierSelect.setMarkupId("corpsMetierSelect");
 		corpsMetierSelect.setRequired(true);
-		corpsMetierSelect.add(new RequiredBorder());
+		corpsMetierSelect.add(new RequiredBorderBehaviour());
 		corpsMetierSelect.add(new ErrorHighlightBehavior());
 
 		objetDevisField = new TextField<String>("titre");
@@ -57,7 +57,7 @@ public class Etape2AnnonceForm extends Form<CreationAnnonceDTO> {
 				ValidatorConstant.CREATION_ANNONCE_TITRE_MAX));
 		objetDevisField.setMarkupId("objetDevisField");
 		objetDevisField.add(new ErrorHighlightBehavior());
-		objetDevisField.add(new RequiredBorder());
+		objetDevisField.add(new RequiredBorderBehaviour());
 
 		descriptionDevisField = new TextArea<String>("description");
 		descriptionDevisField.setRequired(true);
@@ -65,13 +65,13 @@ public class Etape2AnnonceForm extends Form<CreationAnnonceDTO> {
 				ValidatorConstant.CREATION_ANNONCE_DESCRIPTION_MAX));
 		descriptionDevisField.setMarkupId("descriptionDevisField");
 		descriptionDevisField.add(new ErrorHighlightBehavior());
-		descriptionDevisField.add(new RequiredBorder());
+		descriptionDevisField.add(new RequiredBorderBehaviour());
 
 		typeContactField = new DropDownChoice<TypeContact>("typeContact", Arrays.asList(TypeContact.values()));
 		typeContactField.setRequired(true);
 		typeContactField.setMarkupId("typeContactField");
 		typeContactField.add(new ErrorHighlightBehavior());
-		typeContactField.add(new RequiredBorder());
+		typeContactField.add(new RequiredBorderBehaviour());
 
 		delaiInterventionField = new TextField<String>("delaiIntervention");
 		delaiInterventionField.setRequired(true);
@@ -79,7 +79,7 @@ public class Etape2AnnonceForm extends Form<CreationAnnonceDTO> {
 		delaiInterventionField.add(StringValidator
 				.maximumLength(ValidatorConstant.CREATION_ANNONCE_DELAI_INTERVENTION_MAX));
 		delaiInterventionField.add(new ErrorHighlightBehavior());
-		delaiInterventionField.add(new RequiredBorder());
+		delaiInterventionField.add(new RequiredBorderBehaviour());
 
 		nbDevisField = new NumberTextField<Integer>("nbDevis");
 		nbDevisField.setRequired(true);
@@ -87,7 +87,7 @@ public class Etape2AnnonceForm extends Form<CreationAnnonceDTO> {
 		nbDevisField.add(RangeValidator.range(ValidatorConstant.CREATION_ANNONCE_NBDEVIS_MIN,
 				ValidatorConstant.CREATION_ANNONCE_NBDEVIS_MAX));
 		nbDevisField.add(new ErrorHighlightBehavior());
-		nbDevisField.add(new RequiredBorder());
+		nbDevisField.add(new RequiredBorderBehaviour());
 
 		photoField = new MultiFileUploadField("photo", 5);
 		photoField.setMarkupId("photoField");
@@ -98,28 +98,28 @@ public class Etape2AnnonceForm extends Form<CreationAnnonceDTO> {
 		adresseField.add(StringValidator.lengthBetween(ValidatorConstant.CREATION_ANNONCE_ADRESSE_MIN,
 				ValidatorConstant.CREATION_ANNONCE_ADRESSE_MAX));
 		adresseField.add(new ErrorHighlightBehavior());
-		adresseField.add(new RequiredBorder());
+		adresseField.add(new RequiredBorderBehaviour());
 
 		adresseComplementField = new TextField<String>("complementAdresse");
 		adresseComplementField.setMarkupId("adresseComplementField");
 		adresseComplementField.add(StringValidator
 				.maximumLength(ValidatorConstant.CREATION_ANNONCE_COMPLEMENT_ADRESSE_MAX));
 		adresseComplementField.add(new ErrorHighlightBehavior());
-		adresseComplementField.add(new RequiredBorder());
+		adresseComplementField.add(new RequiredBorderBehaviour());
 
 		codePostalField = new TextField<String>("codePostal");
 		codePostalField.setRequired(true);
 		codePostalField.setMarkupId("codePostalField");
 		codePostalField.add(new PatternValidator(ValidatorConstant.CREATION_ANNONCE_CODE_POSTAL_REGEX));
 		codePostalField.add(new ErrorHighlightBehavior());
-		codePostalField.add(new RequiredBorder());
+		codePostalField.add(new RequiredBorderBehaviour());
 
 		villeField = new TextField<String>("ville");
 		villeField.setRequired(true);
 		villeField.setMarkupId("villeField");
 		villeField.add(StringValidator.maximumLength(ValidatorConstant.CREATION_ANNONCE_VILLE_MAX));
 		villeField.add(new ErrorHighlightBehavior());
-		villeField.add(new RequiredBorder());
+		villeField.add(new RequiredBorderBehaviour());
 
 		validateQualification = new SubmitLink("validateQualification");
 

@@ -4,7 +4,7 @@ import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.border.BorderBehavior;
 import org.apache.wicket.markup.html.form.FormComponent;
 
-public class RequiredBorder extends BorderBehavior {
+public class RequiredBorderBehaviour extends BorderBehavior {
 
 	private static final long serialVersionUID = 4898306960741712290L;
 
@@ -22,5 +22,4 @@ public class RequiredBorder extends BorderBehavior {
 			super.afterRender(component);
 		}
 	}
-
 }
