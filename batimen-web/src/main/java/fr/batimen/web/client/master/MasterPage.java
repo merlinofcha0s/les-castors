@@ -347,9 +347,6 @@ public abstract class MasterPage extends WebPage {
 	 * 
 	 * @param address
 	 *            localisation du fichier css
-	 * @param isUrlCSS
-	 *            Est ce que le css se trouve autre part que dans l'application
-	 *            ?
 	 * @return objet wicket qui permet de generer la balise link
 	 */
 	private CssHeaderItem addCssFileToHeader(String address) {

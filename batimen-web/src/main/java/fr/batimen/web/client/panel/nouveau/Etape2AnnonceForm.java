@@ -13,6 +13,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.apache.wicket.validation.validator.RangeValidator;
 import org.apache.wicket.validation.validator.StringValidator;
+import org.odlabs.wiquery.ui.tooltip.TooltipBehavior;
 
 import fr.batimen.dto.CreationAnnonceDTO;
 import fr.batimen.dto.constant.ValidatorConstant;
@@ -122,6 +123,9 @@ public class Etape2AnnonceForm extends Form<CreationAnnonceDTO> {
 		villeField.add(new RequiredBorderBehaviour());
 
 		validateQualification = new SubmitLink("validateQualification");
+
+		// Decore le param title avec jquery
+		this.add(new TooltipBehavior());
 
 		this.add(corpsMetierSelect);
 		this.add(objetDevisField);

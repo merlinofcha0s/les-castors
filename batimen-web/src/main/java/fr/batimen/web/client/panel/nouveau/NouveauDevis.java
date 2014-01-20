@@ -17,7 +17,7 @@ import fr.batimen.web.client.master.MasterPage;
  * @author Casaucau Cyril
  * 
  */
-// TODO : CSSer le bouton supprimer et potentiellement tous les autres.
+// TODO : Intégrer Wiquery, pour les tooltips + custom le bouton upload
 public class NouveauDevis extends MasterPage {
 
 	private static final long serialVersionUID = -7595966450246951918L;
