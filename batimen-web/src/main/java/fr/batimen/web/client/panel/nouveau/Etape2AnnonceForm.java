@@ -13,14 +13,14 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.apache.wicket.validation.validator.RangeValidator;
 import org.apache.wicket.validation.validator.StringValidator;
-import org.odlabs.wiquery.ui.tooltip.TooltipBehavior;
 
 import fr.batimen.dto.CreationAnnonceDTO;
 import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.dto.enums.Metier;
 import fr.batimen.dto.enums.TypeContact;
 import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
-import fr.batimen.web.client.border.RequiredBorderBehaviour;
+import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
+import fr.batimen.web.client.component.BatimenToolTip;
 
 public class Etape2AnnonceForm extends Form<CreationAnnonceDTO> {
 
@@ -42,7 +42,7 @@ public class Etape2AnnonceForm extends Form<CreationAnnonceDTO> {
 	public Etape2AnnonceForm(String id, IModel<CreationAnnonceDTO> model) {
 		super(id, model);
 
-		// multipart pour l'upload de fichier.
+		// Mode Multipart pour l'upload de fichier.
 		this.setMultiPart(true);
 		this.setMarkupId("formEtape2");
 
@@ -124,8 +124,7 @@ public class Etape2AnnonceForm extends Form<CreationAnnonceDTO> {
 
 		validateQualification = new SubmitLink("validateQualification");
 
-		// Decore le param title avec jquery
-		this.add(new TooltipBehavior());
+		this.add(BatimenToolTip.getTooltipBehaviour());
 
 		this.add(corpsMetierSelect);
 		this.add(objetDevisField);

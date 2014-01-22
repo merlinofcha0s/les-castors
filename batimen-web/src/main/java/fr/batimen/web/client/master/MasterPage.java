@@ -2,7 +2,6 @@ package fr.batimen.web.client.master;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.StringHeaderItem;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
@@ -18,7 +17,6 @@ import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.request.resource.PackageResourceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -334,27 +332,9 @@ public abstract class MasterPage extends WebPage {
 		response.render(addStringToMetaResourcesToHeader(metaDescription, "", "description"));
 		response.render(addStringToMetaResourcesToHeader(metaKeywords, "", "keywords"));
 
-		// Custom css File
-		response.render(addCssFileToHeader("css/page.css"));
-
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Ajout des resources dans le header.....OK");
 		}
-	}
-
-	/**
-	 * Ajoute les fichier CSS pour qu'il soit global à l'application
-	 * 
-	 * @param address
-	 *            localisation du fichier css
-	 * @return objet wicket qui permet de generer la balise link
-	 */
-	private CssHeaderItem addCssFileToHeader(String address) {
-
-		PackageResourceReference cssFile = new PackageResourceReference(fr.batimen.web.client.master.MasterPage.class,
-				address);
-
-		return CssHeaderItem.forReference(cssFile);
 	}
 
 	/**

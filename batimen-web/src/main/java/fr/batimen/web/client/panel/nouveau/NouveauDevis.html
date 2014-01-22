@@ -28,8 +28,8 @@
                 	<tr>
                    	 <th>Quel est l'objet de votre devis ?</th>
                     	<td>
-                      	   <input wicket:id="titre" type="text" name="objetDevisField" id="objetDevisField" title="Indiquer un titre pour votre devis" value="" />
-                      	   <img alt="Aide" src="img/helplittle.png" class="imgHelp" title="Titre de votre annonce" />
+                      	   <input wicket:id="titre" type="text" name="objetDevisField" id="objetDevisField" value="" />
+                      	   <img alt="Aide" src="img/helplittle.png" class="imgHelp" title="L'objet servira de titre pour le devis" />
                     	</td>
                 	</tr>
                 	<tr>
@@ -84,7 +84,8 @@
                 	<tr>
                    	 <th>Souhaitez-vous ajouter des photos a votre devis ?</th>
                     	<td>
-                    		<div wicket:id="photo"></div>
+                    		<div wicket:id="photo" class="upload">
+                    		</div>
                     	</td>
                 	</tr>
                 	<tr>

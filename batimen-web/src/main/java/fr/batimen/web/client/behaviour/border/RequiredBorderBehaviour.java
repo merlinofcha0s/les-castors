@@ -1,4 +1,4 @@
-package fr.batimen.web.client.border;
+package fr.batimen.web.client.behaviour.border;
 
 import org.apache.wicket.Component;
 import org.apache.wicket.markup.html.border.BorderBehavior;
