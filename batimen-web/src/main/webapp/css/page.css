@@ -34,7 +34,7 @@
 
 #formEtape2 table td a {
 	float: right;
-	margin-right: 39px;
+	margin-right: 53px;
 }
 
 .imgHelp {
@@ -78,7 +78,7 @@ div.upload {
 div.upload input[type="file"] {
     display: block !important;
     width: 157px !important;
-    height: 57px !important;
+    height: 41px !important;
     opacity: 0 !important;
     overflow: hidden !important;
 }

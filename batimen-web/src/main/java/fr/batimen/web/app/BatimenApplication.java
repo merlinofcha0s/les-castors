@@ -55,7 +55,7 @@ public class BatimenApplication extends AuthenticatedWebApplication {
 		// (appel d'une url http dans une page https)
 		getJavaScriptLibrarySettings().setJQueryReference(
 				new UrlResourceReference(Url.parse("//code.jquery.com/jquery-1.9.1.min.js")));
-		// Jquery-ui avec le theme Smoothness
+		// Chargement de Jquery-ui avec le theme Smoothness
 		addResourceReplacement(WiQueryCoreThemeResourceReference.get(), new WiQueryCoreThemeResourceReference(
 				"smoothness"));
 
