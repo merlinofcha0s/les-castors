@@ -1,6 +1,8 @@
 package fr.batimen.dto;
 
+import java.io.File;
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -14,6 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import fr.batimen.dto.constant.ValidatorConstant;
+import fr.batimen.dto.enums.Civilite;
 import fr.batimen.dto.enums.Metier;
 import fr.batimen.dto.enums.TypeContact;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
@@ -22,6 +25,7 @@ public class CreationAnnonceDTO extends AbstractDTO {
 
 	private static final long serialVersionUID = -7316855280979589583L;
 
+	// Annonce
 	@NotNull
 	private Metier metier;
 	@NotNull
@@ -39,7 +43,7 @@ public class CreationAnnonceDTO extends AbstractDTO {
 	@Max(value = ValidatorConstant.CREATION_ANNONCE_NBDEVIS_MAX)
 	@NotNull
 	private Integer nbDevis;
-	private String photo;
+	private List<File> photos = new ArrayList<>();
 	@NotNull
 	@Size(min = ValidatorConstant.CREATION_ANNONCE_ADRESSE_MIN, max = ValidatorConstant.CREATION_ANNONCE_ADRESSE_MAX)
 	private String adresse;
@@ -58,6 +62,13 @@ public class CreationAnnonceDTO extends AbstractDTO {
 	@Min(value = 01)
 	@Max(value = 100)
 	private Integer departement;
+
+	// Incription
+	private Civilite civilite;
+	@Size(min = ValidatorConstant.CREATION_ANNONCE_NOM_MIN, max = ValidatorConstant.CREATION_ANNONCE_NOM_MAX)
+	private String nom;
+	@Size(min = ValidatorConstant.CREATION_ANNONCE_PRENOM_MIN, max = ValidatorConstant.CREATION_ANNONCE_PRENOM_MAX)
+	private String prenom;
 
 	public Metier getMetier() {
 		return metier;
@@ -107,12 +118,12 @@ public class CreationAnnonceDTO extends AbstractDTO {
 		this.nbDevis = nbDevis;
 	}
 
-	public String getPhoto() {
-		return photo;
+	public List<File> getPhoto() {
+		return photos;
 	}
 
-	public void setPhoto(String photo) {
-		this.photo = photo;
+	public void setPhoto(List<File> photos) {
+		this.photos = photos;
 	}
 
 	public String getAdresse() {

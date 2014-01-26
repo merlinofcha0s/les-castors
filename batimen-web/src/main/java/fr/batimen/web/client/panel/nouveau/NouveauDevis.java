@@ -17,8 +17,7 @@ import fr.batimen.web.client.master.MasterPage;
  * @author Casaucau Cyril
  * 
  */
-// TODO : Finir de custom le bouton upload : trouver une solution pour que le
-// texte ne se décalle pas avec.
+// TODO : Finir la DTO + formulaire inscription
 public class NouveauDevis extends MasterPage {
 
 	private static final long serialVersionUID = -7595966450246951918L;
@@ -37,7 +36,9 @@ public class NouveauDevis extends MasterPage {
 
 	// Composants étape 2
 	private WebMarkupContainer containerQualification;
-	private Etape2AnnonceForm formEtape2;
+	private Etape2AnnonceForm etape2AnnonceForm;
+
+	// Composant étape 3
 
 	public NouveauDevis() {
 		super("Nouveau devis", "devis batiment renovation", "Nouveau devis", true, "img/bg_title1.jpg");
@@ -49,7 +50,7 @@ public class NouveauDevis extends MasterPage {
 		containerQualification = new WebMarkupContainer("containerQualification");
 		containerQualification.setVisible(false);
 
-		formEtape2 = new Etape2AnnonceForm("formQualification", new CompoundPropertyModel<CreationAnnonceDTO>(
+		etape2AnnonceForm = new Etape2AnnonceForm("formQualification", new CompoundPropertyModel<CreationAnnonceDTO>(
 				creationAnnonce)) {
 
 			private static final long serialVersionUID = -6436387191126517996L;
@@ -62,11 +63,25 @@ public class NouveauDevis extends MasterPage {
 			}
 		};
 
-		containerQualification.add(formEtape2);
+		containerQualification.add(etape2AnnonceForm);
 
 		// Etape 3 : Enregistrement des informations du client
 		containerInscription = new WebMarkupContainer("containerInscription");
 		containerInscription.setVisible(false);
+
+		Etape3InscriptionForm etape3InscriptionForm = new Etape3InscriptionForm("formInscription",
+				new CompoundPropertyModel<CreationAnnonceDTO>(creationAnnonce)) {
+
+			private static final long serialVersionUID = -7785574548677996934L;
+
+			@Override
+			protected void onSubmit() {
+				this.setResponsePage(new NouveauDevis(creationAnnonce));
+			}
+
+		};
+
+		containerInscription.add(etape3InscriptionForm);
 
 		// Composant généraux
 		progressBar = new WebMarkupContainer("progressBar");
@@ -110,8 +125,8 @@ public class NouveauDevis extends MasterPage {
 	private void etape3Inscription() {
 		carteFrance.setVisible(false);
 		containerQualification.setVisible(false);
+		containerInscription.setVisible(true);
 		changementEtape("75", "Etape 3/4");
-		feedBackPanelGeneral.info("description : " + creationAnnonce.getDescription());
 	}
 
 	private void changementEtape(String percent, String numeroEtape) {

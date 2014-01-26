@@ -84,7 +84,7 @@
                 	<tr>
                    	 <th>Souhaitez-vous ajouter des photos a votre devis ?</th>
                     	<td>
-                    		<div wicket:id="photo" class="upload">
+                    		<div wicket:id="photos" class="upload">
                     		</div>
                     	</td>
                 	</tr>
@@ -102,5 +102,26 @@
 			</div>
 		</div>
 	</div>
-	<div wicket:id="containerInscription"></div>
+	<div wicket:id="containerInscription">
+	<div class="row-fluid">
+			<div class="span12 module_cont module_text_area module_small_padding">
+				<div class="bg_title">
+					<h4 class="headInModule">Renseignez les caracteristiques du Devis</h4>
+				</div>
+				<form wicket:id="formInscription">
+				<table>
+					<tr>
+                   	 <th>Quels corps de métier recherchez vous ?</th>
+                    	<td>
+                      	  <select wicket:id="civilite" name="corpsMetierSelect" id="corpsMetierSelect"></select>
+                    	</td>
+                	</tr>
+                </table>
+				</form>
+				<div id="champsObligatoire">
+					<span class='required'>*</span> : champs obligatoires
+				</div>
+			</div>
+		</div>
+	</div>
 </wicket:extend>

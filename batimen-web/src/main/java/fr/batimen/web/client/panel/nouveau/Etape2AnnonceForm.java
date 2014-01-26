@@ -90,7 +90,7 @@ public class Etape2AnnonceForm extends Form<CreationAnnonceDTO> {
 		nbDevisField.add(new ErrorHighlightBehavior());
 		nbDevisField.add(new RequiredBorderBehaviour());
 
-		photoField = new MultiFileUploadField("photo", 5);
+		photoField = new MultiFileUploadField("photos", 5);
 		photoField.setMarkupId("photoField");
 
 		adresseField = new TextField<String>("adresse");

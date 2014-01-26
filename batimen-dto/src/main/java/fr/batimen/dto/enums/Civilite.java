@@ -10,7 +10,7 @@ public enum Civilite {
 
 	private String affichage;
 
-	public String getType() {
+	public String getAffichage() {
 		return affichage;
 	}
 
