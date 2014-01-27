@@ -3,6 +3,7 @@ package fr.batimen.dto;
 import java.io.File;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -11,6 +12,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.Email;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -69,6 +72,20 @@ public class CreationAnnonceDTO extends AbstractDTO {
 	private String nom;
 	@Size(min = ValidatorConstant.CREATION_ANNONCE_PRENOM_MIN, max = ValidatorConstant.CREATION_ANNONCE_PRENOM_MAX)
 	private String prenom;
+	@NotNull
+	@Pattern(message = "Numero de téléphone invalide", regexp = ValidatorConstant.CREATION_ANNONCE_TELEPHONE_REGEX)
+	private String numeroTel;
+	@NotNull
+	@Size(min = ValidatorConstant.CREATION_ANNONCE_LOGIN_MIN, max = ValidatorConstant.CREATION_ANNONCE_LOGIN_MAX)
+	private String login;
+	@NotNull
+	@Size(min = ValidatorConstant.CREATION_ANNONCE_PASSWORD_MIN, max = ValidatorConstant.CREATION_ANNONCE_PASSWORD_MAX)
+	private String password;
+	@NotNull
+	@Email
+	private String email;
+	@NotNull
+	private Date dateInscription;
 
 	public Metier getMetier() {
 		return metier;
@@ -118,14 +135,6 @@ public class CreationAnnonceDTO extends AbstractDTO {
 		this.nbDevis = nbDevis;
 	}
 
-	public List<File> getPhoto() {
-		return photos;
-	}
-
-	public void setPhoto(List<File> photos) {
-		this.photos = photos;
-	}
-
 	public String getAdresse() {
 		return adresse;
 	}
@@ -172,6 +181,141 @@ public class CreationAnnonceDTO extends AbstractDTO {
 
 	public void setDepartement(Integer departement) {
 		this.departement = departement;
+	}
+
+	/**
+	 * @return the photos
+	 */
+	public List<File> getPhotos() {
+		return photos;
+	}
+
+	/**
+	 * @param photos
+	 *            the photos to set
+	 */
+	public void setPhotos(List<File> photos) {
+		this.photos = photos;
+	}
+
+	/**
+	 * @return the civilite
+	 */
+	public Civilite getCivilite() {
+		return civilite;
+	}
+
+	/**
+	 * @param civilite
+	 *            the civilite to set
+	 */
+	public void setCivilite(Civilite civilite) {
+		this.civilite = civilite;
+	}
+
+	/**
+	 * @return the nom
+	 */
+	public String getNom() {
+		return nom;
+	}
+
+	/**
+	 * @param nom
+	 *            the nom to set
+	 */
+	public void setNom(String nom) {
+		this.nom = nom;
+	}
+
+	/**
+	 * @return the prenom
+	 */
+	public String getPrenom() {
+		return prenom;
+	}
+
+	/**
+	 * @param prenom
+	 *            the prenom to set
+	 */
+	public void setPrenom(String prenom) {
+		this.prenom = prenom;
+	}
+
+	/**
+	 * @return the numeroTel
+	 */
+	public String getNumeroTel() {
+		return numeroTel;
+	}
+
+	/**
+	 * @param numeroTel
+	 *            the numeroTel to set
+	 */
+	public void setNumeroTel(String numeroTel) {
+		this.numeroTel = numeroTel;
+	}
+
+	/**
+	 * @return the login
+	 */
+	public String getLogin() {
+		return login;
+	}
+
+	/**
+	 * @param login
+	 *            the login to set
+	 */
+	public void setLogin(String login) {
+		this.login = login;
+	}
+
+	/**
+	 * @return the password
+	 */
+	public String getPassword() {
+		return password;
+	}
+
+	/**
+	 * @param password
+	 *            the password to set
+	 */
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	/**
+	 * @return the email
+	 */
+	public String getEmail() {
+		return email;
+	}
+
+	/**
+	 * @param email
+	 *            the email to set
+	 */
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	/**
+	 * @return the dateInscription
+	 */
+	public Date getDateInscription() {
+		return dateInscription;
+	}
+
+	/**
+	 * @param dateInscription
+	 *            the dateInscription to set
+	 */
+	public void setDateInscription(Date dateInscription) {
+		this.dateInscription = dateInscription;
 	}
 
 	/*

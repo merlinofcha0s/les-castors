@@ -35,8 +35,12 @@ public class ValidatorConstant {
 	public static final int CREATION_ANNONCE_NOM_MAX = 20;
 	public static final int CREATION_ANNONCE_PRENOM_MIN = 3;
 	public static final int CREATION_ANNONCE_PRENOM_MAX = 20;
-
+	public static final int CREATION_ANNONCE_LOGIN_MIN = 3;
+	public static final int CREATION_ANNONCE_LOGIN_MAX = 20;
+	public static final int CREATION_ANNONCE_PASSWORD_MIN = 80;
+	public static final int CREATION_ANNONCE_PASSWORD_MAX = 80;
 	// Regex
 	public static final String CREATION_ANNONCE_CODE_POSTAL_REGEX = "^[0-9]{5}$";
+	public static final String CREATION_ANNONCE_TELEPHONE_REGEX = "^0[1-9]([-. ]?[0-9]{2}){4}$";
 
 }
