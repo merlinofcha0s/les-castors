@@ -13,10 +13,10 @@ public class ValidatorConstant {
 	}
 
 	// Login DTO
-	public static final int LOGIN_DTO_LOGIN_RANGE_MIN = 3;
-	public static final int LOGIN_DTO_LOGIN_RANGE_MAX = 25;
-	public static final int LOGIN_DTO_PASSWORD_RANGE_MIN = 8;
-	public static final int LOGIN_DTO_PASSWORD_RANGE_MAX = 40;
+	public static final int LOGIN_RANGE_MIN = 3;
+	public static final int LOGIN_RANGE_MAX = 25;
+	public static final int PASSWORD_RANGE_MIN = 8;
+	public static final int PASSWORD_RANGE_MAX = 40;
 
 	// Creation annonce DTO
 	public static final int CREATION_ANNONCE_TITRE_MIN = 3;
@@ -35,10 +35,6 @@ public class ValidatorConstant {
 	public static final int CREATION_ANNONCE_NOM_MAX = 20;
 	public static final int CREATION_ANNONCE_PRENOM_MIN = 3;
 	public static final int CREATION_ANNONCE_PRENOM_MAX = 20;
-	public static final int CREATION_ANNONCE_LOGIN_MIN = 3;
-	public static final int CREATION_ANNONCE_LOGIN_MAX = 20;
-	public static final int CREATION_ANNONCE_PASSWORD_MIN = 80;
-	public static final int CREATION_ANNONCE_PASSWORD_MAX = 80;
 	// Regex
 	public static final String CREATION_ANNONCE_CODE_POSTAL_REGEX = "^[0-9]{5}$";
 	public static final String CREATION_ANNONCE_TELEPHONE_REGEX = "^0[1-9]([-. ]?[0-9]{2}){4}$";

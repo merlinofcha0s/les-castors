@@ -56,14 +56,14 @@ public final class Authentification extends MasterPage {
 		login = new TextField<String>("login", new Model<String>());
 		login.setModelObject("Identifiant");
 		login.setRequired(true);
-		login.add(new StringValidator(ValidatorConstant.LOGIN_DTO_LOGIN_RANGE_MIN,
-				ValidatorConstant.LOGIN_DTO_LOGIN_RANGE_MAX));
+		login.add(new StringValidator(ValidatorConstant.LOGIN_RANGE_MIN,
+				ValidatorConstant.LOGIN_RANGE_MAX));
 
 		password = new PasswordTextField("password", new Model<String>());
 		password.setModelObject("Password");
 		password.setRequired(true);
-		password.add(new StringValidator(ValidatorConstant.LOGIN_DTO_PASSWORD_RANGE_MIN,
-				ValidatorConstant.LOGIN_DTO_PASSWORD_RANGE_MAX));
+		password.add(new StringValidator(ValidatorConstant.PASSWORD_RANGE_MIN,
+				ValidatorConstant.PASSWORD_RANGE_MAX));
 
 		signIn = new Button("signIn") {
 

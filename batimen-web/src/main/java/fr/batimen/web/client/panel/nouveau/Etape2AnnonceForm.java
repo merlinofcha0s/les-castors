@@ -123,6 +123,7 @@ public class Etape2AnnonceForm extends Form<CreationAnnonceDTO> {
 		villeField.add(new RequiredBorderBehaviour());
 
 		validateQualification = new SubmitLink("validateQualification");
+		validateQualification.setMarkupId("validateQualification");
 
 		this.add(BatimenToolTip.getTooltipBehaviour());
 

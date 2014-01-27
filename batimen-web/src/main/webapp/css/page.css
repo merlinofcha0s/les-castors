@@ -22,19 +22,34 @@
 	margin-top: 45px;
 }
 
-#formEtape2 table th {
+#formEtape3 {
+	float: left;
+	margin-top: 45px;
+}
+
+#dejaInscrit {
+	float: right;
+	margin-top: 45px;
+}
+
+.creationAnnonceTable th {
 	padding-left: 20px;
 	padding-bottom: 20px;
 }
 
-#formEtape2 table td {
+.creationAnnonceTable td {
 	padding-left: 20px;
 	padding-bottom: 8px;
 }
 
-#formEtape2 table td a {
+#validateQualification {
 	float: right;
 	margin-right: 53px;
+}
+
+#validateInscription {
+	float: right;
+	margin-right: 16px;
 }
 
 .imgHelp {
@@ -45,18 +60,9 @@
 	margin-bottom: 7px;
 }
 
-.required {
-	color: red;
-	font-size: 1.3em;
-	padding-left: 5px;
-}
-
-#formEtape2 .error {
-	border: 1px solid red;
-}
 
 #champsObligatoire {
-	margin-left: 300px;
+	margin-left: 16px;
 }
 
 /* Composant Wicket */
@@ -85,6 +91,15 @@ div.upload input[type="file"] {
 
 /* Composant dans tous le site */
 
+.required {
+	color: red;
+	font-size: 1.3em;
+	padding-left: 5px;
+}
+
+table tr td .error {
+	border: 1px solid red;
+}
 input[type="button"]{
 	font-weight: 800;
 	font-family: 'Open Sans',sans-serif !important;

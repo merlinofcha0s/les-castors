@@ -1,6 +1,8 @@
 package fr.batimen.web.client.panel.nouveau;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -17,28 +19,29 @@ import fr.batimen.web.client.master.MasterPage;
  * @author Casaucau Cyril
  * 
  */
-// TODO : Finir la DTO + formulaire inscription
+// TODO : Finir CSS du deja connecter + attaquer popup connexion
 public class NouveauDevis extends MasterPage {
 
 	private static final long serialVersionUID = -7595966450246951918L;
 
 	// Composants Généraux
-	private WebMarkupContainer containerInscription;
 	private WebMarkupContainer progressBar;
 	private Label etape;
+
+	// Objet à remplir
+	private CreationAnnonceDTO creationAnnonce = new CreationAnnonceDTO();
 
 	// Composants étape 1
 	private MapFrance carteFrance;
 	private String departement;
-
-	// Objet à remplir
-	private CreationAnnonceDTO creationAnnonce = new CreationAnnonceDTO();
 
 	// Composants étape 2
 	private WebMarkupContainer containerQualification;
 	private Etape2AnnonceForm etape2AnnonceForm;
 
 	// Composant étape 3
+	private WebMarkupContainer containerInscription;
+	private AjaxLink<String> connexionLink;
 
 	public NouveauDevis() {
 		super("Nouveau devis", "devis batiment renovation", "Nouveau devis", true, "img/bg_title1.jpg");
@@ -81,7 +84,19 @@ public class NouveauDevis extends MasterPage {
 
 		};
 
+		connexionLink = new AjaxLink<String>("connexion") {
+
+			private static final long serialVersionUID = -4897659500119552151L;
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+
+			}
+
+		};
+
 		containerInscription.add(etape3InscriptionForm);
+		containerInscription.add(connexionLink);
 
 		// Composant généraux
 		progressBar = new WebMarkupContainer("progressBar");
@@ -94,6 +109,7 @@ public class NouveauDevis extends MasterPage {
 		this.add(etape);
 
 		changementEtape("25", "Etape 1/4");
+		etape3Inscription();
 	}
 
 	public NouveauDevis(PageParameters parameters) {

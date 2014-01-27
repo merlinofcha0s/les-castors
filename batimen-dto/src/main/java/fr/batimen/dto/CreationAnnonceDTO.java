@@ -76,10 +76,10 @@ public class CreationAnnonceDTO extends AbstractDTO {
 	@Pattern(message = "Numero de téléphone invalide", regexp = ValidatorConstant.CREATION_ANNONCE_TELEPHONE_REGEX)
 	private String numeroTel;
 	@NotNull
-	@Size(min = ValidatorConstant.CREATION_ANNONCE_LOGIN_MIN, max = ValidatorConstant.CREATION_ANNONCE_LOGIN_MAX)
+	@Size(min = ValidatorConstant.LOGIN_RANGE_MIN, max = ValidatorConstant.LOGIN_RANGE_MAX)
 	private String login;
 	@NotNull
-	@Size(min = ValidatorConstant.CREATION_ANNONCE_PASSWORD_MIN, max = ValidatorConstant.CREATION_ANNONCE_PASSWORD_MAX)
+	@Size(min = ValidatorConstant.LOGIN_RANGE_MIN, max = ValidatorConstant.LOGIN_RANGE_MAX)
 	private String password;
 	@NotNull
 	@Email
