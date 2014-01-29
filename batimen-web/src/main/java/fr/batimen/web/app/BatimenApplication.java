@@ -13,12 +13,12 @@ import org.apache.wicket.request.resource.UrlResourceReference;
 import org.odlabs.wiquery.ui.themes.WiQueryCoreThemeResourceReference;
 
 import fr.batimen.core.constant.Constant;
-import fr.batimen.web.client.panel.Accueil;
-import fr.batimen.web.client.panel.Contact;
-import fr.batimen.web.client.panel.MonCompte;
-import fr.batimen.web.client.panel.QuiSommeNous;
-import fr.batimen.web.client.panel.authentification.Authentification;
-import fr.batimen.web.client.panel.nouveau.NouveauDevis;
+import fr.batimen.web.client.extend.Accueil;
+import fr.batimen.web.client.extend.Contact;
+import fr.batimen.web.client.extend.MonCompte;
+import fr.batimen.web.client.extend.QuiSommeNous;
+import fr.batimen.web.client.extend.authentification.Authentification;
+import fr.batimen.web.client.extend.nouveau.NouveauDevis;
 import fr.batimen.web.client.session.BatimenSession;
 
 /**

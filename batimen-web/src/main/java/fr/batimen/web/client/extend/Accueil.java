@@ -1,9 +1,9 @@
-package fr.batimen.web.client.panel;
+package fr.batimen.web.client.extend;
 
 import org.apache.wicket.markup.html.link.Link;
 
+import fr.batimen.web.client.extend.nouveau.NouveauDevis;
 import fr.batimen.web.client.master.MasterPage;
-import fr.batimen.web.client.panel.nouveau.NouveauDevis;
 
 /**
  * Premiere page visible quand l'utilisateur arrivera sur le site, elle definira

@@ -1,4 +1,4 @@
-package fr.batimen.web.client.panel;
+package fr.batimen.web.client.extend;
 
 import fr.batimen.web.client.master.MasterPage;
 

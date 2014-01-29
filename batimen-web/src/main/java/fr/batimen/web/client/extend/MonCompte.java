@@ -1,4 +1,4 @@
-package fr.batimen.web.client.panel;
+package fr.batimen.web.client.extend;
 
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.request.mapper.parameter.PageParameters;

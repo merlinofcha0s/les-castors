@@ -1,4 +1,4 @@
-package fr.batimen.web.client.panel.nouveau;
+package fr.batimen.web.client.extend.nouveau;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -19,7 +19,7 @@ import fr.batimen.web.client.master.MasterPage;
  * @author Casaucau Cyril
  * 
  */
-// TODO : Finir CSS du deja connecter + attaquer popup connexion
+// TODO : Attaquer popup connexion
 public class NouveauDevis extends MasterPage {
 
 	private static final long serialVersionUID = -7595966450246951918L;

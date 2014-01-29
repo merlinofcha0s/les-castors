@@ -1,6 +1,8 @@
 package fr.batimen.web.client.master;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.StringHeaderItem;
@@ -17,15 +19,16 @@ import org.apache.wicket.protocol.http.WebSession;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.odlabs.wiquery.ui.dialog.Dialog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.batimen.web.client.component.BatimenFeedbackPanel;
-import fr.batimen.web.client.panel.Accueil;
-import fr.batimen.web.client.panel.Contact;
-import fr.batimen.web.client.panel.MonCompte;
-import fr.batimen.web.client.panel.QuiSommeNous;
-import fr.batimen.web.client.panel.authentification.Authentification;
+import fr.batimen.web.client.extend.Accueil;
+import fr.batimen.web.client.extend.Contact;
+import fr.batimen.web.client.extend.MonCompte;
+import fr.batimen.web.client.extend.QuiSommeNous;
+import fr.batimen.web.client.panel.AuthentificationPanel;
 import fr.batimen.web.client.session.BatimenSession;
 
 /**
@@ -63,6 +66,8 @@ public abstract class MasterPage extends WebPage {
 	// Feedback panel général
 	protected BatimenFeedbackPanel feedBackPanelGeneral;
 
+	private Dialog loginDialog;
+
 	/**
 	 * Constructeur par defaut, initialise les composants de base de la page
 	 * 
@@ -85,6 +90,8 @@ public abstract class MasterPage extends WebPage {
 		// utilisateur de maniere centralisé
 		feedBackPanelGeneral = new BatimenFeedbackPanel("feedBackPanelGeneral");
 		htmlTag.add(feedBackPanelGeneral);
+
+		this.add(getLoginDialog());
 	}
 
 	/**
@@ -254,17 +261,17 @@ public abstract class MasterPage extends WebPage {
 
 		// Lien qui amene à la page de connexion : n'est visible que quand
 		// l'utilisateur n'est pas encore loggé
-		Link<String> connexion = new Link<String>("connexion") {
+		AjaxLink<String> connexion = new AjaxLink<String>("connexion") {
 			private static final long serialVersionUID = -5109878814704325528L;
-
-			@Override
-			public void onClick() {
-				setResponsePage(Authentification.class);
-			}
 
 			@Override
 			public boolean isVisible() {
 				return !BatimenSession.get().isSignedIn();
+			}
+
+			@Override
+			public void onClick(AjaxRequestTarget target) {
+				getLoginDialog().open(target);
 			}
 
 		};
@@ -372,6 +379,21 @@ public abstract class MasterPage extends WebPage {
 		attribute.append(value);
 		attribute.append("\"");
 		return attribute.toString();
+	}
+
+	public Dialog getLoginDialog() {
+		if (loginDialog == null) {
+			loginDialog = new Dialog("loginDialog");
+			loginDialog.setModal(true);
+			loginDialog.setTitle("Connexion");
+			loginDialog.setResizable(false);
+			loginDialog.setDraggable(false);
+			loginDialog.setWidth(600);
+			loginDialog.setHeight(150);
+			loginDialog.add(new AuthentificationPanel("authentificationPanel"));
+		}
+
+		return loginDialog;
 	}
 
 }

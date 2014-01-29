@@ -1,4 +1,4 @@
-package fr.batimen.web.client.panel.nouveau;
+package fr.batimen.web.client.extend.nouveau;
 
 import java.util.Arrays;
 

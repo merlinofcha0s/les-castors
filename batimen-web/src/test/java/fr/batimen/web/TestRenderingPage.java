@@ -5,10 +5,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import fr.batimen.web.app.BatimenApplication;
-import fr.batimen.web.client.panel.Accueil;
-import fr.batimen.web.client.panel.Contact;
-import fr.batimen.web.client.panel.QuiSommeNous;
-import fr.batimen.web.client.panel.authentification.Authentification;
+import fr.batimen.web.client.extend.Accueil;
+import fr.batimen.web.client.extend.Contact;
+import fr.batimen.web.client.extend.QuiSommeNous;
+import fr.batimen.web.client.extend.authentification.Authentification;
 
 public class TestRenderingPage {
 
