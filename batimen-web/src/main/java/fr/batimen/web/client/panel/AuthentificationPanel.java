@@ -1,9 +1,10 @@
 package fr.batimen.web.client.panel;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
-import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -14,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.web.client.extend.MonCompte;
+import fr.batimen.web.client.extend.authentification.Authentification;
 
 public class AuthentificationPanel extends Panel {
 
@@ -23,7 +25,7 @@ public class AuthentificationPanel extends Panel {
 	private Form<AuthentificationPanel> loginForm;
 	private TextField<String> login;
 	private PasswordTextField password;
-	private SubmitLink signIn;
+	private AjaxSubmitLink signIn;
 
 	public AuthentificationPanel(String id) {
 		super(id);
@@ -48,24 +50,31 @@ public class AuthentificationPanel extends Panel {
 		password.setRequired(true);
 		password.add(new StringValidator(ValidatorConstant.PASSWORD_RANGE_MIN, ValidatorConstant.PASSWORD_RANGE_MAX));
 
-		signIn = new SubmitLink("signIn") {
+		signIn = new AjaxSubmitLink("signIn") {
 
 			private static final long serialVersionUID = 3183458686534816645L;
 
 			@Override
-			public void onSubmit() {
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+
 				boolean authResult = AuthenticatedWebSession.get().signIn(login.getInput(),
 						password.getConvertedInput());
 				// if authentication succeeds redirect user to the requested
 				// page
 				if (authResult) {
-					// Si il voulait aller sur une page en particulier, on le
-					// redirige vers celle ci
-					continueToOriginalDestination();
-					// Si page => Continue to destination sinon rien faire
-					// this.getParent().getClass().getSimpleName()
-					// Sinon on le redirige vers la page de son compte.
-					setResponsePage(MonCompte.class);
+					if (this.getParent().getClass().getSimpleName().equals(Authentification.class)) {
+						// Si il voulait aller sur une page en particulier, on
+						// le
+						// redirige vers celle ci
+						continueToOriginalDestination();
+						// Si page => Continue to destination sinon rien faire
+						// this.getParent().getClass().getSimpleName()
+						// Sinon on le redirige vers la page de son compte.
+						setResponsePage(MonCompte.class);
+					} else {
+						// target.add();
+					}
+
 				} else {
 					// feedBackPanelGeneral.error("Compte inexistant / mot de passe incorrect");
 				}
