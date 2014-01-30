@@ -90,7 +90,7 @@ public class NouveauDevis extends MasterPage {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-
+				getLoginDialog().open(target);
 			}
 
 		};
@@ -109,7 +109,7 @@ public class NouveauDevis extends MasterPage {
 		this.add(etape);
 
 		changementEtape("25", "Etape 1/4");
-		etape3Inscription();
+		// etape3Inscription();
 	}
 
 	public NouveauDevis(PageParameters parameters) {

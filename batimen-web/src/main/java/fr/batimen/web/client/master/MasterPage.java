@@ -381,15 +381,15 @@ public abstract class MasterPage extends WebPage {
 		return attribute.toString();
 	}
 
-	public Dialog getLoginDialog() {
+	protected Dialog getLoginDialog() {
 		if (loginDialog == null) {
 			loginDialog = new Dialog("loginDialog");
 			loginDialog.setModal(true);
-			loginDialog.setTitle("Connexion");
+			loginDialog.setTitle("Connexion à l\\'espace client / artisan");
 			loginDialog.setResizable(false);
 			loginDialog.setDraggable(false);
-			loginDialog.setWidth(600);
-			loginDialog.setHeight(150);
+			loginDialog.setWidth(620);
+			loginDialog.setHeight(160);
 			loginDialog.add(new AuthentificationPanel("authentificationPanel"));
 		}
 

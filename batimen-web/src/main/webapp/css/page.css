@@ -6,6 +6,14 @@
 	padding-top: 12px;
 }
 
+#authentificationPanel{
+	padding-top: 12px;
+}
+
+#signInButton{
+	margin-left: 99px;
+}
+
 .erreur {
 	color: red;
 }
@@ -36,12 +44,12 @@
 	font-size: 1.1em;
 }
 
-.creationAnnonceTable th {
+.tableBatimen th {
 	padding-left: 20px;
 	padding-bottom: 20px;
 }
 
-.creationAnnonceTable td {
+.tableBatimen td {
 	padding-left: 20px;
 	padding-bottom: 8px;
 }

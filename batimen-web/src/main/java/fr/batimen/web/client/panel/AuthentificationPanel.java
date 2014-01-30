@@ -1,10 +1,9 @@
 package fr.batimen.web.client.panel;
 
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Button;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
+import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -21,11 +20,10 @@ public class AuthentificationPanel extends Panel {
 	private static final long serialVersionUID = -1634093925835447825L;
 	private static final Logger LOGGER = LoggerFactory.getLogger(AuthentificationPanel.class);
 
-	private Label hello;
 	private Form<AuthentificationPanel> loginForm;
 	private TextField<String> login;
 	private PasswordTextField password;
-	private Button signIn;
+	private SubmitLink signIn;
 
 	public AuthentificationPanel(String id) {
 		super(id);
@@ -37,8 +35,6 @@ public class AuthentificationPanel extends Panel {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Initialisation du form d'authentification");
 		}
-
-		hello = new Label("loginHello", "Bienvenue sur Batimen.fr veuillez vous identifier.");
 
 		loginForm = new Form<AuthentificationPanel>("loginForm", new CompoundPropertyModel<AuthentificationPanel>(this));
 
@@ -52,7 +48,7 @@ public class AuthentificationPanel extends Panel {
 		password.setRequired(true);
 		password.add(new StringValidator(ValidatorConstant.PASSWORD_RANGE_MIN, ValidatorConstant.PASSWORD_RANGE_MAX));
 
-		signIn = new Button("signIn") {
+		signIn = new SubmitLink("signIn") {
 
 			private static final long serialVersionUID = 3183458686534816645L;
 
@@ -82,7 +78,6 @@ public class AuthentificationPanel extends Panel {
 		loginForm.add(login);
 		loginForm.add(password);
 
-		this.add(hello);
 		this.add(loginForm);
 
 		if (LOGGER.isDebugEnabled()) {
