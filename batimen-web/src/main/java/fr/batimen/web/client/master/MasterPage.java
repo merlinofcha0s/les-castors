@@ -4,6 +4,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.StringHeaderItem;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
@@ -24,6 +25,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.batimen.web.client.component.BatimenFeedbackPanel;
+import fr.batimen.web.client.event.Event;
+import fr.batimen.web.client.event.ConnectionEvent;
 import fr.batimen.web.client.extend.Accueil;
 import fr.batimen.web.client.extend.Contact;
 import fr.batimen.web.client.extend.MonCompte;
@@ -233,35 +236,9 @@ public abstract class MasterPage extends WebPage {
 			LOGGER.debug("Initialisation du composant de connexion.....");
 		}
 
-		// N'est visible que quand l'utilisateur est connecté
-		WebMarkupContainer connectedContainer = new WebMarkupContainer("connected") {
-
-			private static final long serialVersionUID = 109100381329795557L;
-
-			@Override
-			public boolean isVisible() {
-				return BatimenSession.get().isSignedIn();
-			}
-
-		};
-
-		Link<String> monCompte = new Link<String>("monCompte") {
-
-			private static final long serialVersionUID = -9076993269716924371L;
-
-			@Override
-			public void onClick() {
-				setResponsePage(MonCompte.class);
-
-			}
-
-		};
-
-		connectedContainer.add(monCompte);
-
 		// Lien qui amene à la page de connexion : n'est visible que quand
 		// l'utilisateur n'est pas encore loggé
-		AjaxLink<String> connexion = new AjaxLink<String>("connexion") {
+		final AjaxLink<String> connexion = new AjaxLink<String>("connexion") {
 			private static final long serialVersionUID = -5109878814704325528L;
 
 			@Override
@@ -277,6 +254,43 @@ public abstract class MasterPage extends WebPage {
 		};
 
 		connexion.setMarkupId("connexionLink");
+
+		// N'est visible que quand l'utilisateur est connecté
+		WebMarkupContainer connectedContainer = new WebMarkupContainer("connected") {
+
+			private static final long serialVersionUID = 109100381329795557L;
+
+			@Override
+			public boolean isVisible() {
+				return BatimenSession.get().isSignedIn();
+			}
+
+			// On fait souscrire ce container a l'event updateEvent pour que le
+			// panel Authentification puisse lui dire de se mettre a jour quand
+			// l'utilisateur se connecte
+			@Override
+			public void onEvent(IEvent<?> event) {
+				if (event.getPayload() instanceof ConnectionEvent) {
+					Event update = (Event) event.getPayload();
+					update.getTarget().add(this);
+				}
+			}
+
+		};
+
+		Link<String> monCompte = new Link<String>("monCompte") {
+
+			private static final long serialVersionUID = -9076993269716924371L;
+
+			@Override
+			public void onClick() {
+				setResponsePage(MonCompte.class);
+			}
+
+		};
+
+		connectedContainer.setOutputMarkupId(true);
+		connectedContainer.add(monCompte);
 
 		this.add(connectedContainer);
 		this.add(connexion);

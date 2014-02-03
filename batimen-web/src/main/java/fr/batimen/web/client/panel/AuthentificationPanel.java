@@ -3,6 +3,8 @@ package fr.batimen.web.client.panel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
+import org.apache.wicket.event.Broadcast;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.TextField;
@@ -14,8 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.batimen.dto.constant.ValidatorConstant;
-import fr.batimen.web.client.extend.MonCompte;
-import fr.batimen.web.client.extend.authentification.Authentification;
+import fr.batimen.web.client.event.ConnectionEvent;
 
 public class AuthentificationPanel extends Panel {
 
@@ -26,6 +27,8 @@ public class AuthentificationPanel extends Panel {
 	private TextField<String> login;
 	private PasswordTextField password;
 	private AjaxSubmitLink signIn;
+
+	private Label errorLogin;
 
 	public AuthentificationPanel(String id) {
 		super(id);
@@ -59,33 +62,41 @@ public class AuthentificationPanel extends Panel {
 
 				boolean authResult = AuthenticatedWebSession.get().signIn(login.getInput(),
 						password.getConvertedInput());
+
 				// if authentication succeeds redirect user to the requested
 				// page
 				if (authResult) {
-					if (this.getParent().getClass().getSimpleName().equals(Authentification.class)) {
-						// Si il voulait aller sur une page en particulier, on
-						// le
-						// redirige vers celle ci
-						continueToOriginalDestination();
-						// Si page => Continue to destination sinon rien faire
-						// this.getParent().getClass().getSimpleName()
-						// Sinon on le redirige vers la page de son compte.
-						setResponsePage(MonCompte.class);
-					} else {
-						// target.add();
-					}
+					// On envoi un event pour que le connected container
+					// (masterpage) se recharge
+					send(getPage(), Broadcast.DEPTH, new ConnectionEvent(target));
+					// target.add(error);
 
+					// Si il voulait aller sur une page en particulier, on
+					// le redirige vers celle ci
+					continueToOriginalDestination();
 				} else {
-					// feedBackPanelGeneral.error("Compte inexistant / mot de passe incorrect");
+					errorLogin.setDefaultModelObject("");
+					target.add(errorLogin);
 				}
 			}
+
+			@Override
+			protected void onError(AjaxRequestTarget target, Form<?> form) {
+				errorLogin.setDefaultModelObject("Erreur dans la saisie, veuillez recommencer");
+				target.add(errorLogin);
+			}
+
 		};
 
 		signIn.setMarkupId("signInButton");
 
+		errorLogin = new Label("errorLogin", "");
+		errorLogin.setOutputMarkupId(true);
+
 		loginForm.add(signIn);
 		loginForm.add(login);
 		loginForm.add(password);
+		loginForm.add(errorLogin);
 
 		this.add(loginForm);
 
@@ -94,5 +105,4 @@ public class AuthentificationPanel extends Panel {
 		}
 
 	}
-
 }
