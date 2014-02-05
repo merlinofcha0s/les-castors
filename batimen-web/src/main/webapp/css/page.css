@@ -6,12 +6,39 @@
 	padding-top: 12px;
 }
 
+#connexion div {
+	color: #25B8E2;
+	transition : color 300ms ease 0s;
+}
+
+#connexion div:hover {
+	color: #666666;
+	text-decoration: none;
+	
+}
+
 #authentificationPanel{
-	padding-top: 12px;
+	padding-top: 1px;
 }
 
 #signInButton{
-	margin-left: 99px;
+	margin-left: 103px;
+}
+
+.errorLoginActivated{
+	margin-bottom: 10px;
+	border:1px solid;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	padding-top: 5px;
+	padding-bottom: 6px;
+	background: #FF6666;
+	color: #FFFFFF;
+}
+
+.errorLoginDeactivated{
+	margin-bottom: 10px;
 }
 
 .erreur {
@@ -52,6 +79,15 @@
 .tableBatimen td {
 	padding-left: 20px;
 	padding-bottom: 8px;
+}
+
+.tableBatimenLogin th {
+	padding-left: 20px;
+	padding-bottom: 20px;
+}
+
+.tableBatimenLogin td {
+	padding-left: 20px;
 }
 
 #validateQualification {

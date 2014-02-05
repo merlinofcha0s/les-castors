@@ -1,5 +1,6 @@
 package fr.batimen.web.client.panel;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
@@ -16,7 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.batimen.dto.constant.ValidatorConstant;
-import fr.batimen.web.client.event.ConnectionEvent;
+import fr.batimen.web.client.event.LoginEvent;
 
 public class AuthentificationPanel extends Panel {
 
@@ -68,22 +69,19 @@ public class AuthentificationPanel extends Panel {
 				if (authResult) {
 					// On envoi un event pour que le connected container
 					// (masterpage) se recharge
-					send(getPage(), Broadcast.DEPTH, new ConnectionEvent(target));
-					// target.add(error);
+					send(getPage(), Broadcast.BREADTH, new LoginEvent(target));
 
 					// Si il voulait aller sur une page en particulier, on
 					// le redirige vers celle ci
 					continueToOriginalDestination();
 				} else {
-					errorLogin.setDefaultModelObject("");
-					target.add(errorLogin);
+					AuthentificationPanel.this.onError(target);
 				}
 			}
 
 			@Override
 			protected void onError(AjaxRequestTarget target, Form<?> form) {
-				errorLogin.setDefaultModelObject("Erreur dans la saisie, veuillez recommencer");
-				target.add(errorLogin);
+				AuthentificationPanel.this.onError(target);
 			}
 
 		};
@@ -96,13 +94,23 @@ public class AuthentificationPanel extends Panel {
 		loginForm.add(signIn);
 		loginForm.add(login);
 		loginForm.add(password);
-		loginForm.add(errorLogin);
 
 		this.add(loginForm);
+		this.add(errorLogin);
 
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Fin initialisation du form d'authentification");
 		}
+	}
 
+	public void resetLabelError() {
+		errorLogin.setDefaultModelObject("");
+		errorLogin.add(new AttributeModifier("class", "errorLoginDeactivated"));
+	}
+
+	public void onError(AjaxRequestTarget target) {
+		errorLogin.setDefaultModelObject("Erreur dans la saisie ou identifiants inconnues, veuillez recommencer");
+		errorLogin.add(new AttributeModifier("class", "errorLoginActivated"));
+		target.add(errorLogin);
 	}
 }

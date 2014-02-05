@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
 
 import fr.batimen.web.client.component.BatimenFeedbackPanel;
 import fr.batimen.web.client.event.Event;
-import fr.batimen.web.client.event.ConnectionEvent;
+import fr.batimen.web.client.event.LoginEvent;
 import fr.batimen.web.client.extend.Accueil;
 import fr.batimen.web.client.extend.Contact;
 import fr.batimen.web.client.extend.MonCompte;
@@ -70,6 +70,7 @@ public abstract class MasterPage extends WebPage {
 	protected BatimenFeedbackPanel feedBackPanelGeneral;
 
 	private Dialog loginDialog;
+	private AuthentificationPanel authentificationPanel;
 
 	/**
 	 * Constructeur par defaut, initialise les composants de base de la page
@@ -236,33 +237,28 @@ public abstract class MasterPage extends WebPage {
 			LOGGER.debug("Initialisation du composant de connexion.....");
 		}
 
+		final Label connexionlbl = new Label("connexionlbl", new Model<String>());
+		if (BatimenSession.get().isSignedIn()) {
+			connexionlbl.setDefaultModelObject("Mon Compte");
+		} else {
+			connexionlbl.setDefaultModelObject("Espace Membre");
+		}
+
+		connexionlbl.setOutputMarkupId(true);
+
 		// Lien qui amene à la page de connexion : n'est visible que quand
 		// l'utilisateur n'est pas encore loggé
 		final AjaxLink<String> connexion = new AjaxLink<String>("connexion") {
 			private static final long serialVersionUID = -5109878814704325528L;
 
 			@Override
-			public boolean isVisible() {
-				return !BatimenSession.get().isSignedIn();
-			}
-
-			@Override
 			public void onClick(AjaxRequestTarget target) {
-				getLoginDialog().open(target);
-			}
+				if (BatimenSession.get().isSignedIn()) {
+					setResponsePage(MonCompte.class);
+				} else {
+					getLoginDialog().open(target);
+				}
 
-		};
-
-		connexion.setMarkupId("connexionLink");
-
-		// N'est visible que quand l'utilisateur est connecté
-		WebMarkupContainer connectedContainer = new WebMarkupContainer("connected") {
-
-			private static final long serialVersionUID = 109100381329795557L;
-
-			@Override
-			public boolean isVisible() {
-				return BatimenSession.get().isSignedIn();
 			}
 
 			// On fait souscrire ce container a l'event updateEvent pour que le
@@ -270,29 +266,24 @@ public abstract class MasterPage extends WebPage {
 			// l'utilisateur se connecte
 			@Override
 			public void onEvent(IEvent<?> event) {
-				if (event.getPayload() instanceof ConnectionEvent) {
+				if (event.getPayload() instanceof LoginEvent) {
+
 					Event update = (Event) event.getPayload();
+					connexionlbl.setDefaultModelObject("Mon Compte");
+
 					update.getTarget().add(this);
+
+					getLoginDialog().close(update.getTarget());
 				}
 			}
 
 		};
 
-		Link<String> monCompte = new Link<String>("monCompte") {
+		connexion.setMarkupId("connexionLink");
+		connexion.setOutputMarkupId(true);
 
-			private static final long serialVersionUID = -9076993269716924371L;
+		connexion.add(connexionlbl);
 
-			@Override
-			public void onClick() {
-				setResponsePage(MonCompte.class);
-			}
-
-		};
-
-		connectedContainer.setOutputMarkupId(true);
-		connectedContainer.add(monCompte);
-
-		this.add(connectedContainer);
 		this.add(connexion);
 
 		if (LOGGER.isDebugEnabled()) {
@@ -396,18 +387,39 @@ public abstract class MasterPage extends WebPage {
 	}
 
 	protected Dialog getLoginDialog() {
+
 		if (loginDialog == null) {
-			loginDialog = new Dialog("loginDialog");
+
+			authentificationPanel = new AuthentificationPanel("authentificationPanel");
+			authentificationPanel.setOutputMarkupId(true);
+
+			loginDialog = new Dialog("loginDialog") {
+
+				private static final long serialVersionUID = -1661769505673895284L;
+
+				/*
+				 * (non-Javadoc)
+				 * 
+				 * @see
+				 * org.odlabs.wiquery.ui.dialog.Dialog#open(org.apache.wicket
+				 * .ajax.AjaxRequestTarget)
+				 */
+				@Override
+				public void open(AjaxRequestTarget ajaxRequestTarget) {
+					authentificationPanel.resetLabelError();
+					ajaxRequestTarget.add(authentificationPanel);
+					super.open(ajaxRequestTarget);
+				}
+
+			};
 			loginDialog.setModal(true);
 			loginDialog.setTitle("Connexion à l\\'espace client / artisan");
 			loginDialog.setResizable(false);
 			loginDialog.setDraggable(false);
 			loginDialog.setWidth(620);
-			loginDialog.setHeight(160);
-			loginDialog.add(new AuthentificationPanel("authentificationPanel"));
+			loginDialog.add(authentificationPanel);
 		}
 
 		return loginDialog;
 	}
-
 }
