@@ -3,15 +3,21 @@ package fr.batimen.web.client.extend.nouveau;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import fr.batimen.dto.CreationAnnonceDTO;
 import fr.batimen.web.client.component.MapFrance;
+import fr.batimen.web.client.event.Event;
+import fr.batimen.web.client.event.LoginEvent;
 import fr.batimen.web.client.master.MasterPage;
+import fr.batimen.web.client.session.BatimenSession;
 
 /**
  * Permet la création de nouveau devis par un client.
@@ -19,10 +25,11 @@ import fr.batimen.web.client.master.MasterPage;
  * @author Casaucau Cyril
  * 
  */
-// TODO : Attaquer popup connexion
 public class NouveauDevis extends MasterPage {
 
 	private static final long serialVersionUID = -7595966450246951918L;
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(NouveauDevis.class);
 
 	// Composants Généraux
 	private WebMarkupContainer progressBar;
@@ -43,6 +50,9 @@ public class NouveauDevis extends MasterPage {
 	private WebMarkupContainer containerInscription;
 	private AjaxLink<String> connexionLink;
 
+	// Composant étape 4
+	private WebMarkupContainer containerConfirmation;
+
 	public NouveauDevis() {
 		super("Nouveau devis", "devis batiment renovation", "Nouveau devis", true, "img/bg_title1.jpg");
 
@@ -61,7 +71,7 @@ public class NouveauDevis extends MasterPage {
 			@Override
 			protected void onSubmit() {
 				creationAnnonce.setDepartement(Integer.valueOf(departement));
-				creationAnnonce.setIsEtape2(false);
+				creationAnnonce.setNumeroEtape(3);
 				this.setResponsePage(new NouveauDevis(creationAnnonce));
 			}
 		};
@@ -79,6 +89,7 @@ public class NouveauDevis extends MasterPage {
 
 			@Override
 			protected void onSubmit() {
+				creationAnnonce.setNumeroEtape(4);
 				this.setResponsePage(new NouveauDevis(creationAnnonce));
 			}
 
@@ -98,6 +109,9 @@ public class NouveauDevis extends MasterPage {
 		containerInscription.add(etape3InscriptionForm);
 		containerInscription.add(connexionLink);
 
+		// Etape 4 : Confirmation
+		containerConfirmation = new WebMarkupContainer("containerConfirmation");
+
 		// Composant généraux
 		progressBar = new WebMarkupContainer("progressBar");
 		etape = new Label("etape", new Model<String>());
@@ -105,10 +119,11 @@ public class NouveauDevis extends MasterPage {
 		this.add(carteFrance);
 		this.add(containerQualification);
 		this.add(containerInscription);
+		this.add(containerConfirmation);
 		this.add(progressBar);
 		this.add(etape);
 
-		changementEtape("25", "Etape 1/4");
+		changementEtape(creationAnnonce.getNumeroEtape());
 		// etape3Inscription();
 	}
 
@@ -118,36 +133,91 @@ public class NouveauDevis extends MasterPage {
 		// On récupere le departement qu'a choisi l'utilisateur
 		departement = parameters.get("departement").toString();
 		if (departement != null) {
-			etape2Qualification();
+			changementEtape(2);
 		}
 	}
 
 	public NouveauDevis(CreationAnnonceDTO creationAnnonce) {
 		this();
 		this.creationAnnonce = creationAnnonce;
-		if (creationAnnonce.getIsEtape2()) {
-			etape2Qualification();
-		} else {
-			etape3Inscription();
-		}
+		changementEtape(creationAnnonce.getNumeroEtape());
 	}
 
 	private void etape2Qualification() {
 		carteFrance.setVisible(false);
 		containerQualification.setVisible(true);
-		changementEtape("50", "Etape 2/4");
 	}
 
 	private void etape3Inscription() {
 		carteFrance.setVisible(false);
 		containerQualification.setVisible(false);
 		containerInscription.setVisible(true);
-		changementEtape("75", "Etape 3/4");
+
 	}
 
-	private void changementEtape(String percent, String numeroEtape) {
+	private void etape4Inscription() {
+		carteFrance.setVisible(false);
+		containerQualification.setVisible(false);
+		containerInscription.setVisible(false);
+		containerConfirmation.setVisible(true);
+	}
+
+	private void changementEtape(Integer numeroEtape) {
+		String percent = "";
+
+		// On déduit l'avancement de la barre / la bonne etape grace au numero
+		// d'etape qui se trouve dans la DTO
+		switch (numeroEtape) {
+		case 1:
+			percent = "25";
+			break;
+		case 2:
+			percent = "50";
+			etape2Qualification();
+			break;
+		case 3:
+			percent = "75";
+			// Si l'utilisateur est deja authentifié on saute l'inscription
+			// (etape 3)
+			if (BatimenSession.get().isSignedIn()) {
+				percent = "100";
+				etape4Inscription();
+			} else {
+				etape3Inscription();
+			}
+			break;
+		case 4:
+			percent = "100";
+			etape4Inscription();
+			break;
+		default:
+			// N'est pas censé arriver!!!
+			if (LOGGER.isErrorEnabled()) {
+				LOGGER.error("Problème de chargement d'étape à la creation du devis, Numero étape à 0");
+			}
+			percent = "0";
+			break;
+		}
+
+		// On incrémente la progress bar
 		progressBar.add(new AttributeModifier("data-percent", percent));
-		etape.setDefaultModelObject(numeroEtape);
+
+		// On construit la chaine de caract pour affiché Etape x/4
+		StringBuilder numeroEtapeAffiche = new StringBuilder("Etape ");
+		numeroEtapeAffiche.append(numeroEtape).append("/4");
+
+		etape.setDefaultModelObject(numeroEtapeAffiche.toString());
+
 	}
 
+	@Override
+	public void onEvent(IEvent<?> event) {
+		// Event déclenché par la popup de connexion, fait sauter l'etape 3 si
+		// l'utilisateur se connecte
+		if (event.getPayload() instanceof LoginEvent) {
+			Event update = (Event) event.getPayload();
+			changementEtape(4);
+			update.getTarget().add(this);
+		}
+	}
 }

@@ -20,6 +20,7 @@ import com.google.gson.reflect.TypeToken;
 
 import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.dto.enums.Civilite;
+import fr.batimen.dto.enums.DelaiIntervention;
 import fr.batimen.dto.enums.Metier;
 import fr.batimen.dto.enums.TypeContact;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
@@ -41,12 +42,12 @@ public class CreationAnnonceDTO extends AbstractDTO {
 	private TypeContact typeContact;
 	@Size(max = ValidatorConstant.CREATION_ANNONCE_DELAI_INTERVENTION_MAX)
 	@NotNull
-	private String delaiIntervention;
+	private DelaiIntervention delaiIntervention;
 	@Min(value = ValidatorConstant.CREATION_ANNONCE_NBDEVIS_MIN)
 	@Max(value = ValidatorConstant.CREATION_ANNONCE_NBDEVIS_MAX)
 	@NotNull
 	private Integer nbDevis;
-	private List<File> photos = new ArrayList<>();
+	private List<File> photos = new ArrayList<File>();
 	@NotNull
 	@Size(min = ValidatorConstant.CREATION_ANNONCE_ADRESSE_MIN, max = ValidatorConstant.CREATION_ANNONCE_ADRESSE_MAX)
 	private String adresse;
@@ -60,7 +61,7 @@ public class CreationAnnonceDTO extends AbstractDTO {
 	@Size(max = ValidatorConstant.CREATION_ANNONCE_VILLE_MAX)
 	private String ville;
 	@NotNull
-	private Boolean isEtape2 = true;
+	private Integer numeroEtape = 1;
 	@NotNull
 	@Min(value = 01)
 	@Max(value = 100)
@@ -119,11 +120,11 @@ public class CreationAnnonceDTO extends AbstractDTO {
 		this.typeContact = typeContact;
 	}
 
-	public String getDelaiIntervention() {
+	public DelaiIntervention getDelaiIntervention() {
 		return delaiIntervention;
 	}
 
-	public void setDelaiIntervention(String delaiIntervention) {
+	public void setDelaiIntervention(DelaiIntervention delaiIntervention) {
 		this.delaiIntervention = delaiIntervention;
 	}
 
@@ -167,12 +168,19 @@ public class CreationAnnonceDTO extends AbstractDTO {
 		this.ville = ville;
 	}
 
-	public Boolean getIsEtape2() {
-		return isEtape2;
+	/**
+	 * @return the numeroEtape
+	 */
+	public Integer getNumeroEtape() {
+		return numeroEtape;
 	}
 
-	public void setIsEtape2(Boolean isEtape2) {
-		this.isEtape2 = isEtape2;
+	/**
+	 * @param numeroEtape
+	 *            the numeroEtape to set
+	 */
+	public void setNumeroEtape(Integer numeroEtape) {
+		this.numeroEtape = numeroEtape;
 	}
 
 	public Integer getDepartement() {

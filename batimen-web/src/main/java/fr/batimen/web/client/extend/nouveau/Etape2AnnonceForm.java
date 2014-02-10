@@ -16,6 +16,7 @@ import org.apache.wicket.validation.validator.StringValidator;
 
 import fr.batimen.dto.CreationAnnonceDTO;
 import fr.batimen.dto.constant.ValidatorConstant;
+import fr.batimen.dto.enums.DelaiIntervention;
 import fr.batimen.dto.enums.Metier;
 import fr.batimen.dto.enums.TypeContact;
 import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
@@ -30,7 +31,7 @@ public class Etape2AnnonceForm extends Form<CreationAnnonceDTO> {
 	private TextField<String> objetDevisField;
 	private TextArea<String> descriptionDevisField;
 	private DropDownChoice<TypeContact> typeContactField;
-	private TextField<String> delaiInterventionField;
+	private DropDownChoice<DelaiIntervention> delaiInterventionField;
 	private NumberTextField<Integer> nbDevisField;
 	private MultiFileUploadField photoField;
 	private TextField<String> adresseField;
@@ -74,11 +75,10 @@ public class Etape2AnnonceForm extends Form<CreationAnnonceDTO> {
 		typeContactField.add(new ErrorHighlightBehavior());
 		typeContactField.add(new RequiredBorderBehaviour());
 
-		delaiInterventionField = new TextField<String>("delaiIntervention");
+		delaiInterventionField = new DropDownChoice<DelaiIntervention>("delaiIntervention",
+				Arrays.asList(DelaiIntervention.values()));
 		delaiInterventionField.setRequired(true);
 		delaiInterventionField.setMarkupId("delaiInterventionField");
-		delaiInterventionField.add(StringValidator
-				.maximumLength(ValidatorConstant.CREATION_ANNONCE_DELAI_INTERVENTION_MAX));
 		delaiInterventionField.add(new ErrorHighlightBehavior());
 		delaiInterventionField.add(new RequiredBorderBehaviour());
 

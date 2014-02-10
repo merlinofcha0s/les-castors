@@ -21,6 +21,7 @@ import org.apache.wicket.request.Url;
 import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.odlabs.wiquery.ui.dialog.Dialog;
+import org.odlabs.wiquery.ui.dialog.DialogAnimateOption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -261,7 +262,7 @@ public abstract class MasterPage extends WebPage {
 
 			}
 
-			// On fait souscrire ce container a l'event updateEvent pour que le
+			// On fait souscrire ce container a l'event loginEvent pour que le
 			// panel Authentification puisse lui dire de se mettre a jour quand
 			// l'utilisateur se connecte
 			@Override
@@ -418,6 +419,8 @@ public abstract class MasterPage extends WebPage {
 			loginDialog.setDraggable(false);
 			loginDialog.setWidth(620);
 			loginDialog.add(authentificationPanel);
+			loginDialog.setShow(new DialogAnimateOption("fade"));
+			loginDialog.setHide(new DialogAnimateOption("fade"));
 		}
 
 		return loginDialog;
