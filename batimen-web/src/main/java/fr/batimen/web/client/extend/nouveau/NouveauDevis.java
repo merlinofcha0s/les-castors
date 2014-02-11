@@ -148,8 +148,6 @@ public class NouveauDevis extends MasterPage {
 
 		changementEtape(creationAnnonce.getNumeroEtape());
 		chooseConfirmationMessage(false);
-
-		// etape4Confirmation();
 	}
 
 	public NouveauDevis(PageParameters parameters) {
@@ -205,21 +203,32 @@ public class NouveauDevis extends MasterPage {
 	private void changementEtape(Integer numeroEtape) {
 		String percent = "";
 
-		// On déduit l'avancement de la barre / la bonne etape grace au numero
-		// d'etape qui se trouve dans la DTO
+		// On charge l'etape demandé grace au numero d'etape passé en parametre
 		switch (numeroEtape) {
 		case 1:
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Passage dans l'étape 1");
+			}
 			percent = "25";
 			break;
 		case 2:
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Passage dans l'étape 2");
+			}
 			percent = "50";
 			etape2Qualification();
 			break;
 		case 3:
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Passage dans l'étape 3");
+			}
 			percent = "75";
 			// Si l'utilisateur est deja authentifié on saute l'inscription
 			// (etape 3)
 			if (BatimenSession.get().isSignedIn()) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("L'utilisateur s'est connecté, on passe l'etape 3");
+				}
 				percent = "100";
 				etape4Confirmation();
 			} else {
@@ -227,19 +236,17 @@ public class NouveauDevis extends MasterPage {
 			}
 			break;
 		case 4:
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Passage dans l'étape 4");
+			}
 			percent = "100";
+			// Si il est authentifié on l'enregistre dans la DTO (pour le
+			// backend) et on charge le bon message de confirmation
 			if (BatimenSession.get().isSignedIn()) {
 				creationAnnonce.setIsSignedUp(true);
-				chooseConfirmationMessage(true);
 			}
+			chooseConfirmationMessage(true);
 			etape4Confirmation();
-			break;
-		default:
-			// N'est pas censé arriver!!!
-			if (LOGGER.isErrorEnabled()) {
-				LOGGER.error("Problème de chargement d'étape à la creation du devis, Numero étape à 0");
-			}
-			percent = "0";
 			break;
 		}
 
