@@ -113,6 +113,18 @@
 	margin-left: 16px;
 }
 
+#confirmation{
+	text-align: center;
+}
+
+#confirmation img{
+	padding-bottom: 20px;
+}
+
+#confirmation a{
+	padding-top: 20px;
+}
+
 /* Composant Wicket */
 
 .wicket-mfu-caption {

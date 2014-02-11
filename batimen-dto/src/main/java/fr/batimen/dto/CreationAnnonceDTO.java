@@ -87,6 +87,8 @@ public class CreationAnnonceDTO extends AbstractDTO {
 	private String email;
 	@NotNull
 	private Date dateInscription;
+	@NotNull
+	private Boolean isSignedUp = false;
 
 	public Metier getMetier() {
 		return metier;
@@ -324,6 +326,21 @@ public class CreationAnnonceDTO extends AbstractDTO {
 	 */
 	public void setDateInscription(Date dateInscription) {
 		this.dateInscription = dateInscription;
+	}
+
+	/**
+	 * @return the isSignedUp
+	 */
+	public Boolean getIsSignedUp() {
+		return isSignedUp;
+	}
+
+	/**
+	 * @param isSignedUp
+	 *            the isSignedUp to set
+	 */
+	public void setIsSignedUp(Boolean isSignedUp) {
+		this.isSignedUp = isSignedUp;
 	}
 
 	/*

@@ -6,6 +6,7 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -16,6 +17,7 @@ import fr.batimen.dto.CreationAnnonceDTO;
 import fr.batimen.web.client.component.MapFrance;
 import fr.batimen.web.client.event.Event;
 import fr.batimen.web.client.event.LoginEvent;
+import fr.batimen.web.client.extend.Accueil;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.web.client.session.BatimenSession;
 
@@ -52,6 +54,9 @@ public class NouveauDevis extends MasterPage {
 
 	// Composant étape 4
 	private WebMarkupContainer containerConfirmation;
+	private Label confirmation1;
+	private Label confirmation2;
+	private Link<String> retourAccueil;
 
 	public NouveauDevis() {
 		super("Nouveau devis", "devis batiment renovation", "Nouveau devis", true, "img/bg_title1.jpg");
@@ -111,6 +116,24 @@ public class NouveauDevis extends MasterPage {
 
 		// Etape 4 : Confirmation
 		containerConfirmation = new WebMarkupContainer("containerConfirmation");
+		containerConfirmation.setVisible(false);
+		confirmation1 = new Label("confirmation1", new Model<String>());
+		confirmation2 = new Label("confirmation2", new Model<String>());
+
+		retourAccueil = new Link<String>("retourAccueil") {
+
+			private static final long serialVersionUID = 8929146182522407915L;
+
+			@Override
+			public void onClick() {
+				setResponsePage(Accueil.class);
+			}
+
+		};
+
+		containerConfirmation.add(confirmation1);
+		containerConfirmation.add(confirmation2);
+		containerConfirmation.add(retourAccueil);
 
 		// Composant généraux
 		progressBar = new WebMarkupContainer("progressBar");
@@ -124,7 +147,9 @@ public class NouveauDevis extends MasterPage {
 		this.add(etape);
 
 		changementEtape(creationAnnonce.getNumeroEtape());
-		// etape3Inscription();
+		chooseConfirmationMessage(false);
+
+		// etape4Confirmation();
 	}
 
 	public NouveauDevis(PageParameters parameters) {
@@ -143,19 +168,34 @@ public class NouveauDevis extends MasterPage {
 		changementEtape(creationAnnonce.getNumeroEtape());
 	}
 
+	private void chooseConfirmationMessage(boolean isEtape4) {
+		if (creationAnnonce.getIsSignedUp() != null && creationAnnonce.getIsSignedUp() && isEtape4) {
+			confirmation1
+					.setDefaultModelObject("Votre devis a été mis en ligne, nous vous avons envoyé un mail récapitulatif");
+			confirmation2.setDefaultModelObject("");
+		} else if (creationAnnonce.getIsSignedUp() != null && !creationAnnonce.getIsSignedUp() && isEtape4) {
+			confirmation1
+					.setDefaultModelObject("Votre compte a bien été créé, un e-mail vous a été envoyé, Cliquez sur le lien présent dans celui-ci pour l'activer");
+			confirmation2
+					.setDefaultModelObject("Votre devis a bien été enregistré. Celui-ci sera mis en ligne une fois votre compte activé.");
+		}
+	}
+
 	private void etape2Qualification() {
 		carteFrance.setVisible(false);
 		containerQualification.setVisible(true);
+		containerConfirmation.setVisible(false);
 	}
 
 	private void etape3Inscription() {
 		carteFrance.setVisible(false);
 		containerQualification.setVisible(false);
 		containerInscription.setVisible(true);
+		containerConfirmation.setVisible(false);
 
 	}
 
-	private void etape4Inscription() {
+	private void etape4Confirmation() {
 		carteFrance.setVisible(false);
 		containerQualification.setVisible(false);
 		containerInscription.setVisible(false);
@@ -181,14 +221,18 @@ public class NouveauDevis extends MasterPage {
 			// (etape 3)
 			if (BatimenSession.get().isSignedIn()) {
 				percent = "100";
-				etape4Inscription();
+				etape4Confirmation();
 			} else {
 				etape3Inscription();
 			}
 			break;
 		case 4:
 			percent = "100";
-			etape4Inscription();
+			if (BatimenSession.get().isSignedIn()) {
+				creationAnnonce.setIsSignedUp(true);
+				chooseConfirmationMessage(true);
+			}
+			etape4Confirmation();
 			break;
 		default:
 			// N'est pas censé arriver!!!
@@ -200,9 +244,12 @@ public class NouveauDevis extends MasterPage {
 		}
 
 		// On incrémente la progress bar
-		progressBar.add(new AttributeModifier("data-percent", percent));
+		StringBuilder csswidthProgress = new StringBuilder("width:");
+		csswidthProgress.append(percent);
+		csswidthProgress.append("%;");
+		progressBar.add(new AttributeModifier("style", csswidthProgress.toString()));
 
-		// On construit la chaine de caract pour affiché Etape x/4
+		// On construit la chaine de caract pour afficher Etape x/4
 		StringBuilder numeroEtapeAffiche = new StringBuilder("Etape ");
 		numeroEtapeAffiche.append(numeroEtape).append("/4");
 
