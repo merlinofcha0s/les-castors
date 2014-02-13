@@ -62,6 +62,7 @@ public abstract class AbstractSeleniumTest {
 		driver = new FirefoxDriver();
 		appUrl = sbUrlApp.toString();
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+		driver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
 
 	}
 
