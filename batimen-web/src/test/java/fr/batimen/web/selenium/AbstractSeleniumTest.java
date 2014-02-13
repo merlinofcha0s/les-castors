@@ -108,4 +108,15 @@ public abstract class AbstractSeleniumTest {
 		}
 	}
 
+	protected void connexionApplication() {
+		driver.findElement(By.id("connexionlbl")).click();
+		driver.findElement(By.name("login")).click();
+		driver.findElement(By.name("login")).clear();
+		driver.findElement(By.name("login")).sendKeys("raiden");
+		driver.findElement(By.name("password")).click();
+		driver.findElement(By.name("password")).clear();
+		driver.findElement(By.name("password")).sendKeys("lollollol");
+		driver.findElement(By.id("signInButton")).click();
+	}
+
 }
