@@ -32,6 +32,7 @@ import fr.batimen.web.client.extend.Accueil;
 import fr.batimen.web.client.extend.Contact;
 import fr.batimen.web.client.extend.MonCompte;
 import fr.batimen.web.client.extend.QuiSommeNous;
+import fr.batimen.web.client.extend.nouveau.NouveauDevis;
 import fr.batimen.web.client.panel.AuthentificationPanel;
 import fr.batimen.web.client.session.BatimenSession;
 
@@ -57,6 +58,7 @@ public abstract class MasterPage extends WebPage {
 	private final WebMarkupContainer containerLinkMenuAccueil = new WebMarkupContainer("selectAccueil");
 	private final WebMarkupContainer containerLinkMenuQuiSommesNous = new WebMarkupContainer("selectQuiSommesNous");
 	private final WebMarkupContainer containerLinkMenuContact = new WebMarkupContainer("selectContact");
+	private final WebMarkupContainer containerLinkMenuNouveauDevis = new WebMarkupContainer("selectNouveauDevis");
 
 	private final AttributeModifier activateMenuCss = new AttributeModifier("class", new Model<String>(
 			"current-menu-parent"));
@@ -64,6 +66,7 @@ public abstract class MasterPage extends WebPage {
 
 	// Nom Pages Principales Static
 	public static String QUI_SOMMES_NOUS = "quiSommesNous";
+	public static String NOUVEAU_DEVIS = "nouveauDevis";
 	public static String CONTACT = "contact";
 	public static String ACCUEIL = "Accueil";
 
@@ -136,6 +139,17 @@ public abstract class MasterPage extends WebPage {
 		}
 	}
 
+	/**
+	 * Permet d'afficher un titre et une image de fond dynamiquement sur chaque
+	 * page
+	 * 
+	 * @param isPageWithTitleHeader
+	 *            Est ce qu'on veut un titre avec un fond ?
+	 * @param title
+	 *            Le titre de la page
+	 * @param adresseImgBackGround
+	 *            L'image de fond que l'on veut afficher
+	 */
 	private void initTitleHeader(final boolean isPageWithTitleHeader, String title, String adresseImgBackGround) {
 		WebMarkupContainer containerTitleHeader = new WebMarkupContainer("containerTitleHeader") {
 
@@ -183,6 +197,16 @@ public abstract class MasterPage extends WebPage {
 			}
 		};
 
+		Link<String> nouveauDevisLink = new Link<String>("nouveauDevisLink") {
+
+			private static final long serialVersionUID = 3349463856140732172L;
+
+			@Override
+			public void onClick() {
+				this.setResponsePage(NouveauDevis.class);
+			}
+		};
+
 		Link<String> quiSommesNousLink = new Link<String>("quiSommesNousLink") {
 
 			private static final long serialVersionUID = -9076993269716924371L;
@@ -206,10 +230,12 @@ public abstract class MasterPage extends WebPage {
 		containerLinkMenuAccueil.add(accueilLink);
 		containerLinkMenuContact.add(contactLink);
 		containerLinkMenuQuiSommesNous.add(quiSommesNousLink);
+		containerLinkMenuNouveauDevis.add(nouveauDevisLink);
 
 		this.add(containerLinkMenuAccueil);
 		this.add(containerLinkMenuQuiSommesNous);
 		this.add(containerLinkMenuContact);
+		this.add(containerLinkMenuNouveauDevis);
 	}
 
 	public void setActiveMenu(String nomPage) {
@@ -218,17 +244,27 @@ public abstract class MasterPage extends WebPage {
 			containerLinkMenuQuiSommesNous.add(activateMenuCss);
 			containerLinkMenuAccueil.add(deactivateMenuCss);
 			containerLinkMenuContact.add(deactivateMenuCss);
+			containerLinkMenuNouveauDevis.add(deactivateMenuCss);
 		}
 		if (CONTACT.equals(nomPage)) {
 			containerLinkMenuContact.add(activateMenuCss);
 			containerLinkMenuAccueil.add(deactivateMenuCss);
 			containerLinkMenuQuiSommesNous.add(deactivateMenuCss);
+			containerLinkMenuNouveauDevis.add(deactivateMenuCss);
 		}
 
 		if (ACCUEIL.equals(nomPage)) {
 			containerLinkMenuAccueil.add(activateMenuCss);
 			containerLinkMenuContact.add(deactivateMenuCss);
 			containerLinkMenuQuiSommesNous.add(deactivateMenuCss);
+			containerLinkMenuNouveauDevis.add(deactivateMenuCss);
+		}
+
+		if (NOUVEAU_DEVIS.equals(nomPage)) {
+			containerLinkMenuAccueil.add(deactivateMenuCss);
+			containerLinkMenuContact.add(deactivateMenuCss);
+			containerLinkMenuQuiSommesNous.add(deactivateMenuCss);
+			containerLinkMenuNouveauDevis.add(activateMenuCss);
 		}
 	}
 

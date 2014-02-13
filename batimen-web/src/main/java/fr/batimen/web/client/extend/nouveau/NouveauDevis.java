@@ -60,6 +60,7 @@ public class NouveauDevis extends MasterPage {
 
 	public NouveauDevis() {
 		super("Nouveau devis", "devis batiment renovation", "Nouveau devis", true, "img/bg_title1.jpg");
+		super.setActiveMenu(MasterPage.NOUVEAU_DEVIS);
 
 		// Etape 1 : selection du departement avec la carte de la france
 		carteFrance = new MapFrance("mapFrance");
@@ -251,10 +252,10 @@ public class NouveauDevis extends MasterPage {
 		}
 
 		// On incrémente la progress bar
-		StringBuilder csswidthProgress = new StringBuilder("width:");
-		csswidthProgress.append(percent);
-		csswidthProgress.append("%;");
-		progressBar.add(new AttributeModifier("style", csswidthProgress.toString()));
+		StringBuilder cssWidthProgress = new StringBuilder("width:");
+		cssWidthProgress.append(percent);
+		cssWidthProgress.append("%;");
+		progressBar.add(new AttributeModifier("style", cssWidthProgress.toString()));
 
 		// On construit la chaine de caract pour afficher Etape x/4
 		StringBuilder numeroEtapeAffiche = new StringBuilder("Etape ");
