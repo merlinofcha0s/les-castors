@@ -74,6 +74,7 @@
 .tableBatimen th {
 	padding-left: 20px;
 	padding-bottom: 20px;
+	text-align: left;
 }
 
 .tableBatimen td {
@@ -84,6 +85,7 @@
 .tableBatimenLogin th {
 	padding-left: 20px;
 	padding-bottom: 20px;
+	text-align: left;
 }
 
 .tableBatimenLogin td {

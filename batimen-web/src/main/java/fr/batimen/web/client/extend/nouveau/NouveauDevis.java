@@ -182,6 +182,7 @@ public class NouveauDevis extends MasterPage {
 	private void etape2Qualification() {
 		carteFrance.setVisible(false);
 		containerQualification.setVisible(true);
+		containerInscription.setVisible(false);
 		containerConfirmation.setVisible(false);
 	}
 
@@ -229,8 +230,7 @@ public class NouveauDevis extends MasterPage {
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("L'utilisateur s'est connecté, on passe l'etape 3");
 				}
-				percent = "100";
-				etape4Confirmation();
+				changementEtape(4);
 			} else {
 				etape3Inscription();
 			}
@@ -270,8 +270,14 @@ public class NouveauDevis extends MasterPage {
 		// l'utilisateur se connecte
 		if (event.getPayload() instanceof LoginEvent) {
 			Event update = (Event) event.getPayload();
-			changementEtape(4);
-			update.getTarget().add(this);
+			if (creationAnnonce.getNumeroEtape() == 3) {
+				if (LOGGER.isDebugEnabled()) {
+					LOGGER.debug("On est a l'étape 3 : Evenement recu de la popup de connexion, on passe à l'etape 4");
+				}
+				changementEtape(4);
+				update.getTarget().add(this);
+			}
+
 		}
 	}
 }
