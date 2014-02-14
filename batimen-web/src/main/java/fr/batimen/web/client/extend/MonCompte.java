@@ -1,7 +1,6 @@
 package fr.batimen.web.client.extend;
 
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import fr.batimen.web.client.master.SecuredPage;
 
@@ -21,7 +20,4 @@ public final class MonCompte extends SecuredPage {
 		add(new Label("version", getApplication().getFrameworkSettings().getVersion()));
 	}
 
-	public MonCompte(final PageParameters parameters) {
-		this();
-	}
 }

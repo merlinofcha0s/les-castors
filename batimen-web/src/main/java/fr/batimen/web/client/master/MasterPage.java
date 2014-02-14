@@ -65,10 +65,10 @@ public abstract class MasterPage extends WebPage {
 	private final AttributeModifier deactivateMenuCss = new AttributeModifier("class", new Model<String>(""));
 
 	// Nom Pages Principales Static
-	public static String QUI_SOMMES_NOUS = "quiSommesNous";
-	public static String NOUVEAU_DEVIS = "nouveauDevis";
-	public static String CONTACT = "contact";
-	public static String ACCUEIL = "Accueil";
+	public final static String QUI_SOMMES_NOUS = "quiSommesNous";
+	public final static String NOUVEAU_DEVIS = "nouveauDevis";
+	public final static String CONTACT = "contact";
+	public final static String ACCUEIL = "Accueil";
 
 	// Feedback panel général
 	protected BatimenFeedbackPanel feedBackPanelGeneral;
@@ -423,7 +423,7 @@ public abstract class MasterPage extends WebPage {
 		return attribute.toString();
 	}
 
-	protected Dialog getLoginDialog() {
+	protected final Dialog getLoginDialog() {
 
 		if (loginDialog == null) {
 

@@ -4,7 +4,6 @@ import org.apache.wicket.Application;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 /**
  * Classe abstraite qui doit servir de classe mère à toutes les pages où il est
@@ -22,10 +21,6 @@ public abstract class SecuredPage extends MasterPage {
 
 	public SecuredPage() {
 		super();
-	}
-
-	public SecuredPage(final PageParameters parameters) {
-		this();
 	}
 
 	public SecuredPage(String metaDescription, String metaKeywords, String title, boolean isPageWithTitleHeader,

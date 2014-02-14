@@ -56,7 +56,9 @@ public class TrustManagerForProduction implements X509TrustManager {
 				LOGGER.error("Impossible de trouver le fichier keystore contenant les clés SSL", fne);
 			}
 		} finally {
-			keyStoreStream.close();
+			if (keyStoreStream != null) {
+				keyStoreStream.close();
+			}
 		}
 
 		// keyStore.setCertificateEntry("myCert", myCert);

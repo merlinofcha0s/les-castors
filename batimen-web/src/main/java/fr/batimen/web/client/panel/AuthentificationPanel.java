@@ -36,7 +36,7 @@ public class AuthentificationPanel extends Panel {
 		initForm();
 	}
 
-	private void initForm() {
+	private final void initForm() {
 
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Initialisation du form d'authentification");

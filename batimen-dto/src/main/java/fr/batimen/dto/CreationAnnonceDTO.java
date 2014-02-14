@@ -364,7 +364,7 @@ public class CreationAnnonceDTO extends AbstractDTO {
 			return true;
 		}
 
-		if (object instanceof LoginDTO) {
+		if (object instanceof CreationAnnonceDTO) {
 			CreationAnnonceDTO other = (CreationAnnonceDTO) object;
 			return Objects.equals(this.titre, other.titre) && Objects.equals(this.metier, other.metier)
 					&& Objects.equals(this.description, other.description)

@@ -23,7 +23,7 @@ public class BatimenToolTip {
 
 	}
 
-	public static TooltipBehavior getTooltipBehaviour() {
+	public static synchronized TooltipBehavior getTooltipBehaviour() {
 		if (tooltipBehavior == null) {
 			tooltipBehavior = new TooltipBehavior();
 

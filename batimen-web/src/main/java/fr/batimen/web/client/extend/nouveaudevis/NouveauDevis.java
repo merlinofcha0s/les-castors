@@ -13,6 +13,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.batimen.core.exception.FrontEndException;
 import fr.batimen.dto.CreationAnnonceDTO;
 import fr.batimen.web.client.component.MapFrance;
 import fr.batimen.web.client.event.Event;
@@ -147,7 +148,13 @@ public class NouveauDevis extends MasterPage {
 		this.add(progressBar);
 		this.add(etape);
 
-		changementEtape(creationAnnonce.getNumeroEtape());
+		try {
+			changementEtape(creationAnnonce.getNumeroEtape());
+		} catch (FrontEndException e) {
+			if (LOGGER.isErrorEnabled()) {
+				LOGGER.error(e.getMessage());
+			}
+		}
 		chooseConfirmationMessage(false);
 	}
 
@@ -157,14 +164,26 @@ public class NouveauDevis extends MasterPage {
 		// On récupere le departement qu'a choisi l'utilisateur
 		departement = parameters.get("departement").toString();
 		if (departement != null) {
-			changementEtape(2);
+			try {
+				changementEtape(2);
+			} catch (FrontEndException e) {
+				if (LOGGER.isErrorEnabled()) {
+					LOGGER.error(e.getMessage());
+				}
+			}
 		}
 	}
 
 	public NouveauDevis(CreationAnnonceDTO creationAnnonce) {
 		this();
 		this.creationAnnonce = creationAnnonce;
-		changementEtape(creationAnnonce.getNumeroEtape());
+		try {
+			changementEtape(creationAnnonce.getNumeroEtape());
+		} catch (FrontEndException e) {
+			if (LOGGER.isErrorEnabled()) {
+				LOGGER.error(e.getMessage());
+			}
+		}
 	}
 
 	private void chooseConfirmationMessage(boolean isEtape4) {
@@ -202,44 +221,34 @@ public class NouveauDevis extends MasterPage {
 		containerConfirmation.setVisible(true);
 	}
 
-	private void changementEtape(Integer numeroEtape) {
+	private void changementEtape(Integer numeroEtape) throws FrontEndException {
 		String percent = "";
 
 		// On charge l'etape demandé grace au numero d'etape passé en parametre
 		switch (numeroEtape) {
 		case 1:
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("Passage dans l'étape 1");
-			}
+			loggerChangementEtape("Passage dans l'étape 1");
 			percent = "25";
 			break;
 		case 2:
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("Passage dans l'étape 2");
-			}
+			loggerChangementEtape("Passage dans l'étape 2");
 			percent = "50";
 			etape2Qualification();
 			break;
 		case 3:
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("Passage dans l'étape 3");
-			}
+			loggerChangementEtape("Passage dans l'étape 3");
 			percent = "75";
 			// Si l'utilisateur est deja authentifié on saute l'inscription
 			// (etape 3)
 			if (BatimenSession.get().isSignedIn()) {
-				if (LOGGER.isDebugEnabled()) {
-					LOGGER.debug("L'utilisateur s'est connecté, on passe l'etape 3");
-				}
+				loggerChangementEtape("L'utilisateur s'est connecté, on passe l'etape 3");
 				changementEtape(4);
 			} else {
 				etape3Inscription();
 			}
 			break;
 		case 4:
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("Passage dans l'étape 4");
-			}
+			loggerChangementEtape("Passage dans l'étape 4");
 			percent = "100";
 			// Si il est authentifié on l'enregistre dans la DTO (pour le
 			// backend) et on charge le bon message de confirmation
@@ -249,6 +258,8 @@ public class NouveauDevis extends MasterPage {
 			chooseConfirmationMessage(true);
 			etape4Confirmation();
 			break;
+		default:
+			throw new FrontEndException("Aucune étape du nouveau devis chargées, Situation Impossible");
 		}
 
 		// On incrémente la progress bar
@@ -265,6 +276,12 @@ public class NouveauDevis extends MasterPage {
 
 	}
 
+	private void loggerChangementEtape(String message) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug(message);
+		}
+	}
+
 	@Override
 	public void onEvent(IEvent<?> event) {
 		// Event déclenché par la popup de connexion, fait sauter l'etape 3 si
@@ -275,7 +292,13 @@ public class NouveauDevis extends MasterPage {
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("On est a l'étape 3 : Evenement recu de la popup de connexion, on passe à l'etape 4");
 				}
-				changementEtape(4);
+				try {
+					changementEtape(4);
+				} catch (FrontEndException e) {
+					if (LOGGER.isErrorEnabled()) {
+						LOGGER.error(e.getMessage());
+					}
+				}
 				update.getTarget().add(this);
 			}
 

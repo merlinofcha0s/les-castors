@@ -292,6 +292,21 @@ public class Artisan extends AbstractEntity implements Serializable {
 		this.scoreGlobal = scoreGlobal;
 	}
 
+	/**
+	 * @return the entreprise
+	 */
+	public Entreprise getEntreprise() {
+		return entreprise;
+	}
+
+	/**
+	 * @param entreprise
+	 *            the entreprise to set
+	 */
+	public void setEntreprise(Entreprise entreprise) {
+		this.entreprise = entreprise;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 

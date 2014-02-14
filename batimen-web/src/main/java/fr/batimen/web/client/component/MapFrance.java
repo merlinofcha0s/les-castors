@@ -20,31 +20,20 @@ public class MapFrance extends Panel {
 	private static final long serialVersionUID = 2865328261053993119L;
 
 	private WebMarkupContainer canvasFrance;
-	private static final String containerMapFranceName = "mapFrance";
+	private static final String CONTAINER_MAP_FRANCE = "mapFrance";
 
 	public MapFrance(String id) {
 		super(id);
 
-		canvasFrance = new WebMarkupContainer(containerMapFranceName);
+		canvasFrance = new WebMarkupContainer(CONTAINER_MAP_FRANCE);
 		this.add(canvasFrance);
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see org.apache.wicket.Component#isVisible()
-	 */
-	/*
-	 * @Override public boolean isVisible() { return
-	 * !RequestCycle.get().getRequest
-	 * ().getUrl().getPath().contains("departement"); }
-	 */
 
 	private String initCarteFrance() {
 
 		StringBuilder carteFranceJS = new StringBuilder("window.onload = function() {");
 		carteFranceJS.append("var paper = new Raphael(document.getElementById('");
-		carteFranceJS.append(containerMapFranceName);
+		carteFranceJS.append(CONTAINER_MAP_FRANCE);
 		carteFranceJS.append("'), 600, 600);");
 		carteFranceJS
 				.append("var attr = {fill : '#f5f5f5', stroke : '#000000', 'stroke-width' : 1,'stroke-width' : 1,'stroke-linejoin' : 'round'};");
