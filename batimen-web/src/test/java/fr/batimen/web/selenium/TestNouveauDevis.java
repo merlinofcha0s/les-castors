@@ -9,6 +9,12 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+/**
+ * Classe de test selenium pour la creation de nouveau devis par le client
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class TestNouveauDevis extends AbstractSeleniumTest {
 
 	private String nouveauDevisDepartementURL = "/nouveaudevis/departement/41";

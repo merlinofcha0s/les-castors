@@ -7,6 +7,13 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+/**
+ * Classe de test selenium pour la popup d'authentification client.
+ * 
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class TestAuthentification extends AbstractSeleniumTest {
 
 	@Test
