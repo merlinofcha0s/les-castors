@@ -6,7 +6,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import fr.batimen.web.client.extend.nouveau.NouveauDevis;
+import fr.batimen.web.client.extend.nouveaudevis.NouveauDevis;
 
 /**
  * Panel wicket qui permet de sélectionner un departement a l'aide d'une carte

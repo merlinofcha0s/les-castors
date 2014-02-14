@@ -1,5 +1,6 @@
 package fr.batimen.web.selenium;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.IOException;
@@ -14,6 +15,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -110,6 +113,9 @@ public abstract class AbstractSeleniumTest {
 
 	protected void connexionApplication() {
 		driver.findElement(By.id("connexionlbl")).click();
+		Boolean checkCondition = (new WebDriverWait(driver, 5)).until(ExpectedConditions
+				.textToBePresentInElementLocated(By.id("ui-id-1"), "Connexion à l'espace client / artisan"));
+		assertTrue(checkCondition);
 		driver.findElement(By.name("login")).click();
 		driver.findElement(By.name("login")).clear();
 		driver.findElement(By.name("login")).sendKeys("raiden");

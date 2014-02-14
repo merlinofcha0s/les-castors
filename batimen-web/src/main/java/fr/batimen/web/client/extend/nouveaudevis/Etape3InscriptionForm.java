@@ -1,4 +1,4 @@
-package fr.batimen.web.client.extend.nouveau;
+package fr.batimen.web.client.extend.nouveaudevis;
 
 import java.util.Arrays;
 

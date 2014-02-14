@@ -9,7 +9,7 @@ import fr.batimen.web.client.extend.Accueil;
 import fr.batimen.web.client.extend.Contact;
 import fr.batimen.web.client.extend.QuiSommeNous;
 import fr.batimen.web.client.extend.authentification.Authentification;
-import fr.batimen.web.client.extend.nouveau.NouveauDevis;
+import fr.batimen.web.client.extend.nouveaudevis.NouveauDevis;
 
 public class TestRenderingPage {
 
