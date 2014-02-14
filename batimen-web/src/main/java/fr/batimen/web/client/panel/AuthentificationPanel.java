@@ -27,7 +27,6 @@ public class AuthentificationPanel extends Panel {
 	private Form<AuthentificationPanel> loginForm;
 	private TextField<String> login;
 	private PasswordTextField password;
-	private AjaxSubmitLink signIn;
 
 	private Label errorLogin;
 
@@ -54,7 +53,7 @@ public class AuthentificationPanel extends Panel {
 		password.setRequired(true);
 		password.add(new StringValidator(ValidatorConstant.PASSWORD_RANGE_MIN, ValidatorConstant.PASSWORD_RANGE_MAX));
 
-		signIn = new AjaxSubmitLink("signIn") {
+		AjaxSubmitLink signIn = new AjaxSubmitLink("signIn") {
 
 			private static final long serialVersionUID = 3183458686534816645L;
 
@@ -62,7 +61,7 @@ public class AuthentificationPanel extends Panel {
 			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 
 				boolean authResult = AuthenticatedWebSession.get().signIn(login.getInput(),
-						password.getConvertedInput());
+				        password.getConvertedInput());
 
 				// if authentication succeeds redirect user to the requested
 				// page

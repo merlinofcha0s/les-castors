@@ -61,14 +61,14 @@ public abstract class MasterPage extends WebPage {
 	private final WebMarkupContainer containerLinkMenuNouveauDevis = new WebMarkupContainer("selectNouveauDevis");
 
 	private final AttributeModifier activateMenuCss = new AttributeModifier("class", new Model<String>(
-			"current-menu-parent"));
+	        "current-menu-parent"));
 	private final AttributeModifier deactivateMenuCss = new AttributeModifier("class", new Model<String>(""));
 
 	// Nom Pages Principales Static
-	public final static String QUI_SOMMES_NOUS = "quiSommesNous";
-	public final static String NOUVEAU_DEVIS = "nouveauDevis";
-	public final static String CONTACT = "contact";
-	public final static String ACCUEIL = "Accueil";
+	public static final String QUI_SOMMES_NOUS = "quiSommesNous";
+	public static final String NOUVEAU_DEVIS = "nouveauDevis";
+	public static final String CONTACT = "contact";
+	public static final String ACCUEIL = "Accueil";
 
 	// Feedback panel général
 	protected BatimenFeedbackPanel feedBackPanelGeneral;
@@ -117,7 +117,7 @@ public abstract class MasterPage extends WebPage {
 	 *            avec le titre de la page ?
 	 */
 	public MasterPage(String metaDescription, String metaKeywords, String title, boolean isPageWithTitleHeader,
-			String adresseImgBackground) {
+	        String adresseImgBackground) {
 		this();
 		this.metaDescription = metaDescription;
 		this.metaKeywords = metaKeywords;
@@ -169,13 +169,13 @@ public abstract class MasterPage extends WebPage {
 
 		// On prends l'url complete de la page d'accueil avec l'image de fonds
 		StringBuilder generatedAdresseForImage = new StringBuilder(RequestCycle.get().getUrlRenderer()
-				.renderFullUrl(Url.parse(urlFor(Accueil.class, new PageParameters()).toString())));
+		        .renderFullUrl(Url.parse(urlFor(Accueil.class, new PageParameters()).toString())));
 		generatedAdresseForImage.append("/");
 		generatedAdresseForImage.append(adresseImgBackGround);
 
 		// On efface 'accueil' pour que le chemin vers l'image soit correct
 		generatedAdresseForImage.delete(generatedAdresseForImage.indexOf("accueil"),
-				generatedAdresseForImage.indexOf("accueil") + 8);
+		        generatedAdresseForImage.indexOf("accueil") + 8);
 
 		// On charge l'image de fond du titre qui a été passé en parametre
 		StringBuilder bgImageAdresseCSS = new StringBuilder("background:url(");

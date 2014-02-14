@@ -11,7 +11,7 @@
 			<!-- on doit mettre on_close pour pouvoir changer le niveau d'isolation 
 				d'une transaction -->
 			<property name="hibernate.connection.release_mode" value="on_close" />
-			
+
 			<!-- Pour que Glassfish charge hibernate -->
 			<property name="hibernate.transaction.jta.platform"
 				value="org.hibernate.service.jta.platform.internal.SunOneJtaPlatform" />

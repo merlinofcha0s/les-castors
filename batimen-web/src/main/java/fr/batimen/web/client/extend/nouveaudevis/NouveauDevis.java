@@ -47,17 +47,14 @@ public class NouveauDevis extends MasterPage {
 
 	// Composants étape 2
 	private WebMarkupContainer containerQualification;
-	private Etape2AnnonceForm etape2AnnonceForm;
 
 	// Composant étape 3
 	private WebMarkupContainer containerInscription;
-	private AjaxLink<String> connexionLink;
 
 	// Composant étape 4
 	private WebMarkupContainer containerConfirmation;
 	private Label confirmation1;
 	private Label confirmation2;
-	private Link<String> retourAccueil;
 
 	public NouveauDevis() {
 		super("Nouveau devis", "devis batiment renovation", "Nouveau devis", true, "img/bg_title1.jpg");
@@ -70,8 +67,8 @@ public class NouveauDevis extends MasterPage {
 		containerQualification = new WebMarkupContainer("containerQualification");
 		containerQualification.setVisible(false);
 
-		etape2AnnonceForm = new Etape2AnnonceForm("formQualification", new CompoundPropertyModel<CreationAnnonceDTO>(
-				creationAnnonce)) {
+		Etape2AnnonceForm etape2AnnonceForm = new Etape2AnnonceForm("formQualification",
+		        new CompoundPropertyModel<CreationAnnonceDTO>(creationAnnonce)) {
 
 			private static final long serialVersionUID = -6436387191126517996L;
 
@@ -90,7 +87,7 @@ public class NouveauDevis extends MasterPage {
 		containerInscription.setVisible(false);
 
 		Etape3InscriptionForm etape3InscriptionForm = new Etape3InscriptionForm("formInscription",
-				new CompoundPropertyModel<CreationAnnonceDTO>(creationAnnonce)) {
+		        new CompoundPropertyModel<CreationAnnonceDTO>(creationAnnonce)) {
 
 			private static final long serialVersionUID = -7785574548677996934L;
 
@@ -102,7 +99,7 @@ public class NouveauDevis extends MasterPage {
 
 		};
 
-		connexionLink = new AjaxLink<String>("connexion") {
+		AjaxLink<String> connexionLink = new AjaxLink<String>("connexion") {
 
 			private static final long serialVersionUID = -4897659500119552151L;
 
@@ -122,7 +119,7 @@ public class NouveauDevis extends MasterPage {
 		confirmation1 = new Label("confirmation1", new Model<String>());
 		confirmation2 = new Label("confirmation2", new Model<String>());
 
-		retourAccueil = new Link<String>("retourAccueil") {
+		Link<String> retourAccueil = new Link<String>("retourAccueil") {
 
 			private static final long serialVersionUID = 8929146182522407915L;
 
@@ -152,7 +149,7 @@ public class NouveauDevis extends MasterPage {
 			changementEtape(creationAnnonce.getNumeroEtape());
 		} catch (FrontEndException e) {
 			if (LOGGER.isErrorEnabled()) {
-				LOGGER.error(e.getMessage());
+				LOGGER.error("Probleme frontend", e);
 			}
 		}
 		chooseConfirmationMessage(false);
@@ -168,7 +165,7 @@ public class NouveauDevis extends MasterPage {
 				changementEtape(2);
 			} catch (FrontEndException e) {
 				if (LOGGER.isErrorEnabled()) {
-					LOGGER.error(e.getMessage());
+					LOGGER.error("Probleme frontend", e);
 				}
 			}
 		}
@@ -181,7 +178,7 @@ public class NouveauDevis extends MasterPage {
 			changementEtape(creationAnnonce.getNumeroEtape());
 		} catch (FrontEndException e) {
 			if (LOGGER.isErrorEnabled()) {
-				LOGGER.error(e.getMessage());
+				LOGGER.error("Probleme frontend", e);
 			}
 		}
 	}
@@ -189,13 +186,13 @@ public class NouveauDevis extends MasterPage {
 	private void chooseConfirmationMessage(boolean isEtape4) {
 		if (creationAnnonce.getIsSignedUp() != null && creationAnnonce.getIsSignedUp() && isEtape4) {
 			confirmation1
-					.setDefaultModelObject("Votre devis a été mis en ligne, nous vous avons envoyé un mail récapitulatif");
+			        .setDefaultModelObject("Votre devis a été mis en ligne, nous vous avons envoyé un mail récapitulatif");
 			confirmation2.setDefaultModelObject("");
 		} else if (creationAnnonce.getIsSignedUp() != null && !creationAnnonce.getIsSignedUp() && isEtape4) {
 			confirmation1
-					.setDefaultModelObject("Votre compte a bien été créé, un e-mail vous a été envoyé, Cliquez sur le lien présent dans celui-ci pour l'activer");
+			        .setDefaultModelObject("Votre compte a bien été créé, un e-mail vous a été envoyé, Cliquez sur le lien présent dans celui-ci pour l'activer");
 			confirmation2
-					.setDefaultModelObject("Votre devis a bien été enregistré. Celui-ci sera mis en ligne une fois votre compte activé.");
+			        .setDefaultModelObject("Votre devis a bien été enregistré. Celui-ci sera mis en ligne une fois votre compte activé.");
 		}
 	}
 
@@ -296,7 +293,7 @@ public class NouveauDevis extends MasterPage {
 					changementEtape(4);
 				} catch (FrontEndException e) {
 					if (LOGGER.isErrorEnabled()) {
-						LOGGER.error(e.getMessage());
+						LOGGER.error("Probleme frontend", e);
 					}
 				}
 				update.getTarget().add(this);
