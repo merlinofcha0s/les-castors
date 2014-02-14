@@ -1,0 +1,203 @@
+@CHARSET "ISO-8859-1";
+
+#connexion {
+	float: left;
+	padding-left: 670px;
+	padding-top: 12px;
+}
+
+#connexion div {
+	color: #25B8E2;
+	transition : color 300ms ease 0s;
+}
+
+#connexion div:hover {
+	color: #666666;
+	text-decoration: none;
+	
+}
+
+#authentificationPanel{
+	padding-top: 1px;
+}
+
+#signInButton{
+	margin-left: 103px;
+}
+
+.errorLoginActivated{
+	margin-bottom: 10px;
+	border:1px solid;
+	border-radius: 5px;
+	-webkit-border-radius: 5px;
+	-moz-border-radius: 5px;
+	padding-top: 5px;
+	padding-bottom: 6px;
+	background: #FF6666;
+	color: #FFFFFF;
+}
+
+.errorLoginDeactivated{
+	margin-bottom: 10px;
+}
+
+.erreur {
+	color: red;
+}
+
+/* Creation d'annonce */
+#mapFrance {
+	width: 600px;
+	padding-left: 310px;
+	padding-top: 20px;
+}
+
+#formEtape2 {
+	margin-left: 300px;
+	margin-top: 45px;
+}
+
+#formEtape3 {
+	float: left;
+	margin-top: 45px;
+	margin-left: 150px;
+}
+
+#dejaInscrit {
+	float: right;
+	margin-top: 220px;
+	margin-right: 140px;
+	font-weight: bold;
+	font-size: 1.1em;
+}
+
+.tableBatimen th {
+	padding-left: 20px;
+	padding-bottom: 20px;
+	text-align: left;
+}
+
+.tableBatimen td {
+	padding-left: 20px;
+	padding-bottom: 8px;
+}
+
+.tableBatimenLogin th {
+	padding-left: 20px;
+	padding-bottom: 20px;
+	text-align: left;
+}
+
+.tableBatimenLogin td {
+	padding-left: 20px;
+}
+
+#validateQualification {
+	float: right;
+	margin-right: 53px;
+}
+
+#validateInscription {
+	float: right;
+	margin-right: 16px;
+}
+
+.imgHelp {
+	vertical-align: sub;
+}
+
+#photoField {
+	margin-bottom: 7px;
+}
+
+
+#champsObligatoire {
+	margin-left: 16px;
+}
+
+#confirmation{
+	text-align: center;
+}
+
+#confirmation img{
+	padding-bottom: 20px;
+}
+
+#confirmation a{
+	padding-top: 20px;
+}
+
+/* Composant Wicket */
+
+.wicket-mfu-caption {
+	padding-top: 5px;
+}
+
+.wicket-mfu-container{
+	overflow: visible !important;
+}
+
+div.upload {
+    background: url(../img/upload.png);
+    background-repeat: no-repeat;
+    overflow: hidden;
+}
+
+div.upload input[type="file"] {
+    display: block !important;
+    width: 157px !important;
+    height: 41px !important;
+    opacity: 0 !important;
+    overflow: hidden !important;
+}
+
+/* Composant dans tous le site */
+
+.required {
+	color: red;
+	font-size: 1.3em;
+	padding-left: 5px;
+}
+
+table tr td .error {
+	border: 1px solid red;
+}
+input[type="button"]{
+	font-weight: 800;
+	font-family: 'Open Sans',sans-serif !important;
+	text-transform : uppercase;
+	font-size: 12px;
+	color: #666666;
+	padding: 4px 15px;
+	background: -moz-linear-gradient(
+		top,
+		#f0f0f0 0%,
+		#f0f0f0 50%,
+		#f0f0f0);
+	background: -webkit-gradient(
+		linear, left top, left bottom,
+		from(#f0f0f0),
+		color-stop(0.50, #f0f0f0),
+		to(#f0f0f0));
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+	border-radius: 4px;
+	border: 1px solid #cfcfcf;
+	-moz-box-shadow:
+		1px 0px 0px rgba(0,0,0,0),
+		inset 1px 1px 2px rgba(000,000,000,0.4);
+	-webkit-box-shadow:
+		1px 0px 0px rgba(0,0,0,0),
+		inset 1px 1px 2px rgba(000,000,000,0.4);
+	box-shadow:
+		1px 0px 0px rgba(0,0,0,0),
+		inset 1px 1px 2px rgba(000,000,000,0.4);
+	text-shadow:
+		0px 0px 0px rgba(255,255,255,0.2),
+		0px 1px 0px rgba(255,255,255,1);
+
+}
+
+
+
+

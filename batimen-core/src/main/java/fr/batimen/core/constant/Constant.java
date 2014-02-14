@@ -24,4 +24,12 @@ public class Constant {
 	// Timeout de connection au WS
 	public static final int CONNECT_TIMEOUT = 10000;
 
+	// Nom des pages web
+	public static final String ACCUEIL_URL = "/accueil";
+	public static final String AUTHENTIFICATION_URL = "/connexion";
+	public static final String MON_COMPTE_URL = "/moncompte";
+	public static final String QUI_SOMMES_NOUS_URL = "/quisommesnous";
+	public static final String CONTACT_URL = "/contact";
+	public static final String NOUVEAU_DEVIS_URL = "/nouveaudevis";
+
 }

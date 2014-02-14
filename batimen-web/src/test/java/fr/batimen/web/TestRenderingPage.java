@@ -5,10 +5,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import fr.batimen.web.app.BatimenApplication;
-import fr.batimen.web.client.panel.Accueil;
-import fr.batimen.web.client.panel.Contact;
-import fr.batimen.web.client.panel.QuiSommeNous;
-import fr.batimen.web.client.panel.authentification.Authentification;
+import fr.batimen.web.client.extend.Accueil;
+import fr.batimen.web.client.extend.Contact;
+import fr.batimen.web.client.extend.QuiSommeNous;
+import fr.batimen.web.client.extend.authentification.Authentification;
+import fr.batimen.web.client.extend.nouveaudevis.NouveauDevis;
 
 public class TestRenderingPage {
 
@@ -49,6 +50,14 @@ public class TestRenderingPage {
 		tester.startPage(QuiSommeNous.class);
 		// assert rendered page class
 		tester.assertRenderedPage(QuiSommeNous.class);
+	}
+
+	@Test
+	public void nouveauDevisRendersSuccessfully() {
+		// start and render the test page
+		tester.startPage(NouveauDevis.class);
+		// assert rendered page class
+		tester.assertRenderedPage(NouveauDevis.class);
 	}
 
 }

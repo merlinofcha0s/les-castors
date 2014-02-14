@@ -1,8 +1,10 @@
 package fr.batimen.web.client.master;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
-import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.StringHeaderItem;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
@@ -15,16 +17,23 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.http.ClientProperties;
 import org.apache.wicket.protocol.http.WebSession;
-import org.apache.wicket.request.resource.PackageResourceReference;
+import org.apache.wicket.request.Url;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.odlabs.wiquery.ui.dialog.Dialog;
+import org.odlabs.wiquery.ui.dialog.DialogAnimateOption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.batimen.web.client.component.BatimenFeedbackPanel;
-import fr.batimen.web.client.panel.Accueil;
-import fr.batimen.web.client.panel.Contact;
-import fr.batimen.web.client.panel.MonCompte;
-import fr.batimen.web.client.panel.QuiSommeNous;
-import fr.batimen.web.client.panel.authentification.Authentification;
+import fr.batimen.web.client.event.Event;
+import fr.batimen.web.client.event.LoginEvent;
+import fr.batimen.web.client.extend.Accueil;
+import fr.batimen.web.client.extend.Contact;
+import fr.batimen.web.client.extend.MonCompte;
+import fr.batimen.web.client.extend.QuiSommeNous;
+import fr.batimen.web.client.extend.nouveaudevis.NouveauDevis;
+import fr.batimen.web.client.panel.AuthentificationPanel;
 import fr.batimen.web.client.session.BatimenSession;
 
 /**
@@ -49,6 +58,7 @@ public abstract class MasterPage extends WebPage {
 	private final WebMarkupContainer containerLinkMenuAccueil = new WebMarkupContainer("selectAccueil");
 	private final WebMarkupContainer containerLinkMenuQuiSommesNous = new WebMarkupContainer("selectQuiSommesNous");
 	private final WebMarkupContainer containerLinkMenuContact = new WebMarkupContainer("selectContact");
+	private final WebMarkupContainer containerLinkMenuNouveauDevis = new WebMarkupContainer("selectNouveauDevis");
 
 	private final AttributeModifier activateMenuCss = new AttributeModifier("class", new Model<String>(
 			"current-menu-parent"));
@@ -56,11 +66,15 @@ public abstract class MasterPage extends WebPage {
 
 	// Nom Pages Principales Static
 	public static String QUI_SOMMES_NOUS = "quiSommesNous";
+	public static String NOUVEAU_DEVIS = "nouveauDevis";
 	public static String CONTACT = "contact";
 	public static String ACCUEIL = "Accueil";
 
 	// Feedback panel général
 	protected BatimenFeedbackPanel feedBackPanelGeneral;
+
+	private Dialog loginDialog;
+	private AuthentificationPanel authentificationPanel;
 
 	/**
 	 * Constructeur par defaut, initialise les composants de base de la page
@@ -84,6 +98,8 @@ public abstract class MasterPage extends WebPage {
 		// utilisateur de maniere centralisé
 		feedBackPanelGeneral = new BatimenFeedbackPanel("feedBackPanelGeneral");
 		htmlTag.add(feedBackPanelGeneral);
+
+		this.add(getLoginDialog());
 	}
 
 	/**
@@ -100,7 +116,8 @@ public abstract class MasterPage extends WebPage {
 	 *            est ce que la page doit avoir un bandeau en dessous du menu
 	 *            avec le titre de la page ?
 	 */
-	public MasterPage(String metaDescription, String metaKeywords, String title, boolean isPageWithTitleHeader) {
+	public MasterPage(String metaDescription, String metaKeywords, String title, boolean isPageWithTitleHeader,
+			String adresseImgBackground) {
 		this();
 		this.metaDescription = metaDescription;
 		this.metaKeywords = metaKeywords;
@@ -115,14 +132,25 @@ public abstract class MasterPage extends WebPage {
 
 		initComponentConnexion();
 		initMenu();
-		initTitleHeader(isPageWithTitleHeader, title);
+		initTitleHeader(isPageWithTitleHeader, title, adresseImgBackground);
 
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Instantiation de la master page.....OK");
 		}
 	}
 
-	private void initTitleHeader(final boolean isPageWithTitleHeader, String title) {
+	/**
+	 * Permet d'afficher un titre et une image de fond dynamiquement sur chaque
+	 * page
+	 * 
+	 * @param isPageWithTitleHeader
+	 *            Est ce qu'on veut un titre avec un fond ?
+	 * @param title
+	 *            Le titre de la page
+	 * @param adresseImgBackGround
+	 *            L'image de fond que l'on veut afficher
+	 */
+	private void initTitleHeader(final boolean isPageWithTitleHeader, String title, String adresseImgBackGround) {
 		WebMarkupContainer containerTitleHeader = new WebMarkupContainer("containerTitleHeader") {
 
 			private static final long serialVersionUID = -8794910421721268035L;
@@ -138,6 +166,23 @@ public abstract class MasterPage extends WebPage {
 
 		Label titleHeader = new Label("titleHeader", new Model<String>(title));
 		containerTitleHeader.add(titleHeader);
+
+		// On prends l'url complete de la page d'accueil avec l'image de fonds
+		StringBuilder generatedAdresseForImage = new StringBuilder(RequestCycle.get().getUrlRenderer()
+				.renderFullUrl(Url.parse(urlFor(Accueil.class, new PageParameters()).toString())));
+		generatedAdresseForImage.append("/");
+		generatedAdresseForImage.append(adresseImgBackGround);
+
+		// On efface 'accueil' pour que le chemin vers l'image soit correct
+		generatedAdresseForImage.delete(generatedAdresseForImage.indexOf("accueil"),
+				generatedAdresseForImage.indexOf("accueil") + 8);
+
+		// On charge l'image de fond du titre qui a été passé en parametre
+		StringBuilder bgImageAdresseCSS = new StringBuilder("background:url(");
+		bgImageAdresseCSS.append(generatedAdresseForImage.toString());
+		bgImageAdresseCSS.append(") no-repeat center top;");
+
+		containerTitleHeader.add(new AttributeModifier("style", bgImageAdresseCSS.toString()));
 	}
 
 	private void initMenu() {
@@ -149,6 +194,16 @@ public abstract class MasterPage extends WebPage {
 			@Override
 			public void onClick() {
 				this.setResponsePage(Accueil.class);
+			}
+		};
+
+		Link<String> nouveauDevisLink = new Link<String>("nouveauDevisLink") {
+
+			private static final long serialVersionUID = 3349463856140732172L;
+
+			@Override
+			public void onClick() {
+				this.setResponsePage(NouveauDevis.class);
 			}
 		};
 
@@ -175,10 +230,12 @@ public abstract class MasterPage extends WebPage {
 		containerLinkMenuAccueil.add(accueilLink);
 		containerLinkMenuContact.add(contactLink);
 		containerLinkMenuQuiSommesNous.add(quiSommesNousLink);
+		containerLinkMenuNouveauDevis.add(nouveauDevisLink);
 
 		this.add(containerLinkMenuAccueil);
 		this.add(containerLinkMenuQuiSommesNous);
 		this.add(containerLinkMenuContact);
+		this.add(containerLinkMenuNouveauDevis);
 	}
 
 	public void setActiveMenu(String nomPage) {
@@ -187,17 +244,27 @@ public abstract class MasterPage extends WebPage {
 			containerLinkMenuQuiSommesNous.add(activateMenuCss);
 			containerLinkMenuAccueil.add(deactivateMenuCss);
 			containerLinkMenuContact.add(deactivateMenuCss);
+			containerLinkMenuNouveauDevis.add(deactivateMenuCss);
 		}
 		if (CONTACT.equals(nomPage)) {
 			containerLinkMenuContact.add(activateMenuCss);
 			containerLinkMenuAccueil.add(deactivateMenuCss);
 			containerLinkMenuQuiSommesNous.add(deactivateMenuCss);
+			containerLinkMenuNouveauDevis.add(deactivateMenuCss);
 		}
 
 		if (ACCUEIL.equals(nomPage)) {
 			containerLinkMenuAccueil.add(activateMenuCss);
 			containerLinkMenuContact.add(deactivateMenuCss);
 			containerLinkMenuQuiSommesNous.add(deactivateMenuCss);
+			containerLinkMenuNouveauDevis.add(deactivateMenuCss);
+		}
+
+		if (NOUVEAU_DEVIS.equals(nomPage)) {
+			containerLinkMenuAccueil.add(deactivateMenuCss);
+			containerLinkMenuContact.add(deactivateMenuCss);
+			containerLinkMenuQuiSommesNous.add(deactivateMenuCss);
+			containerLinkMenuNouveauDevis.add(activateMenuCss);
 		}
 	}
 
@@ -207,52 +274,53 @@ public abstract class MasterPage extends WebPage {
 			LOGGER.debug("Initialisation du composant de connexion.....");
 		}
 
-		// N'est visible que quand l'utilisateur est connecté
-		WebMarkupContainer connectedContainer = new WebMarkupContainer("connected") {
+		final Label connexionlbl = new Label("connexionlbl", new Model<String>());
+		if (BatimenSession.get().isSignedIn()) {
+			connexionlbl.setDefaultModelObject("Mon Compte");
+		} else {
+			connexionlbl.setDefaultModelObject("Espace Membre");
+		}
 
-			private static final long serialVersionUID = 109100381329795557L;
-
-			@Override
-			public boolean isVisible() {
-				return BatimenSession.get().isSignedIn();
-			}
-
-		};
-
-		Link<String> monCompte = new Link<String>("monCompte") {
-
-			private static final long serialVersionUID = -9076993269716924371L;
-
-			@Override
-			public void onClick() {
-				setResponsePage(MonCompte.class);
-
-			}
-
-		};
-
-		connectedContainer.add(monCompte);
+		connexionlbl.setOutputMarkupId(true);
 
 		// Lien qui amene à la page de connexion : n'est visible que quand
 		// l'utilisateur n'est pas encore loggé
-		Link<String> connexion = new Link<String>("connexion") {
+		final AjaxLink<String> connexion = new AjaxLink<String>("connexion") {
 			private static final long serialVersionUID = -5109878814704325528L;
 
 			@Override
-			public void onClick() {
-				setResponsePage(Authentification.class);
+			public void onClick(AjaxRequestTarget target) {
+				if (BatimenSession.get().isSignedIn()) {
+					setResponsePage(MonCompte.class);
+				} else {
+					getLoginDialog().open(target);
+				}
+
 			}
 
+			// On fait souscrire ce container a l'event loginEvent pour que le
+			// panel Authentification puisse lui dire de se mettre a jour quand
+			// l'utilisateur se connecte
 			@Override
-			public boolean isVisible() {
-				return !BatimenSession.get().isSignedIn();
+			public void onEvent(IEvent<?> event) {
+				if (event.getPayload() instanceof LoginEvent) {
+
+					Event update = (Event) event.getPayload();
+					connexionlbl.setDefaultModelObject("Mon Compte");
+
+					update.getTarget().add(this);
+
+					getLoginDialog().close(update.getTarget());
+				}
 			}
 
 		};
 
 		connexion.setMarkupId("connexionLink");
+		connexion.setOutputMarkupId(true);
 
-		this.add(connectedContainer);
+		connexion.add(connexionlbl);
+
 		this.add(connexion);
 
 		if (LOGGER.isDebugEnabled()) {
@@ -313,30 +381,9 @@ public abstract class MasterPage extends WebPage {
 		response.render(addStringToMetaResourcesToHeader(metaDescription, "", "description"));
 		response.render(addStringToMetaResourcesToHeader(metaKeywords, "", "keywords"));
 
-		// Custom css File
-		response.render(addCssFileToHeader("css/page.css"));
-
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Ajout des resources dans le header.....OK");
 		}
-	}
-
-	/**
-	 * Ajoute les fichier CSS pour qu'il soit global à l'application
-	 * 
-	 * @param address
-	 *            localisation du fichier css
-	 * @param isUrlCSS
-	 *            Est ce que le css se trouve autre part que dans l'application
-	 *            ?
-	 * @return objet wicket qui permet de generer la balise link
-	 */
-	private CssHeaderItem addCssFileToHeader(String address) {
-
-		PackageResourceReference cssFile = new PackageResourceReference(fr.batimen.web.client.master.MasterPage.class,
-				address);
-
-		return CssHeaderItem.forReference(cssFile);
 	}
 
 	/**
@@ -376,4 +423,42 @@ public abstract class MasterPage extends WebPage {
 		return attribute.toString();
 	}
 
+	protected Dialog getLoginDialog() {
+
+		if (loginDialog == null) {
+
+			authentificationPanel = new AuthentificationPanel("authentificationPanel");
+			authentificationPanel.setOutputMarkupId(true);
+
+			loginDialog = new Dialog("loginDialog") {
+
+				private static final long serialVersionUID = -1661769505673895284L;
+
+				/*
+				 * (non-Javadoc)
+				 * 
+				 * @see
+				 * org.odlabs.wiquery.ui.dialog.Dialog#open(org.apache.wicket
+				 * .ajax.AjaxRequestTarget)
+				 */
+				@Override
+				public void open(AjaxRequestTarget ajaxRequestTarget) {
+					authentificationPanel.resetLabelError();
+					ajaxRequestTarget.add(authentificationPanel);
+					super.open(ajaxRequestTarget);
+				}
+
+			};
+			loginDialog.setModal(true);
+			loginDialog.setTitle("Connexion à l\\'espace client / artisan");
+			loginDialog.setResizable(false);
+			loginDialog.setDraggable(false);
+			loginDialog.setWidth(620);
+			loginDialog.add(authentificationPanel);
+			loginDialog.setShow(new DialogAnimateOption("fade"));
+			loginDialog.setHide(new DialogAnimateOption("fade"));
+		}
+
+		return loginDialog;
+	}
 }

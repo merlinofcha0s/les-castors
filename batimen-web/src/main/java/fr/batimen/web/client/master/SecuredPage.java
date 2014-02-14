@@ -28,8 +28,9 @@ public abstract class SecuredPage extends MasterPage {
 		this();
 	}
 
-	public SecuredPage(String metaDescription, String metaKeywords, String title, boolean isPageWithTitleHeader) {
-		super(metaDescription, metaKeywords, title, isPageWithTitleHeader);
+	public SecuredPage(String metaDescription, String metaKeywords, String title, boolean isPageWithTitleHeader,
+			String adresseImgBackground) {
+		super(metaDescription, metaKeywords, title, isPageWithTitleHeader, adresseImgBackground);
 		add(new Link<String>("goToHomePage") {
 			private static final long serialVersionUID = -6480263784484841724L;
 

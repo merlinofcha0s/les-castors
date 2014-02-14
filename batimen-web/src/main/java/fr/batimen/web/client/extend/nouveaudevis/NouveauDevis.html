@@ -1,0 +1,195 @@
+<wicket:extend>
+	<ul class="skills_list">
+		<li class="skill_li">
+			<div class="diagram_bar">
+				<h6 wicket:id="etape">Etape 1/3</h6>
+				<div class="clear"></div>
+				<!--  <div class="skill_div-wrapper">
+					<div wicket:id="progressBar" class="skill_div" data-percent="10"></div> -->
+					    <div class="progress">
+    						<div wicket:id="progressBar" class="bar" style="width: 0%;"></div>
+   						 </div>
+			</div>
+		</li>
+	</ul>
+	<div wicket:id="mapFrance"></div>
+	<div wicket:id="containerQualification">
+		<div class="row-fluid">
+			<div class="span12 module_cont module_text_area module_small_padding">
+				<div class="bg_title">
+					<h4 class="headInModule">Renseignez les caracteristiques du Devis</h4>
+				</div>
+				<form wicket:id="formQualification">
+				<table class="tableBatimen">
+					<tr>
+                   	 <th>Quels corps de métier recherchez vous ?</th>
+                    	<td>
+                      	  <select wicket:id="metier" name="corpsMetierSelect" id="corpsMetierSelect"></select>
+                    	</td>
+                	</tr>
+                	<tr>
+                   	 <th>Quel est l'objet de votre devis ?</th>
+                    	<td>
+                      	   <input wicket:id="titre" type="text" name="objetDevisField" id="objetDevisField" value="" />
+                      	   <img alt="Aide" src="img/helplittle.png" class="imgHelp" title="L'objet servira de titre pour le devis" />
+                    	</td>
+                	</tr>
+                	<tr>
+                   	 <th>Quelle est la description du chantier ?</th>
+                    	<td>
+                      	  <textarea wicket:id="description" rows="6" cols="110" type="text" name="descriptionDevisField" id="descriptionDevisField" value="" />
+                    	</td>
+                	</tr>
+                	<tr>
+                   	 <th>Comment souhaitez-vous être contacté ?</th>
+                    	<td>
+                      	   <select wicket:id="typeContact" name="typeContactField" id="typeContactField"></select>
+                    	</td>
+                	</tr>
+                	<tr>
+                   	 <th>Quel est le délai d'intervention ?</th>
+                    	<td>
+                    		<select wicket:id="delaiIntervention" name="delaiInterventionField" id="delaiInterventionField"></select>
+                    	</td>
+                	</tr>
+                	<tr>
+                   	 <th>Combien voulez-vous de devis ?</th>
+                    	<td>
+                      	   <input wicket:id="nbDevis" type="number" min="1" max="10" step="1" name="nbDevisField" id="nbDevisField" value="" />
+                      	   <img alt="Aide" src="img/helplittle.png" class="imgHelp" title="Le nombre de devis maximum est de 10" />
+                    	</td>
+                	</tr>
+                	<tr>
+                   	 <th>Quelle est l'adresse du chantier ?</th>
+                    	<td>
+                      	    <input wicket:id="adresse" type="text" name="adresseField" id="adresseField" value="" />
+                    	</td>
+                	</tr>
+                	<tr>
+                   	 <th>Quelle est le complément d'adresse du chantier ?</th>
+                    	<td>
+                      	    <input wicket:id="complementAdresse" type="text" name="adresseComplementField" id="adresseComplementField" value="" />
+                    	</td>
+                	</tr>
+                	<tr>
+                   	 <th>Quelle est le code postal du chantier ?</th>
+                    	<td>
+                      	    <input wicket:id="codePostal" type="text" name="codePostalField" id="codePostalField" value="" />
+                    	</td>
+                	</tr>
+                	<tr>
+                   	 <th>Quelle est la ville du chantier ?</th>
+                    	<td>
+                      	    <input wicket:id="ville" type="text" name="villeField" id="villeField" value="" />
+                    	</td>
+                	</tr>
+                	<tr>
+                   	 <th>Souhaitez-vous ajouter des photos a votre devis ?</th>
+                    	<td>
+                    		<div wicket:id="photos" class="upload">
+                    		</div>
+                    	</td>
+                	</tr>
+                	<tr>
+                   	 <th></th>
+                    	<td>
+                      	    <a class="shortcode_button btn_small btn_type1" wicket:id="validateQualification">Etape suivante</a>
+                    	</td>
+                	</tr>
+                </table>
+                <div id="champsObligatoire">
+					<span class='required'>*</span> : champs obligatoires
+				</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div wicket:id="containerInscription">
+	<div class="row-fluid">
+			<div class="span12 module_cont module_text_area module_small_padding">
+				<div class="bg_title">
+					<h4 class="headInModule">Inscription / Connexion</h4>
+				</div>
+				<form wicket:id="formInscription">
+				<table class="tableBatimen">
+					<tr>
+                   	 <th>Civilité :</th>
+                    	<td>
+                      	  <select wicket:id="civilite" name="civilite" id="civilite"></select>
+                    	</td>
+                	</tr>
+                	<tr>
+                   	 <th>Nom :</th>
+                    	<td>
+                      	  <input wicket:id="nom" type="text" name="nom" id="nom" value="" />
+                    	</td>
+                	</tr>
+                	<tr>
+                   	 <th>Prénom :</th>
+                    	<td>
+                      	  <input wicket:id="prenom" type="text" name="prenom" id="prenom" value="" />
+                    	</td>
+                	</tr>
+                	<tr>
+                   	 <th>Numéro de téléphone :</th>
+                    	<td>
+                    	  <input wicket:id="numeroTel" type="text" name="numeroTel" id="numeroTel" value="" />
+                    	</td>
+                	</tr>
+                	<tr>
+                   	 <th>Adresse mail :</th>
+                    	<td>
+                    	  <input wicket:id="email" type="text" name="email" id="email" value="" />
+                    	</td>
+                	</tr>
+                	<tr>
+                   	 <th>Identifiant :</th>
+                    	<td>
+                    	  <input wicket:id="login" type="text" name="login" id="login" value="" />
+                    	</td>
+                	</tr>
+                	<tr>
+                   	 <th>Mot de passe :</th>
+                    	<td>
+                    	  <input wicket:id="password" type="password" name="password" id="password" value="" />
+                    	</td>
+                	</tr>
+                	<tr>
+                   	 <th>Confirmer le mot de passe :</th>
+                    	<td>
+                    	  <input wicket:id="confirmPassword" type="password" name="confirmPassword" id="confirmPassword" value="" />
+                    	</td>
+                	</tr>
+                	<tr>
+                   	 <th></th>
+                    	<td>
+                      	    <a class="shortcode_button btn_small btn_type1" wicket:id="validateInscription">Terminer</a>
+                    	</td>
+                	</tr>
+                </table>
+                <div id="champsObligatoire">
+					<span class='required'>*</span> : champs obligatoires
+				</div>
+				</form>
+					<div id="dejaInscrit">
+				 	Vous possédez déjà un compte ? <a wicket:id="connexion" id="connexionEtape3">Connectez-vous</a>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div wicket:id="containerConfirmation">
+	<div class="row-fluid">
+			<div class="span12 module_cont module_text_area module_small_padding">
+				<div class="bg_title">
+					<h4 class="headInModule">Confirmation</h4>
+				</div>
+				<div id="confirmation">
+				<img src="img/check.png" alt="ok" />
+					<h5 wicket:id="confirmation1"></h5>
+					<h5 wicket:id="confirmation2"></h5>
+					<a wicket:id="retourAccueil">Retour à l'accueil</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</wicket:extend>

@@ -27,10 +27,10 @@ public class LoginDTO extends AbstractDTO {
 	private static final long serialVersionUID = -8518392464976304684L;
 
 	@NotNull
-	@Size(min = ValidatorConstant.LOGIN_DTO_LOGIN_RANGE_MIN, max = ValidatorConstant.LOGIN_DTO_LOGIN_RANGE_MAX)
+	@Size(min = ValidatorConstant.LOGIN_RANGE_MIN, max = ValidatorConstant.LOGIN_RANGE_MAX)
 	private String login;
 	@NotNull
-	@Size(min = ValidatorConstant.LOGIN_DTO_PASSWORD_RANGE_MIN, max = ValidatorConstant.LOGIN_DTO_PASSWORD_RANGE_MAX)
+	@Size(min = ValidatorConstant.PASSWORD_RANGE_MIN, max = ValidatorConstant.PASSWORD_RANGE_MAX)
 	private String password;
 
 	/**

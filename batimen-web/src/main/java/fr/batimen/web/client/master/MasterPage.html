@@ -29,8 +29,9 @@
 <link rel="stylesheet" type="text/css" href="css/responsive.css">
 <link rel="stylesheet" type="text/css" href="css/theme_settings.css">
 <link rel="stylesheet" type="text/css" href="css/rs-settings.css">
-<link rel="stylesheet" type="text/css" href="css/color_theme.css"
-	id="theme_color">
+<link rel="stylesheet" type="text/css" href="css/color_theme.css" id="theme_color">
+<link rel="stylesheet" type="text/css" href="css/page.css">
+
 
 <!--[if IE 8 ]><script>
         var e = ("article,aside,figcaption,figure,footer,header,hgroup,nav,section,time").split(',');
@@ -53,9 +54,7 @@
 					<span class="ico">p</span>Call us toll free:&nbsp; +1 800 546 35 48
 				</div>
 				<div id="connexion">
-					<a wicket:id="connexion">Connexion</a> <span wicket:id="connected">
-						<a wicket:id="monCompte">Mon compte</a>
-					</span>
+					<a wicket:id="connexion"><div id="connexionlbl" wicket:id="connexionlbl"></div></a>
 				</div>
 				<div class="socials">
 					<ul class="socials_list">
@@ -81,10 +80,12 @@
 				<ul class="menu">
 					<li wicket:id="selectAccueil" class="current-menu-parent"><a
 						wicket:id="accueilLink">Accueil</a></li>
+						<li wicket:id="selectNouveauDevis"><a
+						wicket:id="nouveauDevisLink">Demande de devis</a></li>
 					<li wicket:id="selectQuiSommesNous"><a
 						wicket:id="quiSommesNousLink">Qui sommes nous ?</a></li>
-					<li wicket:id="selectContact"><a wicket:id="contactLink">Nous
-							contacter</a></li>
+						
+					<li wicket:id="selectContact"><a wicket:id="contactLink">Nous contacter</a></li>
 				</ul>
 				<!-- .menu -->
 				<div class="clear"></div>
@@ -164,5 +165,8 @@
 	<header class="fixed-menu"></header>
 	<div class="layout_trigger clean_bg_cont"
 		style="background-color: #ffffff;"></div>
+	<div wicket:id="loginDialog">
+	 <div wicket:id="authentificationPanel"></div>
+	</div>
 </body>
 </html>
