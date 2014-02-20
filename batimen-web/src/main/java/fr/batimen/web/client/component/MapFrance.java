@@ -13,16 +13,18 @@ import fr.batimen.web.client.extend.nouveaudevis.NouveauDevis;
 
 /**
  * Panel wicket qui permet de sélectionner un departement a l'aide d'une carte
- * de france généré en SVG
+ * de france générée en SVG grace à Raphael
  * 
  * @author Casaucau Cyril
+ * 
+ * @see http://raphaeljs.com/
  * 
  */
 public class MapFrance extends Panel {
 
 	private static final long serialVersionUID = 2865328261053993119L;
 
-	private static final String CONTAINER_MAP_FRANCE = "mapFrance";
+	public static final String CONTAINER_MAP_FRANCE = "mapFrance";
 
 	// n° de departement, le nom du departement, les coordonnées
 	private final Map<String, Map<String, String>> departements = new HashMap<String, Map<String, String>>();
