@@ -76,7 +76,7 @@ create table Annonce (
         primary key (id)
     );
     
-     create table Users (
+     create table Client (
         id int8 not null,
         civilite int4,
         dateInscription timestamp not null,
@@ -95,9 +95,9 @@ create table Annonce (
         references Adresse;
         
     alter table Annonce 
-        add constraint FK_annonce_user 
+        add constraint FK_annonce_client 
         foreign key (demandeur_fk) 
-        references Users;
+        references Client;
         
     alter table Artisan 
         add constraint FK_artisan_entreprise 

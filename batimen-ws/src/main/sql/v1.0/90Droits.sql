@@ -8,5 +8,11 @@ TO batimen_usr;
 
 --- Sur les tables ---
 GRANT SELECT,INSERT,UPDATE,DELETE ON TABLE
-public.users
+public.Client,
+public.Adresse,
+public.Annonce,
+public.Artisan,
+public.Entreprise,
+public.Notation,
+public.Paiement
 TO batimen_usr;

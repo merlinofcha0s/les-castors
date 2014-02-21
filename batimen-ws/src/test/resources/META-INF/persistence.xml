@@ -5,7 +5,7 @@
 	<persistence-unit name="batimenTestPU"
 		transaction-type="RESOURCE_LOCAL">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
-		<class>fr.batimen.ws.entity.User</class>
+		<class>fr.batimen.ws.entity.Client</class>
 		<class>fr.batimen.ws.entity.Adresse</class>
 		<class>fr.batimen.ws.entity.Annonce</class>
 		<class>fr.batimen.ws.entity.Artisan</class>

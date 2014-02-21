@@ -64,7 +64,7 @@ public class Annonce extends AbstractEntity implements Serializable {
 	private Integer departement;
 	@ManyToOne
 	@JoinColumn(name = "demandeur_fk")
-	private User demandeur;
+	private Client demandeur;
 	@OneToOne(mappedBy = "annonce", cascade = CascadeType.REMOVE)
 	private Notation notationAnnonce;
 	@OneToOne(cascade = CascadeType.REMOVE)
@@ -268,7 +268,7 @@ public class Annonce extends AbstractEntity implements Serializable {
 	/**
 	 * @return the demandeur
 	 */
-	public User getDemandeur() {
+	public Client getDemandeur() {
 		return demandeur;
 	}
 
@@ -291,7 +291,7 @@ public class Annonce extends AbstractEntity implements Serializable {
 	 * @param demandeur
 	 *            the demandeur to set
 	 */
-	public void setDemandeur(User demandeur) {
+	public void setDemandeur(Client demandeur) {
 		this.demandeur = demandeur;
 	}
 

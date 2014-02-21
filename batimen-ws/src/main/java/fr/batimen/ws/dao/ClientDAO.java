@@ -24,8 +24,8 @@ import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.QueryJPQL;
 import fr.batimen.core.constant.WsPath;
 import fr.batimen.dto.LoginDTO;
-import fr.batimen.dto.UserDTO;
-import fr.batimen.ws.entity.User;
+import fr.batimen.dto.ClientDTO;
+import fr.batimen.ws.entity.Client;
 import fr.batimen.ws.helper.HashHelper;
 import fr.batimen.ws.helper.JsonHelper;
 import fr.batimen.ws.interceptor.BatimenInterceptor;
@@ -42,12 +42,12 @@ import fr.batimen.ws.interceptor.BatimenInterceptor;
 @Consumes(JsonHelper.JSON_MEDIA_TYPE_AND_UTF_8_CHARSET)
 @Interceptors(value = { BatimenInterceptor.class })
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class UserDAO {
+public class ClientDAO {
 
 	@PersistenceContext
 	private EntityManager em;
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(UserDAO.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ClientDAO.class);
 
 	/**
 	 * Methode de login des utilisateurs
@@ -58,22 +58,22 @@ public class UserDAO {
 	 *         si inexistant
 	 */
 	@POST
-	@Path(WsPath.USER_SERVICE_LOGIN)
+	@Path(WsPath.CLIENT_SERVICE_LOGIN)
 	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-	public UserDTO login(LoginDTO toLogin) {
+	public ClientDTO login(LoginDTO toLogin) {
 
-		User userFinded = null;
+		Client userFinded = null;
 		ModelMapper modelMapper = new ModelMapper();
 
 		try {
-			Query query = em.createNamedQuery(QueryJPQL.USER_LOGIN);
-			query.setParameter(QueryJPQL.USER_LOGIN, toLogin.getLogin());
+			Query query = em.createNamedQuery(QueryJPQL.CLIENT_LOGIN);
+			query.setParameter(QueryJPQL.CLIENT_LOGIN, toLogin.getLogin());
 
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Chargement requete JPQL OK ");
 			}
 
-			userFinded = (User) query.getSingleResult();
+			userFinded = (Client) query.getSingleResult();
 
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Récuperation resultat requete JPQL OK ");
@@ -88,16 +88,16 @@ public class UserDAO {
 
 			if (passwordMatch) {
 				// Si le password match on transforme l'entité en DTO
-				return modelMapper.map(userFinded, UserDTO.class);
+				return modelMapper.map(userFinded, ClientDTO.class);
 			} else {
-				return new UserDTO();
+				return new ClientDTO();
 			}
 
 		} catch (NoResultException nre) {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Aucune correspondance trouvées dans la BDD", nre);
 			}
-			return new UserDTO();
+			return new ClientDTO();
 		}
 	}
 }

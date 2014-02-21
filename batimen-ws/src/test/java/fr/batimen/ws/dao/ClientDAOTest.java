@@ -13,10 +13,10 @@ import org.junit.Test;
 import de.akquinet.jbosscc.needle.annotation.ObjectUnderTest;
 import de.akquinet.jbosscc.needle.db.transaction.VoidRunnable;
 import fr.batimen.dto.LoginDTO;
-import fr.batimen.dto.UserDTO;
+import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.enums.Civilite;
 import fr.batimen.ws.AbstractBatimenTest;
-import fr.batimen.ws.entity.User;
+import fr.batimen.ws.entity.Client;
 import fr.batimen.ws.helper.HashHelper;
 
 /**
@@ -24,12 +24,12 @@ import fr.batimen.ws.helper.HashHelper;
  * @author Casaucau Cyril
  * 
  */
-public class UserDAOTest extends AbstractBatimenTest {
+public class ClientDAOTest extends AbstractBatimenTest {
 
 	@ObjectUnderTest
-	public UserDAO userDAO;
+	public ClientDAO clientDAO;
 
-	final User userToRec = new User();
+	final Client clientToRec = new Client();
 
 	final Calendar cal = Calendar.getInstance(Locale.FRANCE);
 
@@ -45,14 +45,14 @@ public class UserDAOTest extends AbstractBatimenTest {
 		cal.set(Calendar.MINUTE, 01);
 		cal.set(Calendar.SECOND, 00);
 
-		userToRec.setEmail("lol@lol.com");
-		userToRec.setLogin("pebron");
-		userToRec.setPassword(HashHelper.hashString("lollollol"));
-		userToRec.setCivilite(Civilite.MONSIEUR);
-		userToRec.setPrenom("Pebron");
-		userToRec.setNom("De la Pebronne");
-		userToRec.setNumeroTel("0615125645");
-		userToRec.setDateInscription(cal.getTime());
+		clientToRec.setEmail("lol@lol.com");
+		clientToRec.setLogin("pebron");
+		clientToRec.setPassword(HashHelper.hashString("lollollol"));
+		clientToRec.setCivilite(Civilite.MONSIEUR);
+		clientToRec.setPrenom("Pebron");
+		clientToRec.setNom("De la Pebronne");
+		clientToRec.setNumeroTel("0615125645");
+		clientToRec.setDateInscription(cal.getTime());
 
 		// On ouvre une transaction avec la BDD
 		try {
@@ -60,7 +60,7 @@ public class UserDAOTest extends AbstractBatimenTest {
 				@Override
 				public void doRun(EntityManager entityManager) throws Exception {
 					// On persiste un utilisateur dans la bdd
-					entityManager.persist(userToRec);
+					entityManager.persist(clientToRec);
 				}
 			});
 		} catch (Exception e) {
@@ -78,7 +78,7 @@ public class UserDAOTest extends AbstractBatimenTest {
 		toLogin.setPassword("lollollol");
 
 		// Appel du service qui check le login
-		UserDTO user = userDAO.login(toLogin);
+		ClientDTO user = clientDAO.login(toLogin);
 
 		// Verification des infos
 		assertTrue(user.getLogin().equals("pebron"));
@@ -106,7 +106,7 @@ public class UserDAOTest extends AbstractBatimenTest {
 		toLogin.setPassword("lollol");
 
 		// Appel du service qui check le login
-		UserDTO user = userDAO.login(toLogin);
+		ClientDTO user = clientDAO.login(toLogin);
 
 		// Verification que rien n'est renvoyer ce qui veut dire que la
 		// combinaison login / mdp n'est pas bonne ou que l'utilisateur n'existe

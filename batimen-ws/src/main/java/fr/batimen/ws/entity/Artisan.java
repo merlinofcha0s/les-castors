@@ -15,9 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
 
-import fr.batimen.dto.enums.Civilite;
 import fr.batimen.dto.enums.Metier;
 
 /**
@@ -28,7 +26,7 @@ import fr.batimen.dto.enums.Metier;
  */
 @Entity
 @Table(name = "Artisan")
-public class Artisan extends AbstractEntity implements Serializable {
+public class Artisan extends AbstractUser implements Serializable {
 
 	private static final long serialVersionUID = -4398985801030020390L;
 
@@ -45,23 +43,6 @@ public class Artisan extends AbstractEntity implements Serializable {
 	private String activitePrincipale;
 	@Column(nullable = false)
 	private String domaineActivite;
-	@Column(length = 4, nullable = false)
-	private Civilite civilite;
-	@Column(length = 20, nullable = false)
-	private String nom;
-	@Column(length = 20, nullable = false)
-	private String prenom;
-	@Column(length = 10, nullable = false)
-	private String numeroTel;
-	@Column(length = 25, nullable = false)
-	private String login;
-	@Column(length = 80, nullable = false)
-	private String password;
-	@Column(length = 128, nullable = false)
-	private String email;
-	@Column(nullable = false)
-	@Temporal(javax.persistence.TemporalType.TIMESTAMP)
-	private Date dateInscription;
 	@OneToMany(mappedBy = "artisan", targetEntity = Notation.class, cascade = CascadeType.REMOVE)
 	private List<Notation> scoreGlobal = new ArrayList<>();
 	@OneToOne(cascade = CascadeType.REMOVE)
@@ -155,21 +136,6 @@ public class Artisan extends AbstractEntity implements Serializable {
 	 */
 	public void setDomaineActivite(String domaineActivite) {
 		this.domaineActivite = domaineActivite;
-	}
-
-	/**
-	 * @return the civilite
-	 */
-	public Civilite getCivilite() {
-		return civilite;
-	}
-
-	/**
-	 * @param civilite
-	 *            the civilite to set
-	 */
-	public void setCivilite(Civilite civilite) {
-		this.civilite = civilite;
 	}
 
 	/**
@@ -331,7 +297,7 @@ public class Artisan extends AbstractEntity implements Serializable {
 		if (object instanceof Artisan) {
 			Artisan other = (Artisan) object;
 			return Objects.equals(this.login, other.login) && Objects.equals(this.email, other.email)
-					&& Objects.equals(this.nom, other.nom) && Objects.equals(this.prenom, other.prenom);
+			        && Objects.equals(this.nom, other.nom) && Objects.equals(this.prenom, other.prenom);
 		}
 		return false;
 	}

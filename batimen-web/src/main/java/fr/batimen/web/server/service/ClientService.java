@@ -5,7 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import fr.batimen.core.constant.WsPath;
 import fr.batimen.dto.LoginDTO;
-import fr.batimen.dto.UserDTO;
+import fr.batimen.dto.ClientDTO;
 import fr.batimen.web.client.session.BatimenSession;
 import fr.batimen.web.server.WsConnector;
 
@@ -16,11 +16,11 @@ import fr.batimen.web.server.WsConnector;
  * @author Casaucau Cyril
  * 
  */
-public class UserService {
+public class ClientService {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ClientService.class);
 
-	private UserService() {
+	private ClientService() {
 
 	}
 
@@ -38,9 +38,9 @@ public class UserService {
 		}
 
 		String objectInJSON = WsConnector.getInstance().sendRequest(WsPath.USER_SERVICE_PATH,
-				WsPath.USER_SERVICE_LOGIN, loginDTO);
+				WsPath.CLIENT_SERVICE_LOGIN, loginDTO);
 
-		UserDTO userDTO = UserDTO.deserializeUserDTO(objectInJSON);
+		ClientDTO clientDTO = ClientDTO.deserializeUserDTO(objectInJSON);
 
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Fin appel service login + deserialization");
@@ -48,12 +48,12 @@ public class UserService {
 
 		// Si l'user dto est vide cela veut dire que l'authentification n'a pas
 		// reussi
-		if ("".equals(userDTO.getLogin())) {
+		if ("".equals(clientDTO.getLogin())) {
 			return false;
 		} else {
 			// On enregistre les infos de l'utilisateur dans la session
 			BatimenSession session = (BatimenSession) BatimenSession.get();
-			session.placeUserInSession(userDTO);
+			session.placeUserInSession(clientDTO);
 			return true;
 		}
 	}
