@@ -12,12 +12,12 @@ import org.junit.Test;
 
 import de.akquinet.jbosscc.needle.annotation.ObjectUnderTest;
 import de.akquinet.jbosscc.needle.db.transaction.VoidRunnable;
+import fr.batimen.core.security.HashHelper;
 import fr.batimen.dto.LoginDTO;
 import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.enums.Civilite;
 import fr.batimen.ws.AbstractBatimenTest;
 import fr.batimen.ws.entity.Client;
-import fr.batimen.ws.helper.HashHelper;
 
 /**
  * 

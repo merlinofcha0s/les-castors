@@ -14,6 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.batimen.core.exception.FrontEndException;
+import fr.batimen.core.security.HashHelper;
+import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.CreationAnnonceDTO;
 import fr.batimen.web.client.component.MapFrance;
 import fr.batimen.web.client.event.Event;
@@ -49,6 +51,7 @@ public class NouveauDevis extends MasterPage {
 	private WebMarkupContainer containerQualification;
 
 	// Composant étape 3
+	private final Etape3InscriptionForm etape3InscriptionForm;
 	private WebMarkupContainer containerInscription;
 
 	// Composant étape 4
@@ -86,7 +89,7 @@ public class NouveauDevis extends MasterPage {
 		containerInscription = new WebMarkupContainer("containerInscription");
 		containerInscription.setVisible(false);
 
-		Etape3InscriptionForm etape3InscriptionForm = new Etape3InscriptionForm("formInscription",
+		etape3InscriptionForm = new Etape3InscriptionForm("formInscription",
 		        new CompoundPropertyModel<CreationAnnonceDTO>(creationAnnonce)) {
 
 			private static final long serialVersionUID = -7785574548677996934L;
@@ -94,6 +97,8 @@ public class NouveauDevis extends MasterPage {
 			@Override
 			protected void onSubmit() {
 				creationAnnonce.setNumeroEtape(4);
+				creationAnnonce.setPassword(HashHelper.hashString(etape3InscriptionForm.getPasswordField()
+				        .getConvertedInput()));
 				this.setResponsePage(new NouveauDevis(creationAnnonce));
 			}
 
@@ -250,7 +255,7 @@ public class NouveauDevis extends MasterPage {
 			// Si il est authentifié on l'enregistre dans la DTO (pour le
 			// backend) et on charge le bon message de confirmation
 			if (BatimenSession.get().isSignedIn()) {
-				creationAnnonce.setIsSignedUp(true);
+				remplissageCreationAnnonceSiLogin();
 			}
 			chooseConfirmationMessage(true);
 			etape4Confirmation();
@@ -270,6 +275,14 @@ public class NouveauDevis extends MasterPage {
 		numeroEtapeAffiche.append(numeroEtape).append("/4");
 
 		etape.setDefaultModelObject(numeroEtapeAffiche.toString());
+
+	}
+
+	private void remplissageCreationAnnonceSiLogin() {
+		BatimenSession session = (BatimenSession) BatimenSession.get();
+		ClientDTO client = session.getSessionUser();
+		creationAnnonce.setIsSignedUp(true);
+		creationAnnonce.setEmail(client.getEmail());
 
 	}
 

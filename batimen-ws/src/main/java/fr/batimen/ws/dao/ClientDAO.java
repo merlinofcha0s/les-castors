@@ -23,10 +23,10 @@ import org.slf4j.LoggerFactory;
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.QueryJPQL;
 import fr.batimen.core.constant.WsPath;
+import fr.batimen.core.security.HashHelper;
 import fr.batimen.dto.LoginDTO;
 import fr.batimen.dto.ClientDTO;
 import fr.batimen.ws.entity.Client;
-import fr.batimen.ws.helper.HashHelper;
 import fr.batimen.ws.helper.JsonHelper;
 import fr.batimen.ws.interceptor.BatimenInterceptor;
 

@@ -1,4 +1,4 @@
-package fr.batimen.ws.helper;
+package fr.batimen.core.security;
 
 import com.lambdaworks.crypto.SCryptUtil;
 

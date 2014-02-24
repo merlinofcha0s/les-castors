@@ -73,21 +73,15 @@ public class CreationAnnonceDTO extends AbstractDTO {
 	private String nom;
 	@Size(min = ValidatorConstant.CREATION_ANNONCE_PRENOM_MIN, max = ValidatorConstant.CREATION_ANNONCE_PRENOM_MAX)
 	private String prenom;
-	@NotNull
 	@Pattern(message = "Numero de téléphone invalide", regexp = ValidatorConstant.CREATION_ANNONCE_TELEPHONE_REGEX)
 	private String numeroTel;
-	@NotNull
 	@Size(min = ValidatorConstant.LOGIN_RANGE_MIN, max = ValidatorConstant.LOGIN_RANGE_MAX)
 	private String login;
-	@NotNull
 	@Size(min = ValidatorConstant.LOGIN_RANGE_MIN, max = ValidatorConstant.LOGIN_RANGE_MAX)
 	private String password;
-	@NotNull
 	@Email
 	private String email;
-	@NotNull
 	private Date dateInscription;
-	@NotNull
 	private Boolean isSignedUp = false;
 
 	public Metier getMetier() {
@@ -367,8 +361,8 @@ public class CreationAnnonceDTO extends AbstractDTO {
 		if (object instanceof CreationAnnonceDTO) {
 			CreationAnnonceDTO other = (CreationAnnonceDTO) object;
 			return Objects.equals(this.titre, other.titre) && Objects.equals(this.metier, other.metier)
-					&& Objects.equals(this.description, other.description)
-					&& Objects.equals(this.codePostal, other.codePostal) && Objects.equals(this.ville, other.ville);
+			        && Objects.equals(this.description, other.description)
+			        && Objects.equals(this.codePostal, other.codePostal) && Objects.equals(this.ville, other.ville);
 		}
 		return false;
 	}

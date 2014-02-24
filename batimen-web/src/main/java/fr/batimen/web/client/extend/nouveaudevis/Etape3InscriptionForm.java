@@ -24,6 +24,8 @@ public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 
 	private static final long serialVersionUID = 2500892594731116597L;
 
+	private PasswordTextField passwordField;
+
 	public Etape3InscriptionForm(String id, IModel<CreationAnnonceDTO> model) {
 		super(id, model);
 
@@ -67,7 +69,7 @@ public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 		loginField.add(StringValidator.lengthBetween(ValidatorConstant.LOGIN_RANGE_MIN,
 		        ValidatorConstant.LOGIN_RANGE_MAX));
 
-		PasswordTextField passwordField = new PasswordTextField("password");
+		passwordField = new PasswordTextField("password");
 		passwordField.setRequired(true);
 		passwordField.add(new RequiredBorderBehaviour());
 		passwordField.add(new ErrorHighlightBehavior());
@@ -96,4 +98,20 @@ public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 		this.add(confirmPassword);
 		this.add(validateInscription);
 	}
+
+	/**
+	 * @return the passwordField
+	 */
+	public PasswordTextField getPasswordField() {
+		return passwordField;
+	}
+
+	/**
+	 * @param passwordField
+	 *            the passwordField to set
+	 */
+	public void setPasswordField(PasswordTextField passwordField) {
+		this.passwordField = passwordField;
+	}
+
 }

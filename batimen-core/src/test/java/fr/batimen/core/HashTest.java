@@ -1,11 +1,11 @@
-package fr.batimen.ws.hash;
+package fr.batimen.core;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.batimen.ws.helper.HashHelper;
+import fr.batimen.core.security.HashHelper;
 
 public class HashTest {
 

@@ -6,8 +6,8 @@ import org.apache.wicket.request.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.batimen.dto.LoginDTO;
 import fr.batimen.dto.ClientDTO;
+import fr.batimen.dto.LoginDTO;
 import fr.batimen.web.server.service.ClientService;
 
 /**
@@ -19,9 +19,6 @@ import fr.batimen.web.server.service.ClientService;
  */
 public class BatimenSession extends AuthenticatedWebSession {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -3460138748198816904L;
 	private static final Logger LOGGER = LoggerFactory.getLogger(BatimenSession.class);
 
