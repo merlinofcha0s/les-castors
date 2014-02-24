@@ -45,6 +45,8 @@ public class ClientDTO extends AbstractDTO {
 	private String nom;
 	@Size(min = 3, max = 20)
 	private String prenom;
+	@NotNull
+	private Boolean isArtisan = false;
 
 	// TODO Faire une regex pour le numero de tel
 	private String numeroTel;
@@ -170,6 +172,21 @@ public class ClientDTO extends AbstractDTO {
 	 */
 	public void setCivilite(Civilite civilite) {
 		this.civilite = civilite;
+	}
+
+	/**
+	 * @return the isArtisan
+	 */
+	public Boolean getIsArtisan() {
+		return isArtisan;
+	}
+
+	/**
+	 * @param isArtisan
+	 *            the isArtisan to set
+	 */
+	public void setIsArtisan(Boolean isArtisan) {
+		this.isArtisan = isArtisan;
 	}
 
 	@Override

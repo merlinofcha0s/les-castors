@@ -34,7 +34,7 @@ public class Notation extends AbstractEntity implements Serializable {
 	private Double score;
 	@Column(length = 500, nullable = false)
 	private String commentaire;
-	@OneToOne(cascade = CascadeType.REMOVE)
+	@OneToOne(mappedBy = "notationAnnonce", cascade = CascadeType.REMOVE)
 	private Annonce annonce;
 	@ManyToOne
 	@JoinColumn(name = "artisan_fk")

@@ -46,6 +46,8 @@ public class Artisan extends AbstractUser implements Serializable {
 	private List<Notation> scoreGlobal = new ArrayList<>();
 	@OneToOne(cascade = CascadeType.REMOVE)
 	private Entreprise entreprise;
+	@OneToOne(mappedBy = "artisan", cascade = CascadeType.REMOVE)
+	private Client client;
 
 	/**
 	 * @return the id
@@ -165,6 +167,21 @@ public class Artisan extends AbstractUser implements Serializable {
 	 */
 	public void setEntreprise(Entreprise entreprise) {
 		this.entreprise = entreprise;
+	}
+
+	/**
+	 * @return the client
+	 */
+	public Client getClient() {
+		return client;
+	}
+
+	/**
+	 * @param client
+	 *            the client to set
+	 */
+	public void setClient(Client client) {
+		this.client = client;
 	}
 
 	/*

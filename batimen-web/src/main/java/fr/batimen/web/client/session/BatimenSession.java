@@ -32,7 +32,7 @@ public class BatimenSession extends AuthenticatedWebSession {
 		return user;
 	}
 
-	public void placeUserInSession(ClientDTO user) {
+	public void putUserInSession(ClientDTO user) {
 		this.user = user;
 	}
 

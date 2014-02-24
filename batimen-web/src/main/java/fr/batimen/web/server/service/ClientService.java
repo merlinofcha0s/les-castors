@@ -53,7 +53,7 @@ public class ClientService {
 		} else {
 			// On enregistre les infos de l'utilisateur dans la session
 			BatimenSession session = (BatimenSession) BatimenSession.get();
-			session.placeUserInSession(clientDTO);
+			session.putUserInSession(clientDTO);
 			return true;
 		}
 	}

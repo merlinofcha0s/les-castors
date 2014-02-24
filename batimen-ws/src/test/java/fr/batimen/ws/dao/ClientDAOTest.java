@@ -13,8 +13,8 @@ import org.junit.Test;
 import de.akquinet.jbosscc.needle.annotation.ObjectUnderTest;
 import de.akquinet.jbosscc.needle.db.transaction.VoidRunnable;
 import fr.batimen.core.security.HashHelper;
-import fr.batimen.dto.LoginDTO;
 import fr.batimen.dto.ClientDTO;
+import fr.batimen.dto.LoginDTO;
 import fr.batimen.dto.enums.Civilite;
 import fr.batimen.ws.AbstractBatimenTest;
 import fr.batimen.ws.entity.Client;
@@ -53,6 +53,7 @@ public class ClientDAOTest extends AbstractBatimenTest {
 		clientToRec.setNom("De la Pebronne");
 		clientToRec.setNumeroTel("0615125645");
 		clientToRec.setDateInscription(cal.getTime());
+		clientToRec.setIsArtisan(false);
 
 		// On ouvre une transaction avec la BDD
 		try {

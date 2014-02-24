@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import fr.batimen.core.constant.QueryJPQL;
@@ -36,6 +37,10 @@ public class Client extends AbstractUser implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
+	@Column(nullable = false)
+	private Boolean isArtisan;
+	@OneToOne(cascade = CascadeType.REMOVE)
+	private Artisan artisan;
 	@Column(nullable = false)
 	@OneToMany(mappedBy = "demandeur", targetEntity = Annonce.class, cascade = CascadeType.REMOVE)
 	private List<Annonce> devisDemandes;
@@ -68,6 +73,36 @@ public class Client extends AbstractUser implements Serializable {
 	 */
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	/**
+	 * @return the isArtisan
+	 */
+	public Boolean getIsArtisan() {
+		return isArtisan;
+	}
+
+	/**
+	 * @param isArtisan
+	 *            the isArtisan to set
+	 */
+	public void setIsArtisan(Boolean isArtisan) {
+		this.isArtisan = isArtisan;
+	}
+
+	/**
+	 * @return the artisan
+	 */
+	public Artisan getArtisan() {
+		return artisan;
+	}
+
+	/**
+	 * @param artisan
+	 *            the artisan to set
+	 */
+	public void setArtisan(Artisan artisan) {
+		this.artisan = artisan;
 	}
 
 	/*

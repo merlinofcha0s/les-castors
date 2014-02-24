@@ -24,6 +24,7 @@ create table Annonce (
         typeContact int4 not null,
         adresseChantier_id int8,
         demandeur_fk int8,
+        notationAnnonce_id int8,
         primary key (id)
     );
     
@@ -62,7 +63,6 @@ create table Annonce (
         id int8 not null,
         commentaire varchar(500) not null,
         score float8 not null,
-        annonce_id int8,
         artisan_fk int8,
         primary key (id)
     );
@@ -86,6 +86,8 @@ create table Annonce (
         numeroTel varchar(10) not null,
         password varchar(80) not null,
         prenom varchar(20),
+        isArtisan boolean not null,
+        artisan_id int8,
         primary key (id)
     );
     
@@ -99,10 +101,20 @@ create table Annonce (
         foreign key (demandeur_fk) 
         references Client;
         
+    alter table Annonce 
+        add constraint FK_notation_annonce 
+        foreign key (notationAnnonce_id) 
+        references Notation;
+        
     alter table Artisan 
         add constraint FK_artisan_entreprise 
         foreign key (entreprise_id) 
         references Entreprise;
+        
+    alter table Client 
+        add constraint FK_client_artisan
+        foreign key (artisan_id) 
+        references Artisan;
         
     alter table Entreprise 
         add constraint FK_entreprise_adresse
@@ -113,11 +125,6 @@ create table Annonce (
         add constraint FK_entreprise_paiement 
         foreign key (paiement_id) 
         references Paiement;
-        
-    alter table Notation 
-        add constraint FK_notation_annonce 
-        foreign key (annonce_id) 
-        references Annonce;
         
     alter table Notation 
         add constraint FK_notation_artisan
