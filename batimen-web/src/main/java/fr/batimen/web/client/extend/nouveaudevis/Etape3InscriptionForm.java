@@ -81,7 +81,7 @@ public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 		confirmPassword.add(StringValidator.lengthBetween(ValidatorConstant.PASSWORD_RANGE_MIN,
 		        ValidatorConstant.PASSWORD_RANGE_MAX));
 
-		passwordField.add(new EqualPasswordInputValidator(passwordField, confirmPassword));
+		this.add(new EqualPasswordInputValidator(passwordField, confirmPassword));
 
 		SubmitLink validateInscription = new SubmitLink(idValidateInscription);
 		validateInscription.setMarkupId(idValidateInscription);
