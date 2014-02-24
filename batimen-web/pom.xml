@@ -54,6 +54,12 @@
 		<logs.address>c:/logs/log-batimen</logs.address>
 		<logs.archives>${logs.address}/archived</logs.archives>
 		<logs.lvl>DEBUG</logs.lvl>
+		
+		<!-- Logs pour les tests -->
+		<logs.test.address>c:/logs/log-batimen/test</logs.test.address>
+		<logs.test.archives>${logs.test.address}/archived</logs.test.archives>
+		<logs.test.lvl>DEBUG</logs.test.lvl>
+		
 	</properties>
 
 	<build>
@@ -405,7 +411,12 @@
 				<!-- Logs -->
 				<logs.address>/usr/share/log-batimen</logs.address>
 				<logs.archives>${logs.address}/archived</logs.archives>
-				<logs.lvl>DEBUG</logs.lvl>
+				<logs.lvl>WARN</logs.lvl>
+				
+				<!-- Logs pour les tests -->
+				<logs.test.address>/usr/share/log-test-batimen</logs.test.address>
+				<logs.test.archives>${logs.test.address}/archived</logs.test.archives>
+				<logs.test.lvl>DEBUG</logs.test.lvl>
 			</properties>
 			<build>
 				<plugins>

@@ -26,9 +26,14 @@
 		<database.password>123456</database.password>
 
 		<!-- Logs -->
-		<logs.address>c:/logs/log-batimen</logs.address>
+		<logs.address>c:/logs/log-batimen/dev</logs.address>
 		<logs.archives>${logs.address}/archived</logs.archives>
 		<logs.lvl>DEBUG</logs.lvl>
+		
+		<!-- Logs pour les tests -->
+		<logs.test.address>c:/logs/log-batimen/test</logs.test.address>
+		<logs.test.archives>${logs.test.address}/archived</logs.test.archives>
+		<logs.test.lvl>DEBUG</logs.test.lvl>
 
 		<!-- Hibernate -->
 		<hibernate.show_sql>true</hibernate.show_sql>
@@ -439,7 +444,12 @@
 				<!-- Logs -->
 				<logs.address>/usr/share/log-batimen</logs.address>
 				<logs.archives>${logs.address}/archived</logs.archives>
-				<logs.lvl>DEBUG</logs.lvl>
+				<logs.lvl>WARN</logs.lvl>
+
+				<!-- Logs pour les tests -->
+				<logs.test.address>/usr/share/log-test-batimen</logs.test.address>
+				<logs.test.archives>${logs.test.address}/archived</logs.test.archives>
+				<logs.test.lvl>DEBUG</logs.test.lvl>
 
 				<!-- Hibernate -->
 				<hibernate.show_sql>false</hibernate.show_sql>
@@ -474,7 +484,7 @@
 								<id>deploy-ws</id>
 								<phase>pre-integration-test</phase>
 								<goals>
-									<goal>deploy</goal>
+									<goal>redeploy</goal>
 								</goals>
 							</execution>
 						</executions>
