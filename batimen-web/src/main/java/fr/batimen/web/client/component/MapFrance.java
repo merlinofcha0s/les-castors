@@ -2,6 +2,7 @@ package fr.batimen.web.client.component;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -628,13 +629,15 @@ public class MapFrance extends Panel {
 		        .append("var attr = {fill : '#f5f5f5', stroke : '#000000', 'stroke-width' : 1,'stroke-width' : 1,'stroke-linejoin' : 'round'};");
 		jsMapFrance.append("var fr = {};");
 
-		for (String numeroDepartement : departements.keySet()) {
-			Map<String, String> departement = departements.get(numeroDepartement);
+		for (Entry<String, Map<String, String>> departement : departements.entrySet()) {
+
+			String numeroDepartement = departement.getKey();
 			jsMapFrance.append("fr.departement");
 			jsMapFrance.append(numeroDepartement);
 			jsMapFrance.append(" = paper.path(");
-			for (String nomDepartement : departement.keySet()) {
-				String localisation = departement.get(nomDepartement);
+			for (Entry<String, String> departementLoc : departement.getValue().entrySet()) {
+
+				String localisation = departementLoc.getValue();
 				jsMapFrance.append(localisation);
 				jsMapFrance.append(attr);
 
@@ -644,7 +647,7 @@ public class MapFrance extends Panel {
 				jsMapFrance.append(".attr({title: '");
 				jsMapFrance.append(numeroDepartement);
 				jsMapFrance.append(" – ");
-				jsMapFrance.append(nomDepartement);
+				jsMapFrance.append(departementLoc.getKey());
 				jsMapFrance.append("', href:");
 				jsMapFrance.append(" '");
 				jsMapFrance.append(computeURLWithDepartmentParam(numeroDepartement));
