@@ -40,7 +40,7 @@ public abstract class AbstractSeleniumTest {
 
 	public final static String BON_MOT_DE_PASSE = "lollollol";
 	public final static String MAUVAIS_MOT_DE_PASSE = "kikoulolmauvais";
-	public final static int TEMPS_ATTENTE_AJAX = 10;
+	public final static int TEMPS_ATTENTE_AJAX = 20;
 
 	private static final Logger logger = LoggerFactory.getLogger(AbstractSeleniumTest.class);
 
