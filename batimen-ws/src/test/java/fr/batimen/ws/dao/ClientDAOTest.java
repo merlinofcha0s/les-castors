@@ -69,7 +69,7 @@ public class ClientDAOTest extends AbstractBatimenTest {
 	}
 
 	@Test
-	public void testLogin() {
+	public void testgetClientForLogin() {
 
 		// L'objet que l'on doit recevoir du frontend quand l'utilisateur
 		// tentera de s'authentifier
@@ -97,12 +97,12 @@ public class ClientDAOTest extends AbstractBatimenTest {
 	}
 
 	@Test
-	public void testLoginFail() throws Exception {
+	public void testgetClientForLoginFail() throws Exception {
 
 		// L'objet que l'on doit recevoir du frontend quand l'utilisateur
 		// tentera de s'authentifier
 		LoginDTO toLogin = new LoginDTO();
-		toLogin.setLogin("pebron");
+		toLogin.setLogin("pebronmdr");
 		toLogin.setPassword("lollol");
 
 		// Appel du service qui check le login
