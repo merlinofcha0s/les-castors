@@ -4,8 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.batimen.core.constant.WsPath;
-import fr.batimen.dto.LoginDTO;
+import fr.batimen.core.security.HashHelper;
 import fr.batimen.dto.ClientDTO;
+import fr.batimen.dto.LoginDTO;
 import fr.batimen.web.client.session.BatimenSession;
 import fr.batimen.web.server.WsConnector;
 
@@ -38,7 +39,7 @@ public class ClientService {
 		}
 
 		String objectInJSON = WsConnector.getInstance().sendRequest(WsPath.USER_SERVICE_PATH,
-				WsPath.CLIENT_SERVICE_LOGIN, loginDTO);
+		        WsPath.CLIENT_SERVICE_LOGIN, loginDTO);
 
 		ClientDTO clientDTO = ClientDTO.deserializeUserDTO(objectInJSON);
 
@@ -51,10 +52,22 @@ public class ClientService {
 		if ("".equals(clientDTO.getLogin())) {
 			return false;
 		} else {
-			// On enregistre les infos de l'utilisateur dans la session
-			BatimenSession session = (BatimenSession) BatimenSession.get();
-			session.putUserInSession(clientDTO);
-			return true;
+			// Vérification du password avec le hash qui se trouve dans la bdd
+			boolean passwordMatch = HashHelper.check(loginDTO.getPassword(), clientDTO.getPassword());
+
+			if (LOGGER.isDebugEnabled()) {
+				LOGGER.debug("Verification du password : " + passwordMatch);
+			}
+
+			if (passwordMatch) {
+				// On enregistre les infos de l'utilisateur dans la session
+				BatimenSession session = (BatimenSession) BatimenSession.get();
+				session.putUserInSession(clientDTO);
+				return true;
+			} else {
+				return false;
+			}
+
 		}
 	}
 }

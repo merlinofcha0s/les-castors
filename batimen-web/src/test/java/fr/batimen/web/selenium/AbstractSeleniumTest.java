@@ -38,6 +38,10 @@ public abstract class AbstractSeleniumTest {
 	private String portServeur;
 	private String nomApp;
 
+	public final static String BON_MOT_DE_PASSE = "lollollol";
+	public final static String MAUVAIS_MOT_DE_PASSE = "kikoulolmauvais";
+	public final static int TEMPS_ATTENTE_AJAX = 10;
+
 	private static final Logger logger = LoggerFactory.getLogger(AbstractSeleniumTest.class);
 
 	@Before
@@ -111,17 +115,17 @@ public abstract class AbstractSeleniumTest {
 		}
 	}
 
-	protected void connexionApplication() {
+	protected void connexionApplication(String password) {
 		driver.findElement(By.id("connexionlbl")).click();
 		Boolean checkCondition = (new WebDriverWait(driver, 5)).until(ExpectedConditions
-				.textToBePresentInElementLocated(By.id("ui-id-1"), "Connexion à l'espace client / artisan"));
+		        .textToBePresentInElementLocated(By.id("ui-id-1"), "Connexion à l'espace client / artisan"));
 		assertTrue(checkCondition);
 		driver.findElement(By.name("login")).click();
 		driver.findElement(By.name("login")).clear();
 		driver.findElement(By.name("login")).sendKeys("raiden");
 		driver.findElement(By.name("password")).click();
 		driver.findElement(By.name("password")).clear();
-		driver.findElement(By.name("password")).sendKeys("lollollol");
+		driver.findElement(By.name("password")).sendKeys(password);
 		driver.findElement(By.id("signInButton")).click();
 	}
 

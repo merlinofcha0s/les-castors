@@ -12,7 +12,6 @@ import org.junit.Test;
 
 import de.akquinet.jbosscc.needle.annotation.ObjectUnderTest;
 import de.akquinet.jbosscc.needle.db.transaction.VoidRunnable;
-import fr.batimen.core.security.HashHelper;
 import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.LoginDTO;
 import fr.batimen.dto.enums.Civilite;
@@ -47,7 +46,7 @@ public class ClientDAOTest extends AbstractBatimenTest {
 
 		clientToRec.setEmail("lol@lol.com");
 		clientToRec.setLogin("pebron");
-		clientToRec.setPassword(HashHelper.hashString("lollollol"));
+		clientToRec.setPassword("lollollol");
 		clientToRec.setCivilite(Civilite.MONSIEUR);
 		clientToRec.setPrenom("Pebron");
 		clientToRec.setNom("De la Pebronne");
@@ -83,7 +82,7 @@ public class ClientDAOTest extends AbstractBatimenTest {
 
 		// Verification des infos
 		assertTrue(user.getLogin().equals("pebron"));
-		assertTrue(HashHelper.check(toLogin.getPassword(), user.getPassword()));
+		assertTrue("lollollol".equals(user.getPassword()));
 		assertTrue(user.getEmail().equals("lol@lol.com"));
 		assertTrue(user.getNumeroTel().equals("0615125645"));
 		assertTrue(user.getCivilite() == Civilite.MONSIEUR);

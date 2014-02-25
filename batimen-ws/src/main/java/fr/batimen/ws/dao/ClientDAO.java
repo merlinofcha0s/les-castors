@@ -23,9 +23,8 @@ import org.slf4j.LoggerFactory;
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.QueryJPQL;
 import fr.batimen.core.constant.WsPath;
-import fr.batimen.core.security.HashHelper;
-import fr.batimen.dto.LoginDTO;
 import fr.batimen.dto.ClientDTO;
+import fr.batimen.dto.LoginDTO;
 import fr.batimen.ws.entity.Client;
 import fr.batimen.ws.helper.JsonHelper;
 import fr.batimen.ws.interceptor.BatimenInterceptor;
@@ -79,20 +78,7 @@ public class ClientDAO {
 				LOGGER.debug("Récuperation resultat requete JPQL OK ");
 			}
 
-			// Vérification du password avec le hash qui se trouve dans la bdd
-			boolean passwordMatch = HashHelper.check(toLogin.getPassword(), userFinded.getPassword());
-
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("Verification du password : " + passwordMatch);
-			}
-
-			if (passwordMatch) {
-				// Si le password match on transforme l'entité en DTO
-				return modelMapper.map(userFinded, ClientDTO.class);
-			} else {
-				return new ClientDTO();
-			}
-
+			return modelMapper.map(userFinded, ClientDTO.class);
 		} catch (NoResultException nre) {
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Aucune correspondance trouvées dans la BDD", nre);
