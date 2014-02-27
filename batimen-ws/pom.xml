@@ -3,12 +3,15 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
-		<groupId>fr.batimen.ws</groupId>
-		<artifactId>batimen-parent</artifactId>
+		<groupId>fr.batimen.app</groupId>
+		<artifactId>batimen-module</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
+		<relativePath>../batimen-module</relativePath>
 	</parent>
 
+	<groupId>fr.batimen.app</groupId>
 	<artifactId>batimen-ws</artifactId>
 	<name>batimen-ws</name>
 	<description>Projet qui porte la logique metier et le webservice</description>
@@ -29,7 +32,7 @@
 		<logs.address>c:/logs/log-batimen/dev</logs.address>
 		<logs.archives>${logs.address}/archived</logs.archives>
 		<logs.lvl>DEBUG</logs.lvl>
-		
+
 		<!-- Logs pour les tests -->
 		<logs.test.address>c:/logs/log-batimen/test</logs.test.address>
 		<logs.test.archives>${logs.test.address}/archived</logs.test.archives>
