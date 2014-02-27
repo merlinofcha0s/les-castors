@@ -29,7 +29,7 @@ public class MapFrance extends Panel {
 
 	// n° de departement, le nom du departement, les coordonnées
 	private final Map<String, Map<String, String>> departements = new HashMap<String, Map<String, String>>();
-	private final StringBuilder jsMapFrance = new StringBuilder();
+	private StringBuilder jsMapFrance;
 
 	public MapFrance(String id) {
 		super(id);
@@ -619,6 +619,8 @@ public class MapFrance extends Panel {
 	private String createJSCarteFrance() {
 
 		String attr = ".attr(attr);";
+
+		jsMapFrance = new StringBuilder();
 
 		// Corps de la fonction JS Raphael
 		jsMapFrance.append("window.onload = function() {");
