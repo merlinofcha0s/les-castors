@@ -41,9 +41,13 @@
 		<ws.ip>127.0.0.1</ws.ip>
 		<ws.port>8181</ws.port>
 		<ws.name>batimen-ws</ws.name>
+		
 		<!-- Utilisé pour activer la verification du certificat du serveur obligatoirement 
 			mettre a true en prod -->
 		<ws.isprod>false</ws.isprod>
+		
+		<!--  Config de Wicket pour qu'il enleve / mette ses tags dans le HTML -->
+		<app.setStripWicketTags>false</app.setStripWicketTags>
 
 		<!-- Infos Web App -->
 		<app.ip>127.0.0.1</app.ip>
@@ -417,6 +421,9 @@
 				<logs.test.address>/usr/share/log-test-batimen</logs.test.address>
 				<logs.test.archives>${logs.test.address}/archived</logs.test.archives>
 				<logs.test.lvl>DEBUG</logs.test.lvl>
+				
+				<!--  Config de Wicket pour qu'il enleve / mette ses tags dans le HTML -->
+				<app.setStripWicketTags>true</app.setStripWicketTags>
 			</properties>
 			<build>
 				<plugins>
