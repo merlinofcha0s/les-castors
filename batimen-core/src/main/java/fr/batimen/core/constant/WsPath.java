@@ -14,7 +14,7 @@ public class WsPath {
 	}
 
 	// Path UserDAO
-	public static final String USER_SERVICE_PATH = "userDao";
-	public static final String CLIENT_SERVICE_LOGIN = "login";
+	public static final String GESTION_CLIENT_SERVICE_PATH = "gestionClient";
+	public static final String GESTION_CLIENT_SERVICE_LOGIN = "login";
 
 }

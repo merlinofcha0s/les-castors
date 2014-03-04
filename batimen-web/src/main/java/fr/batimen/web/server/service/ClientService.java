@@ -38,8 +38,13 @@ public class ClientService {
 			LOGGER.debug("Début appel service login + deserialization");
 		}
 
-		String objectInJSON = WsConnector.getInstance().sendRequest(WsPath.USER_SERVICE_PATH,
-		        WsPath.CLIENT_SERVICE_LOGIN, loginDTO);
+		// On enléve le password de la DTO pour des raisons de sécurité, on la
+		// garde dans une String pour comparaison ulterieur.
+		String password = loginDTO.getPassword();
+		loginDTO.setPassword(null);
+
+		String objectInJSON = WsConnector.getInstance().sendRequest(WsPath.GESTION_CLIENT_SERVICE_PATH,
+		        WsPath.GESTION_CLIENT_SERVICE_LOGIN, loginDTO);
 
 		ClientDTO clientDTO = ClientDTO.deserializeUserDTO(objectInJSON);
 
@@ -53,7 +58,7 @@ public class ClientService {
 			return false;
 		} else {
 			// Vérification du password avec le hash qui se trouve dans la bdd
-			boolean passwordMatch = HashHelper.check(loginDTO.getPassword(), clientDTO.getPassword());
+			boolean passwordMatch = HashHelper.check(password, clientDTO.getPassword());
 
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Verification du password : " + passwordMatch);

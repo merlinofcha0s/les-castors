@@ -1,45 +1,27 @@
 package fr.batimen.ws.dao;
 
-import javax.annotation.security.RolesAllowed;
+import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
-import javax.interceptor.Interceptors;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
 
-import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.QueryJPQL;
-import fr.batimen.core.constant.WsPath;
-import fr.batimen.dto.ClientDTO;
-import fr.batimen.dto.LoginDTO;
 import fr.batimen.ws.entity.Client;
-import fr.batimen.ws.helper.JsonHelper;
-import fr.batimen.ws.interceptor.BatimenInterceptor;
 
 /**
  * Controlleur d'utilisateurs
  * 
  * @author Casaucau Cyril
  */
-@Stateless(name = "UserDAO")
-@Path(WsPath.USER_SERVICE_PATH)
-@RolesAllowed(Constant.USERS_ROLE)
-@Produces(JsonHelper.JSON_MEDIA_TYPE_AND_UTF_8_CHARSET)
-@Consumes(JsonHelper.JSON_MEDIA_TYPE_AND_UTF_8_CHARSET)
-@Interceptors(value = { BatimenInterceptor.class })
+@Stateless(name = "ClientDAO")
+@LocalBean
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class ClientDAO {
 
@@ -49,41 +31,36 @@ public class ClientDAO {
 	private static final Logger LOGGER = LoggerFactory.getLogger(ClientDAO.class);
 
 	/**
-	 * Methode de login des utilisateurs
+	 * Methode de récuperation d'un client en fonction de son login.
 	 * 
-	 * @param LoginDTO
-	 *            loginDTO objet permettant l'authentification
-	 * @return UserDTO vide si la combinaison login / mdp ne corresponds pas ou
-	 *         si inexistant
+	 * @param String
+	 *            Le login de l'utilsateur
+	 * @return Client vide si l'utilisateur n'existe pas.
 	 */
-	@POST
-	@Path(WsPath.CLIENT_SERVICE_LOGIN)
-	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-	public ClientDTO login(LoginDTO toLogin) {
+	public Client getClientByLoginName(String login) {
 
-		Client userFinded = null;
-		ModelMapper modelMapper = new ModelMapper();
+		Client clientFinded = null;
 
 		try {
 			Query query = em.createNamedQuery(QueryJPQL.CLIENT_LOGIN);
-			query.setParameter(QueryJPQL.CLIENT_LOGIN, toLogin.getLogin());
+			query.setParameter(QueryJPQL.CLIENT_LOGIN, login);
 
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Chargement requete JPQL OK ");
 			}
 
-			userFinded = (Client) query.getSingleResult();
+			clientFinded = (Client) query.getSingleResult();
 
 			if (LOGGER.isDebugEnabled()) {
 				LOGGER.debug("Récuperation resultat requete JPQL OK ");
 			}
 
-			return modelMapper.map(userFinded, ClientDTO.class);
+			return clientFinded;
 		} catch (NoResultException nre) {
-			if (LOGGER.isDebugEnabled()) {
+			if (LOGGER.isWarnEnabled()) {
 				LOGGER.debug("Aucune correspondance trouvées dans la BDD", nre);
 			}
-			return new ClientDTO();
+			return new Client();
 		}
 	}
 }
