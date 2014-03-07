@@ -8,26 +8,25 @@
 
 #connexion div {
 	color: #25B8E2;
-	transition : color 300ms ease 0s;
+	transition: color 300ms ease 0s;
 }
 
 #connexion div:hover {
 	color: #666666;
 	text-decoration: none;
-	
 }
 
-#authentificationPanel{
+#authentificationPanel {
 	padding-top: 1px;
 }
 
-#signInButton{
+#signInButton {
 	margin-left: 103px;
 }
 
-.errorLoginActivated{
+.errorLoginActivated {
 	margin-bottom: 10px;
-	border:1px solid;
+	border: 1px solid;
 	border-radius: 5px;
 	-webkit-border-radius: 5px;
 	-moz-border-radius: 5px;
@@ -37,7 +36,7 @@
 	color: #FFFFFF;
 }
 
-.errorLoginDeactivated{
+.errorLoginDeactivated {
 	margin-bottom: 10px;
 }
 
@@ -110,49 +109,46 @@
 	margin-bottom: 7px;
 }
 
-
 #champsObligatoire {
 	margin-left: 16px;
 }
 
-#confirmation{
+#confirmation {
 	text-align: center;
 }
 
-#confirmation img{
+#confirmation img {
 	padding-bottom: 20px;
 }
 
-#confirmation a{
+#confirmation a {
 	padding-top: 20px;
 }
 
 /* Composant Wicket */
-
 .wicket-mfu-caption {
 	padding-top: 5px;
 }
 
-.wicket-mfu-container{
+.wicket-mfu-container {
 	overflow: visible !important;
 }
 
 div.upload {
-    background: url(../img/upload.png);
-    background-repeat: no-repeat;
-    overflow: hidden;
+	background: url(../img/upload.png);
+	background-repeat: no-repeat;
+	overflow: hidden;
 }
 
 div.upload input[type="file"] {
-    display: block !important;
-    width: 157px !important;
-    height: 41px !important;
-    opacity: 0 !important;
-    overflow: hidden !important;
+	display: block !important;
+	width: 157px !important;
+	height: 41px !important;
+	opacity: 0 !important;
+	overflow: hidden !important;
 }
 
 /* Composant dans tous le site */
-
 .required {
 	color: red;
 	font-size: 1.3em;
@@ -162,42 +158,27 @@ div.upload input[type="file"] {
 table tr td .error {
 	border: 1px solid red;
 }
-input[type="button"]{
+
+input[type="button"] {
 	font-weight: 800;
-	font-family: 'Open Sans',sans-serif !important;
-	text-transform : uppercase;
+	font-family: 'Open Sans', sans-serif !important;
+	text-transform: uppercase;
 	font-size: 12px;
 	color: #666666;
 	padding: 4px 15px;
-	background: -moz-linear-gradient(
-		top,
-		#f0f0f0 0%,
-		#f0f0f0 50%,
-		#f0f0f0);
-	background: -webkit-gradient(
-		linear, left top, left bottom,
-		from(#f0f0f0),
-		color-stop(0.50, #f0f0f0),
-		to(#f0f0f0));
+	background: -moz-linear-gradient(top, #f0f0f0 0%, #f0f0f0 50%, #f0f0f0);
+	background: -webkit-gradient(linear, left top, left bottom, from(#f0f0f0),
+		color-stop(0.50, #f0f0f0), to(#f0f0f0));
 	-moz-border-radius: 4px;
 	-webkit-border-radius: 4px;
 	border-radius: 4px;
 	border: 1px solid #cfcfcf;
-	-moz-box-shadow:
-		1px 0px 0px rgba(0,0,0,0),
-		inset 1px 1px 2px rgba(000,000,000,0.4);
-	-webkit-box-shadow:
-		1px 0px 0px rgba(0,0,0,0),
-		inset 1px 1px 2px rgba(000,000,000,0.4);
-	box-shadow:
-		1px 0px 0px rgba(0,0,0,0),
-		inset 1px 1px 2px rgba(000,000,000,0.4);
-	text-shadow:
-		0px 0px 0px rgba(255,255,255,0.2),
-		0px 1px 0px rgba(255,255,255,1);
-
+	-moz-box-shadow: 1px 0px 0px rgba(0, 0, 0, 0), inset 1px 1px 2px
+		rgba(000, 000, 000, 0.4);
+	-webkit-box-shadow: 1px 0px 0px rgba(0, 0, 0, 0), inset 1px 1px 2px
+		rgba(000, 000, 000, 0.4);
+	box-shadow: 1px 0px 0px rgba(0, 0, 0, 0), inset 1px 1px 2px
+		rgba(000, 000, 000, 0.4);
+	text-shadow: 0px 0px 0px rgba(255, 255, 255, 0.2), 0px 1px 0px
+		rgba(255, 255, 255, 1);
 }
-
-
-
-

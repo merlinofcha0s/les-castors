@@ -1,41 +1,41 @@
 <wicket:panel>
-<div wicket:id="errorLogin" id="errorLogin"> </div>
-
+	<div
+		wicket:id="errorLogin"
+		id="errorLogin"></div>
 	<form
 		wicket:id="loginForm"
 		id="authentificationPanel">
-		
 		<table class="tableBatimenLogin">
 			<tr>
 				<th><img
 					src="img/user.png"
-					alt="user" width="30px" /></th>
+					alt="user"
+					width="30px" /></th>
 				<td><input
 					type="text"
 					wicket:id="login"
 					onClick="if(this.value=='Identifiant'){this.value=''}"
 					onblur="if(this.value==''){this.value='Identifiant'}" /></td>
-					<td><img
+				<td><img
 					src="img/lock.png"
-					alt="lock" width="22px" style="margin-bottom: 11px;" name="Votre identifiant" /></td>
-				<td>
-					<input
+					alt="lock"
+					width="22px"
+					style="margin-bottom: 11px;"
+					name="Votre identifiant" /></td>
+				<td><input
 					type="password"
 					wicket:id="password"
 					onClick="if(this.value=='Mot de passe'){this.value=''}"
-					onblur="if(this.value==''){this.value='Mot de passe'}" name="Votre mot de passe" />
-				</td>
-					
+					onblur="if(this.value==''){this.value='Mot de passe'}"
+					name="Votre mot de passe" /></td>
 			</tr>
 			<tr>
 				<th></th>
 				<td></td>
 				<td></td>
-				<td>
-					<a
+				<td><a
 					class="shortcode_button btn_small btn_type1"
-					wicket:id="signIn">Se connecter</a>
-				</td>
+					wicket:id="signIn">Se connecter</a></td>
 			</tr>
 		</table>
 	</form>

@@ -29,7 +29,6 @@ public class LoginDTO extends AbstractDTO {
 	@NotNull
 	@Size(min = ValidatorConstant.LOGIN_RANGE_MIN, max = ValidatorConstant.LOGIN_RANGE_MAX)
 	private String login;
-	@NotNull
 	@Size(min = ValidatorConstant.PASSWORD_RANGE_MIN, max = ValidatorConstant.PASSWORD_RANGE_MAX)
 	private String password;
 

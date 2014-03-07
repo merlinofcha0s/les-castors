@@ -5,11 +5,13 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
-		<groupId>fr.batimen.ws</groupId>
-		<artifactId>batimen-parent</artifactId>
+		<groupId>fr.batimen.app</groupId>
+		<artifactId>batimen-module</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
+		<relativePath>../batimen-module</relativePath>
 	</parent>
 
+	<groupId>fr.batimen.app</groupId>
 	<artifactId>batimen-dto</artifactId>
 	<description>Projet contenant les objets d'echanges entre le frontend et le backend</description>
 	<packaging>jar</packaging>

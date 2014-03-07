@@ -24,71 +24,69 @@ public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 
 	private static final long serialVersionUID = 2500892594731116597L;
 
-	private DropDownChoice<Civilite> civiliteField;
-	private TextField<String> nomField;
-	private TextField<String> prenomField;
-	private TextField<String> numeroTelField;
-	private TextField<String> emailField;
-	private TextField<String> loginField;
 	private PasswordTextField passwordField;
-	private PasswordTextField confirmPassword;
-	private SubmitLink validateInscription;
 
 	public Etape3InscriptionForm(String id, IModel<CreationAnnonceDTO> model) {
 		super(id, model);
 
 		this.setMarkupId("formEtape3");
 
-		civiliteField = new DropDownChoice<Civilite>("civilite", Arrays.asList(Civilite.values()));
-		civiliteField.setMarkupId("civilite");
+		String idCiviliteField = "civilite";
+		String idNomField = "nom";
+		String idPrenomField = "prenom";
+		String idValidateInscription = "validateInscription";
 
-		nomField = new TextField<String>("nom");
-		nomField.setMarkupId("nom");
+		DropDownChoice<Civilite> civiliteField = new DropDownChoice<Civilite>(idCiviliteField, Arrays.asList(Civilite
+		        .values()));
+		civiliteField.setMarkupId(idCiviliteField);
+
+		TextField<String> nomField = new TextField<String>(idNomField);
+		nomField.setMarkupId(idNomField);
 		nomField.add(StringValidator.lengthBetween(ValidatorConstant.CREATION_ANNONCE_NOM_MIN,
-				ValidatorConstant.CREATION_ANNONCE_NOM_MAX));
+		        ValidatorConstant.CREATION_ANNONCE_NOM_MAX));
 
-		prenomField = new TextField<String>("prenom");
-		prenomField.setMarkupId("prenom");
+		TextField<String> prenomField = new TextField<String>(idPrenomField);
+		prenomField.setMarkupId(idPrenomField);
 		prenomField.add(StringValidator.lengthBetween(ValidatorConstant.CREATION_ANNONCE_PRENOM_MIN,
-				ValidatorConstant.CREATION_ANNONCE_PRENOM_MAX));
+		        ValidatorConstant.CREATION_ANNONCE_PRENOM_MAX));
 
-		numeroTelField = new TextField<String>("numeroTel");
+		TextField<String> numeroTelField = new TextField<String>("numeroTel");
 		numeroTelField.setRequired(true);
 		numeroTelField.add(new RequiredBorderBehaviour());
 		numeroTelField.add(new ErrorHighlightBehavior());
 		numeroTelField.add(new PatternValidator(ValidatorConstant.CREATION_ANNONCE_TELEPHONE_REGEX));
 
-		emailField = new TextField<String>("email");
+		TextField<String> emailField = new TextField<String>("email");
 		emailField.setRequired(true);
 		emailField.add(new RequiredBorderBehaviour());
 		emailField.add(new ErrorHighlightBehavior());
 		emailField.add(EmailAddressValidator.getInstance());
 
-		loginField = new TextField<String>("login");
+		TextField<String> loginField = new TextField<String>("login");
 		loginField.setRequired(true);
 		loginField.add(new RequiredBorderBehaviour());
 		loginField.add(new ErrorHighlightBehavior());
 		loginField.add(StringValidator.lengthBetween(ValidatorConstant.LOGIN_RANGE_MIN,
-				ValidatorConstant.LOGIN_RANGE_MAX));
+		        ValidatorConstant.LOGIN_RANGE_MAX));
 
 		passwordField = new PasswordTextField("password");
 		passwordField.setRequired(true);
 		passwordField.add(new RequiredBorderBehaviour());
 		passwordField.add(new ErrorHighlightBehavior());
 		passwordField.add(StringValidator.lengthBetween(ValidatorConstant.PASSWORD_RANGE_MIN,
-				ValidatorConstant.PASSWORD_RANGE_MAX));
+		        ValidatorConstant.PASSWORD_RANGE_MAX));
 
-		confirmPassword = new PasswordTextField("confirmPassword", new Model<String>());
+		PasswordTextField confirmPassword = new PasswordTextField("confirmPassword", new Model<String>());
 		confirmPassword.setRequired(true);
 		confirmPassword.add(new RequiredBorderBehaviour());
 		confirmPassword.add(new ErrorHighlightBehavior());
 		confirmPassword.add(StringValidator.lengthBetween(ValidatorConstant.PASSWORD_RANGE_MIN,
-				ValidatorConstant.PASSWORD_RANGE_MAX));
+		        ValidatorConstant.PASSWORD_RANGE_MAX));
 
-		passwordField.add(new EqualPasswordInputValidator(passwordField, confirmPassword));
+		this.add(new EqualPasswordInputValidator(passwordField, confirmPassword));
 
-		validateInscription = new SubmitLink("validateInscription");
-		validateInscription.setMarkupId("validateInscription");
+		SubmitLink validateInscription = new SubmitLink(idValidateInscription);
+		validateInscription.setMarkupId(idValidateInscription);
 
 		this.add(civiliteField);
 		this.add(nomField);
@@ -100,4 +98,20 @@ public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 		this.add(confirmPassword);
 		this.add(validateInscription);
 	}
+
+	/**
+	 * @return the passwordField
+	 */
+	public PasswordTextField getPasswordField() {
+		return passwordField;
+	}
+
+	/**
+	 * @param passwordField
+	 *            the passwordField to set
+	 */
+	public void setPasswordField(PasswordTextField passwordField) {
+		this.passwordField = passwordField;
+	}
+
 }

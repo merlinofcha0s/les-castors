@@ -6,9 +6,9 @@ import org.apache.wicket.request.Request;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.LoginDTO;
-import fr.batimen.dto.UserDTO;
-import fr.batimen.web.server.service.UserService;
+import fr.batimen.web.server.service.ClientService;
 
 /**
  * Classe chargée d'authentifier l'utilisateur et de garder en mémoire les
@@ -19,23 +19,20 @@ import fr.batimen.web.server.service.UserService;
  */
 public class BatimenSession extends AuthenticatedWebSession {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -3460138748198816904L;
 	private static final Logger LOGGER = LoggerFactory.getLogger(BatimenSession.class);
 
-	private UserDTO user;
+	private ClientDTO user;
 
 	public BatimenSession(Request request) {
 		super(request);
 	}
 
-	public UserDTO getSessionUser() {
+	public ClientDTO getSessionUser() {
 		return user;
 	}
 
-	public void placeUserInSession(UserDTO user) {
+	public void putUserInSession(ClientDTO user) {
 		this.user = user;
 	}
 
@@ -48,7 +45,7 @@ public class BatimenSession extends AuthenticatedWebSession {
 		loginDTO.setLogin(username);
 		loginDTO.setPassword(password);
 
-		return UserService.login(loginDTO);
+		return ClientService.login(loginDTO);
 	}
 
 	@Override

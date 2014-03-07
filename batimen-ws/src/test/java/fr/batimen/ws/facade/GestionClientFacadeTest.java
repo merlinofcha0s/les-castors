@@ -1,4 +1,4 @@
-package fr.batimen.ws.dao;
+package fr.batimen.ws.facade;
 
 import static org.junit.Assert.assertTrue;
 
@@ -10,28 +10,34 @@ import javax.persistence.EntityManager;
 import org.junit.Before;
 import org.junit.Test;
 
+import de.akquinet.jbosscc.needle.annotation.InjectInto;
 import de.akquinet.jbosscc.needle.annotation.ObjectUnderTest;
 import de.akquinet.jbosscc.needle.db.transaction.VoidRunnable;
+import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.LoginDTO;
-import fr.batimen.dto.UserDTO;
 import fr.batimen.dto.enums.Civilite;
 import fr.batimen.ws.AbstractBatimenTest;
-import fr.batimen.ws.entity.User;
-import fr.batimen.ws.helper.HashHelper;
+import fr.batimen.ws.dao.ClientDAO;
+import fr.batimen.ws.entity.Client;
+import fr.batimen.ws.facade.GestionClientFacade;
 
 /**
  * 
  * @author Casaucau Cyril
  * 
  */
-public class UserDAOTest extends AbstractBatimenTest {
+public class GestionClientFacadeTest extends AbstractBatimenTest {
 
 	@ObjectUnderTest
-	public UserDAO userDAO;
+	private GestionClientFacade gestionClientFacade;
 
-	final User userToRec = new User();
+	@ObjectUnderTest
+	@InjectInto(targetComponentId = "gestionClientFacade")
+	private ClientDAO clientDAO;
 
-	final Calendar cal = Calendar.getInstance(Locale.FRANCE);
+	private final Client clientToRec = new Client();
+
+	private final Calendar cal = Calendar.getInstance(Locale.FRANCE);
 
 	// Creation d'un user de test dans la BDD
 	@Before
@@ -45,14 +51,15 @@ public class UserDAOTest extends AbstractBatimenTest {
 		cal.set(Calendar.MINUTE, 01);
 		cal.set(Calendar.SECOND, 00);
 
-		userToRec.setEmail("lol@lol.com");
-		userToRec.setLogin("pebron");
-		userToRec.setPassword(HashHelper.hashString("lollollol"));
-		userToRec.setCivilite(Civilite.MONSIEUR);
-		userToRec.setPrenom("Pebron");
-		userToRec.setNom("De la Pebronne");
-		userToRec.setNumeroTel("0615125645");
-		userToRec.setDateInscription(cal.getTime());
+		clientToRec.setEmail("lol@lol.com");
+		clientToRec.setLogin("pebron");
+		clientToRec.setPassword("lollollol");
+		clientToRec.setCivilite(Civilite.MONSIEUR);
+		clientToRec.setPrenom("Pebron");
+		clientToRec.setNom("De la Pebronne");
+		clientToRec.setNumeroTel("0615125645");
+		clientToRec.setDateInscription(cal.getTime());
+		clientToRec.setIsArtisan(false);
 
 		// On ouvre une transaction avec la BDD
 		try {
@@ -60,7 +67,7 @@ public class UserDAOTest extends AbstractBatimenTest {
 				@Override
 				public void doRun(EntityManager entityManager) throws Exception {
 					// On persiste un utilisateur dans la bdd
-					entityManager.persist(userToRec);
+					entityManager.persist(clientToRec);
 				}
 			});
 		} catch (Exception e) {
@@ -69,7 +76,7 @@ public class UserDAOTest extends AbstractBatimenTest {
 	}
 
 	@Test
-	public void testLogin() {
+	public void testGetClientForLogin() {
 
 		// L'objet que l'on doit recevoir du frontend quand l'utilisateur
 		// tentera de s'authentifier
@@ -78,11 +85,11 @@ public class UserDAOTest extends AbstractBatimenTest {
 		toLogin.setPassword("lollollol");
 
 		// Appel du service qui check le login
-		UserDTO user = userDAO.login(toLogin);
+		ClientDTO user = gestionClientFacade.login(toLogin);
 
 		// Verification des infos
 		assertTrue(user.getLogin().equals("pebron"));
-		assertTrue(HashHelper.check(toLogin.getPassword(), user.getPassword()));
+		assertTrue("lollollol".equals(user.getPassword()));
 		assertTrue(user.getEmail().equals("lol@lol.com"));
 		assertTrue(user.getNumeroTel().equals("0615125645"));
 		assertTrue(user.getCivilite() == Civilite.MONSIEUR);
@@ -97,16 +104,16 @@ public class UserDAOTest extends AbstractBatimenTest {
 	}
 
 	@Test
-	public void testLoginFail() throws Exception {
+	public void testgetClientForLoginFail() throws Exception {
 
 		// L'objet que l'on doit recevoir du frontend quand l'utilisateur
 		// tentera de s'authentifier
 		LoginDTO toLogin = new LoginDTO();
-		toLogin.setLogin("pebron");
+		toLogin.setLogin("pebronmdr");
 		toLogin.setPassword("lollol");
 
 		// Appel du service qui check le login
-		UserDTO user = userDAO.login(toLogin);
+		ClientDTO user = gestionClientFacade.login(toLogin);
 
 		// Verification que rien n'est renvoyer ce qui veut dire que la
 		// combinaison login / mdp n'est pas bonne ou que l'utilisateur n'existe

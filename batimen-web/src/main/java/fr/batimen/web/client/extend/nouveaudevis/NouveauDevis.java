@@ -13,6 +13,9 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.batimen.core.exception.FrontEndException;
+import fr.batimen.core.security.HashHelper;
+import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.CreationAnnonceDTO;
 import fr.batimen.web.client.component.MapFrance;
 import fr.batimen.web.client.event.Event;
@@ -46,17 +49,15 @@ public class NouveauDevis extends MasterPage {
 
 	// Composants étape 2
 	private WebMarkupContainer containerQualification;
-	private Etape2AnnonceForm etape2AnnonceForm;
 
 	// Composant étape 3
+	private final Etape3InscriptionForm etape3InscriptionForm;
 	private WebMarkupContainer containerInscription;
-	private AjaxLink<String> connexionLink;
 
 	// Composant étape 4
 	private WebMarkupContainer containerConfirmation;
 	private Label confirmation1;
 	private Label confirmation2;
-	private Link<String> retourAccueil;
 
 	public NouveauDevis() {
 		super("Nouveau devis", "devis batiment renovation", "Nouveau devis", true, "img/bg_title1.jpg");
@@ -69,8 +70,8 @@ public class NouveauDevis extends MasterPage {
 		containerQualification = new WebMarkupContainer("containerQualification");
 		containerQualification.setVisible(false);
 
-		etape2AnnonceForm = new Etape2AnnonceForm("formQualification", new CompoundPropertyModel<CreationAnnonceDTO>(
-				creationAnnonce)) {
+		Etape2AnnonceForm etape2AnnonceForm = new Etape2AnnonceForm("formQualification",
+		        new CompoundPropertyModel<CreationAnnonceDTO>(creationAnnonce)) {
 
 			private static final long serialVersionUID = -6436387191126517996L;
 
@@ -88,20 +89,22 @@ public class NouveauDevis extends MasterPage {
 		containerInscription = new WebMarkupContainer("containerInscription");
 		containerInscription.setVisible(false);
 
-		Etape3InscriptionForm etape3InscriptionForm = new Etape3InscriptionForm("formInscription",
-				new CompoundPropertyModel<CreationAnnonceDTO>(creationAnnonce)) {
+		etape3InscriptionForm = new Etape3InscriptionForm("formInscription",
+		        new CompoundPropertyModel<CreationAnnonceDTO>(creationAnnonce)) {
 
 			private static final long serialVersionUID = -7785574548677996934L;
 
 			@Override
 			protected void onSubmit() {
 				creationAnnonce.setNumeroEtape(4);
+				creationAnnonce.setPassword(HashHelper.hashString(etape3InscriptionForm.getPasswordField()
+				        .getConvertedInput()));
 				this.setResponsePage(new NouveauDevis(creationAnnonce));
 			}
 
 		};
 
-		connexionLink = new AjaxLink<String>("connexion") {
+		AjaxLink<String> connexionLink = new AjaxLink<String>("connexion") {
 
 			private static final long serialVersionUID = -4897659500119552151L;
 
@@ -121,7 +124,7 @@ public class NouveauDevis extends MasterPage {
 		confirmation1 = new Label("confirmation1", new Model<String>());
 		confirmation2 = new Label("confirmation2", new Model<String>());
 
-		retourAccueil = new Link<String>("retourAccueil") {
+		Link<String> retourAccueil = new Link<String>("retourAccueil") {
 
 			private static final long serialVersionUID = 8929146182522407915L;
 
@@ -147,7 +150,13 @@ public class NouveauDevis extends MasterPage {
 		this.add(progressBar);
 		this.add(etape);
 
-		changementEtape(creationAnnonce.getNumeroEtape());
+		try {
+			changementEtape(creationAnnonce.getNumeroEtape());
+		} catch (FrontEndException e) {
+			if (LOGGER.isErrorEnabled()) {
+				LOGGER.error("Probleme frontend", e);
+			}
+		}
 		chooseConfirmationMessage(false);
 	}
 
@@ -157,26 +166,38 @@ public class NouveauDevis extends MasterPage {
 		// On récupere le departement qu'a choisi l'utilisateur
 		departement = parameters.get("departement").toString();
 		if (departement != null) {
-			changementEtape(2);
+			try {
+				changementEtape(2);
+			} catch (FrontEndException e) {
+				if (LOGGER.isErrorEnabled()) {
+					LOGGER.error("Probleme frontend", e);
+				}
+			}
 		}
 	}
 
 	public NouveauDevis(CreationAnnonceDTO creationAnnonce) {
 		this();
 		this.creationAnnonce = creationAnnonce;
-		changementEtape(creationAnnonce.getNumeroEtape());
+		try {
+			changementEtape(creationAnnonce.getNumeroEtape());
+		} catch (FrontEndException e) {
+			if (LOGGER.isErrorEnabled()) {
+				LOGGER.error("Probleme frontend", e);
+			}
+		}
 	}
 
 	private void chooseConfirmationMessage(boolean isEtape4) {
 		if (creationAnnonce.getIsSignedUp() != null && creationAnnonce.getIsSignedUp() && isEtape4) {
 			confirmation1
-					.setDefaultModelObject("Votre devis a été mis en ligne, nous vous avons envoyé un mail récapitulatif");
+			        .setDefaultModelObject("Votre devis a été mis en ligne, nous vous avons envoyé un mail récapitulatif");
 			confirmation2.setDefaultModelObject("");
 		} else if (creationAnnonce.getIsSignedUp() != null && !creationAnnonce.getIsSignedUp() && isEtape4) {
 			confirmation1
-					.setDefaultModelObject("Votre compte a bien été créé, un e-mail vous a été envoyé, Cliquez sur le lien présent dans celui-ci pour l'activer");
+			        .setDefaultModelObject("Votre compte a bien été créé, un e-mail vous a été envoyé, Cliquez sur le lien présent dans celui-ci pour l'activer");
 			confirmation2
-					.setDefaultModelObject("Votre devis a bien été enregistré. Celui-ci sera mis en ligne une fois votre compte activé.");
+			        .setDefaultModelObject("Votre devis a bien été enregistré. Celui-ci sera mis en ligne une fois votre compte activé.");
 		}
 	}
 
@@ -202,53 +223,45 @@ public class NouveauDevis extends MasterPage {
 		containerConfirmation.setVisible(true);
 	}
 
-	private void changementEtape(Integer numeroEtape) {
+	private void changementEtape(Integer numeroEtape) throws FrontEndException {
 		String percent = "";
 
 		// On charge l'etape demandé grace au numero d'etape passé en parametre
 		switch (numeroEtape) {
 		case 1:
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("Passage dans l'étape 1");
-			}
+			loggerChangementEtape("Passage dans l'étape 1");
 			percent = "25";
 			break;
 		case 2:
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("Passage dans l'étape 2");
-			}
+			loggerChangementEtape("Passage dans l'étape 2");
 			percent = "50";
 			etape2Qualification();
 			break;
 		case 3:
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("Passage dans l'étape 3");
-			}
+			loggerChangementEtape("Passage dans l'étape 3");
 			percent = "75";
 			// Si l'utilisateur est deja authentifié on saute l'inscription
 			// (etape 3)
 			if (BatimenSession.get().isSignedIn()) {
-				if (LOGGER.isDebugEnabled()) {
-					LOGGER.debug("L'utilisateur s'est connecté, on passe l'etape 3");
-				}
+				loggerChangementEtape("L'utilisateur s'est connecté, on passe l'etape 3");
 				changementEtape(4);
 			} else {
 				etape3Inscription();
 			}
 			break;
 		case 4:
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("Passage dans l'étape 4");
-			}
+			loggerChangementEtape("Passage dans l'étape 4");
 			percent = "100";
 			// Si il est authentifié on l'enregistre dans la DTO (pour le
 			// backend) et on charge le bon message de confirmation
 			if (BatimenSession.get().isSignedIn()) {
-				creationAnnonce.setIsSignedUp(true);
+				remplissageCreationAnnonceSiLogin();
 			}
 			chooseConfirmationMessage(true);
 			etape4Confirmation();
 			break;
+		default:
+			throw new FrontEndException("Aucune étape du nouveau devis chargées, Situation Impossible");
 		}
 
 		// On incrémente la progress bar
@@ -265,6 +278,20 @@ public class NouveauDevis extends MasterPage {
 
 	}
 
+	private void remplissageCreationAnnonceSiLogin() {
+		BatimenSession session = (BatimenSession) BatimenSession.get();
+		ClientDTO client = session.getSessionUser();
+		creationAnnonce.setIsSignedUp(true);
+		creationAnnonce.setEmail(client.getEmail());
+
+	}
+
+	private void loggerChangementEtape(String message) {
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug(message);
+		}
+	}
+
 	@Override
 	public void onEvent(IEvent<?> event) {
 		// Event déclenché par la popup de connexion, fait sauter l'etape 3 si
@@ -275,7 +302,13 @@ public class NouveauDevis extends MasterPage {
 				if (LOGGER.isDebugEnabled()) {
 					LOGGER.debug("On est a l'étape 3 : Evenement recu de la popup de connexion, on passe à l'etape 4");
 				}
-				changementEtape(4);
+				try {
+					changementEtape(4);
+				} catch (FrontEndException e) {
+					if (LOGGER.isErrorEnabled()) {
+						LOGGER.error("Probleme frontend", e);
+					}
+				}
 				update.getTarget().add(this);
 			}
 

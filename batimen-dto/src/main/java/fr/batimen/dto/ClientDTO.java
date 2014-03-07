@@ -23,7 +23,7 @@ import fr.batimen.dto.helper.DeserializeJsonHelper;
  * @author Casaucau Cyril
  * 
  */
-public class UserDTO extends AbstractDTO {
+public class ClientDTO extends AbstractDTO {
 
 	/**
 	 * 
@@ -45,6 +45,8 @@ public class UserDTO extends AbstractDTO {
 	private String nom;
 	@Size(min = 3, max = 20)
 	private String prenom;
+	@NotNull
+	private Boolean isArtisan = false;
 
 	// TODO Faire une regex pour le numero de tel
 	private String numeroTel;
@@ -172,14 +174,29 @@ public class UserDTO extends AbstractDTO {
 		this.civilite = civilite;
 	}
 
+	/**
+	 * @return the isArtisan
+	 */
+	public Boolean getIsArtisan() {
+		return isArtisan;
+	}
+
+	/**
+	 * @param isArtisan
+	 *            the isArtisan to set
+	 */
+	public void setIsArtisan(Boolean isArtisan) {
+		this.isArtisan = isArtisan;
+	}
+
 	@Override
 	public boolean equals(Object object) {
 		if (this == object) {
 			return true;
 		}
 
-		if (object instanceof UserDTO) {
-			UserDTO other = (UserDTO) object;
+		if (object instanceof ClientDTO) {
+			ClientDTO other = (ClientDTO) object;
 			return Objects.equals(this.login, other.login) && Objects.equals(this.email, other.email);
 		}
 		return false;
@@ -195,14 +212,14 @@ public class UserDTO extends AbstractDTO {
 		return Objects.hashCode(Objects.hash(this.login, this.email));
 	}
 
-	public static UserDTO deserializeUserDTO(String json) {
+	public static ClientDTO deserializeUserDTO(String json) {
 		Gson gson = DeserializeJsonHelper.createGsonObject();
-		return gson.fromJson(json, UserDTO.class);
+		return gson.fromJson(json, ClientDTO.class);
 	}
 
-	public static List<UserDTO> deserializeUserDTOList(String json) {
+	public static List<ClientDTO> deserializeUserDTOList(String json) {
 		Gson gson = DeserializeJsonHelper.createGsonObject();
-		Type collectionType = new TypeToken<List<UserDTO>>() {
+		Type collectionType = new TypeToken<List<ClientDTO>>() {
 		}.getType();
 		return gson.fromJson(json, collectionType);
 	}

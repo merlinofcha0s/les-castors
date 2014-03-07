@@ -64,8 +64,8 @@ public class Annonce extends AbstractEntity implements Serializable {
 	private Integer departement;
 	@ManyToOne
 	@JoinColumn(name = "demandeur_fk")
-	private User demandeur;
-	@OneToOne(mappedBy = "annonce", cascade = CascadeType.REMOVE)
+	private Client demandeur;
+	@OneToOne(cascade = CascadeType.REMOVE)
 	private Notation notationAnnonce;
 	@OneToOne(cascade = CascadeType.REMOVE)
 	private Adresse adresseChantier;
@@ -268,7 +268,7 @@ public class Annonce extends AbstractEntity implements Serializable {
 	/**
 	 * @return the demandeur
 	 */
-	public User getDemandeur() {
+	public Client getDemandeur() {
 		return demandeur;
 	}
 
@@ -291,7 +291,7 @@ public class Annonce extends AbstractEntity implements Serializable {
 	 * @param demandeur
 	 *            the demandeur to set
 	 */
-	public void setDemandeur(User demandeur) {
+	public void setDemandeur(Client demandeur) {
 		this.demandeur = demandeur;
 	}
 
@@ -342,7 +342,7 @@ public class Annonce extends AbstractEntity implements Serializable {
 		if (object instanceof Annonce) {
 			Annonce other = (Annonce) object;
 			return Objects.equals(this.titre, other.titre) && Objects.equals(this.description, other.description)
-					&& Objects.equals(this.dateCreation, other.dateCreation);
+			        && Objects.equals(this.dateCreation, other.dateCreation);
 		}
 		return false;
 	}

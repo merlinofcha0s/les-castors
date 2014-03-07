@@ -1,5 +1,8 @@
 package fr.batimen.ws.entity;
 
-public class AbstractEntity {
+import javax.persistence.MappedSuperclass;
+
+@MappedSuperclass
+public abstract class AbstractEntity {
 
 }

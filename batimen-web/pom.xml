@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-
+	<modelVersion>4.0.0</modelVersion>
 	<parent>
-		<groupId>fr.batimen.ws</groupId>
-		<artifactId>batimen-parent</artifactId>
+		<groupId>fr.batimen.app</groupId>
+		<artifactId>batimen-module</artifactId>
 		<version>0.1.0-SNAPSHOT</version>
+		<relativePath>../batimen-module</relativePath>
 	</parent>
 
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>fr.batimen.web</groupId>
+	<groupId>fr.batimen.app</groupId>
 	<artifactId>batimen-web</artifactId>
 	<packaging>war</packaging>
 
@@ -41,9 +41,13 @@
 		<ws.ip>127.0.0.1</ws.ip>
 		<ws.port>8181</ws.port>
 		<ws.name>batimen-ws</ws.name>
+
 		<!-- Utilisé pour activer la verification du certificat du serveur obligatoirement 
 			mettre a true en prod -->
 		<ws.isprod>false</ws.isprod>
+
+		<!-- Config de Wicket pour qu'il enleve / mette ses tags dans le HTML -->
+		<app.setStripWicketTags>false</app.setStripWicketTags>
 
 		<!-- Infos Web App -->
 		<app.ip>127.0.0.1</app.ip>
@@ -54,6 +58,12 @@
 		<logs.address>c:/logs/log-batimen</logs.address>
 		<logs.archives>${logs.address}/archived</logs.archives>
 		<logs.lvl>DEBUG</logs.lvl>
+
+		<!-- Logs pour les tests -->
+		<logs.test.address>c:/logs/log-batimen/test</logs.test.address>
+		<logs.test.archives>${logs.test.address}/archived</logs.test.archives>
+		<logs.test.lvl>DEBUG</logs.test.lvl>
+
 	</properties>
 
 	<build>
@@ -303,12 +313,12 @@
 
 		<!-- Dependence intra projet -->
 		<dependency>
-			<groupId>fr.batimen.ws</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>batimen-dto</artifactId>
 			<version>0.1.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>fr.batimen.ws</groupId>
+			<groupId>${project.groupId}</groupId>
 			<artifactId>batimen-core</artifactId>
 			<version>0.1.0-SNAPSHOT</version>
 		</dependency>
@@ -405,7 +415,15 @@
 				<!-- Logs -->
 				<logs.address>/usr/share/log-batimen</logs.address>
 				<logs.archives>${logs.address}/archived</logs.archives>
-				<logs.lvl>DEBUG</logs.lvl>
+				<logs.lvl>WARN</logs.lvl>
+
+				<!-- Logs pour les tests -->
+				<logs.test.address>/usr/share/log-test-batimen</logs.test.address>
+				<logs.test.archives>${logs.test.address}/archived</logs.test.archives>
+				<logs.test.lvl>DEBUG</logs.test.lvl>
+
+				<!-- Config de Wicket pour qu'il enleve / mette ses tags dans le HTML -->
+				<app.setStripWicketTags>true</app.setStripWicketTags>
 			</properties>
 			<build>
 				<plugins>

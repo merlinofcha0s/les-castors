@@ -19,33 +19,33 @@
 		<listener-class>fr.batimen.ws.context.LogBackContextListener</listener-class>
 	</listener>
 	<security-constraint>
-        <display-name>BatimenSec</display-name>
-        <web-resource-collection>
-            <web-resource-name>BatimenSec</web-resource-name>
-            <description/>
-            <url-pattern>/*</url-pattern>
-            <http-method>GET</http-method>
-            <http-method>POST</http-method>
-        </web-resource-collection>
-        <auth-constraint>
-            <description>Have to be a USER</description>
-            <role-name>users</role-name>
-            <role-name>admins</role-name>
-        </auth-constraint>
+		<display-name>BatimenSec</display-name>
+		<web-resource-collection>
+			<web-resource-name>BatimenSec</web-resource-name>
+			<description />
+			<url-pattern>/*</url-pattern>
+			<http-method>GET</http-method>
+			<http-method>POST</http-method>
+		</web-resource-collection>
+		<auth-constraint>
+			<description>Have to be a USER</description>
+			<role-name>users</role-name>
+			<role-name>admins</role-name>
+		</auth-constraint>
 		<user-data-constraint>
 			<transport-guarantee>CONFIDENTIAL</transport-guarantee>
 		</user-data-constraint>
-    </security-constraint>
-    <login-config>
-        <auth-method>BASIC</auth-method>
-        <realm-name>file</realm-name>
-    </login-config>
-    <security-role>
-        <description/>
-        <role-name>users</role-name>
-    </security-role>
-    <security-role>
-        <description/>
-        <role-name>admins</role-name>
-    </security-role>
+	</security-constraint>
+	<login-config>
+		<auth-method>BASIC</auth-method>
+		<realm-name>file</realm-name>
+	</login-config>
+	<security-role>
+		<description />
+		<role-name>users</role-name>
+	</security-role>
+	<security-role>
+		<description />
+		<role-name>admins</role-name>
+	</security-role>
 </web-app>

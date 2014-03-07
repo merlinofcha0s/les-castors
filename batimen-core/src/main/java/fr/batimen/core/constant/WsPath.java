@@ -13,8 +13,11 @@ public class WsPath {
 
 	}
 
-	// Path UserDAO
-	public static final String USER_SERVICE_PATH = "userDao";
-	public static final String USER_SERVICE_LOGIN = "login";
+	// Path Gestion Client
+	public static final String GESTION_CLIENT_SERVICE_PATH = "gestionClient";
+	public static final String GESTION_CLIENT_SERVICE_LOGIN = "login";
 
+	// Path Gestion Annonce
+	public static final String GESTION_ANNONCE_SERVICE_PATH = "gestionAnnonce";
+	public static final String GESTION_ANNONCE_SERVICE_CREATION_ANNONCE = "creationAnnonce";
 }

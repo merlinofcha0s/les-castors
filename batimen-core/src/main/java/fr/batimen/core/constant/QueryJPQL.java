@@ -13,6 +13,6 @@ public class QueryJPQL {
 	}
 
 	// Entity User
-	public static final String USER_LOGIN = "login";
+	public static final String CLIENT_LOGIN = "login";
 
 }
