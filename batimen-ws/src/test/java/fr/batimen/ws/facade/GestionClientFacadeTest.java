@@ -1,4 +1,4 @@
-package fr.batimen.ws.dao;
+package fr.batimen.ws.facade;
 
 import static org.junit.Assert.assertTrue;
 
@@ -17,6 +17,7 @@ import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.LoginDTO;
 import fr.batimen.dto.enums.Civilite;
 import fr.batimen.ws.AbstractBatimenTest;
+import fr.batimen.ws.dao.ClientDAO;
 import fr.batimen.ws.entity.Client;
 import fr.batimen.ws.facade.GestionClientFacade;
 
