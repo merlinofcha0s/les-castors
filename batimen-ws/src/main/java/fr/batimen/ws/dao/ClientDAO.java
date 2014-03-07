@@ -58,7 +58,7 @@ public class ClientDAO {
 			return clientFinded;
 		} catch (NoResultException nre) {
 			if (LOGGER.isWarnEnabled()) {
-				LOGGER.debug("Aucune correspondance trouvées dans la BDD", nre);
+				LOGGER.warn("Aucune correspondance trouvées dans la BDD", nre);
 			}
 			return new Client();
 		}

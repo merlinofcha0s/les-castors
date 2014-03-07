@@ -7,6 +7,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.inject.Inject;
 import javax.interceptor.Interceptors;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -16,6 +17,7 @@ import javax.ws.rs.Produces;
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.WsPath;
 import fr.batimen.dto.CreationAnnonceDTO;
+import fr.batimen.ws.dao.AnnonceDAO;
 import fr.batimen.ws.helper.JsonHelper;
 import fr.batimen.ws.interceptor.BatimenInterceptor;
 
@@ -28,6 +30,9 @@ import fr.batimen.ws.interceptor.BatimenInterceptor;
 @Interceptors(value = { BatimenInterceptor.class })
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class GestionAnnonceFacade {
+
+	@Inject
+	private AnnonceDAO annonceDAO;
 
 	@POST
 	@Path(WsPath.GESTION_ANNONCE_SERVICE_CREATION_ANNONCE)
