@@ -16,6 +16,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 
+import fr.batimen.dto.enums.DelaiIntervention;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.Metier;
 import fr.batimen.dto.enums.TypeContact;
@@ -42,8 +43,8 @@ public class Annonce extends AbstractEntity implements Serializable {
 	private String description;
 	@Column(nullable = false)
 	private TypeContact typeContact;
-	@Column(length = 15, nullable = false)
-	private String delaiIntervention;
+	@Column(nullable = false)
+	private DelaiIntervention delaiIntervention;
 	@Temporal(javax.persistence.TemporalType.TIMESTAMP)
 	private Date dateCreation;
 	@Temporal(javax.persistence.TemporalType.TIMESTAMP)
@@ -60,8 +61,6 @@ public class Annonce extends AbstractEntity implements Serializable {
 	private Metier metier;
 	@Column(nullable = false)
 	private EtatAnnonce etatAnnonce;
-	@Column(nullable = false, length = 2)
-	private Integer departement;
 	@ManyToOne
 	@JoinColumn(name = "demandeur_fk")
 	private Client demandeur;
@@ -133,7 +132,7 @@ public class Annonce extends AbstractEntity implements Serializable {
 	/**
 	 * @return the delaiIntervention
 	 */
-	public String getDelaiIntervention() {
+	public DelaiIntervention getDelaiIntervention() {
 		return delaiIntervention;
 	}
 
@@ -141,7 +140,7 @@ public class Annonce extends AbstractEntity implements Serializable {
 	 * @param delaiIntervention
 	 *            the delaiIntervention to set
 	 */
-	public void setDelaiIntervention(String delaiIntervention) {
+	public void setDelaiIntervention(DelaiIntervention delaiIntervention) {
 		this.delaiIntervention = delaiIntervention;
 	}
 
@@ -310,14 +309,6 @@ public class Annonce extends AbstractEntity implements Serializable {
 		this.adresseChantier = adresseChantier;
 	}
 
-	public Integer getDepartement() {
-		return departement;
-	}
-
-	public void setDepartement(Integer departement) {
-		this.departement = departement;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -325,7 +316,7 @@ public class Annonce extends AbstractEntity implements Serializable {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(Objects.hash(this.titre, this.description, this.dateCreation));
+		return Objects.hashCode(Objects.hash(this.titre, this.description, this.demandeur.getLogin()));
 	}
 
 	/*
@@ -342,7 +333,7 @@ public class Annonce extends AbstractEntity implements Serializable {
 		if (object instanceof Annonce) {
 			Annonce other = (Annonce) object;
 			return Objects.equals(this.titre, other.titre) && Objects.equals(this.description, other.description)
-			        && Objects.equals(this.dateCreation, other.dateCreation);
+			        && Objects.equals(this.demandeur.getLogin(), other.demandeur.getLogin());
 		}
 		return false;
 	}

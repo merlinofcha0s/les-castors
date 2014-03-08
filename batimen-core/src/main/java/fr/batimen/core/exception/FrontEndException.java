@@ -13,7 +13,7 @@ public class FrontEndException extends Exception {
 
 	private static final long serialVersionUID = -7416978359691265975L;
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ValidationDTOBatimenException.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(FrontEndException.class);
 
 	public FrontEndException(String message) {
 		if (LOGGER.isErrorEnabled()) {

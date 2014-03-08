@@ -35,6 +35,8 @@ public class Adresse extends AbstractEntity implements Serializable {
 	private String codePostal;
 	@Column(length = 45, nullable = false)
 	private String ville;
+	@Column(nullable = false)
+	private Integer departement;
 	@OneToOne(mappedBy = "adresse", cascade = CascadeType.REMOVE)
 	private Entreprise entreprise;
 	@OneToOne(mappedBy = "adresseFacturation", cascade = CascadeType.REMOVE)
@@ -162,6 +164,21 @@ public class Adresse extends AbstractEntity implements Serializable {
 		this.annonce = annonce;
 	}
 
+	/**
+	 * @return the departement
+	 */
+	public Integer getDepartement() {
+		return departement;
+	}
+
+	/**
+	 * @param departement
+	 *            the departement to set
+	 */
+	public void setDepartement(Integer departement) {
+		this.departement = departement;
+	}
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -186,8 +203,8 @@ public class Adresse extends AbstractEntity implements Serializable {
 		if (object instanceof Adresse) {
 			Adresse other = (Adresse) object;
 			return Objects.equals(this.adresse, other.adresse)
-					&& Objects.equals(this.complementAdresse, other.complementAdresse)
-					&& Objects.equals(this.codePostal, other.codePostal) && Objects.equals(this.ville, other.ville);
+			        && Objects.equals(this.complementAdresse, other.complementAdresse)
+			        && Objects.equals(this.codePostal, other.codePostal) && Objects.equals(this.ville, other.ville);
 		}
 		return false;
 	}

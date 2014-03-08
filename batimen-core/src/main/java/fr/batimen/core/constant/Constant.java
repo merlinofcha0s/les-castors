@@ -13,6 +13,10 @@ public class Constant {
 
 	}
 
+	// Code retour service
+	public static final Integer CODE_SERVICE_RETOUR_OK = 0;
+	public static final Integer CODE_SERVICE_RETOUR_KO = 1;
+
 	// Roles accés WS
 	public static final String USERS_ROLE = "users";
 	public static final String ADMIN_ROLE = "admins";

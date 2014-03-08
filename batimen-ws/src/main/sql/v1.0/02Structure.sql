@@ -4,6 +4,7 @@ create table Adresse (
         codePostal varchar(5) not null,
         complementAdresse varchar(255) not null,
         ville varchar(45) not null,
+        departement int4 not null,
         primary key (id)
     );
     
@@ -12,8 +13,7 @@ create table Annonce (
         active boolean not null,
         dateCreation timestamp,
         dateMAJ timestamp,
-        delaiIntervention varchar(15) not null,
-        departement int4 not null,
+        delaiIntervention int4 not null,
         description varchar(500) not null,
         etatAnnonce int4 not null,
         metier int4 not null,

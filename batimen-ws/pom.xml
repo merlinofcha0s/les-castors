@@ -23,7 +23,7 @@
 
 		<!-- Propriétés de la BDD pour les tests -->
 		<database.address>127.0.0.1</database.address>
-		<database.name>batimen_test</database.name>
+		<database.name>batimen</database.name>
 		<datasource.url>jdbc:postgresql://${database.address}:5432/${database.name}</datasource.url>
 		<database.login>postgres</database.login>
 		<database.password>123456</database.password>

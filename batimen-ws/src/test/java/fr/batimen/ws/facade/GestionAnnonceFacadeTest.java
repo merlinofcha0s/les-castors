@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import de.akquinet.jbosscc.needle.annotation.InjectInto;
 import de.akquinet.jbosscc.needle.annotation.ObjectUnderTest;
+import fr.batimen.core.constant.Constant;
 import fr.batimen.core.security.HashHelper;
 import fr.batimen.dto.CreationAnnonceDTO;
 import fr.batimen.dto.enums.Civilite;
@@ -70,28 +71,28 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenTest {
 
 	/**
 	 * Cas de test : le client n'est pas inscrit sur le site. Il faut donc creer
-	 * l'annonce mais également enregister son compte dasn la base de données.
+	 * l'annonce mais également enregister son compte dans la base de données.
 	 */
 	@Test
 	public void testCreationAnnonceIsNotSignedIn() {
 
 		String loginDeJohnny = "johnny06";
 
-		Boolean isCreationOK = gestionAnnonceFacade.creationAnnonce(creationAnnonceDTO);
+		Integer isCreationOK = gestionAnnonceFacade.creationAnnonce(creationAnnonceDTO);
 
 		// On utilise le DAO de l'annonce et de l'user pour vérifier le tout
 		Client johnny = clientDAO.getClientByLoginName(loginDeJohnny);
 		List<Annonce> annoncesDeJohnny = annonceDAO.getAnnoncesByLogin(loginDeJohnny);
 
 		// On test que la creation de l'annonce et du client en bdd est ok
-		Assert.assertTrue(isCreationOK);
+		Assert.assertTrue(isCreationOK == Constant.CODE_SERVICE_RETOUR_OK);
 		// On check que le client est présent dans la BDD
 		Assert.assertNotNull(johnny);
 		// On regarde que ce soit le bon login
 		Assert.assertTrue(loginDeJohnny.equals(johnny.getLogin()));
 		// On s'assure que la liste renvoyé n'est pas null
 		Assert.assertNotNull(annoncesDeJohnny);
-		// On test qu'il y a bien une annonce liée a Johnny
+		// On test qu'il y a bien une annonce liée a Johnny boy
 		Assert.assertTrue(annoncesDeJohnny.size() == 1);
 	}
 }
