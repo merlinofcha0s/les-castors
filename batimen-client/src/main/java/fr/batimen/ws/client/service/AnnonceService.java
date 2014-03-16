@@ -1,4 +1,4 @@
-package fr.batimen.web.server.service;
+package fr.batimen.ws.client.service;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

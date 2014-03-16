@@ -1,4 +1,4 @@
-package fr.batimen.web.server.ssl;
+package fr.batimen.ws.client.ssl;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;

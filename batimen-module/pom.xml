@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
@@ -7,16 +8,17 @@
 	<description>Projet principal de Batimen</description>
 	<version>0.1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	
+
 	<name>batimen-module</name>
-	
+
 	<modules>
 		<module>../batimen-core</module>
 		<module>../batimen-dto</module>
 		<module>../batimen-ws</module>
 		<module>../batimen-web</module>
+		<module>../batimen-client</module>
 	</modules>
-	
+
 	<properties>
 		<redmine.address>https://88.191.186.210/redmine/projects/batimen</redmine.address>
 		<redmine.depot.address>https://88.191.186.210/redmine/projects/batimen/repository</redmine.depot.address>
@@ -59,6 +61,15 @@
 		<repository>
 			<id>java.net</id>
 			<url>http://download.java.net/maven/</url>
+		</repository>
+		<repository>
+			<id>central-internet-repo</id>
+			<name>Maven Repository Switchboard</name>
+			<layout>default</layout>
+			<url>http://repo1.maven.org/maven2</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
 		</repository>
 	</repositories>
 

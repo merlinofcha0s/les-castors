@@ -4,7 +4,7 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
 
 	<servlet>
-		<servlet-name>${project.artifactId}</servlet-name>
+		<servlet-name>batimen-ws-test</servlet-name>
 		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
 		<init-param>
 			<param-name>com.sun.jersey.api.json.POJOMappingFeature</param-name>
@@ -12,7 +12,7 @@
 		</init-param>
 	</servlet>
 	<servlet-mapping>
-		<servlet-name>${project.artifactId}</servlet-name>
+		<servlet-name>batimen-ws-test</servlet-name>
 		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
 	<listener>

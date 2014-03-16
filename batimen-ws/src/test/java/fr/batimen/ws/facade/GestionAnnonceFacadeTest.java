@@ -3,12 +3,17 @@ package fr.batimen.ws.facade;
 import java.util.Date;
 import java.util.List;
 
+import javax.inject.Inject;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import de.akquinet.jbosscc.needle.annotation.InjectInto;
-import de.akquinet.jbosscc.needle.annotation.ObjectUnderTest;
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.security.HashHelper;
 import fr.batimen.dto.CreationAnnonceDTO;
@@ -16,7 +21,8 @@ import fr.batimen.dto.enums.Civilite;
 import fr.batimen.dto.enums.DelaiIntervention;
 import fr.batimen.dto.enums.Metier;
 import fr.batimen.dto.enums.TypeContact;
-import fr.batimen.ws.AbstractBatimenTest;
+import fr.batimen.ws.AbstractBatimenWsTest;
+import fr.batimen.ws.client.service.AnnonceService;
 import fr.batimen.ws.dao.AnnonceDAO;
 import fr.batimen.ws.dao.ClientDAO;
 import fr.batimen.ws.entity.Annonce;
@@ -27,22 +33,26 @@ import fr.batimen.ws.entity.Client;
  * @author Casaucau Cyril
  * 
  */
-public class GestionAnnonceFacadeTest extends AbstractBatimenTest {
-
-	@ObjectUnderTest
-	private GestionAnnonceFacade gestionAnnonceFacade;
-
-	@ObjectUnderTest
-	@InjectInto(targetComponentId = "gestionAnnonceFacade")
-	private AnnonceDAO annonceDAO;
-
-	@ObjectUnderTest
-	private ClientDAO clientDAO;
+public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
 	private CreationAnnonceDTO creationAnnonceDTO;
 
+	@Inject
+	private ClientDAO clientDAO;
+
+	@Inject
+	private AnnonceDAO annonceDAO;
+
 	@Before
 	public void init() {
+
+		try {
+			utx.begin();
+		} catch (NotSupportedException | SystemException e1) {
+			e1.printStackTrace();
+		}
+		entityManager.joinTransaction();
+
 		creationAnnonceDTO = new CreationAnnonceDTO();
 		// Infos Client
 		creationAnnonceDTO.setCivilite(Civilite.MONSIEUR);
@@ -67,6 +77,15 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenTest {
 		creationAnnonceDTO.setTitre("Peinture facade");
 		creationAnnonceDTO.setTypeContact(TypeContact.EMAIL);
 		creationAnnonceDTO.setVille("Nice");
+
+		try {
+			utx.commit();
+		} catch (SecurityException | IllegalStateException | RollbackException | HeuristicMixedException
+		        | HeuristicRollbackException | SystemException e) {
+			e.printStackTrace();
+		}
+		// clear the persistence context (first-level cache)
+		entityManager.clear();
 	}
 
 	/**
@@ -78,7 +97,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenTest {
 
 		String loginDeJohnny = "johnny06";
 
-		Integer isCreationOK = gestionAnnonceFacade.creationAnnonce(creationAnnonceDTO);
+		Integer isCreationOK = AnnonceService.creationAnnonce(creationAnnonceDTO);
 
 		// On utilise le DAO de l'annonce et de l'user pour vérifier le tout
 		Client johnny = clientDAO.getClientByLoginName(loginDeJohnny);
