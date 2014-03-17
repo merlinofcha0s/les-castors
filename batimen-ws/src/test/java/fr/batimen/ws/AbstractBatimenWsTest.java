@@ -44,6 +44,7 @@ public abstract class AbstractBatimenWsTest {
 		        resolver.loadPomFromFile("pom.xml")
 		                .resolve("fr.batimen.app:batimen-dto:0.1.0-SNAPSHOT",
 		                        "fr.batimen.app:batimen-core:0.1.0-SNAPSHOT",
+		                        "fr.batimen.app:batimen-client:0.1.0-SNAPSHOT",
 		                        "org.hibernate:hibernate-core:4.2.5.Final",
 		                        "org.hibernate:hibernate-entitymanager:4.2.5.Final",
 		                        "com.sun.jersey:jersey-server:1.17", "com.sun.jersey:jersey-servlet:1.17",
@@ -52,13 +53,11 @@ public abstract class AbstractBatimenWsTest {
 
 		// Ajout des ressources
 		batimenWsTest.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
-		        .addAsWebInfResource("logback-test.xml", "logback-test.xml")
+		        .addAsWebInfResource("logback-test.xml", "classes/logback-test.xml")
 		        .addAsWebInfResource("glassfish-web.xml", "glassfish-web.xml").setWebXML("web.xml")
-		        .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
-		        .addAsResource("ws.properties", "ws.properties");
+		        .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml");
 
 		return batimenWsTest;
-
 	}
 
 	@Rule
