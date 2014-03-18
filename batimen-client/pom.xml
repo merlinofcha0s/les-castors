@@ -18,6 +18,15 @@
 
 	<properties>
 		<jersey.client.version>1.17</jersey.client.version>
+
+		<!-- Adresse du WS -->
+		<ws.ip>127.0.0.1</ws.ip>
+		<ws.port>8181</ws.port>
+		<ws.name>batimen-ws</ws.name>
+
+		<!-- Utilisé pour activer la verification du certificat du serveur obligatoirement 
+			mettre a true en prod -->
+		<ws.isprod>false</ws.isprod>
 	</properties>
 
 	<build>
@@ -111,4 +120,20 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+
+	<profiles>
+		<profile>
+			<id>integration</id>
+			<properties>
+				<!-- Adresse du WS -->
+				<ws.ip>127.0.0.1</ws.ip>
+				<ws.port>6161</ws.port>
+				<ws.name>batimen-ws</ws.name>
+				<!-- Utilisé pour activer la verification du certificat du serveur obligatoirement 
+					mettre a true en prod -->
+				<ws.isprod>false</ws.isprod>
+			</properties>
+		</profile>
+	</profiles>
+
 </project>

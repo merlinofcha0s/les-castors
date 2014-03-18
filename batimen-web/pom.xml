@@ -37,15 +37,6 @@
 
 		<wicket.mode>development</wicket.mode>
 
-		<!-- Adresse du WS -->
-		<ws.ip>127.0.0.1</ws.ip>
-		<ws.port>8181</ws.port>
-		<ws.name>batimen-ws</ws.name>
-
-		<!-- Utilisé pour activer la verification du certificat du serveur obligatoirement 
-			mettre a true en prod -->
-		<ws.isprod>false</ws.isprod>
-
 		<!-- Config de Wicket pour qu'il enleve / mette ses tags dans le HTML -->
 		<app.setStripWicketTags>false</app.setStripWicketTags>
 
@@ -312,11 +303,6 @@
 			<properties>
 				<!-- Wicket -->
 				<wicket.mode>deployment</wicket.mode>
-
-				<!-- Adresse du WS -->
-				<ws.ip>127.0.0.1</ws.ip>
-				<ws.port>6161</ws.port>
-				<ws.name>batimen-ws</ws.name>
 
 				<!-- Infos Web App -->
 				<app.ip>127.0.0.1</app.ip>
