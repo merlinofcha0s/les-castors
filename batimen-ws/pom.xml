@@ -38,10 +38,17 @@
 		<logs.test.archives>${logs.test.address}/archived</logs.test.archives>
 		<logs.test.lvl>DEBUG</logs.test.lvl>
 
-		<!-- Hibernate -->
+		<!-- Config Hibernate -->
 		<hibernate.show_sql>true</hibernate.show_sql>
 		<hibernate.format_sql>true</hibernate.format_sql>
 		<hibernate.use_sql_comments>true</hibernate.use_sql_comments>
+
+		<!-- Config Arquillian -->
+		<glassfish.location>D:\dev\glassfish3wp</glassfish.location>
+		<glassfish.adminHost>localhost</glassfish.adminHost>
+		<glassfish.adminPort>4848</glassfish.adminPort>
+		<glassfish.adminHttps>false</glassfish.adminHttps>
+		<glassfish.domain>domain1</glassfish.domain>
 	</properties>
 
 	<issueManagement>
@@ -444,6 +451,13 @@
 				<hibernate.show_sql>false</hibernate.show_sql>
 				<hibernate.format_sql>false</hibernate.format_sql>
 				<hibernate.use_sql_comments>false</hibernate.use_sql_comments>
+
+				<!-- Config Arquillian -->
+				<glassfish.location>/usr/share/glassfish3</glassfish.location>
+				<glassfish.adminHost>localhost</glassfish.adminHost>
+				<glassfish.adminPort>4949</glassfish.adminPort>
+				<glassfish.adminHttps>true</glassfish.adminHttps>
+				<glassfish.domain>batimendomain</glassfish.domain>
 			</properties>
 			<build>
 				<plugins>
