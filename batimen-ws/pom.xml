@@ -51,6 +51,7 @@
 		<glassfish.adminUser></glassfish.adminUser>
 		<glassfish.adminPassword></glassfish.adminPassword>
 		<glassfish.domain>domain1</glassfish.domain>
+		<glassfish.debug>false</glassfish.debug>
 	</properties>
 
 	<issueManagement>
@@ -516,6 +517,12 @@
 					</plugin>
 				</plugins>
 			</build>
+		</profile>
+		<profile>
+			<id>glassfish-managed-debug</id>
+			<properties>
+				<glassfish.debug>true</glassfish.debug>
+			</properties>
 		</profile>
 	</profiles>
 
