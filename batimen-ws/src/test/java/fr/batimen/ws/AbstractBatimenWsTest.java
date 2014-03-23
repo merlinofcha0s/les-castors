@@ -20,6 +20,8 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.batimen.ws.client.WsConnector;
+
 @RunWith(Arquillian.class)
 public abstract class AbstractBatimenWsTest {
 
@@ -65,6 +67,7 @@ public abstract class AbstractBatimenWsTest {
 		@Override
 		protected void starting(Description description) {
 			LOGGER.info("Début Test : " + description.getDisplayName());
+			WsConnector.getInstance().setTest(true);
 		}
 
 		@Override

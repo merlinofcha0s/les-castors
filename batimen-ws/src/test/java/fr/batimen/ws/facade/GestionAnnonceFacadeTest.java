@@ -4,11 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
-import javax.transaction.NotSupportedException;
-import javax.transaction.RollbackException;
-import javax.transaction.SystemException;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -46,13 +41,6 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 	@Before
 	public void init() {
 
-		try {
-			utx.begin();
-		} catch (NotSupportedException | SystemException e1) {
-			e1.printStackTrace();
-		}
-		entityManager.joinTransaction();
-
 		creationAnnonceDTO = new CreationAnnonceDTO();
 		// Infos Client
 		creationAnnonceDTO.setCivilite(Civilite.MONSIEUR);
@@ -77,15 +65,6 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 		creationAnnonceDTO.setTitre("Peinture facade");
 		creationAnnonceDTO.setTypeContact(TypeContact.EMAIL);
 		creationAnnonceDTO.setVille("Nice");
-
-		try {
-			utx.commit();
-		} catch (SecurityException | IllegalStateException | RollbackException | HeuristicMixedException
-		        | HeuristicRollbackException | SystemException e) {
-			e.printStackTrace();
-		}
-		// clear the persistence context (first-level cache)
-		entityManager.clear();
 	}
 
 	/**

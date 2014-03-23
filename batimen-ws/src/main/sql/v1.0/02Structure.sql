@@ -10,7 +10,6 @@ create table Adresse (
     
 create table Annonce (
         id int8 not null,
-        active boolean not null,
         dateCreation timestamp,
         dateMAJ timestamp,
         delaiIntervention int4 not null,
@@ -19,7 +18,7 @@ create table Annonce (
         metier int4 not null,
         nbConsultation int4 not null,
         nbDevis int4 not null,
-        photo varchar(255) not null,
+        photo varchar(255),
         titre varchar(45) not null,
         typeContact int4 not null,
         adresseChantier_id int8,

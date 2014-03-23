@@ -23,7 +23,9 @@ import fr.batimen.core.constant.WsPath;
 import fr.batimen.core.exception.BackendException;
 import fr.batimen.dto.CreationAnnonceDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
+import fr.batimen.ws.dao.AdresseDAO;
 import fr.batimen.ws.dao.AnnonceDAO;
+import fr.batimen.ws.dao.ClientDAO;
 import fr.batimen.ws.entity.Adresse;
 import fr.batimen.ws.entity.Annonce;
 import fr.batimen.ws.entity.Client;
@@ -42,6 +44,12 @@ public class GestionAnnonceFacade {
 
 	@Inject
 	private AnnonceDAO annonceDAO;
+
+	@Inject
+	private AdresseDAO adresseDAO;
+
+	@Inject
+	private ClientDAO clientDAO;
 
 	/**
 	 * Permet la creation d'une nouvelle annonce par le client ainsi que le
@@ -63,6 +71,8 @@ public class GestionAnnonceFacade {
 		Annonce nouvelleAnnonce = remplirAnnonce(nouvelleAnnonceDTO);
 
 		try {
+			clientDAO.saveClient(nouvelleAnnonce.getDemandeur());
+			adresseDAO.saveAdresse(nouvelleAnnonce.getAdresseChantier());
 			annonceDAO.saveAnnonce(nouvelleAnnonce);
 		} catch (BackendException e) {
 			// Annonce deja existante en BDD

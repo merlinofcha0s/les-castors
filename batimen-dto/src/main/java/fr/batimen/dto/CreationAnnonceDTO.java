@@ -40,7 +40,6 @@ public class CreationAnnonceDTO extends AbstractDTO {
 	private String description;
 	@NotNull
 	private TypeContact typeContact;
-	@Size(max = ValidatorConstant.CREATION_ANNONCE_DELAI_INTERVENTION_MAX)
 	@NotNull
 	private DelaiIntervention delaiIntervention;
 	@Min(value = ValidatorConstant.CREATION_ANNONCE_NBDEVIS_MIN)
@@ -77,7 +76,7 @@ public class CreationAnnonceDTO extends AbstractDTO {
 	private String numeroTel;
 	@Size(min = ValidatorConstant.LOGIN_RANGE_MIN, max = ValidatorConstant.LOGIN_RANGE_MAX)
 	private String login;
-	@Size(min = ValidatorConstant.LOGIN_RANGE_MIN, max = ValidatorConstant.LOGIN_RANGE_MAX)
+	@Size(min = ValidatorConstant.PASSWORD_RANGE_MIN, max = ValidatorConstant.PASSWORD_RANGE_MIN)
 	private String password;
 	@Email
 	private String email;

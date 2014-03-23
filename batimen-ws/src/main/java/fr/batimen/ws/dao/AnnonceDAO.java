@@ -18,7 +18,7 @@ import fr.batimen.core.exception.BackendException;
 import fr.batimen.ws.entity.Annonce;
 
 /**
- * Controlleur d'utilisateurs
+ * Classe d'accés aux données pour les annonces
  * 
  * @author Casaucau Cyril
  */
@@ -44,7 +44,7 @@ public class AnnonceDAO {
 			em.persist(nouvelleAnnonce);
 		} catch (EntityExistsException eee) {
 
-			StringBuilder sbError = new StringBuilder("Impossible de perister l'annonce ");
+			StringBuilder sbError = new StringBuilder("Impossible de perister l'annonce: ");
 			sbError.append(nouvelleAnnonce.getTitre());
 			sbError.append(" car elle existe déjà");
 

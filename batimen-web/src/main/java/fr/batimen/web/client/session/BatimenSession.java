@@ -44,7 +44,6 @@ public class BatimenSession extends AuthenticatedWebSession {
 		}
 		LoginDTO loginDTO = new LoginDTO();
 		loginDTO.setLogin(username);
-		loginDTO.setPassword(password);
 
 		ClientDTO clientDTO = ClientService.login(loginDTO);
 

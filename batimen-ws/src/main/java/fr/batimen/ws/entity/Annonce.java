@@ -52,10 +52,8 @@ public class Annonce extends AbstractEntity implements Serializable {
 	@Column(nullable = false)
 	private Integer nbConsultation;
 	@Column(nullable = false)
-	private Boolean active;
-	@Column(nullable = false)
 	private Integer nbDevis;
-	@Column(length = 255, nullable = false)
+	@Column(length = 255, nullable = true)
 	private String photo;
 	@Column(nullable = false)
 	private Metier metier;
@@ -187,21 +185,6 @@ public class Annonce extends AbstractEntity implements Serializable {
 	 */
 	public void setNbConsultation(Integer nbConsultation) {
 		this.nbConsultation = nbConsultation;
-	}
-
-	/**
-	 * @return the active
-	 */
-	public Boolean getActive() {
-		return active;
-	}
-
-	/**
-	 * @param active
-	 *            the active to set
-	 */
-	public void setActive(Boolean active) {
-		this.active = active;
 	}
 
 	/**

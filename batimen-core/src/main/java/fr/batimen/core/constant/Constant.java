@@ -17,11 +17,11 @@ public class Constant {
 	public static final Integer CODE_SERVICE_RETOUR_OK = 0;
 	public static final Integer CODE_SERVICE_RETOUR_KO = 1;
 
-	// Roles accés WS
+	// Roles accés WS (Glassfish AUTH)
 	public static final String USERS_ROLE = "users";
 	public static final String ADMIN_ROLE = "admins";
 
-	// Accés User WS
+	// Accés User WS (Glassfish AUTH)
 	public static final String BATIMEN_USERS_WS = "batimenuser";
 	public static final String BATIMEN_PWD_WS = "Lolmdr06";
 
