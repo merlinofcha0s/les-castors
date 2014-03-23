@@ -91,7 +91,7 @@ public class GestionAnnonceFacade {
 		nouvelleAnnonce.setDemandeur(remplirClient(nouvelleAnnonceDTO, nouvelleAnnonce));
 
 		// On rempli l'entité annonce grace à la DTO
-		nouvelleAnnonce.setDateCreation(new Date());
+		nouvelleAnnonce.setDateCreation(nouvelleAnnonceDTO.getDateInscription());
 		nouvelleAnnonce.setDateMAJ(new Date());
 		nouvelleAnnonce.setDelaiIntervention(nouvelleAnnonceDTO.getDelaiIntervention());
 		nouvelleAnnonce.setDescription(nouvelleAnnonceDTO.getDescription());

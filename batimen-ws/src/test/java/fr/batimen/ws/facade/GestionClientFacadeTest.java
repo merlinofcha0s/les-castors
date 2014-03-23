@@ -30,7 +30,7 @@ public class GestionClientFacadeTest extends AbstractBatimenWsTest {
 	private static final Logger LOGGER = LoggerFactory.getLogger(GestionClientFacadeTest.class);
 
 	@Test
-	@UsingDataSet("datasets/clients.yml")
+	@UsingDataSet("datasets/in/clients.yml")
 	public void testGetClientForLogin() {
 
 		// L'objet que l'on doit recevoir du frontend quand l'utilisateur
@@ -68,7 +68,7 @@ public class GestionClientFacadeTest extends AbstractBatimenWsTest {
 	}
 
 	@Test
-	@UsingDataSet("datasets/clients.yml")
+	@UsingDataSet("datasets/in/clients.yml")
 	public void testgetClientForLoginFail() throws Exception {
 
 		// L'objet que l'on doit recevoir du frontend quand l'utilisateur

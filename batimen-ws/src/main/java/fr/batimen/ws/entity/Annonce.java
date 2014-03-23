@@ -12,10 +12,13 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 
+import fr.batimen.core.constant.QueryJPQL;
 import fr.batimen.dto.enums.DelaiIntervention;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.Metier;
@@ -30,6 +33,7 @@ import fr.batimen.dto.enums.TypeContact;
  */
 @Entity
 @Table(name = "Annonce")
+@NamedQueries(value = { @NamedQuery(name = QueryJPQL.ANNONCE_BY_LOGIN, query = "SELECT a FROM Annonce AS a WHERE a.demandeur.login = :login") })
 public class Annonce extends AbstractEntity implements Serializable {
 
 	private static final long serialVersionUID = 3160372354800747789L;

@@ -15,4 +15,7 @@ public class QueryJPQL {
 	// Entity User
 	public static final String CLIENT_LOGIN = "login";
 
+	// Entity Annonce
+	public static final String ANNONCE_BY_LOGIN = "annonceByLogin";
+
 }

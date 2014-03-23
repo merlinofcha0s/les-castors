@@ -1,16 +1,19 @@
 package fr.batimen.ws.facade;
 
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;
 
+import org.jboss.arquillian.persistence.Cleanup;
+import org.jboss.arquillian.persistence.CleanupStrategy;
+import org.jboss.arquillian.persistence.ShouldMatchDataSet;
+import org.jboss.arquillian.persistence.TestExecutionPhase;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import fr.batimen.core.constant.Constant;
-import fr.batimen.core.security.HashHelper;
 import fr.batimen.dto.CreationAnnonceDTO;
 import fr.batimen.dto.enums.Civilite;
 import fr.batimen.dto.enums.DelaiIntervention;
@@ -28,6 +31,7 @@ import fr.batimen.ws.entity.Client;
  * @author Casaucau Cyril
  * 
  */
+@Cleanup(phase = TestExecutionPhase.BEFORE, strategy = CleanupStrategy.STRICT)
 public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
 	private CreationAnnonceDTO creationAnnonceDTO;
@@ -53,11 +57,22 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 		creationAnnonceDTO.setEmail("pebron@delapebronne.com");
 		creationAnnonceDTO.setLogin("johnny06");
 		creationAnnonceDTO.setNumeroTel("0615458596");
-		creationAnnonceDTO.setPassword(HashHelper.hashString("lolmdr06"));
+		creationAnnonceDTO
+		        .setPassword("$s0$54040$Iq84TgzISA2lYTJePmcV1w==$IOfVNFB4udmHKtW7mrs9PepQvSE4j4fayaUF9SYLLBw=");
 
 		// Infos Qualification Annonce
 		creationAnnonceDTO.setDescription("Peinture d'un mur");
-		creationAnnonceDTO.setDateInscription(new Date());
+
+		Calendar calDateInsription = Calendar.getInstance();
+		calDateInsription.set(Calendar.YEAR, 2014);
+		calDateInsription.set(Calendar.MONTH, Calendar.MARCH);
+		calDateInsription.set(Calendar.DAY_OF_MONTH, 23);
+		calDateInsription.set(Calendar.HOUR_OF_DAY, 22);
+		calDateInsription.set(Calendar.MINUTE, 00);
+		calDateInsription.set(Calendar.SECOND, 00);
+		calDateInsription.set(Calendar.MILLISECOND, 0);
+
+		creationAnnonceDTO.setDateInscription(calDateInsription.getTime());
 		creationAnnonceDTO.setDelaiIntervention(DelaiIntervention.LE_PLUS_RAPIDEMENT_POSSIBLE);
 		creationAnnonceDTO.setDepartement(06);
 		creationAnnonceDTO.setMetier(Metier.PEINTRE);
@@ -70,8 +85,13 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 	/**
 	 * Cas de test : le client n'est pas inscrit sur le site. Il faut donc creer
 	 * l'annonce mais également enregister son compte dans la base de données.
+	 * 
+	 * On ignore volontairement date inscription et datemaj car elles sont
+	 * généréés dynamiquement lors de la creation de l'annonce.
 	 */
 	@Test
+	@ShouldMatchDataSet(value = "datasets/out/creationAnnonce.yml", excludeColumns = { "id", "dateinscription",
+	        "datemaj" })
 	public void testCreationAnnonceIsNotSignedIn() {
 
 		String loginDeJohnny = "johnny06";
@@ -88,7 +108,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 		Assert.assertNotNull(johnny);
 		// On regarde que ce soit le bon login
 		Assert.assertTrue(loginDeJohnny.equals(johnny.getLogin()));
-		// On s'assure que la liste renvoyé n'est pas null
+		// On s'assure que la liste d'annonce renvoyées n'est pas null
 		Assert.assertNotNull(annoncesDeJohnny);
 		// On test qu'il y a bien une annonce liée a Johnny boy
 		Assert.assertTrue(annoncesDeJohnny.size() == 1);
