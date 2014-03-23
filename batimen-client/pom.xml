@@ -22,7 +22,7 @@
 		<!-- Adresse du WS -->
 		<ws.ip>127.0.0.1</ws.ip>
 		<ws.port>8181</ws.port>
-		<ws.name>batimen-ws</ws.name>
+		<ws.name>batimen-ws-test</ws.name>
 
 		<!-- Utilisé pour activer la verification du certificat du serveur obligatoirement 
 			mettre a true en prod -->

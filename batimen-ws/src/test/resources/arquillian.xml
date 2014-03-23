@@ -24,4 +24,10 @@
 			<property name="outputToConsole">true</property>
 		</configuration>
 	</container>
+
+	<extension qualifier="persistence-dbunit">
+		<property name="datatypeFactory">org.dbunit.ext.postgresql.PostgresqlDataTypeFactory</property>
+		<property name="excludePoi">true</property>
+		<property name="defaultDataSetFormat">YAML</property>
+	</extension>
 </arquillian>
