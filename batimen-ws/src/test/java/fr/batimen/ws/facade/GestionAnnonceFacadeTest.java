@@ -5,10 +5,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import org.jboss.arquillian.persistence.Cleanup;
-import org.jboss.arquillian.persistence.CleanupStrategy;
 import org.jboss.arquillian.persistence.ShouldMatchDataSet;
-import org.jboss.arquillian.persistence.TestExecutionPhase;
+import org.jboss.arquillian.persistence.UsingDataSet;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,7 +29,6 @@ import fr.batimen.ws.entity.Client;
  * @author Casaucau Cyril
  * 
  */
-@Cleanup(phase = TestExecutionPhase.BEFORE, strategy = CleanupStrategy.STRICT)
 public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
 	private CreationAnnonceDTO creationAnnonceDTO;
@@ -63,6 +60,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 		// Infos Qualification Annonce
 		creationAnnonceDTO.setDescription("Peinture d'un mur");
 
+		// Le 23/03/2014 @ 22:23:00
 		Calendar calDateInsription = Calendar.getInstance();
 		calDateInsription.set(Calendar.YEAR, 2014);
 		calDateInsription.set(Calendar.MONTH, Calendar.MARCH);
@@ -90,12 +88,32 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 	 * généréés dynamiquement lors de la creation de l'annonce.
 	 */
 	@Test
-	@ShouldMatchDataSet(value = "datasets/out/creationAnnonce.yml", excludeColumns = { "id", "dateinscription",
+	@ShouldMatchDataSet(value = "datasets/out/creation_annonce.yml", excludeColumns = { "id", "dateinscription",
 	        "datemaj" })
 	public void testCreationAnnonceIsNotSignedIn() {
+		creationVerificationAnnonce();
+	}
+
+	/**
+	 * Cas de test : le client est inscrit sur le site. Il faut donc creer
+	 * l'annonce mais ne pas enregistrer son compte, juste lier le compte de
+	 * l'utilisateur avec l'annonce.
+	 * 
+	 * On ignore volontairement date inscription et datemaj car elles sont
+	 * généréés dynamiquement lors de la creation de l'annonce.
+	 */
+	@Test
+	@UsingDataSet("datasets/in/client_creation_annonce_not_signed_in.yml")
+	@ShouldMatchDataSet(value = "datasets/out/creation_annonce.yml", excludeColumns = { "id", "dateinscription",
+	        "datemaj" })
+	public void testCreationAnnonceIsSignedIn() {
+		creationAnnonceDTO.setIsSignedUp(true);
+		creationVerificationAnnonce();
+	}
+
+	private void creationVerificationAnnonce() {
 
 		String loginDeJohnny = "johnny06";
-
 		Integer isCreationOK = AnnonceService.creationAnnonce(creationAnnonceDTO);
 
 		// On utilise le DAO de l'annonce et de l'user pour vérifier le tout
@@ -110,7 +128,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 		Assert.assertTrue(loginDeJohnny.equals(johnny.getLogin()));
 		// On s'assure que la liste d'annonce renvoyées n'est pas null
 		Assert.assertNotNull(annoncesDeJohnny);
-		// On test qu'il y a bien une annonce liée a Johnny boy
+		// On test qu'il y a bien une annonce liée à Johnny boy
 		Assert.assertTrue(annoncesDeJohnny.size() == 1);
 	}
 }

@@ -1,12 +1,13 @@
 package fr.batimen.ws;
 
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.transaction.UserTransaction;
-
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.persistence.Cleanup;
+import org.jboss.arquillian.persistence.CleanupStrategy;
+import org.jboss.arquillian.persistence.DataSeedStrategy;
+import org.jboss.arquillian.persistence.DataSource;
+import org.jboss.arquillian.persistence.SeedDataUsing;
+import org.jboss.arquillian.persistence.TestExecutionPhase;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
@@ -23,15 +24,12 @@ import org.slf4j.LoggerFactory;
 import fr.batimen.ws.client.WsConnector;
 
 @RunWith(Arquillian.class)
+@DataSource(value = "jdbc/__BatimenPGTest")
+@SeedDataUsing(DataSeedStrategy.CLEAN_INSERT)
+@Cleanup(phase = TestExecutionPhase.AFTER, strategy = CleanupStrategy.USED_ROWS_ONLY)
 public abstract class AbstractBatimenWsTest {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AbstractBatimenWsTest.class);
-
-	@PersistenceContext(unitName = "batimenPU")
-	protected EntityManager entityManager;
-
-	@Inject
-	protected UserTransaction utx;
 
 	@Deployment
 	public static WebArchive createTestArchive() {
@@ -55,7 +53,7 @@ public abstract class AbstractBatimenWsTest {
 
 		// Ajout des ressources
 		batimenWsTest.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
-		        .addAsWebInfResource("logback-test.xml", "classes/logback-test.xml")
+		        .addAsWebInfResource("logback-test.xml", "classes/logback.xml")
 		        .addAsWebInfResource("glassfish-web.xml", "glassfish-web.xml").setWebXML("web.xml")
 		        .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml");
 

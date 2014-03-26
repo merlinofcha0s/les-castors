@@ -68,41 +68,36 @@ public class GestionAnnonceFacade {
 	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public Integer creationAnnonce(CreationAnnonceDTO nouvelleAnnonceDTO) {
 
-		Annonce nouvelleAnnonce = remplirAnnonce(nouvelleAnnonceDTO);
-
 		try {
-			clientDAO.saveClient(nouvelleAnnonce.getDemandeur());
+			Annonce nouvelleAnnonce = remplirAnnonce(nouvelleAnnonceDTO);
 			adresseDAO.saveAdresse(nouvelleAnnonce.getAdresseChantier());
 			annonceDAO.saveAnnonce(nouvelleAnnonce);
 		} catch (BackendException e) {
-			// Annonce deja existante en BDD
+			// Erreur pendant la creation du service de l'annonce.
 			return Constant.CODE_SERVICE_RETOUR_KO;
 		}
 
 		return Constant.CODE_SERVICE_RETOUR_OK;
 	}
 
-	private Annonce remplirAnnonce(CreationAnnonceDTO nouvelleAnnonceDTO) {
+	private Annonce remplirAnnonce(CreationAnnonceDTO nouvelleAnnonceDTO) throws BackendException {
 
 		Annonce nouvelleAnnonce = new Annonce();
 
-		// On la bind a l'annonce
-		nouvelleAnnonce.setAdresseChantier(remplirAdresse(nouvelleAnnonceDTO, nouvelleAnnonce));
-		nouvelleAnnonce.setDemandeur(remplirClient(nouvelleAnnonceDTO, nouvelleAnnonce));
+		// On rempli, on persiste et on bind l'adresse à l'annonce.
+		nouvelleAnnonce.setAdresseChantier(remplirAndPersistAdresse(nouvelleAnnonceDTO, nouvelleAnnonce));
+
+		if (nouvelleAnnonceDTO.getIsSignedUp()) {
+			isSignedUp(nouvelleAnnonceDTO, nouvelleAnnonce);
+		} else {
+			isNotSignedUp(nouvelleAnnonceDTO, nouvelleAnnonce);
+		}
 
 		// On rempli l'entité annonce grace à la DTO
 		nouvelleAnnonce.setDateCreation(nouvelleAnnonceDTO.getDateInscription());
 		nouvelleAnnonce.setDateMAJ(new Date());
 		nouvelleAnnonce.setDelaiIntervention(nouvelleAnnonceDTO.getDelaiIntervention());
 		nouvelleAnnonce.setDescription(nouvelleAnnonceDTO.getDescription());
-
-		// On attendra que le client confirme son email avant d'activer
-		// l'annonce.
-		if (nouvelleAnnonceDTO.getIsSignedUp()) {
-			nouvelleAnnonce.setEtatAnnonce(EtatAnnonce.ACTIVE);
-		} else {
-			nouvelleAnnonce.setEtatAnnonce(EtatAnnonce.EN_ATTENTE);
-		}
 
 		nouvelleAnnonce.setMetier(nouvelleAnnonceDTO.getMetier());
 		nouvelleAnnonce.setNbConsultation(0);
@@ -113,7 +108,47 @@ public class GestionAnnonceFacade {
 		return nouvelleAnnonce;
 	}
 
-	private Adresse remplirAdresse(CreationAnnonceDTO nouvelleAnnonceDTO, Annonce nouvelleAnnonce) {
+	/**
+	 * Cette méthode à sert aller chercher un client qui est deja inscit pour le
+	 * binder à l'annonce.
+	 * 
+	 * @param nouvelleAnnonceDTO
+	 *            objet provenant du front
+	 * @param nouvelleAnnonce
+	 *            entité qui sera persisté
+	 */
+	private void isSignedUp(CreationAnnonceDTO nouvelleAnnonceDTO, Annonce nouvelleAnnonce) throws BackendException {
+		Client client = clientDAO.getClientByLoginName(nouvelleAnnonceDTO.getLogin());
+		if (client != null) {
+			nouvelleAnnonce.setDemandeur(client);
+			nouvelleAnnonce.setEtatAnnonce(EtatAnnonce.ACTIVE);
+		} else {
+			throw new BackendException("Impossible de retrouver le client : " + nouvelleAnnonceDTO.getLogin());
+		}
+	}
+
+	/**
+	 * Methode qui permet de populer l'entité client grace a la
+	 * CreationAnnonceDTO. Dans le cas d'une inscription.
+	 * 
+	 * @param nouvelleAnnonceDTO
+	 *            objet provenant du front
+	 * @param nouvelleAnnonce
+	 *            entité qui sera persisté
+	 * @throws BackendException
+	 *             en cas de probleme de sauvegarde dans la BDD
+	 */
+	private void isNotSignedUp(CreationAnnonceDTO nouvelleAnnonceDTO, Annonce nouvelleAnnonce) throws BackendException {
+		Client nouveauClient = remplirClient(nouvelleAnnonceDTO, nouvelleAnnonce);
+		clientDAO.saveClient(nouveauClient);
+		if (nouveauClient != null) {
+			nouvelleAnnonce.setDemandeur(nouveauClient);
+			nouvelleAnnonce.setEtatAnnonce(EtatAnnonce.EN_ATTENTE);
+		}
+	}
+
+	private Adresse remplirAndPersistAdresse(CreationAnnonceDTO nouvelleAnnonceDTO, Annonce nouvelleAnnonce)
+	        throws BackendException {
 
 		// On crée la nouvelle adresse qui sera rattaché a l'annonce.
 		Adresse adresseAnnonce = new Adresse();
@@ -138,7 +173,7 @@ public class GestionAnnonceFacade {
 		// On crée la liste des annonces.
 		List<Annonce> annoncesNouveauClient = new ArrayList<Annonce>();
 		annoncesNouveauClient.add(nouvelleAnnonce);
-		// On bind le client a son annonce.
+		// On bind le client à son annonce.
 		nouveauClient.setDevisDemandes(annoncesNouveauClient);
 		// On enregistre les infos du client dans l'entité client
 		nouveauClient.setNom(nouvelleAnnonceDTO.getNom());

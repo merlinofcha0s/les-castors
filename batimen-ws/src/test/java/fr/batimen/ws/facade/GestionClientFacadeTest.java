@@ -5,9 +5,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.Calendar;
 import java.util.Locale;
 
-import org.jboss.arquillian.persistence.Cleanup;
-import org.jboss.arquillian.persistence.CleanupStrategy;
-import org.jboss.arquillian.persistence.TestExecutionPhase;
 import org.jboss.arquillian.persistence.UsingDataSet;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -24,7 +21,6 @@ import fr.batimen.ws.client.service.ClientService;
  * @author Casaucau Cyril
  * 
  */
-@Cleanup(phase = TestExecutionPhase.AFTER, strategy = CleanupStrategy.USED_ROWS_ONLY)
 public class GestionClientFacadeTest extends AbstractBatimenWsTest {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(GestionClientFacadeTest.class);
@@ -37,7 +33,7 @@ public class GestionClientFacadeTest extends AbstractBatimenWsTest {
 		// tentera de s'authentifier
 		LoginDTO toLogin = new LoginDTO();
 		toLogin.setLogin("pebronne");
-		toLogin.setPassword("lollollol");
+		toLogin.setPassword("$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=");
 
 		// Appel du service qui check le login
 		ClientDTO user = ClientService.login(toLogin);
@@ -75,7 +71,7 @@ public class GestionClientFacadeTest extends AbstractBatimenWsTest {
 		// tentera de s'authentifier
 		LoginDTO toLogin = new LoginDTO();
 		toLogin.setLogin("pebronmdr");
-		toLogin.setPassword("lollol");
+		toLogin.setPassword("$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=");
 
 		// Appel du service qui check le login
 		ClientDTO user = ClientService.login(toLogin);

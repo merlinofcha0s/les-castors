@@ -1,11 +1,11 @@
 client:
-  - id: 1001
+  - id: 100
     civilite: 0
     dateinscription: "2014-01-10 00:00:00"
-    email: lol@lol.com
+    email: pebron@delapebronne.com
     password: $s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=
-    login: pebronne
-    nom: De la Pebronne
-    numerotel: "0615125645"
-    prenom: Pebron
+    login: johnny06
+    nom: Du Pebron
+    numerotel: "0615458596"
+    prenom: Johnny
     isartisan: false
