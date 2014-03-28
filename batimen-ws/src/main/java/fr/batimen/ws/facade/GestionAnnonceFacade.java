@@ -70,7 +70,6 @@ public class GestionAnnonceFacade {
 
 		try {
 			Annonce nouvelleAnnonce = remplirAnnonce(nouvelleAnnonceDTO);
-			adresseDAO.saveAdresse(nouvelleAnnonce.getAdresseChantier());
 			annonceDAO.saveAnnonce(nouvelleAnnonce);
 		} catch (BackendException e) {
 			// Erreur pendant la creation du service de l'annonce.
@@ -128,8 +127,9 @@ public class GestionAnnonceFacade {
 	}
 
 	/**
-	 * Methode qui permet de populer l'entité client grace a la
-	 * CreationAnnonceDTO. Dans le cas d'une inscription.
+	 * Methode qui permet de populer l'entité client grace à la
+	 * CreationAnnonceDTO et a la persister dans la BDD. Dans le cas d'une
+	 * inscription.
 	 * 
 	 * @param nouvelleAnnonceDTO
 	 *            objet provenant du front
@@ -157,7 +157,8 @@ public class GestionAnnonceFacade {
 		adresseAnnonce.setCodePostal(nouvelleAnnonceDTO.getCodePostal());
 		adresseAnnonce.setVille(nouvelleAnnonceDTO.getVille());
 		adresseAnnonce.setDepartement(nouvelleAnnonceDTO.getDepartement());
-		adresseAnnonce.setAnnonce(nouvelleAnnonce);
+
+		adresseDAO.saveAdresse(adresseAnnonce);
 
 		return adresseAnnonce;
 

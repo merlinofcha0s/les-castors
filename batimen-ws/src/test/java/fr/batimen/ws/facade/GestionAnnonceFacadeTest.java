@@ -55,7 +55,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 		creationAnnonceDTO.setLogin("johnny06");
 		creationAnnonceDTO.setNumeroTel("0615458596");
 		creationAnnonceDTO
-		        .setPassword("$s0$54040$Iq84TgzISA2lYTJePmcV1w==$IOfVNFB4udmHKtW7mrs9PepQvSE4j4fayaUF9SYLLBw=");
+		        .setPassword("$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=");
 
 		// Infos Qualification Annonce
 		creationAnnonceDTO.setDescription("Peinture d'un mur");
@@ -88,8 +88,8 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 	 * généréés dynamiquement lors de la creation de l'annonce.
 	 */
 	@Test
-	@ShouldMatchDataSet(value = "datasets/out/creation_annonce.yml", excludeColumns = { "id", "dateinscription",
-	        "datemaj" })
+	@ShouldMatchDataSet(value = "datasets/out/creation_annonce_is_not_signed_in.yml", excludeColumns = { "id",
+	        "dateinscription", "datemaj" })
 	public void testCreationAnnonceIsNotSignedIn() {
 		creationVerificationAnnonce();
 	}
@@ -104,8 +104,8 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 	 */
 	@Test
 	@UsingDataSet("datasets/in/client_creation_annonce_not_signed_in.yml")
-	@ShouldMatchDataSet(value = "datasets/out/creation_annonce.yml", excludeColumns = { "id", "dateinscription",
-	        "datemaj" })
+	@ShouldMatchDataSet(value = "datasets/out/creation_annonce_is_signed_in.yml", excludeColumns = { "id",
+	        "dateinscription", "datemaj" })
 	public void testCreationAnnonceIsSignedIn() {
 		creationAnnonceDTO.setIsSignedUp(true);
 		creationVerificationAnnonce();

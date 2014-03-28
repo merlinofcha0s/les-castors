@@ -24,6 +24,13 @@
 			<property name="outputToConsole">true</property>
 		</configuration>
 	</container>
+	
+	<extension qualifier="persistence">
+    <property name="defaultDataSource">jdbc/__BatimenPGTest</property>
+    <property name="defaultDataSeedStrategy">CLEAN_INSERT</property>
+    <property name="defaultCleanupPhase">AFTER</property>
+    <property name="defaultCleanupStrategy">STRICT</property>
+</extension>
 
 	<extension qualifier="persistence-dbunit">
 		<property name="datatypeFactory">org.dbunit.ext.postgresql.PostgresqlDataTypeFactory</property>
