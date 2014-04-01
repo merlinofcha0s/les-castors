@@ -21,6 +21,7 @@ import javax.ws.rs.Produces;
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.WsPath;
 import fr.batimen.core.exception.BackendException;
+import fr.batimen.core.exception.DuplicateEntityException;
 import fr.batimen.dto.CreationAnnonceDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.ws.dao.AdresseDAO;
@@ -72,6 +73,10 @@ public class GestionAnnonceFacade {
 			Annonce nouvelleAnnonce = remplirAnnonce(nouvelleAnnonceDTO);
 			annonceDAO.saveAnnonce(nouvelleAnnonce);
 		} catch (BackendException e) {
+			// L'annonce est deja présente dans le BDD
+			if (e instanceof DuplicateEntityException) {
+				return Constant.CODE_SERVICE_RETOUR_ANNONCE_DUPLICATE;
+			}
 			// Erreur pendant la creation du service de l'annonce.
 			return Constant.CODE_SERVICE_RETOUR_KO;
 		}

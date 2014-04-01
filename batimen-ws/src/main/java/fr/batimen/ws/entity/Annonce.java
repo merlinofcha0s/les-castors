@@ -33,7 +33,9 @@ import fr.batimen.dto.enums.TypeContact;
  */
 @Entity
 @Table(name = "Annonce")
-@NamedQueries(value = { @NamedQuery(name = QueryJPQL.ANNONCE_BY_LOGIN, query = "SELECT a FROM Annonce AS a WHERE a.demandeur.login = :login") })
+@NamedQueries(value = {
+        @NamedQuery(name = QueryJPQL.ANNONCE_BY_LOGIN, query = "SELECT a FROM Annonce AS a WHERE a.demandeur.login = :login"),
+        @NamedQuery(name = QueryJPQL.ANNONCE_BY_TITLE_AND_DESCRIPTION, query = "SELECT a FROM Annonce AS a WHERE a.titre = :titre AND a.description = :description AND a.demandeur.login = :login") })
 public class Annonce extends AbstractEntity implements Serializable {
 
 	private static final long serialVersionUID = 3160372354800747789L;
@@ -303,7 +305,7 @@ public class Annonce extends AbstractEntity implements Serializable {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(Objects.hash(this.titre, this.description, this.demandeur.getLogin()));
+		return Objects.hashCode(Objects.hash(this.titre, this.description));
 	}
 
 	/*
@@ -319,10 +321,8 @@ public class Annonce extends AbstractEntity implements Serializable {
 
 		if (object instanceof Annonce) {
 			Annonce other = (Annonce) object;
-			return Objects.equals(this.titre, other.titre) && Objects.equals(this.description, other.description)
-			        && Objects.equals(this.demandeur.getLogin(), other.demandeur.getLogin());
+			return Objects.equals(this.titre, other.titre) && Objects.equals(this.description, other.description);
 		}
 		return false;
 	}
-
 }

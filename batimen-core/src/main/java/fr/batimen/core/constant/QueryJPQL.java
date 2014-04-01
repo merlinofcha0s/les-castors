@@ -17,5 +17,9 @@ public class QueryJPQL {
 
 	// Entity Annonce
 	public static final String ANNONCE_BY_LOGIN = "annonceByLogin";
+	public static final String ANNONCE_BY_TITLE_AND_DESCRIPTION = "annonceByTitleAndDescription";
 
+	// Parametre Query Entity annonce
+	public static final String PARAM_ANNONCE_TITRE = "titre";
+	public static final String PARAM_ANNONCE_DESCRIPTION = "description";
 }

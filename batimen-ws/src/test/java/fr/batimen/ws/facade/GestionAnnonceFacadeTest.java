@@ -103,12 +103,25 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 	 * généréés dynamiquement lors de la creation de l'annonce.
 	 */
 	@Test
-	@UsingDataSet("datasets/in/client_creation_annonce_not_signed_in.yml")
+	@UsingDataSet("datasets/in/client_creation_annonce.yml")
 	@ShouldMatchDataSet(value = "datasets/out/creation_annonce_is_signed_in.yml", excludeColumns = { "id",
 	        "dateinscription", "datemaj" })
 	public void testCreationAnnonceIsSignedIn() {
 		creationAnnonceDTO.setIsSignedUp(true);
 		creationVerificationAnnonce();
+	}
+
+	/**
+	 * Cas de test : Le client tente de creer une annonce qui existe déjà avec
+	 * le même titre.
+	 * 
+	 */
+	@Test
+	public void testCreationAnnonceDuplicata() {
+		creationVerificationAnnonce();
+		Integer isCreationOK = AnnonceService.creationAnnonce(creationAnnonceDTO);
+		// Le service doit remonter une erreur
+		Assert.assertTrue(isCreationOK == Constant.CODE_SERVICE_RETOUR_ANNONCE_DUPLICATE);
 	}
 
 	private void creationVerificationAnnonce() {
