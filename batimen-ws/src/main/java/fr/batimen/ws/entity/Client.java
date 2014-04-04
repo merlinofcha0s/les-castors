@@ -26,7 +26,9 @@ import fr.batimen.core.constant.QueryJPQL;
  */
 @Entity
 @Table(name = "Client")
-@NamedQueries(value = { @NamedQuery(name = QueryJPQL.CLIENT_LOGIN, query = "SELECT c FROM Client AS c WHERE c.login = :login") })
+@NamedQueries(value = {
+        @NamedQuery(name = QueryJPQL.CLIENT_LOGIN, query = "SELECT c FROM Client AS c WHERE c.login = :login"),
+        @NamedQuery(name = QueryJPQL.CLIENT_BY_EMAIL, query = "SELECT c FROM Client AS c WHERE c.email = :email") })
 public class Client extends AbstractUser implements Serializable {
 
 	/**

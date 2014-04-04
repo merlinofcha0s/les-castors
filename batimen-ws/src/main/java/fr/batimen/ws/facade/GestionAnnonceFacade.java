@@ -33,6 +33,13 @@ import fr.batimen.ws.entity.Client;
 import fr.batimen.ws.helper.JsonHelper;
 import fr.batimen.ws.interceptor.BatimenInterceptor;
 
+/**
+ * Facade REST de gestion des annonces.
+ * 
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 @Stateless(name = "GestionAnnonceFacade")
 @LocalBean
 @Path(WsPath.GESTION_ANNONCE_SERVICE_PATH)
@@ -84,6 +91,14 @@ public class GestionAnnonceFacade {
 		return Constant.CODE_SERVICE_RETOUR_OK;
 	}
 
+	/**
+	 * Crée une entité annonce a partir d'une DTO CreationAnnonce.
+	 * 
+	 * @param nouvelleAnnonceDTO
+	 *            L'objet provenant du backend contenant les infos de l'annonce.
+	 * @return Entité Annonce
+	 * @throws BackendException
+	 */
 	private Annonce remplirAnnonce(CreationAnnonceDTO nouvelleAnnonceDTO) throws BackendException {
 
 		Annonce nouvelleAnnonce = new Annonce();
@@ -152,6 +167,15 @@ public class GestionAnnonceFacade {
 		}
 	}
 
+	/**
+	 * Rempli une entité Adresse grace à la DTO de création de l'annonce, puis
+	 * la persiste
+	 * 
+	 * @param nouvelleAnnonceDTO
+	 * @param nouvelleAnnonce
+	 * @return
+	 * @throws BackendException
+	 */
 	private Adresse remplirAndPersistAdresse(CreationAnnonceDTO nouvelleAnnonceDTO, Annonce nouvelleAnnonce)
 	        throws BackendException {
 
@@ -169,6 +193,13 @@ public class GestionAnnonceFacade {
 
 	}
 
+	/**
+	 * Rempli une entité Client grace à la DTO de création de l'annonce
+	 * 
+	 * @param nouvelleAnnonceDTO
+	 * @param nouvelleAnnonce
+	 * @return
+	 */
 	private Client remplirClient(CreationAnnonceDTO nouvelleAnnonceDTO, Annonce nouvelleAnnonce) {
 
 		// On crée la nouveau client qui vient de poster la nouvelle annonce.

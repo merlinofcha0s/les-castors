@@ -89,7 +89,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 	 */
 	@Test
 	@ShouldMatchDataSet(value = "datasets/out/creation_annonce_is_not_signed_in.yml", excludeColumns = { "id",
-	        "dateinscription", "datemaj" })
+	        "datemaj" })
 	public void testCreationAnnonceIsNotSignedIn() {
 		creationVerificationAnnonce();
 	}
@@ -104,8 +104,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 	 */
 	@Test
 	@UsingDataSet("datasets/in/client_creation_annonce.yml")
-	@ShouldMatchDataSet(value = "datasets/out/creation_annonce_is_signed_in.yml", excludeColumns = { "id",
-	        "dateinscription", "datemaj" })
+	@ShouldMatchDataSet(value = "datasets/out/creation_annonce_is_signed_in.yml", excludeColumns = { "id", "datemaj" })
 	public void testCreationAnnonceIsSignedIn() {
 		creationAnnonceDTO.setIsSignedUp(true);
 		creationVerificationAnnonce();

@@ -14,7 +14,11 @@ public class QueryJPQL {
 
 	// Entity User
 	public static final String CLIENT_LOGIN = "login";
+	public static final String CLIENT_BY_EMAIL = "clientByLoginAndEmail";
 
+	// Parametre Query Entity client
+	public static final String PARAM_CLIENT_LOGIN = "login";
+	public static final String PARAM_CLIENT_EMAIL = "email";
 	// Entity Annonce
 	public static final String ANNONCE_BY_LOGIN = "annonceByLogin";
 	public static final String ANNONCE_BY_TITLE_AND_DESCRIPTION = "annonceByTitleAndDescription";

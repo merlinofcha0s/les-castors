@@ -120,15 +120,18 @@ public class AnnonceDAO {
 	 * @param nouvelleAnnonce
 	 *            L'annonce a sauvegarder dans la bdd
 	 * @throws DuplicateEntityException
+	 *             Exception throw si l'entité existe déjà.
 	 */
 	public void saveAnnonce(Annonce nouvelleAnnonce) throws DuplicateEntityException {
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Debut persistence d'une nouvelle annonce......");
 		}
 
+		List<Annonce> annoncesDupliquees = getAnnonceByTitleAndDescriptionAndLogin(nouvelleAnnonce.getTitre(),
+		        nouvelleAnnonce.getDescription(), nouvelleAnnonce.getDemandeur().getLogin());
+
 		// On check si l'annonce n'existe pas déjà
-		if (getAnnonceByTitleAndDescriptionAndLogin(nouvelleAnnonce.getTitre(), nouvelleAnnonce.getDescription(),
-		        nouvelleAnnonce.getDemandeur().getLogin()).size() == 0) {
+		if (annoncesDupliquees.size() == 0) {
 			em.persist(nouvelleAnnonce);
 		} else {
 			StringBuilder sbError = new StringBuilder("Impossible de perister l'annonce: ");

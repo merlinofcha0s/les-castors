@@ -25,6 +25,12 @@ import fr.batimen.ws.entity.Client;
 import fr.batimen.ws.helper.JsonHelper;
 import fr.batimen.ws.interceptor.BatimenInterceptor;
 
+/**
+ * Facade REST de gestion des clients
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 @Stateless(name = "GestionClientFacade")
 @LocalBean
 @Path(WsPath.GESTION_CLIENT_SERVICE_PATH)
@@ -43,8 +49,8 @@ public class GestionClientFacade {
 	 * 
 	 * @param LoginDTO
 	 *            loginDTO objet permettant l'authentification
-	 * @return UserDTO vide si la combinaison login / mdp ne corresponds pas ou
-	 *         si inexistant
+	 * @return vide si la combinaison login / mdp ne corresponds pas ou si
+	 *         inexistant
 	 */
 	@POST
 	@Path(WsPath.GESTION_CLIENT_SERVICE_LOGIN)
