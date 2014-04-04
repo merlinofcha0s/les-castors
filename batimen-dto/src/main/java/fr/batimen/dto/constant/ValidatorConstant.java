@@ -15,7 +15,7 @@ public class ValidatorConstant {
 	// Login DTO
 	public static final int LOGIN_RANGE_MIN = 3;
 	public static final int LOGIN_RANGE_MAX = 25;
-	public static final int PASSWORD_RANGE_MIN = 79;
+	public static final int PASSWORD_RANGE_MIN = 6;
 	public static final int PASSWORD_RANGE_MAX = 81;
 
 	// Creation annonce DTO

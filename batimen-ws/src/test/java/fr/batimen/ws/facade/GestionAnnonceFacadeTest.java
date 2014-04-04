@@ -73,7 +73,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 		creationAnnonceDTO.setDateInscription(calDateInsription.getTime());
 		creationAnnonceDTO.setDelaiIntervention(DelaiIntervention.LE_PLUS_RAPIDEMENT_POSSIBLE);
 		creationAnnonceDTO.setDepartement(06);
-		creationAnnonceDTO.setMetier(Metier.PEINTRE);
+		creationAnnonceDTO.setMetier(Metier.PEINTURE);
 		creationAnnonceDTO.setNbDevis(3);
 		creationAnnonceDTO.setTitre("Peinture facade");
 		creationAnnonceDTO.setTypeContact(TypeContact.EMAIL);

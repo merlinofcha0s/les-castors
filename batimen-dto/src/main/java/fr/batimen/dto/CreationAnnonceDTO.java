@@ -76,7 +76,7 @@ public class CreationAnnonceDTO extends AbstractDTO {
 	private String numeroTel;
 	@Size(min = ValidatorConstant.LOGIN_RANGE_MIN, max = ValidatorConstant.LOGIN_RANGE_MAX)
 	private String login;
-	@Size(min = ValidatorConstant.PASSWORD_RANGE_MIN, max = ValidatorConstant.PASSWORD_RANGE_MIN)
+	@Size(min = ValidatorConstant.PASSWORD_RANGE_MIN, max = ValidatorConstant.PASSWORD_RANGE_MAX)
 	private String password;
 	@Email
 	private String email;
