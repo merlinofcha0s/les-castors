@@ -47,4 +47,22 @@ public class ClientService {
 
 		return clientDTO;
 	}
+
+	public static ClientDTO getClientByEmail(String email) {
+
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Début appel service de recuperation client par email + deserialization");
+		}
+
+		String objectInJSON = WsConnector.getInstance().sendRequest(WsPath.GESTION_CLIENT_SERVICE_PATH,
+		        WsPath.GESTION_CLIENT_SERVICE_BY_EMAIL, email);
+
+		ClientDTO clientDTO = ClientDTO.deserializeUserDTO(objectInJSON);
+
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Fin appel service service de recuperation client par email + deserialization");
+		}
+
+		return clientDTO;
+	}
 }

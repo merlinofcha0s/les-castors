@@ -19,7 +19,7 @@ import javax.persistence.Table;
 import fr.batimen.core.constant.QueryJPQL;
 
 /**
- * Entité user : symbolise un particulier en base de données.
+ * Entité client : symbolise un client en base de données.
  * 
  * @author Casaucau Cyril
  * 

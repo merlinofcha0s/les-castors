@@ -16,6 +16,7 @@ public class WsPath {
 	// Path Gestion Client
 	public static final String GESTION_CLIENT_SERVICE_PATH = "gestionClient";
 	public static final String GESTION_CLIENT_SERVICE_LOGIN = "login";
+	public static final String GESTION_CLIENT_SERVICE_BY_EMAIL = "email";
 
 	// Path Gestion Annonce
 	public static final String GESTION_ANNONCE_SERVICE_PATH = "gestionAnnonce";

@@ -101,7 +101,7 @@ public class GestionClientFacadeTest extends AbstractBatimenWsTest {
 	@UsingDataSet("datasets/in/clients.yml")
 	public void testGetClientForEmail() {
 
-		Client clientEmail = clientDAO.getClientByEmail("lol@lol.com");
+		ClientDTO clientEmail = ClientService.getClientByEmail("lol@lol.com");
 
 		// On vérifie les differentes infos du client
 		assertTrue(clientEmail.getLogin().equals("pebronne"));

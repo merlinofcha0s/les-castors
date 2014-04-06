@@ -49,4 +49,9 @@ public class DeserializeJsonHelper {
 		return gson.fromJson(longNumber, Long.class);
 	}
 
+	public static String parseString(String string) {
+		Gson gson = createGsonObject();
+		return gson.fromJson(string, String.class);
+	}
+
 }

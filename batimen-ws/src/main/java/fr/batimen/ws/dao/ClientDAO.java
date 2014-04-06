@@ -72,7 +72,7 @@ public class ClientDAO {
 	 * 
 	 * @param email
 	 *            L'email du client
-	 * @return La liste des clients qui ont le mail passé en param.
+	 * @return Le client qui a le mail passé en param.
 	 */
 	public Client getClientByEmail(String email) {
 
