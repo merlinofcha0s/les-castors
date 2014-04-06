@@ -12,11 +12,11 @@
 	<name>batimen-module</name>
 
 	<modules>
+		<module>../batimen-client</module>
 		<module>../batimen-core</module>
 		<module>../batimen-dto</module>
 		<module>../batimen-ws</module>
 		<module>../batimen-web</module>
-		<module>../batimen-client</module>
 	</modules>
 
 	<properties>
