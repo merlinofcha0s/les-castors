@@ -78,7 +78,7 @@ public abstract class AbstractUser extends AbstractEntity {
 	 * @return the login
 	 */
 	public String getLogin() {
-		return login;
+		return login == null ? "" : login;
 	}
 
 	/**
@@ -108,7 +108,7 @@ public abstract class AbstractUser extends AbstractEntity {
 	 * @return the email
 	 */
 	public String getEmail() {
-		return email;
+		return email == null ? "" : email;
 	}
 
 	/**

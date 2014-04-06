@@ -6,6 +6,9 @@
 
 	<!-- Fait pour la prod, ne log qu'a partir du lvl warn et archive les fichiers 
 		par date -->
+		
+	<logger name="org.dbunit" level="WARN"/>
+		
 	<appender name="log-file"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>${LOGS_FOLDER}/batimen_ws.log</file>
@@ -54,7 +57,7 @@
 	</appender>
 
 
-	<root level="${logs.lvl}">
+	<root level="DEBUG">
 		<appender-ref ref="stdout" />
 		<appender-ref ref="log-file" />
 		<appender-ref ref="troubleshooting-file" />

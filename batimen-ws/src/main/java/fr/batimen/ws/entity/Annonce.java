@@ -12,10 +12,14 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 
+import fr.batimen.core.constant.QueryJPQL;
+import fr.batimen.dto.enums.DelaiIntervention;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.Metier;
 import fr.batimen.dto.enums.TypeContact;
@@ -29,6 +33,9 @@ import fr.batimen.dto.enums.TypeContact;
  */
 @Entity
 @Table(name = "Annonce")
+@NamedQueries(value = {
+        @NamedQuery(name = QueryJPQL.ANNONCE_BY_LOGIN, query = "SELECT a FROM Annonce AS a WHERE a.demandeur.login = :login"),
+        @NamedQuery(name = QueryJPQL.ANNONCE_BY_TITLE_AND_DESCRIPTION, query = "SELECT a FROM Annonce AS a WHERE a.titre = :titre AND a.description = :description AND a.demandeur.login = :login") })
 public class Annonce extends AbstractEntity implements Serializable {
 
 	private static final long serialVersionUID = 3160372354800747789L;
@@ -42,8 +49,8 @@ public class Annonce extends AbstractEntity implements Serializable {
 	private String description;
 	@Column(nullable = false)
 	private TypeContact typeContact;
-	@Column(length = 15, nullable = false)
-	private String delaiIntervention;
+	@Column(nullable = false)
+	private DelaiIntervention delaiIntervention;
 	@Temporal(javax.persistence.TemporalType.TIMESTAMP)
 	private Date dateCreation;
 	@Temporal(javax.persistence.TemporalType.TIMESTAMP)
@@ -51,17 +58,13 @@ public class Annonce extends AbstractEntity implements Serializable {
 	@Column(nullable = false)
 	private Integer nbConsultation;
 	@Column(nullable = false)
-	private Boolean active;
-	@Column(nullable = false)
 	private Integer nbDevis;
-	@Column(length = 255, nullable = false)
+	@Column(length = 255, nullable = true)
 	private String photo;
 	@Column(nullable = false)
 	private Metier metier;
 	@Column(nullable = false)
 	private EtatAnnonce etatAnnonce;
-	@Column(nullable = false, length = 2)
-	private Integer departement;
 	@ManyToOne
 	@JoinColumn(name = "demandeur_fk")
 	private Client demandeur;
@@ -133,7 +136,7 @@ public class Annonce extends AbstractEntity implements Serializable {
 	/**
 	 * @return the delaiIntervention
 	 */
-	public String getDelaiIntervention() {
+	public DelaiIntervention getDelaiIntervention() {
 		return delaiIntervention;
 	}
 
@@ -141,7 +144,7 @@ public class Annonce extends AbstractEntity implements Serializable {
 	 * @param delaiIntervention
 	 *            the delaiIntervention to set
 	 */
-	public void setDelaiIntervention(String delaiIntervention) {
+	public void setDelaiIntervention(DelaiIntervention delaiIntervention) {
 		this.delaiIntervention = delaiIntervention;
 	}
 
@@ -188,21 +191,6 @@ public class Annonce extends AbstractEntity implements Serializable {
 	 */
 	public void setNbConsultation(Integer nbConsultation) {
 		this.nbConsultation = nbConsultation;
-	}
-
-	/**
-	 * @return the active
-	 */
-	public Boolean getActive() {
-		return active;
-	}
-
-	/**
-	 * @param active
-	 *            the active to set
-	 */
-	public void setActive(Boolean active) {
-		this.active = active;
 	}
 
 	/**
@@ -310,14 +298,6 @@ public class Annonce extends AbstractEntity implements Serializable {
 		this.adresseChantier = adresseChantier;
 	}
 
-	public Integer getDepartement() {
-		return departement;
-	}
-
-	public void setDepartement(Integer departement) {
-		this.departement = departement;
-	}
-
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -325,7 +305,7 @@ public class Annonce extends AbstractEntity implements Serializable {
 	 */
 	@Override
 	public int hashCode() {
-		return Objects.hashCode(Objects.hash(this.titre, this.description, this.dateCreation));
+		return Objects.hashCode(Objects.hash(this.titre, this.description));
 	}
 
 	/*
@@ -341,10 +321,8 @@ public class Annonce extends AbstractEntity implements Serializable {
 
 		if (object instanceof Annonce) {
 			Annonce other = (Annonce) object;
-			return Objects.equals(this.titre, other.titre) && Objects.equals(this.description, other.description)
-			        && Objects.equals(this.dateCreation, other.dateCreation);
+			return Objects.equals(this.titre, other.titre) && Objects.equals(this.description, other.description);
 		}
 		return false;
 	}
-
 }

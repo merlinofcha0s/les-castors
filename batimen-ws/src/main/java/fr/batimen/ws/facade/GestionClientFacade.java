@@ -20,11 +20,18 @@ import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.WsPath;
 import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.LoginDTO;
+import fr.batimen.dto.helper.DeserializeJsonHelper;
 import fr.batimen.ws.dao.ClientDAO;
 import fr.batimen.ws.entity.Client;
 import fr.batimen.ws.helper.JsonHelper;
 import fr.batimen.ws.interceptor.BatimenInterceptor;
 
+/**
+ * Facade REST de gestion des clients
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 @Stateless(name = "GestionClientFacade")
 @LocalBean
 @Path(WsPath.GESTION_CLIENT_SERVICE_PATH)
@@ -43,8 +50,8 @@ public class GestionClientFacade {
 	 * 
 	 * @param LoginDTO
 	 *            loginDTO objet permettant l'authentification
-	 * @return UserDTO vide si la combinaison login / mdp ne corresponds pas ou
-	 *         si inexistant
+	 * @return vide si la combinaison login / mdp ne corresponds pas ou si
+	 *         inexistant
 	 */
 	@POST
 	@Path(WsPath.GESTION_CLIENT_SERVICE_LOGIN)
@@ -53,6 +60,28 @@ public class GestionClientFacade {
 		ModelMapper modelMapper = new ModelMapper();
 
 		Client client = clientDAO.getClientByLoginName(toLogin.getLogin());
+
+		return modelMapper.map(client, ClientDTO.class);
+	}
+
+	/**
+	 * Methode de recuperation d'un client par son email
+	 * 
+	 * @param email
+	 *            l'email que l'on veut tester
+	 * @return Le client avec l'email correspondant
+	 */
+	@POST
+	@Path(WsPath.GESTION_CLIENT_SERVICE_BY_EMAIL)
+	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+	public ClientDTO clientByEmail(String email) {
+
+		// Obligé pour les strings sinon il n'escape pas les ""
+		String emailEscaped = DeserializeJsonHelper.parseString(email);
+
+		ModelMapper modelMapper = new ModelMapper();
+
+		Client client = clientDAO.getClientByEmail(emailEscaped);
 
 		return modelMapper.map(client, ClientDTO.class);
 	}

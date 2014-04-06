@@ -37,15 +37,6 @@
 
 		<wicket.mode>development</wicket.mode>
 
-		<!-- Adresse du WS -->
-		<ws.ip>127.0.0.1</ws.ip>
-		<ws.port>8181</ws.port>
-		<ws.name>batimen-ws</ws.name>
-
-		<!-- Utilisé pour activer la verification du certificat du serveur obligatoirement 
-			mettre a true en prod -->
-		<ws.isprod>false</ws.isprod>
-
 		<!-- Config de Wicket pour qu'il enleve / mette ses tags dans le HTML -->
 		<app.setStripWicketTags>false</app.setStripWicketTags>
 
@@ -100,14 +91,14 @@
 			</testResource>
 		</testResources>
 		<plugins>
+			<!-- Javadoc -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
-				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
-				</configuration>
+				<artifactId>maven-javadoc-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-eclipse-plugin</artifactId>
 			</plugin>
 			<!-- Génération du war -->
 			<plugin>
@@ -170,60 +161,6 @@
 					</execution>
 				</executions>
 			</plugin>
-
-			<!-- Javadoc -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.9.1</version>
-				<configuration>
-					<show>public</show>
-					<nohelp>false</nohelp>
-				</configuration>
-				<executions>
-					<execution>
-						<id>aggregate</id>
-						<goals>
-							<goal>aggregate</goal>
-						</goals>
-						<phase>install</phase>
-					</execution>
-					<execution>
-						<id>generate-javadoc</id>
-						<goals>
-							<goal>javadoc</goal>
-						</goals>
-						<phase>install</phase>
-					</execution>
-				</executions>
-			</plugin>
-
-			<!--This plugin's configuration is used to store Eclipse m2e settings 
-				only. It has no influence on the Maven build itself. -->
-			<plugin>
-				<groupId>org.eclipse.m2e</groupId>
-				<artifactId>lifecycle-mapping</artifactId>
-				<version>1.0.0</version>
-				<configuration>
-					<lifecycleMappingMetadata>
-						<pluginExecutions>
-							<pluginExecution>
-								<pluginExecutionFilter>
-									<groupId>org.apache.maven.plugins</groupId>
-									<artifactId>maven-dependency-plugin</artifactId>
-									<versionRange>[2.1,)</versionRange>
-									<goals>
-										<goal>copy</goal>
-									</goals>
-								</pluginExecutionFilter>
-								<action>
-									<ignore></ignore>
-								</action>
-							</pluginExecution>
-						</pluginExecutions>
-					</lifecycleMappingMetadata>
-				</configuration>
-			</plugin>
 		</plugins>
 	</build>
 
@@ -265,28 +202,6 @@
 			<scope>compile</scope>
 		</dependency>
 
-		<!-- Jersey Client -->
-		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-client</artifactId>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.jersey.contribs</groupId>
-			<artifactId>jersey-apache-client</artifactId>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-json</artifactId>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
-			<scope>compile</scope>
-		</dependency>
-
 		<!-- Logback -->
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
@@ -322,6 +237,12 @@
 			<artifactId>batimen-core</artifactId>
 			<version>0.1.0-SNAPSHOT</version>
 		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>batimen-client</artifactId>
+			<version>0.1.0-SNAPSHOT</version>
+		</dependency>
+
 	</dependencies>
 
 	<dependencyManagement>
@@ -347,26 +268,7 @@
 				<artifactId>wiquery-jquery-ui</artifactId>
 				<version>6.12.0</version>
 			</dependency>
-			<dependency>
-				<groupId>com.sun.jersey</groupId>
-				<artifactId>jersey-client</artifactId>
-				<version>${jersey.client.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.sun.jersey.contribs</groupId>
-				<artifactId>jersey-apache-client</artifactId>
-				<version>${jersey.client.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.sun.jersey</groupId>
-				<artifactId>jersey-json</artifactId>
-				<version>${jersey.client.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.google.code.gson</groupId>
-				<artifactId>gson</artifactId>
-				<version>2.2.4</version>
-			</dependency>
+
 			<dependency>
 				<groupId>ch.qos.logback</groupId>
 				<artifactId>logback-classic</artifactId>
@@ -401,11 +303,6 @@
 			<properties>
 				<!-- Wicket -->
 				<wicket.mode>deployment</wicket.mode>
-
-				<!-- Adresse du WS -->
-				<ws.ip>127.0.0.1</ws.ip>
-				<ws.port>6161</ws.port>
-				<ws.name>batimen-ws</ws.name>
 
 				<!-- Infos Web App -->
 				<app.ip>127.0.0.1</app.ip>

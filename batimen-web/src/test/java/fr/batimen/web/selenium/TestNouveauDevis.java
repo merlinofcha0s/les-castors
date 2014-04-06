@@ -109,7 +109,7 @@ public class TestNouveauDevis extends AbstractSeleniumTest {
 	}
 
 	private void etape2() {
-		new Select(driver.findElement(By.id("corpsMetierSelect"))).selectByVisibleText("Electricien");
+		new Select(driver.findElement(By.id("corpsMetierSelect"))).selectByVisibleText("Electricité");
 		driver.findElement(By.id("objetDevisField")).clear();
 		driver.findElement(By.id("objetDevisField")).sendKeys("Travaux electrique");
 		driver.findElement(By.id("descriptionDevisField")).clear();

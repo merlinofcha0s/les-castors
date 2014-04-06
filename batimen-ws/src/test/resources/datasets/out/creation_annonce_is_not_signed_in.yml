@@ -1,0 +1,25 @@
+annonce:
+  - datecreation: 2014-03-23 22:00:00.0
+    delaiintervention: 0
+    description: Peinture d'un mur
+    etatannonce: 3
+    metier: 16
+    nbconsultation: 0
+    nbdevis: 3
+    titre: Peinture facade
+    typecontact: 0
+adresse:
+  - adresse: 106 chemin du pébron
+    codepostal: "06700"
+    complementadresse: Res des pébrons
+    ville: Nice
+    departement: 6
+client:
+  - civilite: 0
+    email: pebron@delapebronne.com
+    password: $s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=
+    login: johnny06
+    nom: Du Pebron
+    numerotel: "0615458596"
+    prenom: Johnny
+    isartisan: false

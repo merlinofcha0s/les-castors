@@ -1,4 +1,4 @@
-package fr.batimen.web.server;
+package fr.batimen.ws.client;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
@@ -31,7 +31,7 @@ import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
 import com.sun.jersey.client.urlconnection.HTTPSProperties;
 
 import fr.batimen.core.constant.Constant;
-import fr.batimen.web.server.ssl.TrustManagerSingleton;
+import fr.batimen.ws.client.ssl.TrustManagerSingleton;
 
 /**
  * Classe qui permet de préparer les requètes qui seront envoyées pour
@@ -47,6 +47,8 @@ public class WsConnector {
 	private String ipServeur;
 	private String portServeur;
 	private String nomWs;
+	private String nomWsTest;
+	private boolean isTest = false;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(WsConnector.class);
 
@@ -100,7 +102,11 @@ public class WsConnector {
 		adresseService.append(":");
 		adresseService.append(portServeur);
 		adresseService.append("/");
-		adresseService.append(nomWs);
+		if (isTest) {
+			adresseService.append(nomWsTest);
+		} else {
+			adresseService.append(nomWs);
+		}
 		adresseService.append("/");
 		adresseService.append(controller);
 		adresseService.append("/");
@@ -111,7 +117,7 @@ public class WsConnector {
 		String json = serializeToJSON(object);
 
 		String reponse = call.accept(MediaType.APPLICATION_JSON_TYPE).header("ACCEPT-CHARSET", "UTF-8")
-				.entity(json, MediaType.APPLICATION_JSON_TYPE).post(String.class);
+		        .entity(json, MediaType.APPLICATION_JSON_TYPE).post(String.class);
 
 		// Au cas ou : dans le cas d'une requete en get ne pas oublier de faire
 		// un response.readentity pour fermer la requete HTTP
@@ -158,6 +164,7 @@ public class WsConnector {
 			ipServeur = wsProperties.getProperty("ws.ip");
 			portServeur = wsProperties.getProperty("ws.port");
 			nomWs = wsProperties.getProperty("ws.name");
+			nomWsTest = wsProperties.getProperty("ws.name.test.arquillian");
 		} catch (IOException e) {
 			if (LOGGER.isErrorEnabled()) {
 				LOGGER.error("Erreur de récupération des properties ws", e);
@@ -204,12 +211,12 @@ public class WsConnector {
 
 		ClientConfig config = new DefaultClientConfig();
 		config.getProperties().put(HTTPSProperties.PROPERTY_HTTPS_PROPERTIES,
-				new HTTPSProperties(new HostnameVerifier() {
-					@Override
-					public boolean verify(String s, SSLSession sslSession) {
-						return true;
-					}
-				}, context));
+		        new HTTPSProperties(new HostnameVerifier() {
+			        @Override
+			        public boolean verify(String s, SSLSession sslSession) {
+				        return true;
+			        }
+		        }, context));
 
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Config de client config.....OK");
@@ -217,4 +224,13 @@ public class WsConnector {
 
 		return config;
 	}
+
+	/**
+	 * @param isTest
+	 *            the isTest to set
+	 */
+	public void setTest(boolean isTest) {
+		this.isTest = isTest;
+	}
+
 }

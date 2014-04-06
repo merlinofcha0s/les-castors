@@ -13,11 +13,18 @@ public class Constant {
 
 	}
 
-	// Roles accés WS
+	// Code retour service
+	public static final Integer CODE_SERVICE_RETOUR_OK = 0;
+	public static final Integer CODE_SERVICE_RETOUR_KO = 1;
+
+	// Code retour propre aux annonces
+	public static final Integer CODE_SERVICE_RETOUR_ANNONCE_DUPLICATE = 10;
+
+	// Roles accés WS (Glassfish AUTH)
 	public static final String USERS_ROLE = "users";
 	public static final String ADMIN_ROLE = "admins";
 
-	// Accés User WS
+	// Accés User WS (Glassfish AUTH)
 	public static final String BATIMEN_USERS_WS = "batimenuser";
 	public static final String BATIMEN_PWD_WS = "Lolmdr06";
 
