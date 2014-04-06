@@ -450,7 +450,7 @@
 
 				<!-- Config Arquillian -->
 				<glassfish.location>/usr/share/glassfish3</glassfish.location>
-				<glassfish.adminHost>localhost</glassfish.adminHost>
+				<glassfish.adminHost>127.0.0.1</glassfish.adminHost>
 				<glassfish.adminPort>4949</glassfish.adminPort>
 				<glassfish.adminHttps>true</glassfish.adminHttps>
 				<glassfish.adminUser>admin</glassfish.adminUser>
