@@ -452,7 +452,7 @@
 				<glassfish.location>/usr/share/glassfish3</glassfish.location>
 				<glassfish.adminHost>127.0.0.1</glassfish.adminHost>
 				<glassfish.adminPort>4949</glassfish.adminPort>
-				<glassfish.adminHttps>true</glassfish.adminHttps>
+				<glassfish.adminHttps>false</glassfish.adminHttps>
 				<glassfish.adminUser>admin</glassfish.adminUser>
 				<glassfish.adminPassword>OIOIUenoBueno</glassfish.adminPassword>
 				<glassfish.domain>batimendomain</glassfish.domain>
