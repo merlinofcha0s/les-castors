@@ -110,7 +110,7 @@
 				<configuration>
 					<skipTests>false</skipTests>
 					<testFailureIgnore>true</testFailureIgnore>
-					<argLine>${jacoco.agent.argLine}</argLine>
+					<argLine>${surefireArgLine}</argLine>
 					<disableXmlReport>false</disableXmlReport>
 					<trimStackTrace>false</trimStackTrace>
 					<reportFormat>plain</reportFormat>
@@ -490,24 +490,28 @@
 							</execution>
 						</executions>
 					</plugin>
-					<!--  <plugin>
+					<plugin>
 						<groupId>org.jacoco</groupId>
 						<artifactId>jacoco-maven-plugin</artifactId>
-						<version>0.6.3.201306030806</version>
+						<version>0.7.0.201403182114</version>
 						<configuration>
-							<propertyName>jacoco.agent.argLine</propertyName>
 							<destFile>${sonar.jacoco.reportPath}</destFile>
 							<dataFile>${sonar.jacoco.reportPath}</dataFile>
 						</configuration>
 						<executions>
+							<!-- Prepares the property pointing to the JaCoCo runtime agent which 
+								is passed as VM argument when Maven the Surefire plugin is executed. -->
 							<execution>
-								<id>agent</id>
+								<id>pre-unit-test</id>
 								<goals>
 									<goal>prepare-agent</goal>
 								</goals>
+								<configuration>
+									<propertyName>surefireArgLine</propertyName>
+								</configuration>
 							</execution>
 						</executions>
-					</plugin> -->
+					</plugin>
 				</plugins>
 			</build>
 		</profile>
