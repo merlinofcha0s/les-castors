@@ -497,6 +497,7 @@
 						<configuration>
 							<destFile>${sonar.jacoco.reportPath}</destFile>
 							<dataFile>${sonar.jacoco.reportPath}</dataFile>
+							<append>true</append>
 						</configuration>
 						<executions>
 							<!-- Prepares the property pointing to the JaCoCo runtime agent which 
