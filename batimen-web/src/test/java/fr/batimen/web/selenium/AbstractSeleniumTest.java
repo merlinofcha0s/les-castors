@@ -66,6 +66,8 @@ public abstract class AbstractSeleniumTest {
 		sbUrlApp.append("/");
 		sbUrlApp.append(nomApp);
 
+		// System.setProperty("webdriver.chrome.driver",
+		// "C:\\selenium\\chromedriver.exe");
 		driver = new FirefoxDriver();
 		appUrl = sbUrlApp.toString();
 		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);

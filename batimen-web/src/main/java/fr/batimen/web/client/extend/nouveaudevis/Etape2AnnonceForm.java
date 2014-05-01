@@ -4,7 +4,6 @@ import java.util.Arrays;
 
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.NumberTextField;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
@@ -70,7 +69,7 @@ public class Etape2AnnonceForm extends Form<CreationAnnonceDTO> {
 		delaiInterventionField.add(new ErrorHighlightBehavior());
 		delaiInterventionField.add(new RequiredBorderBehaviour());
 
-		NumberTextField<Integer> nbDevisField = new NumberTextField<Integer>("nbDevis");
+		TextField<Integer> nbDevisField = new TextField<Integer>("nbDevis");
 		nbDevisField.setRequired(true);
 		nbDevisField.setMarkupId("nbDevisField");
 		nbDevisField.add(RangeValidator.range(ValidatorConstant.CREATION_ANNONCE_NBDEVIS_MIN,

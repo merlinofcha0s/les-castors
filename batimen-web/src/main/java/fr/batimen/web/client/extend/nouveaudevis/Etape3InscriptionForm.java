@@ -2,12 +2,14 @@ package fr.batimen.web.client.extend.nouveaudevis;
 
 import java.util.Arrays;
 
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
@@ -19,6 +21,8 @@ import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.dto.enums.Civilite;
 import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
+import fr.batimen.web.client.extend.CGU;
+import fr.batimen.web.client.validator.CheckBoxTrueValidator;
 
 public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 
@@ -85,6 +89,21 @@ public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 
 		this.add(new EqualPasswordInputValidator(passwordField, confirmPassword));
 
+		CheckBox cguConfirm = new CheckBox("cguConfirmation", Model.of(Boolean.FALSE));
+		cguConfirm.setRequired(true);
+		cguConfirm.add(new CheckBoxTrueValidator());
+		cguConfirm.add(new RequiredBorderBehaviour());
+
+		Link<String> cguLink = new Link<String>("cguLink") {
+
+			private static final long serialVersionUID = -7368483899425701479L;
+
+			@Override
+			public void onClick() {
+				this.setResponsePage(CGU.class);
+			}
+		};
+
 		SubmitLink validateInscription = new SubmitLink(idValidateInscription);
 		validateInscription.setMarkupId(idValidateInscription);
 
@@ -96,6 +115,8 @@ public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 		this.add(loginField);
 		this.add(passwordField);
 		this.add(confirmPassword);
+		this.add(cguConfirm);
+		this.add(cguLink);
 		this.add(validateInscription);
 	}
 

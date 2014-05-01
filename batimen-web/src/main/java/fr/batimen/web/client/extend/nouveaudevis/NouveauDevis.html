@@ -73,7 +73,7 @@
 							<th>Combien voulez-vous de devis ?</th>
 							<td><input
 								wicket:id="nbDevis"
-								type="number"
+								type="text"
 								min="1"
 								max="10"
 								step="1"
@@ -221,6 +221,11 @@
 								id="confirmPassword"
 								value="" /></td>
 						</tr>
+						<tr>
+							<th>J'accepte les <a wicket:id="cguLink" target="_blank">CGU</a></th>
+							<td><input type="checkbox" wicket:id="cguConfirmation"/></td>
+						</tr>
+						
 						<tr>
 							<th></th>
 							<td><a

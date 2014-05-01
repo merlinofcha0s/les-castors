@@ -68,6 +68,7 @@ public class TestNouveauDevis extends AbstractSeleniumTest {
 		driver.findElement(By.id("password")).sendKeys("mdrlollol");
 		driver.findElement(By.id("confirmPassword")).clear();
 		driver.findElement(By.id("confirmPassword")).sendKeys("mdrlollol");
+		driver.findElement(By.name("cguConfirmation")).click();
 		driver.findElement(By.id("validateInscription")).click();
 		assertEquals(
 		        "Votre compte a bien été créé, un e-mail vous a été envoyé, Cliquez sur le lien présent dans celui-ci pour l'activer",

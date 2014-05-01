@@ -125,7 +125,12 @@
 	padding-top: 20px;
 }
 
+.tableBatimen tbody tr td input[type="checkbox"]{
+	margin-bottom: 13px;
+}
+
 /* Composant Wicket */
+
 .wicket-mfu-caption {
 	padding-top: 5px;
 }
@@ -149,6 +154,7 @@ div.upload input[type="file"] {
 }
 
 /* Composant dans tous le site */
+
 .required {
 	color: red;
 	font-size: 1.3em;

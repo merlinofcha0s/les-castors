@@ -37,6 +37,7 @@ public class Constant {
 	public static final String MON_COMPTE_URL = "/moncompte";
 	public static final String QUI_SOMMES_NOUS_URL = "/quisommesnous";
 	public static final String CONTACT_URL = "/contact";
+	public static final String CGU_URL = "/cgu";
 	public static final String NOUVEAU_DEVIS_URL = "/nouveaudevis";
 
 }
