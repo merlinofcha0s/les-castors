@@ -13,6 +13,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.batimen.core.constant.Constant;
 import fr.batimen.core.exception.FrontEndException;
 import fr.batimen.core.security.HashHelper;
 import fr.batimen.dto.ClientDTO;
@@ -23,6 +24,7 @@ import fr.batimen.web.client.event.LoginEvent;
 import fr.batimen.web.client.extend.Accueil;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.web.client.session.BatimenSession;
+import fr.batimen.ws.client.service.AnnonceService;
 
 /**
  * Permet la création de nouveau devis par un client.
@@ -42,6 +44,8 @@ public class NouveauDevis extends MasterPage {
 
 	// Objet à remplir
 	private CreationAnnonceDTO creationAnnonce = new CreationAnnonceDTO();
+	private CompoundPropertyModel<CreationAnnonceDTO> propertyModelNouvelleAnnonce = new CompoundPropertyModel<CreationAnnonceDTO>(
+	        creationAnnonce);
 
 	// Composants étape 1
 	private MapFrance carteFrance;
@@ -70,8 +74,7 @@ public class NouveauDevis extends MasterPage {
 		containerQualification = new WebMarkupContainer("containerQualification");
 		containerQualification.setVisible(false);
 
-		Etape2AnnonceForm etape2AnnonceForm = new Etape2AnnonceForm("formQualification",
-		        new CompoundPropertyModel<CreationAnnonceDTO>(creationAnnonce)) {
+		Etape2AnnonceForm etape2AnnonceForm = new Etape2AnnonceForm("formQualification", propertyModelNouvelleAnnonce) {
 
 			private static final long serialVersionUID = -6436387191126517996L;
 
@@ -89,16 +92,24 @@ public class NouveauDevis extends MasterPage {
 		containerInscription = new WebMarkupContainer("containerInscription");
 		containerInscription.setVisible(false);
 
-		etape3InscriptionForm = new Etape3InscriptionForm("formInscription",
-		        new CompoundPropertyModel<CreationAnnonceDTO>(creationAnnonce)) {
+		etape3InscriptionForm = new Etape3InscriptionForm("formInscription", propertyModelNouvelleAnnonce) {
 
 			private static final long serialVersionUID = -7785574548677996934L;
 
 			@Override
 			protected void onSubmit() {
-				creationAnnonce.setNumeroEtape(4);
+				// On set les champs manuellement contrairement a l'étape 2 car
+				// le compound property model ne marche pas pour une raison
+				// inconnu.
+				creationAnnonce.setCivilite(etape3InscriptionForm.getCiviliteField().getConvertedInput());
+				creationAnnonce.setNom(etape3InscriptionForm.getNomField().getConvertedInput());
+				creationAnnonce.setPrenom(etape3InscriptionForm.getPrenomField().getConvertedInput());
+				creationAnnonce.setNumeroTel(etape3InscriptionForm.getNumeroTelField().getConvertedInput());
+				creationAnnonce.setEmail(etape3InscriptionForm.getEmailField().getConvertedInput());
+				creationAnnonce.setLogin(etape3InscriptionForm.getLoginField().getConvertedInput());
 				creationAnnonce.setPassword(HashHelper.hashString(etape3InscriptionForm.getPasswordField()
 				        .getConvertedInput()));
+				creationAnnonce.setNumeroEtape(4);
 				this.setResponsePage(new NouveauDevis(creationAnnonce));
 			}
 
@@ -157,7 +168,7 @@ public class NouveauDevis extends MasterPage {
 				LOGGER.error("Probleme frontend", e);
 			}
 		}
-		chooseConfirmationMessage(false);
+		chooseConfirmationMessage(false, Constant.CODE_SERVICE_RETOUR_OK);
 	}
 
 	public NouveauDevis(PageParameters parameters) {
@@ -188,16 +199,27 @@ public class NouveauDevis extends MasterPage {
 		}
 	}
 
-	private void chooseConfirmationMessage(boolean isEtape4) {
-		if (creationAnnonce.getIsSignedUp() != null && creationAnnonce.getIsSignedUp() && isEtape4) {
+	private void chooseConfirmationMessage(boolean isEtape4, Integer codeRetour) {
+		if (creationAnnonce.getIsSignedUp() != null && creationAnnonce.getIsSignedUp() && isEtape4
+		        && codeRetour == Constant.CODE_SERVICE_RETOUR_OK) {
 			confirmation1
 			        .setDefaultModelObject("Votre devis a été mis en ligne, nous vous avons envoyé un mail récapitulatif");
 			confirmation2.setDefaultModelObject("");
-		} else if (creationAnnonce.getIsSignedUp() != null && !creationAnnonce.getIsSignedUp() && isEtape4) {
+		} else if (creationAnnonce.getIsSignedUp() != null && !creationAnnonce.getIsSignedUp() && isEtape4
+		        && codeRetour == Constant.CODE_SERVICE_RETOUR_OK) {
 			confirmation1
 			        .setDefaultModelObject("Votre compte a bien été créé, un e-mail vous a été envoyé, Cliquez sur le lien présent dans celui-ci pour l'activer");
 			confirmation2
 			        .setDefaultModelObject("Votre devis a bien été enregistré. Celui-ci sera mis en ligne une fois votre compte activé.");
+		} else if (codeRetour == Constant.CODE_SERVICE_RETOUR_KO
+		        || codeRetour == Constant.CODE_SERVICE_RETOUR_DUPLICATE) {
+			if (LOGGER.isErrorEnabled()) {
+				LOGGER.error("Erreur pendant le chargement de l'annonce");
+				loggerAnnonce(creationAnnonce);
+			}
+			confirmation1
+			        .setDefaultModelObject("Problème pendant l'enregistrement de l'annonce, veuillez nous excuser pour la gène occasionnée.");
+			confirmation2.setDefaultModelObject("Si le problème persiste contactez nous.");
 		}
 	}
 
@@ -257,7 +279,8 @@ public class NouveauDevis extends MasterPage {
 			if (BatimenSession.get().isSignedIn()) {
 				remplissageCreationAnnonceSiLogin();
 			}
-			chooseConfirmationMessage(true);
+			Integer codeRetour = creationAnnonce();
+			chooseConfirmationMessage(true, codeRetour);
 			etape4Confirmation();
 			break;
 		default:
@@ -313,5 +336,36 @@ public class NouveauDevis extends MasterPage {
 			}
 
 		}
+	}
+
+	private Integer creationAnnonce() {
+		Integer codeRetour = AnnonceService.creationAnnonce(creationAnnonce);
+		return codeRetour;
+	}
+
+	private void loggerAnnonce(CreationAnnonceDTO nouvelleAnnonce) {
+		if (LOGGER.isErrorEnabled()) {
+			LOGGER.error("+--------------------------------Annonce ------------------------------------------+");
+			LOGGER.error("Objet : " + nouvelleAnnonce.getTitre());
+			LOGGER.error("Corps de metier : " + nouvelleAnnonce.getMetier());
+			LOGGER.error("Description: " + nouvelleAnnonce.getDescription());
+			LOGGER.error("Contact ? : " + nouvelleAnnonce.getTypeContact().getAffichage());
+			LOGGER.error("Intervention  : " + nouvelleAnnonce.getDelaiIntervention().getType());
+			LOGGER.error("Combien de devis  : " + nouvelleAnnonce.getNbDevis());
+			LOGGER.error("Adresse du chantier  : " + nouvelleAnnonce.getAdresse());
+			LOGGER.error("Complément du chantier  : " + nouvelleAnnonce.getComplementAdresse());
+			LOGGER.error("Code postal  : " + nouvelleAnnonce.getCodePostal());
+			LOGGER.error("Ville  : " + nouvelleAnnonce.getVille());
+			LOGGER.error("+--------------------------------Info Demandeur ------------------------------------------+");
+			LOGGER.error("Civilité  : " + nouvelleAnnonce.getCivilite().getAffichage());
+			LOGGER.error("Nom  : " + nouvelleAnnonce.getNom());
+			LOGGER.error("Prénom  : " + nouvelleAnnonce.getPrenom());
+			LOGGER.error("Numéro de téléphone  : " + nouvelleAnnonce.getNumeroTel());
+			LOGGER.error("Adresse mail : " + nouvelleAnnonce.getEmail());
+			LOGGER.error("Identifiant: " + nouvelleAnnonce.getLogin());
+			LOGGER.error("Password : " + nouvelleAnnonce.getPassword());
+			LOGGER.error("+-------------------------------- Fin log annonce ------------------------------------------+");
+		}
+
 	}
 }

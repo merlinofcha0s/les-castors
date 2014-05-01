@@ -33,13 +33,13 @@ public class AnnonceService {
 		String objectInJSON = WsConnector.getInstance().sendRequest(WsPath.GESTION_ANNONCE_SERVICE_PATH,
 		        WsPath.GESTION_ANNONCE_SERVICE_CREATION_ANNONCE, nouvelleAnnonce);
 
-		Integer codeServiceOKKO = Integer.valueOf(objectInJSON);
+		Integer codeRetour = Integer.valueOf(objectInJSON);
 
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Fin appel service creation annonce.....");
 		}
 
-		return codeServiceOKKO;
+		return codeRetour;
 
 	}
 

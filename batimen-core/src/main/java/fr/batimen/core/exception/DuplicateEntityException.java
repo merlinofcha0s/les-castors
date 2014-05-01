@@ -1,7 +1,6 @@
 package fr.batimen.core.exception;
 
-
-public class DuplicateEntityException extends BackendException {
+public class DuplicateEntityException extends Exception {
 
 	/**
 	 * 

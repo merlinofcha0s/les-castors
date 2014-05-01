@@ -18,7 +18,7 @@ public class Constant {
 	public static final Integer CODE_SERVICE_RETOUR_KO = 1;
 
 	// Code retour propre aux annonces
-	public static final Integer CODE_SERVICE_RETOUR_ANNONCE_DUPLICATE = 10;
+	public static final Integer CODE_SERVICE_RETOUR_DUPLICATE = 10;
 
 	// Roles accés WS (Glassfish AUTH)
 	public static final String USERS_ROLE = "users";

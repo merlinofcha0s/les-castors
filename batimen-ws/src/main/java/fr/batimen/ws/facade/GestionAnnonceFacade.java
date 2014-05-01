@@ -18,6 +18,9 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.WsPath;
 import fr.batimen.core.exception.BackendException;
@@ -50,6 +53,8 @@ import fr.batimen.ws.interceptor.BatimenInterceptor;
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class GestionAnnonceFacade {
 
+	private static final Logger LOGGER = LoggerFactory.getLogger(GestionAnnonceFacade.class);
+
 	@Inject
 	private AnnonceDAO annonceDAO;
 
@@ -79,10 +84,13 @@ public class GestionAnnonceFacade {
 		try {
 			Annonce nouvelleAnnonce = remplirAnnonce(nouvelleAnnonceDTO);
 			annonceDAO.saveAnnonce(nouvelleAnnonce);
-		} catch (BackendException e) {
+		} catch (BackendException | DuplicateEntityException e) {
+			if (LOGGER.isErrorEnabled()) {
+				LOGGER.error("Erreur lors de l'enregistrement de l'annonce", e);
+			}
 			// L'annonce est deja présente dans le BDD
 			if (e instanceof DuplicateEntityException) {
-				return Constant.CODE_SERVICE_RETOUR_ANNONCE_DUPLICATE;
+				return Constant.CODE_SERVICE_RETOUR_DUPLICATE;
 			}
 			// Erreur pendant la creation du service de l'annonce.
 			return Constant.CODE_SERVICE_RETOUR_KO;
@@ -99,7 +107,8 @@ public class GestionAnnonceFacade {
 	 * @return Entité Annonce
 	 * @throws BackendException
 	 */
-	private Annonce remplirAnnonce(CreationAnnonceDTO nouvelleAnnonceDTO) throws BackendException {
+	private Annonce remplirAnnonce(CreationAnnonceDTO nouvelleAnnonceDTO) throws BackendException,
+	        DuplicateEntityException {
 
 		Annonce nouvelleAnnonce = new Annonce();
 
@@ -158,7 +167,8 @@ public class GestionAnnonceFacade {
 	 * @throws BackendException
 	 *             en cas de probleme de sauvegarde dans la BDD
 	 */
-	private void isNotSignedUp(CreationAnnonceDTO nouvelleAnnonceDTO, Annonce nouvelleAnnonce) throws BackendException {
+	private void isNotSignedUp(CreationAnnonceDTO nouvelleAnnonceDTO, Annonce nouvelleAnnonce) throws BackendException,
+	        DuplicateEntityException {
 		Client nouveauClient = remplirClient(nouvelleAnnonceDTO, nouvelleAnnonce);
 		clientDAO.saveClient(nouveauClient);
 		if (nouveauClient != null) {

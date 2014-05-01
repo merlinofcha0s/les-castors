@@ -29,6 +29,12 @@ public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 	private static final long serialVersionUID = 2500892594731116597L;
 
 	private PasswordTextField passwordField;
+	private DropDownChoice<Civilite> civiliteField;
+	private TextField<String> nomField;
+	private TextField<String> prenomField;
+	private TextField<String> numeroTelField;
+	private TextField<String> emailField;
+	private TextField<String> loginField;
 
 	public Etape3InscriptionForm(String id, IModel<CreationAnnonceDTO> model) {
 		super(id, model);
@@ -40,33 +46,35 @@ public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 		String idPrenomField = "prenom";
 		String idValidateInscription = "validateInscription";
 
-		DropDownChoice<Civilite> civiliteField = new DropDownChoice<Civilite>(idCiviliteField, Arrays.asList(Civilite
-		        .values()));
+		civiliteField = new DropDownChoice<Civilite>(idCiviliteField, Arrays.asList(Civilite.values()));
 		civiliteField.setMarkupId(idCiviliteField);
 
-		TextField<String> nomField = new TextField<String>(idNomField);
+		nomField = new TextField<String>(idNomField);
 		nomField.setMarkupId(idNomField);
 		nomField.add(StringValidator.lengthBetween(ValidatorConstant.CREATION_ANNONCE_NOM_MIN,
 		        ValidatorConstant.CREATION_ANNONCE_NOM_MAX));
 
-		TextField<String> prenomField = new TextField<String>(idPrenomField);
+		prenomField = new TextField<String>(idPrenomField);
 		prenomField.setMarkupId(idPrenomField);
 		prenomField.add(StringValidator.lengthBetween(ValidatorConstant.CREATION_ANNONCE_PRENOM_MIN,
 		        ValidatorConstant.CREATION_ANNONCE_PRENOM_MAX));
 
-		TextField<String> numeroTelField = new TextField<String>("numeroTel");
+		numeroTelField = new TextField<String>("numeroTel");
+		numeroTelField.setMarkupId("numeroTel");
 		numeroTelField.setRequired(true);
 		numeroTelField.add(new RequiredBorderBehaviour());
 		numeroTelField.add(new ErrorHighlightBehavior());
 		numeroTelField.add(new PatternValidator(ValidatorConstant.CREATION_ANNONCE_TELEPHONE_REGEX));
 
-		TextField<String> emailField = new TextField<String>("email");
+		emailField = new TextField<String>("email");
+		emailField.setMarkupId("email");
 		emailField.setRequired(true);
 		emailField.add(new RequiredBorderBehaviour());
 		emailField.add(new ErrorHighlightBehavior());
 		emailField.add(EmailAddressValidator.getInstance());
 
-		TextField<String> loginField = new TextField<String>("login");
+		loginField = new TextField<String>("login");
+		loginField.setMarkupId("login");
 		loginField.setRequired(true);
 		loginField.add(new RequiredBorderBehaviour());
 		loginField.add(new ErrorHighlightBehavior());
@@ -74,6 +82,7 @@ public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 		        ValidatorConstant.LOGIN_RANGE_MAX));
 
 		passwordField = new PasswordTextField("password");
+		passwordField.setMarkupId("password");
 		passwordField.setRequired(true);
 		passwordField.add(new RequiredBorderBehaviour());
 		passwordField.add(new ErrorHighlightBehavior());
@@ -81,6 +90,7 @@ public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 		        ValidatorConstant.PASSWORD_RANGE_MAX));
 
 		PasswordTextField confirmPassword = new PasswordTextField("confirmPassword", new Model<String>());
+		passwordField.setMarkupId("confirmPassword");
 		confirmPassword.setRequired(true);
 		confirmPassword.add(new RequiredBorderBehaviour());
 		confirmPassword.add(new ErrorHighlightBehavior());
@@ -103,6 +113,8 @@ public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 				this.setResponsePage(CGU.class);
 			}
 		};
+
+		cguLink.setMarkupId("cguLink");
 
 		SubmitLink validateInscription = new SubmitLink(idValidateInscription);
 		validateInscription.setMarkupId(idValidateInscription);
@@ -128,11 +140,44 @@ public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 	}
 
 	/**
-	 * @param passwordField
-	 *            the passwordField to set
+	 * @return the civiliteField
 	 */
-	public void setPasswordField(PasswordTextField passwordField) {
-		this.passwordField = passwordField;
+	public DropDownChoice<Civilite> getCiviliteField() {
+		return civiliteField;
 	}
 
+	/**
+	 * @return the nomField
+	 */
+	public TextField<String> getNomField() {
+		return nomField;
+	}
+
+	/**
+	 * @return the prenomField
+	 */
+	public TextField<String> getPrenomField() {
+		return prenomField;
+	}
+
+	/**
+	 * @return the numeroTelField
+	 */
+	public TextField<String> getNumeroTelField() {
+		return numeroTelField;
+	}
+
+	/**
+	 * @return the emailField
+	 */
+	public TextField<String> getEmailField() {
+		return emailField;
+	}
+
+	/**
+	 * @return the loginField
+	 */
+	public TextField<String> getLoginField() {
+		return loginField;
+	}
 }

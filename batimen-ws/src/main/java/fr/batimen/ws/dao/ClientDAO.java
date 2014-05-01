@@ -109,7 +109,7 @@ public class ClientDAO {
 	 *            L'entité a ajouter dans la BDD
 	 * @throws BackendException
 	 */
-	public void saveClient(Client nouveauClient) throws BackendException {
+	public void saveClient(Client nouveauClient) throws DuplicateEntityException {
 
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Debut persistence d'un nouveau client......");
@@ -128,7 +128,6 @@ public class ClientDAO {
 			sbError.append(" - ");
 			sbError.append(nouveauClient.getEmail());
 			sbError.append(" car il existe déjà");
-
 			if (LOGGER.isErrorEnabled()) {
 				LOGGER.error(sbError.toString());
 			}

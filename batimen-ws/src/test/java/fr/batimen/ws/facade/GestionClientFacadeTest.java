@@ -117,7 +117,7 @@ public class GestionClientFacadeTest extends AbstractBatimenWsTest {
 	 */
 	@Test(expected = DuplicateEntityException.class)
 	@UsingDataSet("datasets/in/clients.yml")
-	public void testSaveDuplilcateClient() throws BackendException {
+	public void testSaveDuplilcateClient() throws BackendException, DuplicateEntityException {
 
 		Client clientDuplicate = new Client();
 		clientDuplicate.setCivilite(Civilite.MONSIEUR);
