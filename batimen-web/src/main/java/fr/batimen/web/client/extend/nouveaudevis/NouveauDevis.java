@@ -24,6 +24,7 @@ import fr.batimen.web.client.component.MapFrance;
 import fr.batimen.web.client.event.Event;
 import fr.batimen.web.client.event.LoginEvent;
 import fr.batimen.web.client.extend.Accueil;
+import fr.batimen.web.client.extend.Contact;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.web.client.session.BatimenSession;
 import fr.batimen.ws.client.service.AnnonceService;
@@ -65,6 +66,7 @@ public class NouveauDevis extends MasterPage {
 	private Label confirmation1;
 	private Label confirmation2;
 	private Image imageConfirmation;
+	private Link<String> contactezNous;
 
 	public NouveauDevis() {
 		super("Nouveau devis", "devis batiment renovation", "Nouveau devis", true, "img/bg_title1.jpg");
@@ -137,8 +139,16 @@ public class NouveauDevis extends MasterPage {
 		containerConfirmation.setVisible(false);
 		confirmation1 = new Label("confirmation1", new Model<String>());
 		confirmation2 = new Label("confirmation2", new Model<String>());
-		imageConfirmation = new Image("imageConfirmation", new ContextRelativeResource("img/ok.png"));
-		imageConfirmation.add(new AttributeModifier("alt", "ok"));
+		contactezNous = new Link<String>("contactezNous") {
+
+			static final long serialVersionUID = 4407712689323543731L;
+
+			@Override
+			public void onClick() {
+				this.setResponsePage(Contact.class);
+			}
+		};
+		contactezNous.setVisible(false);
 
 		Link<String> retourAccueil = new Link<String>("retourAccueil") {
 
@@ -151,9 +161,12 @@ public class NouveauDevis extends MasterPage {
 
 		};
 
+		retourAccueil.setOutputMarkupId(true);
+		retourAccueil.setMarkupId("retourAccueil");
+
 		containerConfirmation.add(confirmation1);
 		containerConfirmation.add(confirmation2);
-		containerConfirmation.add(imageConfirmation);
+		containerConfirmation.add(contactezNous);
 		containerConfirmation.add(retourAccueil);
 
 		// Composant généraux
@@ -206,13 +219,26 @@ public class NouveauDevis extends MasterPage {
 	}
 
 	private void chooseConfirmationMessage(boolean isEtape4, Integer codeRetour) {
+
+		// On choisi le message d'erreur que l'on va afficher suivant different
+		// cas :
+		// Premier cas : il est connecté et l'enregistrement s'est bien passé
+		// Deuxieme cas : il n'est pas connecté et l'enregistrement s'est bien
+		// passé
+		// Troisieme cas : l'enregistrement ne s'est pas bien passé.
+		// Dernier cas : cas par defaut, on est pas dans l'etape 4 (mais il faut
+		// quand meme instantié l'objet)
 		if (creationAnnonce.getIsSignedUp() != null && creationAnnonce.getIsSignedUp() && isEtape4
 		        && codeRetour == Constant.CODE_SERVICE_RETOUR_OK) {
 			confirmation1
 			        .setDefaultModelObject("Votre devis a été mis en ligne, nous vous avons envoyé un mail récapitulatif");
 			confirmation2.setDefaultModelObject("");
+			imageConfirmation = new Image("imageConfirmation", new ContextRelativeResource("img/ok.png"));
+			imageConfirmation.add(new AttributeModifier("alt", "ok"));
 		} else if (creationAnnonce.getIsSignedUp() != null && !creationAnnonce.getIsSignedUp() && isEtape4
 		        && codeRetour == Constant.CODE_SERVICE_RETOUR_OK) {
+			imageConfirmation = new Image("imageConfirmation", new ContextRelativeResource("img/ok.png"));
+			imageConfirmation.add(new AttributeModifier("alt", "ok"));
 			confirmation1
 			        .setDefaultModelObject("Votre compte a bien été créé, un e-mail vous a été envoyé, Cliquez sur le lien présent dans celui-ci pour l'activer");
 			confirmation2
@@ -223,12 +249,23 @@ public class NouveauDevis extends MasterPage {
 				LOGGER.error("Erreur pendant le chargement de l'annonce");
 				loggerAnnonce(creationAnnonce);
 			}
-			imageConfirmation.setDefaultModelObject(new ContextRelativeResource("img/error.png"));
-			imageConfirmation.add(new AttributeModifier("alt", "error"));
 			confirmation1
 			        .setDefaultModelObject("Problème pendant l'enregistrement de l'annonce, veuillez nous excuser pour la gène occasionnée.");
-			confirmation2.setDefaultModelObject("Si le problème persiste contactez nous.");
+			confirmation2.setDefaultModelObject("Si le problème persiste ");
+			imageConfirmation = new Image("imageConfirmation", new ContextRelativeResource("img/error.png"));
+			imageConfirmation.add(new AttributeModifier("alt", "error"));
+			contactezNous.setVisible(true);
+		} else {
+			imageConfirmation = new Image("imageConfirmation", new ContextRelativeResource("img/ok.png"));
+			imageConfirmation.add(new AttributeModifier("alt", "ok"));
 		}
+
+		// Dans un objet image de wicket, nous sommes obligé de l'instantier
+		// avec
+		// une image car ensuite si on la change, au rechargement de la page vu
+		// que l'instantiation
+		// passera toujours avant, l'image alternative ne s'affichera jamais
+		containerConfirmation.addOrReplace(imageConfirmation);
 	}
 
 	private void etape2Qualification() {
@@ -365,13 +402,24 @@ public class NouveauDevis extends MasterPage {
 			LOGGER.error("Code postal  : " + nouvelleAnnonce.getCodePostal());
 			LOGGER.error("Ville  : " + nouvelleAnnonce.getVille());
 			LOGGER.error("+--------------------------------Info Demandeur ------------------------------------------+");
-			LOGGER.error("Civilité  : " + nouvelleAnnonce.getCivilite().getAffichage());
-			LOGGER.error("Nom  : " + nouvelleAnnonce.getNom());
-			LOGGER.error("Prénom  : " + nouvelleAnnonce.getPrenom());
-			LOGGER.error("Numéro de téléphone  : " + nouvelleAnnonce.getNumeroTel());
-			LOGGER.error("Adresse mail : " + nouvelleAnnonce.getEmail());
-			LOGGER.error("Identifiant: " + nouvelleAnnonce.getLogin());
-			LOGGER.error("Password : " + nouvelleAnnonce.getPassword());
+			if (!nouvelleAnnonce.getIsSignedUp()) {
+				LOGGER.error("Civilité  : " + nouvelleAnnonce.getCivilite().getAffichage());
+				LOGGER.error("Nom  : " + nouvelleAnnonce.getNom());
+				LOGGER.error("Prénom  : " + nouvelleAnnonce.getPrenom());
+				LOGGER.error("Numéro de téléphone  : " + nouvelleAnnonce.getNumeroTel());
+				LOGGER.error("Adresse mail : " + nouvelleAnnonce.getEmail());
+				LOGGER.error("Identifiant: " + nouvelleAnnonce.getLogin());
+			} else {
+				BatimenSession session = (BatimenSession) BatimenSession.get();
+				ClientDTO client = session.getSessionUser();
+				LOGGER.error("Ce client est deja enregistrer dans la BDD");
+				LOGGER.error("Civilité  : " + client.getCivilite().getAffichage());
+				LOGGER.error("Nom  : " + client.getNom());
+				LOGGER.error("Prénom  : " + client.getPrenom());
+				LOGGER.error("Numéro de téléphone  : " + client.getNumeroTel());
+				LOGGER.error("Adresse mail : " + client.getEmail());
+				LOGGER.error("Identifiant: " + client.getLogin());
+			}
 			LOGGER.error("+-------------------------------- Fin log annonce ------------------------------------------+");
 		}
 

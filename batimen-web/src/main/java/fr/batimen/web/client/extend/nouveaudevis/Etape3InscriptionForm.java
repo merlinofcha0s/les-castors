@@ -92,7 +92,7 @@ public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 		        ValidatorConstant.PASSWORD_RANGE_MAX));
 
 		PasswordTextField confirmPassword = new PasswordTextField("confirmPassword", new Model<String>());
-		passwordField.setMarkupId("confirmPassword");
+		confirmPassword.setMarkupId("confirmPassword");
 		confirmPassword.setRequired(true);
 		confirmPassword.add(new RequiredBorderBehaviour());
 		confirmPassword.add(new ErrorHighlightBehavior());
