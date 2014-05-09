@@ -133,6 +133,6 @@ public class GestionClientFacadeTest extends AbstractBatimenWsTest {
 		calClient.set(2014, 01, 10, 00, 00, 00);
 		clientDuplicate.setDateInscription(calClient.getTime());
 
-		clientDAO.saveClient(clientDuplicate);
+		clientDAO.saveNewClient(clientDuplicate);
 	}
 }

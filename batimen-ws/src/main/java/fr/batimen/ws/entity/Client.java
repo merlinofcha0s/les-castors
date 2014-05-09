@@ -1,6 +1,7 @@
 package fr.batimen.ws.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -45,7 +46,7 @@ public class Client extends AbstractUser implements Serializable {
 	private Artisan artisan;
 	@Column(nullable = false)
 	@OneToMany(mappedBy = "demandeur", targetEntity = Annonce.class, cascade = CascadeType.REMOVE)
-	private List<Annonce> devisDemandes;
+	private List<Annonce> devisDemandes = new ArrayList<Annonce>();
 
 	/**
 	 * @return the devisDemandes

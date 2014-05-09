@@ -43,7 +43,7 @@ public class Artisan extends AbstractUser implements Serializable {
 	@Column(nullable = false)
 	private String domaineActivite;
 	@OneToMany(mappedBy = "artisan", targetEntity = Notation.class, cascade = CascadeType.REMOVE)
-	private List<Notation> scoreGlobal = new ArrayList<>();
+	private List<Notation> scoreGlobal = new ArrayList<Notation>();
 	@OneToOne(cascade = CascadeType.REMOVE)
 	private Entreprise entreprise;
 	@OneToOne(mappedBy = "artisan", cascade = CascadeType.REMOVE)

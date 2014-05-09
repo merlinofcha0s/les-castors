@@ -72,6 +72,7 @@ public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 		emailField.add(new RequiredBorderBehaviour());
 		emailField.add(new ErrorHighlightBehavior());
 		emailField.add(EmailAddressValidator.getInstance());
+		// Verification que l'adresse mail n'existe pas deja.
 
 		loginField = new TextField<String>("login");
 		loginField.setMarkupId("login");
@@ -80,6 +81,7 @@ public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 		loginField.add(new ErrorHighlightBehavior());
 		loginField.add(StringValidator.lengthBetween(ValidatorConstant.LOGIN_RANGE_MIN,
 		        ValidatorConstant.LOGIN_RANGE_MAX));
+		// Verification que le login n'existe pas deja
 
 		passwordField = new PasswordTextField("password");
 		passwordField.setMarkupId("password");

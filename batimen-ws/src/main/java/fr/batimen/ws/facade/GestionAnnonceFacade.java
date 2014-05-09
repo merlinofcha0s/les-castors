@@ -145,10 +145,13 @@ public class GestionAnnonceFacade {
 	 * @param nouvelleAnnonce
 	 *            entité qui sera persisté
 	 */
-	private void isSignedUp(CreationAnnonceDTO nouvelleAnnonceDTO, Annonce nouvelleAnnonce) throws BackendException {
+	private void isSignedUp(CreationAnnonceDTO nouvelleAnnonceDTO, Annonce nouvelleAnnonce) throws BackendException,
+	        DuplicateEntityException {
 		Client client = clientDAO.getClientByLoginName(nouvelleAnnonceDTO.getLogin());
 		if (client != null) {
 			nouvelleAnnonce.setDemandeur(client);
+			client.getDevisDemandes().add(nouvelleAnnonce);
+			clientDAO.saveClient(client);
 			nouvelleAnnonce.setEtatAnnonce(EtatAnnonce.ACTIVE);
 		} else {
 			throw new BackendException("Impossible de retrouver le client : " + nouvelleAnnonceDTO.getLogin());
@@ -170,7 +173,7 @@ public class GestionAnnonceFacade {
 	private void isNotSignedUp(CreationAnnonceDTO nouvelleAnnonceDTO, Annonce nouvelleAnnonce) throws BackendException,
 	        DuplicateEntityException {
 		Client nouveauClient = remplirClient(nouvelleAnnonceDTO, nouvelleAnnonce);
-		clientDAO.saveClient(nouveauClient);
+		clientDAO.saveNewClient(nouveauClient);
 		if (nouveauClient != null) {
 			nouvelleAnnonce.setDemandeur(nouveauClient);
 			nouvelleAnnonce.setEtatAnnonce(EtatAnnonce.EN_ATTENTE);

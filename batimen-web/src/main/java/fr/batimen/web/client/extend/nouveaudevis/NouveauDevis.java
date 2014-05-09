@@ -6,10 +6,12 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.ContextRelativeResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -62,6 +64,7 @@ public class NouveauDevis extends MasterPage {
 	private WebMarkupContainer containerConfirmation;
 	private Label confirmation1;
 	private Label confirmation2;
+	private Image imageConfirmation;
 
 	public NouveauDevis() {
 		super("Nouveau devis", "devis batiment renovation", "Nouveau devis", true, "img/bg_title1.jpg");
@@ -134,6 +137,8 @@ public class NouveauDevis extends MasterPage {
 		containerConfirmation.setVisible(false);
 		confirmation1 = new Label("confirmation1", new Model<String>());
 		confirmation2 = new Label("confirmation2", new Model<String>());
+		imageConfirmation = new Image("imageConfirmation", new ContextRelativeResource("img/ok.png"));
+		imageConfirmation.add(new AttributeModifier("alt", "ok"));
 
 		Link<String> retourAccueil = new Link<String>("retourAccueil") {
 
@@ -148,6 +153,7 @@ public class NouveauDevis extends MasterPage {
 
 		containerConfirmation.add(confirmation1);
 		containerConfirmation.add(confirmation2);
+		containerConfirmation.add(imageConfirmation);
 		containerConfirmation.add(retourAccueil);
 
 		// Composant généraux
@@ -217,6 +223,8 @@ public class NouveauDevis extends MasterPage {
 				LOGGER.error("Erreur pendant le chargement de l'annonce");
 				loggerAnnonce(creationAnnonce);
 			}
+			imageConfirmation.setDefaultModelObject(new ContextRelativeResource("img/error.png"));
+			imageConfirmation.add(new AttributeModifier("alt", "error"));
 			confirmation1
 			        .setDefaultModelObject("Problème pendant l'enregistrement de l'annonce, veuillez nous excuser pour la gène occasionnée.");
 			confirmation2.setDefaultModelObject("Si le problème persiste contactez nous.");
@@ -305,7 +313,7 @@ public class NouveauDevis extends MasterPage {
 		BatimenSession session = (BatimenSession) BatimenSession.get();
 		ClientDTO client = session.getSessionUser();
 		creationAnnonce.setIsSignedUp(true);
-		creationAnnonce.setEmail(client.getEmail());
+		creationAnnonce.setLogin(client.getLogin());
 
 	}
 
