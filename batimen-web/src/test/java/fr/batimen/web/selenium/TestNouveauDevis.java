@@ -1,5 +1,6 @@
 package fr.batimen.web.selenium;
 
+import static com.ninja_squad.dbsetup.Operations.sequenceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -9,15 +10,25 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import com.ninja_squad.dbsetup.DbSetup;
+import com.ninja_squad.dbsetup.operation.Operation;
+
 /**
  * Classe de test selenium pour la creation de nouveau devis par le client
  * 
  * @author Casaucau Cyril
  * 
  */
-public class TestNouveauDevis extends AbstractSeleniumTest {
+public class TestNouveauDevis extends AbstractITTest {
 
 	private String nouveauDevisDepartementURL = "/nouveaudevis/departement/41";
+
+	@Override
+	public void prepareDB() throws Exception {
+		Operation operation = sequenceOf(DELETE_ALL, INSERT_USER_DATA);
+		DbSetup dbSetup = new DbSetup(getDriverManagerDestination(), operation);
+		dbSetup.launch();
+	}
 
 	/**
 	 * Cas de test : L'utilisateur rempli son devis en s'étant authentifié juste
@@ -31,7 +42,7 @@ public class TestNouveauDevis extends AbstractSeleniumTest {
 	public void testCreationNouveauDevisAuthenticatedSucceed() {
 		driver.get(appUrl + nouveauDevisDepartementURL);
 		// On s'authentifie à l'application
-		connexionApplication(AbstractSeleniumTest.BON_MOT_DE_PASSE);
+		connexionApplication(AbstractITTest.BON_MOT_DE_PASSE);
 		// On passe l'etape 2
 		etape2();
 		// On vérifie que le label est correcte
@@ -91,9 +102,8 @@ public class TestNouveauDevis extends AbstractSeleniumTest {
 		etape2();
 		// Etape 3
 		driver.findElement(By.id("connexionEtape3")).click();
-		Boolean checkCondition = (new WebDriverWait(driver, AbstractSeleniumTest.TEMPS_ATTENTE_AJAX))
-		        .until(ExpectedConditions.textToBePresentInElementLocated(By.id("ui-id-1"),
-		                "Connexion à l'espace client / artisan"));
+		Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX)).until(ExpectedConditions
+		        .textToBePresentInElementLocated(By.id("ui-id-1"), "Connexion à l'espace client / artisan"));
 		assertTrue(checkCondition);
 		driver.findElement(By.cssSelector("table.tableBatimenLogin > tbody > tr > td > input[name=\"login\"]")).click();
 		driver.findElement(By.cssSelector("table.tableBatimenLogin > tbody > tr > td > input[name=\"login\"]")).clear();

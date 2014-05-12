@@ -420,7 +420,7 @@ public class NouveauDevis extends MasterPage {
 				LOGGER.error("Adresse mail : " + client.getEmail());
 				LOGGER.error("Identifiant: " + client.getLogin());
 			}
-			LOGGER.error("+-------------------------------- Fin log annonce ------------------------------------------+");
+			LOGGER.error("+-------------------------------- Fin annonce ------------------------------------------+");
 		}
 
 	}

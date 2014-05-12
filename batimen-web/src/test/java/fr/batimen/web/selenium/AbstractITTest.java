@@ -1,5 +1,7 @@
 package fr.batimen.web.selenium;
 
+import static com.ninja_squad.dbsetup.Operations.deleteAllFrom;
+import static com.ninja_squad.dbsetup.Operations.insertInto;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -20,6 +22,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.ninja_squad.dbsetup.destination.DriverManagerDestination;
+import com.ninja_squad.dbsetup.operation.Operation;
+
 /**
  * 
  * Classe abstraite permettant de mettre en place les tests d'integration avec
@@ -28,7 +33,7 @@ import org.slf4j.LoggerFactory;
  * @author Casaucau Cyril
  * 
  */
-public abstract class AbstractSeleniumTest {
+public abstract class AbstractITTest {
 
 	protected WebDriver driver;
 	protected String appUrl;
@@ -37,22 +42,51 @@ public abstract class AbstractSeleniumTest {
 	private String ipServeur;
 	private String portServeur;
 	private String nomApp;
+	private String dataSourceAddress;
+	private String loginDB;
+	private String passwordDB;
 
 	public final static String BON_MOT_DE_PASSE = "lollollol";
 	public final static String MAUVAIS_MOT_DE_PASSE = "kikoulolmauvais";
 	public final static int TEMPS_ATTENTE_AJAX = 20;
 
-	private static final Logger logger = LoggerFactory.getLogger(AbstractSeleniumTest.class);
+	private static final Logger logger = LoggerFactory.getLogger(AbstractITTest.class);
+
+	// DBSetup
+	public static final Operation DELETE_ALL = deleteAllFrom("annonce", "adresse", "client");
+	public static final Operation INSERT_USER_DATA = insertInto("client")
+	        .columns("id", "civilite", "email", "nom", "prenom", "login", "password", "numeroTel", "dateInscription",
+	                "isArtisan")
+	        .values(100001, "0", "raiden@batimen.fr", "Casaucau", "Cyril", "raiden",
+	                "$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=", "0614125696",
+	                "2014-01-08", false).build();
 
 	@Before
-	public void setUp() throws Exception {
+	public void setUpITTest() throws Exception {
+		setUpDB();
+		setUpSelenium();
+	}
 
+	public abstract void prepareDB() throws Exception;
+
+	private void setUpDB() throws Exception {
+		Properties dbProperties = new Properties();
+		dbProperties.load(getClass().getClassLoader().getResourceAsStream("dbsetup.properties"));
+		dataSourceAddress = dbProperties.getProperty("datasource.url");
+		loginDB = dbProperties.getProperty("database.login");
+		passwordDB = dbProperties.getProperty("database.password");
+
+		prepareDB();
+	}
+
+	private void setUpSelenium() {
 		Properties wsProperties = new Properties();
 		try {
 			wsProperties.load(getClass().getClassLoader().getResourceAsStream("selenium.properties"));
 			ipServeur = wsProperties.getProperty("app.ip");
 			portServeur = wsProperties.getProperty("app.port");
 			nomApp = wsProperties.getProperty("app.name");
+
 		} catch (IOException e) {
 			if (logger.isErrorEnabled()) {
 				logger.error("Erreur de récupération des properties de l'application web : " + e.getMessage());
@@ -76,7 +110,7 @@ public abstract class AbstractSeleniumTest {
 	}
 
 	@After
-	public void tearDown() throws Exception {
+	public void tearDownSelenium() throws Exception {
 		driver.quit();
 		String verificationErrorString = verificationErrors.toString();
 		if (!"".equals(verificationErrorString)) {
@@ -129,6 +163,10 @@ public abstract class AbstractSeleniumTest {
 		driver.findElement(By.name("password")).clear();
 		driver.findElement(By.name("password")).sendKeys(password);
 		driver.findElement(By.id("signInButton")).click();
+	}
+
+	protected DriverManagerDestination getDriverManagerDestination() {
+		return new DriverManagerDestination(dataSourceAddress, loginDB, passwordDB);
 	}
 
 }

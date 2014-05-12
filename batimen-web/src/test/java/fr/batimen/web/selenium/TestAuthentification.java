@@ -1,11 +1,15 @@
 package fr.batimen.web.selenium;
 
+import static com.ninja_squad.dbsetup.Operations.sequenceOf;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import com.ninja_squad.dbsetup.DbSetup;
+import com.ninja_squad.dbsetup.operation.Operation;
 
 /**
  * Classe de test selenium pour la popup d'authentification client.
@@ -14,24 +18,32 @@ import org.openqa.selenium.support.ui.WebDriverWait;
  * @author Casaucau Cyril
  * 
  */
-public class TestAuthentification extends AbstractSeleniumTest {
+public class TestAuthentification extends AbstractITTest {
+
+	@Override
+	public void prepareDB() throws Exception {
+		Operation operation = sequenceOf(DELETE_ALL, INSERT_USER_DATA);
+		DbSetup dbSetup = new DbSetup(getDriverManagerDestination(), operation);
+		dbSetup.launch();
+	}
 
 	@Test
 	public void testAuthentificationSuccess() throws Exception {
 		driver.get(appUrl);
-		connexionApplication(AbstractSeleniumTest.BON_MOT_DE_PASSE);
-		Boolean checkCondition = (new WebDriverWait(driver, AbstractSeleniumTest.TEMPS_ATTENTE_AJAX))
-		        .until(ExpectedConditions.textToBePresentInElementLocated(By.id("connexionlbl"), "Mon Compte"));
+		connexionApplication(AbstractITTest.BON_MOT_DE_PASSE);
+		Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX)).until(ExpectedConditions
+		        .textToBePresentInElementLocated(By.id("connexionlbl"), "Mon Compte"));
 		assertTrue(checkCondition);
 	}
 
 	@Test
 	public void testAuthentificationFailed() throws Exception {
 		driver.get(appUrl);
-		connexionApplication(AbstractSeleniumTest.MAUVAIS_MOT_DE_PASSE);
-		Boolean checkCondition = (new WebDriverWait(driver, AbstractSeleniumTest.TEMPS_ATTENTE_AJAX))
-		        .until(ExpectedConditions.textToBePresentInElementLocated(By.id("errorLogin"),
+		connexionApplication(AbstractITTest.MAUVAIS_MOT_DE_PASSE);
+		Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX)).until(ExpectedConditions
+		        .textToBePresentInElementLocated(By.id("errorLogin"),
 		                "Erreur dans la saisie ou identifiants inconnues, veuillez recommencer"));
 		assertTrue(checkCondition);
 	}
+
 }
