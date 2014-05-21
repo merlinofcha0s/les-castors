@@ -100,10 +100,45 @@ public class TestNouveauDevis extends AbstractITTest {
 		driver.get(appUrl + nouveauDevisDepartementURL);
 		// On remplit l'étape 2
 		etape2();
+		etape3EnModeInscris();
+
+		assertEquals("Votre devis a été mis en ligne, nous vous avons envoyé un mail récapitulatif", driver
+		        .findElement(By.cssSelector("h5")).getText());
+
+	}
+
+	/**
+	 * Cas de test : L'utilisateur crée deux devis, la deuxieme, l'application
+	 * doit lui renvoyer un message d'erreur.
+	 * 
+	 * Remarque : On saute la selection du département avec selenium, car
+	 * Raphael n'est visiblement pas compatible avec selenium.
+	 */
+	@Test
+	public void testCreationNouveauDevisDuplicate() {
+		// Premiere saisie de l'annonce.
+		driver.get(appUrl + nouveauDevisDepartementURL);
+		etape2();
+		etape3EnModeInscris();
+
+		assertEquals("Votre devis a été mis en ligne, nous vous avons envoyé un mail récapitulatif", driver
+		        .findElement(By.cssSelector("h5")).getText());
+
+		// Deuxieme saisie de l'annonce.
+		driver.get(appUrl + nouveauDevisDepartementURL);
+		etape2();
+
+		assertEquals("Problème pendant l'enregistrement de l'annonce, veuillez nous excuser pour la gène occasionnée.",
+		        driver.findElement(By.cssSelector("h5")).getText());
+
+	}
+
+	private void etape3EnModeInscris() {
 		// Etape 3
 		driver.findElement(By.id("connexionEtape3")).click();
-		Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX)).until(ExpectedConditions
-		        .textToBePresentInElementLocated(By.id("ui-id-1"), "Connexion à l'espace client / artisan"));
+		Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+		        .until(ExpectedConditions.textToBePresentInElementLocated(By.id("ui-id-1"),
+		                "Connexion à l'espace client / artisan"));
 		assertTrue(checkCondition);
 		driver.findElement(By.cssSelector("table.tableBatimenLogin > tbody > tr > td > input[name=\"login\"]")).click();
 		driver.findElement(By.cssSelector("table.tableBatimenLogin > tbody > tr > td > input[name=\"login\"]")).clear();
@@ -113,10 +148,6 @@ public class TestNouveauDevis extends AbstractITTest {
 		driver.findElement(By.xpath("(//input[@name='password'])[2]")).clear();
 		driver.findElement(By.xpath("(//input[@name='password'])[2]")).sendKeys("lollollol");
 		driver.findElement(By.id("signInButton")).click();
-
-		assertEquals("Votre devis a été mis en ligne, nous vous avons envoyé un mail récapitulatif", driver
-		        .findElement(By.cssSelector("h5")).getText());
-
 	}
 
 	private void etape2() {
