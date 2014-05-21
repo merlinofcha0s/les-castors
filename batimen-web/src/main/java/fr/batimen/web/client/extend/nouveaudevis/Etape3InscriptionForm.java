@@ -2,6 +2,8 @@ package fr.batimen.web.client.extend.nouveaudevis;
 
 import java.util.Arrays;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -9,13 +11,16 @@ import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator;
+import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.resource.ContextRelativeResource;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 
+import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.CreationAnnonceDTO;
 import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.dto.enums.Civilite;
@@ -23,6 +28,7 @@ import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.batimen.web.client.extend.CGU;
 import fr.batimen.web.client.validator.CheckBoxTrueValidator;
+import fr.batimen.ws.client.service.ClientService;
 
 public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 
@@ -72,6 +78,35 @@ public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 		emailField.add(new RequiredBorderBehaviour());
 		emailField.add(new ErrorHighlightBehavior());
 		emailField.add(EmailAddressValidator.getInstance());
+		final Image confirmationEmailNotUse = new Image("confirmationEmailNotUse", new ContextRelativeResource(
+		        "img/ok.png"));
+		confirmationEmailNotUse.setVisible(false);
+		confirmationEmailNotUse.setOutputMarkupId(true);
+		// On le render qu'il soit visible ou pas (utilisé pour la maj en ajax)
+		confirmationEmailNotUse.setOutputMarkupPlaceholderTag(true);
+
+		emailField.add(new AjaxFormComponentUpdatingBehavior("onblur") {
+
+			private static final long serialVersionUID = -7445370917612037362L;
+
+			@Override
+			protected void onUpdate(AjaxRequestTarget target) {
+				ClientDTO checkedClient = ClientService.getClientByEmail(emailField.getConvertedInput());
+
+				if (checkedClient.getEmail().equals("")) {
+					confirmationEmailNotUse.setImageResource(new ContextRelativeResource("img/ok.png"));
+					confirmationEmailNotUse.setVisible(true);
+				} else {
+					confirmationEmailNotUse.setImageResource(new ContextRelativeResource("img/error.png"));
+					confirmationEmailNotUse.setVisible(true);
+				}
+
+				target.add(confirmationEmailNotUse);
+
+			}
+
+		});
+
 		// Verification que l'adresse mail n'existe pas deja.
 
 		loginField = new TextField<String>("login");
@@ -126,6 +161,7 @@ public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 		this.add(prenomField);
 		this.add(numeroTelField);
 		this.add(emailField);
+		this.add(confirmationEmailNotUse);
 		this.add(loginField);
 		this.add(passwordField);
 		this.add(confirmPassword);

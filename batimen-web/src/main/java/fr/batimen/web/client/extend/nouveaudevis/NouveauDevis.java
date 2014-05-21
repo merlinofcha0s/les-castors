@@ -181,7 +181,7 @@ public class NouveauDevis extends MasterPage {
 		this.add(etape);
 
 		try {
-			changementEtape(creationAnnonce.getNumeroEtape());
+			changementEtape(/* creationAnnonce.getNumeroEtape() */3);
 		} catch (FrontEndException e) {
 			if (LOGGER.isErrorEnabled()) {
 				LOGGER.error("Probleme frontend", e);
