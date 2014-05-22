@@ -169,4 +169,17 @@ public abstract class AbstractITTest {
 		return new DriverManagerDestination(dataSourceAddress, loginDB, passwordDB);
 	}
 
+	protected void waitForTheElement(String id) throws InterruptedException {
+		for (int second = 0;; second++) {
+			if (second >= TEMPS_ATTENTE_AJAX)
+				fail("timeout");
+			try {
+				if (isElementPresent(By.id(id)))
+					break;
+			} catch (Exception e) {
+			}
+			Thread.sleep(1000);
+		}
+	}
+
 }

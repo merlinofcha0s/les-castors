@@ -2,13 +2,10 @@ package fr.batimen.web.selenium;
 
 import static com.ninja_squad.dbsetup.Operations.sequenceOf;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.ninja_squad.dbsetup.DbSetup;
 import com.ninja_squad.dbsetup.operation.Operation;
@@ -57,9 +54,11 @@ public class TestNouveauDevis extends AbstractITTest {
 	 * 
 	 * Remarque : On saute la selection du département avec selenium, car
 	 * Raphael n'est visiblement pas compatible avec selenium.
+	 * 
+	 * @throws InterruptedException
 	 */
 	@Test
-	public void testCreationNouveauDevisNonAuthenticatedSucceed() {
+	public void testCreationNouveauDevisNonAuthenticatedSucceed() throws InterruptedException {
 		driver.get(appUrl + nouveauDevisDepartementURL);
 		// On remplit l'étape 2
 		etape2();
@@ -73,8 +72,10 @@ public class TestNouveauDevis extends AbstractITTest {
 		driver.findElement(By.id("numeroTel")).sendKeys("0614528796");
 		driver.findElement(By.id("email")).clear();
 		driver.findElement(By.id("email")).sendKeys("test@selenium.fr");
+		waitForTheElement("confirmationEmailNotUse");
 		driver.findElement(By.id("login")).clear();
 		driver.findElement(By.id("login")).sendKeys("selenium");
+		waitForTheElement("confirmationLoginNotUse");
 		driver.findElement(By.id("password")).clear();
 		driver.findElement(By.id("password")).sendKeys("mdrlollol");
 		driver.findElement(By.id("confirmPassword")).clear();
@@ -94,9 +95,11 @@ public class TestNouveauDevis extends AbstractITTest {
 	 * 
 	 * Remarque : On saute la selection du département avec selenium, car
 	 * Raphael n'est visiblement pas compatible avec selenium.
+	 * 
+	 * @throws InterruptedException
 	 */
 	@Test
-	public void testCreationNouveauDevisSubscribeNotAuthenticatedSucceed() {
+	public void testCreationNouveauDevisSubscribeNotAuthenticatedSucceed() throws InterruptedException {
 		driver.get(appUrl + nouveauDevisDepartementURL);
 		// On remplit l'étape 2
 		etape2();
@@ -113,9 +116,11 @@ public class TestNouveauDevis extends AbstractITTest {
 	 * 
 	 * Remarque : On saute la selection du département avec selenium, car
 	 * Raphael n'est visiblement pas compatible avec selenium.
+	 * 
+	 * @throws InterruptedException
 	 */
 	@Test
-	public void testCreationNouveauDevisDuplicate() {
+	public void testCreationNouveauDevisDuplicate() throws InterruptedException {
 		// Premiere saisie de l'annonce.
 		driver.get(appUrl + nouveauDevisDepartementURL);
 		etape2();
@@ -133,13 +138,10 @@ public class TestNouveauDevis extends AbstractITTest {
 
 	}
 
-	private void etape3EnModeInscris() {
+	private void etape3EnModeInscris() throws InterruptedException {
 		// Etape 3
 		driver.findElement(By.id("connexionEtape3")).click();
-		Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
-		        .until(ExpectedConditions.textToBePresentInElementLocated(By.id("ui-id-1"),
-		                "Connexion à l'espace client / artisan"));
-		assertTrue(checkCondition);
+		waitForTheElement("ui-id-1");
 		driver.findElement(By.cssSelector("table.tableBatimenLogin > tbody > tr > td > input[name=\"login\"]")).click();
 		driver.findElement(By.cssSelector("table.tableBatimenLogin > tbody > tr > td > input[name=\"login\"]")).clear();
 		driver.findElement(By.cssSelector("table.tableBatimenLogin > tbody > tr > td > input[name=\"login\"]"))
