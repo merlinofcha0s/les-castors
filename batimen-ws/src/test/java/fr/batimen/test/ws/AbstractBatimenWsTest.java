@@ -33,16 +33,19 @@ public abstract class AbstractBatimenWsTest {
 		WebArchive batimenWsTest = ShrinkWrap.create(WebArchive.class, "batimen-ws-test.war");
 
 		// Ajout des dépendences
-		batimenWsTest.addPackages(true, "fr/batimen/ws").addAsLibraries(
-		        resolver.loadPomFromFile("pom.xml")
-		                .resolve("fr.batimen.app:batimen-dto:0.1.0-SNAPSHOT",
-		                        "fr.batimen.app:batimen-core:0.1.0-SNAPSHOT",
-		                        "fr.batimen.app:batimen-client:0.1.0-SNAPSHOT",
-		                        "org.hibernate:hibernate-core:4.2.5.Final",
-		                        "org.hibernate:hibernate-entitymanager:4.2.5.Final",
-		                        "com.sun.jersey:jersey-server:1.17", "com.sun.jersey:jersey-servlet:1.17",
-		                        "com.sun.jersey:jersey-json:1.17", "org.modelmapper:modelmapper:0.6.1")
-		                .withTransitivity().asFile());
+		batimenWsTest
+		        .addPackages(true, "fr/batimen/ws")
+		        .addPackages(true, "fr/batimen/test/ws")
+		        .addAsLibraries(
+		                resolver.loadPomFromFile("pom.xml")
+		                        .resolve("fr.batimen.app:batimen-dto:0.1.0-SNAPSHOT",
+		                                "fr.batimen.app:batimen-core:0.1.0-SNAPSHOT",
+		                                "fr.batimen.app:batimen-client:0.1.0-SNAPSHOT",
+		                                "org.hibernate:hibernate-core:4.2.5.Final",
+		                                "org.hibernate:hibernate-entitymanager:4.2.5.Final",
+		                                "com.sun.jersey:jersey-server:1.17", "com.sun.jersey:jersey-servlet:1.17",
+		                                "com.sun.jersey:jersey-json:1.17", "org.modelmapper:modelmapper:0.6.1")
+		                        .withTransitivity().asFile());
 
 		// Ajout des ressources
 		batimenWsTest.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
