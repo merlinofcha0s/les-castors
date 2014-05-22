@@ -1,4 +1,4 @@
-package fr.batimen.ws.facade;
+package fr.batimen.test.ws.facade;
 
 import static org.junit.Assert.assertTrue;
 
@@ -17,7 +17,7 @@ import fr.batimen.core.exception.DuplicateEntityException;
 import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.LoginDTO;
 import fr.batimen.dto.enums.Civilite;
-import fr.batimen.ws.AbstractBatimenWsTest;
+import fr.batimen.test.ws.AbstractBatimenWsTest;
 import fr.batimen.ws.client.service.ClientService;
 import fr.batimen.ws.dao.ClientDAO;
 import fr.batimen.ws.entity.Client;

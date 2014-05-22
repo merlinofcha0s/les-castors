@@ -193,7 +193,7 @@
 								name="email"
 								id="email"
 								value="" />
-								<img wicket:id="confirmationEmailNotUse" width="26px" style="vertical-align: top;"/></td>
+								<img wicket:id="confirmationEmailNotUse" title="Email OK" id="confirmationEmailNotUse"/></td>
 								
 						</tr>
 						<tr>
@@ -227,14 +227,9 @@
 							<th>J'accepte les <a wicket:id="cguLink" target="_blank">CGU</a></th>
 							<td> <input type="checkbox" wicket:id="cguConfirmation"/></td>
 						</tr>
-						
-						<tr>
-							<th></th>
-							<td><a
-								class="shortcode_button btn_small btn_type1"
-								wicket:id="validateInscription">Terminer</a></td>
-						</tr>
 					</table>
+					<div id="terminerAnnonce"><a class="shortcode_button btn_small btn_type1"
+								wicket:id="validateInscription">Terminer</a></div>
 					<div id="champsObligatoire">
 						<span class='required'>*</span> : champs obligatoires
 					</div>

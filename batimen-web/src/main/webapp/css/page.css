@@ -97,8 +97,8 @@
 }
 
 #validateInscription {
-	float: right;
-	margin-right: 16px;
+	float: none;
+	margin-left: 325px;
 }
 
 .imgHelp {
@@ -137,6 +137,11 @@
 
 .tableBatimen tbody tr td input[type="checkbox"]{
 	margin-bottom: 13px;
+}
+
+#confirmationEmailNotUse{
+	vertical-align: top;
+	width: 26px;
 }
 
 /* Composant Wicket */

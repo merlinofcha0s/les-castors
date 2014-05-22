@@ -2,6 +2,7 @@ package fr.batimen.web.client.extend.nouveaudevis;
 
 import java.util.Arrays;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -26,6 +27,7 @@ import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.dto.enums.Civilite;
 import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
+import fr.batimen.web.client.component.BatimenToolTip;
 import fr.batimen.web.client.extend.CGU;
 import fr.batimen.web.client.validator.CheckBoxTrueValidator;
 import fr.batimen.ws.client.service.ClientService;
@@ -85,27 +87,7 @@ public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 		// On le render qu'il soit visible ou pas (utilisé pour la maj en ajax)
 		confirmationEmailNotUse.setOutputMarkupPlaceholderTag(true);
 
-		emailField.add(new AjaxFormComponentUpdatingBehavior("onblur") {
-
-			private static final long serialVersionUID = -7445370917612037362L;
-
-			@Override
-			protected void onUpdate(AjaxRequestTarget target) {
-				ClientDTO checkedClient = ClientService.getClientByEmail(emailField.getConvertedInput());
-
-				if (checkedClient.getEmail().equals("")) {
-					confirmationEmailNotUse.setImageResource(new ContextRelativeResource("img/ok.png"));
-					confirmationEmailNotUse.setVisible(true);
-				} else {
-					confirmationEmailNotUse.setImageResource(new ContextRelativeResource("img/error.png"));
-					confirmationEmailNotUse.setVisible(true);
-				}
-
-				target.add(confirmationEmailNotUse);
-
-			}
-
-		});
+		emailField.add(emailAjaxVerification(confirmationEmailNotUse));
 
 		// Verification que l'adresse mail n'existe pas deja.
 
@@ -168,6 +150,56 @@ public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 		this.add(cguConfirm);
 		this.add(cguLink);
 		this.add(validateInscription);
+		this.add(BatimenToolTip.getTooltipBehaviour());
+	}
+
+	private AjaxFormComponentUpdatingBehavior emailAjaxVerification(final Image confirmationEmailNotUse) {
+		return new AjaxFormComponentUpdatingBehavior("onblur") {
+
+			private static final long serialVersionUID = -7445370917612037362L;
+
+			@Override
+			protected void onUpdate(AjaxRequestTarget target) {
+				ClientDTO checkedClient = ClientService.getClientByEmail(emailField.getConvertedInput());
+
+				if (checkedClient.getEmail().equals("")) {
+					confirmationEmailNotUse.setImageResource(new ContextRelativeResource("img/ok.png"));
+					confirmationEmailNotUse.setVisible(true);
+					confirmationEmailNotUse.add(new AttributeModifier("title", "Email OK"));
+				} else {
+					confirmationEmailNotUse.setImageResource(new ContextRelativeResource("img/error.png"));
+					confirmationEmailNotUse.setVisible(true);
+					confirmationEmailNotUse.add(new AttributeModifier("title", "Email déjà enregistré"));
+				}
+
+				target.add(confirmationEmailNotUse);
+			}
+
+		};
+	}
+
+	private AjaxFormComponentUpdatingBehavior loginAjaxVerification(final Image confirmationLoginNotUse) {
+		return new AjaxFormComponentUpdatingBehavior("onblur") {
+
+			@Override
+			protected void onUpdate(AjaxRequestTarget target) {
+				ClientDTO checkedClient = ClientService.getClientByEmail(emailField.getConvertedInput());
+
+				if (checkedClient.getEmail().equals("")) {
+					confirmationLoginNotUse.setImageResource(new ContextRelativeResource("img/ok.png"));
+					confirmationLoginNotUse.setVisible(true);
+					confirmationLoginNotUse.add(new AttributeModifier("title", "Email OK"));
+				} else {
+					confirmationLoginNotUse.setImageResource(new ContextRelativeResource("img/error.png"));
+					confirmationLoginNotUse.setVisible(true);
+					confirmationLoginNotUse.add(new AttributeModifier("title", "Email déjà enregistré"));
+				}
+
+				target.add(confirmationLoginNotUse);
+			}
+
+		};
+
 	}
 
 	/**

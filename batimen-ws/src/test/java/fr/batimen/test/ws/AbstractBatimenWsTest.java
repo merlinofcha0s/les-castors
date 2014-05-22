@@ -1,4 +1,4 @@
-package fr.batimen.ws;
+package fr.batimen.test.ws;
 
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
