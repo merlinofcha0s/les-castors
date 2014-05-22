@@ -23,6 +23,7 @@ import org.apache.wicket.validation.validator.StringValidator;
 
 import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.CreationAnnonceDTO;
+import fr.batimen.dto.LoginDTO;
 import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.dto.enums.Civilite;
 import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
@@ -74,12 +75,6 @@ public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 		numeroTelField.add(new ErrorHighlightBehavior());
 		numeroTelField.add(new PatternValidator(ValidatorConstant.CREATION_ANNONCE_TELEPHONE_REGEX));
 
-		emailField = new TextField<String>("email");
-		emailField.setMarkupId("email");
-		emailField.setRequired(true);
-		emailField.add(new RequiredBorderBehaviour());
-		emailField.add(new ErrorHighlightBehavior());
-		emailField.add(EmailAddressValidator.getInstance());
 		final Image confirmationEmailNotUse = new Image("confirmationEmailNotUse", new ContextRelativeResource(
 		        "img/ok.png"));
 		confirmationEmailNotUse.setVisible(false);
@@ -87,9 +82,22 @@ public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 		// On le render qu'il soit visible ou pas (utilisé pour la maj en ajax)
 		confirmationEmailNotUse.setOutputMarkupPlaceholderTag(true);
 
+		emailField = new TextField<String>("email");
+		emailField.setMarkupId("email");
+		emailField.setRequired(true);
+		emailField.add(new RequiredBorderBehaviour());
+		emailField.add(new ErrorHighlightBehavior());
+		emailField.add(EmailAddressValidator.getInstance());
+
 		emailField.add(emailAjaxVerification(confirmationEmailNotUse));
 
-		// Verification que l'adresse mail n'existe pas deja.
+		final Image confirmationLoginNotUse = new Image("confirmationLoginNotUse", new ContextRelativeResource(
+		        "img/ok.png"));
+		confirmationLoginNotUse.setVisible(false);
+		confirmationLoginNotUse.setOutputMarkupId(true);
+		// On le render qu'il soit visible ou pas (obligatoire pour la maj en
+		// ajax)
+		confirmationLoginNotUse.setOutputMarkupPlaceholderTag(true);
 
 		loginField = new TextField<String>("login");
 		loginField.setMarkupId("login");
@@ -98,7 +106,7 @@ public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 		loginField.add(new ErrorHighlightBehavior());
 		loginField.add(StringValidator.lengthBetween(ValidatorConstant.LOGIN_RANGE_MIN,
 		        ValidatorConstant.LOGIN_RANGE_MAX));
-		// Verification que le login n'existe pas deja
+		loginField.add(loginAjaxVerification(confirmationLoginNotUse));
 
 		passwordField = new PasswordTextField("password");
 		passwordField.setMarkupId("password");
@@ -145,6 +153,7 @@ public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 		this.add(emailField);
 		this.add(confirmationEmailNotUse);
 		this.add(loginField);
+		this.add(confirmationLoginNotUse);
 		this.add(passwordField);
 		this.add(confirmPassword);
 		this.add(cguConfirm);
@@ -181,18 +190,23 @@ public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 	private AjaxFormComponentUpdatingBehavior loginAjaxVerification(final Image confirmationLoginNotUse) {
 		return new AjaxFormComponentUpdatingBehavior("onblur") {
 
+			private static final long serialVersionUID = 658096645690773662L;
+
 			@Override
 			protected void onUpdate(AjaxRequestTarget target) {
-				ClientDTO checkedClient = ClientService.getClientByEmail(emailField.getConvertedInput());
+				LoginDTO loginToCheck = new LoginDTO();
+				loginToCheck.setLogin(loginField.getConvertedInput());
 
-				if (checkedClient.getEmail().equals("")) {
+				ClientDTO checkedClient = ClientService.login(loginToCheck);
+
+				if (checkedClient.getLogin().equals("")) {
 					confirmationLoginNotUse.setImageResource(new ContextRelativeResource("img/ok.png"));
 					confirmationLoginNotUse.setVisible(true);
-					confirmationLoginNotUse.add(new AttributeModifier("title", "Email OK"));
+					confirmationLoginNotUse.add(new AttributeModifier("title", "Nom d'utilisateur disponible"));
 				} else {
 					confirmationLoginNotUse.setImageResource(new ContextRelativeResource("img/error.png"));
 					confirmationLoginNotUse.setVisible(true);
-					confirmationLoginNotUse.add(new AttributeModifier("title", "Email déjà enregistré"));
+					confirmationLoginNotUse.add(new AttributeModifier("title", "Nom d'utilisateur non disponible"));
 				}
 
 				target.add(confirmationLoginNotUse);

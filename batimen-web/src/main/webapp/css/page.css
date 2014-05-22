@@ -139,7 +139,7 @@
 	margin-bottom: 13px;
 }
 
-#confirmationEmailNotUse{
+.checkUsedField{
 	vertical-align: top;
 	width: 26px;
 }
