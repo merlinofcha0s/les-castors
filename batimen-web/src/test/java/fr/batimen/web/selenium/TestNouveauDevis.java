@@ -72,10 +72,8 @@ public class TestNouveauDevis extends AbstractITTest {
 		driver.findElement(By.id("numeroTel")).sendKeys("0614528796");
 		driver.findElement(By.id("email")).clear();
 		driver.findElement(By.id("email")).sendKeys("test@selenium.fr");
-		waitForTheElement("confirmationEmailNotUse");
 		driver.findElement(By.id("login")).clear();
 		driver.findElement(By.id("login")).sendKeys("selenium");
-		waitForTheElement("confirmationLoginNotUse");
 		driver.findElement(By.id("password")).clear();
 		driver.findElement(By.id("password")).sendKeys("mdrlollol");
 		driver.findElement(By.id("confirmPassword")).clear();

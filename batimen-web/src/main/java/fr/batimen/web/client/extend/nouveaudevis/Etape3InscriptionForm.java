@@ -2,9 +2,6 @@ package fr.batimen.web.client.extend.nouveaudevis;
 
 import java.util.Arrays;
 
-import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -12,18 +9,14 @@ import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator;
-import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.request.resource.ContextRelativeResource;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 
-import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.CreationAnnonceDTO;
-import fr.batimen.dto.LoginDTO;
 import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.dto.enums.Civilite;
 import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
@@ -31,7 +24,8 @@ import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.batimen.web.client.component.BatimenToolTip;
 import fr.batimen.web.client.extend.CGU;
 import fr.batimen.web.client.validator.CheckBoxTrueValidator;
-import fr.batimen.ws.client.service.ClientService;
+import fr.batimen.web.client.validator.EmailUniquenessValidator;
+import fr.batimen.web.client.validator.LoginUniquenessValidator;
 
 public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 
@@ -44,8 +38,6 @@ public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 	private TextField<String> numeroTelField;
 	private TextField<String> emailField;
 	private TextField<String> loginField;
-	private boolean emailOK = false;
-	private boolean loginOK = false;
 
 	public Etape3InscriptionForm(String id, IModel<CreationAnnonceDTO> model) {
 		super(id, model);
@@ -77,29 +69,13 @@ public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 		numeroTelField.add(new ErrorHighlightBehavior());
 		numeroTelField.add(new PatternValidator(ValidatorConstant.CREATION_ANNONCE_TELEPHONE_REGEX));
 
-		final Image confirmationEmailNotUse = new Image("confirmationEmailNotUse", new ContextRelativeResource(
-		        "img/ok.png"));
-		confirmationEmailNotUse.setVisible(false);
-		confirmationEmailNotUse.setOutputMarkupId(true);
-		// On le render qu'il soit visible ou pas (utilisé pour la maj en ajax)
-		confirmationEmailNotUse.setOutputMarkupPlaceholderTag(true);
-
 		emailField = new TextField<String>("email");
 		emailField.setMarkupId("email");
 		emailField.setRequired(true);
 		emailField.add(new RequiredBorderBehaviour());
 		emailField.add(new ErrorHighlightBehavior());
 		emailField.add(EmailAddressValidator.getInstance());
-
-		emailField.add(emailAjaxVerification(confirmationEmailNotUse));
-
-		final Image confirmationLoginNotUse = new Image("confirmationLoginNotUse", new ContextRelativeResource(
-		        "img/ok.png"));
-		confirmationLoginNotUse.setVisible(false);
-		confirmationLoginNotUse.setOutputMarkupId(true);
-		// On le render qu'il soit visible ou pas (obligatoire pour la maj en
-		// ajax)
-		confirmationLoginNotUse.setOutputMarkupPlaceholderTag(true);
+		emailField.add(new EmailUniquenessValidator());
 
 		loginField = new TextField<String>("login");
 		loginField.setMarkupId("login");
@@ -108,7 +84,7 @@ public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 		loginField.add(new ErrorHighlightBehavior());
 		loginField.add(StringValidator.lengthBetween(ValidatorConstant.LOGIN_RANGE_MIN,
 		        ValidatorConstant.LOGIN_RANGE_MAX));
-		loginField.add(loginAjaxVerification(confirmationLoginNotUse));
+		loginField.add(new LoginUniquenessValidator());
 
 		passwordField = new PasswordTextField("password");
 		passwordField.setMarkupId("password");
@@ -153,74 +129,13 @@ public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 		this.add(prenomField);
 		this.add(numeroTelField);
 		this.add(emailField);
-		this.add(confirmationEmailNotUse);
 		this.add(loginField);
-		this.add(confirmationLoginNotUse);
 		this.add(passwordField);
 		this.add(confirmPassword);
 		this.add(cguConfirm);
 		this.add(cguLink);
 		this.add(validateInscription);
 		this.add(BatimenToolTip.getTooltipBehaviour());
-	}
-
-	private AjaxFormComponentUpdatingBehavior emailAjaxVerification(final Image confirmationEmailNotUse) {
-		return new AjaxFormComponentUpdatingBehavior("onblur") {
-
-			private static final long serialVersionUID = -7445370917612037362L;
-
-			@Override
-			protected void onUpdate(AjaxRequestTarget target) {
-				ClientDTO checkedClient = ClientService.getClientByEmail(emailField.getConvertedInput());
-
-				if (checkedClient.getEmail().equals("")) {
-					confirmationEmailNotUse.setImageResource(new ContextRelativeResource("img/ok.png"));
-					confirmationEmailNotUse.setVisible(true);
-					confirmationEmailNotUse.add(new AttributeModifier("title", "Email OK"));
-					emailOK = true;
-				} else {
-					confirmationEmailNotUse.setImageResource(new ContextRelativeResource("img/error.png"));
-					confirmationEmailNotUse.setVisible(true);
-					confirmationEmailNotUse.add(new AttributeModifier("title", "Email déjà enregistré"));
-					emailOK = false;
-				}
-
-				target.add(confirmationEmailNotUse);
-			}
-
-		};
-	}
-
-	private AjaxFormComponentUpdatingBehavior loginAjaxVerification(final Image confirmationLoginNotUse) {
-		return new AjaxFormComponentUpdatingBehavior("onblur") {
-
-			private static final long serialVersionUID = 658096645690773662L;
-
-			@Override
-			protected void onUpdate(AjaxRequestTarget target) {
-				LoginDTO loginToCheck = new LoginDTO();
-				loginToCheck.setLogin(loginField.getConvertedInput());
-
-				ClientDTO checkedClient = ClientService.login(loginToCheck);
-
-				if (checkedClient.getLogin().equals("")) {
-					confirmationLoginNotUse.setImageResource(new ContextRelativeResource("img/ok.png"));
-					confirmationLoginNotUse.setVisible(true);
-					confirmationLoginNotUse.add(new AttributeModifier("title", "Nom d'utilisateur disponible"));
-					loginOK = true;
-				} else {
-					confirmationLoginNotUse.setImageResource(new ContextRelativeResource("img/error.png"));
-					confirmationLoginNotUse.setVisible(true);
-					confirmationLoginNotUse.add(new AttributeModifier("title", "Nom d'utilisateur non disponible"));
-					loginOK = false;
-
-				}
-
-				target.add(confirmationLoginNotUse);
-			}
-
-		};
-
 	}
 
 	/**
@@ -270,20 +185,6 @@ public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 	 */
 	public TextField<String> getLoginField() {
 		return loginField;
-	}
-
-	/**
-	 * @return the emailOK
-	 */
-	public boolean isEmailOK() {
-		return emailOK;
-	}
-
-	/**
-	 * @return the loginOK
-	 */
-	public boolean isLoginOK() {
-		return loginOK;
 	}
 
 }
