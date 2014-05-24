@@ -44,6 +44,8 @@ public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 	private TextField<String> numeroTelField;
 	private TextField<String> emailField;
 	private TextField<String> loginField;
+	private boolean emailOK = false;
+	private boolean loginOK = false;
 
 	public Etape3InscriptionForm(String id, IModel<CreationAnnonceDTO> model) {
 		super(id, model);
@@ -175,10 +177,12 @@ public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 					confirmationEmailNotUse.setImageResource(new ContextRelativeResource("img/ok.png"));
 					confirmationEmailNotUse.setVisible(true);
 					confirmationEmailNotUse.add(new AttributeModifier("title", "Email OK"));
+					emailOK = true;
 				} else {
 					confirmationEmailNotUse.setImageResource(new ContextRelativeResource("img/error.png"));
 					confirmationEmailNotUse.setVisible(true);
 					confirmationEmailNotUse.add(new AttributeModifier("title", "Email déjà enregistré"));
+					emailOK = false;
 				}
 
 				target.add(confirmationEmailNotUse);
@@ -203,10 +207,13 @@ public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 					confirmationLoginNotUse.setImageResource(new ContextRelativeResource("img/ok.png"));
 					confirmationLoginNotUse.setVisible(true);
 					confirmationLoginNotUse.add(new AttributeModifier("title", "Nom d'utilisateur disponible"));
+					loginOK = true;
 				} else {
 					confirmationLoginNotUse.setImageResource(new ContextRelativeResource("img/error.png"));
 					confirmationLoginNotUse.setVisible(true);
 					confirmationLoginNotUse.add(new AttributeModifier("title", "Nom d'utilisateur non disponible"));
+					loginOK = false;
+
 				}
 
 				target.add(confirmationLoginNotUse);
@@ -264,4 +271,19 @@ public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 	public TextField<String> getLoginField() {
 		return loginField;
 	}
+
+	/**
+	 * @return the emailOK
+	 */
+	public boolean isEmailOK() {
+		return emailOK;
+	}
+
+	/**
+	 * @return the loginOK
+	 */
+	public boolean isLoginOK() {
+		return loginOK;
+	}
+
 }

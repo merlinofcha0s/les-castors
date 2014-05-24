@@ -103,19 +103,33 @@ public class NouveauDevis extends MasterPage {
 
 			@Override
 			protected void onSubmit() {
-				// On set les champs manuellement contrairement a l'étape 2 car
-				// le compound property model ne marche pas pour une raison
-				// inconnu.
-				creationAnnonce.setCivilite(etape3InscriptionForm.getCiviliteField().getConvertedInput());
-				creationAnnonce.setNom(etape3InscriptionForm.getNomField().getConvertedInput());
-				creationAnnonce.setPrenom(etape3InscriptionForm.getPrenomField().getConvertedInput());
-				creationAnnonce.setNumeroTel(etape3InscriptionForm.getNumeroTelField().getConvertedInput());
-				creationAnnonce.setEmail(etape3InscriptionForm.getEmailField().getConvertedInput());
-				creationAnnonce.setLogin(etape3InscriptionForm.getLoginField().getConvertedInput());
-				creationAnnonce.setPassword(HashHelper.hashString(etape3InscriptionForm.getPasswordField()
-				        .getConvertedInput()));
-				creationAnnonce.setNumeroEtape(4);
-				this.setResponsePage(new NouveauDevis(creationAnnonce));
+
+				if (isLoginOK() && isEmailOK()) {
+					// On set les champs manuellement contrairement a l'étape 2
+					// car
+					// le compound property model ne marche pas pour une raison
+					// inconnu.
+					creationAnnonce.setCivilite(etape3InscriptionForm.getCiviliteField().getConvertedInput());
+					creationAnnonce.setNom(etape3InscriptionForm.getNomField().getConvertedInput());
+					creationAnnonce.setPrenom(etape3InscriptionForm.getPrenomField().getConvertedInput());
+					creationAnnonce.setNumeroTel(etape3InscriptionForm.getNumeroTelField().getConvertedInput());
+					creationAnnonce.setEmail(etape3InscriptionForm.getEmailField().getConvertedInput());
+					creationAnnonce.setLogin(etape3InscriptionForm.getLoginField().getConvertedInput());
+					creationAnnonce.setPassword(HashHelper.hashString(etape3InscriptionForm.getPasswordField()
+					        .getConvertedInput()));
+					creationAnnonce.setNumeroEtape(4);
+					this.setResponsePage(new NouveauDevis(creationAnnonce));
+				} else {
+					if (!isLoginOK()) {
+						feedBackPanelGeneral.error("Veuillez changer de nom d'utlisateur car celui ci est déjà pris");
+					}
+
+					if (!isEmailOK()) {
+						feedBackPanelGeneral
+						        .error("Veuillez changer d'adresse email car celle-ci est déjà présente sur castor.fr");
+					}
+				}
+
 			}
 
 		};
