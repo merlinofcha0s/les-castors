@@ -7,6 +7,12 @@ import fr.batimen.core.constant.WsPath;
 import fr.batimen.dto.CreationAnnonceDTO;
 import fr.batimen.ws.client.WsConnector;
 
+/**
+ * Classe d'appel au webservice concernant les annonces.
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class AnnonceService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AnnonceService.class);

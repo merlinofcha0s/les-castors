@@ -1,5 +1,11 @@
 package fr.batimen.core.exception;
 
+/**
+ * Exception lancée quand une entité dupliquée en base de données
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class DuplicateEntityException extends Exception {
 
 	/**

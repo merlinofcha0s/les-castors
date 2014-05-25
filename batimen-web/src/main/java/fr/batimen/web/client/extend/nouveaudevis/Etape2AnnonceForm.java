@@ -22,6 +22,12 @@ import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.batimen.web.client.component.BatimenToolTip;
 
+/**
+ * Form de l'etape 2 de création d'annonce.
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class Etape2AnnonceForm extends Form<CreationAnnonceDTO> {
 
 	private static final long serialVersionUID = 6521295805432818556L;

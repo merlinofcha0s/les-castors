@@ -7,6 +7,12 @@ import org.apache.wicket.validation.ValidationError;
 import fr.batimen.dto.ClientDTO;
 import fr.batimen.ws.client.service.ClientService;
 
+/**
+ * Verifie que l'email en cours d'inscription n'est pas deja présent en BDD
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class EmailUniquenessValidator implements IValidator<String> {
 
 	private static final long serialVersionUID = 2423564239255893289L;

@@ -8,6 +8,12 @@ import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.LoginDTO;
 import fr.batimen.ws.client.service.ClientService;
 
+/**
+ * Verifie que le login en cours d'inscription n'est pas deja présent en BDD
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class LoginUniquenessValidator implements IValidator<String> {
 
 	private static final long serialVersionUID = -3658940352362936663L;

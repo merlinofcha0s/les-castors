@@ -113,7 +113,7 @@ public class GestionAnnonceFacade {
 		Annonce nouvelleAnnonce = new Annonce();
 
 		// On rempli, on persiste et on bind l'adresse à l'annonce.
-		nouvelleAnnonce.setAdresseChantier(remplirAndPersistAdresse(nouvelleAnnonceDTO, nouvelleAnnonce));
+		nouvelleAnnonce.setAdresseChantier(remplirAndPersistAdresse(nouvelleAnnonceDTO));
 
 		if (nouvelleAnnonceDTO.getIsSignedUp()) {
 			isSignedUp(nouvelleAnnonceDTO, nouvelleAnnonce);
@@ -184,13 +184,11 @@ public class GestionAnnonceFacade {
 	 * Rempli une entité Adresse grace à la DTO de création de l'annonce, puis
 	 * la persiste
 	 * 
-	 * @param nouvelleAnnonceDTO
 	 * @param nouvelleAnnonce
 	 * @return
 	 * @throws BackendException
 	 */
-	private Adresse remplirAndPersistAdresse(CreationAnnonceDTO nouvelleAnnonceDTO, Annonce nouvelleAnnonce)
-	        throws BackendException {
+	private Adresse remplirAndPersistAdresse(CreationAnnonceDTO nouvelleAnnonceDTO) throws BackendException {
 
 		// On crée la nouvelle adresse qui sera rattaché a l'annonce.
 		Adresse adresseAnnonce = new Adresse();

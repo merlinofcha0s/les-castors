@@ -25,6 +25,12 @@ import fr.batimen.dto.enums.Metier;
 import fr.batimen.dto.enums.TypeContact;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 
+/**
+ * Objet d'échange permettant la creation d'annonce.
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class CreationAnnonceDTO extends AbstractDTO {
 
 	private static final long serialVersionUID = -7316855280979589583L;

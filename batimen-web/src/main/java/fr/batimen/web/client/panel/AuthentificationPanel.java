@@ -19,6 +19,13 @@ import org.slf4j.LoggerFactory;
 import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.web.client.event.LoginEvent;
 
+/**
+ * Panel qui contient un form permettant à l'utilisateur de pouvoir
+ * s'identifier.
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class AuthentificationPanel extends Panel {
 
 	private static final long serialVersionUID = -1634093925835447825L;

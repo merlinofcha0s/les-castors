@@ -134,7 +134,7 @@ public class AnnonceDAO {
 		        nouvelleAnnonce.getDescription(), nouvelleAnnonce.getDemandeur().getLogin());
 
 		// On check si l'annonce n'existe pas déjà
-		if (annoncesDupliquees.size() == 0) {
+		if (annoncesDupliquees.isEmpty()) {
 			em.persist(nouvelleAnnonce);
 		} else {
 			StringBuilder sbError = new StringBuilder("Impossible de perister l'annonce: ");

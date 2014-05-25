@@ -27,6 +27,12 @@ import fr.batimen.web.client.validator.CheckBoxTrueValidator;
 import fr.batimen.web.client.validator.EmailUniquenessValidator;
 import fr.batimen.web.client.validator.LoginUniquenessValidator;
 
+/**
+ * Form de l'etape 3 de création d'annonce.
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 
 	private static final long serialVersionUID = 2500892594731116597L;

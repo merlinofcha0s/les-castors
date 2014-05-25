@@ -232,7 +232,7 @@ public class NouveauDevis extends MasterPage {
 		// Dernier cas : cas par defaut, on est pas dans l'etape 4 (mais il faut
 		// quand meme instantié l'objet)
 		if (creationAnnonce.getIsSignedUp() != null && creationAnnonce.getIsSignedUp() && isEtape4
-		        && codeRetour == Constant.CODE_SERVICE_RETOUR_OK) {
+		        && codeRetour.equals(Constant.CODE_SERVICE_RETOUR_OK)) {
 			confirmation1
 			        .setDefaultModelObject("Votre devis a été mis en ligne, nous vous avons envoyé un mail récapitulatif");
 			confirmation2.setDefaultModelObject("");
@@ -387,8 +387,7 @@ public class NouveauDevis extends MasterPage {
 	}
 
 	private Integer creationAnnonce() {
-		Integer codeRetour = AnnonceService.creationAnnonce(creationAnnonce);
-		return codeRetour;
+		return AnnonceService.creationAnnonce(creationAnnonce);
 	}
 
 	private void loggerAnnonce(CreationAnnonceDTO nouvelleAnnonce) {

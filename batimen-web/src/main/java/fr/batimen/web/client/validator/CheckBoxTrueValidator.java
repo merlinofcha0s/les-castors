@@ -16,9 +16,9 @@ public class CheckBoxTrueValidator implements IValidator<Boolean> {
 
 	@Override
 	public void validate(IValidatable<Boolean> validateCheckBox) {
-		boolean checkBoxValue = Boolean.valueOf(validateCheckBox.getValue());
+		boolean checkBoxValue = validateCheckBox.getValue();
 
-		if (checkBoxValue != true) {
+		if (!checkBoxValue) {
 			// Permet de rajouter des variables dans le feedback
 			ValidationError error = new ValidationError(this);
 			validateCheckBox.error(error);
