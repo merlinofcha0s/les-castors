@@ -9,35 +9,38 @@ package fr.batimen.core.constant;
  */
 public class Constant {
 
-	private Constant() {
+    private Constant() {
 
-	}
+    }
 
-	// Code retour service
-	public static final Integer CODE_SERVICE_RETOUR_OK = 0;
-	public static final Integer CODE_SERVICE_RETOUR_KO = 1;
+    // Code retour service
+    public static final Integer CODE_SERVICE_RETOUR_OK = 0;
+    public static final Integer CODE_SERVICE_RETOUR_KO = 1;
 
-	// Code retour propre aux annonces
-	public static final Integer CODE_SERVICE_RETOUR_DUPLICATE = 10;
+    // Code retour propre aux annonces
+    public static final Integer CODE_SERVICE_RETOUR_DUPLICATE = 10;
 
-	// Roles accés WS (Glassfish AUTH)
-	public static final String USERS_ROLE = "users";
-	public static final String ADMIN_ROLE = "admins";
+    // Roles accés WS (Glassfish AUTH)
+    public static final String USERS_ROLE = "users";
+    public static final String ADMIN_ROLE = "admins";
 
-	// Accés User WS (Glassfish AUTH)
-	public static final String BATIMEN_USERS_WS = "batimenuser";
-	public static final String BATIMEN_PWD_WS = "Lolmdr06";
+    // Accés User WS (Glassfish AUTH)
+    public static final String BATIMEN_USERS_WS = "batimenuser";
+    public static final String BATIMEN_PWD_WS = "Lolmdr06";
 
-	// Timeout de connection au WS
-	public static final int CONNECT_TIMEOUT = 10000;
+    // Timeout de connection au WS
+    public static final int CONNECT_TIMEOUT = 10000;
 
-	// Nom des pages web
-	public static final String ACCUEIL_URL = "/accueil";
-	public static final String AUTHENTIFICATION_URL = "/connexion";
-	public static final String MON_COMPTE_URL = "/moncompte";
-	public static final String QUI_SOMMES_NOUS_URL = "/quisommesnous";
-	public static final String CONTACT_URL = "/contact";
-	public static final String CGU_URL = "/cgu";
-	public static final String NOUVEAU_DEVIS_URL = "/nouveaudevis";
+    // Nom des pages web
+    public static final String ACCUEIL_URL = "/accueil";
+    public static final String AUTHENTIFICATION_URL = "/connexion";
+    public static final String MON_COMPTE_URL = "/moncompte";
+    public static final String QUI_SOMMES_NOUS_URL = "/quisommesnous";
+    public static final String CONTACT_URL = "/contact";
+    public static final String CGU_URL = "/cgu";
+    public static final String NOUVEAU_DEVIS_URL = "/nouveaudevis";
+
+    public static final String EMAIL_FROM = "admin@castor.fr";
+    public static final String EMAIL_FROM_NAME = "Admin";
 
 }
