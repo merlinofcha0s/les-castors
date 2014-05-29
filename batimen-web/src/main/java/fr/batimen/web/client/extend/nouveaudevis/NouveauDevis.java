@@ -6,13 +6,16 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.request.resource.ContextRelativeResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.batimen.core.constant.Constant;
 import fr.batimen.core.exception.FrontEndException;
 import fr.batimen.core.security.HashHelper;
 import fr.batimen.dto.ClientDTO;
@@ -21,8 +24,10 @@ import fr.batimen.web.client.component.MapFrance;
 import fr.batimen.web.client.event.Event;
 import fr.batimen.web.client.event.LoginEvent;
 import fr.batimen.web.client.extend.Accueil;
+import fr.batimen.web.client.extend.Contact;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.web.client.session.BatimenSession;
+import fr.batimen.ws.client.service.AnnonceService;
 
 /**
  * Permet la création de nouveau devis par un client.
@@ -42,6 +47,8 @@ public class NouveauDevis extends MasterPage {
 
 	// Objet à remplir
 	private CreationAnnonceDTO creationAnnonce = new CreationAnnonceDTO();
+	private CompoundPropertyModel<CreationAnnonceDTO> propertyModelNouvelleAnnonce = new CompoundPropertyModel<CreationAnnonceDTO>(
+	        creationAnnonce);
 
 	// Composants étape 1
 	private MapFrance carteFrance;
@@ -58,6 +65,8 @@ public class NouveauDevis extends MasterPage {
 	private WebMarkupContainer containerConfirmation;
 	private Label confirmation1;
 	private Label confirmation2;
+	private Image imageConfirmation;
+	private Link<String> contactezNous;
 
 	public NouveauDevis() {
 		super("Nouveau devis", "devis batiment renovation", "Nouveau devis", true, "img/bg_title1.jpg");
@@ -70,8 +79,7 @@ public class NouveauDevis extends MasterPage {
 		containerQualification = new WebMarkupContainer("containerQualification");
 		containerQualification.setVisible(false);
 
-		Etape2AnnonceForm etape2AnnonceForm = new Etape2AnnonceForm("formQualification",
-		        new CompoundPropertyModel<CreationAnnonceDTO>(creationAnnonce)) {
+		Etape2AnnonceForm etape2AnnonceForm = new Etape2AnnonceForm("formQualification", propertyModelNouvelleAnnonce) {
 
 			private static final long serialVersionUID = -6436387191126517996L;
 
@@ -89,17 +97,28 @@ public class NouveauDevis extends MasterPage {
 		containerInscription = new WebMarkupContainer("containerInscription");
 		containerInscription.setVisible(false);
 
-		etape3InscriptionForm = new Etape3InscriptionForm("formInscription",
-		        new CompoundPropertyModel<CreationAnnonceDTO>(creationAnnonce)) {
+		etape3InscriptionForm = new Etape3InscriptionForm("formInscription", propertyModelNouvelleAnnonce) {
 
 			private static final long serialVersionUID = -7785574548677996934L;
 
 			@Override
 			protected void onSubmit() {
-				creationAnnonce.setNumeroEtape(4);
+
+				// On set les champs manuellement contrairement a l'étape 2
+				// car
+				// le compound property model ne marche pas pour une raison
+				// inconnu.
+				creationAnnonce.setCivilite(etape3InscriptionForm.getCiviliteField().getConvertedInput());
+				creationAnnonce.setNom(etape3InscriptionForm.getNomField().getConvertedInput());
+				creationAnnonce.setPrenom(etape3InscriptionForm.getPrenomField().getConvertedInput());
+				creationAnnonce.setNumeroTel(etape3InscriptionForm.getNumeroTelField().getConvertedInput());
+				creationAnnonce.setEmail(etape3InscriptionForm.getEmailField().getConvertedInput());
+				creationAnnonce.setLogin(etape3InscriptionForm.getLoginField().getConvertedInput());
 				creationAnnonce.setPassword(HashHelper.hashString(etape3InscriptionForm.getPasswordField()
 				        .getConvertedInput()));
+				creationAnnonce.setNumeroEtape(4);
 				this.setResponsePage(new NouveauDevis(creationAnnonce));
+
 			}
 
 		};
@@ -123,6 +142,16 @@ public class NouveauDevis extends MasterPage {
 		containerConfirmation.setVisible(false);
 		confirmation1 = new Label("confirmation1", new Model<String>());
 		confirmation2 = new Label("confirmation2", new Model<String>());
+		contactezNous = new Link<String>("contactezNous") {
+
+			static final long serialVersionUID = 4407712689323543731L;
+
+			@Override
+			public void onClick() {
+				this.setResponsePage(Contact.class);
+			}
+		};
+		contactezNous.setVisible(false);
 
 		Link<String> retourAccueil = new Link<String>("retourAccueil") {
 
@@ -135,8 +164,12 @@ public class NouveauDevis extends MasterPage {
 
 		};
 
+		retourAccueil.setOutputMarkupId(true);
+		retourAccueil.setMarkupId("retourAccueil");
+
 		containerConfirmation.add(confirmation1);
 		containerConfirmation.add(confirmation2);
+		containerConfirmation.add(contactezNous);
 		containerConfirmation.add(retourAccueil);
 
 		// Composant généraux
@@ -157,7 +190,7 @@ public class NouveauDevis extends MasterPage {
 				LOGGER.error("Probleme frontend", e);
 			}
 		}
-		chooseConfirmationMessage(false);
+		chooseConfirmationMessage(false, Constant.CODE_SERVICE_RETOUR_OK);
 	}
 
 	public NouveauDevis(PageParameters parameters) {
@@ -188,17 +221,54 @@ public class NouveauDevis extends MasterPage {
 		}
 	}
 
-	private void chooseConfirmationMessage(boolean isEtape4) {
-		if (creationAnnonce.getIsSignedUp() != null && creationAnnonce.getIsSignedUp() && isEtape4) {
+	private void chooseConfirmationMessage(boolean isEtape4, Integer codeRetour) {
+
+		// On choisi le message d'erreur que l'on va afficher suivant different
+		// cas :
+		// Premier cas : il est connecté et l'enregistrement s'est bien passé
+		// Deuxieme cas : il n'est pas connecté et l'enregistrement s'est bien
+		// passé
+		// Troisieme cas : l'enregistrement ne s'est pas bien passé.
+		// Dernier cas : cas par defaut, on est pas dans l'etape 4 (mais il faut
+		// quand meme instantié l'objet)
+		if (creationAnnonce.getIsSignedUp() != null && creationAnnonce.getIsSignedUp() && isEtape4
+		        && codeRetour.equals(Constant.CODE_SERVICE_RETOUR_OK)) {
 			confirmation1
 			        .setDefaultModelObject("Votre devis a été mis en ligne, nous vous avons envoyé un mail récapitulatif");
 			confirmation2.setDefaultModelObject("");
-		} else if (creationAnnonce.getIsSignedUp() != null && !creationAnnonce.getIsSignedUp() && isEtape4) {
+			imageConfirmation = new Image("imageConfirmation", new ContextRelativeResource("img/ok.png"));
+			imageConfirmation.add(new AttributeModifier("alt", "ok"));
+		} else if (creationAnnonce.getIsSignedUp() != null && !creationAnnonce.getIsSignedUp() && isEtape4
+		        && codeRetour == Constant.CODE_SERVICE_RETOUR_OK) {
+			imageConfirmation = new Image("imageConfirmation", new ContextRelativeResource("img/ok.png"));
+			imageConfirmation.add(new AttributeModifier("alt", "ok"));
 			confirmation1
 			        .setDefaultModelObject("Votre compte a bien été créé, un e-mail vous a été envoyé, Cliquez sur le lien présent dans celui-ci pour l'activer");
 			confirmation2
 			        .setDefaultModelObject("Votre devis a bien été enregistré. Celui-ci sera mis en ligne une fois votre compte activé.");
+		} else if (codeRetour == Constant.CODE_SERVICE_RETOUR_KO
+		        || codeRetour == Constant.CODE_SERVICE_RETOUR_DUPLICATE) {
+			if (LOGGER.isErrorEnabled()) {
+				LOGGER.error("Erreur pendant le chargement de l'annonce");
+				loggerAnnonce(creationAnnonce);
+			}
+			confirmation1
+			        .setDefaultModelObject("Problème pendant l'enregistrement de l'annonce, veuillez nous excuser pour la gène occasionnée.");
+			confirmation2.setDefaultModelObject("Si le problème persiste ");
+			imageConfirmation = new Image("imageConfirmation", new ContextRelativeResource("img/error.png"));
+			imageConfirmation.add(new AttributeModifier("alt", "error"));
+			contactezNous.setVisible(true);
+		} else {
+			imageConfirmation = new Image("imageConfirmation", new ContextRelativeResource("img/ok.png"));
+			imageConfirmation.add(new AttributeModifier("alt", "ok"));
 		}
+
+		// Dans un objet image de wicket, nous sommes obligé de l'instantier
+		// avec
+		// une image car ensuite si on la change, au rechargement de la page vu
+		// que l'instantiation
+		// passera toujours avant, l'image alternative ne s'affichera jamais
+		containerConfirmation.addOrReplace(imageConfirmation);
 	}
 
 	private void etape2Qualification() {
@@ -257,7 +327,8 @@ public class NouveauDevis extends MasterPage {
 			if (BatimenSession.get().isSignedIn()) {
 				remplissageCreationAnnonceSiLogin();
 			}
-			chooseConfirmationMessage(true);
+			Integer codeRetour = creationAnnonce();
+			chooseConfirmationMessage(true, codeRetour);
 			etape4Confirmation();
 			break;
 		default:
@@ -282,7 +353,7 @@ public class NouveauDevis extends MasterPage {
 		BatimenSession session = (BatimenSession) BatimenSession.get();
 		ClientDTO client = session.getSessionUser();
 		creationAnnonce.setIsSignedUp(true);
-		creationAnnonce.setEmail(client.getEmail());
+		creationAnnonce.setLogin(client.getLogin());
 
 	}
 
@@ -313,5 +384,46 @@ public class NouveauDevis extends MasterPage {
 			}
 
 		}
+	}
+
+	private Integer creationAnnonce() {
+		return AnnonceService.creationAnnonce(creationAnnonce);
+	}
+
+	private void loggerAnnonce(CreationAnnonceDTO nouvelleAnnonce) {
+		if (LOGGER.isErrorEnabled()) {
+			LOGGER.error("+--------------------------------Annonce ------------------------------------------+");
+			LOGGER.error("Objet : " + nouvelleAnnonce.getTitre());
+			LOGGER.error("Corps de metier : " + nouvelleAnnonce.getMetier());
+			LOGGER.error("Description: " + nouvelleAnnonce.getDescription());
+			LOGGER.error("Contact ? : " + nouvelleAnnonce.getTypeContact().getAffichage());
+			LOGGER.error("Intervention  : " + nouvelleAnnonce.getDelaiIntervention().getType());
+			LOGGER.error("Combien de devis  : " + nouvelleAnnonce.getNbDevis());
+			LOGGER.error("Adresse du chantier  : " + nouvelleAnnonce.getAdresse());
+			LOGGER.error("Complément du chantier  : " + nouvelleAnnonce.getComplementAdresse());
+			LOGGER.error("Code postal  : " + nouvelleAnnonce.getCodePostal());
+			LOGGER.error("Ville  : " + nouvelleAnnonce.getVille());
+			LOGGER.error("+--------------------------------Info Demandeur ------------------------------------------+");
+			if (!nouvelleAnnonce.getIsSignedUp()) {
+				LOGGER.error("Civilité  : " + nouvelleAnnonce.getCivilite().getAffichage());
+				LOGGER.error("Nom  : " + nouvelleAnnonce.getNom());
+				LOGGER.error("Prénom  : " + nouvelleAnnonce.getPrenom());
+				LOGGER.error("Numéro de téléphone  : " + nouvelleAnnonce.getNumeroTel());
+				LOGGER.error("Adresse mail : " + nouvelleAnnonce.getEmail());
+				LOGGER.error("Identifiant: " + nouvelleAnnonce.getLogin());
+			} else {
+				BatimenSession session = (BatimenSession) BatimenSession.get();
+				ClientDTO client = session.getSessionUser();
+				LOGGER.error("Ce client est deja enregistrer dans la BDD");
+				LOGGER.error("Civilité  : " + client.getCivilite().getAffichage());
+				LOGGER.error("Nom  : " + client.getNom());
+				LOGGER.error("Prénom  : " + client.getPrenom());
+				LOGGER.error("Numéro de téléphone  : " + client.getNumeroTel());
+				LOGGER.error("Adresse mail : " + client.getEmail());
+				LOGGER.error("Identifiant: " + client.getLogin());
+			}
+			LOGGER.error("+-------------------------------- Fin annonce ------------------------------------------+");
+		}
+
 	}
 }

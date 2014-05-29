@@ -1,13 +1,14 @@
 package fr.batimen.web.selenium;
 
+import static com.ninja_squad.dbsetup.Operations.sequenceOf;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
+
+import com.ninja_squad.dbsetup.DbSetup;
+import com.ninja_squad.dbsetup.operation.Operation;
 
 /**
  * Classe de test selenium pour la creation de nouveau devis par le client
@@ -15,9 +16,16 @@ import org.openqa.selenium.support.ui.WebDriverWait;
  * @author Casaucau Cyril
  * 
  */
-public class TestNouveauDevis extends AbstractSeleniumTest {
+public class TestNouveauDevis extends AbstractITTest {
 
 	private String nouveauDevisDepartementURL = "/nouveaudevis/departement/41";
+
+	@Override
+	public void prepareDB() throws Exception {
+		Operation operation = sequenceOf(DELETE_ALL, INSERT_USER_DATA);
+		DbSetup dbSetup = new DbSetup(getDriverManagerDestination(), operation);
+		dbSetup.launch();
+	}
 
 	/**
 	 * Cas de test : L'utilisateur rempli son devis en s'étant authentifié juste
@@ -31,7 +39,7 @@ public class TestNouveauDevis extends AbstractSeleniumTest {
 	public void testCreationNouveauDevisAuthenticatedSucceed() {
 		driver.get(appUrl + nouveauDevisDepartementURL);
 		// On s'authentifie à l'application
-		connexionApplication(AbstractSeleniumTest.BON_MOT_DE_PASSE);
+		connexionApplication(AbstractITTest.BON_MOT_DE_PASSE);
 		// On passe l'etape 2
 		etape2();
 		// On vérifie que le label est correcte
@@ -46,9 +54,11 @@ public class TestNouveauDevis extends AbstractSeleniumTest {
 	 * 
 	 * Remarque : On saute la selection du département avec selenium, car
 	 * Raphael n'est visiblement pas compatible avec selenium.
+	 * 
+	 * @throws InterruptedException
 	 */
 	@Test
-	public void testCreationNouveauDevisNonAuthenticatedSucceed() {
+	public void testCreationNouveauDevisNonAuthenticatedSucceed() throws InterruptedException {
 		driver.get(appUrl + nouveauDevisDepartementURL);
 		// On remplit l'étape 2
 		etape2();
@@ -68,6 +78,7 @@ public class TestNouveauDevis extends AbstractSeleniumTest {
 		driver.findElement(By.id("password")).sendKeys("mdrlollol");
 		driver.findElement(By.id("confirmPassword")).clear();
 		driver.findElement(By.id("confirmPassword")).sendKeys("mdrlollol");
+		driver.findElement(By.name("cguConfirmation")).click();
 		driver.findElement(By.id("validateInscription")).click();
 		assertEquals(
 		        "Votre compte a bien été créé, un e-mail vous a été envoyé, Cliquez sur le lien présent dans celui-ci pour l'activer",
@@ -82,18 +93,53 @@ public class TestNouveauDevis extends AbstractSeleniumTest {
 	 * 
 	 * Remarque : On saute la selection du département avec selenium, car
 	 * Raphael n'est visiblement pas compatible avec selenium.
+	 * 
+	 * @throws InterruptedException
 	 */
 	@Test
-	public void testCreationNouveauDevisSubscribeNotAuthenticatedSucceed() {
+	public void testCreationNouveauDevisSubscribeNotAuthenticatedSucceed() throws InterruptedException {
 		driver.get(appUrl + nouveauDevisDepartementURL);
 		// On remplit l'étape 2
 		etape2();
+		etape3EnModeInscris();
+
+		assertEquals("Votre devis a été mis en ligne, nous vous avons envoyé un mail récapitulatif", driver
+		        .findElement(By.cssSelector("h5")).getText());
+
+	}
+
+	/**
+	 * Cas de test : L'utilisateur crée deux devis, la deuxieme, l'application
+	 * doit lui renvoyer un message d'erreur.
+	 * 
+	 * Remarque : On saute la selection du département avec selenium, car
+	 * Raphael n'est visiblement pas compatible avec selenium.
+	 * 
+	 * @throws InterruptedException
+	 */
+	@Test
+	public void testCreationNouveauDevisDuplicate() throws InterruptedException {
+		// Premiere saisie de l'annonce.
+		driver.get(appUrl + nouveauDevisDepartementURL);
+		etape2();
+		etape3EnModeInscris();
+
+		assertEquals("Votre devis a été mis en ligne, nous vous avons envoyé un mail récapitulatif", driver
+		        .findElement(By.cssSelector("h5")).getText());
+
+		// Deuxieme saisie de l'annonce.
+		driver.get(appUrl + nouveauDevisDepartementURL);
+		etape2();
+
+		assertEquals("Problème pendant l'enregistrement de l'annonce, veuillez nous excuser pour la gène occasionnée.",
+		        driver.findElement(By.cssSelector("h5")).getText());
+
+	}
+
+	private void etape3EnModeInscris() throws InterruptedException {
 		// Etape 3
 		driver.findElement(By.id("connexionEtape3")).click();
-		Boolean checkCondition = (new WebDriverWait(driver, AbstractSeleniumTest.TEMPS_ATTENTE_AJAX))
-		        .until(ExpectedConditions.textToBePresentInElementLocated(By.id("ui-id-1"),
-		                "Connexion à l'espace client / artisan"));
-		assertTrue(checkCondition);
+		waitForTheElement("ui-id-1");
 		driver.findElement(By.cssSelector("table.tableBatimenLogin > tbody > tr > td > input[name=\"login\"]")).click();
 		driver.findElement(By.cssSelector("table.tableBatimenLogin > tbody > tr > td > input[name=\"login\"]")).clear();
 		driver.findElement(By.cssSelector("table.tableBatimenLogin > tbody > tr > td > input[name=\"login\"]"))
@@ -102,10 +148,6 @@ public class TestNouveauDevis extends AbstractSeleniumTest {
 		driver.findElement(By.xpath("(//input[@name='password'])[2]")).clear();
 		driver.findElement(By.xpath("(//input[@name='password'])[2]")).sendKeys("lollollol");
 		driver.findElement(By.id("signInButton")).click();
-
-		assertEquals("Votre devis a été mis en ligne, nous vous avons envoyé un mail récapitulatif", driver
-		        .findElement(By.cssSelector("h5")).getText());
-
 	}
 
 	private void etape2() {

@@ -5,6 +5,13 @@ import org.apache.wicket.behavior.Behavior;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.form.FormComponent;
 
+/**
+ * Permet de signifier à l'utilisateur que le champ est en erreur (le colori en
+ * rouge)
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class ErrorHighlightBehavior extends Behavior {
 
 	private static final long serialVersionUID = -7426851486352182384L;

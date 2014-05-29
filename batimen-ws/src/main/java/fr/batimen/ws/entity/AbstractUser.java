@@ -8,6 +8,12 @@ import javax.persistence.Temporal;
 
 import fr.batimen.dto.enums.Civilite;
 
+/**
+ * Entité abstraite qui permet de factoriser le client et l'artisan
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 @MappedSuperclass
 public abstract class AbstractUser extends AbstractEntity {
 

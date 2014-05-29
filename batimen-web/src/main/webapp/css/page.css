@@ -97,8 +97,8 @@
 }
 
 #validateInscription {
-	float: right;
-	margin-right: 16px;
+	float: none;
+	margin-left: 325px;
 }
 
 .imgHelp {
@@ -119,10 +119,24 @@
 
 #confirmation img {
 	padding-bottom: 20px;
+	width: 81px;
 }
 
-#confirmation a {
+#confirmation h5 a {
+	color: #25B8E2;
+}
+
+#confirmation h5 a:focus {
+	outline: thin dotted #333333;
+	outline-offset: -2px;
+}
+
+#retourAccueil {
 	padding-top: 20px;
+}
+
+.tableBatimen tbody tr td input[type="checkbox"] {
+	margin-bottom: 13px;
 }
 
 /* Composant Wicket */

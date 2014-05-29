@@ -2,6 +2,12 @@ package fr.batimen.core.security;
 
 import com.lambdaworks.crypto.SCryptUtil;
 
+/**
+ * Classe d'aide au hash des mots de passe
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class HashHelper {
 
 	private HashHelper() {

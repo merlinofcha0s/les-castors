@@ -69,6 +69,7 @@ public abstract class MasterPage extends WebPage {
 	public static final String NOUVEAU_DEVIS = "nouveauDevis";
 	public static final String CONTACT = "contact";
 	public static final String ACCUEIL = "Accueil";
+	public static final String NONE = "None";
 
 	// Feedback panel général
 	protected BatimenFeedbackPanel feedBackPanelGeneral;
@@ -266,6 +267,13 @@ public abstract class MasterPage extends WebPage {
 			containerLinkMenuQuiSommesNous.add(deactivateMenuCss);
 			containerLinkMenuNouveauDevis.add(activateMenuCss);
 		}
+		if (NONE.equals(nomPage)) {
+			containerLinkMenuAccueil.add(deactivateMenuCss);
+			containerLinkMenuContact.add(deactivateMenuCss);
+			containerLinkMenuQuiSommesNous.add(deactivateMenuCss);
+			containerLinkMenuNouveauDevis.add(deactivateMenuCss);
+		}
+
 	}
 
 	private void initComponentConnexion() {

@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import fr.batimen.web.app.BatimenApplication;
 import fr.batimen.web.client.extend.Accueil;
+import fr.batimen.web.client.extend.CGU;
 import fr.batimen.web.client.extend.Contact;
 import fr.batimen.web.client.extend.QuiSommeNous;
 import fr.batimen.web.client.extend.authentification.Authentification;
@@ -42,6 +43,14 @@ public class TestRenderingPage {
 		tester.startPage(Contact.class);
 		// assert rendered page class
 		tester.assertRenderedPage(Contact.class);
+	}
+
+	@Test
+	public void cguRendersSuccessfully() {
+		// start and render the test page
+		tester.startPage(CGU.class);
+		// assert rendered page class
+		tester.assertRenderedPage(CGU.class);
 	}
 
 	@Test

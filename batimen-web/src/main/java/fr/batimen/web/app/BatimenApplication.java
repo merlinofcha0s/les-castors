@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 import fr.batimen.core.constant.Constant;
 import fr.batimen.web.client.extend.Accueil;
+import fr.batimen.web.client.extend.CGU;
 import fr.batimen.web.client.extend.Contact;
 import fr.batimen.web.client.extend.MonCompte;
 import fr.batimen.web.client.extend.QuiSommeNous;
@@ -86,8 +87,9 @@ public class BatimenApplication extends AuthenticatedWebApplication {
 		mountPage(Constant.MON_COMPTE_URL, MonCompte.class);
 		mountPage(Constant.QUI_SOMMES_NOUS_URL, QuiSommeNous.class);
 		mountPage(Constant.CONTACT_URL, Contact.class);
+		mountPage(Constant.CGU_URL, CGU.class);
 		// Encode la page de cette maniere : nouveaudevis/departement/06
-		mount(new MountedMapper("/nouveaudevis", NouveauDevis.class, new UrlPathPageParametersEncoder()));
+		mount(new MountedMapper(Constant.NOUVEAU_DEVIS_URL, NouveauDevis.class, new UrlPathPageParametersEncoder()));
 
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Init de la Web app.....OK");

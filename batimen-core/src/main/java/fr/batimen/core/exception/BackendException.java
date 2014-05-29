@@ -3,6 +3,12 @@ package fr.batimen.core.exception;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Lancer quand il y a un probléme du coté du webservice
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class BackendException extends Exception {
 
 	/**

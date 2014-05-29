@@ -1,7 +1,12 @@
 package fr.batimen.core.exception;
 
-
-public class DuplicateEntityException extends BackendException {
+/**
+ * Exception lancée quand une entité dupliquée en base de données
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
+public class DuplicateEntityException extends Exception {
 
 	/**
 	 * 

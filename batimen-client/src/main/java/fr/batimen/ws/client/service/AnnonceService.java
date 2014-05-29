@@ -7,6 +7,12 @@ import fr.batimen.core.constant.WsPath;
 import fr.batimen.dto.CreationAnnonceDTO;
 import fr.batimen.ws.client.WsConnector;
 
+/**
+ * Classe d'appel au webservice concernant les annonces.
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class AnnonceService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(AnnonceService.class);
@@ -33,13 +39,13 @@ public class AnnonceService {
 		String objectInJSON = WsConnector.getInstance().sendRequest(WsPath.GESTION_ANNONCE_SERVICE_PATH,
 		        WsPath.GESTION_ANNONCE_SERVICE_CREATION_ANNONCE, nouvelleAnnonce);
 
-		Integer codeServiceOKKO = Integer.valueOf(objectInJSON);
+		Integer codeRetour = Integer.valueOf(objectInJSON);
 
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Fin appel service creation annonce.....");
 		}
 
-		return codeServiceOKKO;
+		return codeRetour;
 
 	}
 

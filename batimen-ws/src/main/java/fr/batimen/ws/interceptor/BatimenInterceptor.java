@@ -16,6 +16,13 @@ import org.slf4j.LoggerFactory;
 import fr.batimen.core.exception.ValidationDTOBatimenException;
 import fr.batimen.dto.AbstractDTO;
 
+/**
+ * Interceptor qui valide les DTO en entrées de toutes les methodes du
+ * webservices
+ * 
+ * @author Casaucau
+ * 
+ */
 public class BatimenInterceptor {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(BatimenInterceptor.class);

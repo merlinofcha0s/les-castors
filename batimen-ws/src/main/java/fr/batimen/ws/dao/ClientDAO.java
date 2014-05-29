@@ -2,6 +2,8 @@ package fr.batimen.ws.dao;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityManager;
@@ -109,7 +111,8 @@ public class ClientDAO {
 	 *            L'entité a ajouter dans la BDD
 	 * @throws BackendException
 	 */
-	public void saveClient(Client nouveauClient) throws BackendException {
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	public void saveNewClient(Client nouveauClient) throws DuplicateEntityException {
 
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("Debut persistence d'un nouveau client......");
@@ -128,12 +131,37 @@ public class ClientDAO {
 			sbError.append(" - ");
 			sbError.append(nouveauClient.getEmail());
 			sbError.append(" car il existe déjà");
-
 			if (LOGGER.isErrorEnabled()) {
 				LOGGER.error(sbError.toString());
 			}
 
 			throw new DuplicateEntityException(sbError.toString());
+		}
+
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Fin persistence d'un nouveau client......OK");
+		}
+	}
+
+	/**
+	 * Sauvegarde un client dans la base de données et check si l'utilisateur
+	 * existe deja
+	 * 
+	 * @param nouveauClient
+	 *            L'entité a ajouter dans la BDD
+	 * @throws BackendException
+	 */
+	@TransactionAttribute(TransactionAttributeType.REQUIRED)
+	public void saveClient(Client client) throws BackendException {
+
+		if (LOGGER.isDebugEnabled()) {
+			LOGGER.debug("Debut persistence d'un client......");
+		}
+
+		if (client != null) {
+			em.persist(client);
+		} else {
+			throw new BackendException("L'entité client est null, impossible de la persister");
 		}
 
 		if (LOGGER.isDebugEnabled()) {

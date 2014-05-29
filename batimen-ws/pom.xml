@@ -110,7 +110,7 @@
 				<configuration>
 					<skipTests>false</skipTests>
 					<testFailureIgnore>true</testFailureIgnore>
-					<argLine>${jacoco.agent.argLine}</argLine>
+					<argLine>${surefireArgLine}</argLine>
 					<disableXmlReport>false</disableXmlReport>
 					<trimStackTrace>false</trimStackTrace>
 					<reportFormat>plain</reportFormat>
@@ -450,9 +450,9 @@
 
 				<!-- Config Arquillian -->
 				<glassfish.location>/usr/share/glassfish3</glassfish.location>
-				<glassfish.adminHost>localhost</glassfish.adminHost>
+				<glassfish.adminHost>127.0.0.1</glassfish.adminHost>
 				<glassfish.adminPort>4949</glassfish.adminPort>
-				<glassfish.adminHttps>true</glassfish.adminHttps>
+				<glassfish.adminHttps>false</glassfish.adminHttps>
 				<glassfish.adminUser>admin</glassfish.adminUser>
 				<glassfish.adminPassword>OIOIUenoBueno</glassfish.adminPassword>
 				<glassfish.domain>batimendomain</glassfish.domain>
@@ -493,18 +493,23 @@
 					<plugin>
 						<groupId>org.jacoco</groupId>
 						<artifactId>jacoco-maven-plugin</artifactId>
-						<version>0.6.3.201306030806</version>
+						<version>0.7.0.201403182114</version>
 						<configuration>
-							<propertyName>jacoco.agent.argLine</propertyName>
 							<destFile>${sonar.jacoco.reportPath}</destFile>
 							<dataFile>${sonar.jacoco.reportPath}</dataFile>
+							<append>true</append>
 						</configuration>
 						<executions>
+							<!-- Prepares the property pointing to the JaCoCo runtime agent which 
+								is passed as VM argument when Maven the Surefire plugin is executed. -->
 							<execution>
-								<id>agent</id>
+								<id>pre-unit-test</id>
 								<goals>
 									<goal>prepare-agent</goal>
 								</goals>
+								<configuration>
+									<propertyName>surefireArgLine</propertyName>
+								</configuration>
 							</execution>
 						</executions>
 					</plugin>

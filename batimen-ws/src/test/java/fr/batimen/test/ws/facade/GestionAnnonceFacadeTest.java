@@ -1,4 +1,4 @@
-package fr.batimen.ws.facade;
+package fr.batimen.test.ws.facade;
 
 import java.util.Calendar;
 import java.util.List;
@@ -17,7 +17,7 @@ import fr.batimen.dto.enums.Civilite;
 import fr.batimen.dto.enums.DelaiIntervention;
 import fr.batimen.dto.enums.Metier;
 import fr.batimen.dto.enums.TypeContact;
-import fr.batimen.ws.AbstractBatimenWsTest;
+import fr.batimen.test.ws.AbstractBatimenWsTest;
 import fr.batimen.ws.client.service.AnnonceService;
 import fr.batimen.ws.dao.AnnonceDAO;
 import fr.batimen.ws.dao.ClientDAO;
@@ -120,7 +120,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 		creationVerificationAnnonce();
 		Integer isCreationOK = AnnonceService.creationAnnonce(creationAnnonceDTO);
 		// Le service doit remonter une erreur
-		Assert.assertTrue(isCreationOK == Constant.CODE_SERVICE_RETOUR_ANNONCE_DUPLICATE);
+		Assert.assertTrue(isCreationOK == Constant.CODE_SERVICE_RETOUR_DUPLICATE);
 	}
 
 	private void creationVerificationAnnonce() {

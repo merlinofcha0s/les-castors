@@ -2,12 +2,14 @@ package fr.batimen.web.client.extend.nouveaudevis;
 
 import java.util.Arrays;
 
+import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
@@ -19,12 +21,29 @@ import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.dto.enums.Civilite;
 import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
+import fr.batimen.web.client.component.BatimenToolTip;
+import fr.batimen.web.client.extend.CGU;
+import fr.batimen.web.client.validator.CheckBoxTrueValidator;
+import fr.batimen.web.client.validator.EmailUniquenessValidator;
+import fr.batimen.web.client.validator.LoginUniquenessValidator;
 
+/**
+ * Form de l'etape 3 de création d'annonce.
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 
 	private static final long serialVersionUID = 2500892594731116597L;
 
 	private PasswordTextField passwordField;
+	private DropDownChoice<Civilite> civiliteField;
+	private TextField<String> nomField;
+	private TextField<String> prenomField;
+	private TextField<String> numeroTelField;
+	private TextField<String> emailField;
+	private TextField<String> loginField;
 
 	public Etape3InscriptionForm(String id, IModel<CreationAnnonceDTO> model) {
 		super(id, model);
@@ -36,40 +55,45 @@ public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 		String idPrenomField = "prenom";
 		String idValidateInscription = "validateInscription";
 
-		DropDownChoice<Civilite> civiliteField = new DropDownChoice<Civilite>(idCiviliteField, Arrays.asList(Civilite
-		        .values()));
+		civiliteField = new DropDownChoice<Civilite>(idCiviliteField, Arrays.asList(Civilite.values()));
 		civiliteField.setMarkupId(idCiviliteField);
 
-		TextField<String> nomField = new TextField<String>(idNomField);
+		nomField = new TextField<String>(idNomField);
 		nomField.setMarkupId(idNomField);
 		nomField.add(StringValidator.lengthBetween(ValidatorConstant.CREATION_ANNONCE_NOM_MIN,
 		        ValidatorConstant.CREATION_ANNONCE_NOM_MAX));
 
-		TextField<String> prenomField = new TextField<String>(idPrenomField);
+		prenomField = new TextField<String>(idPrenomField);
 		prenomField.setMarkupId(idPrenomField);
 		prenomField.add(StringValidator.lengthBetween(ValidatorConstant.CREATION_ANNONCE_PRENOM_MIN,
 		        ValidatorConstant.CREATION_ANNONCE_PRENOM_MAX));
 
-		TextField<String> numeroTelField = new TextField<String>("numeroTel");
+		numeroTelField = new TextField<String>("numeroTel");
+		numeroTelField.setMarkupId("numeroTel");
 		numeroTelField.setRequired(true);
 		numeroTelField.add(new RequiredBorderBehaviour());
 		numeroTelField.add(new ErrorHighlightBehavior());
 		numeroTelField.add(new PatternValidator(ValidatorConstant.CREATION_ANNONCE_TELEPHONE_REGEX));
 
-		TextField<String> emailField = new TextField<String>("email");
+		emailField = new TextField<String>("email");
+		emailField.setMarkupId("email");
 		emailField.setRequired(true);
 		emailField.add(new RequiredBorderBehaviour());
 		emailField.add(new ErrorHighlightBehavior());
 		emailField.add(EmailAddressValidator.getInstance());
+		emailField.add(new EmailUniquenessValidator());
 
-		TextField<String> loginField = new TextField<String>("login");
+		loginField = new TextField<String>("login");
+		loginField.setMarkupId("login");
 		loginField.setRequired(true);
 		loginField.add(new RequiredBorderBehaviour());
 		loginField.add(new ErrorHighlightBehavior());
 		loginField.add(StringValidator.lengthBetween(ValidatorConstant.LOGIN_RANGE_MIN,
 		        ValidatorConstant.LOGIN_RANGE_MAX));
+		loginField.add(new LoginUniquenessValidator());
 
 		passwordField = new PasswordTextField("password");
+		passwordField.setMarkupId("password");
 		passwordField.setRequired(true);
 		passwordField.add(new RequiredBorderBehaviour());
 		passwordField.add(new ErrorHighlightBehavior());
@@ -77,6 +101,7 @@ public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 		        ValidatorConstant.PASSWORD_RANGE_MAX));
 
 		PasswordTextField confirmPassword = new PasswordTextField("confirmPassword", new Model<String>());
+		confirmPassword.setMarkupId("confirmPassword");
 		confirmPassword.setRequired(true);
 		confirmPassword.add(new RequiredBorderBehaviour());
 		confirmPassword.add(new ErrorHighlightBehavior());
@@ -84,6 +109,23 @@ public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 		        ValidatorConstant.PASSWORD_RANGE_MAX));
 
 		this.add(new EqualPasswordInputValidator(passwordField, confirmPassword));
+
+		CheckBox cguConfirm = new CheckBox("cguConfirmation", Model.of(Boolean.FALSE));
+		cguConfirm.setRequired(true);
+		cguConfirm.add(new CheckBoxTrueValidator());
+		cguConfirm.add(new RequiredBorderBehaviour());
+
+		Link<String> cguLink = new Link<String>("cguLink") {
+
+			private static final long serialVersionUID = -7368483899425701479L;
+
+			@Override
+			public void onClick() {
+				this.setResponsePage(CGU.class);
+			}
+		};
+
+		cguLink.setMarkupId("cguLink");
 
 		SubmitLink validateInscription = new SubmitLink(idValidateInscription);
 		validateInscription.setMarkupId(idValidateInscription);
@@ -96,7 +138,10 @@ public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 		this.add(loginField);
 		this.add(passwordField);
 		this.add(confirmPassword);
+		this.add(cguConfirm);
+		this.add(cguLink);
 		this.add(validateInscription);
+		this.add(BatimenToolTip.getTooltipBehaviour());
 	}
 
 	/**
@@ -107,11 +152,45 @@ public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
 	}
 
 	/**
-	 * @param passwordField
-	 *            the passwordField to set
+	 * @return the civiliteField
 	 */
-	public void setPasswordField(PasswordTextField passwordField) {
-		this.passwordField = passwordField;
+	public DropDownChoice<Civilite> getCiviliteField() {
+		return civiliteField;
+	}
+
+	/**
+	 * @return the nomField
+	 */
+	public TextField<String> getNomField() {
+		return nomField;
+	}
+
+	/**
+	 * @return the prenomField
+	 */
+	public TextField<String> getPrenomField() {
+		return prenomField;
+	}
+
+	/**
+	 * @return the numeroTelField
+	 */
+	public TextField<String> getNumeroTelField() {
+		return numeroTelField;
+	}
+
+	/**
+	 * @return the emailField
+	 */
+	public TextField<String> getEmailField() {
+		return emailField;
+	}
+
+	/**
+	 * @return the loginField
+	 */
+	public TextField<String> getLoginField() {
+		return loginField;
 	}
 
 }

@@ -13,6 +13,13 @@ import ch.qos.logback.classic.joran.JoranConfigurator;
 import ch.qos.logback.core.joran.spi.JoranException;
 import ch.qos.logback.core.util.StatusPrinter;
 
+/**
+ * Force l'application a trouver le fichier logback.xml dans le classpath et à
+ * relancer la cfg de logback suivant ce dernier.
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class LogBackContextListener implements ServletContextListener {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(LogBackContextListener.class);

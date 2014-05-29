@@ -32,7 +32,7 @@
 	</scm>
 
 	<properties>
-		<wicket.version>6.12.0</wicket.version>
+		<wicket.version>6.15.0</wicket.version>
 		<jersey.client.version>1.17</jersey.client.version>
 
 		<wicket.mode>development</wicket.mode>
@@ -55,6 +55,12 @@
 		<logs.test.archives>${logs.test.address}/archived</logs.test.archives>
 		<logs.test.lvl>DEBUG</logs.test.lvl>
 
+		<!-- Propriétés de la BDD pour les tests d'integration -->
+		<database.address>127.0.0.1</database.address>
+		<database.name>batimen</database.name>
+		<datasource.url>jdbc:postgresql://${database.address}:5432/${database.name}</datasource.url>
+		<database.login>postgres</database.login>
+		<database.password>123456</database.password>
 	</properties>
 
 	<build>
@@ -125,6 +131,7 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.16</version>
 				<configuration>
+					<append>true</append>
 					<skipTests>false</skipTests>
 					<testFailureIgnore>true</testFailureIgnore>
 					<excludes>
@@ -138,13 +145,13 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>2.7.2</version>
+				<version>2.16</version>
 				<configuration>
 					<reportsDirectory>${basedir}/target/surefire-reports</reportsDirectory>
 					<includes>
 						<include>**/selenium/**/*.java</include>
 					</includes>
-					<argLine>${jacoco.agent.argLine}</argLine>
+					<argLine>${failsafeArgLine}</argLine>
 				</configuration>
 				<executions>
 					<execution>
@@ -225,6 +232,18 @@
 			<artifactId>selenium-java</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.ninja-squad</groupId>
+			<artifactId>DbSetup</artifactId>
+			<version>1.2.0</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<version>9.1-901.jdbc4</version>
+			<scope>test</scope>
+		</dependency>
 
 		<!-- Dependence intra projet -->
 		<dependency>
@@ -266,7 +285,7 @@
 			<dependency>
 				<groupId>org.odlabs.wiquery</groupId>
 				<artifactId>wiquery-jquery-ui</artifactId>
-				<version>6.12.0</version>
+				<version>6.13.0</version>
 			</dependency>
 
 			<dependency>
@@ -292,7 +311,7 @@
 			<dependency>
 				<groupId>org.seleniumhq.selenium</groupId>
 				<artifactId>selenium-java</artifactId>
-				<version>2.39.0</version>
+				<version>2.41.0</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -321,6 +340,13 @@
 
 				<!-- Config de Wicket pour qu'il enleve / mette ses tags dans le HTML -->
 				<app.setStripWicketTags>true</app.setStripWicketTags>
+
+				<!-- Propriétés de la BDD pour les tests d'integration -->
+				<database.address>127.0.0.1</database.address>
+				<database.name>batimen</database.name>
+				<datasource.url>jdbc:postgresql://${database.address}:5432/${database.name}</datasource.url>
+				<database.login>raiden</database.login>
+				<database.password>M0ntaleign3</database.password>
 			</properties>
 			<build>
 				<plugins>
@@ -358,18 +384,23 @@
 					<plugin>
 						<groupId>org.jacoco</groupId>
 						<artifactId>jacoco-maven-plugin</artifactId>
-						<version>0.6.3.201306030806</version>
+						<version>0.7.0.201403182114</version>
 						<configuration>
-							<propertyName>jacoco.agent.argLine</propertyName>
 							<destFile>${sonar.jacoco.itReportPath}</destFile>
 							<dataFile>${sonar.jacoco.itReportPath}</dataFile>
 						</configuration>
 						<executions>
 							<execution>
-								<id>agent</id>
+								<id>pre-integration-test</id>
+								<phase>pre-integration-test</phase>
 								<goals>
 									<goal>prepare-agent</goal>
 								</goals>
+								<configuration>
+									<!-- Sets the name of the property containing the settings for JaCoCo 
+										runtime agent. -->
+									<propertyName>failsafeArgLine</propertyName>
+								</configuration>
 							</execution>
 						</executions>
 					</plugin>

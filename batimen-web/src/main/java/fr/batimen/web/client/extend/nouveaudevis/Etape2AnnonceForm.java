@@ -4,7 +4,6 @@ import java.util.Arrays;
 
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.NumberTextField;
 import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
@@ -23,6 +22,12 @@ import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.batimen.web.client.component.BatimenToolTip;
 
+/**
+ * Form de l'etape 2 de création d'annonce.
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class Etape2AnnonceForm extends Form<CreationAnnonceDTO> {
 
 	private static final long serialVersionUID = 6521295805432818556L;
@@ -70,7 +75,7 @@ public class Etape2AnnonceForm extends Form<CreationAnnonceDTO> {
 		delaiInterventionField.add(new ErrorHighlightBehavior());
 		delaiInterventionField.add(new RequiredBorderBehaviour());
 
-		NumberTextField<Integer> nbDevisField = new NumberTextField<Integer>("nbDevis");
+		TextField<Integer> nbDevisField = new TextField<Integer>("nbDevis");
 		nbDevisField.setRequired(true);
 		nbDevisField.setMarkupId("nbDevisField");
 		nbDevisField.add(RangeValidator.range(ValidatorConstant.CREATION_ANNONCE_NBDEVIS_MIN,
