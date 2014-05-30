@@ -1,17 +1,28 @@
 package fr.batimen.ws.dao;
 
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Properties;
+
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 
-import org.apache.commons.mail.DefaultAuthenticator;
-import org.apache.commons.mail.EmailException;
-import org.apache.commons.mail.HtmlEmail;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.microtripit.mandrillapp.lutung.MandrillApi;
+import com.microtripit.mandrillapp.lutung.model.MandrillApiError;
+import com.microtripit.mandrillapp.lutung.view.MandrillMessage;
+import com.microtripit.mandrillapp.lutung.view.MandrillMessage.Recipient;
+import com.microtripit.mandrillapp.lutung.view.MandrillMessageStatus;
+
 import fr.batimen.core.constant.Constant;
+import fr.batimen.core.exception.EmailException;
 
 /**
  * Classe de formatage d'email
@@ -25,38 +36,85 @@ public class EmailDAO {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EmailDAO.class);
 
-    public HtmlEmail prepareEmail(String to, String toName, String subject) throws EmailException {
+    private MandrillApi mandrillApi;
+    private String apiKey;
+    private boolean emailActive;
 
-        HtmlEmail email = new HtmlEmail();
-        // Information connexion recuperer dans le fichier de properties
-        email.setHostName("mail.myserver.com");
-        email.setSmtpPort(465);
-        email.setSSLOnConnect(true);
-        email.setSSLCheckServerIdentity(true);
-
-        email.setAuthenticator(new DefaultAuthenticator("username", "password"));
-        // Information sur le client
-        email.addTo(to, toName);
-        email.setFrom(Constant.EMAIL_FROM, Constant.EMAIL_FROM_NAME);
-        email.setSubject(subject);
-
-        return email;
+    public EmailDAO() {
+        getMessageProperties();
+        mandrillApi = new MandrillApi(apiKey);
     }
 
-    public void prepareContent(HtmlEmail email, String htmlContent, String alternativeContent) throws EmailException {
+    public MandrillMessage prepareEmail(String subject) {
+
+        // create your message
+        MandrillMessage message = new MandrillMessage();
+        message.setSubject(subject);
+        message.setAutoText(true);
+        message.setFromEmail(Constant.EMAIL_FROM);
+        message.setFromName(Constant.EMAIL_FROM_NAME);
+
+        return message;
+    }
+
+    public void prepareRecipient(MandrillMessage message, Map<String, String> recipients, boolean preserveRecipients) {
+
+        List<Recipient> to = new LinkedList<Recipient>();
+
+        for (Entry<String, String> recipient : recipients.entrySet()) {
+            Recipient recipientFormatted = new Recipient();
+            recipientFormatted.setName(recipient.getKey());
+            recipientFormatted.setEmail(recipient.getValue());
+            to.add(recipientFormatted);
+        }
+
+        message.setTo(to);
+        message.setPreserveRecipients(preserveRecipients);
+    }
+
+    public void prepareContent(MandrillMessage message, String htmlContent) {
         // set the html message
         // "<html>The apache logo - <img src=\"cid:" + "\"></html>"
-        email.setHtmlMsg(htmlContent);
-        // set the alternative message
-        // "Your email client does not support HTML messages"
-        email.setTextMsg(alternativeContent);
+        message.setHtml(htmlContent);
     }
 
-    public void sendEmail(HtmlEmail email) throws EmailException {
-        email.send();
+    public boolean sendEmail(MandrillMessage message) throws MandrillApiError, IOException, EmailException {
+        // TODO Remplacer par sendTemplate une fois que le template aura ete
+        // choisi
+        if (emailActive) {
+            MandrillMessageStatus[] messagesStatus = mandrillApi.messages().send(message, false);
+            return checkErrorOnSentEmail(messagesStatus);
+        } else {
+            return true;
+        }
+
     }
 
-    private void getEmailProperties() {
+    private boolean checkErrorOnSentEmail(MandrillMessageStatus[] messagesStatus) throws EmailException {
 
+        boolean noError = true;
+        // On verifie que tout s'est bien passé.
+        for (int i = 0; i < messagesStatus.length; i++) {
+            if (!Constant.EMAIL_SENT.equals(messagesStatus[i].getStatus())) {
+                noError = false;
+                throw new EmailException("Certain mails n'ont pas été distribués correctement",
+                        messagesStatus[i].getEmail(), messagesStatus[i].getStatus());
+            }
+        }
+
+        return noError;
+    }
+
+    private void getMessageProperties() {
+        Properties appProperties = new Properties();
+        try {
+            appProperties.load(getClass().getClassLoader().getResourceAsStream("email.properties"));
+            apiKey = appProperties.getProperty("mandrill.api.key");
+            emailActive = Boolean.valueOf(appProperties.getProperty("email.active"));
+        } catch (IOException e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Erreur de récupération des properties des mails", e);
+            }
+        }
     }
 }
