@@ -254,6 +254,17 @@ public class GestionAnnonceFacade {
         return nouveauClient;
     }
 
+    /**
+     * Preparation et envoi d'un mail de confirmation, dans le but d'informer
+     * l'utilisateur que l'annonce a correctement été enregistrée.
+     * 
+     * @param nouvelleAnnonceDTO
+     *            L'objet que l'on a recu du frontend
+     * @return vrai si l'envoi s'est bien passé.
+     * @throws EmailException
+     * @throws MandrillApiError
+     * @throws IOException
+     */
     private boolean envoiMailConfirmationAnnonce(CreationAnnonceDTO nouvelleAnnonceDTO) throws EmailException,
             MandrillApiError, IOException {
         // On prepare l'entete, on ne mets pas de titre.
@@ -267,7 +278,7 @@ public class GestionAnnonceFacade {
         Map<String, String> recipients = new HashMap<String, String>();
         recipients.put(nomEtPrenom.toString(), nouvelleAnnonceDTO.getEmail());
 
-        // On charge les tags
+        // On charge le contenu
         Map<String, String> templateContent = new HashMap<String, String>();
         templateContent.put(Constant.TAG_EMAIL_USERNAME, nouvelleAnnonceDTO.getLogin());
         templateContent.put(Constant.TAG_EMAIL_TITRE, nouvelleAnnonceDTO.getTitre());
