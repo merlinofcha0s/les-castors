@@ -48,4 +48,15 @@ public class Constant {
     public static final String EMAIL_REJECTED = "rejected";
     public static final String EMAIL_INVALID = "invalid";
 
+    // Template Email
+    public static final String TEMPLATE_CONFIRMATION_ANNONCE = "confirmation_creation_annonce";
+
+    // Creation annonce tags Email
+    public static final String TAG_EMAIL_USERNAME = "username";
+    public static final String TAG_EMAIL_TITRE = "titre";
+    public static final String TAG_EMAIL_METIER = "metier";
+    public static final String TAG_EMAIL_SOUS_CATEGORIE_METIER = "souscategoriemetier";
+    public static final String TAG_EMAIL_TYPE_CONTACT = "typecontact";
+    public static final String TAG_EMAIL_DELAI_INTERVENTION = "delaiintervention";
+
 }

@@ -1,8 +1,11 @@
 package fr.batimen.ws.facade;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.LocalBean;
@@ -21,15 +24,20 @@ import javax.ws.rs.Produces;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.microtripit.mandrillapp.lutung.model.MandrillApiError;
+import com.microtripit.mandrillapp.lutung.view.MandrillMessage;
+
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.WsPath;
 import fr.batimen.core.exception.BackendException;
 import fr.batimen.core.exception.DuplicateEntityException;
+import fr.batimen.core.exception.EmailException;
 import fr.batimen.dto.CreationAnnonceDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.ws.dao.AdresseDAO;
 import fr.batimen.ws.dao.AnnonceDAO;
 import fr.batimen.ws.dao.ClientDAO;
+import fr.batimen.ws.dao.EmailDAO;
 import fr.batimen.ws.entity.Adresse;
 import fr.batimen.ws.entity.Annonce;
 import fr.batimen.ws.entity.Client;
@@ -64,6 +72,9 @@ public class GestionAnnonceFacade {
     @Inject
     private ClientDAO clientDAO;
 
+    @Inject
+    private EmailDAO emailDAO;
+
     /**
      * Permet la creation d'une nouvelle annonce par le client ainsi que le
      * compte de ce dernier
@@ -94,6 +105,14 @@ public class GestionAnnonceFacade {
             }
             // Erreur pendant la creation du service de l'annonce.
             return Constant.CODE_SERVICE_RETOUR_KO;
+        }
+
+        try {
+            envoiMailConfirmationAnnonce(nouvelleAnnonceDTO);
+        } catch (EmailException | MandrillApiError | IOException e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Erreur d'envoi de mail", e);
+            }
         }
 
         return Constant.CODE_SERVICE_RETOUR_OK;
@@ -233,5 +252,37 @@ public class GestionAnnonceFacade {
         nouveauClient.setIsArtisan(false);
 
         return nouveauClient;
+    }
+
+    private boolean envoiMailConfirmationAnnonce(CreationAnnonceDTO nouvelleAnnonceDTO) throws EmailException,
+            MandrillApiError, IOException {
+        // On prepare l'entete, on ne mets pas de titre.
+        MandrillMessage confirmationAnnonceMessage = emailDAO.prepareEmail(null);
+
+        StringBuilder nomEtPrenom = new StringBuilder(nouvelleAnnonceDTO.getNom());
+        nomEtPrenom.append(" ");
+        nomEtPrenom.append(nouvelleAnnonceDTO.getPrenom());
+
+        // On construit les recepteurs
+        Map<String, String> recipients = new HashMap<String, String>();
+        recipients.put(nomEtPrenom.toString(), nouvelleAnnonceDTO.getEmail());
+
+        // On charge les tags
+        Map<String, String> templateContent = new HashMap<String, String>();
+        templateContent.put(Constant.TAG_EMAIL_USERNAME, nouvelleAnnonceDTO.getLogin());
+        templateContent.put(Constant.TAG_EMAIL_TITRE, nouvelleAnnonceDTO.getTitre());
+        templateContent.put(Constant.TAG_EMAIL_METIER, nouvelleAnnonceDTO.getMetier().getMetier());
+        templateContent.put(Constant.TAG_EMAIL_SOUS_CATEGORIE_METIER, "Pas encore dispo");
+        templateContent.put(Constant.TAG_EMAIL_DELAI_INTERVENTION, nouvelleAnnonceDTO.getDelaiIntervention().getType());
+        templateContent.put(Constant.TAG_EMAIL_TYPE_CONTACT, nouvelleAnnonceDTO.getTypeContact().getAffichage());
+
+        // On charge les recepteurs
+        emailDAO.prepareRecipient(confirmationAnnonceMessage, recipients, true);
+
+        // On envoi le mail
+        boolean noError = emailDAO.sendEmailTemplate(confirmationAnnonceMessage,
+                Constant.TEMPLATE_CONFIRMATION_ANNONCE, templateContent);
+
+        return noError;
     }
 }

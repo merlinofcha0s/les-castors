@@ -12,7 +12,11 @@ import org.junit.Test;
 import com.microtripit.mandrillapp.lutung.model.MandrillApiError;
 import com.microtripit.mandrillapp.lutung.view.MandrillMessage;
 
+import fr.batimen.core.constant.Constant;
 import fr.batimen.core.exception.EmailException;
+import fr.batimen.dto.enums.DelaiIntervention;
+import fr.batimen.dto.enums.Metier;
+import fr.batimen.dto.enums.TypeContact;
 import fr.batimen.test.ws.AbstractBatimenWsTest;
 import fr.batimen.ws.dao.EmailDAO;
 
@@ -37,6 +41,34 @@ public class EmailDAOTest extends AbstractBatimenWsTest {
 
         // On envoi le mail
         boolean noError = emailDAO.sendEmail(testMessage);
+
+        Assert.assertTrue(noError);
+        Assert.assertNotNull(testMessage);
+    }
+
+    @Test
+    public void sendEmailTemplateTest() throws MandrillApiError, IOException, EmailException {
+        // On prepare l'entete, on ne mets pas de titre.
+        MandrillMessage testMessage = emailDAO.prepareEmail(null);
+
+        // On construit les recepteurs
+        Map<String, String> recipients = new HashMap<String, String>();
+        recipients.put("Admin", "admin@lol.fr");
+
+        // On charge les tags
+        Map<String, String> tags = new HashMap<String, String>();
+        tags.put(Constant.TAG_EMAIL_USERNAME, "admin");
+        tags.put(Constant.TAG_EMAIL_TITRE, "titre lol");
+        tags.put(Constant.TAG_EMAIL_METIER, Metier.CHARPENTE.getMetier());
+        tags.put(Constant.TAG_EMAIL_SOUS_CATEGORIE_METIER, "Toiture");
+        tags.put(Constant.TAG_EMAIL_DELAI_INTERVENTION, DelaiIntervention.LE_PLUS_RAPIDEMENT_POSSIBLE.getType());
+        tags.put(Constant.TAG_EMAIL_TYPE_CONTACT, TypeContact.EMAIL.getAffichage());
+
+        // On charge les recepteurs
+        emailDAO.prepareRecipient(testMessage, recipients, true);
+
+        // On envoi le mail
+        boolean noError = emailDAO.sendEmailTemplate(testMessage, Constant.TEMPLATE_CONFIRMATION_ANNONCE, tags);
 
         Assert.assertTrue(noError);
         Assert.assertNotNull(testMessage);

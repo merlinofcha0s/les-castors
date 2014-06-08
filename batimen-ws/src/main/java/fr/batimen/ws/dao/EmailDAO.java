@@ -79,10 +79,20 @@ public class EmailDAO {
     }
 
     public boolean sendEmail(MandrillMessage message) throws MandrillApiError, IOException, EmailException {
-        // TODO Remplacer par sendTemplate une fois que le template aura ete
-        // choisi
         if (emailActive) {
             MandrillMessageStatus[] messagesStatus = mandrillApi.messages().send(message, false);
+            return checkErrorOnSentEmail(messagesStatus);
+        } else {
+            return true;
+        }
+
+    }
+
+    public boolean sendEmailTemplate(MandrillMessage message, String templateName, Map<String, String> templateContent)
+            throws MandrillApiError, IOException, EmailException {
+        if (emailActive) {
+            MandrillMessageStatus[] messagesStatus = mandrillApi.messages().sendTemplate(templateName, templateContent,
+                    message, false);
             return checkErrorOnSentEmail(messagesStatus);
         } else {
             return true;
