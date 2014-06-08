@@ -1,8 +1,11 @@
 package fr.batimen.ws.facade;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.LocalBean;
@@ -21,15 +24,20 @@ import javax.ws.rs.Produces;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.microtripit.mandrillapp.lutung.model.MandrillApiError;
+import com.microtripit.mandrillapp.lutung.view.MandrillMessage;
+
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.WsPath;
 import fr.batimen.core.exception.BackendException;
 import fr.batimen.core.exception.DuplicateEntityException;
+import fr.batimen.core.exception.EmailException;
 import fr.batimen.dto.CreationAnnonceDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.ws.dao.AdresseDAO;
 import fr.batimen.ws.dao.AnnonceDAO;
 import fr.batimen.ws.dao.ClientDAO;
+import fr.batimen.ws.dao.EmailDAO;
 import fr.batimen.ws.entity.Adresse;
 import fr.batimen.ws.entity.Annonce;
 import fr.batimen.ws.entity.Client;
@@ -53,185 +61,228 @@ import fr.batimen.ws.interceptor.BatimenInterceptor;
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class GestionAnnonceFacade {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(GestionAnnonceFacade.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GestionAnnonceFacade.class);
 
-	@Inject
-	private AnnonceDAO annonceDAO;
+    @Inject
+    private AnnonceDAO annonceDAO;
 
-	@Inject
-	private AdresseDAO adresseDAO;
+    @Inject
+    private AdresseDAO adresseDAO;
 
-	@Inject
-	private ClientDAO clientDAO;
+    @Inject
+    private ClientDAO clientDAO;
 
-	/**
-	 * Permet la creation d'une nouvelle annonce par le client ainsi que le
-	 * compte de ce dernier
-	 * 
-	 * @see Constant
-	 * 
-	 * @param nouvelleAnnonceDTO
-	 *            L'objet provenant du frontend qui permet la creation de
-	 *            l'annonce.
-	 * @return CODE_SERVICE_RETOUR_KO ou CODE_SERVICE_RETOUR_OK voir la classe
-	 *         Constant
-	 */
-	@POST
-	@Path(WsPath.GESTION_ANNONCE_SERVICE_CREATION_ANNONCE)
-	@TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public Integer creationAnnonce(CreationAnnonceDTO nouvelleAnnonceDTO) {
+    @Inject
+    private EmailDAO emailDAO;
 
-		try {
-			Annonce nouvelleAnnonce = remplirAnnonce(nouvelleAnnonceDTO);
-			annonceDAO.saveAnnonce(nouvelleAnnonce);
-		} catch (BackendException | DuplicateEntityException e) {
-			if (LOGGER.isErrorEnabled()) {
-				LOGGER.error("Erreur lors de l'enregistrement de l'annonce", e);
-			}
-			// L'annonce est deja présente dans le BDD
-			if (e instanceof DuplicateEntityException) {
-				return Constant.CODE_SERVICE_RETOUR_DUPLICATE;
-			}
-			// Erreur pendant la creation du service de l'annonce.
-			return Constant.CODE_SERVICE_RETOUR_KO;
-		}
+    /**
+     * Permet la creation d'une nouvelle annonce par le client ainsi que le
+     * compte de ce dernier
+     * 
+     * @see Constant
+     * 
+     * @param nouvelleAnnonceDTO
+     *            L'objet provenant du frontend qui permet la creation de
+     *            l'annonce.
+     * @return CODE_SERVICE_RETOUR_KO ou CODE_SERVICE_RETOUR_OK voir la classe
+     *         Constant
+     */
+    @POST
+    @Path(WsPath.GESTION_ANNONCE_SERVICE_CREATION_ANNONCE)
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public Integer creationAnnonce(CreationAnnonceDTO nouvelleAnnonceDTO) {
 
-		return Constant.CODE_SERVICE_RETOUR_OK;
-	}
+        try {
+            Annonce nouvelleAnnonce = remplirAnnonce(nouvelleAnnonceDTO);
+            annonceDAO.saveAnnonce(nouvelleAnnonce);
+        } catch (BackendException | DuplicateEntityException e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Erreur lors de l'enregistrement de l'annonce", e);
+            }
+            // L'annonce est deja présente dans le BDD
+            if (e instanceof DuplicateEntityException) {
+                return Constant.CODE_SERVICE_RETOUR_DUPLICATE;
+            }
+            // Erreur pendant la creation du service de l'annonce.
+            return Constant.CODE_SERVICE_RETOUR_KO;
+        }
 
-	/**
-	 * Crée une entité annonce a partir d'une DTO CreationAnnonce.
-	 * 
-	 * @param nouvelleAnnonceDTO
-	 *            L'objet provenant du backend contenant les infos de l'annonce.
-	 * @return Entité Annonce
-	 * @throws BackendException
-	 */
-	private Annonce remplirAnnonce(CreationAnnonceDTO nouvelleAnnonceDTO) throws BackendException,
-	        DuplicateEntityException {
+        try {
+            envoiMailConfirmationAnnonce(nouvelleAnnonceDTO);
+        } catch (EmailException | MandrillApiError | IOException e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Erreur d'envoi de mail", e);
+            }
+        }
 
-		Annonce nouvelleAnnonce = new Annonce();
+        return Constant.CODE_SERVICE_RETOUR_OK;
+    }
 
-		// On rempli, on persiste et on bind l'adresse à l'annonce.
-		nouvelleAnnonce.setAdresseChantier(remplirAndPersistAdresse(nouvelleAnnonceDTO));
+    /**
+     * Crée une entité annonce a partir d'une DTO CreationAnnonce.
+     * 
+     * @param nouvelleAnnonceDTO
+     *            L'objet provenant du backend contenant les infos de l'annonce.
+     * @return Entité Annonce
+     * @throws BackendException
+     */
+    private Annonce remplirAnnonce(CreationAnnonceDTO nouvelleAnnonceDTO) throws BackendException,
+            DuplicateEntityException {
 
-		if (nouvelleAnnonceDTO.getIsSignedUp()) {
-			isSignedUp(nouvelleAnnonceDTO, nouvelleAnnonce);
-		} else {
-			isNotSignedUp(nouvelleAnnonceDTO, nouvelleAnnonce);
-		}
+        Annonce nouvelleAnnonce = new Annonce();
 
-		// On rempli l'entité annonce grace à la DTO
-		nouvelleAnnonce.setDateCreation(nouvelleAnnonceDTO.getDateInscription());
-		nouvelleAnnonce.setDateMAJ(new Date());
-		nouvelleAnnonce.setDelaiIntervention(nouvelleAnnonceDTO.getDelaiIntervention());
-		nouvelleAnnonce.setDescription(nouvelleAnnonceDTO.getDescription());
+        // On rempli, on persiste et on bind l'adresse à l'annonce.
+        nouvelleAnnonce.setAdresseChantier(remplirAndPersistAdresse(nouvelleAnnonceDTO));
 
-		nouvelleAnnonce.setMetier(nouvelleAnnonceDTO.getMetier());
-		nouvelleAnnonce.setNbConsultation(0);
-		nouvelleAnnonce.setNbDevis(nouvelleAnnonceDTO.getNbDevis());
-		nouvelleAnnonce.setTitre(nouvelleAnnonceDTO.getTitre());
-		nouvelleAnnonce.setTypeContact(nouvelleAnnonceDTO.getTypeContact());
+        if (nouvelleAnnonceDTO.getIsSignedUp()) {
+            isSignedUp(nouvelleAnnonceDTO, nouvelleAnnonce);
+        } else {
+            isNotSignedUp(nouvelleAnnonceDTO, nouvelleAnnonce);
+        }
 
-		return nouvelleAnnonce;
-	}
+        // On rempli l'entité annonce grace à la DTO
+        nouvelleAnnonce.setDateCreation(nouvelleAnnonceDTO.getDateInscription());
+        nouvelleAnnonce.setDateMAJ(new Date());
+        nouvelleAnnonce.setDelaiIntervention(nouvelleAnnonceDTO.getDelaiIntervention());
+        nouvelleAnnonce.setDescription(nouvelleAnnonceDTO.getDescription());
 
-	/**
-	 * Cette méthode à sert aller chercher un client qui est deja inscit pour le
-	 * binder à l'annonce.
-	 * 
-	 * @param nouvelleAnnonceDTO
-	 *            objet provenant du front
-	 * @param nouvelleAnnonce
-	 *            entité qui sera persisté
-	 */
-	private void isSignedUp(CreationAnnonceDTO nouvelleAnnonceDTO, Annonce nouvelleAnnonce) throws BackendException,
-	        DuplicateEntityException {
-		Client client = clientDAO.getClientByLoginName(nouvelleAnnonceDTO.getLogin());
-		if (client != null) {
-			nouvelleAnnonce.setDemandeur(client);
-			client.getDevisDemandes().add(nouvelleAnnonce);
-			clientDAO.saveClient(client);
-			nouvelleAnnonce.setEtatAnnonce(EtatAnnonce.ACTIVE);
-		} else {
-			throw new BackendException("Impossible de retrouver le client : " + nouvelleAnnonceDTO.getLogin());
-		}
-	}
+        nouvelleAnnonce.setMetier(nouvelleAnnonceDTO.getMetier());
+        nouvelleAnnonce.setNbConsultation(0);
+        nouvelleAnnonce.setNbDevis(nouvelleAnnonceDTO.getNbDevis());
+        nouvelleAnnonce.setTitre(nouvelleAnnonceDTO.getTitre());
+        nouvelleAnnonce.setTypeContact(nouvelleAnnonceDTO.getTypeContact());
 
-	/**
-	 * Methode qui permet de populer l'entité client grace à la
-	 * CreationAnnonceDTO et a la persister dans la BDD. Dans le cas d'une
-	 * inscription.
-	 * 
-	 * @param nouvelleAnnonceDTO
-	 *            objet provenant du front
-	 * @param nouvelleAnnonce
-	 *            entité qui sera persisté
-	 * @throws BackendException
-	 *             en cas de probleme de sauvegarde dans la BDD
-	 */
-	private void isNotSignedUp(CreationAnnonceDTO nouvelleAnnonceDTO, Annonce nouvelleAnnonce) throws BackendException,
-	        DuplicateEntityException {
-		Client nouveauClient = remplirClient(nouvelleAnnonceDTO, nouvelleAnnonce);
-		clientDAO.saveNewClient(nouveauClient);
-		if (nouveauClient != null) {
-			nouvelleAnnonce.setDemandeur(nouveauClient);
-			nouvelleAnnonce.setEtatAnnonce(EtatAnnonce.EN_ATTENTE);
-		}
-	}
+        return nouvelleAnnonce;
+    }
 
-	/**
-	 * Rempli une entité Adresse grace à la DTO de création de l'annonce, puis
-	 * la persiste
-	 * 
-	 * @param nouvelleAnnonce
-	 * @return
-	 * @throws BackendException
-	 */
-	private Adresse remplirAndPersistAdresse(CreationAnnonceDTO nouvelleAnnonceDTO) throws BackendException {
+    /**
+     * Cette méthode à sert aller chercher un client qui est deja inscit pour le
+     * binder à l'annonce.
+     * 
+     * @param nouvelleAnnonceDTO
+     *            objet provenant du front
+     * @param nouvelleAnnonce
+     *            entité qui sera persisté
+     */
+    private void isSignedUp(CreationAnnonceDTO nouvelleAnnonceDTO, Annonce nouvelleAnnonce) throws BackendException,
+            DuplicateEntityException {
+        Client client = clientDAO.getClientByLoginName(nouvelleAnnonceDTO.getLogin());
+        if (client != null) {
+            nouvelleAnnonce.setDemandeur(client);
+            client.getDevisDemandes().add(nouvelleAnnonce);
+            clientDAO.saveClient(client);
+            nouvelleAnnonce.setEtatAnnonce(EtatAnnonce.ACTIVE);
+        } else {
+            throw new BackendException("Impossible de retrouver le client : " + nouvelleAnnonceDTO.getLogin());
+        }
+    }
 
-		// On crée la nouvelle adresse qui sera rattaché a l'annonce.
-		Adresse adresseAnnonce = new Adresse();
-		adresseAnnonce.setAdresse(nouvelleAnnonceDTO.getAdresse());
-		adresseAnnonce.setComplementAdresse(nouvelleAnnonceDTO.getComplementAdresse());
-		adresseAnnonce.setCodePostal(nouvelleAnnonceDTO.getCodePostal());
-		adresseAnnonce.setVille(nouvelleAnnonceDTO.getVille());
-		adresseAnnonce.setDepartement(nouvelleAnnonceDTO.getDepartement());
+    /**
+     * Methode qui permet de populer l'entité client grace à la
+     * CreationAnnonceDTO et a la persister dans la BDD. Dans le cas d'une
+     * inscription.
+     * 
+     * @param nouvelleAnnonceDTO
+     *            objet provenant du front
+     * @param nouvelleAnnonce
+     *            entité qui sera persisté
+     * @throws BackendException
+     *             en cas de probleme de sauvegarde dans la BDD
+     */
+    private void isNotSignedUp(CreationAnnonceDTO nouvelleAnnonceDTO, Annonce nouvelleAnnonce) throws BackendException,
+            DuplicateEntityException {
+        Client nouveauClient = remplirClient(nouvelleAnnonceDTO, nouvelleAnnonce);
+        clientDAO.saveNewClient(nouveauClient);
+        if (nouveauClient != null) {
+            nouvelleAnnonce.setDemandeur(nouveauClient);
+            nouvelleAnnonce.setEtatAnnonce(EtatAnnonce.EN_ATTENTE);
+        }
+    }
 
-		adresseDAO.saveAdresse(adresseAnnonce);
+    /**
+     * Rempli une entité Adresse grace à la DTO de création de l'annonce, puis
+     * la persiste
+     * 
+     * @param nouvelleAnnonce
+     * @return
+     * @throws BackendException
+     */
+    private Adresse remplirAndPersistAdresse(CreationAnnonceDTO nouvelleAnnonceDTO) throws BackendException {
 
-		return adresseAnnonce;
+        // On crée la nouvelle adresse qui sera rattaché a l'annonce.
+        Adresse adresseAnnonce = new Adresse();
+        adresseAnnonce.setAdresse(nouvelleAnnonceDTO.getAdresse());
+        adresseAnnonce.setComplementAdresse(nouvelleAnnonceDTO.getComplementAdresse());
+        adresseAnnonce.setCodePostal(nouvelleAnnonceDTO.getCodePostal());
+        adresseAnnonce.setVille(nouvelleAnnonceDTO.getVille());
+        adresseAnnonce.setDepartement(nouvelleAnnonceDTO.getDepartement());
 
-	}
+        adresseDAO.saveAdresse(adresseAnnonce);
 
-	/**
-	 * Rempli une entité Client grace à la DTO de création de l'annonce
-	 * 
-	 * @param nouvelleAnnonceDTO
-	 * @param nouvelleAnnonce
-	 * @return
-	 */
-	private Client remplirClient(CreationAnnonceDTO nouvelleAnnonceDTO, Annonce nouvelleAnnonce) {
+        return adresseAnnonce;
 
-		// On crée la nouveau client qui vient de poster la nouvelle annonce.
-		Client nouveauClient = new Client();
-		nouveauClient.setCivilite(nouvelleAnnonceDTO.getCivilite());
-		nouveauClient.setDateInscription(new Date());
+    }
 
-		// On crée la liste des annonces.
-		List<Annonce> annoncesNouveauClient = new ArrayList<Annonce>();
-		annoncesNouveauClient.add(nouvelleAnnonce);
-		// On bind le client à son annonce.
-		nouveauClient.setDevisDemandes(annoncesNouveauClient);
-		// On enregistre les infos du client dans l'entité client
-		nouveauClient.setNom(nouvelleAnnonceDTO.getNom());
-		nouveauClient.setPrenom(nouvelleAnnonceDTO.getPrenom());
-		nouveauClient.setLogin(nouvelleAnnonceDTO.getLogin());
-		nouveauClient.setPassword(nouvelleAnnonceDTO.getPassword());
-		nouveauClient.setEmail(nouvelleAnnonceDTO.getEmail());
-		nouveauClient.setNumeroTel(nouvelleAnnonceDTO.getNumeroTel());
-		nouveauClient.setIsArtisan(false);
+    /**
+     * Rempli une entité Client grace à la DTO de création de l'annonce
+     * 
+     * @param nouvelleAnnonceDTO
+     * @param nouvelleAnnonce
+     * @return
+     */
+    private Client remplirClient(CreationAnnonceDTO nouvelleAnnonceDTO, Annonce nouvelleAnnonce) {
 
-		return nouveauClient;
-	}
+        // On crée la nouveau client qui vient de poster la nouvelle annonce.
+        Client nouveauClient = new Client();
+        nouveauClient.setCivilite(nouvelleAnnonceDTO.getCivilite());
+        nouveauClient.setDateInscription(new Date());
+
+        // On crée la liste des annonces.
+        List<Annonce> annoncesNouveauClient = new ArrayList<Annonce>();
+        annoncesNouveauClient.add(nouvelleAnnonce);
+        // On bind le client à son annonce.
+        nouveauClient.setDevisDemandes(annoncesNouveauClient);
+        // On enregistre les infos du client dans l'entité client
+        nouveauClient.setNom(nouvelleAnnonceDTO.getNom());
+        nouveauClient.setPrenom(nouvelleAnnonceDTO.getPrenom());
+        nouveauClient.setLogin(nouvelleAnnonceDTO.getLogin());
+        nouveauClient.setPassword(nouvelleAnnonceDTO.getPassword());
+        nouveauClient.setEmail(nouvelleAnnonceDTO.getEmail());
+        nouveauClient.setNumeroTel(nouvelleAnnonceDTO.getNumeroTel());
+        nouveauClient.setIsArtisan(false);
+
+        return nouveauClient;
+    }
+
+    private boolean envoiMailConfirmationAnnonce(CreationAnnonceDTO nouvelleAnnonceDTO) throws EmailException,
+            MandrillApiError, IOException {
+        // On prepare l'entete, on ne mets pas de titre.
+        MandrillMessage confirmationAnnonceMessage = emailDAO.prepareEmail(null);
+
+        StringBuilder nomEtPrenom = new StringBuilder(nouvelleAnnonceDTO.getNom());
+        nomEtPrenom.append(" ");
+        nomEtPrenom.append(nouvelleAnnonceDTO.getPrenom());
+
+        // On construit les recepteurs
+        Map<String, String> recipients = new HashMap<String, String>();
+        recipients.put(nomEtPrenom.toString(), nouvelleAnnonceDTO.getEmail());
+
+        // On charge les tags
+        Map<String, String> templateContent = new HashMap<String, String>();
+        templateContent.put(Constant.TAG_EMAIL_USERNAME, nouvelleAnnonceDTO.getLogin());
+        templateContent.put(Constant.TAG_EMAIL_TITRE, nouvelleAnnonceDTO.getTitre());
+        templateContent.put(Constant.TAG_EMAIL_METIER, nouvelleAnnonceDTO.getMetier().getMetier());
+        templateContent.put(Constant.TAG_EMAIL_SOUS_CATEGORIE_METIER, "Pas encore dispo");
+        templateContent.put(Constant.TAG_EMAIL_DELAI_INTERVENTION, nouvelleAnnonceDTO.getDelaiIntervention().getType());
+        templateContent.put(Constant.TAG_EMAIL_TYPE_CONTACT, nouvelleAnnonceDTO.getTypeContact().getAffichage());
+
+        // On charge les recepteurs
+        emailDAO.prepareRecipient(confirmationAnnonceMessage, recipients, true);
+
+        // On envoi le mail
+        boolean noError = emailDAO.sendEmailTemplate(confirmationAnnonceMessage,
+                Constant.TEMPLATE_CONFIRMATION_ANNONCE, templateContent);
+
+        return noError;
+    }
 }
