@@ -226,6 +226,9 @@ public class CreationAnnonceDTO extends AbstractDTO {
      * @return the nom
      */
     public String getNom() {
+        if (nom == null) {
+            return "";
+        }
         return nom;
     }
 
@@ -241,6 +244,9 @@ public class CreationAnnonceDTO extends AbstractDTO {
      * @return the prenom
      */
     public String getPrenom() {
+        if (prenom == null) {
+            return "";
+        }
         return prenom;
     }
 

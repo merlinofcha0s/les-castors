@@ -196,3 +196,74 @@ input[type="button"] {
 	text-shadow: 0px 0px 0px rgba(255, 255, 255, 0.2), 0px 1px 0px
 		rgba(255, 255, 255, 1);
 }
+
+/* Page d'erreur */
+.wrapper500{
+	background: url("../img/bg_500.png") no-repeat scroll center top rgba(0, 0, 0, 0);
+    padding-top: 250px;
+    position: relative !important;
+    text-align: center;
+}
+
+.block500{
+	display: block;
+    left: 315px;
+    position: absolute;
+    text-align: inherit;
+    top: 56px;
+}
+
+.title500{
+	 font-size: 30px !important;
+    line-height: 32px !important;
+    margin-bottom: 7px !important;
+    padding-left: 13px;
+}
+
+.retourAccueil500{
+	line-height: 250px;
+}
+
+.wrapperAccessDenied{
+    padding-top: 250px;
+    position: relative !important;
+    text-align: center;
+}
+
+.blockAccessDenied{
+	display: block;
+    left: 245px;
+    position: absolute;
+    text-align: inherit;
+    top: 56px;
+}
+
+.titleAccessDenied{
+	 font-size: 30px !important;
+    line-height: 32px !important;
+    margin-bottom: 7px !important;
+    padding-left: 13px;
+}
+
+.wrapperExpiree{
+    padding-top: 250px;
+    position: relative !important;
+    text-align: center;
+}
+
+.blockExpiree{
+	display: block;
+    left: 335px;
+    position: absolute;
+    text-align: inherit;
+    top: 56px;
+}
+
+.titleExpiree{
+	 font-size: 30px !important;
+    line-height: 32px !important;
+    margin-bottom: 7px !important;
+    padding-left: 13px;
+}
+
+

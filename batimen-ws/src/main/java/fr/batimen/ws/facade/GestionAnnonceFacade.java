@@ -270,13 +270,19 @@ public class GestionAnnonceFacade {
         // On prepare l'entete, on ne mets pas de titre.
         MandrillMessage confirmationAnnonceMessage = emailDAO.prepareEmail(null);
 
-        StringBuilder nomEtPrenom = new StringBuilder(nouvelleAnnonceDTO.getNom());
-        nomEtPrenom.append(" ");
-        nomEtPrenom.append(nouvelleAnnonceDTO.getPrenom());
+        StringBuilder nomDestinataire = null;
+
+        if (nouvelleAnnonceDTO.getNom() != "" && nouvelleAnnonceDTO.getPrenom() != "") {
+            nomDestinataire = new StringBuilder(nouvelleAnnonceDTO.getNom());
+            nomDestinataire.append(" ");
+            nomDestinataire.append(nouvelleAnnonceDTO.getPrenom());
+        } else {
+            nomDestinataire = new StringBuilder(nouvelleAnnonceDTO.getLogin());
+        }
 
         // On construit les recepteurs
         Map<String, String> recipients = new HashMap<String, String>();
-        recipients.put(nomEtPrenom.toString(), nouvelleAnnonceDTO.getEmail());
+        recipients.put(nomDestinataire.toString(), nouvelleAnnonceDTO.getEmail());
 
         // On charge le contenu
         Map<String, String> templateContent = new HashMap<String, String>();
