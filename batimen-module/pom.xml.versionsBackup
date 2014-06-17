@@ -6,7 +6,7 @@
 	<groupId>fr.batimen.app</groupId>
 	<artifactId>batimen-module</artifactId>
 	<description>Projet principal de Batimen</description>
-	<version>0.2.0-SNAPSHOT</version>
+	<version>0.1.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>batimen-module</name>

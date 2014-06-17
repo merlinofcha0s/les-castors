@@ -3,26 +3,30 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
 		<groupId>fr.batimen.app</groupId>
 		<artifactId>batimen-module</artifactId>
-		<version>0.2.0-SNAPSHOT</version>
+		<version>0.1.0-SNAPSHOT</version>
 		<relativePath>../batimen-module</relativePath>
 	</parent>
 
 	<groupId>fr.batimen.app</groupId>
-	<artifactId>batimen-core</artifactId>
-	<name>batimen-core</name>
-	<description>Projet contenant toutes les classes de base de batimen (Comparator, Exception, etc)</description>
+	<artifactId>batimen-dto</artifactId>
+	<description>Projet contenant les objets d'echanges entre le frontend et le backend</description>
+	<packaging>jar</packaging>
+	<name>batimen-dto</name>
 
 	<issueManagement>
 		<system>Redmine</system>
 		<url>${redmine.address}</url>
 	</issueManagement>
+
 	<ciManagement>
 		<system>Jenkins</system>
 		<url>${jenkins.address}</url>
 	</ciManagement>
+
 	<scm>
 		<connection>${git.repository}</connection>
 		<developerConnection>${git.repository}</developerConnection>
@@ -44,29 +48,30 @@
 	</build>
 
 	<dependencies>
-		<!-- Log -->
 		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<scope>provided</scope>
-			<version>${logback.version}</version>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-access</artifactId>
-			<scope>provided</scope>
-			<version>${logback.version}</version>
-		</dependency>
-		<!-- Hash password -->
-		<dependency>
-			<groupId>com.lambdaworks</groupId>
-			<artifactId>scrypt</artifactId>
-			<version>1.4.0</version>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<scope>compile</scope>
 		</dependency>
 	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-validator</artifactId>
+				<version>4.3.1.Final</version>
+			</dependency>
+			<dependency>
+				<groupId>com.google.code.gson</groupId>
+				<artifactId>gson</artifactId>
+				<version>2.2.4</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 </project>
