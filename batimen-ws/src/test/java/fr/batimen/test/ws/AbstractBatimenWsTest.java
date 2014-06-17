@@ -38,9 +38,9 @@ public abstract class AbstractBatimenWsTest {
                 .addPackages(true, "fr/batimen/test/ws")
                 .addAsLibraries(
                         resolver.loadPomFromFile("pom.xml")
-                                .resolve("fr.batimen.app:batimen-dto:0.1.0-SNAPSHOT",
-                                        "fr.batimen.app:batimen-core:0.1.0-SNAPSHOT",
-                                        "fr.batimen.app:batimen-client:0.1.0-SNAPSHOT",
+                                .resolve("fr.batimen.app:batimen-dto:0.2.0-SNAPSHOT",
+                                        "fr.batimen.app:batimen-core:0.2.0-SNAPSHOT",
+                                        "fr.batimen.app:batimen-client:0.2.0-SNAPSHOT",
                                         "org.hibernate:hibernate-core:4.2.5.Final",
                                         "org.hibernate:hibernate-entitymanager:4.2.5.Final",
                                         "com.sun.jersey:jersey-server:1.17", "com.sun.jersey:jersey-servlet:1.17",
