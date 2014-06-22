@@ -139,6 +139,10 @@
 	margin-bottom: 13px;
 }
 
+#batimenWizard{
+	margin-bottom: 20px;
+}
+
 /* Composant Wicket */
 .wicket-mfu-caption {
 	padding-top: 5px;
@@ -198,72 +202,81 @@ input[type="button"] {
 }
 
 /* Page d'erreur */
-.wrapper500{
-	background: url("../img/bg_500.png") no-repeat scroll center top rgba(0, 0, 0, 0);
-    padding-top: 250px;
-    position: relative !important;
-    text-align: center;
+.wrapper500 {
+	background: url("../img/bg_500.png") no-repeat scroll center top
+		rgba(0, 0, 0, 0);
+	padding-top: 250px;
+	position: relative !important;
+	text-align: center;
 }
 
-.block500{
+.block500 {
 	display: block;
-    left: 315px;
-    position: absolute;
-    text-align: inherit;
-    top: 56px;
+	left: 315px;
+	position: absolute;
+	text-align: inherit;
+	top: 56px;
 }
 
-.title500{
-	 font-size: 30px !important;
-    line-height: 32px !important;
-    margin-bottom: 7px !important;
-    padding-left: 13px;
+.title500 {
+	font-size: 30px !important;
+	line-height: 32px !important;
+	margin-bottom: 7px !important;
+	padding-left: 13px;
 }
 
-.retourAccueil500{
+.retourAccueil500 {
 	line-height: 250px;
 }
 
-.wrapperAccessDenied{
-    padding-top: 250px;
-    position: relative !important;
-    text-align: center;
+.wrapperAccessDenied {
+	padding-top: 250px;
+	position: relative !important;
+	text-align: center;
 }
 
-.blockAccessDenied{
+.blockAccessDenied {
 	display: block;
-    left: 245px;
-    position: absolute;
-    text-align: inherit;
-    top: 56px;
+	left: 245px;
+	position: absolute;
+	text-align: inherit;
+	top: 56px;
 }
 
-.titleAccessDenied{
-	 font-size: 30px !important;
-    line-height: 32px !important;
-    margin-bottom: 7px !important;
-    padding-left: 13px;
+.titleAccessDenied {
+	font-size: 30px !important;
+	line-height: 32px !important;
+	margin-bottom: 7px !important;
+	padding-left: 13px;
 }
 
-.wrapperExpiree{
-    padding-top: 250px;
-    position: relative !important;
-    text-align: center;
+.wrapperExpiree {
+	padding-top: 250px;
+	position: relative !important;
+	text-align: center;
 }
 
-.blockExpiree{
+.blockExpiree {
 	display: block;
-    left: 335px;
-    position: absolute;
-    text-align: inherit;
-    top: 56px;
+	left: 335px;
+	position: absolute;
+	text-align: inherit;
+	top: 56px;
 }
 
-.titleExpiree{
-	 font-size: 30px !important;
-    line-height: 32px !important;
-    margin-bottom: 7px !important;
-    padding-left: 13px;
+.titleExpiree {
+	font-size: 30px !important;
+	line-height: 32px !important;
+	margin-bottom: 7px !important;
+	padding-left: 13px;
 }
 
+/* Custom CSS FuelUX */
+.fuelux .wizard ul li:before {
+	content: "";
+	font-size: 13px;
+}
 
+.fuelux .wizard ul li{
+	font-size: 13px;
+}
