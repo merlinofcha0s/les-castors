@@ -389,12 +389,10 @@ public class NouveauDevis extends MasterPage {
     private void loggerAnnonce(CreationAnnonceDTO nouvelleAnnonce) {
         if (LOGGER.isErrorEnabled()) {
             LOGGER.error("+--------------------------------Annonce ------------------------------------------+");
-            LOGGER.error("Objet : " + nouvelleAnnonce.getTitre());
             LOGGER.error("Corps de metier : " + nouvelleAnnonce.getMetier());
             LOGGER.error("Description: " + nouvelleAnnonce.getDescription());
             LOGGER.error("Contact ? : " + nouvelleAnnonce.getTypeContact().getAffichage());
             LOGGER.error("Intervention  : " + nouvelleAnnonce.getDelaiIntervention().getType());
-            LOGGER.error("Combien de devis  : " + nouvelleAnnonce.getNbDevis());
             LOGGER.error("Adresse du chantier  : " + nouvelleAnnonce.getAdresse());
             LOGGER.error("Complément du chantier  : " + nouvelleAnnonce.getComplementAdresse());
             LOGGER.error("Code postal  : " + nouvelleAnnonce.getCodePostal());
