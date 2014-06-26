@@ -135,75 +135,95 @@ public class NavigationWizard extends Panel {
     public void setStep(int step) {
         switch (step) {
         case 1:
-            etape1Li.add(new AttributeModifier("class", "active"));
-            etape2Li.add(new AttributeModifier("class", ""));
-            etape3Li.add(new AttributeModifier("class", ""));
-            etape4Li.add(new AttributeModifier("class", ""));
-            etape5Li.add(new AttributeModifier("class", ""));
-            badgeEtape1.add(new AttributeModifier("class", "badge badge-info"));
-            badgeEtape2.add(new AttributeModifier("class", "badge"));
-            badgeEtape3.add(new AttributeModifier("class", "badge"));
-            badgeEtape4.add(new AttributeModifier("class", "badge"));
-            badgeEtape5.add(new AttributeModifier("class", "badge"));
+            loadEtape1();
             break;
         case 2:
-            etape1Li.add(new AttributeModifier("class", "complete"));
-            etape2Li.add(new AttributeModifier("class", "active"));
-            etape3Li.add(new AttributeModifier("class", ""));
-            etape4Li.add(new AttributeModifier("class", ""));
-            etape5Li.add(new AttributeModifier("class", ""));
-
-            badgeEtape1.add(new AttributeModifier("class", "badge badge-success"));
-            badgeEtape2.add(new AttributeModifier("class", "badge badge-info"));
-            badgeEtape3.add(new AttributeModifier("class", "badge"));
-            badgeEtape4.add(new AttributeModifier("class", "badge"));
-            badgeEtape5.add(new AttributeModifier("class", "badge"));
+            loadEtape2();
             break;
         case 3:
-            etape1Li.add(new AttributeModifier("class", "complete"));
-            etape2Li.add(new AttributeModifier("class", "complete"));
-            etape3Li.add(new AttributeModifier("class", "active"));
-            etape4Li.add(new AttributeModifier("class", ""));
-            etape5Li.add(new AttributeModifier("class", ""));
-            badgeEtape1.add(new AttributeModifier("class", "badge badge-success"));
-            badgeEtape2.add(new AttributeModifier("class", "badge badge-success"));
-            badgeEtape3.add(new AttributeModifier("class", "badge badge-info"));
-            badgeEtape4.add(new AttributeModifier("class", "badge"));
-            badgeEtape5.add(new AttributeModifier("class", "badge"));
+            loadEtape3();
             break;
         case 4:
-            etape1Li.add(new AttributeModifier("class", "complete"));
-            etape2Li.add(new AttributeModifier("class", "complete"));
-            etape3Li.add(new AttributeModifier("class", "complete"));
-            etape4Li.add(new AttributeModifier("class", "active"));
-            etape5Li.add(new AttributeModifier("class", ""));
-            badgeEtape1.add(new AttributeModifier("class", "badge badge-success"));
-            badgeEtape2.add(new AttributeModifier("class", "badge badge-success"));
-            badgeEtape3.add(new AttributeModifier("class", "badge badge-success"));
-            badgeEtape4.add(new AttributeModifier("class", "badge badge-info"));
-            badgeEtape5.add(new AttributeModifier("class", "badge"));
+            loadEtape4();
             break;
         case 5:
-            etape1Li.add(new AttributeModifier("class", "complete"));
-            etape2Li.add(new AttributeModifier("class", "complete"));
-            etape3Li.add(new AttributeModifier("class", "complete"));
-            etape4Li.add(new AttributeModifier("class", "complete"));
-            etape5Li.add(new AttributeModifier("class", "active"));
-            badgeEtape1.add(new AttributeModifier("class", "badge badge-success"));
-            badgeEtape2.add(new AttributeModifier("class", "badge badge-success"));
-            badgeEtape3.add(new AttributeModifier("class", "badge badge-success"));
-            badgeEtape4.add(new AttributeModifier("class", "badge badge-success"));
-            badgeEtape5.add(new AttributeModifier("class", "badge badge-info"));
-            ;
+            loadEtape5();
+            break;
         default:
             try {
                 throw new FrontEndException("Numéro d'étape invalide");
-            } catch (FrontEndException e) {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("Le numéro de l'étape demandé n'est pas valide (pas au dessus de 5)");
+            } catch (FrontEndException fee) {
+                if (LOGGER.isErrorEnabled()) {
+                    LOGGER.error("Le numéro de l'étape demandé n'est pas valide (pas au dessus de 5)", fee);
                 }
             }
         }
+    }
+
+    private void loadEtape5() {
+        etape1Li.add(new AttributeModifier("class", "complete"));
+        etape2Li.add(new AttributeModifier("class", "complete"));
+        etape3Li.add(new AttributeModifier("class", "complete"));
+        etape4Li.add(new AttributeModifier("class", "complete"));
+        etape5Li.add(new AttributeModifier("class", "active"));
+        badgeEtape1.add(new AttributeModifier("class", "badge badge-success"));
+        badgeEtape2.add(new AttributeModifier("class", "badge badge-success"));
+        badgeEtape3.add(new AttributeModifier("class", "badge badge-success"));
+        badgeEtape4.add(new AttributeModifier("class", "badge badge-success"));
+        badgeEtape5.add(new AttributeModifier("class", "badge badge-info"));
+    }
+
+    private void loadEtape4() {
+        etape1Li.add(new AttributeModifier("class", "complete"));
+        etape2Li.add(new AttributeModifier("class", "complete"));
+        etape3Li.add(new AttributeModifier("class", "complete"));
+        etape4Li.add(new AttributeModifier("class", "active"));
+        etape5Li.add(new AttributeModifier("class", ""));
+        badgeEtape1.add(new AttributeModifier("class", "badge badge-success"));
+        badgeEtape2.add(new AttributeModifier("class", "badge badge-success"));
+        badgeEtape3.add(new AttributeModifier("class", "badge badge-success"));
+        badgeEtape4.add(new AttributeModifier("class", "badge badge-info"));
+        badgeEtape5.add(new AttributeModifier("class", "badge"));
+    }
+
+    private void loadEtape3() {
+        etape1Li.add(new AttributeModifier("class", "complete"));
+        etape2Li.add(new AttributeModifier("class", "complete"));
+        etape3Li.add(new AttributeModifier("class", "active"));
+        etape4Li.add(new AttributeModifier("class", ""));
+        etape5Li.add(new AttributeModifier("class", ""));
+        badgeEtape1.add(new AttributeModifier("class", "badge badge-success"));
+        badgeEtape2.add(new AttributeModifier("class", "badge badge-success"));
+        badgeEtape3.add(new AttributeModifier("class", "badge badge-info"));
+        badgeEtape4.add(new AttributeModifier("class", "badge"));
+        badgeEtape5.add(new AttributeModifier("class", "badge"));
+    }
+
+    private void loadEtape2() {
+        etape1Li.add(new AttributeModifier("class", "complete"));
+        etape2Li.add(new AttributeModifier("class", "active"));
+        etape3Li.add(new AttributeModifier("class", ""));
+        etape4Li.add(new AttributeModifier("class", ""));
+        etape5Li.add(new AttributeModifier("class", ""));
+
+        badgeEtape1.add(new AttributeModifier("class", "badge badge-success"));
+        badgeEtape2.add(new AttributeModifier("class", "badge badge-info"));
+        badgeEtape3.add(new AttributeModifier("class", "badge"));
+        badgeEtape4.add(new AttributeModifier("class", "badge"));
+        badgeEtape5.add(new AttributeModifier("class", "badge"));
+    }
+
+    private void loadEtape1() {
+        etape1Li.add(new AttributeModifier("class", "active"));
+        etape2Li.add(new AttributeModifier("class", ""));
+        etape3Li.add(new AttributeModifier("class", ""));
+        etape4Li.add(new AttributeModifier("class", ""));
+        etape5Li.add(new AttributeModifier("class", ""));
+        badgeEtape1.add(new AttributeModifier("class", "badge badge-info"));
+        badgeEtape2.add(new AttributeModifier("class", "badge"));
+        badgeEtape3.add(new AttributeModifier("class", "badge"));
+        badgeEtape4.add(new AttributeModifier("class", "badge"));
+        badgeEtape5.add(new AttributeModifier("class", "badge"));
     }
 
 }
