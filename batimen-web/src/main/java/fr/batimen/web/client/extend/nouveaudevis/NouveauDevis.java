@@ -46,8 +46,6 @@ public class NouveauDevis extends MasterPage {
     private static final Logger LOGGER = LoggerFactory.getLogger(NouveauDevis.class);
 
     // Composants Généraux
-    private final WebMarkupContainer progressBar;
-    private final Label etape;
     private NavigationWizard navigationWizard;
 
     // Objet à remplir
@@ -177,14 +175,10 @@ public class NouveauDevis extends MasterPage {
         containerConfirmation.add(contactezNous);
         containerConfirmation.add(retourAccueil);
 
-        // Composant généraux
-        progressBar = new WebMarkupContainer("progressBar");
-        etape = new Label("etape", new Model<String>());
-
         List<String> etapes = new ArrayList<String>();
-        etapes.add("Selectionner un departement");
-        etapes.add("Selectionner la catégorie");
-        etapes.add("Renseignez les caracteristiques du Devis");
+        etapes.add("Sélectionner un departement");
+        etapes.add("Sélectionner la catégorie");
+        etapes.add("Renseigner les caracteristiques du Devis");
         etapes.add("Inscription / Connexion");
         etapes.add("Confirmation");
 
@@ -200,8 +194,6 @@ public class NouveauDevis extends MasterPage {
         this.add(containerQualification);
         this.add(containerInscription);
         this.add(containerConfirmation);
-        this.add(progressBar);
-        this.add(etape);
         this.add(navigationWizard);
 
         try {
@@ -315,22 +307,17 @@ public class NouveauDevis extends MasterPage {
     }
 
     private void changementEtape(Integer numeroEtape) throws FrontEndException {
-        String percent = "";
-
         // On charge l'etape demandé grace au numero d'etape passé en parametre
         switch (numeroEtape) {
         case 1:
             loggerChangementEtape("Passage dans l'étape 1");
-            percent = "25";
             break;
         case 2:
             loggerChangementEtape("Passage dans l'étape 2");
-            percent = "50";
             etape2Qualification();
             break;
         case 3:
             loggerChangementEtape("Passage dans l'étape 3");
-            percent = "75";
             // Si l'utilisateur est deja authentifié on saute l'inscription
             // (etape 3)
             if (BatimenSession.get().isSignedIn()) {
@@ -342,7 +329,6 @@ public class NouveauDevis extends MasterPage {
             break;
         case 4:
             loggerChangementEtape("Passage dans l'étape 4");
-            percent = "100";
             // Si il est authentifié on l'enregistre dans la DTO (pour le
             // backend) et on charge le bon message de confirmation
             if (BatimenSession.get().isSignedIn()) {
@@ -356,18 +342,7 @@ public class NouveauDevis extends MasterPage {
             throw new FrontEndException("Aucune étape du nouveau devis chargées, Situation Impossible");
         }
 
-        // On incrémente la progress bar
-        StringBuilder cssWidthProgress = new StringBuilder("width:");
-        cssWidthProgress.append(percent);
-        cssWidthProgress.append("%;");
-        progressBar.add(new AttributeModifier("style", cssWidthProgress.toString()));
-
-        // On construit la chaine de caract pour afficher Etape x/4
-        StringBuilder numeroEtapeAffiche = new StringBuilder("Etape ");
-        numeroEtapeAffiche.append(numeroEtape).append("/4");
-
-        etape.setDefaultModelObject(numeroEtapeAffiche.toString());
-
+        navigationWizard.setStep(numeroEtape);
     }
 
     private void remplissageCreationAnnonceSiLogin() {
