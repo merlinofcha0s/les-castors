@@ -1,0 +1,47 @@
+<wicket:head>
+	<link
+		href="//www.fuelcdn.com/fuelux/2.6.1/css/fuelux.min.css"
+		rel="stylesheet"
+		type="text/css">
+	<link
+		href="//www.fuelcdn.com/fuelux/2.6.1/css/fuelux-responsive.css"
+		rel="stylesheet"
+		type="text/css">
+	<script
+		src="//www.fuelcdn.com/fuelux/2.6.1/loader.min.js"
+		type="text/javascript"></script>
+</wicket:head>
+<wicket:panel class="fuelux">
+	<div
+		id="batimenWizard"
+		class="wizard" wicket:id="wizard">
+		<ul class="steps">
+			<li
+				data-target="#step1"
+				class="active"
+				wicket:id="etape1Li"><span
+				class="badge badge-info"
+				wicket:id="badgeEtape1">1</span><span wicket:id="etape1">Step 1</span><span class="chevron"></span></li>
+			<li
+				data-target="#step2"
+				wicket:id="etape2Li"><span
+				class="badge"
+				wicket:id="badgeEtape2">2</span><span wicket:id="etape2">Step 2</span><span class="chevron"></span></li>
+			<li
+				data-target="#step3"
+				wicket:id="etape3Li"><span
+				class="badge"
+				wicket:id="badgeEtape3">3</span><span wicket:id="etape3">Step 3</span><span class="chevron"></span></li>
+			<li
+				data-target="#step4"
+				wicket:id="etape4Li"><span
+				class="badge"
+				wicket:id="badgeEtape4">4</span><span wicket:id="etape4">Step 4</span><span class="chevron"></span></li>
+			<li
+				data-target="#step5"
+				wicket:id="etape5Li"><span
+				class="badge"
+				wicket:id="badgeEtape5">5</span><span wicket:id="etape5">Step 5</span><span class="chevron"></span></li>
+		</ul>
+	</div>
+</wicket:panel>

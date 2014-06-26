@@ -39,7 +39,14 @@
 	<filter-mapping>
 		<filter-name>wicket.batimen-web</filter-name>
 		<url-pattern>/*</url-pattern>
+		<dispatcher>REQUEST</dispatcher>
+		<dispatcher>ERROR</dispatcher>
 	</filter-mapping>
+
+	<error-page>
+		<error-code>404</error-code>
+		<location>/404</location>
+	</error-page>
 
 	<listener>
 		<listener-class>fr.batimen.web.app.context.LogBackContextListener</listener-class>

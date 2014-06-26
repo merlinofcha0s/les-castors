@@ -25,7 +25,8 @@ import fr.batimen.core.constant.Constant;
 import fr.batimen.core.exception.EmailException;
 
 /**
- * Classe de formatage d'email
+ * Classe de formatage et d'envoi d'email, l'envoi de mail est realisé par
+ * mandrillapp
  * 
  * @author Casaucau Cyril
  */
@@ -45,6 +46,13 @@ public class EmailDAO {
         mandrillApi = new MandrillApi(apiKey);
     }
 
+    /**
+     * Prepare l'email : régle les differentes options, ajoute l'emetteur, etc
+     * 
+     * @param subject
+     *            L'objet du mail, null dans le cas d'un template
+     * @return
+     */
     public MandrillMessage prepareEmail(String subject) {
 
         // create your message
@@ -57,6 +65,16 @@ public class EmailDAO {
         return message;
     }
 
+    /**
+     * Ajoute le ou les recepteurs au mail.
+     * 
+     * @param message
+     *            Le message qui sera envoyé
+     * @param recipients
+     *            Les recepteurs sous forme de map
+     * @param preserveRecipients
+     *            est ce que les recepteurs doivent se voir entre eux?
+     */
     public void prepareRecipient(MandrillMessage message, Map<String, String> recipients, boolean preserveRecipients) {
 
         List<Recipient> to = new LinkedList<Recipient>();
@@ -72,12 +90,32 @@ public class EmailDAO {
         message.setPreserveRecipients(preserveRecipients);
     }
 
+    /**
+     * Ajoute le contenu au mail <br/>
+     * A utiliser dans le cas de l'envoi sans template.
+     * 
+     * @param message
+     * @param htmlContent
+     */
     public void prepareContent(MandrillMessage message, String htmlContent) {
         // set the html message
         // "<html>The apache logo - <img src=\"cid:" + "\"></html>"
         message.setHtml(htmlContent);
     }
 
+    /**
+     * Envoi d'un message sans template
+     * 
+     * @see prepareContent a utiliser obligatoirement en passant par cette
+     *      methode.
+     * 
+     * @param message
+     *            le message a envoyé
+     * @return vrai si pas d'erreur
+     * @throws MandrillApiError
+     * @throws IOException
+     * @throws EmailException
+     */
     public boolean sendEmail(MandrillMessage message) throws MandrillApiError, IOException, EmailException {
         if (emailActive) {
             MandrillMessageStatus[] messagesStatus = mandrillApi.messages().send(message, false);
@@ -88,6 +126,20 @@ public class EmailDAO {
 
     }
 
+    /**
+     * Envoi de mail avec template
+     * 
+     * @param message
+     *            le mail que l'on va envoyer
+     * @param templateName
+     *            Le nom du template présent sur mandrillapp
+     * @param templateContent
+     *            Le contenu dynamic à remplacer.
+     * @return vrai si pas d'erreur
+     * @throws MandrillApiError
+     * @throws IOException
+     * @throws EmailException
+     */
     public boolean sendEmailTemplate(MandrillMessage message, String templateName, Map<String, String> templateContent)
             throws MandrillApiError, IOException, EmailException {
         if (emailActive) {
@@ -100,6 +152,14 @@ public class EmailDAO {
 
     }
 
+    /**
+     * Regarde si des erreurs reviennent lors de l'envoi des mails
+     * 
+     * @param messagesStatus
+     *            Tableau d'erreurs d'envoi de mail
+     * @return vrai si pas d'erreur.
+     * @throws EmailException
+     */
     private boolean checkErrorOnSentEmail(MandrillMessageStatus[] messagesStatus) throws EmailException {
 
         boolean noError = true;
@@ -115,6 +175,9 @@ public class EmailDAO {
         return noError;
     }
 
+    /**
+     * Charge les parametres pour communiquer avec mandrillapp
+     */
     private void getMessageProperties() {
         Properties appProperties = new Properties();
         try {

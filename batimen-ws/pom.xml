@@ -7,7 +7,7 @@
 	<parent>
 		<groupId>fr.batimen.app</groupId>
 		<artifactId>batimen-module</artifactId>
-		<version>0.1.0-SNAPSHOT</version>
+		<version>0.2.0-SNAPSHOT</version>
 		<relativePath>../batimen-module</relativePath>
 	</parent>
 
@@ -270,12 +270,12 @@
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>batimen-dto</artifactId>
-			<version>0.1.0-SNAPSHOT</version>
+			<version>0.2.0-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>batimen-core</artifactId>
-			<version>0.1.0-SNAPSHOT</version>
+			<version>0.2.0-SNAPSHOT</version>
 		</dependency>
 
 		<!-- Test Arquillian -->
@@ -314,7 +314,7 @@
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>batimen-client</artifactId>
-			<version>0.1.0-SNAPSHOT</version>
+			<version>0.2.0-SNAPSHOT</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -475,7 +475,8 @@
 				<glassfish.domain>batimendomain</glassfish.domain>
 				
 				<!-- Email -->
-				<mandrill.api.key>AqM7U8jIxFR7GURuupcsIA</mandrill.api.key>
+				<!--  <mandrill.api.key>AqM7U8jIxFR7GURuupcsIA</mandrill.api.key> -->
+				<mandrill.api.key>OOBiT-ollMvq7_JaMjyDOQ</mandrill.api.key>
 				<email.active>true</email.active>
 			</properties>
 			<build>
