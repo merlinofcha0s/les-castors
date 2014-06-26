@@ -184,9 +184,9 @@ public class NouveauDevis extends MasterPage {
 
         try {
             navigationWizard = new NavigationWizard("navigationWizard", etapes);
-        } catch (FrontEndException e1) {
+        } catch (FrontEndException fee) {
             if (LOGGER.isErrorEnabled()) {
-                LOGGER.error(e1.getMessage());
+                LOGGER.error("Problème avec le chargement du wizard", fee);
             }
         }
 
