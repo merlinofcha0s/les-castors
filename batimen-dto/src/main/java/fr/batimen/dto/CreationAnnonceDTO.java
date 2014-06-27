@@ -39,19 +39,13 @@ public class CreationAnnonceDTO extends AbstractDTO {
     @NotNull
     private Metier metier;
     @NotNull
-    @Size(min = ValidatorConstant.CREATION_ANNONCE_TITRE_MIN, max = ValidatorConstant.CREATION_ANNONCE_TITRE_MAX)
-    private String titre;
-    @NotNull
-    @Size(min = ValidatorConstant.CREATION_ANNONCE_DESCRIPTION_MIN, max = ValidatorConstant.CREATION_ANNONCE_DESCRIPTION_MAX)
+    @Size(min = ValidatorConstant.CREATION_ANNONCE_DESCRIPTION_MIN,
+            max = ValidatorConstant.CREATION_ANNONCE_DESCRIPTION_MAX)
     private String description;
     @NotNull
     private TypeContact typeContact;
     @NotNull
     private DelaiIntervention delaiIntervention;
-    @Min(value = ValidatorConstant.CREATION_ANNONCE_NBDEVIS_MIN)
-    @Max(value = ValidatorConstant.CREATION_ANNONCE_NBDEVIS_MAX)
-    @NotNull
-    private Integer nbDevis;
     private List<File> photos = new ArrayList<File>();
     @NotNull
     @Size(min = ValidatorConstant.CREATION_ANNONCE_ADRESSE_MIN, max = ValidatorConstant.CREATION_ANNONCE_ADRESSE_MAX)
@@ -97,14 +91,6 @@ public class CreationAnnonceDTO extends AbstractDTO {
         this.metier = metier;
     }
 
-    public String getTitre() {
-        return titre;
-    }
-
-    public void setTitre(String titre) {
-        this.titre = titre;
-    }
-
     public String getDescription() {
         return description;
     }
@@ -127,14 +113,6 @@ public class CreationAnnonceDTO extends AbstractDTO {
 
     public void setDelaiIntervention(DelaiIntervention delaiIntervention) {
         this.delaiIntervention = delaiIntervention;
-    }
-
-    public Integer getNbDevis() {
-        return nbDevis;
-    }
-
-    public void setNbDevis(Integer nbDevis) {
-        this.nbDevis = nbDevis;
     }
 
     public String getAdresse() {
@@ -355,7 +333,7 @@ public class CreationAnnonceDTO extends AbstractDTO {
      */
     @Override
     public int hashCode() {
-        return Objects.hashCode(Objects.hash(this.titre, this.metier, this.description, this.codePostal, this.ville));
+        return Objects.hashCode(Objects.hash(this.metier, this.description, this.codePostal, this.ville));
     }
 
     /*
@@ -371,8 +349,7 @@ public class CreationAnnonceDTO extends AbstractDTO {
 
         if (object instanceof CreationAnnonceDTO) {
             CreationAnnonceDTO other = (CreationAnnonceDTO) object;
-            return Objects.equals(this.titre, other.titre) && Objects.equals(this.metier, other.metier)
-                    && Objects.equals(this.description, other.description)
+            return Objects.equals(this.metier, other.metier) && Objects.equals(this.description, other.description)
                     && Objects.equals(this.codePostal, other.codePostal) && Objects.equals(this.ville, other.ville);
         }
         return false;

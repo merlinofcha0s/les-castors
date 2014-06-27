@@ -148,8 +148,6 @@ public class GestionAnnonceFacade {
 
         nouvelleAnnonce.setMetier(nouvelleAnnonceDTO.getMetier());
         nouvelleAnnonce.setNbConsultation(0);
-        nouvelleAnnonce.setNbDevis(nouvelleAnnonceDTO.getNbDevis());
-        nouvelleAnnonce.setTitre(nouvelleAnnonceDTO.getTitre());
         nouvelleAnnonce.setTypeContact(nouvelleAnnonceDTO.getTypeContact());
 
         return nouvelleAnnonce;
@@ -287,7 +285,6 @@ public class GestionAnnonceFacade {
         // On charge le contenu
         Map<String, String> templateContent = new HashMap<String, String>();
         templateContent.put(Constant.TAG_EMAIL_USERNAME, nouvelleAnnonceDTO.getLogin());
-        templateContent.put(Constant.TAG_EMAIL_TITRE, nouvelleAnnonceDTO.getTitre());
         templateContent.put(Constant.TAG_EMAIL_METIER, nouvelleAnnonceDTO.getMetier().getMetier());
         templateContent.put(Constant.TAG_EMAIL_SOUS_CATEGORIE_METIER, "Pas encore dispo");
         templateContent.put(Constant.TAG_EMAIL_DELAI_INTERVENTION, nouvelleAnnonceDTO.getDelaiIntervention().getType());

@@ -5,8 +5,6 @@ annonce:
     etatannonce: 3
     metier: 16
     nbconsultation: 0
-    nbdevis: 3
-    titre: Peinture facade
     typecontact: 0
 adresse:
   - adresse: 106 chemin du pébron
