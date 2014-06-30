@@ -1,6 +1,5 @@
 package fr.batimen.test.ws.facade;
 
-import java.util.Calendar;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -13,7 +12,6 @@ import org.junit.Test;
 
 import fr.batimen.core.constant.Constant;
 import fr.batimen.dto.CreationAnnonceDTO;
-import fr.batimen.dto.enums.Civilite;
 import fr.batimen.dto.enums.DelaiIntervention;
 import fr.batimen.dto.enums.Metier;
 import fr.batimen.dto.enums.TypeContact;
@@ -44,33 +42,21 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
         creationAnnonceDTO = new CreationAnnonceDTO();
         // Infos Client
-        creationAnnonceDTO.setCivilite(Civilite.MONSIEUR);
-        creationAnnonceDTO.setNom("Du Pebron");
-        creationAnnonceDTO.setPrenom("Johnny");
+        creationAnnonceDTO.getClient().setNom("Du Pebron");
+        creationAnnonceDTO.getClient().setPrenom("Johnny");
         creationAnnonceDTO.setAdresse("106 chemin du pébron");
         creationAnnonceDTO.setComplementAdresse("Res des pébrons");
         creationAnnonceDTO.setCodePostal("06700");
         creationAnnonceDTO.setIsSignedUp(false);
-        creationAnnonceDTO.setEmail("pebron@delapebronne.com");
-        creationAnnonceDTO.setLogin("johnny06");
-        creationAnnonceDTO.setNumeroTel("0615458596");
-        creationAnnonceDTO
-                .setPassword("$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=");
+        creationAnnonceDTO.getClient().setEmail("pebron@delapebronne.com");
+        creationAnnonceDTO.getClient().setLogin("johnny06");
+        creationAnnonceDTO.getClient().setNumeroTel("0615458596");
+        creationAnnonceDTO.getClient().setPassword(
+                "$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=");
 
         // Infos Qualification Annonce
         creationAnnonceDTO.setDescription("Peinture d'un mur");
 
-        // Le 23/03/2014 @ 22:23:00
-        Calendar calDateInsription = Calendar.getInstance();
-        calDateInsription.set(Calendar.YEAR, 2014);
-        calDateInsription.set(Calendar.MONTH, Calendar.MARCH);
-        calDateInsription.set(Calendar.DAY_OF_MONTH, 23);
-        calDateInsription.set(Calendar.HOUR_OF_DAY, 22);
-        calDateInsription.set(Calendar.MINUTE, 00);
-        calDateInsription.set(Calendar.SECOND, 00);
-        calDateInsription.set(Calendar.MILLISECOND, 0);
-
-        creationAnnonceDTO.setDateInscription(calDateInsription.getTime());
         creationAnnonceDTO.setDelaiIntervention(DelaiIntervention.LE_PLUS_RAPIDEMENT_POSSIBLE);
         creationAnnonceDTO.setDepartement(06);
         creationAnnonceDTO.setMetier(Metier.PEINTURE);
@@ -87,7 +73,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
      */
     @Test
     @ShouldMatchDataSet(value = "datasets/out/creation_annonce_is_not_signed_in.yml", excludeColumns = { "id",
-            "datemaj" })
+            "datemaj", "datecreation" })
     public void testCreationAnnonceIsNotSignedIn() {
         creationVerificationAnnonce();
     }
@@ -102,7 +88,8 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
      */
     @Test
     @UsingDataSet("datasets/in/client_creation_annonce.yml")
-    @ShouldMatchDataSet(value = "datasets/out/creation_annonce_is_signed_in.yml", excludeColumns = { "id", "datemaj" })
+    @ShouldMatchDataSet(value = "datasets/out/creation_annonce_is_signed_in.yml", excludeColumns = { "id", "datemaj",
+            "datecreation" })
     public void testCreationAnnonceIsSignedIn() {
         creationAnnonceDTO.setIsSignedUp(true);
         creationVerificationAnnonce();

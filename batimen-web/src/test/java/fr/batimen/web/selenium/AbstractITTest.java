@@ -35,151 +35,150 @@ import com.ninja_squad.dbsetup.operation.Operation;
  */
 public abstract class AbstractITTest {
 
-	protected WebDriver driver;
-	protected String appUrl;
-	protected boolean acceptNextAlert = true;
-	protected StringBuilder verificationErrors = new StringBuilder();
-	private String ipServeur;
-	private String portServeur;
-	private String nomApp;
-	private String dataSourceAddress;
-	private String loginDB;
-	private String passwordDB;
+    protected WebDriver driver;
+    protected String appUrl;
+    protected boolean acceptNextAlert = true;
+    protected StringBuilder verificationErrors = new StringBuilder();
+    private String ipServeur;
+    private String portServeur;
+    private String nomApp;
+    private String dataSourceAddress;
+    private String loginDB;
+    private String passwordDB;
 
-	public final static String BON_MOT_DE_PASSE = "lollollol";
-	public final static String MAUVAIS_MOT_DE_PASSE = "kikoulolmauvais";
-	public final static int TEMPS_ATTENTE_AJAX = 20;
+    public final static String BON_MOT_DE_PASSE = "lollollol";
+    public final static String MAUVAIS_MOT_DE_PASSE = "kikoulolmauvais";
+    public final static int TEMPS_ATTENTE_AJAX = 20;
 
-	private static final Logger logger = LoggerFactory.getLogger(AbstractITTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(AbstractITTest.class);
 
-	// DBSetup
-	public static final Operation DELETE_ALL = deleteAllFrom("annonce", "adresse", "client");
-	public static final Operation INSERT_USER_DATA = insertInto("client")
-	        .columns("id", "civilite", "email", "nom", "prenom", "login", "password", "numeroTel", "dateInscription",
-	                "isArtisan")
-	        .values(100001, "0", "raiden@batimen.fr", "Casaucau", "Cyril", "raiden",
-	                "$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=", "0614125696",
-	                "2014-01-08", false).build();
+    // DBSetup
+    public static final Operation DELETE_ALL = deleteAllFrom("annonce", "adresse", "client");
+    public static final Operation INSERT_USER_DATA = insertInto("client")
+            .columns("id", "email", "nom", "prenom", "login", "password", "numeroTel", "dateInscription", "isArtisan")
+            .values(100001, "raiden@batimen.fr", "Casaucau", "Cyril", "raiden",
+                    "$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=", "0614125696",
+                    "2014-01-08", false).build();
 
-	@Before
-	public void setUpITTest() throws Exception {
-		setUpDB();
-		setUpSelenium();
-	}
+    @Before
+    public void setUpITTest() throws Exception {
+        setUpDB();
+        setUpSelenium();
+    }
 
-	public abstract void prepareDB() throws Exception;
+    public abstract void prepareDB() throws Exception;
 
-	private void setUpDB() throws Exception {
-		Properties dbProperties = new Properties();
-		dbProperties.load(getClass().getClassLoader().getResourceAsStream("dbsetup.properties"));
-		dataSourceAddress = dbProperties.getProperty("datasource.url");
-		loginDB = dbProperties.getProperty("database.login");
-		passwordDB = dbProperties.getProperty("database.password");
+    private void setUpDB() throws Exception {
+        Properties dbProperties = new Properties();
+        dbProperties.load(getClass().getClassLoader().getResourceAsStream("dbsetup.properties"));
+        dataSourceAddress = dbProperties.getProperty("datasource.url");
+        loginDB = dbProperties.getProperty("database.login");
+        passwordDB = dbProperties.getProperty("database.password");
 
-		prepareDB();
-	}
+        prepareDB();
+    }
 
-	private void setUpSelenium() {
-		Properties wsProperties = new Properties();
-		try {
-			wsProperties.load(getClass().getClassLoader().getResourceAsStream("selenium.properties"));
-			ipServeur = wsProperties.getProperty("app.ip");
-			portServeur = wsProperties.getProperty("app.port");
-			nomApp = wsProperties.getProperty("app.name");
+    private void setUpSelenium() {
+        Properties wsProperties = new Properties();
+        try {
+            wsProperties.load(getClass().getClassLoader().getResourceAsStream("selenium.properties"));
+            ipServeur = wsProperties.getProperty("app.ip");
+            portServeur = wsProperties.getProperty("app.port");
+            nomApp = wsProperties.getProperty("app.name");
 
-		} catch (IOException e) {
-			if (logger.isErrorEnabled()) {
-				logger.error("Erreur de récupération des properties de l'application web : " + e.getMessage());
-			}
-		}
+        } catch (IOException e) {
+            if (logger.isErrorEnabled()) {
+                logger.error("Erreur de récupération des properties de l'application web : " + e.getMessage());
+            }
+        }
 
-		StringBuilder sbUrlApp = new StringBuilder("https://");
-		sbUrlApp.append(ipServeur);
-		sbUrlApp.append(":");
-		sbUrlApp.append(portServeur);
-		sbUrlApp.append("/");
-		sbUrlApp.append(nomApp);
+        StringBuilder sbUrlApp = new StringBuilder("https://");
+        sbUrlApp.append(ipServeur);
+        sbUrlApp.append(":");
+        sbUrlApp.append(portServeur);
+        sbUrlApp.append("/");
+        sbUrlApp.append(nomApp);
 
-		// System.setProperty("webdriver.chrome.driver",
-		// "C:\\selenium\\chromedriver.exe");
-		driver = new FirefoxDriver();
-		appUrl = sbUrlApp.toString();
-		driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
-		driver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
+        // System.setProperty("webdriver.chrome.driver",
+        // "C:\\selenium\\chromedriver.exe");
+        driver = new FirefoxDriver();
+        appUrl = sbUrlApp.toString();
+        driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
+        driver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
 
-	}
+    }
 
-	@After
-	public void tearDownSelenium() throws Exception {
-		driver.quit();
-		String verificationErrorString = verificationErrors.toString();
-		if (!"".equals(verificationErrorString)) {
-			fail(verificationErrorString);
-		}
-	}
+    @After
+    public void tearDownSelenium() throws Exception {
+        driver.quit();
+        String verificationErrorString = verificationErrors.toString();
+        if (!"".equals(verificationErrorString)) {
+            fail(verificationErrorString);
+        }
+    }
 
-	protected boolean isElementPresent(By by) {
-		try {
-			driver.findElement(by);
-			return true;
-		} catch (NoSuchElementException e) {
-			return false;
-		}
-	}
+    protected boolean isElementPresent(By by) {
+        try {
+            driver.findElement(by);
+            return true;
+        } catch (NoSuchElementException e) {
+            return false;
+        }
+    }
 
-	protected boolean isAlertPresent() {
-		try {
-			driver.switchTo().alert();
-			return true;
-		} catch (NoAlertPresentException e) {
-			return false;
-		}
-	}
+    protected boolean isAlertPresent() {
+        try {
+            driver.switchTo().alert();
+            return true;
+        } catch (NoAlertPresentException e) {
+            return false;
+        }
+    }
 
-	protected String closeAlertAndGetItsText() {
-		try {
-			Alert alert = driver.switchTo().alert();
-			String alertText = alert.getText();
-			if (acceptNextAlert) {
-				alert.accept();
-			} else {
-				alert.dismiss();
-			}
-			return alertText;
-		} finally {
-			acceptNextAlert = true;
-		}
-	}
+    protected String closeAlertAndGetItsText() {
+        try {
+            Alert alert = driver.switchTo().alert();
+            String alertText = alert.getText();
+            if (acceptNextAlert) {
+                alert.accept();
+            } else {
+                alert.dismiss();
+            }
+            return alertText;
+        } finally {
+            acceptNextAlert = true;
+        }
+    }
 
-	protected void connexionApplication(String password) {
-		driver.findElement(By.id("connexionlbl")).click();
-		Boolean checkCondition = (new WebDriverWait(driver, 5)).until(ExpectedConditions
-		        .textToBePresentInElementLocated(By.id("ui-id-1"), "Connexion à l'espace client / artisan"));
-		assertTrue(checkCondition);
-		driver.findElement(By.name("login")).click();
-		driver.findElement(By.name("login")).clear();
-		driver.findElement(By.name("login")).sendKeys("raiden");
-		driver.findElement(By.name("password")).click();
-		driver.findElement(By.name("password")).clear();
-		driver.findElement(By.name("password")).sendKeys(password);
-		driver.findElement(By.id("signInButton")).click();
-	}
+    protected void connexionApplication(String password) {
+        driver.findElement(By.id("connexionlbl")).click();
+        Boolean checkCondition = (new WebDriverWait(driver, 5)).until(ExpectedConditions
+                .textToBePresentInElementLocated(By.id("ui-id-1"), "Connexion à l'espace client / artisan"));
+        assertTrue(checkCondition);
+        driver.findElement(By.name("login")).click();
+        driver.findElement(By.name("login")).clear();
+        driver.findElement(By.name("login")).sendKeys("raiden");
+        driver.findElement(By.name("password")).click();
+        driver.findElement(By.name("password")).clear();
+        driver.findElement(By.name("password")).sendKeys(password);
+        driver.findElement(By.id("signInButton")).click();
+    }
 
-	protected DriverManagerDestination getDriverManagerDestination() {
-		return new DriverManagerDestination(dataSourceAddress, loginDB, passwordDB);
-	}
+    protected DriverManagerDestination getDriverManagerDestination() {
+        return new DriverManagerDestination(dataSourceAddress, loginDB, passwordDB);
+    }
 
-	protected void waitForTheElement(String id) throws InterruptedException {
-		for (int second = 0;; second++) {
-			if (second >= TEMPS_ATTENTE_AJAX)
-				fail("timeout");
-			try {
-				if (isElementPresent(By.id(id)))
-					break;
-			} catch (Exception e) {
-			}
-			Thread.sleep(1000);
-		}
-	}
+    protected void waitForTheElement(String id) throws InterruptedException {
+        for (int second = 0;; second++) {
+            if (second >= TEMPS_ATTENTE_AJAX)
+                fail("timeout");
+            try {
+                if (isElementPresent(By.id(id)))
+                    break;
+            } catch (Exception e) {
+            }
+            Thread.sleep(1000);
+        }
+    }
 
 }

@@ -75,7 +75,6 @@ create table Annonce (
     
      create table Client (
         id int8 not null,
-        civilite int4,
         dateInscription timestamp not null,
         email varchar(128) not null,
         login varchar(25) not null,

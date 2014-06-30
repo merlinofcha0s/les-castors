@@ -63,7 +63,6 @@ public class TestNouveauDevis extends AbstractITTest {
         // On remplit l'étape 2
         etape2();
         // Etape 3
-        new Select(driver.findElement(By.id("civilite"))).selectByVisibleText("Monsieur");
         driver.findElement(By.id("nom")).clear();
         driver.findElement(By.id("nom")).sendKeys("Selenium");
         driver.findElement(By.id("prenom")).clear();
@@ -140,13 +139,11 @@ public class TestNouveauDevis extends AbstractITTest {
         // Etape 3
         driver.findElement(By.id("connexionEtape3")).click();
         waitForTheElement("ui-id-1");
-        driver.findElement(By.cssSelector("table.tableBatimenLogin > tbody > tr > td > input[name=\"login\"]")).click();
-        driver.findElement(By.cssSelector("table.tableBatimenLogin > tbody > tr > td > input[name=\"login\"]")).clear();
-        driver.findElement(By.cssSelector("table.tableBatimenLogin > tbody > tr > td > input[name=\"login\"]"))
-                .sendKeys("raiden");
-        driver.findElement(By.xpath("(//input[@name='password'])[2]")).click();
-        driver.findElement(By.xpath("(//input[@name='password'])[2]")).clear();
-        driver.findElement(By.xpath("(//input[@name='password'])[2]")).sendKeys("lollollol");
+        driver.findElement(By.id("loginModal")).click();
+        driver.findElement(By.id("loginModal")).clear();
+        driver.findElement(By.id("loginModal")).sendKeys("raiden");
+        driver.findElement(By.id("passwordModal")).clear();
+        driver.findElement(By.id("passwordModal")).sendKeys("lollollol");
         driver.findElement(By.id("signInButton")).click();
     }
 
