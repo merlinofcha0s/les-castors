@@ -37,4 +37,9 @@
 		<property name="excludePoi">true</property>
 		<property name="defaultDataSetFormat">YAML</property>
 	</extension>
+
+	<extension qualifier="jacoco">
+		<property name="excludes">fr.batimen.test.*</property>
+		<property name="includes">fr.batimen.*</property>
+	</extension>
 </arquillian>
