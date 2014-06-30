@@ -52,8 +52,8 @@
 		<glassfish.adminPassword></glassfish.adminPassword>
 		<glassfish.domain>domain1</glassfish.domain>
 		<glassfish.debug>false</glassfish.debug>
-
-		<!-- Email -->
+		
+		<!-- Email  -->
 		<mandrill.api.key>OOBiT-ollMvq7_JaMjyDOQ</mandrill.api.key>
 		<email.active>true</email.active>
 	</properties>
@@ -244,7 +244,7 @@
 			<groupId>com.mandrillapp.wrapper.lutung</groupId>
 			<artifactId>lutung</artifactId>
 			<scope>compile</scope>
-
+			
 		</dependency>
 
 		<!-- Security -->
@@ -309,12 +309,6 @@
 		<dependency>
 			<groupId>org.jboss.arquillian.extension</groupId>
 			<artifactId>arquillian-persistence-impl</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.arquillian.extension</groupId>
-			<artifactId>arquillian-jacoco</artifactId>
-			<version>1.0.0.Alpha6</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -439,10 +433,10 @@
 				<version>1.17</version>
 			</dependency>
 			<dependency>
-				<groupId>com.mandrillapp.wrapper.lutung</groupId>
-				<artifactId>lutung</artifactId>
-				<version>0.0.4</version>
-			</dependency>
+			<groupId>com.mandrillapp.wrapper.lutung</groupId>
+			<artifactId>lutung</artifactId>
+			<version>0.0.4</version>
+		</dependency>
 		</dependencies>
 	</dependencyManagement>
 
@@ -479,9 +473,9 @@
 				<glassfish.adminUser>admin</glassfish.adminUser>
 				<glassfish.adminPassword>OIOIUenoBueno</glassfish.adminPassword>
 				<glassfish.domain>batimendomain</glassfish.domain>
-
+				
 				<!-- Email -->
-				<!-- <mandrill.api.key>AqM7U8jIxFR7GURuupcsIA</mandrill.api.key> -->
+				<!--  <mandrill.api.key>AqM7U8jIxFR7GURuupcsIA</mandrill.api.key> -->
 				<mandrill.api.key>OOBiT-ollMvq7_JaMjyDOQ</mandrill.api.key>
 				<email.active>true</email.active>
 			</properties>
