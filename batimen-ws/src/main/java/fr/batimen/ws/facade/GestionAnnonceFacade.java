@@ -75,6 +75,8 @@ public class GestionAnnonceFacade {
     @Inject
     private EmailDAO emailDAO;
 
+    private boolean isSignedUp = false;
+
     /**
      * Permet la creation d'une nouvelle annonce par le client ainsi que le
      * compte de ce dernier
@@ -92,8 +94,10 @@ public class GestionAnnonceFacade {
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public Integer creationAnnonce(CreationAnnonceDTO nouvelleAnnonceDTO) {
 
+        Annonce nouvelleAnnonce = null;
+
         try {
-            Annonce nouvelleAnnonce = remplirAnnonce(nouvelleAnnonceDTO);
+            nouvelleAnnonce = remplirAnnonce(nouvelleAnnonceDTO);
             annonceDAO.saveAnnonce(nouvelleAnnonce);
         } catch (BackendException | DuplicateEntityException e) {
             if (LOGGER.isErrorEnabled()) {
@@ -108,7 +112,9 @@ public class GestionAnnonceFacade {
         }
 
         try {
-            envoiMailConfirmationAnnonce(nouvelleAnnonceDTO);
+            if (nouvelleAnnonce != null) {
+                envoiMailConfirmationAnnonce(nouvelleAnnonceDTO, nouvelleAnnonce.getDemandeur());
+            }
         } catch (EmailException | MandrillApiError | IOException e) {
             if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("Erreur d'envoi de mail", e);
@@ -141,15 +147,13 @@ public class GestionAnnonceFacade {
         }
 
         // On rempli l'entité annonce grace à la DTO
-        nouvelleAnnonce.setDateCreation(nouvelleAnnonceDTO.getDateInscription());
+        nouvelleAnnonce.setDateCreation(new Date());
         nouvelleAnnonce.setDateMAJ(new Date());
         nouvelleAnnonce.setDelaiIntervention(nouvelleAnnonceDTO.getDelaiIntervention());
         nouvelleAnnonce.setDescription(nouvelleAnnonceDTO.getDescription());
 
         nouvelleAnnonce.setMetier(nouvelleAnnonceDTO.getMetier());
         nouvelleAnnonce.setNbConsultation(0);
-        nouvelleAnnonce.setNbDevis(nouvelleAnnonceDTO.getNbDevis());
-        nouvelleAnnonce.setTitre(nouvelleAnnonceDTO.getTitre());
         nouvelleAnnonce.setTypeContact(nouvelleAnnonceDTO.getTypeContact());
 
         return nouvelleAnnonce;
@@ -166,14 +170,18 @@ public class GestionAnnonceFacade {
      */
     private void isSignedUp(CreationAnnonceDTO nouvelleAnnonceDTO, Annonce nouvelleAnnonce) throws BackendException,
             DuplicateEntityException {
-        Client client = clientDAO.getClientByLoginName(nouvelleAnnonceDTO.getLogin());
+
+        isSignedUp = true;
+
+        Client client = clientDAO.getClientByLoginName(nouvelleAnnonceDTO.getClient().getLogin());
         if (client != null) {
             nouvelleAnnonce.setDemandeur(client);
             client.getDevisDemandes().add(nouvelleAnnonce);
             clientDAO.saveClient(client);
             nouvelleAnnonce.setEtatAnnonce(EtatAnnonce.ACTIVE);
         } else {
-            throw new BackendException("Impossible de retrouver le client : " + nouvelleAnnonceDTO.getLogin());
+            throw new BackendException("Impossible de retrouver le client : "
+                    + nouvelleAnnonceDTO.getClient().getLogin());
         }
     }
 
@@ -191,6 +199,7 @@ public class GestionAnnonceFacade {
      */
     private void isNotSignedUp(CreationAnnonceDTO nouvelleAnnonceDTO, Annonce nouvelleAnnonce) throws BackendException,
             DuplicateEntityException {
+        isSignedUp = false;
         Client nouveauClient = remplirClient(nouvelleAnnonceDTO, nouvelleAnnonce);
         clientDAO.saveNewClient(nouveauClient);
         if (nouveauClient != null) {
@@ -234,7 +243,6 @@ public class GestionAnnonceFacade {
 
         // On crée la nouveau client qui vient de poster la nouvelle annonce.
         Client nouveauClient = new Client();
-        nouveauClient.setCivilite(nouvelleAnnonceDTO.getCivilite());
         nouveauClient.setDateInscription(new Date());
 
         // On crée la liste des annonces.
@@ -243,12 +251,12 @@ public class GestionAnnonceFacade {
         // On bind le client à son annonce.
         nouveauClient.setDevisDemandes(annoncesNouveauClient);
         // On enregistre les infos du client dans l'entité client
-        nouveauClient.setNom(nouvelleAnnonceDTO.getNom());
-        nouveauClient.setPrenom(nouvelleAnnonceDTO.getPrenom());
-        nouveauClient.setLogin(nouvelleAnnonceDTO.getLogin());
-        nouveauClient.setPassword(nouvelleAnnonceDTO.getPassword());
-        nouveauClient.setEmail(nouvelleAnnonceDTO.getEmail());
-        nouveauClient.setNumeroTel(nouvelleAnnonceDTO.getNumeroTel());
+        nouveauClient.setNom(nouvelleAnnonceDTO.getClient().getNom());
+        nouveauClient.setPrenom(nouvelleAnnonceDTO.getClient().getPrenom());
+        nouveauClient.setLogin(nouvelleAnnonceDTO.getClient().getLogin());
+        nouveauClient.setPassword(nouvelleAnnonceDTO.getClient().getPassword());
+        nouveauClient.setEmail(nouvelleAnnonceDTO.getClient().getEmail());
+        nouveauClient.setNumeroTel(nouvelleAnnonceDTO.getClient().getNumeroTel());
         nouveauClient.setIsArtisan(false);
 
         return nouveauClient;
@@ -265,29 +273,28 @@ public class GestionAnnonceFacade {
      * @throws MandrillApiError
      * @throws IOException
      */
-    private boolean envoiMailConfirmationAnnonce(CreationAnnonceDTO nouvelleAnnonceDTO) throws EmailException,
-            MandrillApiError, IOException {
+    private boolean envoiMailConfirmationAnnonce(CreationAnnonceDTO nouvelleAnnonceDTO, Client clientDejaInscrit)
+            throws EmailException, MandrillApiError, IOException {
         // On prepare l'entete, on ne mets pas de titre.
         MandrillMessage confirmationAnnonceMessage = emailDAO.prepareEmail(null);
 
-        StringBuilder nomDestinataire = null;
+        StringBuilder nomDestinataire = new StringBuilder();
 
-        if (nouvelleAnnonceDTO.getNom() != "" && nouvelleAnnonceDTO.getPrenom() != "") {
-            nomDestinataire = new StringBuilder(nouvelleAnnonceDTO.getNom());
-            nomDestinataire.append(" ");
-            nomDestinataire.append(nouvelleAnnonceDTO.getPrenom());
+        if (isSignedUp) {
+            remplirNomPrenomMail(clientDejaInscrit.getNom(), clientDejaInscrit.getPrenom(), clientDejaInscrit.getLogin(),
+                    nomDestinataire);
         } else {
-            nomDestinataire = new StringBuilder(nouvelleAnnonceDTO.getLogin());
+            remplirNomPrenomMail(nouvelleAnnonceDTO.getClient().getNom(), nouvelleAnnonceDTO.getClient().getPrenom(),
+                    nouvelleAnnonceDTO.getClient().getLogin(), nomDestinataire);
         }
 
         // On construit les recepteurs
         Map<String, String> recipients = new HashMap<String, String>();
-        recipients.put(nomDestinataire.toString(), nouvelleAnnonceDTO.getEmail());
+        recipients.put(nomDestinataire.toString(), nouvelleAnnonceDTO.getClient().getEmail());
 
         // On charge le contenu
         Map<String, String> templateContent = new HashMap<String, String>();
-        templateContent.put(Constant.TAG_EMAIL_USERNAME, nouvelleAnnonceDTO.getLogin());
-        templateContent.put(Constant.TAG_EMAIL_TITRE, nouvelleAnnonceDTO.getTitre());
+        templateContent.put(Constant.TAG_EMAIL_USERNAME, nouvelleAnnonceDTO.getClient().getLogin());
         templateContent.put(Constant.TAG_EMAIL_METIER, nouvelleAnnonceDTO.getMetier().getMetier());
         templateContent.put(Constant.TAG_EMAIL_SOUS_CATEGORIE_METIER, "Pas encore dispo");
         templateContent.put(Constant.TAG_EMAIL_DELAI_INTERVENTION, nouvelleAnnonceDTO.getDelaiIntervention().getType());
@@ -301,5 +308,15 @@ public class GestionAnnonceFacade {
                 Constant.TEMPLATE_CONFIRMATION_ANNONCE, templateContent);
 
         return noError;
+    }
+
+    private void remplirNomPrenomMail(String nom, String prenom, String login, StringBuilder nomDestinataire) {
+        if (nom != "" && prenom != "") {
+            nomDestinataire.append(nom);
+            nomDestinataire.append(" ");
+            nomDestinataire.append(prenom);
+        } else {
+            nomDestinataire = new StringBuilder(login);
+        }
     }
 }

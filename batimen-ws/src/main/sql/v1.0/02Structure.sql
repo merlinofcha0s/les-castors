@@ -17,9 +17,7 @@ create table Annonce (
         etatAnnonce int4 not null,
         metier int4 not null,
         nbConsultation int4 not null,
-        nbDevis int4 not null,
         photo varchar(255),
-        titre varchar(45) not null,
         typeContact int4 not null,
         adresseChantier_id int8,
         demandeur_fk int8,
@@ -77,7 +75,6 @@ create table Annonce (
     
      create table Client (
         id int8 not null,
-        civilite int4,
         dateInscription timestamp not null,
         email varchar(128) not null,
         login varchar(25) not null,

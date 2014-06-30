@@ -28,95 +28,97 @@ import fr.batimen.web.client.event.LoginEvent;
  */
 public class AuthentificationPanel extends Panel {
 
-	private static final long serialVersionUID = -1634093925835447825L;
-	private static final Logger LOGGER = LoggerFactory.getLogger(AuthentificationPanel.class);
+    private static final long serialVersionUID = -1634093925835447825L;
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthentificationPanel.class);
 
-	private Form<AuthentificationPanel> loginForm;
-	private TextField<String> login;
-	private PasswordTextField password;
+    private Form<AuthentificationPanel> loginForm;
+    private TextField<String> login;
+    private PasswordTextField password;
 
-	private Label errorLogin;
+    private Label errorLogin;
 
-	public AuthentificationPanel(String id) {
-		super(id);
-		initForm();
-	}
+    public AuthentificationPanel(String id) {
+        super(id);
+        initForm();
+    }
 
-	private final void initForm() {
+    private final void initForm() {
 
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Initialisation du form d'authentification");
-		}
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Initialisation du form d'authentification");
+        }
 
-		loginForm = new Form<AuthentificationPanel>("loginForm", new CompoundPropertyModel<AuthentificationPanel>(this));
+        loginForm = new Form<AuthentificationPanel>("loginForm", new CompoundPropertyModel<AuthentificationPanel>(this));
 
-		login = new TextField<String>("login", new Model<String>());
-		login.setModelObject("Identifiant");
-		login.setRequired(true);
-		login.add(new StringValidator(ValidatorConstant.LOGIN_RANGE_MIN, ValidatorConstant.LOGIN_RANGE_MAX));
+        login = new TextField<String>("login", new Model<String>());
+        login.setModelObject("Identifiant");
+        login.setMarkupId("loginModal");
+        login.setRequired(true);
+        login.add(new StringValidator(ValidatorConstant.LOGIN_RANGE_MIN, ValidatorConstant.LOGIN_RANGE_MAX));
 
-		password = new PasswordTextField("password", new Model<String>());
-		password.setModelObject("Password");
-		password.setRequired(true);
-		password.add(new StringValidator(ValidatorConstant.PASSWORD_RANGE_MIN, ValidatorConstant.PASSWORD_RANGE_MAX));
+        password = new PasswordTextField("password", new Model<String>());
+        password.setModelObject("Password");
+        password.setMarkupId("passwordModal");
+        password.setRequired(true);
+        password.add(new StringValidator(ValidatorConstant.PASSWORD_RANGE_MIN, ValidatorConstant.PASSWORD_RANGE_MAX));
 
-		AjaxSubmitLink signIn = new AjaxSubmitLink("signIn") {
+        AjaxSubmitLink signIn = new AjaxSubmitLink("signIn") {
 
-			private static final long serialVersionUID = 3183458686534816645L;
+            private static final long serialVersionUID = 3183458686534816645L;
 
-			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 
-				boolean authResult = AuthenticatedWebSession.get().signIn(login.getInput(),
-				        password.getConvertedInput());
+                boolean authResult = AuthenticatedWebSession.get().signIn(login.getInput(),
+                        password.getConvertedInput());
 
-				// if authentication succeeds redirect user to the requested
-				// page
-				if (authResult) {
-					// On envoi un event pour que le connected container
-					// (masterpage) se recharge
-					send(getPage(), Broadcast.BREADTH, new LoginEvent(target));
+                // if authentication succeeds redirect user to the requested
+                // page
+                if (authResult) {
+                    // On envoi un event pour que le connected container
+                    // (masterpage) se recharge
+                    send(getPage(), Broadcast.BREADTH, new LoginEvent(target));
 
-					// Si il voulait aller sur une page en particulier, on
-					// le redirige vers celle ci
-					continueToOriginalDestination();
-				} else {
-					AuthentificationPanel.this.onError(target);
-				}
-			}
+                    // Si il voulait aller sur une page en particulier, on
+                    // le redirige vers celle ci
+                    continueToOriginalDestination();
+                } else {
+                    AuthentificationPanel.this.onError(target);
+                }
+            }
 
-			@Override
-			protected void onError(AjaxRequestTarget target, Form<?> form) {
-				AuthentificationPanel.this.onError(target);
-			}
+            @Override
+            protected void onError(AjaxRequestTarget target, Form<?> form) {
+                AuthentificationPanel.this.onError(target);
+            }
 
-		};
+        };
 
-		signIn.setMarkupId("signInButton");
+        signIn.setMarkupId("signInButton");
 
-		errorLogin = new Label("errorLogin", "");
-		errorLogin.setOutputMarkupId(true);
+        errorLogin = new Label("errorLogin", "");
+        errorLogin.setOutputMarkupId(true);
 
-		loginForm.add(signIn);
-		loginForm.add(login);
-		loginForm.add(password);
+        loginForm.add(signIn);
+        loginForm.add(login);
+        loginForm.add(password);
 
-		this.add(loginForm);
-		this.add(errorLogin);
+        this.add(loginForm);
+        this.add(errorLogin);
 
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Fin initialisation du form d'authentification");
-		}
-	}
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Fin initialisation du form d'authentification");
+        }
+    }
 
-	public void resetLabelError() {
-		errorLogin.setDefaultModelObject("");
-		errorLogin.add(new AttributeModifier("class", "errorLoginDeactivated"));
-	}
+    public void resetLabelError() {
+        errorLogin.setDefaultModelObject("");
+        errorLogin.add(new AttributeModifier("class", "errorLoginDeactivated"));
+    }
 
-	public void onError(AjaxRequestTarget target) {
-		errorLogin.setDefaultModelObject("Erreur dans la saisie ou identifiants inconnues, veuillez recommencer");
-		errorLogin.add(new AttributeModifier("class", "errorLoginActivated"));
-		target.add(errorLogin);
-	}
+    public void onError(AjaxRequestTarget target) {
+        errorLogin.setDefaultModelObject("Erreur dans la saisie ou identifiants inconnues, veuillez recommencer");
+        errorLogin.add(new AttributeModifier("class", "errorLoginActivated"));
+        target.add(errorLogin);
+    }
 }

@@ -34,295 +34,264 @@ import fr.batimen.dto.enums.TypeContact;
 @Entity
 @Table(name = "Annonce")
 @NamedQueries(value = {
-        @NamedQuery(name = QueryJPQL.ANNONCE_BY_LOGIN, query = "SELECT a FROM Annonce AS a WHERE a.demandeur.login = :login"),
-        @NamedQuery(name = QueryJPQL.ANNONCE_BY_TITLE_AND_DESCRIPTION, query = "SELECT a FROM Annonce AS a WHERE a.titre = :titre AND a.description = :description AND a.demandeur.login = :login") })
+        @NamedQuery(name = QueryJPQL.ANNONCE_BY_LOGIN,
+                query = "SELECT a FROM Annonce AS a WHERE a.demandeur.login = :login"),
+        @NamedQuery(name = QueryJPQL.ANNONCE_BY_TITLE_AND_DESCRIPTION,
+                query = "SELECT a FROM Annonce AS a WHERE a.description = :description AND a.demandeur.login = :login") })
 public class Annonce extends AbstractEntity implements Serializable {
 
-	private static final long serialVersionUID = 3160372354800747789L;
+    private static final long serialVersionUID = 3160372354800747789L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
-	@Column(length = 45, nullable = false)
-	private String titre;
-	@Column(length = 500, nullable = false)
-	private String description;
-	@Column(nullable = false)
-	private TypeContact typeContact;
-	@Column(nullable = false)
-	private DelaiIntervention delaiIntervention;
-	@Temporal(javax.persistence.TemporalType.TIMESTAMP)
-	private Date dateCreation;
-	@Temporal(javax.persistence.TemporalType.TIMESTAMP)
-	private Date dateMAJ;
-	@Column(nullable = false)
-	private Integer nbConsultation;
-	@Column(nullable = false)
-	private Integer nbDevis;
-	@Column(length = 255, nullable = true)
-	private String photo;
-	@Column(nullable = false)
-	private Metier metier;
-	@Column(nullable = false)
-	private EtatAnnonce etatAnnonce;
-	@ManyToOne
-	@JoinColumn(name = "demandeur_fk")
-	private Client demandeur;
-	@OneToOne(cascade = CascadeType.REMOVE)
-	private Notation notationAnnonce;
-	@OneToOne(cascade = CascadeType.REMOVE)
-	private Adresse adresseChantier;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+    @Column(length = 500, nullable = false)
+    private String description;
+    @Column(nullable = false)
+    private TypeContact typeContact;
+    @Column(nullable = false)
+    private DelaiIntervention delaiIntervention;
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dateCreation;
+    @Temporal(javax.persistence.TemporalType.TIMESTAMP)
+    private Date dateMAJ;
+    @Column(nullable = false)
+    private Integer nbConsultation;
+    @Column(length = 255, nullable = true)
+    private String photo;
+    @Column(nullable = false)
+    private Metier metier;
+    @Column(nullable = false)
+    private EtatAnnonce etatAnnonce;
+    @ManyToOne
+    @JoinColumn(name = "demandeur_fk")
+    private Client demandeur;
+    @OneToOne(cascade = CascadeType.REMOVE)
+    private Notation notationAnnonce;
+    @OneToOne(cascade = CascadeType.REMOVE)
+    private Adresse adresseChantier;
 
-	/**
-	 * @return the id
-	 */
-	public Long getId() {
-		return id;
-	}
+    /**
+     * @return the id
+     */
+    public Long getId() {
+        return id;
+    }
 
-	/**
-	 * @param id
-	 *            the id to set
-	 */
-	public void setId(Long id) {
-		this.id = id;
-	}
+    /**
+     * @param id
+     *            the id to set
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	/**
-	 * @return the titre
-	 */
-	public String getTitre() {
-		return titre;
-	}
+    /**
+     * @return the description
+     */
+    public String getDescription() {
+        return description;
+    }
 
-	/**
-	 * @param titre
-	 *            the titre to set
-	 */
-	public void setTitre(String titre) {
-		this.titre = titre;
-	}
+    /**
+     * @param description
+     *            the description to set
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
 
-	/**
-	 * @return the description
-	 */
-	public String getDescription() {
-		return description;
-	}
+    /**
+     * @return the typeContact
+     */
+    public TypeContact getTypeContact() {
+        return typeContact;
+    }
 
-	/**
-	 * @param description
-	 *            the description to set
-	 */
-	public void setDescription(String description) {
-		this.description = description;
-	}
+    /**
+     * @param typeContact
+     *            the typeContact to set
+     */
+    public void setTypeContact(TypeContact typeContact) {
+        this.typeContact = typeContact;
+    }
 
-	/**
-	 * @return the typeContact
-	 */
-	public TypeContact getTypeContact() {
-		return typeContact;
-	}
+    /**
+     * @return the delaiIntervention
+     */
+    public DelaiIntervention getDelaiIntervention() {
+        return delaiIntervention;
+    }
 
-	/**
-	 * @param typeContact
-	 *            the typeContact to set
-	 */
-	public void setTypeContact(TypeContact typeContact) {
-		this.typeContact = typeContact;
-	}
+    /**
+     * @param delaiIntervention
+     *            the delaiIntervention to set
+     */
+    public void setDelaiIntervention(DelaiIntervention delaiIntervention) {
+        this.delaiIntervention = delaiIntervention;
+    }
 
-	/**
-	 * @return the delaiIntervention
-	 */
-	public DelaiIntervention getDelaiIntervention() {
-		return delaiIntervention;
-	}
+    /**
+     * @return the dateCreation
+     */
+    public Date getDateCreation() {
+        return dateCreation;
+    }
 
-	/**
-	 * @param delaiIntervention
-	 *            the delaiIntervention to set
-	 */
-	public void setDelaiIntervention(DelaiIntervention delaiIntervention) {
-		this.delaiIntervention = delaiIntervention;
-	}
+    /**
+     * @param dateCreation
+     *            the dateCreation to set
+     */
+    public void setDateCreation(Date dateCreation) {
+        this.dateCreation = dateCreation;
+    }
 
-	/**
-	 * @return the dateCreation
-	 */
-	public Date getDateCreation() {
-		return dateCreation;
-	}
+    /**
+     * @return the dateMAJ
+     */
+    public Date getDateMAJ() {
+        return dateMAJ;
+    }
 
-	/**
-	 * @param dateCreation
-	 *            the dateCreation to set
-	 */
-	public void setDateCreation(Date dateCreation) {
-		this.dateCreation = dateCreation;
-	}
+    /**
+     * @param dateMAJ
+     *            the dateMAJ to set
+     */
+    public void setDateMAJ(Date dateMAJ) {
+        this.dateMAJ = dateMAJ;
+    }
 
-	/**
-	 * @return the dateMAJ
-	 */
-	public Date getDateMAJ() {
-		return dateMAJ;
-	}
+    /**
+     * @return the nbConsultation
+     */
+    public Integer getNbConsultation() {
+        return nbConsultation;
+    }
 
-	/**
-	 * @param dateMAJ
-	 *            the dateMAJ to set
-	 */
-	public void setDateMAJ(Date dateMAJ) {
-		this.dateMAJ = dateMAJ;
-	}
+    /**
+     * @param nbConsultation
+     *            the nbConsultation to set
+     */
+    public void setNbConsultation(Integer nbConsultation) {
+        this.nbConsultation = nbConsultation;
+    }
 
-	/**
-	 * @return the nbConsultation
-	 */
-	public Integer getNbConsultation() {
-		return nbConsultation;
-	}
+    /**
+     * @return the photo
+     */
+    public String getPhoto() {
+        return photo;
+    }
 
-	/**
-	 * @param nbConsultation
-	 *            the nbConsultation to set
-	 */
-	public void setNbConsultation(Integer nbConsultation) {
-		this.nbConsultation = nbConsultation;
-	}
+    /**
+     * @param photo
+     *            the photo to set
+     */
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
 
-	/**
-	 * @return the nbDevis
-	 */
-	public Integer getNbDevis() {
-		return nbDevis;
-	}
+    /**
+     * @return the metier
+     */
+    public Metier getMetier() {
+        return metier;
+    }
 
-	/**
-	 * @param nbDevis
-	 *            the nbDevis to set
-	 */
-	public void setNbDevis(Integer nbDevis) {
-		this.nbDevis = nbDevis;
-	}
+    /**
+     * @param metier
+     *            the metier to set
+     */
+    public void setMetier(Metier metier) {
+        this.metier = metier;
+    }
 
-	/**
-	 * @return the photo
-	 */
-	public String getPhoto() {
-		return photo;
-	}
+    /**
+     * @return the etatAnnonce
+     */
+    public EtatAnnonce getEtatAnnonce() {
+        return etatAnnonce;
+    }
 
-	/**
-	 * @param photo
-	 *            the photo to set
-	 */
-	public void setPhoto(String photo) {
-		this.photo = photo;
-	}
+    /**
+     * @param etatAnnonce
+     *            the etatAnnonce to set
+     */
+    public void setEtatAnnonce(EtatAnnonce etatAnnonce) {
+        this.etatAnnonce = etatAnnonce;
+    }
 
-	/**
-	 * @return the metier
-	 */
-	public Metier getMetier() {
-		return metier;
-	}
+    /**
+     * @return the demandeur
+     */
+    public Client getDemandeur() {
+        return demandeur;
+    }
 
-	/**
-	 * @param metier
-	 *            the metier to set
-	 */
-	public void setMetier(Metier metier) {
-		this.metier = metier;
-	}
+    /**
+     * @return the notationAnnonce
+     */
+    public Notation getNotationAnnonce() {
+        return notationAnnonce;
+    }
 
-	/**
-	 * @return the etatAnnonce
-	 */
-	public EtatAnnonce getEtatAnnonce() {
-		return etatAnnonce;
-	}
+    /**
+     * @param notationAnnonce
+     *            the notationAnnonce to set
+     */
+    public void setNotationAnnonce(Notation notationAnnonce) {
+        this.notationAnnonce = notationAnnonce;
+    }
 
-	/**
-	 * @param etatAnnonce
-	 *            the etatAnnonce to set
-	 */
-	public void setEtatAnnonce(EtatAnnonce etatAnnonce) {
-		this.etatAnnonce = etatAnnonce;
-	}
+    /**
+     * @param demandeur
+     *            the demandeur to set
+     */
+    public void setDemandeur(Client demandeur) {
+        this.demandeur = demandeur;
+    }
 
-	/**
-	 * @return the demandeur
-	 */
-	public Client getDemandeur() {
-		return demandeur;
-	}
+    /**
+     * @return the adresseChantier
+     */
+    public Adresse getAdresseChantier() {
+        return adresseChantier;
+    }
 
-	/**
-	 * @return the notationAnnonce
-	 */
-	public Notation getNotationAnnonce() {
-		return notationAnnonce;
-	}
+    /**
+     * @param adresseChantier
+     *            the adresseChantier to set
+     */
+    public void setAdresseChantier(Adresse adresseChantier) {
+        this.adresseChantier = adresseChantier;
+    }
 
-	/**
-	 * @param notationAnnonce
-	 *            the notationAnnonce to set
-	 */
-	public void setNotationAnnonce(Notation notationAnnonce) {
-		this.notationAnnonce = notationAnnonce;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(Objects.hash(this.description, this.metier, this.dateCreation));
+    }
 
-	/**
-	 * @param demandeur
-	 *            the demandeur to set
-	 */
-	public void setDemandeur(Client demandeur) {
-		this.demandeur = demandeur;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
 
-	/**
-	 * @return the adresseChantier
-	 */
-	public Adresse getAdresseChantier() {
-		return adresseChantier;
-	}
-
-	/**
-	 * @param adresseChantier
-	 *            the adresseChantier to set
-	 */
-	public void setAdresseChantier(Adresse adresseChantier) {
-		this.adresseChantier = adresseChantier;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		return Objects.hashCode(Objects.hash(this.titre, this.description));
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object object) {
-		if (this == object) {
-			return true;
-		}
-
-		if (object instanceof Annonce) {
-			Annonce other = (Annonce) object;
-			return Objects.equals(this.titre, other.titre) && Objects.equals(this.description, other.description);
-		}
-		return false;
-	}
+        if (object instanceof Annonce) {
+            Annonce other = (Annonce) object;
+            return Objects.equals(this.description, other.description) && Objects.equals(this.metier, other.metier)
+                    && Objects.equals(this.dateCreation, other.dateCreation);
+        }
+        return false;
+    }
 }

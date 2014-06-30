@@ -17,19 +17,6 @@
 								id="corpsMetierSelect"></select></td>
 						</tr>
 						<tr>
-							<th>Quel est l'objet de votre devis ?</th>
-							<td><input
-								wicket:id="titre"
-								type="text"
-								name="objetDevisField"
-								id="objetDevisField"
-								value="" /> <img
-								alt="Aide"
-								src="img/helplittle.png"
-								class="imgHelp"
-								title="L'objet servira de titre pour le devis" /></td>
-						</tr>
-						<tr>
 							<th>Quelle est la description du chantier ?</th>
 							<td><textarea
 									wicket:id="description"
@@ -53,22 +40,6 @@
 								wicket:id="delaiIntervention"
 								name="delaiInterventionField"
 								id="delaiInterventionField"></select></td>
-						</tr>
-						<tr>
-							<th>Combien voulez-vous de devis ?</th>
-							<td><input
-								wicket:id="nbDevis"
-								type="text"
-								min="1"
-								max="10"
-								step="1"
-								name="nbDevisField"
-								id="nbDevisField"
-								value="" /> <img
-								alt="Aide"
-								src="img/helplittle.png"
-								class="imgHelp"
-								title="Le nombre de devis maximum est de 10" /></td>
 						</tr>
 						<tr>
 							<th>Quelle est l'adresse du chantier ?</th>
@@ -137,16 +108,9 @@
 				<form wicket:id="formInscription">
 					<table class="tableBatimen">
 						<tr>
-							<th>Civilité :</th>
-							<td><select
-								wicket:id="civilite"
-								name="civilite"
-								id="civilite"></select></td>
-						</tr>
-						<tr>
 							<th>Nom :</th>
 							<td><input
-								wicket:id="nom"
+								wicket:id="client.nom"
 								type="text"
 								name="nom"
 								id="nom"
@@ -155,7 +119,7 @@
 						<tr>
 							<th>Prénom :</th>
 							<td><input
-								wicket:id="prenom"
+								wicket:id="client.prenom"
 								type="text"
 								name="prenom"
 								id="prenom"
@@ -164,7 +128,7 @@
 						<tr>
 							<th>Numéro de téléphone :</th>
 							<td><input
-								wicket:id="numeroTel"
+								wicket:id="client.numeroTel"
 								type="text"
 								name="numeroTel"
 								id="numeroTel"
@@ -173,7 +137,7 @@
 						<tr>
 							<th>Adresse mail :</th>
 							<td><input
-								wicket:id="email"
+								wicket:id="client.email"
 								type="text"
 								name="email"
 								id="email"
@@ -182,7 +146,7 @@
 						<tr>
 							<th>Identifiant :</th>
 							<td><input
-								wicket:id="login"
+								wicket:id="client.login"
 								type="text"
 								name="login"
 								id="login"
@@ -191,7 +155,7 @@
 						<tr>
 							<th>Mot de passe :</th>
 							<td><input
-								wicket:id="password"
+								wicket:id="client.password"
 								type="password"
 								name="password"
 								id="password"

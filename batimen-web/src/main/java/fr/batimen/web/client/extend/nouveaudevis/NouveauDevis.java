@@ -111,17 +111,15 @@ public class NouveauDevis extends MasterPage {
                 // car
                 // le compound property model ne marche pas pour une raison
                 // inconnu.
-                creationAnnonce.setCivilite(etape3InscriptionForm.getCiviliteField().getConvertedInput());
-                creationAnnonce.setNom(etape3InscriptionForm.getNomField().getConvertedInput());
-                creationAnnonce.setPrenom(etape3InscriptionForm.getPrenomField().getConvertedInput());
-                creationAnnonce.setNumeroTel(etape3InscriptionForm.getNumeroTelField().getConvertedInput());
-                creationAnnonce.setEmail(etape3InscriptionForm.getEmailField().getConvertedInput());
-                creationAnnonce.setLogin(etape3InscriptionForm.getLoginField().getConvertedInput());
-                creationAnnonce.setPassword(HashHelper.hashString(etape3InscriptionForm.getPasswordField()
-                        .getConvertedInput()));
+                creationAnnonce.getClient().setNom(etape3InscriptionForm.getNomField().getConvertedInput());
+                creationAnnonce.getClient().setPrenom(etape3InscriptionForm.getPrenomField().getConvertedInput());
+                creationAnnonce.getClient().setNumeroTel(etape3InscriptionForm.getNumeroTelField().getConvertedInput());
+                creationAnnonce.getClient().setEmail(etape3InscriptionForm.getEmailField().getConvertedInput());
+                creationAnnonce.getClient().setLogin(etape3InscriptionForm.getLoginField().getConvertedInput());
+                creationAnnonce.getClient().setPassword(
+                        HashHelper.hashString(etape3InscriptionForm.getPasswordField().getConvertedInput()));
                 creationAnnonce.setNumeroEtape(4);
                 this.setResponsePage(new NouveauDevis(creationAnnonce));
-
             }
 
         };
@@ -349,7 +347,7 @@ public class NouveauDevis extends MasterPage {
         BatimenSession session = (BatimenSession) BatimenSession.get();
         ClientDTO client = session.getSessionUser();
         creationAnnonce.setIsSignedUp(true);
-        creationAnnonce.setLogin(client.getLogin());
+        creationAnnonce.getClient().setLogin(client.getLogin());
 
     }
 
@@ -389,29 +387,25 @@ public class NouveauDevis extends MasterPage {
     private void loggerAnnonce(CreationAnnonceDTO nouvelleAnnonce) {
         if (LOGGER.isErrorEnabled()) {
             LOGGER.error("+--------------------------------Annonce ------------------------------------------+");
-            LOGGER.error("Objet : " + nouvelleAnnonce.getTitre());
             LOGGER.error("Corps de metier : " + nouvelleAnnonce.getMetier());
             LOGGER.error("Description: " + nouvelleAnnonce.getDescription());
             LOGGER.error("Contact ? : " + nouvelleAnnonce.getTypeContact().getAffichage());
             LOGGER.error("Intervention  : " + nouvelleAnnonce.getDelaiIntervention().getType());
-            LOGGER.error("Combien de devis  : " + nouvelleAnnonce.getNbDevis());
             LOGGER.error("Adresse du chantier  : " + nouvelleAnnonce.getAdresse());
             LOGGER.error("Complément du chantier  : " + nouvelleAnnonce.getComplementAdresse());
             LOGGER.error("Code postal  : " + nouvelleAnnonce.getCodePostal());
             LOGGER.error("Ville  : " + nouvelleAnnonce.getVille());
             LOGGER.error("+--------------------------------Info Demandeur ------------------------------------------+");
             if (!nouvelleAnnonce.getIsSignedUp()) {
-                LOGGER.error("Civilité  : " + nouvelleAnnonce.getCivilite().getAffichage());
-                LOGGER.error("Nom  : " + nouvelleAnnonce.getNom());
-                LOGGER.error("Prénom  : " + nouvelleAnnonce.getPrenom());
-                LOGGER.error("Numéro de téléphone  : " + nouvelleAnnonce.getNumeroTel());
-                LOGGER.error("Adresse mail : " + nouvelleAnnonce.getEmail());
-                LOGGER.error("Identifiant: " + nouvelleAnnonce.getLogin());
+                LOGGER.error("Nom  : " + nouvelleAnnonce.getClient().getNom());
+                LOGGER.error("Prénom  : " + nouvelleAnnonce.getClient().getPrenom());
+                LOGGER.error("Numéro de téléphone  : " + nouvelleAnnonce.getClient().getNumeroTel());
+                LOGGER.error("Adresse mail : " + nouvelleAnnonce.getClient().getEmail());
+                LOGGER.error("Identifiant: " + nouvelleAnnonce.getClient().getLogin());
             } else {
                 BatimenSession session = (BatimenSession) BatimenSession.get();
                 ClientDTO client = session.getSessionUser();
                 LOGGER.error("Ce client est deja enregistrer dans la BDD");
-                LOGGER.error("Civilité  : " + client.getCivilite().getAffichage());
                 LOGGER.error("Nom  : " + client.getNom());
                 LOGGER.error("Prénom  : " + client.getPrenom());
                 LOGGER.error("Numéro de téléphone  : " + client.getNumeroTel());
