@@ -14,6 +14,12 @@ import org.slf4j.LoggerFactory;
 import fr.batimen.core.exception.FrontEndException;
 import fr.batimen.web.client.master.MasterPage;
 
+/**
+ * Affiche les differentes etapes à l'utilisateur qu'il va devoir faire
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class NavigationWizard extends Panel {
 
     private static final long serialVersionUID = -4561122813846106343L;
@@ -132,6 +138,12 @@ public class NavigationWizard extends Panel {
         }
     }
 
+    /**
+     * Fais passer le navigation wizard à l'étape demandée
+     * 
+     * @param step
+     *            l'etape demandée
+     */
     public void setStep(int step) {
         switch (step) {
         case 1:
