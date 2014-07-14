@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.StringHeaderItem;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -91,14 +91,12 @@ public class NavigationWizard extends Panel {
              */
             @Override
             public void renderHead(IHeaderResponse response) {
-                StringBuilder jsAvoidStepClick = new StringBuilder("<script type=\"text/javascript\">");
-                jsAvoidStepClick.append("$('.wizard').on('stepclick', function (e, data) {");
+                super.renderHead(response);
+                StringBuilder jsAvoidStepClick = new StringBuilder();
+                jsAvoidStepClick.append("$('#batimenWizard').on('stepclick', function (e, data) {");
                 jsAvoidStepClick.append(" return e.preventDefault();");
                 jsAvoidStepClick.append(" });");
-                jsAvoidStepClick.append(" </script>");
-
-                response.render(StringHeaderItem.forString(jsAvoidStepClick.toString()));
-                super.renderHead(response);
+                response.render(JavaScriptHeaderItem.forScript(jsAvoidStepClick, "batimenWizard"));
             }
 
         };

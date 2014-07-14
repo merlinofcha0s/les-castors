@@ -2,10 +2,17 @@ package fr.batimen.web.selenium;
 
 import static com.ninja_squad.dbsetup.Operations.sequenceOf;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.Wait;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.ninja_squad.dbsetup.DbSetup;
 import com.ninja_squad.dbsetup.operation.Operation;
@@ -18,7 +25,7 @@ import com.ninja_squad.dbsetup.operation.Operation;
  */
 public class TestNouveauDevis extends AbstractITTest {
 
-    private final String nouveauDevisDepartementURL = "/nouveaudevis/departement/41";
+    private final String nouveauDevisDepartementURL = "/nouveaudevis/";
 
     @Override
     public void prepareDB() throws Exception {
@@ -34,14 +41,20 @@ public class TestNouveauDevis extends AbstractITTest {
      * Remarque : On saute la selection du département avec selenium, car
      * Raphael n'est visiblement pas compatible avec selenium.
      * 
+     * @throws InterruptedException
+     * 
      */
     @Test
-    public void testCreationNouveauDevisAuthenticatedSucceed() {
+    public void testCreationNouveauDevisAuthenticatedSucceed() throws InterruptedException {
         driver.get(appUrl + nouveauDevisDepartementURL);
-        // On s'authentifie à l'application
-        connexionApplication(AbstractITTest.BON_MOT_DE_PASSE);
+
+        // On passe à l'etape 1
+        etape1();
         // On passe l'etape 2
         etape2();
+        // On s'authentifie à l'application
+        connexionApplication(AbstractITTest.BON_MOT_DE_PASSE);
+
         // On vérifie que le label est correcte
         assertEquals("Votre devis a été mis en ligne, nous vous avons envoyé un mail récapitulatif", driver
                 .findElement(By.cssSelector("h5")).getText());
@@ -60,6 +73,8 @@ public class TestNouveauDevis extends AbstractITTest {
     @Test
     public void testCreationNouveauDevisNonAuthenticatedSucceed() throws InterruptedException {
         driver.get(appUrl + nouveauDevisDepartementURL);
+        // On passe à l'etape 1
+        etape1();
         // On remplit l'étape 2
         etape2();
         // Etape 3
@@ -98,9 +113,12 @@ public class TestNouveauDevis extends AbstractITTest {
     @Test
     public void testCreationNouveauDevisSubscribeNotAuthenticatedSucceed() throws InterruptedException {
         driver.get(appUrl + nouveauDevisDepartementURL);
+        // On selectionne le bon département
+        etape1();
         // On remplit l'étape 2
         etape2();
-        etape3EnModeInscris();
+        // On se connecte
+        connexionApplication(BON_MOT_DE_PASSE);
 
         assertEquals("Votre devis a été mis en ligne, nous vous avons envoyé un mail récapitulatif", driver
                 .findElement(By.cssSelector("h5")).getText());
@@ -120,31 +138,23 @@ public class TestNouveauDevis extends AbstractITTest {
     public void testCreationNouveauDevisDuplicate() throws InterruptedException {
         // Premiere saisie de l'annonce.
         driver.get(appUrl + nouveauDevisDepartementURL);
+        // On selectionne le bon département
+        etape1();
+        // On passe à l'étape 2
         etape2();
-        etape3EnModeInscris();
+        connexionApplication(BON_MOT_DE_PASSE);
 
         assertEquals("Votre devis a été mis en ligne, nous vous avons envoyé un mail récapitulatif", driver
                 .findElement(By.cssSelector("h5")).getText());
 
         // Deuxieme saisie de l'annonce.
         driver.get(appUrl + nouveauDevisDepartementURL);
+        etape1();
         etape2();
 
         assertEquals("Problème pendant l'enregistrement de l'annonce, veuillez nous excuser pour la gène occasionnée.",
                 driver.findElement(By.cssSelector("h5")).getText());
 
-    }
-
-    private void etape3EnModeInscris() throws InterruptedException {
-        // Etape 3
-        driver.findElement(By.id("connexionEtape3")).click();
-        waitForTheElement("ui-id-1");
-        driver.findElement(By.id("loginModal")).click();
-        driver.findElement(By.id("loginModal")).clear();
-        driver.findElement(By.id("loginModal")).sendKeys("raiden");
-        driver.findElement(By.id("passwordModal")).clear();
-        driver.findElement(By.id("passwordModal")).sendKeys("lollollol");
-        driver.findElement(By.id("signInButton")).click();
     }
 
     private void etape2() {
@@ -163,6 +173,20 @@ public class TestNouveauDevis extends AbstractITTest {
         driver.findElement(By.id("villeField")).clear();
         driver.findElement(By.id("villeField")).sendKeys("selenium city");
         driver.findElement(By.id("validateQualification")).click();
+    }
+
+    private void etape1() {
+        Wait<WebDriver> wait = new WebDriverWait(driver, 30);
+        try {
+            wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("#mapFrance > svg")));
+        } catch (Throwable error) {
+            assertFalse("Timeout waiting for Page Load Request to complete.", true);
+        }
+
+        WebElement carteFrance = driver.findElement(By.cssSelector("#mapFrance > svg"));
+
+        Actions builder = new Actions(driver);
+        builder.clickAndHold(carteFrance).release(carteFrance).build().perform();
     }
 
 }

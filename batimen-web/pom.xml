@@ -38,7 +38,7 @@
 		<wicket.mode>development</wicket.mode>
 
 		<!-- Config de Wicket pour qu'il enleve / mette ses tags dans le HTML -->
-		<app.setStripWicketTags>false</app.setStripWicketTags>
+		<app.setStripWicketTags>true</app.setStripWicketTags>
 
 		<!-- Infos Web App -->
 		<app.ip>127.0.0.1</app.ip>
@@ -261,7 +261,6 @@
 			<artifactId>batimen-client</artifactId>
 			<version>0.2.0-SNAPSHOT</version>
 		</dependency>
-
 	</dependencies>
 
 	<dependencyManagement>

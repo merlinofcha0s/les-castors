@@ -1,6 +1,5 @@
 package fr.batimen.web.app;
 
-import java.io.IOException;
 import java.util.Properties;
 
 import org.apache.wicket.Session;
@@ -18,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.batimen.core.constant.Constant;
+import fr.batimen.core.utils.PropertiesUtils;
 import fr.batimen.web.client.extend.Accueil;
 import fr.batimen.web.client.extend.CGU;
 import fr.batimen.web.client.extend.Contact;
@@ -135,15 +135,10 @@ public class BatimenApplication extends AuthenticatedWebApplication {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Récuperation des properties....");
         }
-        Properties appProperties = new Properties();
-        try {
-            appProperties.load(getClass().getClassLoader().getResourceAsStream("app.properties"));
-            setStripWicketTags = Boolean.valueOf(appProperties.getProperty("app.setStripWicketTags"));
-        } catch (IOException e) {
-            if (LOGGER.isErrorEnabled()) {
-                LOGGER.error("Erreur de récupération des properties de la web app", e);
-            }
-        }
+
+        Properties appProperties = PropertiesUtils.loadPropertiesFile("app.properties");
+        setStripWicketTags = Boolean.valueOf(appProperties.getProperty("app.setStripWicketTags"));
+
     }
 
 }

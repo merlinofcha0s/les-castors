@@ -23,6 +23,7 @@ import com.microtripit.mandrillapp.lutung.view.MandrillMessageStatus;
 
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.exception.EmailException;
+import fr.batimen.core.utils.PropertiesUtils;
 
 /**
  * Classe de formatage et d'envoi d'email, l'envoi de mail est realisé par
@@ -37,7 +38,7 @@ public class EmailDAO {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EmailDAO.class);
 
-    private MandrillApi mandrillApi;
+    private final MandrillApi mandrillApi;
     private String apiKey;
     private boolean emailActive;
 
@@ -179,15 +180,10 @@ public class EmailDAO {
      * Charge les parametres pour communiquer avec mandrillapp
      */
     private void getMessageProperties() {
-        Properties appProperties = new Properties();
-        try {
-            appProperties.load(getClass().getClassLoader().getResourceAsStream("email.properties"));
-            apiKey = appProperties.getProperty("mandrill.api.key");
-            emailActive = Boolean.valueOf(appProperties.getProperty("email.active"));
-        } catch (IOException e) {
-            if (LOGGER.isErrorEnabled()) {
-                LOGGER.error("Erreur de récupération des properties des mails", e);
-            }
-        }
+
+        final Properties appProperties = PropertiesUtils.loadPropertiesFile("email.properties");
+        apiKey = appProperties.getProperty("mandrill.api.key");
+        emailActive = Boolean.valueOf(appProperties.getProperty("email.active"));
+
     }
 }

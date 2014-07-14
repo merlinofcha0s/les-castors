@@ -13,7 +13,6 @@ import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.request.resource.ContextRelativeResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +26,7 @@ import fr.batimen.web.client.component.MapFrance;
 import fr.batimen.web.client.component.NavigationWizard;
 import fr.batimen.web.client.event.Event;
 import fr.batimen.web.client.event.LoginEvent;
+import fr.batimen.web.client.event.MapFranceEvent;
 import fr.batimen.web.client.extend.Accueil;
 import fr.batimen.web.client.extend.Contact;
 import fr.batimen.web.client.master.MasterPage;
@@ -88,7 +88,6 @@ public class NouveauDevis extends MasterPage {
 
             @Override
             protected void onSubmit() {
-                creationAnnonce.setDepartement(Integer.valueOf(departement));
                 creationAnnonce.setNumeroEtape(3);
                 this.setResponsePage(new NouveauDevis(creationAnnonce));
             }
@@ -204,22 +203,6 @@ public class NouveauDevis extends MasterPage {
         chooseConfirmationMessage(false, Constant.CODE_SERVICE_RETOUR_OK);
     }
 
-    public NouveauDevis(PageParameters parameters) {
-        this();
-        // On passe dans ce constructeur au debut de l'étape 2
-        // On récupere le departement qu'a choisi l'utilisateur
-        departement = parameters.get("departement").toString();
-        if (departement != null) {
-            try {
-                changementEtape(2);
-            } catch (FrontEndException e) {
-                if (LOGGER.isErrorEnabled()) {
-                    LOGGER.error("Probleme frontend", e);
-                }
-            }
-        }
-    }
-
     public NouveauDevis(CreationAnnonceDTO creationAnnonce) {
         this();
         this.creationAnnonce = creationAnnonce;
@@ -287,6 +270,15 @@ public class NouveauDevis extends MasterPage {
         containerQualification.setVisible(true);
         containerInscription.setVisible(false);
         containerConfirmation.setVisible(false);
+
+        try {
+            changementEtape(1);
+        } catch (FrontEndException e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Probleme frontend avec l'etape 1", e);
+            }
+        }
+
     }
 
     private void etape3Inscription() {
@@ -378,6 +370,36 @@ public class NouveauDevis extends MasterPage {
             }
 
         }
+
+        // Event déclenché par la carte de france, cela permet de recuperer le
+        // département et de passer à l'etape 2
+        if (event.getPayload() instanceof MapFranceEvent) {
+            MapFranceEvent eventMapFrance = (MapFranceEvent) event.getPayload();
+
+            // On récupére le departement qui se trouve dans l'event
+            Integer departementInt = Integer.valueOf(eventMapFrance.getDepartement());
+
+            if (departementInt != null && departementInt > 0 && departementInt < 100) {
+
+                // On l'enregistre dans la DTO
+                creationAnnonce.setDepartement(departementInt);
+                // On prepare le passage à l'etape suivante
+                creationAnnonce.setNumeroEtape(2);
+                try {
+                    changementEtape(2);
+                } catch (FrontEndException e) {
+                    if (LOGGER.isErrorEnabled()) {
+                        LOGGER.error("Probleme frontend avec l'etape 2", e);
+                    }
+                }
+                // Cas ou il y aurait un snake qui essaye de modifier la requete
+                // ajax pour injecter des données erronées
+            } else {
+                feedBackPanelGeneral.error("Numéro de département incorrecte, veuillez recommencer");
+            }
+            eventMapFrance.getTarget().add(this);
+        }
+
     }
 
     private Integer creationAnnonce() {
