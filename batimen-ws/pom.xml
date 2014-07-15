@@ -11,14 +11,12 @@
 		<relativePath>../batimen-module</relativePath>
 	</parent>
 
-	<groupId>fr.batimen.app</groupId>
 	<artifactId>batimen-ws</artifactId>
 	<name>batimen-ws</name>
 	<description>Projet qui porte la logique metier et le webservice</description>
 	<packaging>war</packaging>
 
 	<properties>
-		<jersey.version>1.17</jersey.version>
 		<hibernate.version>4.2.5.Final</hibernate.version>
 
 		<!-- Propriétés de la BDD pour les tests -->
@@ -203,32 +201,38 @@
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-server</artifactId>
+			<version>${jersey.version}</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-servlet</artifactId>
+			<version>${jersey.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<!-- Scope Compile car sinon glassfish ne voit pas les providers -->
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
 			<artifactId>jersey-json</artifactId>
+			<version>${jersey.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-core</artifactId>
+			<version>${hibernate.version}</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-jpamodelgen</artifactId>
+			<version>1.3.0.Final</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-entitymanager</artifactId>
+			<version>${hibernate.version}</version>
 			<scope>compile</scope>
 		</dependency>
 
@@ -236,6 +240,7 @@
 		<dependency>
 			<groupId>org.modelmapper</groupId>
 			<artifactId>modelmapper</artifactId>
+			<version>0.6.1</version>
 			<scope>compile</scope>
 		</dependency>
 
@@ -243,6 +248,7 @@
 		<dependency>
 			<groupId>com.mandrillapp.wrapper.lutung</groupId>
 			<artifactId>lutung</artifactId>
+			<version>0.0.4</version>
 			<scope>compile</scope>
 		</dependency>
 
@@ -250,6 +256,7 @@
 		<dependency>
 			<groupId>com.lambdaworks</groupId>
 			<artifactId>scrypt</artifactId>
+			<version>1.4.0</version>
 			<scope>compile</scope>
 		</dependency>
 
@@ -269,12 +276,12 @@
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>batimen-dto</artifactId>
-			<version>0.2.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>batimen-core</artifactId>
-			<version>0.2.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 		</dependency>
 
 		<!-- Test Arquillian -->
@@ -308,12 +315,13 @@
 		<dependency>
 			<groupId>org.jboss.arquillian.extension</groupId>
 			<artifactId>arquillian-persistence-impl</artifactId>
+			<version>1.0.0.Alpha6</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>batimen-client</artifactId>
-			<version>0.2.0-SNAPSHOT</version>
+			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
@@ -321,75 +329,9 @@
 	<dependencyManagement>
 		<dependencies>
 			<dependency>
-				<groupId>org.jboss.spec</groupId>
-				<artifactId>jboss-javaee-6.0</artifactId>
-				<type>pom</type>
-				<version>3.0.2.Final</version>
-			</dependency>
-			<dependency>
-				<groupId>com.sun.jersey</groupId>
-				<artifactId>jersey-server</artifactId>
-				<version>${jersey.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.sun.jersey</groupId>
-				<artifactId>jersey-servlet</artifactId>
-				<version>${jersey.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.sun.jersey</groupId>
-				<artifactId>jersey-json</artifactId>
-				<version>${jersey.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.hibernate</groupId>
-				<artifactId>hibernate-core</artifactId>
-				<version>${hibernate.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.hibernate</groupId>
-				<artifactId>hibernate-jpamodelgen</artifactId>
-				<version>1.3.0.Final</version>
-			</dependency>
-			<dependency>
-				<groupId>org.hibernate</groupId>
-				<artifactId>hibernate-entitymanager</artifactId>
-				<version>${hibernate.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.modelmapper</groupId>
-				<artifactId>modelmapper</artifactId>
-				<version>0.6.1</version>
-			</dependency>
-			<dependency>
-				<groupId>ch.qos.logback</groupId>
-				<artifactId>logback-classic</artifactId>
-				<version>${logback.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>ch.qos.logback</groupId>
-				<artifactId>logback-access</artifactId>
-				<version>${logback.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>junit</groupId>
-				<artifactId>junit</artifactId>
-				<version>4.11</version>
-			</dependency>
-			<dependency>
-				<groupId>postgresql</groupId>
-				<artifactId>postgresql</artifactId>
-				<version>9.1-901.jdbc4</version>
-			</dependency>
-			<dependency>
 				<groupId>xalan</groupId>
 				<artifactId>xalan</artifactId>
 				<version>2.7.1</version>
-			</dependency>
-			<dependency>
-				<groupId>com.lambdaworks</groupId>
-				<artifactId>scrypt</artifactId>
-				<version>1.4.0</version>
 			</dependency>
 			<!-- Test arquillian -->
 			<dependency>
@@ -405,26 +347,6 @@
 				<version>2.0.2</version>
 				<scope>import</scope>
 				<type>pom</type>
-			</dependency>
-			<dependency>
-				<groupId>org.jboss.arquillian.extension</groupId>
-				<artifactId>arquillian-persistence-impl</artifactId>
-				<version>1.0.0.Alpha6</version>
-			</dependency>
-			<dependency>
-				<groupId>com.sun.jersey</groupId>
-				<artifactId>jersey-bundle</artifactId>
-				<version>1.17</version>
-			</dependency>
-			<dependency>
-				<groupId>com.sun.jersey.contribs</groupId>
-				<artifactId>jersey-multipart</artifactId>
-				<version>1.17</version>
-			</dependency>
-			<dependency>
-				<groupId>com.mandrillapp.wrapper.lutung</groupId>
-				<artifactId>lutung</artifactId>
-				<version>0.0.4</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
