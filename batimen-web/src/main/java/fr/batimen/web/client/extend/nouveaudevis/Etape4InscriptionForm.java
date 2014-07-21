@@ -29,7 +29,7 @@ import fr.batimen.web.client.validator.LoginUniquenessValidator;
  * @author Casaucau Cyril
  * 
  */
-public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
+public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
 
     private static final long serialVersionUID = 2500892594731116597L;
 
@@ -40,7 +40,7 @@ public class Etape3InscriptionForm extends Form<CreationAnnonceDTO> {
     private final TextField<String> emailField;
     private final TextField<String> loginField;
 
-    public Etape3InscriptionForm(String id, IModel<CreationAnnonceDTO> model) {
+    public Etape4InscriptionForm(String id, IModel<CreationAnnonceDTO> model) {
         super(id, model);
 
         this.setMarkupId("formEtape3");

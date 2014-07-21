@@ -166,6 +166,16 @@ div.upload input[type="file"] {
 	overflow: hidden !important;
 }
 
+#sliderUp{
+	padding-bottom: 60px;
+	padding-top: 15px;
+}
+
+#sliderDown{
+	padding-bottom: 20px;
+	padding-left: 300px;
+}
+
 /* Composant dans tous le site */
 .required {
 	color: red;
@@ -177,7 +187,7 @@ table tr td .error {
 	border: 1px solid red;
 }
 
-input[type="button"] {
+.buttonCastor {
 	font-weight: 800;
 	font-family: 'Open Sans', sans-serif !important;
 	text-transform: uppercase;

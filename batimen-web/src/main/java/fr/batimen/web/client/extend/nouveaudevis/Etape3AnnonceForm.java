@@ -26,11 +26,11 @@ import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
  * @author Casaucau Cyril
  * 
  */
-public class Etape2AnnonceForm extends Form<CreationAnnonceDTO> {
+public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
 
     private static final long serialVersionUID = 6521295805432818556L;
 
-    public Etape2AnnonceForm(String id, IModel<CreationAnnonceDTO> model) {
+    public Etape3AnnonceForm(String id, IModel<CreationAnnonceDTO> model) {
         super(id, model);
 
         // Mode Multipart pour l'upload de fichier.
