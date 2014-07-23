@@ -152,7 +152,8 @@ public class GestionAnnonceFacade {
         nouvelleAnnonce.setDelaiIntervention(nouvelleAnnonceDTO.getDelaiIntervention());
         nouvelleAnnonce.setDescription(nouvelleAnnonceDTO.getDescription());
 
-        nouvelleAnnonce.setMetier(nouvelleAnnonceDTO.getMetier());
+        nouvelleAnnonce.setCategorieMetier(nouvelleAnnonceDTO.getCategorieMetier().getName());
+        nouvelleAnnonce.setSousCategorieMetier(nouvelleAnnonceDTO.getSousCategorie().getName());
         nouvelleAnnonce.setNbConsultation(0);
         nouvelleAnnonce.setTypeContact(nouvelleAnnonceDTO.getTypeContact());
 
@@ -281,8 +282,8 @@ public class GestionAnnonceFacade {
         StringBuilder nomDestinataire = new StringBuilder();
 
         if (isSignedUp) {
-            remplirNomPrenomMail(clientDejaInscrit.getNom(), clientDejaInscrit.getPrenom(), clientDejaInscrit.getLogin(),
-                    nomDestinataire);
+            remplirNomPrenomMail(clientDejaInscrit.getNom(), clientDejaInscrit.getPrenom(),
+                    clientDejaInscrit.getLogin(), nomDestinataire);
         } else {
             remplirNomPrenomMail(nouvelleAnnonceDTO.getClient().getNom(), nouvelleAnnonceDTO.getClient().getPrenom(),
                     nouvelleAnnonceDTO.getClient().getLogin(), nomDestinataire);
@@ -295,8 +296,8 @@ public class GestionAnnonceFacade {
         // On charge le contenu
         Map<String, String> templateContent = new HashMap<String, String>();
         templateContent.put(Constant.TAG_EMAIL_USERNAME, nouvelleAnnonceDTO.getClient().getLogin());
-        templateContent.put(Constant.TAG_EMAIL_METIER, nouvelleAnnonceDTO.getMetier().getMetier());
-        templateContent.put(Constant.TAG_EMAIL_SOUS_CATEGORIE_METIER, "Pas encore dispo");
+        templateContent.put(Constant.TAG_EMAIL_METIER, nouvelleAnnonceDTO.getCategorieMetier().getName());
+        templateContent.put(Constant.TAG_EMAIL_SOUS_CATEGORIE_METIER, nouvelleAnnonceDTO.getSousCategorie().getName());
         templateContent.put(Constant.TAG_EMAIL_DELAI_INTERVENTION, nouvelleAnnonceDTO.getDelaiIntervention().getType());
         templateContent.put(Constant.TAG_EMAIL_TYPE_CONTACT, nouvelleAnnonceDTO.getTypeContact().getAffichage());
 

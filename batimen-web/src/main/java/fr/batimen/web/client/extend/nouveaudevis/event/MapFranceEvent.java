@@ -1,6 +1,8 @@
-package fr.batimen.web.client.event;
+package fr.batimen.web.client.extend.nouveaudevis.event;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+
+import fr.batimen.web.client.event.AbstractEvent;
 
 public class MapFranceEvent extends AbstractEvent {
 

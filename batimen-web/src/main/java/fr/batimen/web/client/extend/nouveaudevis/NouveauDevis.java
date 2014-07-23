@@ -26,9 +26,10 @@ import fr.batimen.web.client.component.MapFrance;
 import fr.batimen.web.client.component.NavigationWizard;
 import fr.batimen.web.client.event.Event;
 import fr.batimen.web.client.event.LoginEvent;
-import fr.batimen.web.client.event.MapFranceEvent;
 import fr.batimen.web.client.extend.Accueil;
 import fr.batimen.web.client.extend.Contact;
+import fr.batimen.web.client.extend.nouveaudevis.event.CategorieEvent;
+import fr.batimen.web.client.extend.nouveaudevis.event.MapFranceEvent;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.web.client.session.BatimenSession;
 import fr.batimen.ws.client.service.AnnonceService;
@@ -60,6 +61,7 @@ public class NouveauDevis extends MasterPage {
     private final Etape2Categorie etape2Categorie;
 
     // Composants étape 3
+    private final Etape3AnnonceForm etape3AnnonceForm;
     private final WebMarkupContainer containerQualification;
 
     // Composant étape 4
@@ -88,7 +90,7 @@ public class NouveauDevis extends MasterPage {
         containerQualification = new WebMarkupContainer("containerQualification");
         containerQualification.setVisible(false);
 
-        Etape3AnnonceForm etape3AnnonceForm = new Etape3AnnonceForm("formQualification", propertyModelNouvelleAnnonce) {
+        etape3AnnonceForm = new Etape3AnnonceForm("formQualification", propertyModelNouvelleAnnonce) {
 
             private static final long serialVersionUID = -6436387191126517996L;
 
@@ -334,7 +336,7 @@ public class NouveauDevis extends MasterPage {
             // (etape 3)
             if (BatimenSession.get().isSignedIn()) {
                 loggerChangementEtape("L'utilisateur s'est connecté, on passe l'etape 5");
-                changementEtape(4);
+                changementEtape(5);
             } else {
                 etape4Inscription();
             }
@@ -377,12 +379,12 @@ public class NouveauDevis extends MasterPage {
         // l'utilisateur se connecte
         if (event.getPayload() instanceof LoginEvent) {
             Event update = (Event) event.getPayload();
-            if (creationAnnonce.getNumeroEtape() == 3) {
+            if (creationAnnonce.getNumeroEtape() == 4) {
                 if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("On est a l'étape 4 : Evenement recu de la popup de connexion, on passe à l'etape 4");
+                    LOGGER.debug("On est a l'étape 3 : Evenement recu de la popup de connexion, on passe à l'etape 5");
                 }
                 try {
-                    changementEtape(3);
+                    changementEtape(5);
                 } catch (FrontEndException e) {
                     if (LOGGER.isErrorEnabled()) {
                         LOGGER.error("Probleme frontend", e);
@@ -422,6 +424,20 @@ public class NouveauDevis extends MasterPage {
             eventMapFrance.getTarget().add(this);
         }
 
+        if (event.getPayload() instanceof CategorieEvent) {
+            CategorieEvent eventCategorie = (CategorieEvent) event.getPayload();
+            creationAnnonce.setCategorieMetier(eventCategorie.getCategorieChoisie());
+            creationAnnonce.setNumeroEtape(3);
+            try {
+                changementEtape(3);
+            } catch (FrontEndException e) {
+                if (LOGGER.isErrorEnabled()) {
+                    LOGGER.error("Probleme frontend avec l'etape 2", e);
+                }
+            }
+            eventCategorie.getTarget().add(this);
+        }
+
     }
 
     private Integer creationAnnonce() {
@@ -431,7 +447,8 @@ public class NouveauDevis extends MasterPage {
     private void loggerAnnonce(CreationAnnonceDTO nouvelleAnnonce) {
         if (LOGGER.isErrorEnabled()) {
             LOGGER.error("+--------------------------------Annonce ------------------------------------------+");
-            LOGGER.error("Corps de metier : " + nouvelleAnnonce.getMetier());
+            LOGGER.error("Categorie : " + nouvelleAnnonce.getCategorieMetier());
+            LOGGER.error("Sous categorie : " + nouvelleAnnonce.getSousCategorie());
             LOGGER.error("Description: " + nouvelleAnnonce.getDescription());
             LOGGER.error("Contact ? : " + nouvelleAnnonce.getTypeContact().getAffichage());
             LOGGER.error("Intervention  : " + nouvelleAnnonce.getDelaiIntervention().getType());

@@ -13,7 +13,6 @@ import org.junit.Test;
 import fr.batimen.core.constant.Constant;
 import fr.batimen.dto.CreationAnnonceDTO;
 import fr.batimen.dto.enums.DelaiIntervention;
-import fr.batimen.dto.enums.Metier;
 import fr.batimen.dto.enums.TypeContact;
 import fr.batimen.test.ws.AbstractBatimenWsTest;
 import fr.batimen.ws.client.service.AnnonceService;
@@ -59,7 +58,8 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
         creationAnnonceDTO.setDelaiIntervention(DelaiIntervention.LE_PLUS_RAPIDEMENT_POSSIBLE);
         creationAnnonceDTO.setDepartement(06);
-        creationAnnonceDTO.setMetier(Metier.PEINTURE);
+        // creationAnnonceDTO.setCategorieMetier(CategorieLoader.getCategorieElectricite());
+        // creationAnnonceDTO.setSousCategorie(CategorieLoader.getCategorieElectricite().getSousCategories().get(0));
         creationAnnonceDTO.setTypeContact(TypeContact.EMAIL);
         creationAnnonceDTO.setVille("Nice");
     }

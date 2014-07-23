@@ -1,6 +1,13 @@
 package fr.batimen.web.client.extend.nouveaudevis;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.panel.Panel;
+
+import fr.batimen.dto.CategorieMetierDTO;
+import fr.batimen.dto.helper.CategorieLoader;
+import fr.batimen.web.client.extend.nouveaudevis.event.CategorieEvent;
 
 public class Etape2Categorie extends Panel {
 
@@ -8,6 +15,101 @@ public class Etape2Categorie extends Panel {
 
     public Etape2Categorie(String id) {
         super(id);
+
+        AjaxLink<String> electriciteLink = new AjaxLink<String>("electricite") {
+
+            private static final long serialVersionUID = -614532061323998813L;
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                createAndTriggerEvent(target, CategorieLoader.getCategorieElectricite());
+            }
+
+        };
+
+        AjaxLink<String> plomberieLink = new AjaxLink<String>("plomberie") {
+
+            /**
+             * 
+             */
+            private static final long serialVersionUID = 3348068130513170534L;
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                createAndTriggerEvent(target, CategorieLoader.getCategoriePlomberie());
+            }
+
+        };
+
+        AjaxLink<String> espacesVertLink = new AjaxLink<String>("espaceVert") {
+
+            /**
+             * 
+             */
+            private static final long serialVersionUID = 2357941702285210447L;
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                createAndTriggerEvent(target, CategorieLoader.getCategorieEspaceVert());
+            }
+
+        };
+
+        AjaxLink<String> decorationMaconnerieLink = new AjaxLink<String>("decorationMaconnerie") {
+
+            /**
+             * 
+             */
+            private static final long serialVersionUID = -8999749142033429880L;
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                createAndTriggerEvent(target, CategorieLoader.getCategorieDecorationMaconnerie());
+            }
+
+        };
+
+        AjaxLink<String> grosOeuvreLink = new AjaxLink<String>("grosOeuvre") {
+
+            /**
+             * 
+             */
+            private static final long serialVersionUID = -5125845408338328259L;
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                createAndTriggerEvent(target, CategorieLoader.getCategorieGrosOeuvre());
+            }
+
+        };
+
+        AjaxLink<String> equipementLink = new AjaxLink<String>("equipement") {
+
+            /**
+             * 
+             */
+            private static final long serialVersionUID = 5693979328585286647L;
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                createAndTriggerEvent(target, CategorieLoader.getCategorieEquipement());
+            }
+
+        };
+
+        add(electriciteLink);
+        add(plomberieLink);
+        add(espacesVertLink);
+        add(decorationMaconnerieLink);
+        add(grosOeuvreLink);
+        add(equipementLink);
+    }
+
+    private void createAndTriggerEvent(AjaxRequestTarget target, CategorieMetierDTO categorieMetier) {
+        // On crée l'event qui sera envoyé a la page de nouveau devis
+        CategorieEvent categorieEvent = new CategorieEvent(target, categorieMetier);
+        // On trigger l'event
+        target.getPage().send(target.getPage(), Broadcast.BREADTH, categorieEvent);
     }
 
 }

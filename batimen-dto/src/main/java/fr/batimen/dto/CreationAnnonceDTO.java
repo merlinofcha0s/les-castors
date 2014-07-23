@@ -18,7 +18,6 @@ import com.google.gson.reflect.TypeToken;
 
 import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.dto.enums.DelaiIntervention;
-import fr.batimen.dto.enums.Metier;
 import fr.batimen.dto.enums.TypeContact;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 
@@ -33,8 +32,12 @@ public class CreationAnnonceDTO extends AbstractDTO {
     private static final long serialVersionUID = -7316855280979589583L;
 
     // Annonce
+    @Valid
     @NotNull
-    private Metier metier;
+    private CategorieMetierDTO categorieMetier;
+    @Valid
+    @NotNull
+    private SousCategorieMetierDTO sousCategorie;
     @NotNull
     @Size(min = ValidatorConstant.CREATION_ANNONCE_DESCRIPTION_MIN,
             max = ValidatorConstant.CREATION_ANNONCE_DESCRIPTION_MAX)
@@ -67,14 +70,6 @@ public class CreationAnnonceDTO extends AbstractDTO {
     @Valid
     private final ClientDTO client = new ClientDTO();
     private Boolean isSignedUp = false;
-
-    public Metier getMetier() {
-        return metier;
-    }
-
-    public void setMetier(Metier metier) {
-        this.metier = metier;
-    }
 
     public String getDescription() {
         return description;
@@ -192,6 +187,41 @@ public class CreationAnnonceDTO extends AbstractDTO {
         this.isSignedUp = isSignedUp;
     }
 
+    /**
+     * @return the categorieMetier
+     */
+
+    public CategorieMetierDTO getCategorieMetier() {
+        return categorieMetier;
+    }
+
+    /**
+     * @param categorieMetier
+     *            the categorieMetier to set
+     */
+
+    public void setCategorieMetier(CategorieMetierDTO categorieMetier) {
+        this.categorieMetier = categorieMetier;
+    }
+
+    /**
+     * @return the sousCategorie
+     */
+
+    public SousCategorieMetierDTO getSousCategorie() {
+        return sousCategorie;
+    }
+
+    /**
+     * 
+     * @param sousCategorie
+     *            the sousCategorie to set
+     */
+
+    public void setSousCategorie(SousCategorieMetierDTO sousCategorie) {
+        this.sousCategorie = sousCategorie;
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -199,7 +229,7 @@ public class CreationAnnonceDTO extends AbstractDTO {
      */
     @Override
     public int hashCode() {
-        return Objects.hashCode(Objects.hash(this.metier, this.description, this.codePostal, this.ville));
+        return Objects.hashCode(Objects.hash(/* this.categorieMetier, */this.description, this.codePostal, this.ville));
     }
 
     /*
@@ -215,7 +245,10 @@ public class CreationAnnonceDTO extends AbstractDTO {
 
         if (object instanceof CreationAnnonceDTO) {
             CreationAnnonceDTO other = (CreationAnnonceDTO) object;
-            return Objects.equals(this.metier, other.metier) && Objects.equals(this.description, other.description)
+            return /*
+                    * Objects.equals(this.categorieMetier,
+                    * other.categorieMetier) &&
+                    */Objects.equals(this.description, other.description)
                     && Objects.equals(this.codePostal, other.codePostal) && Objects.equals(this.ville, other.ville);
         }
         return false;
