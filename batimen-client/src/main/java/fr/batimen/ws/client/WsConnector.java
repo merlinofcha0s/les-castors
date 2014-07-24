@@ -28,6 +28,7 @@ import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
 import com.sun.jersey.client.urlconnection.HTTPSProperties;
+import com.sun.jersey.multipart.impl.MultiPartWriter;
 
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.utils.PropertiesUtils;
@@ -71,7 +72,9 @@ public class WsConnector {
             // Consomme bcp de ressource pour creer le client, il est thread
             // safe. Voir si ca ne pose pas de probleme de perf de l'avoir mis
             // en singleton
-            client = Client.create(configSSL());
+            ClientConfig clientConfig = configSSL();
+            clientConfig.getClasses().add(MultiPartWriter.class);
+            client = Client.create(clientConfig);
             client.setFollowRedirects(true);
             // Authentification du client
             client.addFilter(new HTTPBasicAuthFilter(Constant.BATIMEN_USERS_WS, Constant.BATIMEN_PWD_WS));
