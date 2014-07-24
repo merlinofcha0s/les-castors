@@ -15,7 +15,7 @@ public class CategorieLoader {
     public static CategorieMetierDTO getCategorieElectricite() {
         if (electricite == null) {
             electricite = new CategorieMetierDTO("Electricité");
-            SousCategorieMetierDTO sousElectrique = new SousCategorieMetierDTO("Tableau électrique");
+            SousCategorieMetierDTO sousElectrique = new SousCategorieMetierDTO("Installation électrique");
             electricite.addSousCategorie(sousElectrique);
         }
         return electricite;

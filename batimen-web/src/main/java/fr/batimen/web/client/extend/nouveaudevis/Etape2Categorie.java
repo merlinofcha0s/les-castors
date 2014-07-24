@@ -27,6 +27,9 @@ public class Etape2Categorie extends Panel {
 
         };
 
+        electriciteLink.setOutputMarkupId(true);
+        electriciteLink.setMarkupId("electricite");
+
         AjaxLink<String> plomberieLink = new AjaxLink<String>("plomberie") {
 
             /**
@@ -40,6 +43,9 @@ public class Etape2Categorie extends Panel {
             }
 
         };
+
+        plomberieLink.setOutputMarkupId(true);
+        plomberieLink.setMarkupId("plomberie");
 
         AjaxLink<String> espacesVertLink = new AjaxLink<String>("espaceVert") {
 
@@ -55,6 +61,9 @@ public class Etape2Categorie extends Panel {
 
         };
 
+        espacesVertLink.setOutputMarkupId(true);
+        espacesVertLink.setMarkupId("espaceVert");
+
         AjaxLink<String> decorationMaconnerieLink = new AjaxLink<String>("decorationMaconnerie") {
 
             /**
@@ -68,6 +77,9 @@ public class Etape2Categorie extends Panel {
             }
 
         };
+
+        decorationMaconnerieLink.setOutputMarkupId(true);
+        decorationMaconnerieLink.setMarkupId("decorationMaconnerie");
 
         AjaxLink<String> grosOeuvreLink = new AjaxLink<String>("grosOeuvre") {
 
@@ -83,6 +95,9 @@ public class Etape2Categorie extends Panel {
 
         };
 
+        grosOeuvreLink.setOutputMarkupId(true);
+        grosOeuvreLink.setMarkupId("grosOeuvre");
+
         AjaxLink<String> equipementLink = new AjaxLink<String>("equipement") {
 
             /**
@@ -96,6 +111,9 @@ public class Etape2Categorie extends Panel {
             }
 
         };
+
+        equipementLink.setOutputMarkupId(true);
+        equipementLink.setMarkupId("equipement");
 
         add(electriciteLink);
         add(plomberieLink);

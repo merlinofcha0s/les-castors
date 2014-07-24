@@ -50,8 +50,10 @@ public class TestNouveauDevis extends AbstractITTest {
 
         // On passe à l'etape 1
         etape1();
-        // On passe l'etape 2
+        // On remplit l'étape 2
         etape2();
+        // On passe l'etape 3
+        etape3();
         // On s'authentifie à l'application
         connexionApplication(AbstractITTest.BON_MOT_DE_PASSE);
 
@@ -77,6 +79,8 @@ public class TestNouveauDevis extends AbstractITTest {
         etape1();
         // On remplit l'étape 2
         etape2();
+        // On remplit l'étape 3
+        etape3();
         // Etape 3
         driver.findElement(By.id("nom")).clear();
         driver.findElement(By.id("nom")).sendKeys("Selenium");
@@ -117,6 +121,8 @@ public class TestNouveauDevis extends AbstractITTest {
         etape1();
         // On remplit l'étape 2
         etape2();
+        // On remplit l'étape 3
+        etape3();
         // On se connecte
         connexionApplication(BON_MOT_DE_PASSE);
 
@@ -140,8 +146,10 @@ public class TestNouveauDevis extends AbstractITTest {
         driver.get(appUrl + nouveauDevisDepartementURL);
         // On selectionne le bon département
         etape1();
-        // On passe à l'étape 2
+        // On remplit l'étape 2
         etape2();
+        // On passe à l'étape 3
+        etape3();
         connexionApplication(BON_MOT_DE_PASSE);
 
         assertEquals("Votre devis a été mis en ligne, nous vous avons envoyé un mail récapitulatif", driver
@@ -151,14 +159,15 @@ public class TestNouveauDevis extends AbstractITTest {
         driver.get(appUrl + nouveauDevisDepartementURL);
         etape1();
         etape2();
+        etape3();
 
         assertEquals("Problème pendant l'enregistrement de l'annonce, veuillez nous excuser pour la gène occasionnée.",
                 driver.findElement(By.cssSelector("h5")).getText());
 
     }
 
-    private void etape2() {
-        new Select(driver.findElement(By.id("corpsMetierSelect"))).selectByVisibleText("Electricité");
+    private void etape3() {
+        new Select(driver.findElement(By.id("sousCategorieSelect"))).selectByVisibleText("Installation électrique");
         driver.findElement(By.id("descriptionDevisField")).clear();
         driver.findElement(By.id("descriptionDevisField")).sendKeys("Refonte complete de l'electricite dans la maison");
         new Select(driver.findElement(By.id("typeContactField"))).selectByVisibleText("Email");
@@ -187,6 +196,10 @@ public class TestNouveauDevis extends AbstractITTest {
 
         Actions builder = new Actions(driver);
         builder.clickAndHold(carteFrance).release(carteFrance).build().perform();
+    }
+
+    private void etape2() {
+        driver.findElement(By.id("electricite")).click();
     }
 
 }

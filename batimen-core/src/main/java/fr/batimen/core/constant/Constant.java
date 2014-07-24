@@ -41,8 +41,8 @@ public class Constant {
     public static final String NOUVEAU_DEVIS_URL = "/nouveaudevis";
 
     // Email
-    public static final String EMAIL_FROM = "admin@lol.fr";
-    public static final String EMAIL_FROM_NAME = "Admin";
+    public static final String EMAIL_FROM = "notifications@lescastors.fr";
+    public static final String EMAIL_FROM_NAME = "Les Castors";
     public static final String EMAIL_SENT = "sent";
     public static final String EMAIL_QUEUED = "queued";
     public static final String EMAIL_REJECTED = "rejected";
