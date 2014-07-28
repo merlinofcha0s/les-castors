@@ -10,6 +10,10 @@ public class PropertiesUtils {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PropertiesUtils.class);
 
+    private PropertiesUtils() {
+
+    }
+
     public static Properties loadPropertiesFile(String name) {
 
         final Properties properties = new Properties();

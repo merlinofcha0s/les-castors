@@ -1,4 +1,4 @@
-package fr.batimen.web.client.extend.nouveaudevis;
+package fr.batimen.web.client.extend.nouveau.devis;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -7,8 +7,15 @@ import org.apache.wicket.markup.html.panel.Panel;
 
 import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.helper.CategorieLoader;
-import fr.batimen.web.client.extend.nouveaudevis.event.CategorieEvent;
+import fr.batimen.web.client.extend.nouveau.devis.event.CategorieEvent;
 
+/**
+ * Panel de l'Etape 2 de la creation d'annonce. Permet à l'utilisateur de
+ * choisir la catégorie qu'il desire dans sa demande de devis.
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class Etape2Categorie extends Panel {
 
     private static final long serialVersionUID = -3950302126805043243L;
@@ -124,7 +131,7 @@ public class Etape2Categorie extends Panel {
     }
 
     private void createAndTriggerEvent(AjaxRequestTarget target, CategorieMetierDTO categorieMetier) {
-        // On crée l'event qui sera envoyé a la page de nouveau devis
+        // On crée l'event qui sera envoyé à la page de nouveau devis
         CategorieEvent categorieEvent = new CategorieEvent(target, categorieMetier);
         // On trigger l'event
         target.getPage().send(target.getPage(), Broadcast.BREADTH, categorieEvent);

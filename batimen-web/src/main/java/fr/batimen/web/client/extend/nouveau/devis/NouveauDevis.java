@@ -1,4 +1,4 @@
-package fr.batimen.web.client.extend.nouveaudevis;
+package fr.batimen.web.client.extend.nouveau.devis;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,8 +28,8 @@ import fr.batimen.web.client.event.Event;
 import fr.batimen.web.client.event.LoginEvent;
 import fr.batimen.web.client.extend.Accueil;
 import fr.batimen.web.client.extend.Contact;
-import fr.batimen.web.client.extend.nouveaudevis.event.CategorieEvent;
-import fr.batimen.web.client.extend.nouveaudevis.event.MapFranceEvent;
+import fr.batimen.web.client.extend.nouveau.devis.event.CategorieEvent;
+import fr.batimen.web.client.extend.nouveau.devis.event.MapFranceEvent;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.web.client.session.BatimenSession;
 import fr.batimen.ws.client.service.AnnonceService;
@@ -242,15 +242,15 @@ public class NouveauDevis extends MasterPage {
             imageConfirmation = new Image("imageConfirmation", new ContextRelativeResource("img/ok.png"));
             imageConfirmation.add(new AttributeModifier("alt", "ok"));
         } else if (creationAnnonce.getIsSignedUp() != null && !creationAnnonce.getIsSignedUp() && isEtape4
-                && codeRetour == Constant.CODE_SERVICE_RETOUR_OK) {
+                && codeRetour.equals(Constant.CODE_SERVICE_RETOUR_OK)) {
             imageConfirmation = new Image("imageConfirmation", new ContextRelativeResource("img/ok.png"));
             imageConfirmation.add(new AttributeModifier("alt", "ok"));
             confirmation1
                     .setDefaultModelObject("Votre compte a bien été créé, un e-mail vous a été envoyé, Cliquez sur le lien présent dans celui-ci pour l'activer");
             confirmation2
                     .setDefaultModelObject("Votre devis a bien été enregistré. Celui-ci sera mis en ligne une fois votre compte activé.");
-        } else if (codeRetour == Constant.CODE_SERVICE_RETOUR_KO
-                || codeRetour == Constant.CODE_SERVICE_RETOUR_DUPLICATE) {
+        } else if (codeRetour.equals(Constant.CODE_SERVICE_RETOUR_KO)
+                || codeRetour.equals(Constant.CODE_SERVICE_RETOUR_DUPLICATE)) {
             if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("Erreur pendant le chargement de l'annonce");
                 loggerAnnonce(creationAnnonce);
@@ -288,16 +288,6 @@ public class NouveauDevis extends MasterPage {
         containerQualification.setVisible(true);
         containerInscription.setVisible(false);
         containerConfirmation.setVisible(false);
-
-        // Comprends pas....
-        // try {
-        // changementEtape(2);
-        // } catch (FrontEndException e) {
-        // if (LOGGER.isErrorEnabled()) {
-        // LOGGER.error("Probleme frontend avec l'etape 1", e);
-        // }
-        // }
-
     }
 
     private void etape4Inscription() {
@@ -426,8 +416,11 @@ public class NouveauDevis extends MasterPage {
 
         if (event.getPayload() instanceof CategorieEvent) {
             CategorieEvent eventCategorie = (CategorieEvent) event.getPayload();
+            // On recupere la catégorie métier
             creationAnnonce.setCategorieMetier(eventCategorie.getCategorieChoisie());
+            // On set la prochaine etape
             creationAnnonce.setNumeroEtape(3);
+            // On passe à l'etape suivante
             try {
                 changementEtape(3);
             } catch (FrontEndException e) {
@@ -435,6 +428,7 @@ public class NouveauDevis extends MasterPage {
                     LOGGER.error("Probleme frontend avec l'etape 2", e);
                 }
             }
+            // On dit a wicket de rafraichir ce panel avec la requete ajax
             eventCategorie.getTarget().add(this);
         }
 

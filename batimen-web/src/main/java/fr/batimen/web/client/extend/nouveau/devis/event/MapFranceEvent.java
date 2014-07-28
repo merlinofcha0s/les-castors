@@ -1,4 +1,4 @@
-package fr.batimen.web.client.extend.nouveaudevis.event;
+package fr.batimen.web.client.extend.nouveau.devis.event;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 

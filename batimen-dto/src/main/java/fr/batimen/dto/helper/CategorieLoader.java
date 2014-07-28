@@ -3,6 +3,13 @@ package fr.batimen.dto.helper;
 import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.SousCategorieMetierDTO;
 
+/**
+ * Chargeur de catégorie, initialise et donne les differentes categorie / sous
+ * catégorie metier.
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class CategorieLoader {
 
     private static CategorieMetierDTO electricite;
@@ -12,7 +19,11 @@ public class CategorieLoader {
     private static CategorieMetierDTO grosOeuvre;
     private static CategorieMetierDTO equipement;
 
-    public static CategorieMetierDTO getCategorieElectricite() {
+    private CategorieLoader() {
+
+    }
+
+    public static synchronized CategorieMetierDTO getCategorieElectricite() {
         if (electricite == null) {
             electricite = new CategorieMetierDTO("Electricité");
             SousCategorieMetierDTO sousElectrique = new SousCategorieMetierDTO("Installation électrique");
@@ -21,7 +32,7 @@ public class CategorieLoader {
         return electricite;
     }
 
-    public static CategorieMetierDTO getCategoriePlomberie() {
+    public static synchronized CategorieMetierDTO getCategoriePlomberie() {
         if (plomberie == null) {
             plomberie = new CategorieMetierDTO("Plomberie");
             SousCategorieMetierDTO sousPlomberie = new SousCategorieMetierDTO("Tuyauterie");
@@ -30,7 +41,7 @@ public class CategorieLoader {
         return plomberie;
     }
 
-    public static CategorieMetierDTO getCategorieEspaceVert() {
+    public static synchronized CategorieMetierDTO getCategorieEspaceVert() {
         if (espaceVert == null) {
             espaceVert = new CategorieMetierDTO("Espace Vert");
             SousCategorieMetierDTO sousEspaceVert = new SousCategorieMetierDTO("Jardinage");
@@ -39,16 +50,16 @@ public class CategorieLoader {
         return espaceVert;
     }
 
-    public static CategorieMetierDTO getCategorieDecorationMaconnerie() {
+    public static synchronized CategorieMetierDTO getCategorieDecorationMaconnerie() {
         if (decorationMaconnerie == null) {
             decorationMaconnerie = new CategorieMetierDTO("Décoration / Maçonnerie");
-            SousCategorieMetierDTO sousDecorationMaçonnerie = new SousCategorieMetierDTO("Peinture");
-            decorationMaconnerie.addSousCategorie(sousDecorationMaçonnerie);
+            SousCategorieMetierDTO sousDecorationMaconnerie = new SousCategorieMetierDTO("Peinture");
+            decorationMaconnerie.addSousCategorie(sousDecorationMaconnerie);
         }
         return decorationMaconnerie;
     }
 
-    public static CategorieMetierDTO getCategorieGrosOeuvre() {
+    public static synchronized CategorieMetierDTO getCategorieGrosOeuvre() {
         if (grosOeuvre == null) {
             grosOeuvre = new CategorieMetierDTO("Gros oeuvre");
             SousCategorieMetierDTO sousGrosOeuvre = new SousCategorieMetierDTO("Fondation");
@@ -57,7 +68,7 @@ public class CategorieLoader {
         return grosOeuvre;
     }
 
-    public static CategorieMetierDTO getCategorieEquipement() {
+    public static synchronized CategorieMetierDTO getCategorieEquipement() {
         if (equipement == null) {
             equipement = new CategorieMetierDTO("Equipement");
             SousCategorieMetierDTO sousEquipement = new SousCategorieMetierDTO("Alarme");

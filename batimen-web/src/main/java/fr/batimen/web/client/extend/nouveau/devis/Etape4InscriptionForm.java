@@ -1,4 +1,4 @@
-package fr.batimen.web.client.extend.nouveaudevis;
+package fr.batimen.web.client.extend.nouveau.devis;
 
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;

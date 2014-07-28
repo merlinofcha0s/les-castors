@@ -1,4 +1,4 @@
-package fr.batimen.web.client.extend.nouveaudevis;
+package fr.batimen.web.client.extend.nouveau.devis;
 
 import java.util.Arrays;
 
@@ -20,7 +20,7 @@ import fr.batimen.dto.enums.DelaiIntervention;
 import fr.batimen.dto.enums.TypeContact;
 import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
-import fr.batimen.web.client.extend.nouveaudevis.event.CategorieEvent;
+import fr.batimen.web.client.extend.nouveau.devis.event.CategorieEvent;
 
 /**
  * Form de l'etape 2 de création d'annonce.

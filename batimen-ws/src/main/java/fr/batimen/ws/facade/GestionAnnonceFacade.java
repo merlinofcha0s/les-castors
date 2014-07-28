@@ -312,7 +312,7 @@ public class GestionAnnonceFacade {
     }
 
     private void remplirNomPrenomMail(String nom, String prenom, String login, StringBuilder nomDestinataire) {
-        if (nom != "" && prenom != "") {
+        if (!nom.isEmpty() && !prenom.isEmpty()) {
             nomDestinataire.append(nom);
             nomDestinataire.append(" ");
             nomDestinataire.append(prenom);

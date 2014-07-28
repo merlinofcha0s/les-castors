@@ -73,6 +73,7 @@ public class WsConnector {
             // safe. Voir si ca ne pose pas de probleme de perf de l'avoir mis
             // en singleton
             ClientConfig clientConfig = configSSL();
+            // Fix pour le serv d'integration
             clientConfig.getClasses().add(MultiPartWriter.class);
             client = Client.create(clientConfig);
             client.setFollowRedirects(true);

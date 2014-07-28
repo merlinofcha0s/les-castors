@@ -14,7 +14,7 @@ import fr.batimen.web.client.extend.error.AccesInterdit;
 import fr.batimen.web.client.extend.error.ErreurInterne;
 import fr.batimen.web.client.extend.error.Expiree;
 import fr.batimen.web.client.extend.error.NonTrouvee;
-import fr.batimen.web.client.extend.nouveaudevis.NouveauDevis;
+import fr.batimen.web.client.extend.nouveau.devis.NouveauDevis;
 
 public class TestRenderingPage {
 
