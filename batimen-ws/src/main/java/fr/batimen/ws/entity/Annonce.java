@@ -21,7 +21,6 @@ import javax.persistence.Temporal;
 import fr.batimen.core.constant.QueryJPQL;
 import fr.batimen.dto.enums.DelaiIntervention;
 import fr.batimen.dto.enums.EtatAnnonce;
-import fr.batimen.dto.enums.Metier;
 import fr.batimen.dto.enums.TypeContact;
 
 /**
@@ -60,7 +59,9 @@ public class Annonce extends AbstractEntity implements Serializable {
     @Column(length = 255, nullable = true)
     private String photo;
     @Column(nullable = false)
-    private Metier metier;
+    private String categorieMetier;
+    @Column(nullable = false)
+    private String sousCategorieMetier;
     @Column(nullable = false)
     private EtatAnnonce etatAnnonce;
     @ManyToOne
@@ -192,21 +193,6 @@ public class Annonce extends AbstractEntity implements Serializable {
     }
 
     /**
-     * @return the metier
-     */
-    public Metier getMetier() {
-        return metier;
-    }
-
-    /**
-     * @param metier
-     *            the metier to set
-     */
-    public void setMetier(Metier metier) {
-        this.metier = metier;
-    }
-
-    /**
      * @return the etatAnnonce
      */
     public EtatAnnonce getEtatAnnonce() {
@@ -266,6 +252,36 @@ public class Annonce extends AbstractEntity implements Serializable {
         this.adresseChantier = adresseChantier;
     }
 
+    /**
+     * @return the categorieMetier
+     */
+    public String getCategorieMetier() {
+        return categorieMetier;
+    }
+
+    /**
+     * @return the sousCategorieMetier
+     */
+    public String getSousCategorieMetier() {
+        return sousCategorieMetier;
+    }
+
+    /**
+     * @param categorieMetier
+     *            the categorieMetier to set
+     */
+    public void setCategorieMetier(String categorieMetier) {
+        this.categorieMetier = categorieMetier;
+    }
+
+    /**
+     * @param sousCategorieMetier
+     *            the sousCategorieMetier to set
+     */
+    public void setSousCategorieMetier(String sousCategorieMetier) {
+        this.sousCategorieMetier = sousCategorieMetier;
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -273,7 +289,8 @@ public class Annonce extends AbstractEntity implements Serializable {
      */
     @Override
     public int hashCode() {
-        return Objects.hashCode(Objects.hash(this.description, this.metier, this.dateCreation));
+        return Objects.hashCode(Objects.hash(this.description, this.categorieMetier, this.sousCategorieMetier,
+                this.dateCreation));
     }
 
     /*
@@ -289,7 +306,9 @@ public class Annonce extends AbstractEntity implements Serializable {
 
         if (object instanceof Annonce) {
             Annonce other = (Annonce) object;
-            return Objects.equals(this.description, other.description) && Objects.equals(this.metier, other.metier)
+            return Objects.equals(this.description, other.description)
+                    && Objects.equals(this.categorieMetier, other.categorieMetier)
+                    && Objects.equals(this.sousCategorieMetier, other.sousCategorieMetier)
                     && Objects.equals(this.dateCreation, other.dateCreation);
         }
         return false;

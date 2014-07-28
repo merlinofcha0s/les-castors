@@ -24,10 +24,11 @@
 		<redmine.depot.address>https://88.191.186.210/redmine/projects/batimen/repository</redmine.depot.address>
 		<jenkins.address>http://88.191.186.210:9090/</jenkins.address>
 		<git.repository>scm:git:https://raiden@88.191.186.210:8181/git/batimen.git </git.repository>
-		<app.version>0.1.0-SNAPSHOT</app.version>
+		<app.version>0.2.0-SNAPSHOT</app.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<logback.version>1.0.13</logback.version>
+		<jersey.version>1.17</jersey.version>
 		<!-- Sonar -->
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
@@ -143,6 +144,37 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.jboss.spec</groupId>
+				<artifactId>jboss-javaee-6.0</artifactId>
+				<type>pom</type>
+				<version>3.0.2.Final</version>
+			</dependency>
+			<dependency>
+				<groupId>ch.qos.logback</groupId>
+				<artifactId>logback-classic</artifactId>
+				<version>${logback.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>ch.qos.logback</groupId>
+				<artifactId>logback-access</artifactId>
+				<version>${logback.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>4.11</version>
+			</dependency>
+			<dependency>
+				<groupId>com.lambdaworks</groupId>
+				<artifactId>scrypt</artifactId>
+				<version>1.4.0</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 	<repositories>
 		<repository>

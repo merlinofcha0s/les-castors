@@ -2,8 +2,9 @@ annonce:
   - datecreation: 2014-03-23 22:00:00.0
     delaiintervention: 0
     description: Peinture d'un mur
+    categoriemetier: Electricité
+    souscategoriemetier: Installation électrique
     etatannonce: 3
-    metier: 16
     nbconsultation: 0
     typecontact: 0
 adresse:

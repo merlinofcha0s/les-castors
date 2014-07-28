@@ -1,6 +1,7 @@
 <wicket:extend>
 	<div wicket:id="navigationWizard"></div>
 	<div wicket:id="mapFrance"></div>
+	<div wicket:id="etape2Categorie"></div>
 	<div wicket:id="containerQualification">
 		<div class="row-fluid">
 			<div class="span12 module_cont module_text_area module_small_padding">
@@ -10,11 +11,11 @@
 				<form wicket:id="formQualification">
 					<table class="tableBatimen">
 						<tr>
-							<th>Quels corps de métier recherchez vous ?</th>
+							<th>Quelle sous catégorie métier recherchez vous ?</th>
 							<td><select
-								wicket:id="metier"
-								name="corpsMetierSelect"
-								id="corpsMetierSelect"></select></td>
+								wicket:id="sousCategorie"
+								name="sousCategorieSelect"
+								id="sousCategorieSelect"></select></td>
 						</tr>
 						<tr>
 							<th>Quelle est la description du chantier ?</th>

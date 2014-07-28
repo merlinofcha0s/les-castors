@@ -5,7 +5,6 @@ import static com.ninja_squad.dbsetup.Operations.insertInto;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-import java.io.IOException;
 import java.util.NoSuchElementException;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
@@ -24,6 +23,8 @@ import org.slf4j.LoggerFactory;
 
 import com.ninja_squad.dbsetup.destination.DriverManagerDestination;
 import com.ninja_squad.dbsetup.operation.Operation;
+
+import fr.batimen.core.utils.PropertiesUtils;
 
 /**
  * 
@@ -50,7 +51,7 @@ public abstract class AbstractITTest {
     public final static String MAUVAIS_MOT_DE_PASSE = "kikoulolmauvais";
     public final static int TEMPS_ATTENTE_AJAX = 20;
 
-    private static final Logger logger = LoggerFactory.getLogger(AbstractITTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractITTest.class);
 
     // DBSetup
     public static final Operation DELETE_ALL = deleteAllFrom("annonce", "adresse", "client");
@@ -69,8 +70,8 @@ public abstract class AbstractITTest {
     public abstract void prepareDB() throws Exception;
 
     private void setUpDB() throws Exception {
-        Properties dbProperties = new Properties();
-        dbProperties.load(getClass().getClassLoader().getResourceAsStream("dbsetup.properties"));
+
+        Properties dbProperties = PropertiesUtils.loadPropertiesFile("dbsetup.properties");
         dataSourceAddress = dbProperties.getProperty("datasource.url");
         loginDB = dbProperties.getProperty("database.login");
         passwordDB = dbProperties.getProperty("database.password");
@@ -79,18 +80,11 @@ public abstract class AbstractITTest {
     }
 
     private void setUpSelenium() {
-        Properties wsProperties = new Properties();
-        try {
-            wsProperties.load(getClass().getClassLoader().getResourceAsStream("selenium.properties"));
-            ipServeur = wsProperties.getProperty("app.ip");
-            portServeur = wsProperties.getProperty("app.port");
-            nomApp = wsProperties.getProperty("app.name");
 
-        } catch (IOException e) {
-            if (logger.isErrorEnabled()) {
-                logger.error("Erreur de récupération des properties de l'application web : " + e.getMessage());
-            }
-        }
+        Properties wsProperties = PropertiesUtils.loadPropertiesFile("selenium.properties");
+        ipServeur = wsProperties.getProperty("app.ip");
+        portServeur = wsProperties.getProperty("app.port");
+        nomApp = wsProperties.getProperty("app.name");
 
         StringBuilder sbUrlApp = new StringBuilder("https://");
         sbUrlApp.append(ipServeur);
@@ -168,13 +162,27 @@ public abstract class AbstractITTest {
         return new DriverManagerDestination(dataSourceAddress, loginDB, passwordDB);
     }
 
-    protected void waitForTheElement(String id) throws InterruptedException {
+    protected void waitForTheElementById(String id) throws InterruptedException {
         for (int second = 0;; second++) {
             if (second >= TEMPS_ATTENTE_AJAX)
                 fail("timeout");
             try {
                 if (isElementPresent(By.id(id)))
                     break;
+            } catch (Exception e) {
+            }
+            Thread.sleep(1000);
+        }
+    }
+
+    protected void waitForTheElementByXPAth(String xPath) throws InterruptedException {
+        for (int second = 0;; second++) {
+            if (second >= TEMPS_ATTENTE_AJAX)
+                fail("timeout");
+            try {
+                if (isElementPresent(By.xpath(xPath)))
+                    ;
+                break;
             } catch (Exception e) {
             }
             Thread.sleep(1000);

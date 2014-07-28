@@ -36,6 +36,7 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 			</plugin>
+			<!-- Eclipse -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-eclipse-plugin</artifactId>
@@ -49,24 +50,22 @@
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 			<scope>provided</scope>
-			<version>${logback.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-access</artifactId>
 			<scope>provided</scope>
-			<version>${logback.version}</version>
 		</dependency>
 		<!-- Hash password -->
 		<dependency>
 			<groupId>com.lambdaworks</groupId>
 			<artifactId>scrypt</artifactId>
-			<version>1.4.0</version>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
-			<version>4.11</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 </project>

@@ -51,12 +51,12 @@
 	padding-top: 20px;
 }
 
-#formEtape2 {
+#formEtape3 {
 	margin-left: 300px;
 	margin-top: 45px;
 }
 
-#formEtape3 {
+#formEtape4 {
 	float: left;
 	margin-top: 45px;
 	margin-left: 150px;
@@ -143,6 +143,15 @@
 	margin-bottom: 20px;
 }
 
+.glypheEtape2{
+	position: absolute;
+	left: 10px;
+	top: 8px;
+	width: 20px;
+	display: block;
+	font-size: 22px;
+}
+
 /* Composant Wicket */
 .wicket-mfu-caption {
 	padding-top: 5px;
@@ -166,6 +175,16 @@ div.upload input[type="file"] {
 	overflow: hidden !important;
 }
 
+#sliderUp{
+	padding-bottom: 60px;
+	padding-top: 15px;
+}
+
+#sliderDown{
+	padding-bottom: 20px;
+	padding-left: 300px;
+}
+
 /* Composant dans tous le site */
 .required {
 	color: red;
@@ -177,7 +196,7 @@ table tr td .error {
 	border: 1px solid red;
 }
 
-input[type="button"] {
+.buttonCastor {
 	font-weight: 800;
 	font-family: 'Open Sans', sans-serif !important;
 	text-transform: uppercase;

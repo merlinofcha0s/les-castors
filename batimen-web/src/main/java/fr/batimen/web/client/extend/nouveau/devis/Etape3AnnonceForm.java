@@ -1,7 +1,8 @@
-package fr.batimen.web.client.extend.nouveaudevis;
+package fr.batimen.web.client.extend.nouveau.devis;
 
 import java.util.Arrays;
 
+import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.SubmitLink;
@@ -13,12 +14,13 @@ import org.apache.wicket.validation.validator.PatternValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 
 import fr.batimen.dto.CreationAnnonceDTO;
+import fr.batimen.dto.SousCategorieMetierDTO;
 import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.dto.enums.DelaiIntervention;
-import fr.batimen.dto.enums.Metier;
 import fr.batimen.dto.enums.TypeContact;
 import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
+import fr.batimen.web.client.extend.nouveau.devis.event.CategorieEvent;
 
 /**
  * Form de l'etape 2 de création d'annonce.
@@ -26,22 +28,38 @@ import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
  * @author Casaucau Cyril
  * 
  */
-public class Etape2AnnonceForm extends Form<CreationAnnonceDTO> {
+public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
 
     private static final long serialVersionUID = 6521295805432818556L;
 
-    public Etape2AnnonceForm(String id, IModel<CreationAnnonceDTO> model) {
+    public Etape3AnnonceForm(String id, IModel<CreationAnnonceDTO> model) {
         super(id, model);
 
         // Mode Multipart pour l'upload de fichier.
         this.setMultiPart(true);
-        this.setMarkupId("formEtape2");
+        this.setMarkupId("formEtape3");
 
-        DropDownChoice<Metier> corpsMetierSelect = new DropDownChoice<Metier>("metier", Arrays.asList(Metier.values()));
-        corpsMetierSelect.setMarkupId("corpsMetierSelect");
-        corpsMetierSelect.setRequired(true);
-        corpsMetierSelect.add(new RequiredBorderBehaviour());
-        corpsMetierSelect.add(new ErrorHighlightBehavior());
+        DropDownChoice<SousCategorieMetierDTO> sousCategorieSelect = new DropDownChoice<SousCategorieMetierDTO>(
+                "sousCategorie") {
+
+            private static final long serialVersionUID = -4258418495065575690L;
+
+            @Override
+            public void onEvent(IEvent<?> event) {
+                if (event.getPayload() instanceof CategorieEvent) {
+                    CategorieEvent eventCategorie = (CategorieEvent) event.getPayload();
+                    // On maj la liste des sous categorie quand on passe dans //
+                    // l'etape 3
+                    this.setChoices(eventCategorie.getCategorieChoisie().getSousCategories());
+                    eventCategorie.getTarget().add(this);
+                }
+            }
+
+        };
+        sousCategorieSelect.setMarkupId("sousCategorieSelect");
+        sousCategorieSelect.setRequired(true);
+        sousCategorieSelect.add(new RequiredBorderBehaviour());
+        sousCategorieSelect.add(new ErrorHighlightBehavior());
 
         TextArea<String> descriptionDevisField = new TextArea<String>("description");
         descriptionDevisField.setRequired(true);
@@ -100,7 +118,7 @@ public class Etape2AnnonceForm extends Form<CreationAnnonceDTO> {
         SubmitLink validateQualification = new SubmitLink("validateQualification");
         validateQualification.setMarkupId("validateQualification");
 
-        this.add(corpsMetierSelect);
+        this.add(sousCategorieSelect);
         this.add(descriptionDevisField);
         this.add(typeContactField);
         this.add(delaiInterventionField);

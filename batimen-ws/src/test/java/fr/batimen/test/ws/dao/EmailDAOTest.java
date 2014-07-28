@@ -15,8 +15,8 @@ import com.microtripit.mandrillapp.lutung.view.MandrillMessage;
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.exception.EmailException;
 import fr.batimen.dto.enums.DelaiIntervention;
-import fr.batimen.dto.enums.Metier;
 import fr.batimen.dto.enums.TypeContact;
+import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.test.ws.AbstractBatimenWsTest;
 import fr.batimen.ws.dao.EmailDAO;
 
@@ -57,10 +57,10 @@ public class EmailDAOTest extends AbstractBatimenWsTest {
 
         // On charge les tags
         Map<String, String> tags = new HashMap<String, String>();
-        tags.put(Constant.TAG_EMAIL_USERNAME, "admin");
-        tags.put(Constant.TAG_EMAIL_TITRE, "titre lol");
-        tags.put(Constant.TAG_EMAIL_METIER, Metier.CHARPENTE.getMetier());
-        tags.put(Constant.TAG_EMAIL_SOUS_CATEGORIE_METIER, "Toiture");
+        tags.put(Constant.TAG_EMAIL_USERNAME, "test");
+        tags.put(Constant.TAG_EMAIL_METIER, CategorieLoader.getCategorieElectricite().getName());
+        tags.put(Constant.TAG_EMAIL_SOUS_CATEGORIE_METIER, CategorieLoader.getCategorieElectricite()
+                .getSousCategories().get(0).getName());
         tags.put(Constant.TAG_EMAIL_DELAI_INTERVENTION, DelaiIntervention.LE_PLUS_RAPIDEMENT_POSSIBLE.getType());
         tags.put(Constant.TAG_EMAIL_TYPE_CONTACT, TypeContact.EMAIL.getAffichage());
 
