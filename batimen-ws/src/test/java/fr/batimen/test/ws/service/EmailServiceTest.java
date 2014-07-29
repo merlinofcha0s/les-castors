@@ -8,14 +8,16 @@ import javax.inject.Inject;
 
 import org.jboss.arquillian.persistence.UsingDataSet;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import com.microtripit.mandrillapp.lutung.model.MandrillApiError;
 import com.microtripit.mandrillapp.lutung.view.MandrillMessage;
 
 import fr.batimen.core.exception.EmailException;
+import fr.batimen.dto.CreationAnnonceDTO;
 import fr.batimen.test.ws.AbstractBatimenWsTest;
-import fr.batimen.test.ws.DataHelper;
+import fr.batimen.test.ws.helper.DataHelper;
 import fr.batimen.ws.dao.ClientDAO;
 import fr.batimen.ws.dao.EmailDAO;
 import fr.batimen.ws.entity.Client;
@@ -31,6 +33,13 @@ public class EmailServiceTest extends AbstractBatimenWsTest {
 
     @Inject
     private ClientDAO clientDAO;
+
+    private CreationAnnonceDTO creationAnnonceDTO;
+
+    @Before
+    public void init() {
+        creationAnnonceDTO = DataHelper.getAnnonceData();
+    }
 
     @Test
     public void sendEmailTest() throws MandrillApiError, IOException, EmailException {
@@ -65,9 +74,25 @@ public class EmailServiceTest extends AbstractBatimenWsTest {
     @UsingDataSet("datasets/in/client_creation_annonce.yml")
     public void sendConfirmationCreationAnnonce() throws MandrillApiError, IOException, EmailException {
         Client johnny = clientDAO.getClientByLoginName("johnny06");
-        boolean noError = emailService.envoiMailConfirmationCreationAnnonce(DataHelper.getAnnonceData(), johnny);
+        boolean noError = emailService.envoiMailConfirmationCreationAnnonce(creationAnnonceDTO, johnny);
 
         Assert.assertNotNull(johnny);
+        Assert.assertTrue(noError);
+    }
+
+    /**
+     * Cas de test : Test qui envoi un mail d'activation au client qui vient de
+     * créer une demande de devis et de s'enregistrer
+     * 
+     * @throws MandrillApiError
+     * @throws IOException
+     * @throws EmailException
+     */
+    @Test
+    public void sendActivationMail() throws MandrillApiError, IOException, EmailException {
+        String activationLien = "LOL";
+
+        boolean noError = emailService.envoiMailActivationCompte(creationAnnonceDTO, activationLien);
         Assert.assertTrue(noError);
     }
 }

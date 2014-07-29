@@ -1,4 +1,4 @@
-package fr.batimen.test.ws;
+package fr.batimen.test.ws.helper;
 
 import fr.batimen.dto.CreationAnnonceDTO;
 import fr.batimen.dto.enums.DelaiIntervention;

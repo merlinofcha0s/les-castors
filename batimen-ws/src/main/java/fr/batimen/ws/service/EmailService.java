@@ -50,15 +50,9 @@ public class EmailService {
         // On construit les recepteurs
         Map<String, String> recipients = new HashMap<String, String>();
 
-        if (nouvelleAnnonceDTO.getIsSignedUp()) {
-            remplirNomPrenomMail(clientDejaInscrit.getNom(), clientDejaInscrit.getPrenom(),
-                    clientDejaInscrit.getLogin(), nomDestinataire);
-            recipients.put(nomDestinataire.toString(), clientDejaInscrit.getEmail());
-        } else {
-            remplirNomPrenomMail(nouvelleAnnonceDTO.getClient().getNom(), nouvelleAnnonceDTO.getClient().getPrenom(),
-                    nouvelleAnnonceDTO.getClient().getLogin(), nomDestinataire);
-            recipients.put(nomDestinataire.toString(), nouvelleAnnonceDTO.getClient().getEmail());
-        }
+        getNomDestinataire(clientDejaInscrit.getNom(), clientDejaInscrit.getPrenom(), clientDejaInscrit.getLogin(),
+                nomDestinataire);
+        recipients.put(nomDestinataire.toString(), clientDejaInscrit.getEmail());
 
         // On charge le contenu
         Map<String, String> templateContent = new HashMap<String, String>();
@@ -78,7 +72,36 @@ public class EmailService {
         return noError;
     }
 
-    private void remplirNomPrenomMail(String nom, String prenom, String login, StringBuilder nomDestinataire) {
+    public boolean envoiMailActivationCompte(CreationAnnonceDTO nouvelleAnnonceDTO, String lienActivation)
+            throws EmailException, MandrillApiError, IOException {
+
+        // On prepare l'entete, on ne mets pas de titre.
+        MandrillMessage activationCompteMessage = emailDAO.prepareEmail(null);
+
+        StringBuilder nomDestinataire = new StringBuilder();
+        // On construit les recepteurs
+        Map<String, String> recipients = new HashMap<String, String>();
+
+        getNomDestinataire(nouvelleAnnonceDTO.getClient().getNom(), nouvelleAnnonceDTO.getClient().getPrenom(),
+                nouvelleAnnonceDTO.getClient().getLogin(), nomDestinataire);
+        recipients.put(nomDestinataire.toString(), nouvelleAnnonceDTO.getClient().getEmail());
+
+        // On charge les recepteurs
+        emailDAO.prepareRecipient(activationCompteMessage, recipients, true);
+
+        // On charge le contenu
+        Map<String, String> templateContent = new HashMap<String, String>();
+        templateContent.put(Constant.TAG_EMAIL_USERNAME, nouvelleAnnonceDTO.getClient().getLogin());
+        templateContent.put(Constant.TAG_EMAIL_ACTIVATION_LINK, lienActivation);
+
+        // On envoi le mail
+        boolean noError = emailDAO.sendEmailTemplate(activationCompteMessage, Constant.TEMPLATE_ACTIVATION_COMPTE,
+                templateContent);
+
+        return noError;
+    }
+
+    private void getNomDestinataire(String nom, String prenom, String login, StringBuilder nomDestinataire) {
         if (!nom.isEmpty() && !prenom.isEmpty()) {
             nomDestinataire.append(nom);
             nomDestinataire.append(" ");
