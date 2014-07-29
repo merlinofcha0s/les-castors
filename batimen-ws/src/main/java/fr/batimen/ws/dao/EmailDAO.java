@@ -23,6 +23,7 @@ import com.microtripit.mandrillapp.lutung.view.MandrillMessageStatus;
 
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.exception.EmailException;
+import fr.batimen.core.security.HashHelper;
 import fr.batimen.core.utils.PropertiesUtils;
 
 /**
@@ -180,10 +181,26 @@ public class EmailDAO {
      * Charge les parametres pour communiquer avec mandrillapp
      */
     private void getMessageProperties() {
-
         final Properties appProperties = PropertiesUtils.loadPropertiesFile("email.properties");
         apiKey = appProperties.getProperty("mandrill.api.key");
         emailActive = Boolean.valueOf(appProperties.getProperty("email.active"));
+    }
 
+    /**
+     * 
+     * 
+     * @param login
+     * @param motDePasse
+     * @return
+     */
+    public String generationLienActivation(String login, String motDePasse, String url) {
+        StringBuilder loginAndMotDePasse = new StringBuilder(login);
+        loginAndMotDePasse.append(motDePasse);
+
+        StringBuilder lienActivation = new StringBuilder();
+
+        lienActivation.append(HashHelper.hashString(loginAndMotDePasse.toString()));
+
+        return lienActivation.toString();
     }
 }

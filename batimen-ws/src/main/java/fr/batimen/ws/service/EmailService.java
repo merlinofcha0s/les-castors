@@ -72,8 +72,8 @@ public class EmailService {
         return noError;
     }
 
-    public boolean envoiMailActivationCompte(CreationAnnonceDTO nouvelleAnnonceDTO, String lienActivation)
-            throws EmailException, MandrillApiError, IOException {
+    public boolean envoiMailActivationCompte(CreationAnnonceDTO nouvelleAnnonceDTO, String url) throws EmailException,
+            MandrillApiError, IOException {
 
         // On prepare l'entete, on ne mets pas de titre.
         MandrillMessage activationCompteMessage = emailDAO.prepareEmail(null);
@@ -88,6 +88,10 @@ public class EmailService {
 
         // On charge les recepteurs
         emailDAO.prepareRecipient(activationCompteMessage, recipients, true);
+
+        // On génére le lien
+        String lienActivation = emailDAO.generationLienActivation(nouvelleAnnonceDTO.getClient().getLogin(),
+                nouvelleAnnonceDTO.getClient().getPassword(), url);
 
         // On charge le contenu
         Map<String, String> templateContent = new HashMap<String, String>();

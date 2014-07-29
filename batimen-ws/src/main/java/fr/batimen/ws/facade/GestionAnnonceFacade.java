@@ -18,11 +18,13 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.microtripit.mandrillapp.lutung.model.MandrillApiError;
+import com.sun.jersey.api.core.HttpContext;
 
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.WsPath;
@@ -87,7 +89,7 @@ public class GestionAnnonceFacade {
     @POST
     @Path(WsPath.GESTION_ANNONCE_SERVICE_CREATION_ANNONCE)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public Integer creationAnnonce(CreationAnnonceDTO nouvelleAnnonceDTO) {
+    public Integer creationAnnonce(CreationAnnonceDTO nouvelleAnnonceDTO, @Context HttpContext context) {
 
         Annonce nouvelleAnnonce = null;
 
@@ -112,7 +114,8 @@ public class GestionAnnonceFacade {
                     emailService.envoiMailConfirmationCreationAnnonce(nouvelleAnnonceDTO,
                             nouvelleAnnonce.getDemandeur());
                 } else {
-                    // TODO : On envoi le mail d'activation ici
+                    emailService.envoiMailActivationCompte(nouvelleAnnonceDTO, context.getRequest().getAbsolutePath()
+                            .getPath());
                 }
             }
         } catch (EmailException | MandrillApiError | IOException e) {
