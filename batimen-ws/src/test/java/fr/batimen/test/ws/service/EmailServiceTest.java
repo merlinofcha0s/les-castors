@@ -90,7 +90,8 @@ public class EmailServiceTest extends AbstractBatimenWsTest {
      */
     @Test
     public void sendActivationMail() throws MandrillApiError, IOException, EmailException {
-        boolean noError = emailService.envoiMailActivationCompte(creationAnnonceDTO, "");
+        boolean noError = emailService.envoiMailActivationCompte(creationAnnonceDTO,
+                "https://127.0.0.1:8181/batimen-ws-test/");
         Assert.assertTrue(noError);
     }
 

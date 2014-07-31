@@ -147,11 +147,11 @@ public class EmailDAO {
         if (emailActive) {
             MandrillMessageStatus[] messagesStatus = mandrillApi.messages().sendTemplate(templateName, templateContent,
                     message, false);
+
             return checkErrorOnSentEmail(messagesStatus);
         } else {
             return true;
         }
-
     }
 
     /**
@@ -188,18 +188,24 @@ public class EmailDAO {
 
     /**
      * 
+     * Genere un lien d'activation de compte de cette maniere :
+     * Base64(Scrypt(login+password))
+     * 
+     * Le login étant unique, il ne devrait pas y avoir de colision
      * 
      * @param login
+     *            L'identifiant du client
      * @param motDePasse
-     * @return
+     *            Le hash du mot de passe du client
+     * @return Le lien d'activation calculé de cette maniere :
+     *         Base64(Scrypt(uniqueUserName+password))
      */
     public String generationLienActivation(String login, String motDePasse, String url) {
         StringBuilder loginAndMotDePasse = new StringBuilder(login);
         loginAndMotDePasse.append(motDePasse);
 
-        StringBuilder lienActivation = new StringBuilder();
-
-        lienActivation.append(HashHelper.hashString(loginAndMotDePasse.toString()));
+        StringBuilder lienActivation = new StringBuilder(url);
+        lienActivation.append(HashHelper.convertToBase64(HashHelper.hashString(loginAndMotDePasse.toString())));
 
         return lienActivation.toString();
     }

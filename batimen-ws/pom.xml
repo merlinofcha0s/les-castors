@@ -256,7 +256,6 @@
 		<dependency>
 			<groupId>com.lambdaworks</groupId>
 			<artifactId>scrypt</artifactId>
-			<version>1.4.0</version>
 			<scope>compile</scope>
 		</dependency>
 

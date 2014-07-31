@@ -2,6 +2,8 @@ package fr.batimen.ws.service;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import javax.ejb.LocalBean;
@@ -12,6 +14,7 @@ import javax.inject.Inject;
 
 import com.microtripit.mandrillapp.lutung.model.MandrillApiError;
 import com.microtripit.mandrillapp.lutung.view.MandrillMessage;
+import com.microtripit.mandrillapp.lutung.view.MandrillMessage.MergeVar;
 
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.exception.EmailException;
@@ -96,7 +99,12 @@ public class EmailService {
         // On charge le contenu
         Map<String, String> templateContent = new HashMap<String, String>();
         templateContent.put(Constant.TAG_EMAIL_USERNAME, nouvelleAnnonceDTO.getClient().getLogin());
-        templateContent.put(Constant.TAG_EMAIL_ACTIVATION_LINK, lienActivation);
+
+        // On charge les variables dynamique à remplacer
+        List<MergeVar> mergevars = new LinkedList<MergeVar>();
+        MergeVar mergeVar = new MergeVar(Constant.TAG_EMAIL_ACTIVATION_LINK, lienActivation);
+        mergevars.add(mergeVar);
+        activationCompteMessage.setGlobalMergeVars(mergevars);
 
         // On envoi le mail
         boolean noError = emailDAO.sendEmailTemplate(activationCompteMessage, Constant.TEMPLATE_ACTIVATION_COMPTE,

@@ -114,8 +114,8 @@ public class GestionAnnonceFacade {
                     emailService.envoiMailConfirmationCreationAnnonce(nouvelleAnnonceDTO,
                             nouvelleAnnonce.getDemandeur());
                 } else {
-                    emailService.envoiMailActivationCompte(nouvelleAnnonceDTO, context.getRequest().getAbsolutePath()
-                            .getPath());
+                    emailService.envoiMailActivationCompte(nouvelleAnnonceDTO, context.getRequest().getBaseUri()
+                            .toString());
                 }
             }
         } catch (EmailException | MandrillApiError | IOException e) {
