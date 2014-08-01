@@ -90,23 +90,11 @@ public class EmailServiceTest extends AbstractBatimenWsTest {
      */
     @Test
     public void sendActivationMail() throws MandrillApiError, IOException, EmailException {
-        boolean noError = emailService.envoiMailActivationCompte(creationAnnonceDTO,
-                "https://127.0.0.1:8181/batimen-ws-test/");
+        boolean noError = emailService
+                .envoiMailActivationCompte(
+                        creationAnnonceDTO,
+                        "JHMwJDU0MDQwJDcxZStxT2JnTWlpejhjTk5LY3liK2c9PSRtMzdobWh3QXRweW92a1NVSXhLenkzNGY2NlZVZUNBUktOMFFaaEJoVmFZPQ==",
+                        "https://127.0.0.1:8181/batimen-ws-test/");
         Assert.assertTrue(noError);
-    }
-
-    /**
-     * Cas de test : Verifie que la génération d'un lien (hashage) se passe
-     * bien.
-     * 
-     * @throws MandrillApiError
-     * @throws IOException
-     * @throws EmailException
-     */
-    @Test
-    public void generateLinkActivation() {
-        String hashActivation = emailDAO.generationLienActivation(creationAnnonceDTO.getClient().getLogin(),
-                creationAnnonceDTO.getClient().getPassword(), "");
-        Assert.assertTrue(!hashActivation.isEmpty());
     }
 }

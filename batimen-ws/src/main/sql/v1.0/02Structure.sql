@@ -41,6 +41,8 @@ create table Annonce (
         password varchar(80) not null,
         prenom varchar(20) not null,
         siret int4 not null,
+        isActive boolean,
+        cleActivation varchar(255),
         entreprise_id int8,
         primary key (id)
     );
@@ -84,6 +86,8 @@ create table Annonce (
         password varchar(80) not null,
         prenom varchar(20),
         isArtisan boolean not null,
+        isActive boolean,
+        cleActivation varchar(255),
         artisan_id int8,
         primary key (id)
     );

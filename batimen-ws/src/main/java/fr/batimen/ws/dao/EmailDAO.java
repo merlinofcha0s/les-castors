@@ -23,7 +23,6 @@ import com.microtripit.mandrillapp.lutung.view.MandrillMessageStatus;
 
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.exception.EmailException;
-import fr.batimen.core.security.HashHelper;
 import fr.batimen.core.utils.PropertiesUtils;
 
 /**
@@ -184,29 +183,5 @@ public class EmailDAO {
         final Properties appProperties = PropertiesUtils.loadPropertiesFile("email.properties");
         apiKey = appProperties.getProperty("mandrill.api.key");
         emailActive = Boolean.valueOf(appProperties.getProperty("email.active"));
-    }
-
-    /**
-     * 
-     * Genere un lien d'activation de compte de cette maniere :
-     * Base64(Scrypt(login+password))
-     * 
-     * Le login étant unique, il ne devrait pas y avoir de colision
-     * 
-     * @param login
-     *            L'identifiant du client
-     * @param motDePasse
-     *            Le hash du mot de passe du client
-     * @return Le lien d'activation calculé de cette maniere :
-     *         Base64(Scrypt(uniqueUserName+password))
-     */
-    public String generationLienActivation(String login, String motDePasse, String url) {
-        StringBuilder loginAndMotDePasse = new StringBuilder(login);
-        loginAndMotDePasse.append(motDePasse);
-
-        StringBuilder lienActivation = new StringBuilder(url);
-        lienActivation.append(HashHelper.convertToBase64(HashHelper.hashString(loginAndMotDePasse.toString())));
-
-        return lienActivation.toString();
     }
 }

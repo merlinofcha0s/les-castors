@@ -31,6 +31,7 @@ import fr.batimen.core.constant.WsPath;
 import fr.batimen.core.exception.BackendException;
 import fr.batimen.core.exception.DuplicateEntityException;
 import fr.batimen.core.exception.EmailException;
+import fr.batimen.core.security.HashHelper;
 import fr.batimen.dto.CreationAnnonceDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.ws.dao.AdresseDAO;
@@ -114,8 +115,8 @@ public class GestionAnnonceFacade {
                     emailService.envoiMailConfirmationCreationAnnonce(nouvelleAnnonceDTO,
                             nouvelleAnnonce.getDemandeur());
                 } else {
-                    emailService.envoiMailActivationCompte(nouvelleAnnonceDTO, context.getRequest().getBaseUri()
-                            .toString());
+                    emailService.envoiMailActivationCompte(nouvelleAnnonceDTO, nouvelleAnnonce.getDemandeur()
+                            .getCleActivation(), context.getRequest().getBaseUri().toString());
                 }
             }
         } catch (EmailException | MandrillApiError | IOException e) {
@@ -258,6 +259,13 @@ public class GestionAnnonceFacade {
         nouveauClient.setEmail(nouvelleAnnonceDTO.getClient().getEmail());
         nouveauClient.setNumeroTel(nouvelleAnnonceDTO.getClient().getNumeroTel());
         nouveauClient.setIsArtisan(false);
+        nouveauClient.setActive(false);
+
+        StringBuilder loginAndMotDePasse = new StringBuilder(nouvelleAnnonceDTO.getClient().getLogin());
+        loginAndMotDePasse.append(nouvelleAnnonceDTO.getClient().getPassword());
+
+        nouveauClient
+                .setCleActivation(HashHelper.convertToBase64(HashHelper.hashString(loginAndMotDePasse.toString())));
 
         return nouveauClient;
     }

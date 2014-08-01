@@ -75,10 +75,11 @@ public class EmailService {
         return noError;
     }
 
-    public boolean envoiMailActivationCompte(CreationAnnonceDTO nouvelleAnnonceDTO, String url) throws EmailException,
-            MandrillApiError, IOException {
+    public boolean envoiMailActivationCompte(CreationAnnonceDTO nouvelleAnnonceDTO, String cleActivation, String url)
+            throws EmailException, MandrillApiError, IOException {
 
-        // On prepare l'entete, on ne mets pas de titre.
+        // On prepare l'entete, on ne mets pas de titre (il est géré par
+        // mandrillApp).
         MandrillMessage activationCompteMessage = emailDAO.prepareEmail(null);
 
         StringBuilder nomDestinataire = new StringBuilder();
@@ -92,17 +93,16 @@ public class EmailService {
         // On charge les recepteurs
         emailDAO.prepareRecipient(activationCompteMessage, recipients, true);
 
-        // On génére le lien
-        String lienActivation = emailDAO.generationLienActivation(nouvelleAnnonceDTO.getClient().getLogin(),
-                nouvelleAnnonceDTO.getClient().getPassword(), url);
-
         // On charge le contenu
         Map<String, String> templateContent = new HashMap<String, String>();
         templateContent.put(Constant.TAG_EMAIL_USERNAME, nouvelleAnnonceDTO.getClient().getLogin());
 
+        StringBuilder lienActivation = new StringBuilder(url);
+        lienActivation.append(cleActivation);
+
         // On charge les variables dynamique à remplacer
         List<MergeVar> mergevars = new LinkedList<MergeVar>();
-        MergeVar mergeVar = new MergeVar(Constant.TAG_EMAIL_ACTIVATION_LINK, lienActivation);
+        MergeVar mergeVar = new MergeVar(Constant.TAG_EMAIL_ACTIVATION_LINK, lienActivation.toString());
         mergevars.add(mergeVar);
         activationCompteMessage.setGlobalMergeVars(mergevars);
 
