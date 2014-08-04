@@ -117,7 +117,8 @@ public class AuthentificationPanel extends Panel {
     }
 
     public void onError(AjaxRequestTarget target) {
-        errorLogin.setDefaultModelObject("Erreur dans la saisie ou identifiants inconnues, veuillez recommencer");
+        errorLogin
+                .setDefaultModelObject("Erreur dans la saisie / identifiants inconnues / compte pas activé, veuillez recommencer");
         errorLogin.add(new AttributeModifier("class", "errorLoginActivated"));
         target.add(errorLogin);
     }

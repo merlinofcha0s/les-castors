@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.LocalBean;
@@ -18,13 +19,11 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.Context;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.microtripit.mandrillapp.lutung.model.MandrillApiError;
-import com.sun.jersey.api.core.HttpContext;
 
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.WsPath;
@@ -32,6 +31,7 @@ import fr.batimen.core.exception.BackendException;
 import fr.batimen.core.exception.DuplicateEntityException;
 import fr.batimen.core.exception.EmailException;
 import fr.batimen.core.security.HashHelper;
+import fr.batimen.core.utils.PropertiesUtils;
 import fr.batimen.dto.CreationAnnonceDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.ws.dao.AdresseDAO;
@@ -90,7 +90,7 @@ public class GestionAnnonceFacade {
     @POST
     @Path(WsPath.GESTION_ANNONCE_SERVICE_CREATION_ANNONCE)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public Integer creationAnnonce(CreationAnnonceDTO nouvelleAnnonceDTO, @Context HttpContext context) {
+    public Integer creationAnnonce(CreationAnnonceDTO nouvelleAnnonceDTO) {
 
         Annonce nouvelleAnnonce = null;
 
@@ -115,8 +115,11 @@ public class GestionAnnonceFacade {
                     emailService.envoiMailConfirmationCreationAnnonce(nouvelleAnnonceDTO,
                             nouvelleAnnonce.getDemandeur());
                 } else {
+                    // On recupere l'url du frontend
+                    Properties urlProperties = PropertiesUtils.loadPropertiesFile("url.properties");
+                    String urlFrontend = urlProperties.getProperty("url.frontend.web");
                     emailService.envoiMailActivationCompte(nouvelleAnnonceDTO, nouvelleAnnonce.getDemandeur()
-                            .getCleActivation(), context.getRequest().getBaseUri().toString());
+                            .getCleActivation(), urlFrontend);
                 }
             }
         } catch (EmailException | MandrillApiError | IOException e) {
@@ -265,7 +268,7 @@ public class GestionAnnonceFacade {
         loginAndMotDePasse.append(nouvelleAnnonceDTO.getClient().getPassword());
 
         nouveauClient
-                .setCleActivation(HashHelper.convertToBase64(HashHelper.hashString(loginAndMotDePasse.toString())));
+                .setCleActivation(HashHelper.convertToBase64(HashHelper.hashSHA256(loginAndMotDePasse.toString())));
 
         return nouveauClient;
     }

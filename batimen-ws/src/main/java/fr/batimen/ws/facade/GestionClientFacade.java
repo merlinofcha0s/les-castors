@@ -42,47 +42,47 @@ import fr.batimen.ws.interceptor.BatimenInterceptor;
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class GestionClientFacade {
 
-	@Inject
-	ClientDAO clientDAO;
+    @Inject
+    ClientDAO clientDAO;
 
-	/**
-	 * Methode de login des utilisateurs
-	 * 
-	 * @param LoginDTO
-	 *            loginDTO objet permettant l'authentification
-	 * @return vide si la combinaison login / mdp ne corresponds pas ou si
-	 *         inexistant
-	 */
-	@POST
-	@Path(WsPath.GESTION_CLIENT_SERVICE_LOGIN)
-	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-	public ClientDTO login(LoginDTO toLogin) {
-		ModelMapper modelMapper = new ModelMapper();
+    /**
+     * Methode de login des utilisateurs
+     * 
+     * @param LoginDTO
+     *            loginDTO objet permettant l'authentification
+     * @return vide si la combinaison login / mdp ne corresponds pas ou si
+     *         inexistant
+     */
+    @POST
+    @Path(WsPath.GESTION_CLIENT_SERVICE_LOGIN)
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public ClientDTO login(LoginDTO toLogin) {
+        ModelMapper modelMapper = new ModelMapper();
 
-		Client client = clientDAO.getClientByLoginName(toLogin.getLogin());
+        Client client = clientDAO.getClientByLoginName(toLogin.getLogin());
 
-		return modelMapper.map(client, ClientDTO.class);
-	}
+        return modelMapper.map(client, ClientDTO.class);
+    }
 
-	/**
-	 * Methode de recuperation d'un client par son email
-	 * 
-	 * @param email
-	 *            l'email que l'on veut tester
-	 * @return Le client avec l'email correspondant
-	 */
-	@POST
-	@Path(WsPath.GESTION_CLIENT_SERVICE_BY_EMAIL)
-	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-	public ClientDTO clientByEmail(String email) {
+    /**
+     * Methode de recuperation d'un client par son email
+     * 
+     * @param email
+     *            l'email que l'on veut tester
+     * @return Le client avec l'email correspondant
+     */
+    @POST
+    @Path(WsPath.GESTION_CLIENT_SERVICE_BY_EMAIL)
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public ClientDTO clientByEmail(String email) {
 
-		// Obligé pour les strings sinon il n'escape pas les ""
-		String emailEscaped = DeserializeJsonHelper.parseString(email);
+        // Obligé pour les strings sinon il n'escape pas les ""
+        String emailEscaped = DeserializeJsonHelper.parseString(email);
 
-		ModelMapper modelMapper = new ModelMapper();
+        ModelMapper modelMapper = new ModelMapper();
 
-		Client client = clientDAO.getClientByEmail(emailEscaped);
+        Client client = clientDAO.getClientByEmail(emailEscaped);
 
-		return modelMapper.map(client, ClientDTO.class);
-	}
+        return modelMapper.map(client, ClientDTO.class);
+    }
 }

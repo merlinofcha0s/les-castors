@@ -30,7 +30,7 @@ public abstract class AbstractUser extends AbstractEntity {
     @Column(nullable = false)
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     protected Date dateInscription;
-    @Column
+    @Column(nullable = false)
     protected boolean isActive;
     @Column(length = 255)
     protected String cleActivation;

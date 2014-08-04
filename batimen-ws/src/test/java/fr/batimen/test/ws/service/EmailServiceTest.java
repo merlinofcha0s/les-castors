@@ -3,6 +3,7 @@ package fr.batimen.test.ws.service;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
 import javax.inject.Inject;
 
@@ -15,6 +16,7 @@ import com.microtripit.mandrillapp.lutung.model.MandrillApiError;
 import com.microtripit.mandrillapp.lutung.view.MandrillMessage;
 
 import fr.batimen.core.exception.EmailException;
+import fr.batimen.core.utils.PropertiesUtils;
 import fr.batimen.dto.CreationAnnonceDTO;
 import fr.batimen.test.ws.AbstractBatimenWsTest;
 import fr.batimen.test.ws.helper.DataHelper;
@@ -90,11 +92,14 @@ public class EmailServiceTest extends AbstractBatimenWsTest {
      */
     @Test
     public void sendActivationMail() throws MandrillApiError, IOException, EmailException {
+        Properties urlProperties = PropertiesUtils.loadPropertiesFile("url.properties");
+        String urlFrontend = urlProperties.getProperty("url.frontend.web");
+
         boolean noError = emailService
                 .envoiMailActivationCompte(
                         creationAnnonceDTO,
                         "JHMwJDU0MDQwJDcxZStxT2JnTWlpejhjTk5LY3liK2c9PSRtMzdobWh3QXRweW92a1NVSXhLenkzNGY2NlZVZUNBUktOMFFaaEJoVmFZPQ==",
-                        "https://127.0.0.1:8181/batimen-ws-test/");
+                        urlFrontend);
         Assert.assertTrue(noError);
     }
 }

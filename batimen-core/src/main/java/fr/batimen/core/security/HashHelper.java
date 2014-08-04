@@ -1,6 +1,7 @@
 package fr.batimen.core.security;
 
 import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import com.lambdaworks.crypto.SCryptUtil;
 
@@ -48,6 +49,10 @@ public class HashHelper {
 
     public static String convertToBase64(String chaineAEncoder) {
         return new String(Base64.encodeBase64(chaineAEncoder.getBytes()));
+    }
+
+    public static String hashSHA256(String chaineAEncoder) {
+        return DigestUtils.sha256Hex(chaineAEncoder);
     }
 
 }

@@ -8,3 +8,4 @@ client:
     numerotel: "0615125645"
     prenom: Pebron
     isartisan: false
+    isActive: true

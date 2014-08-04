@@ -21,3 +21,4 @@ client:
     numerotel: "0615458596"
     prenom: Johnny
     isartisan: false
+    isactive: true

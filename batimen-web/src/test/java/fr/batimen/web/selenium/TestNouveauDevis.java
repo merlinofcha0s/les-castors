@@ -55,7 +55,7 @@ public class TestNouveauDevis extends AbstractITTest {
         // On passe l'etape 3
         etape3();
         // On s'authentifie à l'application
-        connexionApplication(AbstractITTest.BON_MOT_DE_PASSE);
+        connexionApplication("raiden", AbstractITTest.BON_MOT_DE_PASSE);
 
         // On vérifie que le label est correcte
         assertEquals("Votre devis a été mis en ligne, nous vous avons envoyé un mail récapitulatif", driver
@@ -124,7 +124,7 @@ public class TestNouveauDevis extends AbstractITTest {
         // On remplit l'étape 3
         etape3();
         // On se connecte
-        connexionApplication(BON_MOT_DE_PASSE);
+        connexionApplication("raiden", BON_MOT_DE_PASSE);
 
         assertEquals("Votre devis a été mis en ligne, nous vous avons envoyé un mail récapitulatif", driver
                 .findElement(By.cssSelector("h5")).getText());
@@ -150,7 +150,7 @@ public class TestNouveauDevis extends AbstractITTest {
         etape2();
         // On passe à l'étape 3
         etape3();
-        connexionApplication(BON_MOT_DE_PASSE);
+        connexionApplication("raiden", BON_MOT_DE_PASSE);
 
         assertEquals("Votre devis a été mis en ligne, nous vous avons envoyé un mail récapitulatif", driver
                 .findElement(By.cssSelector("h5")).getText());
