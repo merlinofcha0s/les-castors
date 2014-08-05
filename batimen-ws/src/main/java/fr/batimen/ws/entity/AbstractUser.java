@@ -31,7 +31,7 @@ public abstract class AbstractUser extends AbstractEntity {
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     protected Date dateInscription;
     @Column(nullable = false)
-    protected boolean isActive;
+    protected Boolean isActive;
     @Column(length = 255)
     protected String cleActivation;
 
@@ -143,7 +143,7 @@ public abstract class AbstractUser extends AbstractEntity {
     /**
      * @return the isActive
      */
-    public boolean isActive() {
+    public Boolean getIsActive() {
         return isActive;
     }
 
@@ -158,7 +158,7 @@ public abstract class AbstractUser extends AbstractEntity {
      * @param isActive
      *            the isActive to set
      */
-    public void setActive(boolean isActive) {
+    public void setIsActive(Boolean isActive) {
         this.isActive = isActive;
     }
 

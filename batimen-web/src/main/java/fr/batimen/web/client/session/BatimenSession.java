@@ -60,10 +60,10 @@ public class BatimenSession extends AuthenticatedWebSession {
 
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Verification du password : " + passwordMatch);
-                LOGGER.debug("Verification si le compte est activé : " + clientDTO.isActive());
+                LOGGER.debug("Verification si le compte est activé : " + clientDTO.getIsActive());
             }
 
-            if (passwordMatch && clientDTO.isActive()) {
+            if (passwordMatch && clientDTO.getIsActive()) {
                 // On enregistre les infos de l'utilisateur dans la session
                 BatimenSession session = (BatimenSession) BatimenSession.get();
                 session.putUserInSession(clientDTO);

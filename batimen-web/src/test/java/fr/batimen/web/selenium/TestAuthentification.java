@@ -20,6 +20,8 @@ import com.ninja_squad.dbsetup.operation.Operation;
  */
 public class TestAuthentification extends AbstractITTest {
 
+    private final String messageErreur = "Erreur dans la saisie / identifiants inconnues / compte pas activé, veuillez recommencer";
+
     @Override
     public void prepareDB() throws Exception {
         Operation operation = sequenceOf(DELETE_ALL, INSERT_USER_DATA);
@@ -41,8 +43,7 @@ public class TestAuthentification extends AbstractITTest {
         driver.get(appUrl);
         connexionApplication("raiden", AbstractITTest.MAUVAIS_MOT_DE_PASSE);
         Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
-                .until(ExpectedConditions.textToBePresentInElementLocated(By.id("errorLogin"),
-                        "Erreur dans la saisie ou identifiants inconnues, veuillez recommencer"));
+                .until(ExpectedConditions.textToBePresentInElementLocated(By.id("errorLogin"), messageErreur));
         assertTrue(checkCondition);
     }
 
@@ -51,8 +52,7 @@ public class TestAuthentification extends AbstractITTest {
         driver.get(appUrl);
         connexionApplication("xavier", AbstractITTest.BON_MOT_DE_PASSE);
         Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
-                .until(ExpectedConditions.textToBePresentInElementLocated(By.id("errorLogin"),
-                        "Erreur dans la saisie / identifiants inconnues / compte pas activé, veuillez recommencer"));
+                .until(ExpectedConditions.textToBePresentInElementLocated(By.id("errorLogin"), messageErreur));
         assertTrue(checkCondition);
     }
 
