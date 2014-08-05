@@ -169,4 +169,40 @@ public class ClientDAO {
         }
     }
 
+    /**
+     * Active le compte d'un client
+     * 
+     * @param nouveauClient
+     *            L'entité a ajouter dans la BDD
+     * @throws BackendException
+     */
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public Client getClientByActivationKey(String cleActivation) {
+
+        Client clientFinded = null;
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Debut récuperation compte client avec la clé : " + cleActivation);
+        }
+
+        try {
+            Query query = em.createNamedQuery(QueryJPQL.CLIENT_BY_ACTIVATION_KEY);
+            query.setParameter(QueryJPQL.PARAM_CLIENT_ACTIVATION_KEY, cleActivation);
+
+            clientFinded = (Client) query.getSingleResult();
+        } catch (NoResultException nre) {
+            if (LOGGER.isWarnEnabled()) {
+                LOGGER.warn("Aucune correspondance trouvées dans la BDD pour la clé: " + cleActivation, nre);
+            }
+            return new Client();
+        }
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Fin récuperation compte client avec la clé");
+        }
+
+        return clientFinded;
+
+    }
+
 }

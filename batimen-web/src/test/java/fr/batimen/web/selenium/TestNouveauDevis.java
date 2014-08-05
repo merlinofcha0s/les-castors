@@ -38,9 +38,6 @@ public class TestNouveauDevis extends AbstractITTest {
      * Cas de test : L'utilisateur rempli son devis en s'étant authentifié juste
      * avant. Le devis doit se créer correctement.
      * 
-     * Remarque : On saute la selection du département avec selenium, car
-     * Raphael n'est visiblement pas compatible avec selenium.
-     * 
      * @throws InterruptedException
      * 
      */
@@ -66,9 +63,6 @@ public class TestNouveauDevis extends AbstractITTest {
     /**
      * Cas de test : L'utilisateur crée un nouveau devis alors qu'il n'est pas
      * inscrit (et donc pas authentifié). Le devis doit se créer correctement.
-     * 
-     * Remarque : On saute la selection du département avec selenium, car
-     * Raphael n'est visiblement pas compatible avec selenium.
      * 
      * @throws InterruptedException
      */
@@ -109,9 +103,6 @@ public class TestNouveauDevis extends AbstractITTest {
      * mais pas authentifié, il s'authentifie lors de l'étape 3. Le devis doit
      * se créer correctement.
      * 
-     * Remarque : On saute la selection du département avec selenium, car
-     * Raphael n'est visiblement pas compatible avec selenium.
-     * 
      * @throws InterruptedException
      */
     @Test
@@ -134,9 +125,6 @@ public class TestNouveauDevis extends AbstractITTest {
     /**
      * Cas de test : L'utilisateur crée deux devis, la deuxieme, l'application
      * doit lui renvoyer un message d'erreur.
-     * 
-     * Remarque : On saute la selection du département avec selenium, car
-     * Raphael n'est visiblement pas compatible avec selenium.
      * 
      * @throws InterruptedException
      */

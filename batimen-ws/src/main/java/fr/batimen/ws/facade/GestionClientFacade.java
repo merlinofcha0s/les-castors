@@ -15,9 +15,12 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.WsPath;
+import fr.batimen.core.exception.BackendException;
 import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.LoginDTO;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
@@ -41,6 +44,8 @@ import fr.batimen.ws.interceptor.BatimenInterceptor;
 @Interceptors(value = { BatimenInterceptor.class })
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class GestionClientFacade {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(GestionClientFacade.class);
 
     @Inject
     ClientDAO clientDAO;
@@ -84,5 +89,44 @@ public class GestionClientFacade {
         Client client = clientDAO.getClientByEmail(emailEscaped);
 
         return modelMapper.map(client, ClientDTO.class);
+    }
+
+    /**
+     * Methode de recuperation d'un client par son email
+     * 
+     * @param email
+     *            l'email que l'on veut tester
+     * @return Le client avec l'email correspondant
+     */
+    @POST
+    @Path(WsPath.GESTION_CLIENT_SERVICE_ACTIVATION)
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public int activateAccount(String cleActivation) {
+
+        String cleActivationEscaped = DeserializeJsonHelper.parseString(cleActivation);
+
+        Client clientByKey;
+        clientByKey = clientDAO.getClientByActivationKey(cleActivationEscaped);
+
+        if (!clientByKey.getLogin().isEmpty()) {
+            if (clientByKey.getIsActive().equals(Boolean.FALSE)) {
+                clientByKey.setIsActive(true);
+                try {
+                    clientDAO.saveClient(clientByKey);
+                } catch (BackendException e) {
+                    if (LOGGER.isErrorEnabled()) {
+                        LOGGER.error("Impossible de mettre à jour le client apres activation de son compte", e);
+                    }
+                    return Constant.CODE_SERVICE_RETOUR_KO;
+                }
+            } else {
+                return Constant.CODE_SERVICE_ANNONCE_RETOUR_DEJA_ACTIF;
+            }
+
+        } else {
+            return Constant.CODE_SERVICE_ANNONCE_RETOUR_COMPTE_INEXISTANT;
+        }
+
+        return Constant.CODE_SERVICE_RETOUR_OK;
     }
 }

@@ -81,7 +81,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         creationVerificationAnnonce();
         Integer isCreationOK = AnnonceService.creationAnnonce(creationAnnonceDTO);
         // Le service doit remonter une erreur
-        Assert.assertTrue(isCreationOK == Constant.CODE_SERVICE_RETOUR_DUPLICATE);
+        Assert.assertTrue(isCreationOK == Constant.CODE_SERVICE_ANNONCE_RETOUR_DUPLICATE);
     }
 
     private void creationVerificationAnnonce() {

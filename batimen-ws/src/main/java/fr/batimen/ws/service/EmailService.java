@@ -22,6 +22,12 @@ import fr.batimen.dto.CreationAnnonceDTO;
 import fr.batimen.ws.dao.EmailDAO;
 import fr.batimen.ws.entity.Client;
 
+/**
+ * Classe de gestion d'envoi de mail.
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 @Stateless(name = "EmailService")
 @LocalBean
 @TransactionManagement(TransactionManagementType.CONTAINER)
@@ -75,6 +81,20 @@ public class EmailService {
         return noError;
     }
 
+    /**
+     * Envoi d'un mail d'activation pour les nouveaux clients.
+     * 
+     * @param nouvelleAnnonceDTO
+     *            La DTO contenant toutes les infos.
+     * @param cleActivation
+     *            La clé d'activation généré
+     * @param url
+     *            L'url du front
+     * @return True si l'envoi du mail s'est bien passé
+     * @throws EmailException
+     * @throws MandrillApiError
+     * @throws IOException
+     */
     public boolean envoiMailActivationCompte(CreationAnnonceDTO nouvelleAnnonceDTO, String cleActivation, String url)
             throws EmailException, MandrillApiError, IOException {
 

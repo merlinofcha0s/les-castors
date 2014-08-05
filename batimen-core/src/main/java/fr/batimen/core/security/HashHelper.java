@@ -6,7 +6,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import com.lambdaworks.crypto.SCryptUtil;
 
 /**
- * Classe d'aide au hash des mots de passe
+ * Classe d'aide au hash (mot de passe, activation compte, etc)
  * 
  * @author Casaucau Cyril
  * 
@@ -47,10 +47,24 @@ public class HashHelper {
         return SCryptUtil.check(password, hash);
     }
 
+    /**
+     * Converti une chaine de caractére en Base64
+     * 
+     * @param chaineAEncoder
+     *            La chaine a transformer
+     * @return La chaine de caractére en Base64
+     */
     public static String convertToBase64(String chaineAEncoder) {
         return new String(Base64.encodeBase64(chaineAEncoder.getBytes()));
     }
 
+    /**
+     * Hash une chaine de caractére en SHA-256
+     * 
+     * @param chaineAEncoder
+     *            La chaine a hasher
+     * @return La chaine en SHA-256
+     */
     public static String hashSHA256(String chaineAEncoder) {
         return DigestUtils.sha256Hex(chaineAEncoder);
     }

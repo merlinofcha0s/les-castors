@@ -250,7 +250,7 @@ public class NouveauDevis extends MasterPage {
             confirmation2
                     .setDefaultModelObject("Votre devis a bien été enregistré. Celui-ci sera mis en ligne une fois votre compte activé.");
         } else if (codeRetour.equals(Constant.CODE_SERVICE_RETOUR_KO)
-                || codeRetour.equals(Constant.CODE_SERVICE_RETOUR_DUPLICATE)) {
+                || codeRetour.equals(Constant.CODE_SERVICE_ANNONCE_RETOUR_DUPLICATE)) {
             if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("Erreur pendant le chargement de l'annonce");
                 loggerAnnonce(creationAnnonce);

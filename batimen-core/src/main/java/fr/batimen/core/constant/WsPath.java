@@ -9,16 +9,17 @@ package fr.batimen.core.constant;
  */
 public class WsPath {
 
-	private WsPath() {
+    private WsPath() {
 
-	}
+    }
 
-	// Path Gestion Client
-	public static final String GESTION_CLIENT_SERVICE_PATH = "gestionClient";
-	public static final String GESTION_CLIENT_SERVICE_LOGIN = "login";
-	public static final String GESTION_CLIENT_SERVICE_BY_EMAIL = "email";
+    // Path Gestion Client
+    public static final String GESTION_CLIENT_SERVICE_PATH = "gestionClient";
+    public static final String GESTION_CLIENT_SERVICE_LOGIN = "login";
+    public static final String GESTION_CLIENT_SERVICE_BY_EMAIL = "email";
+    public static final String GESTION_CLIENT_SERVICE_ACTIVATION = "activation";
 
-	// Path Gestion Annonce
-	public static final String GESTION_ANNONCE_SERVICE_PATH = "gestionAnnonce";
-	public static final String GESTION_ANNONCE_SERVICE_CREATION_ANNONCE = "creationAnnonce";
+    // Path Gestion Annonce
+    public static final String GESTION_ANNONCE_SERVICE_PATH = "gestionAnnonce";
+    public static final String GESTION_ANNONCE_SERVICE_CREATION_ANNONCE = "creationAnnonce";
 }

@@ -103,7 +103,7 @@ public class GestionAnnonceFacade {
             }
             // L'annonce est deja présente dans le BDD
             if (e instanceof DuplicateEntityException) {
-                return Constant.CODE_SERVICE_RETOUR_DUPLICATE;
+                return Constant.CODE_SERVICE_ANNONCE_RETOUR_DUPLICATE;
             }
             // Erreur pendant la creation du service de l'annonce.
             return Constant.CODE_SERVICE_RETOUR_KO;
