@@ -43,6 +43,7 @@ public class Constant {
     public static final String CONTACT_URL = "/contact";
     public static final String CGU_URL = "/cgu";
     public static final String NOUVEAU_DEVIS_URL = "/nouveaudevis";
+    public static final String ACTIVATION = "/activation";
 
     // Email
     public static final String EMAIL_FROM = "notifications@lescastors.fr";

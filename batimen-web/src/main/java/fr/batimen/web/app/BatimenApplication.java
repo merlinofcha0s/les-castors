@@ -23,6 +23,7 @@ import fr.batimen.web.client.extend.CGU;
 import fr.batimen.web.client.extend.Contact;
 import fr.batimen.web.client.extend.MonCompte;
 import fr.batimen.web.client.extend.QuiSommeNous;
+import fr.batimen.web.client.extend.activation.Activation;
 import fr.batimen.web.client.extend.authentification.Authentification;
 import fr.batimen.web.client.extend.error.AccesInterdit;
 import fr.batimen.web.client.extend.error.ErreurInterne;
@@ -92,6 +93,7 @@ public class BatimenApplication extends AuthenticatedWebApplication {
         mountPage(Constant.QUI_SOMMES_NOUS_URL, QuiSommeNous.class);
         mountPage(Constant.CONTACT_URL, Contact.class);
         mountPage(Constant.CGU_URL, CGU.class);
+        mountPage(Constant.ACTIVATION, Activation.class);
         mountPage("/404", NonTrouvee.class);
         // Encode la page de cette maniere : nouveaudevis/departement/06
         mount(new MountedMapper(Constant.NOUVEAU_DEVIS_URL, NouveauDevis.class, new UrlPathPageParametersEncoder()));
