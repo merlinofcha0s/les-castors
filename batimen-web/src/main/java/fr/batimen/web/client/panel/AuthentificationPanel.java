@@ -8,9 +8,9 @@ import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
+import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.validator.StringValidator;
 import org.slf4j.Logger;
@@ -31,7 +31,7 @@ public class AuthentificationPanel extends Panel {
     private static final long serialVersionUID = -1634093925835447825L;
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthentificationPanel.class);
 
-    private Form<AuthentificationPanel> loginForm;
+    private StatelessForm<AuthentificationPanel> loginForm;
     private TextField<String> login;
     private PasswordTextField password;
 
@@ -48,7 +48,7 @@ public class AuthentificationPanel extends Panel {
             LOGGER.debug("Initialisation du form d'authentification");
         }
 
-        loginForm = new Form<AuthentificationPanel>("loginForm", new CompoundPropertyModel<AuthentificationPanel>(this));
+        loginForm = new StatelessForm<AuthentificationPanel>("loginForm", new Model<AuthentificationPanel>());
 
         login = new TextField<String>("login", new Model<String>());
         login.setModelObject("Identifiant");
