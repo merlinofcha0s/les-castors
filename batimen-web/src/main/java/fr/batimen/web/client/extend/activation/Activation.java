@@ -17,7 +17,7 @@ public class Activation extends MasterPage {
     private String cleActivation;
     private final Label messageActivationCompte;
     private final Label messageActivationCompte2;
-    private final Image confirmationImg;
+    private Image confirmationImg;
     private final ContextRelativeResource pathImgOk = new ContextRelativeResource("img/thumbsUp.png");
     private final ContextRelativeResource pathImgKo = new ContextRelativeResource("img/error2.png");;
 
@@ -28,9 +28,10 @@ public class Activation extends MasterPage {
         this.setVersioned(false);
         messageActivationCompte = new Label("messageActivationCompte", new Model<String>());
         messageActivationCompte2 = new Label("messageActivationCompte2", new Model<String>());
-        confirmationImg = new Image("confirmationImg", pathImgOk);
 
-        this.add(confirmationImg);
+        pathImgOk.setCachingEnabled(false);
+        pathImgKo.setCachingEnabled(false);
+
         this.add(messageActivationCompte);
         this.add(messageActivationCompte2);
     }
@@ -46,15 +47,15 @@ public class Activation extends MasterPage {
                 messageActivationCompte.setDefaultModelObject("Votre compte est activé !!");
                 messageActivationCompte2
                         .setDefaultModelObject("Vous pouvez maintenant vous connecter à notre espace membre");
-                confirmationImg.setImageResource(pathImgOk);
+                confirmationImg = new Image("confirmationImg", new ContextRelativeResource("img/thumbsup.png"));
             } else if (codeRetourService.equals(Constant.CODE_SERVICE_RETOUR_KO)) {
                 messageActivationCompte.setDefaultModelObject("Problème d'accès au service.");
                 messageActivationCompte2.setDefaultModelObject("Si le probleme persiste contactez nous.");
-                confirmationImg.setImageResource(pathImgKo);
+                confirmationImg = new Image("confirmationImg", pathImgKo);
             } else if (codeRetourService.equals(Constant.CODE_SERVICE_ANNONCE_RETOUR_DEJA_ACTIF)) {
                 messageActivationCompte.setDefaultModelObject("Votre compte est déjà actif");
                 messageActivationCompte2.setDefaultModelObject("");
-                confirmationImg.setImageResource(pathImgKo);
+                confirmationImg = new Image("confirmationImg", pathImgKo);
             } else if (codeRetourService.equals(Constant.CODE_SERVICE_ANNONCE_RETOUR_COMPTE_INEXISTANT)) {
                 getMessageIncorrectKey();
             }
@@ -62,13 +63,15 @@ public class Activation extends MasterPage {
             getMessageIncorrectKey();
         }
 
+        this.addOrReplace(confirmationImg);
+
     }
 
     private void getMessageIncorrectKey() {
         messageActivationCompte.setDefaultModelObject("Clé d'activation incorrecte");
         messageActivationCompte2
                 .setDefaultModelObject("Veuillez suivre le lien contenu dans le mail de confirmation d'inscription");
-        confirmationImg.setImageResource(pathImgKo);
+        confirmationImg = new Image("confirmationImg", pathImgKo);
     }
 
     private int activatingAccount(String cleActivation) {

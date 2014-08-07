@@ -96,6 +96,13 @@ public class TestNouveauDevis extends AbstractITTest {
                 "Votre compte a bien été créé, un e-mail vous a été envoyé, Cliquez sur le lien présent dans celui-ci pour l'activer",
                 driver.findElement(By.cssSelector("h5")).getText());
 
+        driver.get(appUrl
+                + "activation?key=NTNkN2RmYzVkNWU2MDZkZjZlYTVjZGQ2ZGE0ZjljY2JhNGJjZWY5MmIxNmNiOWJmMjk2ZDVhNDY3OTEzMTIyZA==");
+
+        assertEquals(
+                "Votre compte a bien été créé, un e-mail vous a été envoyé, Cliquez sur le lien présent dans celui-ci pour l'activer",
+                driver.findElement(By.cssSelector("h5")).getText());
+
     }
 
     /**
