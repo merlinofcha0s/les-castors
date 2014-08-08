@@ -57,13 +57,13 @@ public abstract class AbstractITTest {
     public static final Operation DELETE_ALL = deleteAllFrom("annonce", "adresse", "client");
     public static final Operation INSERT_USER_DATA = insertInto("client")
             .columns("id", "email", "nom", "prenom", "login", "password", "numeroTel", "dateInscription", "isArtisan",
-                    "isActive")
+                    "isActive", "cleactivation")
             .values(100001, "raiden@batimen.fr", "Casaucau", "Cyril", "raiden",
                     "$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=", "0614125696",
-                    "2014-01-08", false, true)
+                    "2014-01-08", false, true, "lolmdr")
             .values(100002, "xaviern@batimen.fr", "Dupont", "Xavier", "xavier",
                     "$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=", "0614125696",
-                    "2014-01-08", false, false).build();
+                    "2014-01-08", false, false, "lolmdr06").build();
 
     @Before
     public void setUpITTest() throws Exception {

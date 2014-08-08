@@ -3,6 +3,8 @@ package fr.batimen.web.selenium;
 import static com.ninja_squad.dbsetup.Operations.sequenceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -92,17 +94,21 @@ public class TestNouveauDevis extends AbstractITTest {
         driver.findElement(By.id("confirmPassword")).sendKeys("mdrlollol");
         driver.findElement(By.name("cguConfirmation")).click();
         driver.findElement(By.id("validateInscription")).click();
-        assertEquals(
-                "Votre compte a bien été créé, un e-mail vous a été envoyé, Cliquez sur le lien présent dans celui-ci pour l'activer",
-                driver.findElement(By.cssSelector("h5")).getText());
 
-        driver.get(appUrl
-                + "activation?key=NTNkN2RmYzVkNWU2MDZkZjZlYTVjZGQ2ZGE0ZjljY2JhNGJjZWY5MmIxNmNiOWJmMjk2ZDVhNDY3OTEzMTIyZA==");
+        Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("h5"),
+                        "Votre compte a bien été créé, un e-mail vous a été envoyé, Cliquez sur le lien présent dans celui-ci pour l'activer"));
+        assertTrue(checkCondition);
 
-        assertEquals(
-                "Votre compte a bien été créé, un e-mail vous a été envoyé, Cliquez sur le lien présent dans celui-ci pour l'activer",
-                driver.findElement(By.cssSelector("h5")).getText());
+        driver.get(appUrl + "/activation?key=lolmdr06");
 
+        WebElement checkConditionActivationlabel1 = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@id='activation']/h3[1]")));
+        assertNotNull(checkConditionActivationlabel1);
+
+        WebElement checkConditionActivationlabel2 = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@id='activation']/h3[2]")));
+        assertNotNull(checkConditionActivationlabel2);
     }
 
     /**

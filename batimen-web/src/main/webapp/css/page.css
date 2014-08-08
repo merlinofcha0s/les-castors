@@ -152,6 +152,21 @@
 	font-size: 22px;
 }
 
+/* Activation compte */
+.confirmationactivationok{
+	background: url('../img/thumbsup.png');
+	width: 143px;
+	height: 143px;
+	background-repeat: no-repeat;
+}
+
+.confirmationactivationko{
+	background: url('../img/error2.png');
+	width: 143px;
+	height: 143px;
+	background-repeat: no-repeat;
+}
+
 /* Composant Wicket */
 .wicket-mfu-caption {
 	padding-top: 5px;

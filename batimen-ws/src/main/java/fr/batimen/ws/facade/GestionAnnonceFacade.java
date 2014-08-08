@@ -264,11 +264,11 @@ public class GestionAnnonceFacade {
         nouveauClient.setIsArtisan(false);
         nouveauClient.setIsActive(false);
 
-        StringBuilder loginAndMotDePasse = new StringBuilder(nouvelleAnnonceDTO.getClient().getLogin());
-        loginAndMotDePasse.append(nouvelleAnnonceDTO.getClient().getPassword());
+        StringBuilder loginAndEmail = new StringBuilder(nouvelleAnnonceDTO.getClient().getLogin());
+        loginAndEmail.append(nouvelleAnnonceDTO.getClient().getEmail());
 
         nouveauClient
-                .setCleActivation(HashHelper.convertToBase64(HashHelper.hashSHA256(loginAndMotDePasse.toString())));
+                .setCleActivation(HashHelper.convertToBase64(HashHelper.hashSHA256(loginAndEmail.toString())));
 
         return nouveauClient;
     }
