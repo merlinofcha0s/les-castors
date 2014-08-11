@@ -20,7 +20,7 @@ import fr.batimen.core.constant.Constant;
 import fr.batimen.core.exception.EmailException;
 import fr.batimen.dto.CreationAnnonceDTO;
 import fr.batimen.ws.dao.EmailDAO;
-import fr.batimen.ws.entity.Client;
+import fr.batimen.ws.entity.Annonce;
 
 /**
  * Classe de gestion d'envoi de mail.
@@ -49,8 +49,8 @@ public class EmailService {
      * @throws MandrillApiError
      * @throws IOException
      */
-    public boolean envoiMailConfirmationCreationAnnonce(CreationAnnonceDTO nouvelleAnnonceDTO, Client clientDejaInscrit)
-            throws EmailException, MandrillApiError, IOException {
+    public boolean envoiMailConfirmationCreationAnnonce(Annonce nouvelleAnnonce) throws EmailException,
+            MandrillApiError, IOException {
 
         // On prepare l'entete, on ne mets pas de titre.
         MandrillMessage confirmationAnnonceMessage = emailDAO.prepareEmail(null);
@@ -59,17 +59,17 @@ public class EmailService {
         // On construit les recepteurs
         Map<String, String> recipients = new HashMap<String, String>();
 
-        getNomDestinataire(clientDejaInscrit.getNom(), clientDejaInscrit.getPrenom(), clientDejaInscrit.getLogin(),
-                nomDestinataire);
-        recipients.put(nomDestinataire.toString(), clientDejaInscrit.getEmail());
+        getNomDestinataire(nouvelleAnnonce.getDemandeur().getNom(), nouvelleAnnonce.getDemandeur().getPrenom(),
+                nouvelleAnnonce.getDemandeur().getLogin(), nomDestinataire);
+        recipients.put(nomDestinataire.toString(), nouvelleAnnonce.getDemandeur().getEmail());
 
         // On charge le contenu
         Map<String, String> templateContent = new HashMap<String, String>();
-        templateContent.put(Constant.TAG_EMAIL_USERNAME, nouvelleAnnonceDTO.getClient().getLogin());
-        templateContent.put(Constant.TAG_EMAIL_METIER, nouvelleAnnonceDTO.getCategorieMetier().getName());
-        templateContent.put(Constant.TAG_EMAIL_SOUS_CATEGORIE_METIER, nouvelleAnnonceDTO.getSousCategorie().getName());
-        templateContent.put(Constant.TAG_EMAIL_DELAI_INTERVENTION, nouvelleAnnonceDTO.getDelaiIntervention().getType());
-        templateContent.put(Constant.TAG_EMAIL_TYPE_CONTACT, nouvelleAnnonceDTO.getTypeContact().getAffichage());
+        templateContent.put(Constant.TAG_EMAIL_USERNAME, nouvelleAnnonce.getDemandeur().getLogin());
+        templateContent.put(Constant.TAG_EMAIL_METIER, nouvelleAnnonce.getCategorieMetier());
+        templateContent.put(Constant.TAG_EMAIL_SOUS_CATEGORIE_METIER, nouvelleAnnonce.getSousCategorieMetier());
+        templateContent.put(Constant.TAG_EMAIL_DELAI_INTERVENTION, nouvelleAnnonce.getDelaiIntervention().getType());
+        templateContent.put(Constant.TAG_EMAIL_TYPE_CONTACT, nouvelleAnnonce.getTypeContact().getAffichage());
 
         // On charge les recepteurs
         emailDAO.prepareRecipient(confirmationAnnonceMessage, recipients, true);

@@ -7,7 +7,7 @@ import fr.batimen.dto.helper.CategorieLoader;
 
 public class DataHelper {
 
-    public static CreationAnnonceDTO getAnnonceData() {
+    public static CreationAnnonceDTO getAnnonceDTOData() {
 
         CreationAnnonceDTO creationAnnonceDTO = new CreationAnnonceDTO();
         // Infos Client
@@ -36,4 +36,5 @@ public class DataHelper {
         return creationAnnonceDTO;
 
     }
+
 }

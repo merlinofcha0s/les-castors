@@ -112,8 +112,7 @@ public class GestionAnnonceFacade {
         try {
             if (nouvelleAnnonce != null) {
                 if (nouvelleAnnonceDTO.getIsSignedUp()) {
-                    emailService.envoiMailConfirmationCreationAnnonce(nouvelleAnnonceDTO,
-                            nouvelleAnnonce.getDemandeur());
+                    emailService.envoiMailConfirmationCreationAnnonce(nouvelleAnnonce);
                 } else {
                     // On recupere l'url du frontend
                     Properties urlProperties = PropertiesUtils.loadPropertiesFile("url.properties");
@@ -267,8 +266,7 @@ public class GestionAnnonceFacade {
         StringBuilder loginAndEmail = new StringBuilder(nouvelleAnnonceDTO.getClient().getLogin());
         loginAndEmail.append(nouvelleAnnonceDTO.getClient().getEmail());
 
-        nouveauClient
-                .setCleActivation(HashHelper.convertToBase64(HashHelper.hashSHA256(loginAndEmail.toString())));
+        nouveauClient.setCleActivation(HashHelper.convertToBase64(HashHelper.hashSHA256(loginAndEmail.toString())));
 
         return nouveauClient;
     }

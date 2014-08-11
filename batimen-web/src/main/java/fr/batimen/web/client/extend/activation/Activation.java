@@ -10,6 +10,13 @@ import fr.batimen.core.constant.Constant;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.ws.client.service.ClientService;
 
+/**
+ * Page de l'application qui sert à activer et à informer le client à propos de
+ * l'activation de son compte.
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class Activation extends MasterPage {
 
     private static final long serialVersionUID = 99813244363266423L;

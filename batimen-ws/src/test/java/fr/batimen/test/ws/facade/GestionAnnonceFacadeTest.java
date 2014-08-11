@@ -37,7 +37,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
     @Before
     public void init() {
-        creationAnnonceDTO = DataHelper.getAnnonceData();
+        creationAnnonceDTO = DataHelper.getAnnonceDTOData();
     }
 
     /**

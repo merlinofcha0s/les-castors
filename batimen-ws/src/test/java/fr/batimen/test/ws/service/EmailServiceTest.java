@@ -40,7 +40,7 @@ public class EmailServiceTest extends AbstractBatimenWsTest {
 
     @Before
     public void init() {
-        creationAnnonceDTO = DataHelper.getAnnonceData();
+        creationAnnonceDTO = DataHelper.getAnnonceDTOData();
     }
 
     @Test
@@ -73,10 +73,13 @@ public class EmailServiceTest extends AbstractBatimenWsTest {
      * @throws EmailException
      */
     @Test
-    @UsingDataSet("datasets/in/client_creation_annonce.yml")
+    @UsingDataSet("datasets/in/email_confirmation_creation_annonce.yml")
     public void sendConfirmationCreationAnnonce() throws MandrillApiError, IOException, EmailException {
         Client johnny = clientDAO.getClientByLoginName("johnny06");
-        boolean noError = emailService.envoiMailConfirmationCreationAnnonce(creationAnnonceDTO, johnny);
+
+        System.out.println("Taille de devis demande : " + johnny.getDevisDemandes().size());
+        Assert.assertTrue(johnny.getDevisDemandes().size() > 0);
+        boolean noError = emailService.envoiMailConfirmationCreationAnnonce(johnny.getDevisDemandes().get(0));
 
         Assert.assertNotNull(johnny);
         Assert.assertTrue(noError);
