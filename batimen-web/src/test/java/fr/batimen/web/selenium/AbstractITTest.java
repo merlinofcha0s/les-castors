@@ -56,10 +56,14 @@ public abstract class AbstractITTest {
     // DBSetup
     public static final Operation DELETE_ALL = deleteAllFrom("annonce", "adresse", "client");
     public static final Operation INSERT_USER_DATA = insertInto("client")
-            .columns("id", "email", "nom", "prenom", "login", "password", "numeroTel", "dateInscription", "isArtisan")
+            .columns("id", "email", "nom", "prenom", "login", "password", "numeroTel", "dateInscription", "isArtisan",
+                    "isActive", "cleactivation")
             .values(100001, "raiden@batimen.fr", "Casaucau", "Cyril", "raiden",
                     "$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=", "0614125696",
-                    "2014-01-08", false).build();
+                    "2014-01-08", false, true, "lolmdr")
+            .values(100002, "xaviern@batimen.fr", "Dupont", "Xavier", "xavier",
+                    "$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=", "0614125696",
+                    "2014-01-08", false, false, "lolmdr06").build();
 
     @Before
     public void setUpITTest() throws Exception {
@@ -144,14 +148,14 @@ public abstract class AbstractITTest {
         }
     }
 
-    protected void connexionApplication(String password) {
+    protected void connexionApplication(String username, String password) {
         driver.findElement(By.id("connexionlbl")).click();
         Boolean checkCondition = (new WebDriverWait(driver, 5)).until(ExpectedConditions
                 .textToBePresentInElementLocated(By.id("ui-id-1"), "Connexion à l'espace client / artisan"));
         assertTrue(checkCondition);
         driver.findElement(By.name("login")).click();
         driver.findElement(By.name("login")).clear();
-        driver.findElement(By.name("login")).sendKeys("raiden");
+        driver.findElement(By.name("login")).sendKeys(username);
         driver.findElement(By.name("password")).click();
         driver.findElement(By.name("password")).clear();
         driver.findElement(By.name("password")).sendKeys(password);

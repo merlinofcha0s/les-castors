@@ -42,9 +42,11 @@ public class ClientDTO extends AbstractDTO {
     private String prenom;
     @NotNull
     private Boolean isArtisan = false;
-
     @Pattern(message = "Numero de téléphone invalide", regexp = ValidatorConstant.CREATION_ANNONCE_TELEPHONE_REGEX)
     private String numeroTel;
+    private String cleActivation;
+    @NotNull
+    private Boolean isActive = false;
 
     /**
      * @return the login
@@ -149,6 +151,36 @@ public class ClientDTO extends AbstractDTO {
      */
     public void setIsArtisan(Boolean isArtisan) {
         this.isArtisan = isArtisan;
+    }
+
+    /**
+     * @return the isActive
+     */
+    public Boolean getIsActive() {
+        return isActive;
+    }
+
+    /**
+     * @param isActive
+     *            the isActive to set
+     */
+    public void setIsActive(Boolean isActive) {
+        this.isActive = isActive;
+    }
+
+    /**
+     * @return the cleActivation
+     */
+    public String getCleActivation() {
+        return cleActivation == null ? "" : cleActivation;
+    }
+
+    /**
+     * @param cleActivation
+     *            the cleActivation to set
+     */
+    public void setCleActivation(String cleActivation) {
+        this.cleActivation = cleActivation;
     }
 
     @Override

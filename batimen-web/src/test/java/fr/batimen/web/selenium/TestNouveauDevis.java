@@ -3,6 +3,8 @@ package fr.batimen.web.selenium;
 import static com.ninja_squad.dbsetup.Operations.sequenceOf;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -38,9 +40,6 @@ public class TestNouveauDevis extends AbstractITTest {
      * Cas de test : L'utilisateur rempli son devis en s'étant authentifié juste
      * avant. Le devis doit se créer correctement.
      * 
-     * Remarque : On saute la selection du département avec selenium, car
-     * Raphael n'est visiblement pas compatible avec selenium.
-     * 
      * @throws InterruptedException
      * 
      */
@@ -55,7 +54,7 @@ public class TestNouveauDevis extends AbstractITTest {
         // On passe l'etape 3
         etape3();
         // On s'authentifie à l'application
-        connexionApplication(AbstractITTest.BON_MOT_DE_PASSE);
+        connexionApplication("raiden", AbstractITTest.BON_MOT_DE_PASSE);
 
         // On vérifie que le label est correcte
         assertEquals("Votre devis a été mis en ligne, nous vous avons envoyé un mail récapitulatif", driver
@@ -66,9 +65,6 @@ public class TestNouveauDevis extends AbstractITTest {
     /**
      * Cas de test : L'utilisateur crée un nouveau devis alors qu'il n'est pas
      * inscrit (et donc pas authentifié). Le devis doit se créer correctement.
-     * 
-     * Remarque : On saute la selection du département avec selenium, car
-     * Raphael n'est visiblement pas compatible avec selenium.
      * 
      * @throws InterruptedException
      */
@@ -98,19 +94,27 @@ public class TestNouveauDevis extends AbstractITTest {
         driver.findElement(By.id("confirmPassword")).sendKeys("mdrlollol");
         driver.findElement(By.name("cguConfirmation")).click();
         driver.findElement(By.id("validateInscription")).click();
-        assertEquals(
-                "Votre compte a bien été créé, un e-mail vous a été envoyé, Cliquez sur le lien présent dans celui-ci pour l'activer",
-                driver.findElement(By.cssSelector("h5")).getText());
 
+        Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("h5"),
+                        "Votre compte a bien été créé, un e-mail vous a été envoyé, Cliquez sur le lien présent dans celui-ci pour l'activer"));
+        assertTrue(checkCondition);
+
+        driver.get(appUrl + "/activation?key=lolmdr06");
+
+        WebElement checkConditionActivationlabel1 = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@id='activation']/h3[1]")));
+        assertNotNull(checkConditionActivationlabel1);
+
+        WebElement checkConditionActivationlabel2 = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@id='activation']/h3[2]")));
+        assertNotNull(checkConditionActivationlabel2);
     }
 
     /**
      * Cas de test : L'utilisateur crée un nouveau devis alors qu'il est inscrit
      * mais pas authentifié, il s'authentifie lors de l'étape 3. Le devis doit
      * se créer correctement.
-     * 
-     * Remarque : On saute la selection du département avec selenium, car
-     * Raphael n'est visiblement pas compatible avec selenium.
      * 
      * @throws InterruptedException
      */
@@ -124,7 +128,7 @@ public class TestNouveauDevis extends AbstractITTest {
         // On remplit l'étape 3
         etape3();
         // On se connecte
-        connexionApplication(BON_MOT_DE_PASSE);
+        connexionApplication("raiden", BON_MOT_DE_PASSE);
 
         assertEquals("Votre devis a été mis en ligne, nous vous avons envoyé un mail récapitulatif", driver
                 .findElement(By.cssSelector("h5")).getText());
@@ -134,9 +138,6 @@ public class TestNouveauDevis extends AbstractITTest {
     /**
      * Cas de test : L'utilisateur crée deux devis, la deuxieme, l'application
      * doit lui renvoyer un message d'erreur.
-     * 
-     * Remarque : On saute la selection du département avec selenium, car
-     * Raphael n'est visiblement pas compatible avec selenium.
      * 
      * @throws InterruptedException
      */
@@ -150,7 +151,7 @@ public class TestNouveauDevis extends AbstractITTest {
         etape2();
         // On passe à l'étape 3
         etape3();
-        connexionApplication(BON_MOT_DE_PASSE);
+        connexionApplication("raiden", BON_MOT_DE_PASSE);
 
         assertEquals("Votre devis a été mis en ligne, nous vous avons envoyé un mail récapitulatif", driver
                 .findElement(By.cssSelector("h5")).getText());

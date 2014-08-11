@@ -20,30 +20,40 @@ import com.ninja_squad.dbsetup.operation.Operation;
  */
 public class TestAuthentification extends AbstractITTest {
 
-	@Override
-	public void prepareDB() throws Exception {
-		Operation operation = sequenceOf(DELETE_ALL, INSERT_USER_DATA);
-		DbSetup dbSetup = new DbSetup(getDriverManagerDestination(), operation);
-		dbSetup.launch();
-	}
+    private final String messageErreur = "Erreur dans la saisie / identifiants inconnues / compte pas activé, veuillez recommencer";
 
-	@Test
-	public void testAuthentificationSuccess() throws Exception {
-		driver.get(appUrl);
-		connexionApplication(AbstractITTest.BON_MOT_DE_PASSE);
-		Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX)).until(ExpectedConditions
-		        .textToBePresentInElementLocated(By.id("connexionlbl"), "Mon Compte"));
-		assertTrue(checkCondition);
-	}
+    @Override
+    public void prepareDB() throws Exception {
+        Operation operation = sequenceOf(DELETE_ALL, INSERT_USER_DATA);
+        DbSetup dbSetup = new DbSetup(getDriverManagerDestination(), operation);
+        dbSetup.launch();
+    }
 
-	@Test
-	public void testAuthentificationFailed() throws Exception {
-		driver.get(appUrl);
-		connexionApplication(AbstractITTest.MAUVAIS_MOT_DE_PASSE);
-		Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX)).until(ExpectedConditions
-		        .textToBePresentInElementLocated(By.id("errorLogin"),
-		                "Erreur dans la saisie ou identifiants inconnues, veuillez recommencer"));
-		assertTrue(checkCondition);
-	}
+    @Test
+    public void testAuthentificationSuccess() throws Exception {
+        driver.get(appUrl);
+        connexionApplication("raiden", AbstractITTest.BON_MOT_DE_PASSE);
+        Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.textToBePresentInElementLocated(By.id("connexionlbl"), "Mon Compte"));
+        assertTrue(checkCondition);
+    }
+
+    @Test
+    public void testAuthentificationFailed() throws Exception {
+        driver.get(appUrl);
+        connexionApplication("raiden", AbstractITTest.MAUVAIS_MOT_DE_PASSE);
+        Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.textToBePresentInElementLocated(By.id("errorLogin"), messageErreur));
+        assertTrue(checkCondition);
+    }
+
+    @Test
+    public void testAuthentificationFailedBecauseNotActivated() throws Exception {
+        driver.get(appUrl);
+        connexionApplication("xavier", AbstractITTest.BON_MOT_DE_PASSE);
+        Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.textToBePresentInElementLocated(By.id("errorLogin"), messageErreur));
+        assertTrue(checkCondition);
+    }
 
 }

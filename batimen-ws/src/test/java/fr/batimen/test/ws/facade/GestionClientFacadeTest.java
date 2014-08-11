@@ -8,10 +8,12 @@ import java.util.Locale;
 import javax.inject.Inject;
 
 import org.jboss.arquillian.persistence.UsingDataSet;
+import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.batimen.core.constant.Constant;
 import fr.batimen.core.exception.BackendException;
 import fr.batimen.core.exception.DuplicateEntityException;
 import fr.batimen.dto.ClientDTO;
@@ -117,5 +119,24 @@ public class GestionClientFacadeTest extends AbstractBatimenWsTest {
         clientDuplicate.setDateInscription(calClient.getTime());
 
         clientDAO.saveNewClient(clientDuplicate);
+    }
+
+    /**
+     * On test le service d'activation de compte
+     * 
+     * @throws BackendException
+     */
+    @Test
+    @UsingDataSet("datasets/in/clients.yml")
+    public void testActivationClient() throws BackendException {
+        int codeRetour = ClientService
+                .activateAccount("NTNkN2RmYzVkNWU2MDZkZjZlYTVjZGQ2ZGE0ZjljY2JhNGJjZWY5MmIxNmNiOWJmMjk2ZDVhNDY3OTEzMTIyZA==");
+
+        // On charge le client pour vérifié les infos d'activation.
+        ClientDTO client = ClientService.getClientByEmail("mdr@lol.com");
+
+        Assert.assertFalse(client.getCleActivation().equals(""));
+        Assert.assertTrue(client.getIsActive().equals(Boolean.TRUE));
+        Assert.assertTrue(codeRetour == Constant.CODE_SERVICE_RETOUR_OK);
     }
 }

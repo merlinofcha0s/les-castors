@@ -17,52 +17,79 @@ import fr.batimen.ws.client.WsConnector;
  */
 public class ClientService {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(ClientService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ClientService.class);
 
-	private ClientService() {
+    private ClientService() {
 
-	}
+    }
 
-	/**
-	 * Verification nom utilisateur / mdp
-	 * 
-	 * @param loginDTO
-	 *            l'objet d'échange pour verifier les données.
-	 * @return true si le couple login / mdp correspond.
-	 */
-	public static ClientDTO login(LoginDTO loginDTO) {
+    /**
+     * Verification nom utilisateur / mdp
+     * 
+     * @param loginDTO
+     *            l'objet d'échange pour verifier les données.
+     * @return true si le couple login / mdp correspond.
+     */
+    public static ClientDTO login(LoginDTO loginDTO) {
 
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Début appel service login + deserialization");
-		}
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Début appel service login + deserialization");
+        }
 
-		String objectInJSON = WsConnector.getInstance().sendRequest(WsPath.GESTION_CLIENT_SERVICE_PATH,
-		        WsPath.GESTION_CLIENT_SERVICE_LOGIN, loginDTO);
+        String objectInJSON = WsConnector.getInstance().sendRequest(WsPath.GESTION_CLIENT_SERVICE_PATH,
+                WsPath.GESTION_CLIENT_SERVICE_LOGIN, loginDTO);
 
-		ClientDTO clientDTO = ClientDTO.deserializeUserDTO(objectInJSON);
+        ClientDTO clientDTO = ClientDTO.deserializeUserDTO(objectInJSON);
 
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Fin appel service login + deserialization");
-		}
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Fin appel service login + deserialization");
+        }
 
-		return clientDTO;
-	}
+        return clientDTO;
+    }
 
-	public static ClientDTO getClientByEmail(String email) {
+    /**
+     * Récupérer un client a partir de son email
+     * 
+     * @param email
+     *            L'email du client
+     * @return Les informations du client, vide si il n'existe pas.
+     */
+    public static ClientDTO getClientByEmail(String email) {
 
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Début appel service de recuperation client par email + deserialization");
-		}
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Début appel service de recuperation client par email + deserialization");
+        }
 
-		String objectInJSON = WsConnector.getInstance().sendRequest(WsPath.GESTION_CLIENT_SERVICE_PATH,
-		        WsPath.GESTION_CLIENT_SERVICE_BY_EMAIL, email);
+        String objectInJSON = WsConnector.getInstance().sendRequest(WsPath.GESTION_CLIENT_SERVICE_PATH,
+                WsPath.GESTION_CLIENT_SERVICE_BY_EMAIL, email);
 
-		ClientDTO clientDTO = ClientDTO.deserializeUserDTO(objectInJSON);
+        ClientDTO clientDTO = ClientDTO.deserializeUserDTO(objectInJSON);
 
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("Fin appel service service de recuperation client par email + deserialization");
-		}
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Fin appel service service de recuperation client par email + deserialization");
+        }
 
-		return clientDTO;
-	}
+        return clientDTO;
+    }
+
+    public static int activateAccount(String cleActivation) {
+
+        int resultatService;
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Début appel service de recuperation client par email + deserialization");
+        }
+
+        String objectInJSON = WsConnector.getInstance().sendRequest(WsPath.GESTION_CLIENT_SERVICE_PATH,
+                WsPath.GESTION_CLIENT_SERVICE_ACTIVATION, cleActivation);
+
+        resultatService = Integer.parseInt(objectInJSON);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Fin appel service service de recuperation client par email + deserialization");
+        }
+
+        return resultatService;
+    }
 }

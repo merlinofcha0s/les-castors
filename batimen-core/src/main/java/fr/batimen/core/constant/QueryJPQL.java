@@ -8,22 +8,25 @@ package fr.batimen.core.constant;
  */
 public class QueryJPQL {
 
-	private QueryJPQL() {
+    private QueryJPQL() {
 
-	}
+    }
 
-	// Entity User
-	public static final String CLIENT_LOGIN = "login";
-	public static final String CLIENT_BY_EMAIL = "clientByLoginAndEmail";
+    // Entity User
+    public static final String CLIENT_LOGIN = "login";
+    public static final String CLIENT_BY_EMAIL = "clientByLoginAndEmail";
+    public static final String CLIENT_BY_ACTIVATION_KEY = "clientByActivationKey";
 
-	// Parametre Query Entity client
-	public static final String PARAM_CLIENT_LOGIN = "login";
-	public static final String PARAM_CLIENT_EMAIL = "email";
-	// Entity Annonce
-	public static final String ANNONCE_BY_LOGIN = "annonceByLogin";
-	public static final String ANNONCE_BY_TITLE_AND_DESCRIPTION = "annonceByTitleAndDescription";
+    // Parametre Query Entity client
+    public static final String PARAM_CLIENT_LOGIN = "login";
+    public static final String PARAM_CLIENT_EMAIL = "email";
+    public static final String PARAM_CLIENT_ACTIVATION_KEY = "cleActivation";
 
-	// Parametre Query Entity annonce
-	public static final String PARAM_ANNONCE_TITRE = "titre";
-	public static final String PARAM_ANNONCE_DESCRIPTION = "description";
+    // Entity Annonce
+    public static final String ANNONCE_BY_LOGIN = "annonceByLogin";
+    public static final String ANNONCE_BY_TITLE_AND_DESCRIPTION = "annonceByTitleAndDescription";
+
+    // Parametre Query Entity annonce
+    public static final String PARAM_ANNONCE_TITRE = "titre";
+    public static final String PARAM_ANNONCE_DESCRIPTION = "description";
 }

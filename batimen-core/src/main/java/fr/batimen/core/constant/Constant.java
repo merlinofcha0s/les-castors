@@ -18,7 +18,11 @@ public class Constant {
     public static final Integer CODE_SERVICE_RETOUR_KO = 1;
 
     // Code retour propre aux annonces
-    public static final Integer CODE_SERVICE_RETOUR_DUPLICATE = 10;
+    public static final Integer CODE_SERVICE_ANNONCE_RETOUR_DUPLICATE = 10;
+
+    // Code Retour service propres aux client
+    public static final Integer CODE_SERVICE_ANNONCE_RETOUR_DEJA_ACTIF = 10;
+    public static final Integer CODE_SERVICE_ANNONCE_RETOUR_COMPTE_INEXISTANT = 11;
 
     // Roles accés WS (Glassfish AUTH)
     public static final String USERS_ROLE = "users";
@@ -39,6 +43,7 @@ public class Constant {
     public static final String CONTACT_URL = "/contact";
     public static final String CGU_URL = "/cgu";
     public static final String NOUVEAU_DEVIS_URL = "/nouveaudevis";
+    public static final String ACTIVATION = "/activation";
 
     // Email
     public static final String EMAIL_FROM = "notifications@lescastors.fr";
@@ -50,6 +55,7 @@ public class Constant {
 
     // Template Email
     public static final String TEMPLATE_CONFIRMATION_ANNONCE = "confirmation_creation_annonce";
+    public static final String TEMPLATE_ACTIVATION_COMPTE = "activation_compte";
 
     // Creation annonce tags Email
     public static final String TAG_EMAIL_USERNAME = "username";
@@ -58,5 +64,6 @@ public class Constant {
     public static final String TAG_EMAIL_SOUS_CATEGORIE_METIER = "souscategoriemetier";
     public static final String TAG_EMAIL_TYPE_CONTACT = "typecontact";
     public static final String TAG_EMAIL_DELAI_INTERVENTION = "delaiintervention";
+    public static final String TAG_EMAIL_ACTIVATION_LINK = "lienactivation";
 
 }

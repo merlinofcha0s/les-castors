@@ -146,11 +146,11 @@ public class EmailDAO {
         if (emailActive) {
             MandrillMessageStatus[] messagesStatus = mandrillApi.messages().sendTemplate(templateName, templateContent,
                     message, false);
+
             return checkErrorOnSentEmail(messagesStatus);
         } else {
             return true;
         }
-
     }
 
     /**
@@ -180,10 +180,8 @@ public class EmailDAO {
      * Charge les parametres pour communiquer avec mandrillapp
      */
     private void getMessageProperties() {
-
         final Properties appProperties = PropertiesUtils.loadPropertiesFile("email.properties");
         apiKey = appProperties.getProperty("mandrill.api.key");
         emailActive = Boolean.valueOf(appProperties.getProperty("email.active"));
-
     }
 }

@@ -76,8 +76,6 @@
 					<configuration>
 						<show>protected</show>
 						<nohelp>false</nohelp>
-						<detectJavaApiLink>false</detectJavaApiLink>
-						<detectLinks>false</detectLinks>
 						<encoding>UTF-8</encoding>
 					</configuration>
 					<executions>
@@ -86,14 +84,7 @@
 							<goals>
 								<goal>aggregate</goal>
 							</goals>
-							<phase>install</phase>
-						</execution>
-						<execution>
-							<id>generate-javadoc</id>
-							<goals>
-								<goal>javadoc</goal>
-							</goals>
-							<phase>install</phase>
+							<phase>site</phase>
 						</execution>
 					</executions>
 				</plugin>

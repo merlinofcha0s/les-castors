@@ -54,6 +54,9 @@
 		<!-- Email -->
 		<mandrill.api.key>OOBiT-ollMvq7_JaMjyDOQ</mandrill.api.key>
 		<email.active>true</email.active>
+		
+		<!-- URL du frontend -->
+		<url.frontend.web>https://127.0.0.1:8181/batimen-web/</url.frontend.web>
 	</properties>
 
 	<issueManagement>
@@ -256,7 +259,6 @@
 		<dependency>
 			<groupId>com.lambdaworks</groupId>
 			<artifactId>scrypt</artifactId>
-			<version>1.4.0</version>
 			<scope>compile</scope>
 		</dependency>
 
@@ -389,6 +391,9 @@
 				<!-- <mandrill.api.key>AqM7U8jIxFR7GURuupcsIA</mandrill.api.key> -->
 				<mandrill.api.key>OOBiT-ollMvq7_JaMjyDOQ</mandrill.api.key>
 				<email.active>true</email.active>
+				
+				<!-- URL du frontend -->
+				<url.frontend.web>https://127.0.0.1:6161/batimen-web/</url.frontend.web>
 			</properties>
 			<build>
 				<plugins>
