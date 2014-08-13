@@ -5,12 +5,10 @@ import java.util.Properties;
 import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
-import org.apache.wicket.core.request.mapper.MountedMapper;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.request.Url;
-import org.apache.wicket.request.mapper.parameter.UrlPathPageParametersEncoder;
 import org.apache.wicket.request.resource.UrlResourceReference;
 import org.odlabs.wiquery.ui.themes.WiQueryCoreThemeResourceReference;
 import org.slf4j.Logger;
@@ -24,6 +22,7 @@ import fr.batimen.web.client.extend.Contact;
 import fr.batimen.web.client.extend.MonCompte;
 import fr.batimen.web.client.extend.QuiSommeNous;
 import fr.batimen.web.client.extend.activation.Activation;
+import fr.batimen.web.client.extend.artisan.NouveauArtisan;
 import fr.batimen.web.client.extend.authentification.Authentification;
 import fr.batimen.web.client.extend.error.AccesInterdit;
 import fr.batimen.web.client.extend.error.ErreurInterne;
@@ -93,10 +92,10 @@ public class BatimenApplication extends AuthenticatedWebApplication {
         mountPage(Constant.QUI_SOMMES_NOUS_URL, QuiSommeNous.class);
         mountPage(Constant.CONTACT_URL, Contact.class);
         mountPage(Constant.CGU_URL, CGU.class);
-        mountPage(Constant.ACTIVATION, Activation.class);
+        mountPage(Constant.ACTIVATION_URL, Activation.class);
+        mountPage(Constant.PARTENAIRE_URL, NouveauArtisan.class);
+        mountPage(Constant.NOUVEAU_DEVIS_URL, NouveauDevis.class);
         mountPage("/404", NonTrouvee.class);
-        // Encode la page de cette maniere : nouveaudevis/departement/06
-        mount(new MountedMapper(Constant.NOUVEAU_DEVIS_URL, NouveauDevis.class, new UrlPathPageParametersEncoder()));
 
         // Config des pages d'erreurs
         getApplicationSettings().setInternalErrorPage(ErreurInterne.class);
