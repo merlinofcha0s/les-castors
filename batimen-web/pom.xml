@@ -32,7 +32,7 @@
 	</scm>
 
 	<properties>
-		<wicket.version>6.15.0</wicket.version>
+		<wicket.version>6.16.0</wicket.version>
 		<jersey.client.version>1.17</jersey.client.version>
 
 		<wicket.mode>development</wicket.mode>
@@ -97,14 +97,13 @@
 			</testResource>
 		</testResources>
 		<plugins>
-			<!-- Javadoc -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-eclipse-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
 			</plugin>
 			<!-- Génération du war -->
 			<plugin>
