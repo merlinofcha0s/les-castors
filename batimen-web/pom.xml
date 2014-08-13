@@ -32,7 +32,7 @@
 	</scm>
 
 	<properties>
-		<wicket.version>6.15.0</wicket.version>
+		<wicket.version>6.16.0</wicket.version>
 		<jersey.client.version>1.17</jersey.client.version>
 
 		<wicket.mode>development</wicket.mode>
