@@ -1,4 +1,4 @@
-package fr.batimen.web.client.extend.artisan;
+package fr.batimen.web.client.extend.nouveau.artisan;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +23,8 @@ public class NouveauArtisan extends MasterPage {
     // Composants étape 1
     private final MapFrance carteFrance;
 
+    // Composant étape 2
+
     public NouveauArtisan() {
         super("Inscription d'un nouveau partenaire qui effectuera les travaux chez un particulier",
                 "Artisan Rénovation Inscription", "Nouveau partenaire", true, "img/bg_title1.jpg");
@@ -41,8 +43,7 @@ public class NouveauArtisan extends MasterPage {
         etapes.add("Sélectionner un departement");
         etapes.add("Informations du dirigeant");
         etapes.add("Informations de l'entreprise");
-        etapes.add("Vos options");
-        etapes.add("Informations de paiement");
+        etapes.add("Confirmation");
 
         try {
             navigationWizard = new NavigationWizard("navigationWizard", etapes);
@@ -51,7 +52,6 @@ public class NouveauArtisan extends MasterPage {
                 LOGGER.error("Problème avec le chargement du wizard", fee);
             }
         }
-
         this.add(navigationWizard);
     }
 

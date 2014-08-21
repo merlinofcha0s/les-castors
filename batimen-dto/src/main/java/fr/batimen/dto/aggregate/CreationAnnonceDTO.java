@@ -1,4 +1,12 @@
-package fr.batimen.dto;
+package fr.batimen.dto.aggregate;
+
+import static fr.batimen.dto.constant.ValidatorConstant.ADRESSE_MAX;
+import static fr.batimen.dto.constant.ValidatorConstant.ADRESSE_MIN;
+import static fr.batimen.dto.constant.ValidatorConstant.CODE_POSTAL_REGEX;
+import static fr.batimen.dto.constant.ValidatorConstant.COMPLEMENT_ADRESSE_MAX;
+import static fr.batimen.dto.constant.ValidatorConstant.CREATION_ANNONCE_DESCRIPTION_MAX;
+import static fr.batimen.dto.constant.ValidatorConstant.CREATION_ANNONCE_DESCRIPTION_MIN;
+import static fr.batimen.dto.constant.ValidatorConstant.VILLE_MAX;
 
 import java.io.File;
 import java.lang.reflect.Type;
@@ -16,7 +24,10 @@ import javax.validation.constraints.Size;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import fr.batimen.dto.constant.ValidatorConstant;
+import fr.batimen.dto.AbstractDTO;
+import fr.batimen.dto.CategorieMetierDTO;
+import fr.batimen.dto.ClientDTO;
+import fr.batimen.dto.SousCategorieMetierDTO;
 import fr.batimen.dto.enums.DelaiIntervention;
 import fr.batimen.dto.enums.TypeContact;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
@@ -39,8 +50,7 @@ public class CreationAnnonceDTO extends AbstractDTO {
     @NotNull
     private SousCategorieMetierDTO sousCategorie;
     @NotNull
-    @Size(min = ValidatorConstant.CREATION_ANNONCE_DESCRIPTION_MIN,
-            max = ValidatorConstant.CREATION_ANNONCE_DESCRIPTION_MAX)
+    @Size(min = CREATION_ANNONCE_DESCRIPTION_MIN, max = CREATION_ANNONCE_DESCRIPTION_MAX)
     private String description;
     @NotNull
     private TypeContact typeContact;
@@ -48,16 +58,16 @@ public class CreationAnnonceDTO extends AbstractDTO {
     private DelaiIntervention delaiIntervention;
     private List<File> photos = new ArrayList<File>();
     @NotNull
-    @Size(min = ValidatorConstant.CREATION_ANNONCE_ADRESSE_MIN, max = ValidatorConstant.CREATION_ANNONCE_ADRESSE_MAX)
+    @Size(min = ADRESSE_MIN, max = ADRESSE_MAX)
     private String adresse;
     @NotNull
-    @Size(max = ValidatorConstant.CREATION_ANNONCE_COMPLEMENT_ADRESSE_MAX)
+    @Size(max = COMPLEMENT_ADRESSE_MAX)
     private String complementAdresse;
     @NotNull
-    @Pattern(message = "Format code postal invalide", regexp = ValidatorConstant.CREATION_ANNONCE_CODE_POSTAL_REGEX)
+    @Pattern(message = "Format code postal invalide", regexp = CODE_POSTAL_REGEX)
     private String codePostal;
     @NotNull
-    @Size(max = ValidatorConstant.CREATION_ANNONCE_VILLE_MAX)
+    @Size(max = VILLE_MAX)
     private String ville;
     @NotNull
     private Integer numeroEtape = 1;
@@ -69,6 +79,7 @@ public class CreationAnnonceDTO extends AbstractDTO {
     // Inscription
     @Valid
     private final ClientDTO client = new ClientDTO();
+
     private Boolean isSignedUp = false;
 
     public String getDescription() {

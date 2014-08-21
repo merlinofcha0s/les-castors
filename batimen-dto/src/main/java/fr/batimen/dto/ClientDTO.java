@@ -1,5 +1,15 @@
 package fr.batimen.dto;
 
+import static fr.batimen.dto.constant.ValidatorConstant.CLIENT_NOM_MAX;
+import static fr.batimen.dto.constant.ValidatorConstant.CLIENT_NOM_MIN;
+import static fr.batimen.dto.constant.ValidatorConstant.CLIENT_PRENOM_MAX;
+import static fr.batimen.dto.constant.ValidatorConstant.CLIENT_PRENOM_MIN;
+import static fr.batimen.dto.constant.ValidatorConstant.LOGIN_RANGE_MAX;
+import static fr.batimen.dto.constant.ValidatorConstant.LOGIN_RANGE_MIN;
+import static fr.batimen.dto.constant.ValidatorConstant.PASSWORD_RANGE_MAX;
+import static fr.batimen.dto.constant.ValidatorConstant.PASSWORD_RANGE_MIN;
+import static fr.batimen.dto.constant.ValidatorConstant.TELEPHONE_REGEX;
+
 import java.lang.reflect.Type;
 import java.util.List;
 import java.util.Objects;
@@ -13,7 +23,6 @@ import org.hibernate.validator.constraints.Email;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
-import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 
 /**
@@ -29,20 +38,20 @@ public class ClientDTO extends AbstractDTO {
 	 */
     private static final long serialVersionUID = 908669177512952849L;
 
-    @Size(min = ValidatorConstant.LOGIN_RANGE_MIN, max = ValidatorConstant.LOGIN_RANGE_MAX)
+    @Size(min = LOGIN_RANGE_MIN, max = LOGIN_RANGE_MAX)
     private String login;
-    @Size(min = ValidatorConstant.PASSWORD_RANGE_MIN, max = ValidatorConstant.PASSWORD_RANGE_MAX)
+    @Size(min = PASSWORD_RANGE_MIN, max = PASSWORD_RANGE_MAX)
     private String password;
     @Email
     @Size(max = 128)
     private String email;
-    @Size(min = ValidatorConstant.CREATION_ANNONCE_NOM_MIN, max = ValidatorConstant.CREATION_ANNONCE_NOM_MAX)
+    @Size(min = CLIENT_NOM_MIN, max = CLIENT_NOM_MAX)
     private String nom;
-    @Size(min = ValidatorConstant.CREATION_ANNONCE_PRENOM_MIN, max = ValidatorConstant.CREATION_ANNONCE_PRENOM_MAX)
+    @Size(min = CLIENT_PRENOM_MIN, max = CLIENT_PRENOM_MAX)
     private String prenom;
     @NotNull
     private Boolean isArtisan = false;
-    @Pattern(message = "Numero de téléphone invalide", regexp = ValidatorConstant.CREATION_ANNONCE_TELEPHONE_REGEX)
+    @Pattern(message = "Numero de téléphone invalide", regexp = TELEPHONE_REGEX)
     private String numeroTel;
     private String cleActivation;
     @NotNull

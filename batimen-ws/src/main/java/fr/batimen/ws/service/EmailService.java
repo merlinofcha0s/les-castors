@@ -18,7 +18,7 @@ import com.microtripit.mandrillapp.lutung.view.MandrillMessage.MergeVar;
 
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.exception.EmailException;
-import fr.batimen.dto.CreationAnnonceDTO;
+import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.ws.dao.EmailDAO;
 import fr.batimen.ws.entity.Annonce;
 

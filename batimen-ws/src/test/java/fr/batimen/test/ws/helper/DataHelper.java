@@ -1,6 +1,6 @@
 package fr.batimen.test.ws.helper;
 
-import fr.batimen.dto.CreationAnnonceDTO;
+import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.enums.DelaiIntervention;
 import fr.batimen.dto.enums.TypeContact;
 import fr.batimen.dto.helper.CategorieLoader;

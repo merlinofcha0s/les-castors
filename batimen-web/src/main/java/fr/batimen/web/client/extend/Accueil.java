@@ -2,7 +2,7 @@ package fr.batimen.web.client.extend;
 
 import org.apache.wicket.markup.html.link.Link;
 
-import fr.batimen.web.client.extend.artisan.NouveauArtisan;
+import fr.batimen.web.client.extend.nouveau.artisan.NouveauArtisan;
 import fr.batimen.web.client.extend.nouveau.devis.NouveauDevis;
 import fr.batimen.web.client.master.MasterPage;
 

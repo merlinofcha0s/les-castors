@@ -21,7 +21,7 @@ import fr.batimen.core.constant.Constant;
 import fr.batimen.core.exception.FrontEndException;
 import fr.batimen.core.security.HashHelper;
 import fr.batimen.dto.ClientDTO;
-import fr.batimen.dto.CreationAnnonceDTO;
+import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.web.client.component.MapFrance;
 import fr.batimen.web.client.component.NavigationWizard;
 import fr.batimen.web.client.event.Event;

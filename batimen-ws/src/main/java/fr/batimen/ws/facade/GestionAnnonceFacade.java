@@ -32,7 +32,7 @@ import fr.batimen.core.exception.DuplicateEntityException;
 import fr.batimen.core.exception.EmailException;
 import fr.batimen.core.security.HashHelper;
 import fr.batimen.core.utils.PropertiesUtils;
-import fr.batimen.dto.CreationAnnonceDTO;
+import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.ws.dao.AdresseDAO;
 import fr.batimen.ws.dao.AnnonceDAO;

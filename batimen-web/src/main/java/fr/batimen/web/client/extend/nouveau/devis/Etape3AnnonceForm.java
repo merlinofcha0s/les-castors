@@ -13,8 +13,8 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 
-import fr.batimen.dto.CreationAnnonceDTO;
 import fr.batimen.dto.SousCategorieMetierDTO;
+import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.dto.enums.DelaiIntervention;
 import fr.batimen.dto.enums.TypeContact;
@@ -23,7 +23,7 @@ import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.batimen.web.client.extend.nouveau.devis.event.CategorieEvent;
 
 /**
- * Form de l'etape 2 de création d'annonce.
+ * Form de l'etape 3 de création d'annonce.
  * 
  * @author Casaucau Cyril
  * 
@@ -89,29 +89,29 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
         TextField<String> adresseField = new TextField<String>("adresse");
         adresseField.setRequired(true);
         adresseField.setMarkupId("adresseField");
-        adresseField.add(StringValidator.lengthBetween(ValidatorConstant.CREATION_ANNONCE_ADRESSE_MIN,
-                ValidatorConstant.CREATION_ANNONCE_ADRESSE_MAX));
+        adresseField.add(StringValidator.lengthBetween(ValidatorConstant.ADRESSE_MIN,
+                ValidatorConstant.ADRESSE_MAX));
         adresseField.add(new ErrorHighlightBehavior());
         adresseField.add(new RequiredBorderBehaviour());
 
         TextField<String> adresseComplementField = new TextField<String>("complementAdresse");
         adresseComplementField.setMarkupId("adresseComplementField");
         adresseComplementField.add(StringValidator
-                .maximumLength(ValidatorConstant.CREATION_ANNONCE_COMPLEMENT_ADRESSE_MAX));
+                .maximumLength(ValidatorConstant.COMPLEMENT_ADRESSE_MAX));
         adresseComplementField.add(new ErrorHighlightBehavior());
         adresseComplementField.add(new RequiredBorderBehaviour());
 
         TextField<String> codePostalField = new TextField<String>("codePostal");
         codePostalField.setRequired(true);
         codePostalField.setMarkupId("codePostalField");
-        codePostalField.add(new PatternValidator(ValidatorConstant.CREATION_ANNONCE_CODE_POSTAL_REGEX));
+        codePostalField.add(new PatternValidator(ValidatorConstant.CODE_POSTAL_REGEX));
         codePostalField.add(new ErrorHighlightBehavior());
         codePostalField.add(new RequiredBorderBehaviour());
 
         TextField<String> villeField = new TextField<String>("ville");
         villeField.setRequired(true);
         villeField.setMarkupId("villeField");
-        villeField.add(StringValidator.maximumLength(ValidatorConstant.CREATION_ANNONCE_VILLE_MAX));
+        villeField.add(StringValidator.maximumLength(ValidatorConstant.VILLE_MAX));
         villeField.add(new ErrorHighlightBehavior());
         villeField.add(new RequiredBorderBehaviour());
 

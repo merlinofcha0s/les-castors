@@ -13,7 +13,7 @@ import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 
-import fr.batimen.dto.CreationAnnonceDTO;
+import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
@@ -24,7 +24,7 @@ import fr.batimen.web.client.validator.EmailUniquenessValidator;
 import fr.batimen.web.client.validator.LoginUniquenessValidator;
 
 /**
- * Form de l'etape 3 de création d'annonce.
+ * Form de l'etape 4 de création d'annonce.
  * 
  * @author Casaucau Cyril
  * 
@@ -49,20 +49,20 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
 
         nomField = new TextField<String>("client.nom");
         nomField.setMarkupId("nom");
-        nomField.add(StringValidator.lengthBetween(ValidatorConstant.CREATION_ANNONCE_NOM_MIN,
-                ValidatorConstant.CREATION_ANNONCE_NOM_MAX));
+        nomField.add(StringValidator.lengthBetween(ValidatorConstant.CLIENT_NOM_MIN,
+                ValidatorConstant.CLIENT_NOM_MAX));
 
         prenomField = new TextField<String>("client.prenom");
         prenomField.setMarkupId("prenom");
-        prenomField.add(StringValidator.lengthBetween(ValidatorConstant.CREATION_ANNONCE_PRENOM_MIN,
-                ValidatorConstant.CREATION_ANNONCE_PRENOM_MAX));
+        prenomField.add(StringValidator.lengthBetween(ValidatorConstant.CLIENT_PRENOM_MIN,
+                ValidatorConstant.CLIENT_PRENOM_MAX));
 
         numeroTelField = new TextField<String>("client.numeroTel");
         numeroTelField.setMarkupId("numeroTel");
         numeroTelField.setRequired(true);
         numeroTelField.add(new RequiredBorderBehaviour());
         numeroTelField.add(new ErrorHighlightBehavior());
-        numeroTelField.add(new PatternValidator(ValidatorConstant.CREATION_ANNONCE_TELEPHONE_REGEX));
+        numeroTelField.add(new PatternValidator(ValidatorConstant.TELEPHONE_REGEX));
 
         emailField = new TextField<String>("client.email");
         emailField.setMarkupId("email");

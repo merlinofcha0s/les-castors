@@ -109,6 +109,7 @@ public class TestNouveauDevis extends AbstractITTest {
         WebElement checkConditionActivationlabel2 = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@id='activation']/h3[2]")));
         assertNotNull(checkConditionActivationlabel2);
+
     }
 
     /**

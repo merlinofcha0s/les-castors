@@ -22,12 +22,12 @@ import fr.batimen.web.client.extend.Contact;
 import fr.batimen.web.client.extend.MonCompte;
 import fr.batimen.web.client.extend.QuiSommeNous;
 import fr.batimen.web.client.extend.activation.Activation;
-import fr.batimen.web.client.extend.artisan.NouveauArtisan;
 import fr.batimen.web.client.extend.authentification.Authentification;
 import fr.batimen.web.client.extend.error.AccesInterdit;
 import fr.batimen.web.client.extend.error.ErreurInterne;
 import fr.batimen.web.client.extend.error.Expiree;
 import fr.batimen.web.client.extend.error.NonTrouvee;
+import fr.batimen.web.client.extend.nouveau.artisan.NouveauArtisan;
 import fr.batimen.web.client.extend.nouveau.devis.NouveauDevis;
 import fr.batimen.web.client.session.BatimenSession;
 
