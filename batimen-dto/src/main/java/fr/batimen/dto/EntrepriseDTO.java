@@ -24,7 +24,7 @@ public class EntrepriseDTO extends AbstractDTO {
     @Pattern(message = "Format siret invalide", regexp = ENTREPRISE_SIRET_REGEXP)
     private String siret;
     @AssertTrue(message = "Siret invalide")
-    private final boolean isSiretValide = SiretValidator.isSiretValide(siret);
+    private final boolean isSiretValide = SiretValidator.isSiretValide(getSiret());
     @NotNull
     private CategorieMetierDTO categorieMetier;
     @Size(min = ENTREPRISE_NOM_COMPLET_MIN, max = ENTREPRISE_NOM_COMPLET_MAX)
@@ -102,7 +102,11 @@ public class EntrepriseDTO extends AbstractDTO {
      * @return the siret
      */
     public String getSiret() {
-        return siret;
+        if (siret == null) {
+            return "";
+        } else {
+            return siret;
+        }
     }
 
     /**

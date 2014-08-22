@@ -240,7 +240,7 @@ public class CreationAnnonceDTO extends AbstractDTO {
      */
     @Override
     public int hashCode() {
-        return Objects.hashCode(Objects.hash(/* this.categorieMetier, */this.description, this.codePostal, this.ville));
+        return Objects.hashCode(Objects.hash(this.description, this.codePostal, this.ville));
     }
 
     /*
@@ -256,10 +256,7 @@ public class CreationAnnonceDTO extends AbstractDTO {
 
         if (object instanceof CreationAnnonceDTO) {
             CreationAnnonceDTO other = (CreationAnnonceDTO) object;
-            return /*
-                    * Objects.equals(this.categorieMetier,
-                    * other.categorieMetier) &&
-                    */Objects.equals(this.description, other.description)
+            return Objects.equals(this.description, other.description)
                     && Objects.equals(this.codePostal, other.codePostal) && Objects.equals(this.ville, other.ville);
         }
         return false;

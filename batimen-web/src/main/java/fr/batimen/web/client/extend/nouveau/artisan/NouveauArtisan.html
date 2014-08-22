@@ -1,4 +1,33 @@
 <wicket:extend>
 	<div wicket:id="navigationWizard"></div>
 	<div wicket:id="mapFrance"></div>
+	<div wicket:id="containerEtape2">
+		<div class="row-fluid">
+			<div class="span12 module_cont module_text_area module_small_padding">
+				<div class="bg_title">
+					<h4 class="headInModule">Renseignez les informations du dirigeant</h4>
+				</div>
+				<form wicket:id="etape2PartenaireForm">
+					<table class="tableBatimen">
+						<tr>
+							<th>Civilité</th>
+							<td><select
+								wicket:id="artisan.civilite"
+								name="civilite"
+								id="civilite"></select></td>
+						</tr>
+						<tr>
+							<th>Nom</th>
+							<td><input
+								wicket:id="artisan.nom"
+								type="text"
+								name="nomField"
+								id="nomField"
+								value="" /></td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+	</div>
 </wicket:extend>

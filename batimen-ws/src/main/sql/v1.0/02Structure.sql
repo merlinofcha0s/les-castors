@@ -34,7 +34,6 @@ create table Annonce (
         domaineActivite varchar(255) not null,
         email varchar(128) not null,
         login varchar(25) not null,
-        metier int4 not null,
         nbAnnonce int4 not null,
         nom varchar(20) not null,
         numeroTel varchar(10) not null,

@@ -23,6 +23,7 @@ import org.hibernate.validator.constraints.Email;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import fr.batimen.dto.enums.Civilite;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 
 /**
@@ -38,6 +39,7 @@ public class ClientDTO extends AbstractDTO {
 	 */
     private static final long serialVersionUID = 908669177512952849L;
 
+    private Civilite civilite;
     @Size(min = LOGIN_RANGE_MIN, max = LOGIN_RANGE_MAX)
     private String login;
     @Size(min = PASSWORD_RANGE_MIN, max = PASSWORD_RANGE_MAX)
@@ -190,6 +192,21 @@ public class ClientDTO extends AbstractDTO {
      */
     public void setCleActivation(String cleActivation) {
         this.cleActivation = cleActivation;
+    }
+
+    /**
+     * @return the civilite
+     */
+    public Civilite getCivilite() {
+        return civilite;
+    }
+
+    /**
+     * @param civilite
+     *            the civilite to set
+     */
+    public void setCivilite(Civilite civilite) {
+        this.civilite = civilite;
     }
 
     @Override
