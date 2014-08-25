@@ -22,7 +22,7 @@ public class NouveauArtisan extends MasterPage {
     private static final Logger LOGGER = LoggerFactory.getLogger(NouveauArtisan.class);
 
     // DTO
-    private final CreationPartenaireDTO nouveauPartenaire;
+    private CreationPartenaireDTO nouveauPartenaire;
 
     // Composants Généraux
     private NavigationWizard navigationWizard;
@@ -47,9 +47,25 @@ public class NouveauArtisan extends MasterPage {
 
         // Etape 2 : Informations sur le dirigeant
         etape2PartenaireForm = new Etape2PartenaireForm("etape2PartenaireForm",
-                new CompoundPropertyModel<CreationPartenaireDTO>(nouveauPartenaire));
+                new CompoundPropertyModel<CreationPartenaireDTO>(nouveauPartenaire)) {
+
+            private static final long serialVersionUID = -3398962583371973217L;
+
+            /*
+             * (non-Javadoc)
+             * 
+             * @see org.apache.wicket.markup.html.form.Form#onSubmit()
+             */
+            @Override
+            protected void onSubmit() {
+                nouveauPartenaire.setNumeroEtape(3);
+                this.setResponsePage(new NouveauArtisan(nouveauPartenaire));
+            }
+
+        };
         containerEtape2 = new WebMarkupContainer("containerEtape2");
         containerEtape2.add(etape2PartenaireForm);
+        containerEtape2.setVisible(false);
 
         this.add(containerEtape2);
         this.add(carteFrance);
@@ -59,6 +75,18 @@ public class NouveauArtisan extends MasterPage {
         } catch (FrontEndException e) {
             if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("Erreur lors du changment d'étape pendant la creation d'un nouveau partenaire", e);
+            }
+        }
+    }
+
+    private NouveauArtisan(CreationPartenaireDTO nouveauPartenaire) {
+        this();
+        this.nouveauPartenaire = nouveauPartenaire;
+        try {
+            changementEtape(nouveauPartenaire.getNumeroEtape());
+        } catch (FrontEndException e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Probleme frontend", e);
             }
         }
     }
@@ -80,6 +108,11 @@ public class NouveauArtisan extends MasterPage {
         this.add(navigationWizard);
     }
 
+    private void etape1Departement() {
+        carteFrance.setVisible(true);
+        containerEtape2.setVisible(false);
+    }
+
     private void etape2InformationsDirigeant() {
         carteFrance.setVisible(false);
         containerEtape2.setVisible(true);
@@ -90,6 +123,7 @@ public class NouveauArtisan extends MasterPage {
         switch (numeroEtape) {
         case 1:
             loggerChangementEtape("Passage dans l'étape 1");
+            etape1Departement();
             break;
         case 2:
             loggerChangementEtape("Passage dans l'étape 2");

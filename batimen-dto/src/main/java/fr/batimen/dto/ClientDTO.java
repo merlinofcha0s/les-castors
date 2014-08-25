@@ -4,8 +4,8 @@ import static fr.batimen.dto.constant.ValidatorConstant.CLIENT_NOM_MAX;
 import static fr.batimen.dto.constant.ValidatorConstant.CLIENT_NOM_MIN;
 import static fr.batimen.dto.constant.ValidatorConstant.CLIENT_PRENOM_MAX;
 import static fr.batimen.dto.constant.ValidatorConstant.CLIENT_PRENOM_MIN;
-import static fr.batimen.dto.constant.ValidatorConstant.LOGIN_RANGE_MAX;
-import static fr.batimen.dto.constant.ValidatorConstant.LOGIN_RANGE_MIN;
+import static fr.batimen.dto.constant.ValidatorConstant.CLIENT_LOGIN_RANGE_MAX;
+import static fr.batimen.dto.constant.ValidatorConstant.CLIENT_LOGIN_RANGE_MIN;
 import static fr.batimen.dto.constant.ValidatorConstant.PASSWORD_RANGE_MAX;
 import static fr.batimen.dto.constant.ValidatorConstant.PASSWORD_RANGE_MIN;
 import static fr.batimen.dto.constant.ValidatorConstant.TELEPHONE_REGEX;
@@ -40,7 +40,7 @@ public class ClientDTO extends AbstractDTO {
     private static final long serialVersionUID = 908669177512952849L;
 
     private Civilite civilite;
-    @Size(min = LOGIN_RANGE_MIN, max = LOGIN_RANGE_MAX)
+    @Size(min = CLIENT_LOGIN_RANGE_MIN, max = CLIENT_LOGIN_RANGE_MAX)
     private String login;
     @Size(min = PASSWORD_RANGE_MIN, max = PASSWORD_RANGE_MAX)
     private String password;

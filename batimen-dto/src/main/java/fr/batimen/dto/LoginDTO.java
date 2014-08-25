@@ -1,7 +1,7 @@
 package fr.batimen.dto;
 
-import static fr.batimen.dto.constant.ValidatorConstant.LOGIN_RANGE_MAX;
-import static fr.batimen.dto.constant.ValidatorConstant.LOGIN_RANGE_MIN;
+import static fr.batimen.dto.constant.ValidatorConstant.CLIENT_LOGIN_RANGE_MAX;
+import static fr.batimen.dto.constant.ValidatorConstant.CLIENT_LOGIN_RANGE_MIN;
 import static fr.batimen.dto.constant.ValidatorConstant.PASSWORD_RANGE_MAX;
 import static fr.batimen.dto.constant.ValidatorConstant.PASSWORD_RANGE_MIN;
 
@@ -31,7 +31,7 @@ public class LoginDTO extends AbstractDTO {
     private static final long serialVersionUID = -8518392464976304684L;
 
     @NotNull
-    @Size(min = LOGIN_RANGE_MIN, max = LOGIN_RANGE_MAX)
+    @Size(min = CLIENT_LOGIN_RANGE_MIN, max = CLIENT_LOGIN_RANGE_MAX)
     private String login;
     @Size(min = PASSWORD_RANGE_MIN, max = PASSWORD_RANGE_MAX)
     private String password;

@@ -77,8 +77,8 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
         loginField.setRequired(true);
         loginField.add(new RequiredBorderBehaviour());
         loginField.add(new ErrorHighlightBehavior());
-        loginField.add(StringValidator.lengthBetween(ValidatorConstant.LOGIN_RANGE_MIN,
-                ValidatorConstant.LOGIN_RANGE_MAX));
+        loginField.add(StringValidator.lengthBetween(ValidatorConstant.CLIENT_LOGIN_RANGE_MIN,
+                ValidatorConstant.CLIENT_LOGIN_RANGE_MAX));
         loginField.add(new LoginUniquenessValidator());
 
         passwordField = new PasswordTextField("client.password");

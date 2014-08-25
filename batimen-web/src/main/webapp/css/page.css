@@ -167,6 +167,18 @@
 	background-repeat: no-repeat;
 }
 
+/* Creation partenaire */
+#formPartenaireEtape2{
+	padding-left: 330px;
+	padding-top: 45px;
+}
+
+#validateEtape2Partenaire{
+	float: right;
+	margin-right: 17px;
+	margin-top: 20px;
+}
+
 /* Composant Wicket */
 .wicket-mfu-caption {
 	padding-top: 5px;
