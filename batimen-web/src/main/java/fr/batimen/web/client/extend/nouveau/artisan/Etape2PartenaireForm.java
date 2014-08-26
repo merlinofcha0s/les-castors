@@ -28,8 +28,6 @@ public class Etape2PartenaireForm extends Form<CreationPartenaireDTO> {
     public Etape2PartenaireForm(String id, IModel<CreationPartenaireDTO> model) {
         super(id, model);
 
-        // Mode Multipart pour l'upload de fichier.
-        this.setMultiPart(true);
         this.setMarkupId("formPartenaireEtape2");
 
         DropDownChoice<Civilite> civilite = new DropDownChoice<Civilite>("artisan.civilite", Arrays.asList(Civilite

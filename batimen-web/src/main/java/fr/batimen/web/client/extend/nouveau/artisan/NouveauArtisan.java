@@ -33,6 +33,10 @@ public class NouveauArtisan extends MasterPage {
     private final Etape2PartenaireForm etape2PartenaireForm;
     private final WebMarkupContainer containerEtape2;
 
+    // Composant étape 3
+    private final Etape3EntrepriseForm etape3EntrepriseForm;
+    private final WebMarkupContainer containerEtape3;
+
     public NouveauArtisan() {
         super("Inscription d'un nouveau partenaire qui effectuera les travaux chez un particulier",
                 "Artisan Rénovation Inscription", "Nouveau partenaire", true, "img/bg_title1.jpg");
@@ -45,7 +49,7 @@ public class NouveauArtisan extends MasterPage {
         // Etape 1 : selection du departement avec la carte de la france
         carteFrance = new MapFrance("mapFrance");
 
-        // Etape 2 : Informations sur le dirigeant
+        // Etape 2 : Informations du dirigeant
         etape2PartenaireForm = new Etape2PartenaireForm("etape2PartenaireForm",
                 new CompoundPropertyModel<CreationPartenaireDTO>(nouveauPartenaire)) {
 
@@ -67,11 +71,34 @@ public class NouveauArtisan extends MasterPage {
         containerEtape2.add(etape2PartenaireForm);
         containerEtape2.setVisible(false);
 
-        this.add(containerEtape2);
+        // Etape 3 : Information de l'entreprise
+        etape3EntrepriseForm = new Etape3EntrepriseForm("etape3EntrepriseForm",
+                new CompoundPropertyModel<CreationPartenaireDTO>(nouveauPartenaire)) {
+
+            private static final long serialVersionUID = -7951018707634233008L;
+
+            /*
+             * (non-Javadoc)
+             * 
+             * @see org.apache.wicket.markup.html.form.Form#onSubmit()
+             */
+            @Override
+            protected void onSubmit() {
+                nouveauPartenaire.setNumeroEtape(4);
+                this.setResponsePage(new NouveauArtisan(nouveauPartenaire));
+            }
+        };
+
+        containerEtape3 = new WebMarkupContainer("containerEtape3");
+        containerEtape3.add(etape3EntrepriseForm);
+        containerEtape3.setVisible(false);
+
         this.add(carteFrance);
+        this.add(containerEtape2);
+        this.add(containerEtape3);
 
         try {
-            changementEtape(nouveauPartenaire.getNumeroEtape());
+            changementEtape(/* nouveauPartenaire.getNumeroEtape() */3);
         } catch (FrontEndException e) {
             if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("Erreur lors du changment d'étape pendant la creation d'un nouveau partenaire", e);
@@ -89,7 +116,7 @@ public class NouveauArtisan extends MasterPage {
                 LOGGER.error("Probleme frontend", e);
             }
         }
-    }
+    };
 
     private void initNavigationWizard() {
         List<String> etapes = new ArrayList<String>();
@@ -111,11 +138,19 @@ public class NouveauArtisan extends MasterPage {
     private void etape1Departement() {
         carteFrance.setVisible(true);
         containerEtape2.setVisible(false);
+        containerEtape3.setVisible(false);
     }
 
     private void etape2InformationsDirigeant() {
         carteFrance.setVisible(false);
         containerEtape2.setVisible(true);
+        containerEtape3.setVisible(false);
+    }
+
+    private void etape3InformationsEntreprise() {
+        carteFrance.setVisible(false);
+        containerEtape2.setVisible(false);
+        containerEtape3.setVisible(true);
     }
 
     private void changementEtape(Integer numeroEtape) throws FrontEndException {
@@ -128,6 +163,10 @@ public class NouveauArtisan extends MasterPage {
         case 2:
             loggerChangementEtape("Passage dans l'étape 2");
             etape2InformationsDirigeant();
+            break;
+        case 3:
+            loggerChangementEtape("Passage dans l'étape 3");
+            etape3InformationsEntreprise();
             break;
         default:
             throw new FrontEndException("Aucune étape du nouveau devis chargées, Situation Impossible");

@@ -10,6 +10,7 @@ import java.util.Date;
 
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
@@ -31,9 +32,10 @@ public class EntrepriseDTO extends AbstractDTO {
     private String nomComplet;
     @NotNull
     private StatutJuridique statutJuridique;
-    private Integer nbEmployees;
+    private Integer nbEmploye;
     private String logo;
     @NotNull
+    @Past
     private Date dateCreation;
     @Size(min = ENTREPRISE_SPECIALITE_MIN, max = ENTREPRISE_SPECIALITE_MAX)
     private String specialité;
@@ -56,7 +58,7 @@ public class EntrepriseDTO extends AbstractDTO {
      * @return the nbEmployees
      */
     public Integer getNbEmployees() {
-        return nbEmployees;
+        return nbEmploye;
     }
 
     /**
@@ -87,7 +89,7 @@ public class EntrepriseDTO extends AbstractDTO {
      *            the nbEmployees to set
      */
     public void setNbEmployees(Integer nbEmployees) {
-        this.nbEmployees = nbEmployees;
+        this.nbEmploye = nbEmployees;
     }
 
     /**

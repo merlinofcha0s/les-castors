@@ -128,7 +128,8 @@ public class BatimenApplication extends AuthenticatedWebApplication {
      */
     @Override
     public Session newSession(Request request, Response response) {
-        return new BatimenSession(request);
+        BatimenSession session = new BatimenSession(request);
+        return session;
     }
 
     private void getAppProperties() {
@@ -139,7 +140,6 @@ public class BatimenApplication extends AuthenticatedWebApplication {
 
         Properties appProperties = PropertiesUtils.loadPropertiesFile("app.properties");
         setStripWicketTags = Boolean.valueOf(appProperties.getProperty("app.setStripWicketTags"));
-
     }
 
 }

@@ -95,4 +95,57 @@
 			</div>
 		</div>
 	</div>
+	<div wicket:id="containerEtape3">
+		<div class="row-fluid">
+			<div class="span12 module_cont module_text_area module_small_padding">
+				<div class="bg_title">
+					<h4 class="headInModule">Renseignez les informations de l'entreprise</h4>
+				</div>
+				<form wicket:id="etape3EntrepriseForm">
+					<table class="tableBatimen">
+						<tr>
+							<th>Nom complet</th>
+							<td><input
+								wicket:id="entreprise.nomComplet"
+								type="text"
+								name="nomCompletField"
+								id="nomCompletField"
+								value="" /></td>
+						</tr>
+						<tr>
+							<th>Statut juridique</th>
+							<td><select
+								wicket:id="entreprise.statutJuridique"
+								name="statutJuridique"
+								id="statutJuridique"></select></td>
+						</tr>
+						<tr>
+							<th>Nombre d'employé</th>
+							<td><input
+								wicket:id="entreprise.nbEmploye"
+								type="text"
+								min="1"
+								max="10"
+								step="1"
+								name="nombreEmployeField"
+								id="nombreEmployeField"
+								value="" /></td>
+						</tr>
+						<tr>
+							<th>Date de création</th>
+							<td><input
+								wicket:id="entreprise.dateCreation"
+								type="text"
+								name="dateCreationField"
+								id="dateCreationField"
+								value="" /></td>
+						</tr>
+					</table>
+					<div id="champsObligatoire">
+						<span class='required'>*</span> : champs obligatoires
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
 </wicket:extend>
