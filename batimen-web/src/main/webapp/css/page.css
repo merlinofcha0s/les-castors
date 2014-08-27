@@ -179,6 +179,11 @@
 	margin-top: 20px;
 }
 
+
+#siretField span{
+	vertical-align: text-top;
+}
+
 /* Composant Wicket */
 .wicket-mfu-caption {
 	padding-top: 5px;

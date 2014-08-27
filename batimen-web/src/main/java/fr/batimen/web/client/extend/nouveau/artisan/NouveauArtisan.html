@@ -140,10 +140,30 @@
 								id="dateCreationField"
 								value="" /></td>
 						</tr>
+						<tr>
+							<th>Siret</th>
+							<td><input
+								wicket:id="entreprise.siret"
+								type="text"
+								name="siretField"
+								id="siretField"
+								value="" /></td>
+						</tr>
+						<tr>
+							<th>Activité</th>
+							<td align="right"><a
+								wicket:id="ajouterActivite"
+								id="ajouterActivite"> <img
+									wicket:id="ajouterImg"
+									width=25px; /> 
+									<span>Ajouter une activité</span>
+							</a><span class="required">*</span></td>
+						</tr>
 					</table>
 					<div id="champsObligatoire">
 						<span class='required'>*</span> : champs obligatoires
 					</div>
+					<div wicket:id="activiteDialog"></div>
 				</form>
 			</div>
 		</div>

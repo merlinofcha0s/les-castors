@@ -4,11 +4,11 @@ import org.odlabs.wiquery.ui.datepicker.ArrayOfDayNames;
 import org.odlabs.wiquery.ui.datepicker.ArrayOfMonthNames;
 import org.odlabs.wiquery.ui.datepicker.DatePicker;
 
-public class FrenchDatePicker<T> extends DatePicker<T> {
+public class CastorDatePicker<T> extends DatePicker<T> {
 
     private static final long serialVersionUID = -5011785809353752263L;
 
-    public FrenchDatePicker(String id) {
+    public CastorDatePicker(String id) {
         super(id);
         ArrayOfDayNames days = new ArrayOfDayNames("Dim", "Lun", "Mar", "Mer", "Jeu", "Ven", "Sam");
         setDayNamesMin(days);
