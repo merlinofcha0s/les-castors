@@ -3,19 +3,13 @@ package fr.batimen.web.client.extend.nouveau.artisan;
 import java.util.Arrays;
 import java.util.Date;
 
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.model.IModel;
-import org.apache.wicket.request.resource.ContextRelativeResource;
 import org.apache.wicket.validation.validator.DateValidator;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.apache.wicket.validation.validator.StringValidator;
-import org.odlabs.wiquery.ui.dialog.Dialog;
-import org.odlabs.wiquery.ui.dialog.DialogAnimateOption;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -73,51 +67,11 @@ public class Etape3EntrepriseForm extends Form<CreationPartenaireDTO> {
         siret.add(new ErrorHighlightBehavior());
         siret.add(new RequiredBorderBehaviour());
 
-        final Dialog activiteDialog = new Dialog("activiteDialog") {
-
-            private static final long serialVersionUID = 1703137705306176173L;
-
-            /*
-             * (non-Javadoc)
-             * 
-             * @see org.odlabs.wiquery.ui.dialog.Dialog#open(org.apache.wicket
-             * .ajax.AjaxRequestTarget)
-             */
-            @Override
-            public void open(AjaxRequestTarget ajaxRequestTarget) {
-                super.open(ajaxRequestTarget);
-            }
-
-        };
-        activiteDialog.setModal(true);
-        activiteDialog.setTitle("Ajouter une activité");
-        activiteDialog.setResizable(false);
-        activiteDialog.setDraggable(false);
-        activiteDialog.setWidth(620);
-        activiteDialog.setShow(new DialogAnimateOption("fade"));
-        activiteDialog.setHide(new DialogAnimateOption("fade"));
-
-        Image ajouterImg = new Image("ajouterImg", new ContextRelativeResource("img/add.png"));
-
-        AjaxLink<Void> ajouterActivite = new AjaxLink<Void>("ajouterActivite") {
-
-            private static final long serialVersionUID = -9008353963454924193L;
-
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                activiteDialog.open(target);
-            }
-        };
-
-        ajouterActivite.add(ajouterImg);
-
         this.add(nomComplet);
         this.add(statutJuridique);
         this.add(nbEmploye);
         this.add(dateCreation);
         this.add(siret);
-        this.add(ajouterActivite);
-        this.add(activiteDialog);
-
     }
+
 }

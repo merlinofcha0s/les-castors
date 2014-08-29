@@ -1,11 +1,13 @@
 package fr.batimen.web.client.extend.nouveau.artisan;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +36,7 @@ public class NouveauArtisan extends MasterPage {
     private final WebMarkupContainer containerEtape2;
 
     // Composant étape 3
-    private final Etape3EntrepriseForm etape3EntrepriseForm;
+    private final Etape3Entreprise etape3Entreprise;
     private final WebMarkupContainer containerEtape3;
 
     public NouveauArtisan() {
@@ -71,26 +73,10 @@ public class NouveauArtisan extends MasterPage {
         containerEtape2.add(etape2PartenaireForm);
         containerEtape2.setVisible(false);
 
-        // Etape 3 : Information de l'entreprise
-        etape3EntrepriseForm = new Etape3EntrepriseForm("etape3EntrepriseForm",
-                new CompoundPropertyModel<CreationPartenaireDTO>(nouveauPartenaire)) {
-
-            private static final long serialVersionUID = -7951018707634233008L;
-
-            /*
-             * (non-Javadoc)
-             * 
-             * @see org.apache.wicket.markup.html.form.Form#onSubmit()
-             */
-            @Override
-            protected void onSubmit() {
-                nouveauPartenaire.setNumeroEtape(4);
-                this.setResponsePage(new NouveauArtisan(nouveauPartenaire));
-            }
-        };
+        etape3Entreprise = new Etape3Entreprise("etape3", new Model<Serializable>(), nouveauPartenaire);
 
         containerEtape3 = new WebMarkupContainer("containerEtape3");
-        containerEtape3.add(etape3EntrepriseForm);
+        containerEtape3.add(etape3Entreprise);
         containerEtape3.setVisible(false);
 
         this.add(carteFrance);
@@ -106,7 +92,7 @@ public class NouveauArtisan extends MasterPage {
         }
     }
 
-    private NouveauArtisan(CreationPartenaireDTO nouveauPartenaire) {
+    public NouveauArtisan(CreationPartenaireDTO nouveauPartenaire) {
         this();
         this.nouveauPartenaire = nouveauPartenaire;
         try {

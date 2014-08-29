@@ -6,7 +6,9 @@ import static fr.batimen.dto.constant.ValidatorConstant.ENTREPRISE_SIRET_REGEXP;
 import static fr.batimen.dto.constant.ValidatorConstant.ENTREPRISE_SPECIALITE_MAX;
 import static fr.batimen.dto.constant.ValidatorConstant.ENTREPRISE_SPECIALITE_MIN;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.NotNull;
@@ -27,7 +29,7 @@ public class EntrepriseDTO extends AbstractDTO {
     @AssertTrue(message = "Siret invalide")
     private final boolean isSiretValide = SiretValidator.isSiretValide(getSiret());
     @NotNull
-    private CategorieMetierDTO categorieMetier;
+    private List<CategorieMetierDTO> categoriesMetier = new ArrayList<CategorieMetierDTO>();
     @Size(min = ENTREPRISE_NOM_COMPLET_MIN, max = ENTREPRISE_NOM_COMPLET_MAX)
     private String nomComplet;
     @NotNull
@@ -112,13 +114,6 @@ public class EntrepriseDTO extends AbstractDTO {
     }
 
     /**
-     * @return the categorieMetier
-     */
-    public CategorieMetierDTO getCategorieMetier() {
-        return categorieMetier;
-    }
-
-    /**
      * @param siret
      *            the siret to set
      */
@@ -127,11 +122,18 @@ public class EntrepriseDTO extends AbstractDTO {
     }
 
     /**
+     * @return the categorieMetier
+     */
+    public List<CategorieMetierDTO> getCategorieMetier() {
+        return categoriesMetier;
+    }
+
+    /**
      * @param categorieMetier
      *            the categorieMetier to set
      */
-    public void setCategorieMetier(CategorieMetierDTO categorieMetier) {
-        this.categorieMetier = categorieMetier;
+    public void setCategorieMetier(List<CategorieMetierDTO> categorieMetier) {
+        this.categoriesMetier = categorieMetier;
     }
 
 }

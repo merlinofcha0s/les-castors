@@ -1,0 +1,104 @@
+<wicket:panel>
+	<div class="row-fluid">
+		<div class="span12 module_cont module_text_area module_small_padding">
+			<div class="bg_title">
+				<h4 class="headInModule">Renseignez les informations de l'entreprise</h4>
+			</div>
+			<form wicket:id="etape3EntrepriseForm">
+				<table class="tableBatimen">
+					<tr>
+						<th>Nom complet</th>
+						<td><input
+							wicket:id="entreprise.nomComplet"
+							type="text"
+							name="nomCompletField"
+							id="nomCompletField"
+							value="" /></td>
+					</tr>
+					<tr>
+						<th>Statut juridique</th>
+						<td><select
+							wicket:id="entreprise.statutJuridique"
+							name="statutJuridique"
+							id="statutJuridique"></select></td>
+					</tr>
+					<tr>
+						<th>Nombre d'employé</th>
+						<td><input
+							wicket:id="entreprise.nbEmploye"
+							type="text"
+							min="1"
+							max="10"
+							step="1"
+							name="nombreEmployeField"
+							id="nombreEmployeField"
+							value="" /></td>
+					</tr>
+					<tr>
+						<th>Date de création</th>
+						<td><input
+							wicket:id="entreprise.dateCreation"
+							type="text"
+							name="dateCreationField"
+							id="dateCreationField"
+							value="" /></td>
+					</tr>
+					<tr>
+						<th>Siret</th>
+						<td><input
+							wicket:id="entreprise.siret"
+							type="text"
+							name="siretField"
+							id="siretField"
+							value="" /></td>
+					</tr>
+				</table>
+				<div id="champsObligatoire">
+					<span class='required'>*</span> : champs obligatoires
+				</div>
+			</form>
+			<div
+				wicket:id="containerActivite"
+				id="containerActivite">
+				<h5>Activité de votre entreprise</h5>
+				<div id="containerAjoutActivite">
+					<a
+						wicket:id="ajouterActivite"
+						id="ajouterActivite"> <img
+						wicket:id="ajouterImg"
+						width=25px; /> <span>Ajouter une activité</span>
+					</a><span class="required">*</span>
+				</div>
+				<div
+					wicket:id="containerCategorieSelection"
+					id="containerCategorieSelection">
+					<h6>Activité(s) choisie(s)</h6>
+					<ul class="list_type1">
+						<li wicket:id="entreprise.categoriesMetier"><span wicket:id="categorieSel"></span>
+						 <a wicket:id="removeLinkCategorie"><img wicket:id="removeImgCategorie" width="20px" /></a></li>
+					</ul>
+				</div>
+			</div>
+			<div wicket:id="activiteDialog">
+				<div id="categorieMetierPartenaire">
+					<form wicket:id="formSelectionActivite">
+						<table class="tableBatimen">
+							<tr>
+								<th>Activité</th>
+								<td><select
+									wicket:id="dropdownCategoriesMetier"
+									name="activite"
+									id="activiteField"></select></td>
+							</tr>
+						</table>
+						<div id="enregistrerCategorie">
+							<a
+								class="shortcode_button btn_small btn_type1"
+								wicket:id="enregistrerCategorie">Valider</a>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</wicket:panel>

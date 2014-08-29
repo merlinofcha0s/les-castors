@@ -1,5 +1,8 @@
 package fr.batimen.dto.helper;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.SousCategorieMetierDTO;
 
@@ -75,6 +78,17 @@ public class CategorieLoader {
             equipement.addSousCategorie(sousEquipement);
         }
         return equipement;
+    }
+
+    public static synchronized List<CategorieMetierDTO> getAllCategories() {
+        List<CategorieMetierDTO> allCategories = new ArrayList<CategorieMetierDTO>();
+        allCategories.add(getCategorieDecorationMaconnerie());
+        allCategories.add(getCategorieElectricite());
+        allCategories.add(getCategorieEquipement());
+        allCategories.add(getCategorieEspaceVert());
+        allCategories.add(getCategorieGrosOeuvre());
+        allCategories.add(getCategoriePlomberie());
+        return allCategories;
     }
 
 }
