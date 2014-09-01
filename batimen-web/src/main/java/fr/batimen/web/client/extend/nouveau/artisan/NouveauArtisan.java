@@ -15,6 +15,7 @@ import fr.batimen.core.exception.FrontEndException;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
 import fr.batimen.web.client.component.MapFrance;
 import fr.batimen.web.client.component.NavigationWizard;
+import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.web.client.event.MapFranceEvent;
 import fr.batimen.web.client.master.MasterPage;
 
@@ -194,6 +195,15 @@ public class NouveauArtisan extends MasterPage {
                 feedBackPanelGeneral.error("Numéro de département incorrecte, veuillez recommencer");
             }
             eventMapFrance.getTarget().add(this);
+        }
+
+        if (event.getPayload() instanceof FeedBackPanelEvent) {
+            FeedBackPanelEvent feedBackPanelUpdate = (FeedBackPanelEvent) event.getPayload();
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Affichage message dans le feedBackPanel");
+            }
+            feedBackPanelGeneral.error(feedBackPanelUpdate.getMessage());
+            feedBackPanelUpdate.getTarget().add(feedBackPanelGeneral);
         }
     }
 

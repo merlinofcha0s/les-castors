@@ -98,6 +98,7 @@ public abstract class MasterPage extends WebPage {
         // Instantiation du composant qui permet d'afficher des messages aux
         // utilisateur de maniere centralisé
         feedBackPanelGeneral = new BatimenFeedbackPanel("feedBackPanelGeneral");
+        feedBackPanelGeneral.setOutputMarkupId(true);
         htmlTag.add(feedBackPanelGeneral);
 
         this.add(getLoginDialog());
@@ -469,4 +470,5 @@ public abstract class MasterPage extends WebPage {
 
         return loginDialog;
     }
+
 }

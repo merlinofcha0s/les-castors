@@ -8,10 +8,8 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import fr.batimen.web.client.behaviour.AjaxMapFranceBehaviour;
-import fr.batimen.web.client.extend.nouveau.devis.NouveauDevis;
 
 /**
  * Panel wicket qui permet de sélectionner un departement a l'aide d'une carte
@@ -691,22 +689,6 @@ public class MapFrance extends Panel {
         super.renderHead(response);
         populateMap();
         response.render(JavaScriptHeaderItem.forScript(createJSCarteFrance(), "carteFranceJS"));
-    }
-
-    /**
-     * Génére l'url qui permettra de passer à l'étape 2 du nouveau devis
-     * 
-     * @param departementNb
-     *            le numéro du dpt qui a été selectionnée
-     * 
-     * @return l'url généré correctement
-     */
-    private String computeURLWithDepartmentParam(String departementNb) {
-
-        PageParameters parametersDept = new PageParameters();
-        parametersDept.add("departement", departementNb);
-
-        return urlFor(NouveauDevis.class, parametersDept).toString();
     }
 
     /**

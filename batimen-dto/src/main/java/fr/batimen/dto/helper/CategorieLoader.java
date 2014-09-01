@@ -21,6 +21,7 @@ public class CategorieLoader {
     private static CategorieMetierDTO decorationMaconnerie;
     private static CategorieMetierDTO grosOeuvre;
     private static CategorieMetierDTO equipement;
+    private static CategorieMetierDTO toutesCategories;
 
     private CategorieLoader() {
 
@@ -80,7 +81,14 @@ public class CategorieLoader {
         return equipement;
     }
 
-    public static synchronized List<CategorieMetierDTO> getAllCategories() {
+    public static synchronized CategorieMetierDTO getCategorieAll() {
+        if (toutesCategories == null) {
+            toutesCategories = new CategorieMetierDTO("Toutes les catégories");
+        }
+        return toutesCategories;
+    }
+
+    public static synchronized List<CategorieMetierDTO> getAllCategories(boolean isForArtisan) {
         List<CategorieMetierDTO> allCategories = new ArrayList<CategorieMetierDTO>();
         allCategories.add(getCategorieDecorationMaconnerie());
         allCategories.add(getCategorieElectricite());
@@ -88,6 +96,11 @@ public class CategorieLoader {
         allCategories.add(getCategorieEspaceVert());
         allCategories.add(getCategorieGrosOeuvre());
         allCategories.add(getCategoriePlomberie());
+
+        if (isForArtisan) {
+            allCategories.add(getCategorieAll());
+        }
+
         return allCategories;
     }
 

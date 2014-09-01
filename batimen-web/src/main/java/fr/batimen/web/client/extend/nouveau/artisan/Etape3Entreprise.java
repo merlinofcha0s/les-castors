@@ -6,6 +6,7 @@ import java.util.List;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -25,6 +26,7 @@ import org.odlabs.wiquery.ui.dialog.DialogAnimateOption;
 import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
 import fr.batimen.dto.helper.CategorieLoader;
+import fr.batimen.web.client.event.FeedBackPanelEvent;
 
 public class Etape3Entreprise extends Panel {
 
@@ -132,7 +134,7 @@ public class Etape3Entreprise extends Panel {
         activiteDialog.setOutputMarkupId(true);
 
         final DropDownChoice<CategorieMetierDTO> categorieMetier = new DropDownChoice<CategorieMetierDTO>(
-                "dropdownCategoriesMetier", new Model<CategorieMetierDTO>(), CategorieLoader.getAllCategories());
+                "dropdownCategoriesMetier", new Model<CategorieMetierDTO>(), CategorieLoader.getAllCategories(true));
 
         AjaxSubmitLink enregistreCategorie = new AjaxSubmitLink("enregistrerCategorie") {
 
@@ -141,7 +143,15 @@ public class Etape3Entreprise extends Panel {
             @Override
             public void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 CategorieMetierDTO categorieSelectionnee = categorieMetier.getConvertedInput();
-                categoriesSelectionnees.add(categorieSelectionnee);
+
+                if (categoriesSelectionnees.contains(categorieSelectionnee)) {
+                    triggerEventFeedBackPanel(target, "Vous ne pouvez pas sélectionner deux fois la même catégorie");
+                } else if (categoriesSelectionnees.contains(CategorieLoader.getCategorieAll())) {
+                    triggerEventFeedBackPanel(target, "Vous avez déjà selectionné toutes les categories");
+                } else {
+                    categoriesSelectionnees.add(categorieSelectionnee);
+                }
+
                 activiteDialog.close(target);
                 target.add(containerCategorieSelection);
             }
@@ -155,6 +165,12 @@ public class Etape3Entreprise extends Panel {
         activiteDialog.add(formSelectionActivite);
 
         return activiteDialog;
+    }
+
+    private void triggerEventFeedBackPanel(AjaxRequestTarget target, String message) {
+        FeedBackPanelEvent feedbackPanelEvent = new FeedBackPanelEvent(target);
+        feedbackPanelEvent.setMessage(message);
+        target.getPage().send(target.getPage(), Broadcast.EXACT, feedbackPanelEvent);
     }
 
 }

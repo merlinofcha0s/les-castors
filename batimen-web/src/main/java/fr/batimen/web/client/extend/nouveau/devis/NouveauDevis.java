@@ -382,7 +382,6 @@ public class NouveauDevis extends MasterPage {
                 }
                 update.getTarget().add(this);
             }
-
         }
 
         // Event déclenché par la carte de france, cela permet de recuperer le
