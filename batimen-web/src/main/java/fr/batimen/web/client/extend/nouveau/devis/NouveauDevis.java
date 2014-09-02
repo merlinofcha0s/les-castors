@@ -424,7 +424,7 @@ public class NouveauDevis extends MasterPage {
                 changementEtape(3);
             } catch (FrontEndException e) {
                 if (LOGGER.isErrorEnabled()) {
-                    LOGGER.error("Probleme frontend avec l'etape 2", e);
+                    LOGGER.error("Probleme frontend avec l'etape 3", e);
                 }
             }
             // On dit a wicket de rafraichir ce panel avec la requete ajax

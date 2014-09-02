@@ -52,10 +52,59 @@
 							id="siretField"
 							value="" /></td>
 					</tr>
+					<tr>
+						<th>Logo</th>
+						<td><input
+							wicket:id="entreprise.logo"
+							type="file"
+							name="logo"
+							accept="image/*"
+							class="upload"></td>
+					</tr>
+					<tr>
+						<th>Adresse</th>
+						<td><input
+							wicket:id="adresse.adresse"
+							type="text"
+							name="adresse"
+							value=""></td>
+					</tr>
+					<tr>
+						<th>Complément d'adresse</th>
+						<td><input
+							wicket:id="adresse.complementAdresse"
+							type="text"
+							name="adresseComplementField"
+							id="adresseComplementField"
+							value="" /></td>
+					</tr>
+					<tr>
+						<th>Code postal</th>
+						<td><input
+							wicket:id="adresse.codePostal"
+							type="text"
+							name="codePostalField"
+							id="codePostalField"
+							value="" /></td>
+					</tr>
+					<tr>
+						<th>Ville</th>
+						<td><input
+							wicket:id="adresse.ville"
+							type="text"
+							name="villeField"
+							id="villeField"
+							value="" /></td>
+					</tr>
 				</table>
-				<div id="champsObligatoire">
-					<span class='required'>*</span> : champs obligatoires
-				</div>
+				<div id="terminerInscriptionPartenaire">
+						<a
+							class="shortcode_button btn_small btn_type1"
+							wicket:id="validateEtape3Partenaire">Terminer</a>
+					</div>
+					<div id="champsObligatoire">
+						<span class='required'>*</span> : champs obligatoires
+					</div>
 			</form>
 			<div
 				wicket:id="containerActivite"
@@ -74,8 +123,10 @@
 					id="containerCategorieSelection">
 					<h6>Activité(s) choisie(s)</h6>
 					<ul class="list_type1">
-						<li wicket:id="entreprise.categoriesMetier"><span wicket:id="categorieSel"></span>
-						 <a wicket:id="removeLinkCategorie"><img wicket:id="removeImgCategorie" width="20px" /></a></li>
+						<li wicket:id="entreprise.categoriesMetier"><span wicket:id="categorieSel"></span> <a
+							wicket:id="removeLinkCategorie"><img
+								wicket:id="removeImgCategorie"
+								width="20px" /></a></li>
 					</ul>
 				</div>
 			</div>

@@ -15,8 +15,8 @@ import fr.batimen.core.exception.FrontEndException;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
 import fr.batimen.web.client.component.MapFrance;
 import fr.batimen.web.client.component.NavigationWizard;
-import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.web.client.event.MapFranceEvent;
+import fr.batimen.web.client.extend.nouveau.artisan.event.ChangementEtapeEvent;
 import fr.batimen.web.client.master.MasterPage;
 
 public class NouveauArtisan extends MasterPage {
@@ -25,7 +25,7 @@ public class NouveauArtisan extends MasterPage {
     private static final Logger LOGGER = LoggerFactory.getLogger(NouveauArtisan.class);
 
     // DTO
-    private CreationPartenaireDTO nouveauPartenaire;
+    private CreationPartenaireDTO nouveauPartenaire = new CreationPartenaireDTO();
 
     // Composants Généraux
     private NavigationWizard navigationWizard;
@@ -45,8 +45,6 @@ public class NouveauArtisan extends MasterPage {
                 "Artisan Rénovation Inscription", "Nouveau partenaire", true, "img/bg_title1.jpg");
         super.setActiveMenu(MasterPage.NONE);
 
-        nouveauPartenaire = new CreationPartenaireDTO();
-
         initNavigationWizard();
 
         // Etape 1 : selection du departement avec la carte de la france
@@ -54,22 +52,7 @@ public class NouveauArtisan extends MasterPage {
 
         // Etape 2 : Informations du dirigeant
         etape2PartenaireForm = new Etape2PartenaireForm("etape2PartenaireForm",
-                new CompoundPropertyModel<CreationPartenaireDTO>(nouveauPartenaire)) {
-
-            private static final long serialVersionUID = -3398962583371973217L;
-
-            /*
-             * (non-Javadoc)
-             * 
-             * @see org.apache.wicket.markup.html.form.Form#onSubmit()
-             */
-            @Override
-            protected void onSubmit() {
-                nouveauPartenaire.setNumeroEtape(3);
-                this.setResponsePage(new NouveauArtisan(nouveauPartenaire));
-            }
-
-        };
+                new CompoundPropertyModel<CreationPartenaireDTO>(nouveauPartenaire));
         containerEtape2 = new WebMarkupContainer("containerEtape2");
         containerEtape2.add(etape2PartenaireForm);
         containerEtape2.setVisible(false);
@@ -85,7 +68,7 @@ public class NouveauArtisan extends MasterPage {
         this.add(containerEtape3);
 
         try {
-            changementEtape(/* nouveauPartenaire.getNumeroEtape() */3);
+            changementEtape(nouveauPartenaire.getNumeroEtape());
         } catch (FrontEndException e) {
             if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("Erreur lors du changment d'étape pendant la creation d'un nouveau partenaire", e);
@@ -140,6 +123,12 @@ public class NouveauArtisan extends MasterPage {
         containerEtape3.setVisible(true);
     }
 
+    private void etape4Confirmation() {
+        carteFrance.setVisible(false);
+        containerEtape2.setVisible(false);
+        containerEtape3.setVisible(false);
+    }
+
     private void changementEtape(Integer numeroEtape) throws FrontEndException {
         // On charge l'etape demandé grace au numero d'etape passé en parametre
         switch (numeroEtape) {
@@ -154,6 +143,10 @@ public class NouveauArtisan extends MasterPage {
         case 3:
             loggerChangementEtape("Passage dans l'étape 3");
             etape3InformationsEntreprise();
+            break;
+        case 4:
+            loggerChangementEtape("Passage dans l'étape 4");
+            etape4Confirmation();
             break;
         default:
             throw new FrontEndException("Aucune étape du nouveau devis chargées, Situation Impossible");
@@ -175,6 +168,7 @@ public class NouveauArtisan extends MasterPage {
      */
     @Override
     public void onEvent(IEvent<?> event) {
+        super.onEvent(event);
         if (event.getPayload() instanceof MapFranceEvent) {
             MapFranceEvent eventMapFrance = (MapFranceEvent) event.getPayload();
 
@@ -197,13 +191,20 @@ public class NouveauArtisan extends MasterPage {
             eventMapFrance.getTarget().add(this);
         }
 
-        if (event.getPayload() instanceof FeedBackPanelEvent) {
-            FeedBackPanelEvent feedBackPanelUpdate = (FeedBackPanelEvent) event.getPayload();
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Affichage message dans le feedBackPanel");
+        if (event.getPayload() instanceof ChangementEtapeEvent) {
+            ChangementEtapeEvent changementEtapeEvent = (ChangementEtapeEvent) event.getPayload();
+
+            // On récupére le departement qui se trouve dans l'event
+            this.nouveauPartenaire = changementEtapeEvent.getNouveauPartenaire();
+            try {
+                changementEtape(nouveauPartenaire.getNumeroEtape());
+            } catch (FrontEndException e) {
+                if (LOGGER.isErrorEnabled()) {
+                    LOGGER.error("Probleme frontend avec l'etape " + nouveauPartenaire.getNumeroEtape(), e);
+                }
             }
-            feedBackPanelGeneral.error(feedBackPanelUpdate.getMessage());
-            feedBackPanelUpdate.getTarget().add(feedBackPanelGeneral);
+
+            changementEtapeEvent.getTarget().add(this);
         }
     }
 

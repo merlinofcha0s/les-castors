@@ -2,10 +2,12 @@ package fr.batimen.web.client.extend.nouveau.artisan;
 
 import java.util.Arrays;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
-import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator;
 import org.apache.wicket.model.IModel;
@@ -19,6 +21,7 @@ import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.dto.enums.Civilite;
 import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
+import fr.batimen.web.client.extend.nouveau.artisan.event.ChangementEtapeEvent;
 import fr.batimen.web.client.validator.EmailUniquenessValidator;
 
 public class Etape2PartenaireForm extends Form<CreationPartenaireDTO> {
@@ -27,6 +30,8 @@ public class Etape2PartenaireForm extends Form<CreationPartenaireDTO> {
 
     public Etape2PartenaireForm(String id, IModel<CreationPartenaireDTO> model) {
         super(id, model);
+
+        final CreationPartenaireDTO nouveauPartenaire = model.getObject();
 
         this.setMarkupId("formPartenaireEtape2");
 
@@ -93,7 +98,25 @@ public class Etape2PartenaireForm extends Form<CreationPartenaireDTO> {
 
         this.add(new EqualPasswordInputValidator(passwordField, confirmPassword));
 
-        SubmitLink validateEtape2Partenaire = new SubmitLink("validateEtape2Partenaire");
+        AjaxSubmitLink validateEtape2Partenaire = new AjaxSubmitLink("validateEtape2Partenaire") {
+            private static final long serialVersionUID = -171673358382084307L;
+
+            /*
+             * (non-Javadoc)
+             * 
+             * @see
+             * org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink#onSubmit
+             * (org.apache.wicket.ajax.AjaxRequestTarget,
+             * org.apache.wicket.markup.html.form.Form)
+             */
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                nouveauPartenaire.setNumeroEtape(3);
+                ChangementEtapeEvent changementEtapeEvent = new ChangementEtapeEvent(target, nouveauPartenaire);
+                this.send(target.getPage(), Broadcast.EXACT, changementEtapeEvent);
+            }
+
+        };
         validateEtape2Partenaire.setMarkupId("validateEtape2Partenaire");
 
         this.add(civilite);
@@ -107,5 +130,4 @@ public class Etape2PartenaireForm extends Form<CreationPartenaireDTO> {
         this.add(validateEtape2Partenaire);
 
     }
-
 }

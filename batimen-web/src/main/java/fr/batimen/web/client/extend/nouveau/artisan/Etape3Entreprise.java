@@ -6,7 +6,6 @@ import java.util.List;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
-import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -26,7 +25,7 @@ import org.odlabs.wiquery.ui.dialog.DialogAnimateOption;
 import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
 import fr.batimen.dto.helper.CategorieLoader;
-import fr.batimen.web.client.event.FeedBackPanelEvent;
+import fr.batimen.web.client.master.MasterPage;
 
 public class Etape3Entreprise extends Panel {
 
@@ -44,27 +43,13 @@ public class Etape3Entreprise extends Panel {
     public Etape3Entreprise(String id, IModel<?> model, final CreationPartenaireDTO nouveauPartenaire) {
         this(id, model);
 
-        // Etape 3 : Information de l'entreprise
+        categoriesSelectionnees = new ArrayList<CategorieMetierDTO>();
+        nouveauPartenaire.getEntreprise().setCategorieMetier(categoriesSelectionnees);
+
         etape3EntrepriseForm = new Etape3EntrepriseForm("etape3EntrepriseForm",
-                new CompoundPropertyModel<CreationPartenaireDTO>(nouveauPartenaire)) {
-
-            private static final long serialVersionUID = -7951018707634233008L;
-
-            /*
-             * (non-Javadoc)
-             * 
-             * @see org.apache.wicket.markup.html.form.Form#onSubmit()
-             */
-            @Override
-            protected void onSubmit() {
-                nouveauPartenaire.setNumeroEtape(4);
-                this.setResponsePage(new NouveauArtisan(nouveauPartenaire));
-            }
-        };
+                new CompoundPropertyModel<CreationPartenaireDTO>(nouveauPartenaire), categoriesSelectionnees);
 
         final Dialog activiteDialog = initActiviteDialog();
-
-        categoriesSelectionnees = new ArrayList<CategorieMetierDTO>();
 
         Image ajouterImg = new Image("ajouterImg", new ContextRelativeResource("img/add.png"));
 
@@ -144,11 +129,20 @@ public class Etape3Entreprise extends Panel {
             public void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 CategorieMetierDTO categorieSelectionnee = categorieMetier.getConvertedInput();
 
+                boolean isError = false;
+
                 if (categoriesSelectionnees.contains(categorieSelectionnee)) {
-                    triggerEventFeedBackPanel(target, "Vous ne pouvez pas sélectionner deux fois la même catégorie");
-                } else if (categoriesSelectionnees.contains(CategorieLoader.getCategorieAll())) {
-                    triggerEventFeedBackPanel(target, "Vous avez déjà selectionné toutes les categories");
-                } else {
+                    MasterPage.triggerEventFeedBackPanel(target,
+                            "Vous ne pouvez pas sélectionner deux fois la même catégorie");
+                    isError = true;
+                }
+
+                if (categoriesSelectionnees.contains(CategorieLoader.getCategorieAll())) {
+                    MasterPage.triggerEventFeedBackPanel(target, "Vous avez déjà selectionné toutes les categories");
+                    isError = true;
+                }
+
+                if (!isError) {
                     categoriesSelectionnees.add(categorieSelectionnee);
                 }
 
@@ -166,11 +160,4 @@ public class Etape3Entreprise extends Panel {
 
         return activiteDialog;
     }
-
-    private void triggerEventFeedBackPanel(AjaxRequestTarget target, String message) {
-        FeedBackPanelEvent feedbackPanelEvent = new FeedBackPanelEvent(target);
-        feedbackPanelEvent.setMessage(message);
-        target.getPage().send(target.getPage(), Broadcast.EXACT, feedbackPanelEvent);
-    }
-
 }

@@ -4,6 +4,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.behavior.AttributeAppender;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.StringHeaderItem;
@@ -27,6 +28,7 @@ import org.slf4j.LoggerFactory;
 
 import fr.batimen.web.client.component.BatimenFeedbackPanel;
 import fr.batimen.web.client.event.Event;
+import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.web.client.event.LoginEvent;
 import fr.batimen.web.client.extend.Accueil;
 import fr.batimen.web.client.extend.Contact;
@@ -469,6 +471,29 @@ public abstract class MasterPage extends WebPage {
         }
 
         return loginDialog;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.wicket.Component#onEvent(org.apache.wicket.event.IEvent)
+     */
+    @Override
+    public void onEvent(IEvent<?> event) {
+        if (event.getPayload() instanceof FeedBackPanelEvent) {
+            FeedBackPanelEvent feedBackPanelUpdate = (FeedBackPanelEvent) event.getPayload();
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Affichage message dans le feedBackPanel");
+            }
+            feedBackPanelGeneral.error(feedBackPanelUpdate.getMessage());
+            feedBackPanelUpdate.getTarget().add(feedBackPanelGeneral);
+        }
+    }
+
+    public static void triggerEventFeedBackPanel(AjaxRequestTarget target, String message) {
+        FeedBackPanelEvent feedbackPanelEvent = new FeedBackPanelEvent(target);
+        feedbackPanelEvent.setMessage(message);
+        target.getPage().send(target.getPage(), Broadcast.EXACT, feedbackPanelEvent);
     }
 
 }
