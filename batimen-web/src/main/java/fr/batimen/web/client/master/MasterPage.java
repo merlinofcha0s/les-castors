@@ -485,7 +485,10 @@ public abstract class MasterPage extends WebPage {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Affichage message dans le feedBackPanel");
             }
-            feedBackPanelGeneral.error(feedBackPanelUpdate.getMessage());
+            if (!feedBackPanelUpdate.getMessage().isEmpty()) {
+                feedBackPanelGeneral.error(feedBackPanelUpdate.getMessage());
+            }
+
             feedBackPanelUpdate.getTarget().add(feedBackPanelGeneral);
         }
     }

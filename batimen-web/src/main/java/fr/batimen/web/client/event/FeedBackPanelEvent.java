@@ -14,7 +14,7 @@ public class FeedBackPanelEvent extends AbstractEvent {
      * @return the message
      */
     public String getMessage() {
-        return message;
+        return message == null ? "" : message;
     }
 
     /**

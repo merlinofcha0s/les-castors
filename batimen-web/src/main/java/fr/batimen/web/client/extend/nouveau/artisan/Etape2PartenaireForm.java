@@ -21,6 +21,7 @@ import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.dto.enums.Civilite;
 import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
+import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.web.client.extend.nouveau.artisan.event.ChangementEtapeEvent;
 import fr.batimen.web.client.validator.EmailUniquenessValidator;
 
@@ -100,6 +101,20 @@ public class Etape2PartenaireForm extends Form<CreationPartenaireDTO> {
 
         AjaxSubmitLink validateEtape2Partenaire = new AjaxSubmitLink("validateEtape2Partenaire") {
             private static final long serialVersionUID = -171673358382084307L;
+
+            /*
+             * (non-Javadoc)
+             * 
+             * @see
+             * org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink#onError
+             * (org.apache.wicket.ajax.AjaxRequestTarget,
+             * org.apache.wicket.markup.html.form.Form)
+             */
+            @Override
+            protected void onError(AjaxRequestTarget target, Form<?> form) {
+                super.onError(target, form);
+                this.send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target));
+            }
 
             /*
              * (non-Javadoc)

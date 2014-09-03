@@ -203,7 +203,7 @@ public class NouveauArtisan extends MasterPage {
                     LOGGER.error("Probleme frontend avec l'etape " + nouveauPartenaire.getNumeroEtape(), e);
                 }
             }
-
+            changementEtapeEvent.getTarget().add(feedBackPanelGeneral);
             changementEtapeEvent.getTarget().add(this);
         }
     }

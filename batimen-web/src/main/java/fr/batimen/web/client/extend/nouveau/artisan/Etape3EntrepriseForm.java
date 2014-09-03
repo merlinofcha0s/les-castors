@@ -25,7 +25,9 @@ import fr.batimen.dto.enums.StatutJuridique;
 import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.batimen.web.client.component.CastorDatePicker;
+import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.web.client.extend.nouveau.artisan.event.ChangementEtapeEvent;
+import fr.batimen.web.client.extend.nouveau.artisan.validator.SiretValidator;
 import fr.batimen.web.client.master.MasterPage;
 
 public class Etape3EntrepriseForm extends Form<CreationPartenaireDTO> {
@@ -59,9 +61,9 @@ public class Etape3EntrepriseForm extends Form<CreationPartenaireDTO> {
         statutJuridique.add(new ErrorHighlightBehavior());
         statutJuridique.add(new RequiredBorderBehaviour());
 
-        TextField<Integer> nbEmploye = new TextField<Integer>("entreprise.nbEmploye");
-        nbEmploye.setMarkupId("nbEmployeField");
-        nbEmploye.add(new ErrorHighlightBehavior());
+        TextField<Integer> nbEmployes = new TextField<Integer>("entreprise.nbEmploye");
+        nbEmployes.setMarkupId("nbEmployeField");
+        nbEmployes.add(new ErrorHighlightBehavior());
 
         // nbDevis.IConverter=Le champs nombre de devis doit contenir un nombre
         // !
@@ -75,6 +77,7 @@ public class Etape3EntrepriseForm extends Form<CreationPartenaireDTO> {
         siret.setRequired(true);
         siret.setMarkupId("siretField");
         siret.add(new PatternValidator(ValidatorConstant.ENTREPRISE_SIRET_REGEXP));
+        siret.add(new SiretValidator());
         siret.add(new ErrorHighlightBehavior());
         siret.add(new RequiredBorderBehaviour());
 
@@ -115,6 +118,20 @@ public class Etape3EntrepriseForm extends Form<CreationPartenaireDTO> {
              * (non-Javadoc)
              * 
              * @see
+             * org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink#onError
+             * (org.apache.wicket.ajax.AjaxRequestTarget,
+             * org.apache.wicket.markup.html.form.Form)
+             */
+            @Override
+            protected void onError(AjaxRequestTarget target, Form<?> form) {
+                super.onError(target, form);
+                this.send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target));
+            }
+
+            /*
+             * (non-Javadoc)
+             * 
+             * @see
              * org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink#onSubmit
              * (org.apache.wicket.ajax.AjaxRequestTarget,
              * org.apache.wicket.markup.html.form.Form)
@@ -137,7 +154,7 @@ public class Etape3EntrepriseForm extends Form<CreationPartenaireDTO> {
 
         this.add(nomComplet);
         this.add(statutJuridique);
-        this.add(nbEmploye);
+        this.add(nbEmployes);
         this.add(dateCreation);
         this.add(siret);
         this.add(logo);

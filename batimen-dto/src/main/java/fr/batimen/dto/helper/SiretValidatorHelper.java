@@ -1,6 +1,6 @@
 package fr.batimen.dto.helper;
 
-public class SiretValidator {
+public class SiretValidatorHelper {
 
     public static boolean isSiretValide(String siretToValidate) {
 
