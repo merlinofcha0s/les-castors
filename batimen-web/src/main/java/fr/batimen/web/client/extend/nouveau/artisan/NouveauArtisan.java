@@ -27,6 +27,9 @@ public class NouveauArtisan extends MasterPage {
     // DTO
     private CreationPartenaireDTO nouveauPartenaire = new CreationPartenaireDTO();
 
+    // Composant maitre
+    private final WebMarkupContainer masterContainer;
+
     // Composants Généraux
     private NavigationWizard navigationWizard;
     // Composants étape 1
@@ -38,12 +41,18 @@ public class NouveauArtisan extends MasterPage {
 
     // Composant étape 3
     private final Etape3Entreprise etape3Entreprise;
-    private final WebMarkupContainer containerEtape3;
+
+    // Composant étape 4
+    private final Etape4Confirmation etape4Confirmation;
 
     public NouveauArtisan() {
         super("Inscription d'un nouveau partenaire qui effectuera les travaux chez un particulier",
                 "Artisan Rénovation Inscription", "Nouveau partenaire", true, "img/bg_title1.jpg");
         super.setActiveMenu(MasterPage.NONE);
+
+        masterContainer = new WebMarkupContainer("masterContainer");
+        masterContainer.setMarkupId("masterContainer");
+        masterContainer.setOutputMarkupId(true);
 
         initNavigationWizard();
 
@@ -57,15 +66,20 @@ public class NouveauArtisan extends MasterPage {
         containerEtape2.add(etape2PartenaireForm);
         containerEtape2.setVisible(false);
 
-        etape3Entreprise = new Etape3Entreprise("etape3", new Model<Serializable>(), nouveauPartenaire);
+        // Etape 3 : Information de l'entreprise
+        etape3Entreprise = new Etape3Entreprise("etape3InformationsEntreprise", new Model<Serializable>(),
+                nouveauPartenaire);
 
-        containerEtape3 = new WebMarkupContainer("containerEtape3");
-        containerEtape3.add(etape3Entreprise);
-        containerEtape3.setVisible(false);
+        // Etape 4 : confirmation inscription
+        etape4Confirmation = new Etape4Confirmation("etape4Confirmation");
+        etape4Confirmation.setVisible(false);
 
-        this.add(carteFrance);
-        this.add(containerEtape2);
-        this.add(containerEtape3);
+        masterContainer.add(carteFrance);
+        masterContainer.add(containerEtape2);
+        masterContainer.add(etape3Entreprise);
+        masterContainer.add(etape4Confirmation);
+
+        this.add(masterContainer);
 
         try {
             changementEtape(nouveauPartenaire.getNumeroEtape());
@@ -75,18 +89,6 @@ public class NouveauArtisan extends MasterPage {
             }
         }
     }
-
-    public NouveauArtisan(CreationPartenaireDTO nouveauPartenaire) {
-        this();
-        this.nouveauPartenaire = nouveauPartenaire;
-        try {
-            changementEtape(nouveauPartenaire.getNumeroEtape());
-        } catch (FrontEndException e) {
-            if (LOGGER.isErrorEnabled()) {
-                LOGGER.error("Probleme frontend", e);
-            }
-        }
-    };
 
     private void initNavigationWizard() {
         List<String> etapes = new ArrayList<String>();
@@ -102,31 +104,39 @@ public class NouveauArtisan extends MasterPage {
                 LOGGER.error("Problème avec le chargement du wizard", fee);
             }
         }
-        this.add(navigationWizard);
+        masterContainer.add(navigationWizard);
     }
 
     private void etape1Departement() {
         carteFrance.setVisible(true);
         containerEtape2.setVisible(false);
-        containerEtape3.setVisible(false);
+        etape3Entreprise.setVisible(false);
     }
 
     private void etape2InformationsDirigeant() {
         carteFrance.setVisible(false);
         containerEtape2.setVisible(true);
-        containerEtape3.setVisible(false);
+        etape3Entreprise.setVisible(false);
     }
 
     private void etape3InformationsEntreprise() {
         carteFrance.setVisible(false);
         containerEtape2.setVisible(false);
-        containerEtape3.setVisible(true);
+        etape3Entreprise.setVisible(true);
     }
 
     private void etape4Confirmation() {
         carteFrance.setVisible(false);
         containerEtape2.setVisible(false);
-        containerEtape3.setVisible(false);
+        etape3Entreprise.setVisible(false);
+        etape4Confirmation.setVisible(true);
+        Integer retourService = creationPartenaire();
+        if (retourService == 0) {
+            etape4Confirmation.succesInscription();
+        } else {
+            etape4Confirmation.failureInscription();
+        }
+
     }
 
     private void changementEtape(Integer numeroEtape) throws FrontEndException {
@@ -159,6 +169,10 @@ public class NouveauArtisan extends MasterPage {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug(message);
         }
+    }
+
+    private Integer creationPartenaire() {
+        return 0;
     }
 
     /*
