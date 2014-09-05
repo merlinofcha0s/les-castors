@@ -25,6 +25,12 @@ import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.web.client.extend.nouveau.artisan.event.ChangementEtapeEvent;
 import fr.batimen.web.client.validator.EmailUniquenessValidator;
 
+/**
+ * Etape 2 de l'inscription d'un nouvel artisan : Informations du dirigeant
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class Etape2PartenaireForm extends Form<CreationPartenaireDTO> {
 
     private static final long serialVersionUID = 8347005157184562826L;

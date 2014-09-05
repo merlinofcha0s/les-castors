@@ -30,6 +30,13 @@ import fr.batimen.web.client.extend.nouveau.artisan.event.ChangementEtapeEvent;
 import fr.batimen.web.client.extend.nouveau.artisan.validator.SiretValidator;
 import fr.batimen.web.client.master.MasterPage;
 
+/**
+ * Form de l'etape 3 permettant au nouvel artisan de renseigner les informayions
+ * de l'entreprise
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class Etape3EntrepriseForm extends Form<CreationPartenaireDTO> {
 
     private static final long serialVersionUID = 7654913676022607009L;

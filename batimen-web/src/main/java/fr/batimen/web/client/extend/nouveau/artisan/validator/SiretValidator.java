@@ -6,6 +6,12 @@ import org.apache.wicket.validation.ValidationError;
 
 import fr.batimen.dto.helper.SiretValidatorHelper;
 
+/**
+ * Valide un siret
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class SiretValidator implements IValidator<String> {
 
     private static final long serialVersionUID = -9143693623488715025L;

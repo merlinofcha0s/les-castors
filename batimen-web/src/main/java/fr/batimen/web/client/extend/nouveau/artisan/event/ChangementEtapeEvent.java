@@ -5,6 +5,13 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
 import fr.batimen.web.client.event.AbstractEvent;
 
+/**
+ * Event qui declenche le changement d'etape dans la page creation de nouveau
+ * partenaire.
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class ChangementEtapeEvent extends AbstractEvent {
 
     private CreationPartenaireDTO nouveauPartenaire;

@@ -19,6 +19,12 @@ import fr.batimen.web.client.event.MapFranceEvent;
 import fr.batimen.web.client.extend.nouveau.artisan.event.ChangementEtapeEvent;
 import fr.batimen.web.client.master.MasterPage;
 
+/**
+ * Page permettant d'enregistré un nouveau partenaire (artisan)
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class NouveauArtisan extends MasterPage {
 
     private static final long serialVersionUID = 7796768527786855832L;
@@ -130,6 +136,7 @@ public class NouveauArtisan extends MasterPage {
         containerEtape2.setVisible(false);
         etape3Entreprise.setVisible(false);
         etape4Confirmation.setVisible(true);
+        // Appel du service d'enregistrement du nouveau partenaire
         Integer retourService = creationPartenaire();
         if (retourService == 0) {
             etape4Confirmation.succesInscription();
@@ -208,7 +215,7 @@ public class NouveauArtisan extends MasterPage {
         if (event.getPayload() instanceof ChangementEtapeEvent) {
             ChangementEtapeEvent changementEtapeEvent = (ChangementEtapeEvent) event.getPayload();
 
-            // On récupére le departement qui se trouve dans l'event
+            // On extrait le numero de l'etape
             this.nouveauPartenaire = changementEtapeEvent.getNouveauPartenaire();
             try {
                 changementEtape(nouveauPartenaire.getNumeroEtape());

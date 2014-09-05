@@ -10,6 +10,13 @@ import org.apache.wicket.request.resource.ContextRelativeResource;
 
 import fr.batimen.web.client.extend.Accueil;
 
+/**
+ * Etape 4 : Confirme ou informe si il y a eu des erreurs lors de
+ * l'enregistrement de ce compte par le webservice.
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class Etape4Confirmation extends Panel {
 
     private static final long serialVersionUID = 6182955802651062198L;

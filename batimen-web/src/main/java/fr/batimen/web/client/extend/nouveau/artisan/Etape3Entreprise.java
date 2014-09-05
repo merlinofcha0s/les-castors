@@ -27,6 +27,12 @@ import fr.batimen.dto.aggregate.CreationPartenaireDTO;
 import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.web.client.master.MasterPage;
 
+/**
+ * Etape 3 de l'inscription d'un nouvel artisan : Informations sur l'entreprise
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class Etape3Entreprise extends Panel {
 
     private static final long serialVersionUID = -4959756477938900372L;
@@ -131,17 +137,20 @@ public class Etape3Entreprise extends Panel {
 
                 boolean isError = false;
 
+                // L'utilisateur a selectionné deux fois la meme categorie
                 if (categoriesSelectionnees.contains(categorieSelectionnee)) {
                     MasterPage.triggerEventFeedBackPanel(target,
                             "Vous ne pouvez pas sélectionner deux fois la même catégorie");
                     isError = true;
                 }
 
+                // L'utilisateur a deja selectionné toutes les categories
                 if (categoriesSelectionnees.contains(CategorieLoader.getCategorieAll())) {
                     MasterPage.triggerEventFeedBackPanel(target, "Vous avez déjà selectionné toutes les categories");
                     isError = true;
                 }
 
+                // Si il n'y a pas d'erreur
                 if (!isError) {
                     categoriesSelectionnees.add(categorieSelectionnee);
                 }
@@ -151,6 +160,8 @@ public class Etape3Entreprise extends Panel {
             }
 
         };
+
+        enregistreCategorie.setMarkupId("enregistrerCategorie");
 
         Form<Void> formSelectionActivite = new Form<Void>("formSelectionActivite");
         formSelectionActivite.add(categorieMetier);

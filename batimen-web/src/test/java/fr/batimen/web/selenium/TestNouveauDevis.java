@@ -2,22 +2,20 @@ package fr.batimen.web.selenium;
 
 import static com.ninja_squad.dbsetup.Operations.sequenceOf;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.ninja_squad.dbsetup.DbSetup;
 import com.ninja_squad.dbsetup.operation.Operation;
+
+import fr.batimen.web.utils.UtilsSelenium;
 
 /**
  * Classe de test selenium pour la creation de nouveau devis par le client
@@ -48,7 +46,7 @@ public class TestNouveauDevis extends AbstractITTest {
         driver.get(appUrl + nouveauDevisDepartementURL);
 
         // On passe à l'etape 1
-        etape1();
+        UtilsSelenium.selectionDepartement(driver);
         // On remplit l'étape 2
         etape2();
         // On passe l'etape 3
@@ -72,7 +70,7 @@ public class TestNouveauDevis extends AbstractITTest {
     public void testCreationNouveauDevisNonAuthenticatedSucceed() throws InterruptedException {
         driver.get(appUrl + nouveauDevisDepartementURL);
         // On passe à l'etape 1
-        etape1();
+        UtilsSelenium.selectionDepartement(driver);
         // On remplit l'étape 2
         etape2();
         // On remplit l'étape 3
@@ -123,7 +121,7 @@ public class TestNouveauDevis extends AbstractITTest {
     public void testCreationNouveauDevisSubscribeNotAuthenticatedSucceed() throws InterruptedException {
         driver.get(appUrl + nouveauDevisDepartementURL);
         // On selectionne le bon département
-        etape1();
+        UtilsSelenium.selectionDepartement(driver);
         // On remplit l'étape 2
         etape2();
         // On remplit l'étape 3
@@ -147,7 +145,7 @@ public class TestNouveauDevis extends AbstractITTest {
         // Premiere saisie de l'annonce.
         driver.get(appUrl + nouveauDevisDepartementURL);
         // On selectionne le bon département
-        etape1();
+        UtilsSelenium.selectionDepartement(driver);
         // On remplit l'étape 2
         etape2();
         // On passe à l'étape 3
@@ -159,7 +157,7 @@ public class TestNouveauDevis extends AbstractITTest {
 
         // Deuxieme saisie de l'annonce.
         driver.get(appUrl + nouveauDevisDepartementURL);
-        etape1();
+        UtilsSelenium.selectionDepartement(driver);
         etape2();
         etape3();
 
@@ -184,20 +182,6 @@ public class TestNouveauDevis extends AbstractITTest {
         driver.findElement(By.id("villeField")).clear();
         driver.findElement(By.id("villeField")).sendKeys("selenium city");
         driver.findElement(By.id("validateQualification")).click();
-    }
-
-    private void etape1() {
-        Wait<WebDriver> wait = new WebDriverWait(driver, 30);
-        try {
-            wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector("#mapFrance > svg")));
-        } catch (Throwable error) {
-            assertFalse("Timeout waiting for Page Load Request to complete.", true);
-        }
-
-        WebElement carteFrance = driver.findElement(By.cssSelector("#mapFrance > svg"));
-
-        Actions builder = new Actions(driver);
-        builder.clickAndHold(carteFrance).release(carteFrance).build().perform();
     }
 
     private void etape2() {
