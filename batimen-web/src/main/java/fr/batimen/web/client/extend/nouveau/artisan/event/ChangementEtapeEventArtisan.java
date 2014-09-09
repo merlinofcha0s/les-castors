@@ -12,11 +12,11 @@ import fr.batimen.web.client.event.AbstractEvent;
  * @author Casaucau Cyril
  * 
  */
-public class ChangementEtapeEvent extends AbstractEvent {
+public class ChangementEtapeEventArtisan extends AbstractEvent {
 
     private CreationPartenaireDTO nouveauPartenaire;
 
-    public ChangementEtapeEvent(AjaxRequestTarget target, CreationPartenaireDTO nouveauPartenaire) {
+    public ChangementEtapeEventArtisan(AjaxRequestTarget target, CreationPartenaireDTO nouveauPartenaire) {
         super(target);
         this.nouveauPartenaire = nouveauPartenaire;
     }

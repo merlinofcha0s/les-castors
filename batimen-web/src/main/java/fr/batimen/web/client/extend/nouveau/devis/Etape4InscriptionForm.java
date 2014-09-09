@@ -1,9 +1,11 @@
 package fr.batimen.web.client.extend.nouveau.devis;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
-import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator;
 import org.apache.wicket.markup.html.link.Link;
@@ -19,6 +21,8 @@ import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.batimen.web.client.component.BatimenToolTip;
 import fr.batimen.web.client.extend.CGU;
+import fr.batimen.web.client.extend.nouveau.devis.event.ChangementEtapeClientEvent;
+import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.web.client.validator.CheckBoxTrueValidator;
 import fr.batimen.web.client.validator.EmailUniquenessValidator;
 import fr.batimen.web.client.validator.LoginUniquenessValidator;
@@ -33,6 +37,8 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
 
     private static final long serialVersionUID = 2500892594731116597L;
 
+    private final CreationAnnonceDTO nouvelleAnnonce;
+
     private final PasswordTextField passwordField;
     private final TextField<String> nomField;
     private final TextField<String> prenomField;
@@ -45,12 +51,13 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
 
         this.setMarkupId("formEtape4");
 
+        nouvelleAnnonce = model.getObject();
+
         String idValidateInscription = "validateInscription";
 
         nomField = new TextField<String>("client.nom");
         nomField.setMarkupId("nom");
-        nomField.add(StringValidator.lengthBetween(ValidatorConstant.CLIENT_NOM_MIN,
-                ValidatorConstant.CLIENT_NOM_MAX));
+        nomField.add(StringValidator.lengthBetween(ValidatorConstant.CLIENT_NOM_MIN, ValidatorConstant.CLIENT_NOM_MAX));
 
         prenomField = new TextField<String>("client.prenom");
         prenomField.setMarkupId("prenom");
@@ -116,7 +123,40 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
 
         cguLink.setMarkupId("cguLink");
 
-        SubmitLink validateInscription = new SubmitLink(idValidateInscription);
+        AjaxSubmitLink validateInscription = new AjaxSubmitLink(idValidateInscription) {
+
+            private static final long serialVersionUID = 6200004097590331163L;
+
+            /*
+             * (non-Javadoc)
+             * 
+             * @see
+             * org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink#onSubmit
+             * (org.apache.wicket.ajax.AjaxRequestTarget,
+             * org.apache.wicket.markup.html.form.Form)
+             */
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                nouvelleAnnonce.setNumeroEtape(5);
+                ChangementEtapeClientEvent changementEtapeEventClient = new ChangementEtapeClientEvent(target,
+                        nouvelleAnnonce);
+                target.getPage().send(target.getPage(), Broadcast.BREADTH, changementEtapeEventClient);
+            }
+
+            /*
+             * (non-Javadoc)
+             * 
+             * @see
+             * org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink#onError
+             * (org.apache.wicket.ajax.AjaxRequestTarget,
+             * org.apache.wicket.markup.html.form.Form)
+             */
+            @Override
+            protected void onError(AjaxRequestTarget target, Form<?> form) {
+                MasterPage.triggerEventFeedBackPanel(target, "Problème technique, veuillez réessayer");
+            }
+
+        };
         validateInscription.setMarkupId(idValidateInscription);
 
         this.add(nomField);

@@ -30,6 +30,7 @@ import fr.batimen.web.client.event.MapFranceEvent;
 import fr.batimen.web.client.extend.Accueil;
 import fr.batimen.web.client.extend.Contact;
 import fr.batimen.web.client.extend.nouveau.devis.event.CategorieEvent;
+import fr.batimen.web.client.extend.nouveau.devis.event.ChangementEtapeClientEvent;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.web.client.session.BatimenSession;
 import fr.batimen.ws.client.service.AnnonceService;
@@ -50,9 +51,9 @@ public class NouveauDevis extends MasterPage {
     private NavigationWizard navigationWizard;
 
     // Objet à remplir
-    private CreationAnnonceDTO creationAnnonce = new CreationAnnonceDTO();
+    private CreationAnnonceDTO nouvelleAnnonce = new CreationAnnonceDTO();
     private final CompoundPropertyModel<CreationAnnonceDTO> propertyModelNouvelleAnnonce = new CompoundPropertyModel<CreationAnnonceDTO>(
-            creationAnnonce);
+            nouvelleAnnonce);
 
     // Composants étape 1
     private final MapFrance carteFrance;
@@ -90,16 +91,7 @@ public class NouveauDevis extends MasterPage {
         containerQualification = new WebMarkupContainer("containerQualification");
         containerQualification.setVisible(false);
 
-        etape3AnnonceForm = new Etape3AnnonceForm("formQualification", propertyModelNouvelleAnnonce) {
-
-            private static final long serialVersionUID = -6436387191126517996L;
-
-            @Override
-            protected void onSubmit() {
-                creationAnnonce.setNumeroEtape(4);
-                this.setResponsePage(new NouveauDevis(creationAnnonce));
-            }
-        };
+        etape3AnnonceForm = new Etape3AnnonceForm("formQualification", propertyModelNouvelleAnnonce);
 
         containerQualification.add(etape3AnnonceForm);
 
@@ -107,29 +99,7 @@ public class NouveauDevis extends MasterPage {
         containerInscription = new WebMarkupContainer("containerInscription");
         containerInscription.setVisible(false);
 
-        etape4InscriptionForm = new Etape4InscriptionForm("formInscription", propertyModelNouvelleAnnonce) {
-
-            private static final long serialVersionUID = -7785574548677996934L;
-
-            @Override
-            protected void onSubmit() {
-
-                // On set les champs manuellement contrairement a l'étape 2
-                // car
-                // le compound property model ne marche pas pour une raison
-                // inconnu.
-                creationAnnonce.getClient().setNom(etape4InscriptionForm.getNomField().getConvertedInput());
-                creationAnnonce.getClient().setPrenom(etape4InscriptionForm.getPrenomField().getConvertedInput());
-                creationAnnonce.getClient().setNumeroTel(etape4InscriptionForm.getNumeroTelField().getConvertedInput());
-                creationAnnonce.getClient().setEmail(etape4InscriptionForm.getEmailField().getConvertedInput());
-                creationAnnonce.getClient().setLogin(etape4InscriptionForm.getLoginField().getConvertedInput());
-                creationAnnonce.getClient().setPassword(
-                        HashHelper.hashString(etape4InscriptionForm.getPasswordField().getConvertedInput()));
-                creationAnnonce.setNumeroEtape(5);
-                this.setResponsePage(new NouveauDevis(creationAnnonce));
-            }
-
-        };
+        etape4InscriptionForm = new Etape4InscriptionForm("formInscription", propertyModelNouvelleAnnonce);
 
         AjaxLink<String> connexionLink = new AjaxLink<String>("connexion") {
 
@@ -203,7 +173,7 @@ public class NouveauDevis extends MasterPage {
         this.add(navigationWizard);
 
         try {
-            changementEtape(creationAnnonce.getNumeroEtape());
+            changementEtape(nouvelleAnnonce.getNumeroEtape());
         } catch (FrontEndException e) {
             if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("Probleme frontend", e);
@@ -214,7 +184,7 @@ public class NouveauDevis extends MasterPage {
 
     public NouveauDevis(CreationAnnonceDTO creationAnnonce) {
         this();
-        this.creationAnnonce = creationAnnonce;
+        this.nouvelleAnnonce = creationAnnonce;
         try {
             changementEtape(creationAnnonce.getNumeroEtape());
         } catch (FrontEndException e) {
@@ -234,14 +204,14 @@ public class NouveauDevis extends MasterPage {
         // Troisieme cas : l'enregistrement ne s'est pas bien passé.
         // Dernier cas : cas par defaut, on est pas dans l'etape 4 (mais il faut
         // quand meme instantié l'objet)
-        if (creationAnnonce.getIsSignedUp() != null && creationAnnonce.getIsSignedUp() && isEtape4
+        if (nouvelleAnnonce.getIsSignedUp() != null && nouvelleAnnonce.getIsSignedUp() && isEtape4
                 && codeRetour.equals(Constant.CODE_SERVICE_RETOUR_OK)) {
             confirmation1
                     .setDefaultModelObject("Votre devis a été mis en ligne, nous vous avons envoyé un mail récapitulatif");
             confirmation2.setDefaultModelObject("");
             imageConfirmation = new Image("imageConfirmation", new ContextRelativeResource("img/ok.png"));
             imageConfirmation.add(new AttributeModifier("alt", "ok"));
-        } else if (creationAnnonce.getIsSignedUp() != null && !creationAnnonce.getIsSignedUp() && isEtape4
+        } else if (nouvelleAnnonce.getIsSignedUp() != null && !nouvelleAnnonce.getIsSignedUp() && isEtape4
                 && codeRetour.equals(Constant.CODE_SERVICE_RETOUR_OK)) {
             imageConfirmation = new Image("imageConfirmation", new ContextRelativeResource("img/ok.png"));
             imageConfirmation.add(new AttributeModifier("alt", "ok"));
@@ -253,7 +223,7 @@ public class NouveauDevis extends MasterPage {
                 || codeRetour.equals(Constant.CODE_SERVICE_ANNONCE_RETOUR_DUPLICATE)) {
             if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("Erreur pendant le chargement de l'annonce");
-                loggerAnnonce(creationAnnonce);
+                loggerAnnonce(nouvelleAnnonce);
             }
             confirmation1
                     .setDefaultModelObject("Problème pendant l'enregistrement de l'annonce, veuillez nous excuser pour la gène occasionnée.");
@@ -352,8 +322,8 @@ public class NouveauDevis extends MasterPage {
     private void remplissageCreationAnnonceSiLogin() {
         BatimenSession session = (BatimenSession) BatimenSession.get();
         ClientDTO client = session.getSessionUser();
-        creationAnnonce.setIsSignedUp(true);
-        creationAnnonce.getClient().setLogin(client.getLogin());
+        nouvelleAnnonce.setIsSignedUp(true);
+        nouvelleAnnonce.getClient().setLogin(client.getLogin());
 
     }
 
@@ -369,7 +339,7 @@ public class NouveauDevis extends MasterPage {
         // l'utilisateur se connecte
         if (event.getPayload() instanceof LoginEvent) {
             Event update = (Event) event.getPayload();
-            if (creationAnnonce.getNumeroEtape() == 4) {
+            if (nouvelleAnnonce.getNumeroEtape() == 4) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("On est a l'étape 3 : Evenement recu de la popup de connexion, on passe à l'etape 5");
                 }
@@ -395,9 +365,9 @@ public class NouveauDevis extends MasterPage {
             if (departementInt != null && departementInt > 0 && departementInt < 100) {
 
                 // On l'enregistre dans la DTO
-                creationAnnonce.setDepartement(departementInt);
+                nouvelleAnnonce.setDepartement(departementInt);
                 // On prepare le passage à l'etape suivante
-                creationAnnonce.setNumeroEtape(2);
+                nouvelleAnnonce.setNumeroEtape(2);
                 try {
                     changementEtape(2);
                 } catch (FrontEndException e) {
@@ -416,9 +386,9 @@ public class NouveauDevis extends MasterPage {
         if (event.getPayload() instanceof CategorieEvent) {
             CategorieEvent eventCategorie = (CategorieEvent) event.getPayload();
             // On recupere la catégorie métier
-            creationAnnonce.setCategorieMetier(eventCategorie.getCategorieChoisie());
+            nouvelleAnnonce.setCategorieMetier(eventCategorie.getCategorieChoisie());
             // On set la prochaine etape
-            creationAnnonce.setNumeroEtape(3);
+            nouvelleAnnonce.setNumeroEtape(3);
             // On passe à l'etape suivante
             try {
                 changementEtape(3);
@@ -431,10 +401,32 @@ public class NouveauDevis extends MasterPage {
             eventCategorie.getTarget().add(this);
         }
 
+        if (event.getPayload() instanceof ChangementEtapeClientEvent) {
+            ChangementEtapeClientEvent eventChangementEtapeClient = (ChangementEtapeClientEvent) event.getPayload();
+            // On passe à l'etape suivante
+            this.nouvelleAnnonce = eventChangementEtapeClient.getNouvelleAnnonce();
+
+            if (nouvelleAnnonce.getNumeroEtape().equals(Integer.valueOf(5))) {
+                String password = nouvelleAnnonce.getClient().getPassword();
+                nouvelleAnnonce.getClient().setPassword(HashHelper.hashString(password));
+            }
+
+            try {
+                changementEtape(nouvelleAnnonce.getNumeroEtape());
+            } catch (FrontEndException e) {
+                if (LOGGER.isErrorEnabled()) {
+                    LOGGER.error("Probleme frontend avec l'etape " + nouvelleAnnonce.getNumeroEtape(), e);
+                }
+            }
+
+            // On dit a wicket de rafraichir ce panel avec la requete ajax
+            eventChangementEtapeClient.getTarget().add(this);
+        }
+
     }
 
     private Integer creationAnnonce() {
-        return AnnonceService.creationAnnonce(creationAnnonce);
+        return AnnonceService.creationAnnonce(nouvelleAnnonce);
     }
 
     private void loggerAnnonce(CreationAnnonceDTO nouvelleAnnonce) {

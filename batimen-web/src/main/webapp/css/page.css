@@ -179,14 +179,13 @@
 	margin-top: 20px;
 }
 
-
 #categorieMetierPartenaire {
 	padding-left: 16px;
 	padding-top: 10px;
 }
 
 #enregistrerCategorie {
-	padding-left: 293px;
+	float: right;
 }
 
 #formEntrepriseEtape3 {
@@ -201,19 +200,19 @@
 	padding-top: 21px;
 }
 
-#containerCategorieSelection{
+#containerCategorieSelection {
 	padding-top: 15px;
 }
 
-#containerAjoutActivite{
+#containerAjoutActivite {
 	padding-left: 10px;
 }
 
-#containerAjoutActivite span{
+#containerAjoutActivite span {
 	vertical-align: text-top;
 }
 
-#terminerInscriptionPartenaire{
+#terminerInscriptionPartenaire {
 	float: right;
 	margin-right: 35px;
 }

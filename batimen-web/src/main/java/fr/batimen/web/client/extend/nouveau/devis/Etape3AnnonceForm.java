@@ -2,10 +2,12 @@ package fr.batimen.web.client.extend.nouveau.devis;
 
 import java.util.Arrays;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.SubmitLink;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.MultiFileUploadField;
@@ -21,6 +23,8 @@ import fr.batimen.dto.enums.TypeContact;
 import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.batimen.web.client.extend.nouveau.devis.event.CategorieEvent;
+import fr.batimen.web.client.extend.nouveau.devis.event.ChangementEtapeClientEvent;
+import fr.batimen.web.client.master.MasterPage;
 
 /**
  * Form de l'etape 3 de création d'annonce.
@@ -32,12 +36,16 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
 
     private static final long serialVersionUID = 6521295805432818556L;
 
+    private final CreationAnnonceDTO nouvelleAnnonce;
+
     public Etape3AnnonceForm(String id, IModel<CreationAnnonceDTO> model) {
         super(id, model);
 
         // Mode Multipart pour l'upload de fichier.
         this.setMultiPart(true);
         this.setMarkupId("formEtape3");
+
+        nouvelleAnnonce = model.getObject();
 
         DropDownChoice<SousCategorieMetierDTO> sousCategorieSelect = new DropDownChoice<SousCategorieMetierDTO>(
                 "sousCategorie") {
@@ -89,15 +97,13 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
         TextField<String> adresseField = new TextField<String>("adresse");
         adresseField.setRequired(true);
         adresseField.setMarkupId("adresseField");
-        adresseField.add(StringValidator.lengthBetween(ValidatorConstant.ADRESSE_MIN,
-                ValidatorConstant.ADRESSE_MAX));
+        adresseField.add(StringValidator.lengthBetween(ValidatorConstant.ADRESSE_MIN, ValidatorConstant.ADRESSE_MAX));
         adresseField.add(new ErrorHighlightBehavior());
         adresseField.add(new RequiredBorderBehaviour());
 
         TextField<String> adresseComplementField = new TextField<String>("complementAdresse");
         adresseComplementField.setMarkupId("adresseComplementField");
-        adresseComplementField.add(StringValidator
-                .maximumLength(ValidatorConstant.COMPLEMENT_ADRESSE_MAX));
+        adresseComplementField.add(StringValidator.maximumLength(ValidatorConstant.COMPLEMENT_ADRESSE_MAX));
         adresseComplementField.add(new ErrorHighlightBehavior());
         adresseComplementField.add(new RequiredBorderBehaviour());
 
@@ -115,7 +121,40 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
         villeField.add(new ErrorHighlightBehavior());
         villeField.add(new RequiredBorderBehaviour());
 
-        SubmitLink validateQualification = new SubmitLink("validateQualification");
+        AjaxSubmitLink validateQualification = new AjaxSubmitLink("validateQualification") {
+
+            private static final long serialVersionUID = -4417031301033032959L;
+
+            /*
+             * (non-Javadoc)
+             * 
+             * @see
+             * org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink#onSubmit
+             * (org.apache.wicket.ajax.AjaxRequestTarget,
+             * org.apache.wicket.markup.html.form.Form)
+             */
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                nouvelleAnnonce.setNumeroEtape(4);
+                ChangementEtapeClientEvent changementEtapeEventClient = new ChangementEtapeClientEvent(target,
+                        nouvelleAnnonce);
+                target.getPage().send(target.getPage(), Broadcast.BREADTH, changementEtapeEventClient);
+            }
+
+            /*
+             * (non-Javadoc)
+             * 
+             * @see
+             * org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink#onError
+             * (org.apache.wicket.ajax.AjaxRequestTarget,
+             * org.apache.wicket.markup.html.form.Form)
+             */
+            @Override
+            protected void onError(AjaxRequestTarget target, Form<?> form) {
+                MasterPage.triggerEventFeedBackPanel(target, "Problème technique, veuillez réessayer");
+            }
+
+        };
         validateQualification.setMarkupId("validateQualification");
 
         this.add(sousCategorieSelect);

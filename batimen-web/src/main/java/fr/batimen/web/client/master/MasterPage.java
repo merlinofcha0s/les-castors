@@ -79,6 +79,8 @@ public abstract class MasterPage extends WebPage {
     private Dialog loginDialog;
     private AuthentificationPanel authentificationPanel;
 
+    private Dialog waiter;
+
     /**
      * Constructeur par defaut, initialise les composants de base de la page
      * 

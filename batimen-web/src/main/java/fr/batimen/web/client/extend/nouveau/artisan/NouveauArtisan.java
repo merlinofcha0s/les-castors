@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.IAjaxIndicatorAware;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -16,7 +18,7 @@ import fr.batimen.dto.aggregate.CreationPartenaireDTO;
 import fr.batimen.web.client.component.MapFrance;
 import fr.batimen.web.client.component.NavigationWizard;
 import fr.batimen.web.client.event.MapFranceEvent;
-import fr.batimen.web.client.extend.nouveau.artisan.event.ChangementEtapeEvent;
+import fr.batimen.web.client.extend.nouveau.artisan.event.ChangementEtapeEventArtisan;
 import fr.batimen.web.client.master.MasterPage;
 
 /**
@@ -25,7 +27,7 @@ import fr.batimen.web.client.master.MasterPage;
  * @author Casaucau Cyril
  * 
  */
-public class NouveauArtisan extends MasterPage {
+public class NouveauArtisan extends MasterPage implements IAjaxIndicatorAware {
 
     private static final long serialVersionUID = 7796768527786855832L;
     private static final Logger LOGGER = LoggerFactory.getLogger(NouveauArtisan.class);
@@ -75,6 +77,7 @@ public class NouveauArtisan extends MasterPage {
         // Etape 3 : Information de l'entreprise
         etape3Entreprise = new Etape3Entreprise("etape3InformationsEntreprise", new Model<Serializable>(),
                 nouveauPartenaire);
+        etape3Entreprise.setVisible(false);
 
         // Etape 4 : confirmation inscription
         etape4Confirmation = new Etape4Confirmation("etape4Confirmation");
@@ -117,18 +120,21 @@ public class NouveauArtisan extends MasterPage {
         carteFrance.setVisible(true);
         containerEtape2.setVisible(false);
         etape3Entreprise.setVisible(false);
+        etape4Confirmation.setVisible(false);
     }
 
     private void etape2InformationsDirigeant() {
         carteFrance.setVisible(false);
         containerEtape2.setVisible(true);
         etape3Entreprise.setVisible(false);
+        etape4Confirmation.setVisible(false);
     }
 
     private void etape3InformationsEntreprise() {
         carteFrance.setVisible(false);
         containerEtape2.setVisible(false);
         etape3Entreprise.setVisible(true);
+        etape4Confirmation.setVisible(false);
     }
 
     private void etape4Confirmation() {
@@ -196,9 +202,11 @@ public class NouveauArtisan extends MasterPage {
             // On récupére le departement qui se trouve dans l'event
             Integer departementInt = Integer.valueOf(eventMapFrance.getDepartement());
 
+            // On le valide
             if (departementInt != null && departementInt > 0 && departementInt < 100) {
                 nouveauPartenaire.getAdresse().setDepartement(departementInt);
                 nouveauPartenaire.setNumeroEtape(2);
+                // SI c'est bon, on passe à l'etape 2
                 try {
                     changementEtape(2);
                 } catch (FrontEndException e) {
@@ -206,14 +214,16 @@ public class NouveauArtisan extends MasterPage {
                         LOGGER.error("Probleme frontend avec l'etape 2", e);
                     }
                 }
+                // Sinon affichage retour sur le feedback panel
             } else {
                 feedBackPanelGeneral.error("Numéro de département incorrecte, veuillez recommencer");
             }
             eventMapFrance.getTarget().add(this);
         }
 
-        if (event.getPayload() instanceof ChangementEtapeEvent) {
-            ChangementEtapeEvent changementEtapeEvent = (ChangementEtapeEvent) event.getPayload();
+        // Catch de l'event de changement d'etape
+        if (event.getPayload() instanceof ChangementEtapeEventArtisan) {
+            ChangementEtapeEventArtisan changementEtapeEvent = (ChangementEtapeEventArtisan) event.getPayload();
 
             // On extrait le numero de l'etape
             this.nouveauPartenaire = changementEtapeEvent.getNouveauPartenaire();
@@ -224,9 +234,15 @@ public class NouveauArtisan extends MasterPage {
                     LOGGER.error("Probleme frontend avec l'etape " + nouveauPartenaire.getNumeroEtape(), e);
                 }
             }
-            changementEtapeEvent.getTarget().add(feedBackPanelGeneral);
-            changementEtapeEvent.getTarget().add(this);
+
+            AjaxRequestTarget targetChangementEtape = changementEtapeEvent.getTarget();
+            targetChangementEtape.add(feedBackPanelGeneral);
+            targetChangementEtape.add(this);
         }
     }
 
+    @Override
+    public String getAjaxIndicatorMarkupId() {
+        return "waiter";
+    }
 }

@@ -14,6 +14,12 @@ import com.ninja_squad.dbsetup.operation.Operation;
 
 import fr.batimen.web.utils.UtilsSelenium;
 
+/**
+ * Classe de cas de test concernant l'inscription d'un nouveau partenaire
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class TestNouveauPartenaire extends AbstractITTest {
 
     private final String nouveauPartenaireURL = "/nouveaupartenaire/";
@@ -25,12 +31,18 @@ public class TestNouveauPartenaire extends AbstractITTest {
         dbSetup.launch();
     }
 
+    /**
+     * Cas de test : L'utilisateur (artisan) crée son compte, l'operation doit
+     * être un succés
+     */
     @Test
     public void testInscriptioNouveauPartenaireNominal() {
         driver.get(appUrl + nouveauPartenaireURL);
+
         // On selectionne un departement
         UtilsSelenium.selectionDepartement(driver);
 
+        // Etape 2
         new Select(driver.findElement(By.id("civilite"))).selectByVisibleText("Monsieur");
         driver.findElement(By.id("nom")).clear();
         driver.findElement(By.id("nom")).sendKeys("Dupont");
@@ -47,6 +59,8 @@ public class TestNouveauPartenaire extends AbstractITTest {
         driver.findElement(By.id("confirmPassword")).clear();
         driver.findElement(By.id("confirmPassword")).sendKeys("lolmdr06");
         driver.findElement(By.id("validateEtape2Partenaire")).click();
+
+        // Etape 3
         driver.findElement(By.id("nomComplet")).clear();
         driver.findElement(By.id("nomComplet")).sendKeys("Xav Entreprise");
         new Select(driver.findElement(By.id("statutJuridique"))).selectByVisibleText("SARL");
@@ -64,14 +78,25 @@ public class TestNouveauPartenaire extends AbstractITTest {
         driver.findElement(By.id("villeField")).clear();
         driver.findElement(By.id("villeField")).sendKeys("Xavier City");
         driver.findElement(By.cssSelector("#ajouterActivite > span")).click();
-        Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
-                .until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("#ajouterActivite > span"),
-                        "Faites votre choix"));
-        assertTrue(checkCondition);
+        Boolean checkConditionActivite = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.textToBePresentInElementLocated(By.id("ui-id-2"), "Ajouter une activité"));
+
+        assertTrue(checkConditionActivite);
+
         new Select(driver.findElement(By.id("activiteField"))).selectByVisibleText("Décoration / Maçonnerie");
         driver.findElement(By.id("enregistrerCategorie")).click();
         driver.findElement(By.id("validateEtape3Partenaire")).click();
 
-    }
+        // Etape 4 confirmation
+        Boolean checkConditionConfirmation1 = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//div[@id='confirmation']/h5[1]"),
+                        "Votre compte a été créé avec succés"));
 
+        Boolean checkConditionConfirmation2 = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//div[@id='confirmation']/h5[2]"),
+                        "Un email vous a été envoyé, merci de cliquer sur le lien présent dans ce dernier pour activer votre compte"));
+
+        assertTrue(checkConditionConfirmation1);
+        assertTrue(checkConditionConfirmation2);
+    }
 }

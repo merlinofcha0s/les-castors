@@ -26,7 +26,7 @@ import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.batimen.web.client.component.CastorDatePicker;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
-import fr.batimen.web.client.extend.nouveau.artisan.event.ChangementEtapeEvent;
+import fr.batimen.web.client.extend.nouveau.artisan.event.ChangementEtapeEventArtisan;
 import fr.batimen.web.client.extend.nouveau.artisan.validator.SiretValidator;
 import fr.batimen.web.client.master.MasterPage;
 
@@ -149,7 +149,7 @@ public class Etape3EntrepriseForm extends Form<CreationPartenaireDTO> {
                     MasterPage.triggerEventFeedBackPanel(target, "Veuillez selectionner au moins une categorie");
                 } else {
                     nouveauPartenaire.setNumeroEtape(4);
-                    ChangementEtapeEvent changementEtapeEvent = new ChangementEtapeEvent(target, nouveauPartenaire);
+                    ChangementEtapeEventArtisan changementEtapeEvent = new ChangementEtapeEventArtisan(target, nouveauPartenaire);
                     this.send(target.getPage(), Broadcast.EXACT, changementEtapeEvent);
                 }
 

@@ -22,8 +22,9 @@ import fr.batimen.dto.enums.Civilite;
 import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
-import fr.batimen.web.client.extend.nouveau.artisan.event.ChangementEtapeEvent;
+import fr.batimen.web.client.extend.nouveau.artisan.event.ChangementEtapeEventArtisan;
 import fr.batimen.web.client.validator.EmailUniquenessValidator;
+import fr.batimen.web.client.validator.LoginUniquenessValidator;
 
 /**
  * Etape 2 de l'inscription d'un nouvel artisan : Informations du dirigeant
@@ -86,6 +87,7 @@ public class Etape2PartenaireForm extends Form<CreationPartenaireDTO> {
                 ValidatorConstant.CLIENT_LOGIN_RANGE_MAX));
         identifiant.add(new ErrorHighlightBehavior());
         identifiant.add(new RequiredBorderBehaviour());
+        identifiant.add(new LoginUniquenessValidator());
 
         PasswordTextField passwordField = new PasswordTextField("artisan.password");
         passwordField.setMarkupId("password");
@@ -133,8 +135,9 @@ public class Etape2PartenaireForm extends Form<CreationPartenaireDTO> {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 nouveauPartenaire.setNumeroEtape(3);
-                ChangementEtapeEvent changementEtapeEvent = new ChangementEtapeEvent(target, nouveauPartenaire);
-                this.send(target.getPage(), Broadcast.EXACT, changementEtapeEvent);
+                ChangementEtapeEventArtisan changementEtapeEvent = new ChangementEtapeEventArtisan(target, nouveauPartenaire);
+                this.send(target.getPage(), Broadcast.BREADTH, changementEtapeEvent);
+
             }
 
         };
