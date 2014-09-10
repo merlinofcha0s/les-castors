@@ -143,7 +143,7 @@ public class NouveauArtisan extends MasterPage implements IAjaxIndicatorAware {
         etape3Entreprise.setVisible(false);
         etape4Confirmation.setVisible(true);
         // Appel du service d'enregistrement du nouveau partenaire
-        Integer retourService = creationPartenaire();
+        Integer retourService = creationPartenaire(nouveauPartenaire);
         if (retourService == 0) {
             etape4Confirmation.succesInscription();
         } else {
@@ -184,8 +184,9 @@ public class NouveauArtisan extends MasterPage implements IAjaxIndicatorAware {
         }
     }
 
-    private Integer creationPartenaire() {
+    private Integer creationPartenaire(CreationPartenaireDTO nouveauPartenaire) {
         return 0;
+        // return ArtisanService.creationNouveauPartenaire(nouveauPartenaire);
     }
 
     /*
