@@ -6,10 +6,8 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
-import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,10 +25,7 @@ import fr.batimen.ws.entity.Client;
 @Stateless(name = "ClientDAO")
 @LocalBean
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class ClientDAO {
-
-    @PersistenceContext
-    private EntityManager em;
+public class ClientDAO extends AbstractDAO {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ClientDAO.class);
 
@@ -41,19 +36,20 @@ public class ClientDAO {
      *            Le login de l'utilsateur
      * @return Client vide si l'utilisateur n'existe pas.
      */
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public Client getClientByLoginName(String login) {
 
         Client clientFinded = null;
 
         try {
-            Query query = em.createNamedQuery(QueryJPQL.CLIENT_LOGIN);
+            TypedQuery<Client> query = entityManager.createNamedQuery(QueryJPQL.CLIENT_LOGIN, Client.class);
             query.setParameter(QueryJPQL.CLIENT_LOGIN, login);
 
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Chargement requete JPQL OK ");
             }
 
-            clientFinded = (Client) query.getSingleResult();
+            clientFinded = query.getSingleResult();
 
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Récuperation resultat requete JPQL OK ");
@@ -76,19 +72,20 @@ public class ClientDAO {
      *            L'email du client
      * @return Le client qui a le mail passé en param.
      */
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public Client getClientByEmail(String email) {
 
         Client clientFinded = null;
 
         try {
-            Query query = em.createNamedQuery(QueryJPQL.CLIENT_BY_EMAIL);
+            TypedQuery<Client> query = entityManager.createNamedQuery(QueryJPQL.CLIENT_BY_EMAIL, Client.class);
             query.setParameter(QueryJPQL.PARAM_CLIENT_EMAIL, email);
 
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Chargement requete JPQL client email OK ");
             }
 
-            clientFinded = (Client) query.getSingleResult();
+            clientFinded = query.getSingleResult();
 
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Récuperation resultat requete JPQL client email OK ");
@@ -124,7 +121,7 @@ public class ClientDAO {
         Client clientMemeEmail = getClientByEmail(nouveauClient.getEmail());
 
         if ("".equals(clientMemeLogin.getLogin()) && "".equals(clientMemeEmail.getLogin())) {
-            em.persist(nouveauClient);
+            entityManager.persist(nouveauClient);
         } else {
             StringBuilder sbError = new StringBuilder("Impossible de perister le client : ");
             sbError.append(nouveauClient.getLogin());
@@ -159,7 +156,7 @@ public class ClientDAO {
         }
 
         if (client != null) {
-            em.persist(client);
+            entityManager.persist(client);
         } else {
             throw new BackendException("L'entité client est null, impossible de la persister");
         }
@@ -176,7 +173,7 @@ public class ClientDAO {
      *            L'entité a ajouter dans la BDD
      * @throws BackendException
      */
-    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public Client getClientByActivationKey(String cleActivation) {
 
         Client clientFinded = null;
@@ -186,10 +183,10 @@ public class ClientDAO {
         }
 
         try {
-            Query query = em.createNamedQuery(QueryJPQL.CLIENT_BY_ACTIVATION_KEY);
+            TypedQuery<Client> query = entityManager.createNamedQuery(QueryJPQL.CLIENT_BY_ACTIVATION_KEY, Client.class);
             query.setParameter(QueryJPQL.PARAM_CLIENT_ACTIVATION_KEY, cleActivation);
 
-            clientFinded = (Client) query.getSingleResult();
+            clientFinded = query.getSingleResult();
         } catch (NoResultException nre) {
             if (LOGGER.isWarnEnabled()) {
                 LOGGER.warn("Aucune correspondance trouvées dans la BDD pour la clé: " + cleActivation, nre);
