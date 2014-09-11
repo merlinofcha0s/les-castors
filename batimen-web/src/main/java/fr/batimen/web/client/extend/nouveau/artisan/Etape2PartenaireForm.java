@@ -120,7 +120,7 @@ public class Etape2PartenaireForm extends Form<CreationPartenaireDTO> {
              */
             @Override
             protected void onError(AjaxRequestTarget target, Form<?> form) {
-                super.onError(target, form);
+                target.add(getForm());
                 this.send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target));
             }
 
@@ -135,7 +135,8 @@ public class Etape2PartenaireForm extends Form<CreationPartenaireDTO> {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 nouveauPartenaire.setNumeroEtape(3);
-                ChangementEtapeEventArtisan changementEtapeEvent = new ChangementEtapeEventArtisan(target, nouveauPartenaire);
+                ChangementEtapeEventArtisan changementEtapeEvent = new ChangementEtapeEventArtisan(target,
+                        nouveauPartenaire);
                 this.send(target.getPage(), Broadcast.BREADTH, changementEtapeEvent);
 
             }

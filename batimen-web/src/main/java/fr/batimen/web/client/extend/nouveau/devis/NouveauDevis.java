@@ -335,6 +335,7 @@ public class NouveauDevis extends MasterPage {
 
     @Override
     public void onEvent(IEvent<?> event) {
+        super.onEvent(event);
         // Event déclenché par la popup de connexion, fait sauter l'etape 3 si
         // l'utilisateur se connecte
         if (event.getPayload() instanceof LoginEvent) {

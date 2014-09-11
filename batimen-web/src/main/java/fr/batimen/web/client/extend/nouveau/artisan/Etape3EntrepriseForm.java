@@ -131,7 +131,7 @@ public class Etape3EntrepriseForm extends Form<CreationPartenaireDTO> {
              */
             @Override
             protected void onError(AjaxRequestTarget target, Form<?> form) {
-                super.onError(target, form);
+                target.add(getForm());
                 this.send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target));
             }
 
@@ -149,7 +149,8 @@ public class Etape3EntrepriseForm extends Form<CreationPartenaireDTO> {
                     MasterPage.triggerEventFeedBackPanel(target, "Veuillez selectionner au moins une categorie");
                 } else {
                     nouveauPartenaire.setNumeroEtape(4);
-                    ChangementEtapeEventArtisan changementEtapeEvent = new ChangementEtapeEventArtisan(target, nouveauPartenaire);
+                    ChangementEtapeEventArtisan changementEtapeEvent = new ChangementEtapeEventArtisan(target,
+                            nouveauPartenaire);
                     this.send(target.getPage(), Broadcast.EXACT, changementEtapeEvent);
                 }
 

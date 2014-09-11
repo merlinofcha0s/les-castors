@@ -22,9 +22,9 @@ import fr.batimen.dto.enums.DelaiIntervention;
 import fr.batimen.dto.enums.TypeContact;
 import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
+import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.web.client.extend.nouveau.devis.event.CategorieEvent;
 import fr.batimen.web.client.extend.nouveau.devis.event.ChangementEtapeClientEvent;
-import fr.batimen.web.client.master.MasterPage;
 
 /**
  * Form de l'etape 3 de création d'annonce.
@@ -138,7 +138,7 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
                 nouvelleAnnonce.setNumeroEtape(4);
                 ChangementEtapeClientEvent changementEtapeEventClient = new ChangementEtapeClientEvent(target,
                         nouvelleAnnonce);
-                target.getPage().send(target.getPage(), Broadcast.BREADTH, changementEtapeEventClient);
+                this.send(target.getPage(), Broadcast.BREADTH, changementEtapeEventClient);
             }
 
             /*
@@ -151,7 +151,8 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
              */
             @Override
             protected void onError(AjaxRequestTarget target, Form<?> form) {
-                MasterPage.triggerEventFeedBackPanel(target, "Problème technique, veuillez réessayer");
+                target.add(getForm());
+                this.send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target));
             }
 
         };
