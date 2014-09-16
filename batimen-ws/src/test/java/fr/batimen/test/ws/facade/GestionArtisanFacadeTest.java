@@ -1,6 +1,7 @@
 package fr.batimen.test.ws.facade;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.junit.Assert;
@@ -39,13 +40,16 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
         nouveauPartenaire.getArtisan().setPrenom("David");
 
         // Entreprise
+        nouveauPartenaire.getEntreprise().setDateCreation(new Date());
+
         List<CategorieMetierDTO> categoriesMetier = new ArrayList<CategorieMetierDTO>();
         categoriesMetier.add(CategorieLoader.getCategoriePlomberie());
 
-        nouveauPartenaire.getEntreprise().setCategorieMetier(categoriesMetier);
+        nouveauPartenaire.getEntreprise().getCategoriesMetier().addAll(categoriesMetier);
         nouveauPartenaire.getEntreprise().setNbEmployees(2);
         nouveauPartenaire.getEntreprise().setNomComplet("Entreprise de la plomberie");
         nouveauPartenaire.getEntreprise().setSiret("43394298400017");
+
         nouveauPartenaire.getEntreprise().setStatutJuridique(StatutJuridique.SARL);
 
         Integer retourService = ArtisanService.creationNouveauPartenaire(nouveauPartenaire);

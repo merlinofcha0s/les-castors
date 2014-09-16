@@ -21,8 +21,10 @@ public class CreationPartenaireDTO extends AbstractDTO {
 
     @Valid
     private final ClientDTO artisan = new ClientDTO();
+
     @Valid
     private final EntrepriseDTO entreprise = new EntrepriseDTO();
+
     @Valid
     private final AdresseDTO adresse = new AdresseDTO();
 
@@ -31,6 +33,7 @@ public class CreationPartenaireDTO extends AbstractDTO {
     /**
      * @return the artisan
      */
+
     public ClientDTO getArtisan() {
         return artisan;
     }
@@ -38,6 +41,7 @@ public class CreationPartenaireDTO extends AbstractDTO {
     /**
      * @return the entreprise
      */
+
     public EntrepriseDTO getEntreprise() {
         return entreprise;
     }
@@ -71,8 +75,10 @@ public class CreationPartenaireDTO extends AbstractDTO {
      */
     @Override
     public int hashCode() {
-        return Objects.hashCode(Objects.hash(this.entreprise.getSiret(), this.entreprise.getNomComplet(),
-                this.artisan.getEmail()));
+        return Objects.hashCode(Objects.hash(
+        /*
+         * this.entreprise.getSiret(), this .entreprise.getNomComplet() ,
+         */this.artisan.getEmail()));
     }
 
     /*
@@ -80,6 +86,7 @@ public class CreationPartenaireDTO extends AbstractDTO {
      * 
      * @see java.lang.Object#equals(java.lang.Object)
      */
+
     @Override
     public boolean equals(Object object) {
         if (this == object) {
@@ -88,9 +95,14 @@ public class CreationPartenaireDTO extends AbstractDTO {
 
         if (object instanceof CreationPartenaireDTO) {
             CreationPartenaireDTO other = (CreationPartenaireDTO) object;
-            return Objects.equals(this.entreprise.getSiret(), other.entreprise.getSiret())
-                    && Objects.equals(this.entreprise.getNomComplet(), other.entreprise.getNomComplet())
-                    && Objects.equals(this.artisan.getEmail(), other.artisan.getEmail());
+            return /*
+                    * Objects.equals(this.entreprise.getSiret(),
+                    * other.entreprise.getSiret()) &&
+                    * Objects.equals(this.entreprise.getNomComplet(),
+                    * other.entreprise.getNomComplet())
+                    * 
+                    * &&
+                    */Objects.equals(this.artisan.getEmail(), other.artisan.getEmail());
         }
         return false;
     }
