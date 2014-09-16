@@ -260,7 +260,6 @@ public class GestionAnnonceFacade {
         nouveauClient.setPassword(nouvelleAnnonceDTO.getClient().getPassword());
         nouveauClient.setEmail(nouvelleAnnonceDTO.getClient().getEmail());
         nouveauClient.setNumeroTel(nouvelleAnnonceDTO.getClient().getNumeroTel());
-        nouveauClient.setIsArtisan(false);
         nouveauClient.setIsActive(false);
 
         StringBuilder loginAndEmail = new StringBuilder(nouvelleAnnonceDTO.getClient().getLogin());

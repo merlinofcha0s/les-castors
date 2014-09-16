@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -28,22 +27,13 @@ public class Artisan extends AbstractUser implements Serializable {
     private static final long serialVersionUID = -4398985801030020390L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(length = 14, nullable = false)
-    private Integer siret;
-    @Column(nullable = false)
-    private Integer nbAnnonce;
-    @Column(nullable = false)
-    private String activitePrincipale;
-    @Column(nullable = false)
-    private String domaineActivite;
+
     @OneToMany(mappedBy = "artisan", targetEntity = Notation.class, cascade = CascadeType.REMOVE)
     private List<Notation> scoreGlobal = new ArrayList<Notation>();
     @OneToOne(cascade = CascadeType.REMOVE)
     private Entreprise entreprise;
-    @OneToOne(mappedBy = "artisan", cascade = CascadeType.REMOVE)
-    private Client client;
 
     /**
      * @return the id
@@ -58,66 +48,6 @@ public class Artisan extends AbstractUser implements Serializable {
      */
     public void setId(Long id) {
         this.id = id;
-    }
-
-    /**
-     * @return the siret
-     */
-    public Integer getSiret() {
-        return siret;
-    }
-
-    /**
-     * @param siret
-     *            the siret to set
-     */
-    public void setSiret(Integer siret) {
-        this.siret = siret;
-    }
-
-    /**
-     * @return the nbAnnonce
-     */
-    public Integer getNbAnnonce() {
-        return nbAnnonce;
-    }
-
-    /**
-     * @param nbAnnonce
-     *            the nbAnnonce to set
-     */
-    public void setNbAnnonce(Integer nbAnnonce) {
-        this.nbAnnonce = nbAnnonce;
-    }
-
-    /**
-     * @return the activitePrincipale
-     */
-    public String getActivitePrincipale() {
-        return activitePrincipale;
-    }
-
-    /**
-     * @param activitePrincipale
-     *            the activitePrincipale to set
-     */
-    public void setActivitePrincipale(String activitePrincipale) {
-        this.activitePrincipale = activitePrincipale;
-    }
-
-    /**
-     * @return the domaineActivite
-     */
-    public String getDomaineActivite() {
-        return domaineActivite;
-    }
-
-    /**
-     * @param domaineActivite
-     *            the domaineActivite to set
-     */
-    public void setDomaineActivite(String domaineActivite) {
-        this.domaineActivite = domaineActivite;
     }
 
     /**
@@ -148,21 +78,6 @@ public class Artisan extends AbstractUser implements Serializable {
      */
     public void setEntreprise(Entreprise entreprise) {
         this.entreprise = entreprise;
-    }
-
-    /**
-     * @return the client
-     */
-    public Client getClient() {
-        return client;
-    }
-
-    /**
-     * @param client
-     *            the client to set
-     */
-    public void setClient(Client client) {
-        this.client = client;
     }
 
     /*

@@ -1,5 +1,5 @@
 create table Adresse (
-        id int8 not null,
+        id  bigserial not null,
         adresse varchar(255) not null,
         codePostal varchar(5) not null,
         complementAdresse varchar(255) not null,
@@ -9,7 +9,7 @@ create table Adresse (
     );
     
 create table Annonce (
-        id int8 not null,
+        id  bigserial not null,
         dateCreation timestamp,
         dateMAJ timestamp,
         delaiIntervention int4 not null,
@@ -27,39 +27,45 @@ create table Annonce (
     );
     
     create table Artisan (
-        id int8 not null,
-        activitePrincipale varchar(255) not null,
+        id  bigserial not null,
         civilite int4 not null,
         dateInscription timestamp not null,
-        domaineActivite varchar(255) not null,
         email varchar(128) not null,
         login varchar(25) not null,
-        nbAnnonce int4 not null,
         nom varchar(20) not null,
         numeroTel varchar(10) not null,
         password varchar(80) not null,
         prenom varchar(20) not null,
-        siret int4 not null,
         isActive boolean not null,
         cleActivation varchar(255),
+        typeCompte int4 not null,
         entreprise_id int8,
         primary key (id)
     );
     
+    create table CategorieMetier (
+        id  bigserial not null,
+        categorieMetier int2 not null,
+        entreprise_fk int8,
+        primary key (id)
+    );
+    
     create table Entreprise (
-        id int8 not null,
-        capitalSociale int4 not null,
-        logo varchar(255) not null,
+        id  bigserial not null,
+        logo varchar(255),
         nbEmployees int4 not null,
         nomComplet varchar(40) not null,
+        specialite varchar(50),
         statutJuridique int4 not null,
+        siret int4 not null,
+        dateCreation date not null,
         adresse_id int8,
         paiement_id int8,
         primary key (id)
     );
     
     create table Notation (
-        id int8 not null,
+        id  bigserial not null,
         commentaire varchar(500) not null,
         score float8 not null,
         artisan_fk int8,
@@ -67,7 +73,7 @@ create table Annonce (
     );
     
     create table Paiement (
-        id int8 not null,
+        id  bigserial not null,
         codeSecurite varchar(255) not null,
         dateExpiration date not null,
         numeroCarte varchar(255) not null,
@@ -76,7 +82,7 @@ create table Annonce (
     );
     
      create table Client (
-        id int8 not null,
+        id  bigserial not null,
         dateInscription timestamp not null,
         email varchar(128) not null,
         login varchar(25) not null,
@@ -87,52 +93,53 @@ create table Annonce (
         isArtisan boolean not null,
         isActive boolean not null,
         cleActivation varchar(255),
+        typeCompte int4 not null,
         artisan_id int8,
         primary key (id)
     );
     
     alter table Annonce 
-        add constraint FK_annonce_adresse 
+        add constraint annonce_adresse
         foreign key (adresseChantier_id) 
         references Adresse;
-        
+
     alter table Annonce 
-        add constraint FK_annonce_client 
+        add constraint annonce_client 
         foreign key (demandeur_fk) 
         references Client;
-        
+
     alter table Annonce 
-        add constraint FK_notation_annonce 
+        add constraint annonce_notation 
         foreign key (notationAnnonce_id) 
         references Notation;
-        
+
     alter table Artisan 
-        add constraint FK_artisan_entreprise 
+        add constraint artisan_entreprise 
         foreign key (entreprise_id) 
         references Entreprise;
-        
-    alter table Client 
-        add constraint FK_client_artisan
-        foreign key (artisan_id) 
-        references Artisan;
-        
+
+    alter table CategorieMetier 
+        add constraint categorie_metier_entreprise 
+        foreign key (entreprise_fk) 
+        references Entreprise;
+
     alter table Entreprise 
-        add constraint FK_entreprise_adresse
+        add constraint entreprise_adresse
         foreign key (adresse_id) 
         references Adresse;
-        
+
     alter table Entreprise 
-        add constraint FK_entreprise_paiement 
+        add constraint entreprise_paiement 
         foreign key (paiement_id) 
         references Paiement;
-        
+
     alter table Notation 
-        add constraint FK_notation_artisan
+        add constraint notation_artisan
         foreign key (artisan_fk) 
         references Artisan;
-        
+
     alter table Paiement 
-        add constraint FK_notation_adresseFacturation
+        add constraint paiement_adresse 
         foreign key (adresseFacturation_id) 
         references Adresse;
         

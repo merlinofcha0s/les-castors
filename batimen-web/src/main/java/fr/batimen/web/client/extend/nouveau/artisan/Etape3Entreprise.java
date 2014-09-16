@@ -1,6 +1,5 @@
 package fr.batimen.web.client.extend.nouveau.artisan;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -49,11 +48,10 @@ public class Etape3Entreprise extends Panel {
     public Etape3Entreprise(String id, IModel<?> model, final CreationPartenaireDTO nouveauPartenaire) {
         this(id, model);
 
-        categoriesSelectionnees = new ArrayList<CategorieMetierDTO>();
-        nouveauPartenaire.getEntreprise().setCategorieMetier(categoriesSelectionnees);
+        categoriesSelectionnees = nouveauPartenaire.getEntreprise().getCategoriesMetier();
 
         etape3EntrepriseForm = new Etape3EntrepriseForm("etape3EntrepriseForm",
-                new CompoundPropertyModel<CreationPartenaireDTO>(nouveauPartenaire), categoriesSelectionnees);
+                new CompoundPropertyModel<CreationPartenaireDTO>(nouveauPartenaire));
 
         final Dialog activiteDialog = initActiviteDialog();
 

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -15,8 +17,13 @@ import fr.batimen.dto.enums.StatutJuridique;
 import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.test.ws.AbstractBatimenWsTest;
 import fr.batimen.ws.client.service.ArtisanService;
+import fr.batimen.ws.dao.ArtisanDAO;
+import fr.batimen.ws.entity.Artisan;
 
 public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
+
+    @Inject
+    private ArtisanDAO artisanDAO;
 
     @Test
     public void nouveauPartenaireTestNominal() {
@@ -57,8 +64,7 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
         Assert.assertNotNull(retourService);
         Assert.assertEquals(Constant.CODE_SERVICE_RETOUR_OK, retourService);
 
-        // TODO : Injecter le DAO et verifié que l'artisan est bien créé dans la
-        // BDD
-
+        Artisan artisanEnregistre = artisanDAO.getArtisanByEmail(nouveauPartenaire.getArtisan().getEmail());
+        Assert.assertNotNull(artisanEnregistre);
     }
 }

@@ -43,8 +43,7 @@ public class Etape3EntrepriseForm extends Form<CreationPartenaireDTO> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Etape3EntrepriseForm.class);
 
-    public Etape3EntrepriseForm(String id, IModel<CreationPartenaireDTO> model,
-            final List<CategorieMetierDTO> categorieSelectionnees) {
+    public Etape3EntrepriseForm(String id, IModel<CreationPartenaireDTO> model) {
         super(id, model);
 
         // Mode Multipart pour l'upload de fichier.
@@ -52,6 +51,7 @@ public class Etape3EntrepriseForm extends Form<CreationPartenaireDTO> {
         this.setMarkupId("formEntrepriseEtape3");
 
         final CreationPartenaireDTO nouveauPartenaire = model.getObject();
+        final List<CategorieMetierDTO> categorieSelectionnees = nouveauPartenaire.getEntreprise().getCategoriesMetier();
 
         TextField<String> nomComplet = new TextField<String>("entreprise.nomComplet");
         nomComplet.setRequired(true);

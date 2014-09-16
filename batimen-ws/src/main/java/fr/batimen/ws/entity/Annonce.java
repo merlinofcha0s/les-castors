@@ -42,7 +42,7 @@ public class Annonce extends AbstractEntity implements Serializable {
     private static final long serialVersionUID = 3160372354800747789L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(length = 500, nullable = false)
     private String description;

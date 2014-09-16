@@ -24,4 +24,9 @@ public class ArtisanDAO extends AbstractDAO {
 
     }
 
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public Artisan getArtisanByEmail(String email) {
+        return null;
+    }
+
 }
