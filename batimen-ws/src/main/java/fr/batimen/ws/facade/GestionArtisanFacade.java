@@ -1,5 +1,7 @@
 package fr.batimen.ws.facade;
 
+import java.util.Date;
+
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -20,7 +22,9 @@ import org.slf4j.LoggerFactory;
 
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.WsPath;
+import fr.batimen.core.security.HashHelper;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
+import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.ws.dao.ArtisanDAO;
 import fr.batimen.ws.entity.Artisan;
 import fr.batimen.ws.helper.JsonHelper;
@@ -50,9 +54,21 @@ public class GestionArtisanFacade {
     @POST
     @Path(WsPath.GESTION_PARTENAIRE_SERVICE_CREATION_PARTENAIRE)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public Integer creationArtisan(CreationPartenaireDTO nouveauPartenaire) {
+    public Integer creationArtisan(CreationPartenaireDTO nouveauPartenaireDTO) {
 
-        Artisan artisanExiste = artisanDAO.getArtisanByEmail(nouveauPartenaire.getArtisan().getEmail());
+        Integer codeRetourService = enregistrementArtisan(nouveauPartenaireDTO);
+
+        if (!codeRetourService.equals(Constant.CODE_SERVICE_RETOUR_OK)) {
+            return codeRetourService;
+        }
+
+        // TODO : Passer à l'enregistrement entreprise
+
+        return Constant.CODE_SERVICE_RETOUR_OK;
+    }
+
+    private Integer enregistrementArtisan(CreationPartenaireDTO nouveauPartenaireDTO) {
+        Artisan artisanExiste = artisanDAO.getArtisanByEmail(nouveauPartenaireDTO.getArtisan().getEmail());
 
         // On check que l'artisan n'existe pas déjà
         if (!artisanExiste.getEmail().isEmpty()) {
@@ -61,9 +77,18 @@ public class GestionArtisanFacade {
 
         Artisan nouveauArtisan = new Artisan();
 
+        // Remplissage automatique des champs commun
         ModelMapper mapper = new ModelMapper();
-        mapper.map(nouveauPartenaire.getArtisan(), nouveauArtisan);
+        mapper.map(nouveauPartenaireDTO.getArtisan(), nouveauArtisan);
 
-        return 0;
+        nouveauArtisan.setDateInscription(new Date());
+        nouveauArtisan.setTypeCompte(TypeCompte.DEFAULT_ARTISAN);
+
+        // Calcul de la clé d'activation du compte
+        StringBuilder loginAndEmail = new StringBuilder(nouveauPartenaireDTO.getArtisan().getLogin());
+        loginAndEmail.append(nouveauPartenaireDTO.getArtisan().getEmail());
+        nouveauArtisan.setCleActivation(HashHelper.convertToBase64(HashHelper.hashSHA256(loginAndEmail.toString())));
+
+        return Constant.CODE_SERVICE_RETOUR_OK;
     }
 }

@@ -174,4 +174,19 @@ public abstract class AbstractUser extends AbstractEntity {
         this.cleActivation = cleActivation;
     }
 
+    /**
+     * @return the typeCompte
+     */
+    public TypeCompte getTypeCompte() {
+        return typeCompte;
+    }
+
+    /**
+     * @param typeCompte
+     *            the typeCompte to set
+     */
+    public void setTypeCompte(TypeCompte typeCompte) {
+        this.typeCompte = typeCompte;
+    }
+
 }

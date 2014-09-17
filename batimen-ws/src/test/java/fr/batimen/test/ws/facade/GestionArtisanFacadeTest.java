@@ -10,6 +10,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 import fr.batimen.core.constant.Constant;
+import fr.batimen.core.security.HashHelper;
 import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
 import fr.batimen.dto.enums.Civilite;
@@ -43,7 +44,7 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
         nouveauPartenaire.getArtisan().setLogin("plombier06");
         nouveauPartenaire.getArtisan().setNom("Dupont");
         nouveauPartenaire.getArtisan().setNumeroTel("0645789655");
-        nouveauPartenaire.getArtisan().setPassword("lolmdr06");
+        nouveauPartenaire.getArtisan().setPassword(HashHelper.hashString("lolmdr06"));
         nouveauPartenaire.getArtisan().setPrenom("David");
 
         // Entreprise

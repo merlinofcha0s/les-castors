@@ -16,6 +16,7 @@ import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 
+import fr.batimen.core.security.HashHelper;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
 import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.dto.enums.Civilite;
@@ -137,6 +138,8 @@ public class Etape2PartenaireForm extends Form<CreationPartenaireDTO> {
                 nouveauPartenaire.setNumeroEtape(3);
                 ChangementEtapeEventArtisan changementEtapeEvent = new ChangementEtapeEventArtisan(target,
                         nouveauPartenaire);
+                String hashedPassword = HashHelper.hashString(nouveauPartenaire.getArtisan().getPassword());
+                nouveauPartenaire.getArtisan().setPassword(hashedPassword);
                 this.send(target.getPage(), Broadcast.BREADTH, changementEtapeEvent);
 
             }

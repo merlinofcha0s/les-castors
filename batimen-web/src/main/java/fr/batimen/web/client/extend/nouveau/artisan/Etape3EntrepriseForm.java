@@ -68,7 +68,7 @@ public class Etape3EntrepriseForm extends Form<CreationPartenaireDTO> {
         statutJuridique.add(new ErrorHighlightBehavior());
         statutJuridique.add(new RequiredBorderBehaviour());
 
-        TextField<Integer> nbEmployes = new TextField<Integer>("entreprise.nbEmploye");
+        TextField<Integer> nbEmployes = new TextField<Integer>("entreprise.nbEmployees");
         nbEmployes.setMarkupId("nbEmployeField");
         nbEmployes.add(new ErrorHighlightBehavior());
 
