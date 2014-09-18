@@ -53,11 +53,11 @@ create table Annonce (
     create table Entreprise (
         id  bigserial not null,
         logo varchar(255),
-        nbEmployees int4 not null,
+        nbEmployees int4,
         nomComplet varchar(40) not null,
         specialite varchar(50),
         statutJuridique int4 not null,
-        siret int4 not null,
+        siret varchar(14) not null,
         dateCreation date not null,
         adresse_id int8,
         paiement_id int8,

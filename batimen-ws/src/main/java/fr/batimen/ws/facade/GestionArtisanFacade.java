@@ -1,6 +1,7 @@
 package fr.batimen.ws.facade;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.LocalBean;
@@ -22,11 +23,20 @@ import org.slf4j.LoggerFactory;
 
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.WsPath;
+import fr.batimen.core.exception.BackendException;
 import fr.batimen.core.security.HashHelper;
+import fr.batimen.dto.CategorieMetierDTO;
+import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
 import fr.batimen.dto.enums.TypeCompte;
+import fr.batimen.ws.dao.AdresseDAO;
 import fr.batimen.ws.dao.ArtisanDAO;
+import fr.batimen.ws.dao.CategorieMetierDAO;
+import fr.batimen.ws.dao.EntrepriseDAO;
+import fr.batimen.ws.entity.Adresse;
 import fr.batimen.ws.entity.Artisan;
+import fr.batimen.ws.entity.CategorieMetier;
+import fr.batimen.ws.entity.Entreprise;
 import fr.batimen.ws.helper.JsonHelper;
 import fr.batimen.ws.interceptor.BatimenInterceptor;
 
@@ -51,44 +61,105 @@ public class GestionArtisanFacade {
     @Inject
     private ArtisanDAO artisanDAO;
 
+    @Inject
+    private EntrepriseDAO entrepriseDAO;
+
+    @Inject
+    private AdresseDAO adresseDAO;
+
+    @Inject
+    private CategorieMetierDAO categorieMetierDAO;
+
     @POST
     @Path(WsPath.GESTION_PARTENAIRE_SERVICE_CREATION_PARTENAIRE)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public Integer creationArtisan(CreationPartenaireDTO nouveauPartenaireDTO) {
+        ModelMapper mapper = new ModelMapper();
 
-        Integer codeRetourService = enregistrementArtisan(nouveauPartenaireDTO);
+        Artisan artisanExiste = checkArtisanExiste(nouveauPartenaireDTO.getArtisan().getEmail());
 
-        if (!codeRetourService.equals(Constant.CODE_SERVICE_RETOUR_OK)) {
-            return codeRetourService;
+        if (artisanExiste != null) {
+            return Constant.CODE_SERVICE_RETOUR_KO;
         }
 
-        // TODO : Passer à l'enregistrement entreprise
+        Artisan nouveauArtisan = constructionNouveauArtisan(nouveauPartenaireDTO.getArtisan(), mapper);
+
+        Entreprise entrepriseExiste = checkEntrepriseExiste(nouveauPartenaireDTO.getEntreprise().getSiret());
+
+        if (entrepriseExiste != null) {
+            return Constant.CODE_SERVICE_RETOUR_KO;
+        }
+
+        // On init l'entité et on la rempli avec les champs de la DTO
+        Entreprise nouvelleEntreprise = new Entreprise();
+        Adresse nouvelleAdresse = new Adresse();
+        // Remplissage automatique des champs commun
+        mapper.map(nouveauPartenaireDTO.getEntreprise(), nouvelleEntreprise);
+        mapper.map(nouveauPartenaireDTO.getAdresse(), nouvelleAdresse);
+
+        List<CategorieMetierDTO> categories = nouveauPartenaireDTO.getEntreprise().getCategoriesMetier();
+
+        nouvelleEntreprise.setAdresse(nouvelleAdresse);
+        nouveauArtisan.setEntreprise(nouvelleEntreprise);
+
+        artisanDAO.saveArtisan(nouveauArtisan);
+        entrepriseDAO.saveEntreprise(nouvelleEntreprise);
+
+        for (CategorieMetierDTO categorieDTO : categories) {
+            CategorieMetier nouvelleCategorieMetier = new CategorieMetier();
+            mapper.map(categorieDTO, nouvelleCategorieMetier);
+            nouvelleCategorieMetier.setEntreprise(nouvelleEntreprise);
+            categorieMetierDAO.persistCategorieMetier(nouvelleCategorieMetier);
+        }
+
+        try {
+            adresseDAO.saveAdresse(nouvelleAdresse);
+        } catch (BackendException e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("L'adresse existe déjà dans la BDD ", e);
+            }
+            return Constant.CODE_SERVICE_RETOUR_KO;
+        }
 
         return Constant.CODE_SERVICE_RETOUR_OK;
     }
 
-    private Integer enregistrementArtisan(CreationPartenaireDTO nouveauPartenaireDTO) {
-        Artisan artisanExiste = artisanDAO.getArtisanByEmail(nouveauPartenaireDTO.getArtisan().getEmail());
+    private Entreprise checkEntrepriseExiste(String siret) {
+        // On check que l'entreprise n'existe pas dans notre BDD
+        Entreprise entrepriseExiste = entrepriseDAO.getEntrepriseBySiret(siret);
 
-        // On check que l'artisan n'existe pas déjà
-        if (!artisanExiste.getEmail().isEmpty()) {
-            return Constant.CODE_SERVICE_RETOUR_KO;
+        if (entrepriseExiste.getNomComplet().isEmpty()) {
+            return null;
         }
 
+        return entrepriseExiste;
+    }
+
+    private Artisan checkArtisanExiste(String email) {
+        Artisan artisanExiste = artisanDAO.getArtisanByEmail(email);
+
+        // On check que l'artisan n'existe pas déjà
+        if (artisanExiste.getEmail().isEmpty()) {
+            return null;
+        }
+
+        return artisanExiste;
+    }
+
+    private Artisan constructionNouveauArtisan(ClientDTO artisan, ModelMapper mapper) {
         Artisan nouveauArtisan = new Artisan();
 
         // Remplissage automatique des champs commun
-        ModelMapper mapper = new ModelMapper();
-        mapper.map(nouveauPartenaireDTO.getArtisan(), nouveauArtisan);
+        mapper.map(artisan, nouveauArtisan);
 
         nouveauArtisan.setDateInscription(new Date());
         nouveauArtisan.setTypeCompte(TypeCompte.DEFAULT_ARTISAN);
 
         // Calcul de la clé d'activation du compte
-        StringBuilder loginAndEmail = new StringBuilder(nouveauPartenaireDTO.getArtisan().getLogin());
-        loginAndEmail.append(nouveauPartenaireDTO.getArtisan().getEmail());
+        StringBuilder loginAndEmail = new StringBuilder(artisan.getLogin());
+        loginAndEmail.append(artisan.getEmail());
         nouveauArtisan.setCleActivation(HashHelper.convertToBase64(HashHelper.hashSHA256(loginAndEmail.toString())));
 
-        return Constant.CODE_SERVICE_RETOUR_OK;
+        return nouveauArtisan;
     }
 }

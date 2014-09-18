@@ -17,7 +17,6 @@ import javax.validation.constraints.Size;
 
 import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.dto.enums.StatutJuridique;
-import fr.batimen.dto.helper.SiretValidatorHelper;
 
 public class EntrepriseDTO extends AbstractDTO {
 
@@ -26,9 +25,6 @@ public class EntrepriseDTO extends AbstractDTO {
     @NotNull
     @Pattern(message = "Format siret invalide", regexp = ENTREPRISE_SIRET_REGEXP)
     private String siret;
-
-    // @AssertTrue(message = "Siret invalide")
-    private Boolean isSiretValide = SiretValidatorHelper.isSiretValide(getSiret());
 
     @NotNull
     private final List<CategorieMetierDTO> categoriesMetier = new ArrayList<CategorieMetierDTO>();
@@ -124,21 +120,6 @@ public class EntrepriseDTO extends AbstractDTO {
 
     public List<CategorieMetierDTO> getCategoriesMetier() {
         return categoriesMetier;
-    }
-
-    /**
-     * @return the isSiretValide
-     */
-    public Boolean getIsSiretValide() {
-        return isSiretValide;
-    }
-
-    /**
-     * @param isSiretValide
-     *            the isSiretValide to set
-     */
-    public void setIsSiretValide(Boolean isSiretValide) {
-        this.isSiretValide = isSiretValide;
     }
 
     /*

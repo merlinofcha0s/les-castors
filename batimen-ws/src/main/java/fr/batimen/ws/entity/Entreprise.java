@@ -12,11 +12,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 
+import fr.batimen.core.constant.QueryJPQL;
 import fr.batimen.dto.enums.StatutJuridique;
 
 /**
@@ -27,6 +30,8 @@ import fr.batimen.dto.enums.StatutJuridique;
  */
 @Entity
 @Table(name = "Entreprise")
+@NamedQueries(value = { @NamedQuery(name = QueryJPQL.ENTREPRISE_BY_SIRET,
+        query = "SELECT ent FROM Entreprise AS ent WHERE ent.siret = :siret") })
 public class Entreprise extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = 8234078910852637284L;
@@ -42,7 +47,7 @@ public class Entreprise extends AbstractEntity implements Serializable {
     @Temporal(javax.persistence.TemporalType.DATE)
     private Date dateCreation;
     @Column(length = 14, nullable = false)
-    private Integer siret;
+    private String siret;
     @Column(nullable = false)
     private Integer nbEmployees;
     @Column(length = 255, nullable = true)
@@ -77,7 +82,7 @@ public class Entreprise extends AbstractEntity implements Serializable {
      * @return the nomComplet
      */
     public String getNomComplet() {
-        return nomComplet;
+        return nomComplet == null ? "" : nomComplet;
     }
 
     /**
@@ -181,8 +186,16 @@ public class Entreprise extends AbstractEntity implements Serializable {
     /**
      * @return the siret
      */
-    public Integer getSiret() {
+    public String getSiret() {
         return siret;
+    }
+
+    /**
+     * @param siret
+     *            the siret to set
+     */
+    public void setSiret(String siret) {
+        this.siret = siret;
     }
 
     /**
@@ -193,19 +206,41 @@ public class Entreprise extends AbstractEntity implements Serializable {
     }
 
     /**
-     * @param siret
-     *            the siret to set
-     */
-    public void setSiret(Integer siret) {
-        this.siret = siret;
-    }
-
-    /**
      * @param categoriesMetier
      *            the categoriesMetier to set
      */
     public void setCategoriesMetier(List<CategorieMetier> categoriesMetier) {
         this.categoriesMetier = categoriesMetier;
+    }
+
+    /**
+     * @return the dateCreation
+     */
+    public Date getDateCreation() {
+        return dateCreation;
+    }
+
+    /**
+     * @param dateCreation
+     *            the dateCreation to set
+     */
+    public void setDateCreation(Date dateCreation) {
+        this.dateCreation = dateCreation;
+    }
+
+    /**
+     * @return the specialite
+     */
+    public String getSpecialite() {
+        return specialite;
+    }
+
+    /**
+     * @param specialite
+     *            the specialite to set
+     */
+    public void setSpecialite(String specialite) {
+        this.specialite = specialite;
     }
 
     /*

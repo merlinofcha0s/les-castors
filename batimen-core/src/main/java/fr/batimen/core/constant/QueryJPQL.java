@@ -35,4 +35,10 @@ public class QueryJPQL {
 
     // Parametre Query Entity artisan
     public static final String PARAM_ARTISAN_EMAIL = "email";
+
+    // Entity entreprise
+    public static final String ENTREPRISE_BY_SIRET = "entrepriseBySiret";
+
+    // Parametre Query Entity entreprise
+    public static final String PARAM_ENTEPRISE_SIRET = "siret";
 }

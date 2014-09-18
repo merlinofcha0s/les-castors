@@ -15,11 +15,14 @@ import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
 import fr.batimen.dto.enums.Civilite;
 import fr.batimen.dto.enums.StatutJuridique;
+import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.test.ws.AbstractBatimenWsTest;
 import fr.batimen.ws.client.service.ArtisanService;
 import fr.batimen.ws.dao.ArtisanDAO;
+import fr.batimen.ws.entity.Adresse;
 import fr.batimen.ws.entity.Artisan;
+import fr.batimen.ws.entity.Entreprise;
 
 public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
 
@@ -40,12 +43,12 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
         // Artisan
         nouveauPartenaire.getArtisan().setCivilite(Civilite.MONSIEUR);
         nouveauPartenaire.getArtisan().setEmail("plombier@tuyaux.com");
-        nouveauPartenaire.getArtisan().setIsArtisan(true);
         nouveauPartenaire.getArtisan().setLogin("plombier06");
         nouveauPartenaire.getArtisan().setNom("Dupont");
         nouveauPartenaire.getArtisan().setNumeroTel("0645789655");
         nouveauPartenaire.getArtisan().setPassword(HashHelper.hashString("lolmdr06"));
         nouveauPartenaire.getArtisan().setPrenom("David");
+        nouveauPartenaire.getArtisan().setTypeCompte(TypeCompte.DEFAULT_ARTISAN);
 
         // Entreprise
         nouveauPartenaire.getEntreprise().setDateCreation(new Date());
@@ -67,5 +70,15 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
 
         Artisan artisanEnregistre = artisanDAO.getArtisanByEmail(nouveauPartenaire.getArtisan().getEmail());
         Assert.assertNotNull(artisanEnregistre);
+        Assert.assertEquals("plombier@tuyaux.com", artisanEnregistre.getEmail());
+
+        Entreprise entreprise = artisanEnregistre.getEntreprise();
+        Assert.assertNotNull(entreprise);
+        Assert.assertEquals("Entreprise de la plomberie", entreprise.getNomComplet());
+
+        Adresse adresseEntreprise = entreprise.getAdresse();
+        Assert.assertEquals("250 chemin du plombier", adresseEntreprise.getAdresse());
+        Assert.assertNotNull(adresseEntreprise);
+
     }
 }

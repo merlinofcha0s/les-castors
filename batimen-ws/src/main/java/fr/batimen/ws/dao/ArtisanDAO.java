@@ -28,8 +28,8 @@ public class ArtisanDAO extends AbstractDAO {
     private static final Logger LOGGER = LoggerFactory.getLogger(ArtisanDAO.class);
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void saveArtisan(Artisan nouvelArtisan) {
-        entityManager.persist(nouvelArtisan);
+    public void saveArtisan(Artisan nouveauArtisan) {
+        entityManager.persist(nouveauArtisan);
     }
 
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)

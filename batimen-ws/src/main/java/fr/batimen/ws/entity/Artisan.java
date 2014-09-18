@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,6 +18,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import fr.batimen.core.constant.QueryJPQL;
+import fr.batimen.dto.enums.Civilite;
 
 /**
  * Entité Artisan : symbolise un artisan en base de données.
@@ -35,6 +37,9 @@ public class Artisan extends AbstractUser implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Column(nullable = false)
+    protected Civilite civilite;
 
     @OneToMany(mappedBy = "artisan", targetEntity = Notation.class, cascade = CascadeType.REMOVE)
     private List<Notation> scoreGlobal = new ArrayList<Notation>();
@@ -84,6 +89,21 @@ public class Artisan extends AbstractUser implements Serializable {
      */
     public void setEntreprise(Entreprise entreprise) {
         this.entreprise = entreprise;
+    }
+
+    /**
+     * @return the civilite
+     */
+    public Civilite getCivilite() {
+        return civilite;
+    }
+
+    /**
+     * @param civilite
+     *            the civilite to set
+     */
+    public void setCivilite(Civilite civilite) {
+        this.civilite = civilite;
     }
 
     /*
