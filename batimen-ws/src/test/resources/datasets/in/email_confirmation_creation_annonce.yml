@@ -7,8 +7,8 @@ client:
     nom: Du Pebron
     numerotel: "0615458596"
     prenom: Johnny
-    isartisan: false
     isactive: true
+    typecompte: 2
 annonce:
   - id: 10001
     datecreation: 2014-03-23 22:00:00.0

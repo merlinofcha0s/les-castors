@@ -100,7 +100,10 @@ public class EmailServiceTest extends AbstractBatimenWsTest {
 
         boolean noError = emailService
                 .envoiMailActivationCompte(
-                        creationAnnonceDTO,
+                        creationAnnonceDTO.getClient().getNom(),
+                        creationAnnonceDTO.getClient().getPrenom(),
+                        creationAnnonceDTO.getClient().getLogin(),
+                        creationAnnonceDTO.getClient().getEmail(),
                         "JHMwJDU0MDQwJDcxZStxT2JnTWlpejhjTk5LY3liK2c9PSRtMzdobWh3QXRweW92a1NVSXhLenkzNGY2NlZVZUNBUktOMFFaaEJoVmFZPQ==",
                         urlFrontend);
         Assert.assertTrue(noError);

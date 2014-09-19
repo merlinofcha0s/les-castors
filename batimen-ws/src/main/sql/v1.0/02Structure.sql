@@ -90,11 +90,9 @@ create table Annonce (
         numeroTel varchar(10) not null,
         password varchar(80) not null,
         prenom varchar(20),
-        isArtisan boolean not null,
         isActive boolean not null,
         cleActivation varchar(255),
         typeCompte int4 not null,
-        artisan_id int8,
         primary key (id)
     );
     

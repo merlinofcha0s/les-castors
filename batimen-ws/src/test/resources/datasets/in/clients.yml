@@ -7,8 +7,8 @@ client:
     nom: De la Pebronne
     numerotel: "0615125645"
     prenom: Pebron
-    isartisan: false
     isActive: true
+    typecompte: 3
   - id: 1002
     dateinscription: "2014-01-10 01:00:00"
     email: mdr@lol.com
@@ -17,6 +17,6 @@ client:
     nom: De la Pebronne
     numerotel: "0615125645"
     prenom: Xavier
-    isartisan: false
     isActive: false
+    typecompte: 3
     cleactivation: "NTNkN2RmYzVkNWU2MDZkZjZlYTVjZGQ2ZGE0ZjljY2JhNGJjZWY5MmIxNmNiOWJmMjk2ZDVhNDY3OTEzMTIyZA=="

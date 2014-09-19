@@ -1,7 +1,9 @@
 package fr.batimen.ws.facade;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.LocalBean;
@@ -21,10 +23,14 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.microtripit.mandrillapp.lutung.model.MandrillApiError;
+
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.WsPath;
 import fr.batimen.core.exception.BackendException;
+import fr.batimen.core.exception.EmailException;
 import fr.batimen.core.security.HashHelper;
+import fr.batimen.core.utils.PropertiesUtils;
 import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
@@ -39,6 +45,7 @@ import fr.batimen.ws.entity.CategorieMetier;
 import fr.batimen.ws.entity.Entreprise;
 import fr.batimen.ws.helper.JsonHelper;
 import fr.batimen.ws.interceptor.BatimenInterceptor;
+import fr.batimen.ws.service.EmailService;
 
 /**
  * Facade REST de gestion des artisans
@@ -69,6 +76,9 @@ public class GestionArtisanFacade {
 
     @Inject
     private CategorieMetierDAO categorieMetierDAO;
+
+    @Inject
+    private EmailService emailService;
 
     @POST
     @Path(WsPath.GESTION_PARTENAIRE_SERVICE_CREATION_PARTENAIRE)
@@ -119,6 +129,18 @@ public class GestionArtisanFacade {
                 LOGGER.error("L'adresse existe déjà dans la BDD ", e);
             }
             return Constant.CODE_SERVICE_RETOUR_KO;
+        }
+        // On recupere l'url du frontend
+        Properties urlProperties = PropertiesUtils.loadPropertiesFile("url.properties");
+        String urlFrontend = urlProperties.getProperty("url.frontend.web");
+        try {
+            emailService.envoiMailActivationCompte(nouveauPartenaireDTO.getArtisan().getNom(), nouveauPartenaireDTO
+                    .getArtisan().getPrenom(), nouveauPartenaireDTO.getArtisan().getLogin(), nouveauPartenaireDTO
+                    .getArtisan().getEmail(), nouveauArtisan.getCleActivation(), urlFrontend);
+        } catch (EmailException | MandrillApiError | IOException e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Problème d'envoi de mail de confirmation pour un artisan", e);
+            }
         }
 
         return Constant.CODE_SERVICE_RETOUR_OK;
