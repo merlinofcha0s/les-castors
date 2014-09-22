@@ -112,7 +112,6 @@ public class GestionClientFacadeTest extends AbstractBatimenWsTest {
         clientDuplicate.setNom("De la Pebronne");
         clientDuplicate.setNumeroTel("0615125645");
         clientDuplicate.setPrenom("Pebron");
-        clientDuplicate.setIsArtisan(false);
 
         Calendar calClient = Calendar.getInstance(Locale.FRANCE);
         calClient.set(2014, 01, 10, 00, 00, 00);

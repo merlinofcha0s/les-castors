@@ -48,6 +48,7 @@ public class NavigationWizard extends Panel {
 
     public NavigationWizard(String id) {
         super(id);
+
         etape1 = new Label("etape1", "");
         etape2 = new Label("etape2", "");
         etape3 = new Label("etape3", "");
@@ -65,6 +66,11 @@ public class NavigationWizard extends Panel {
         etape3Li = new WebMarkupContainer("etape3Li");
         etape4Li = new WebMarkupContainer("etape4Li");
         etape5Li = new WebMarkupContainer("etape5Li");
+        etape1Li.setVisible(false);
+        etape2Li.setVisible(false);
+        etape3Li.setVisible(false);
+        etape4Li.setVisible(false);
+        etape5Li.setVisible(false);
 
         etape1Li.add(etape1);
         etape2Li.add(etape2);
@@ -117,18 +123,23 @@ public class NavigationWizard extends Panel {
             switch (i) {
             case 0:
                 etape1.setDefaultModelObject(etapes.get(i));
+                etape1Li.setVisible(true);
                 break;
             case 1:
                 etape2.setDefaultModelObject(etapes.get(i));
+                etape2Li.setVisible(true);
                 break;
             case 2:
                 etape3.setDefaultModelObject(etapes.get(i));
+                etape3Li.setVisible(true);
                 break;
             case 3:
                 etape4.setDefaultModelObject(etapes.get(i));
+                etape4Li.setVisible(true);
                 break;
             case 4:
                 etape5.setDefaultModelObject(etapes.get(i));
+                etape5Li.setVisible(true);
                 break;
             default:
                 throw new FrontEndException("Trop d'étape pour le composant Navigation wizard (max 5 etapes)");

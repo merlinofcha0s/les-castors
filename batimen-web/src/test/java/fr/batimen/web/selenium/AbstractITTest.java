@@ -54,16 +54,17 @@ public abstract class AbstractITTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractITTest.class);
 
     // DBSetup
-    public static final Operation DELETE_ALL = deleteAllFrom("annonce", "adresse", "client");
+    public static final Operation DELETE_ALL = deleteAllFrom("annonce", "artisan", "categoriemetier", "entreprise",
+            "adresse", "notation", "client");
     public static final Operation INSERT_USER_DATA = insertInto("client")
-            .columns("id", "email", "nom", "prenom", "login", "password", "numeroTel", "dateInscription", "isArtisan",
-                    "isActive", "cleactivation")
+            .columns("id", "email", "nom", "prenom", "login", "password", "numeroTel", "dateInscription", "isActive",
+                    "cleactivation", "typecompte")
             .values(100001, "raiden@batimen.fr", "Casaucau", "Cyril", "raiden",
                     "$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=", "0614125696",
-                    "2014-01-08", false, true, "lolmdr")
+                    "2014-01-08", true, "lolmdr", 2)
             .values(100002, "xaviern@batimen.fr", "Dupont", "Xavier", "xavier",
                     "$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=", "0614125696",
-                    "2014-01-08", false, false, "lolmdr06").build();
+                    "2014-01-08", false, "lolmdr06", 2).build();
 
     @Before
     public void setUpITTest() throws Exception {

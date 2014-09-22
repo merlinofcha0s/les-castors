@@ -8,7 +8,7 @@ import org.apache.wicket.request.cycle.RequestCycle;
 import org.apache.wicket.request.http.WebRequest;
 
 import fr.batimen.web.client.component.MapFrance;
-import fr.batimen.web.client.extend.nouveau.devis.event.MapFranceEvent;
+import fr.batimen.web.client.event.MapFranceEvent;
 
 /**
  * Behaviour qui crée, envoi et recupere une requete qjax qui a pour but de

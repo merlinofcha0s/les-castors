@@ -20,5 +20,5 @@ client:
     nom: Du Pebron
     numerotel: "0615458596"
     prenom: Johnny
-    isartisan: false
     isactive: true
+    typecompte: 3

@@ -54,7 +54,7 @@ public class AuthentificationPanel extends Panel {
         login.setModelObject("Identifiant");
         login.setMarkupId("loginModal");
         login.setRequired(true);
-        login.add(new StringValidator(ValidatorConstant.LOGIN_RANGE_MIN, ValidatorConstant.LOGIN_RANGE_MAX));
+        login.add(new StringValidator(ValidatorConstant.CLIENT_LOGIN_RANGE_MIN, ValidatorConstant.CLIENT_LOGIN_RANGE_MAX));
 
         password = new PasswordTextField("password", new Model<String>());
         password.setModelObject("Password");

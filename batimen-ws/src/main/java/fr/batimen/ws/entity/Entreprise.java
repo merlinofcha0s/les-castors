@@ -1,6 +1,9 @@
 package fr.batimen.ws.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.CascadeType;
@@ -9,9 +12,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
 
+import fr.batimen.core.constant.QueryJPQL;
 import fr.batimen.dto.enums.StatutJuridique;
 
 /**
@@ -22,193 +30,247 @@ import fr.batimen.dto.enums.StatutJuridique;
  */
 @Entity
 @Table(name = "Entreprise")
+@NamedQueries(value = { @NamedQuery(name = QueryJPQL.ENTREPRISE_BY_SIRET,
+        query = "SELECT ent FROM Entreprise AS ent WHERE ent.siret = :siret") })
 public class Entreprise extends AbstractEntity implements Serializable {
 
-	private static final long serialVersionUID = 8234078910852637284L;
+    private static final long serialVersionUID = 8234078910852637284L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
-	@Column(length = 40, nullable = false)
-	private String nomComplet;
-	@Column(nullable = false)
-	private StatutJuridique statutJuridique;
-	@Column(nullable = false)
-	private Integer capitalSociale;
-	@Column(nullable = false)
-	private Integer nbEmployees;
-	@Column(length = 255, nullable = false)
-	private String logo;
-	@OneToOne(mappedBy = "entreprise", cascade = CascadeType.REMOVE)
-	private Artisan artisan;
-	@OneToOne(cascade = CascadeType.REMOVE)
-	private Paiement paiement;
-	@OneToOne(cascade = CascadeType.REMOVE)
-	private Adresse adresse;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    @Column(length = 40, nullable = false)
+    private String nomComplet;
+    @Column(nullable = false)
+    private StatutJuridique statutJuridique;
+    @Column(nullable = false)
+    @Temporal(javax.persistence.TemporalType.DATE)
+    private Date dateCreation;
+    @Column(length = 14, nullable = false)
+    private String siret;
+    @Column(nullable = false)
+    private Integer nbEmployees;
+    @Column(length = 255, nullable = true)
+    private String logo;
+    @Column(length = 50, nullable = true)
+    private String specialite;
+    @OneToOne(mappedBy = "entreprise", cascade = CascadeType.REMOVE)
+    private Artisan artisan;
+    @OneToOne(cascade = CascadeType.REMOVE)
+    private Paiement paiement;
+    @OneToOne(cascade = CascadeType.REMOVE)
+    private Adresse adresse;
+    @OneToMany(mappedBy = "entreprise", targetEntity = CategorieMetier.class, cascade = CascadeType.REMOVE)
+    private List<CategorieMetier> categoriesMetier = new ArrayList<CategorieMetier>();
 
-	/**
-	 * @return the id
-	 */
-	public Long getId() {
-		return id;
-	}
+    /**
+     * @return the id
+     */
+    public Long getId() {
+        return id;
+    }
 
-	/**
-	 * @param id
-	 *            the id to set
-	 */
-	public void setId(Long id) {
-		this.id = id;
-	}
+    /**
+     * @param id
+     *            the id to set
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	/**
-	 * @return the nomComplet
-	 */
-	public String getNomComplet() {
-		return nomComplet;
-	}
+    /**
+     * @return the nomComplet
+     */
+    public String getNomComplet() {
+        return nomComplet == null ? "" : nomComplet;
+    }
 
-	/**
-	 * @param nomComplet
-	 *            the nomComplet to set
-	 */
-	public void setNomComplet(String nomComplet) {
-		this.nomComplet = nomComplet;
-	}
+    /**
+     * @param nomComplet
+     *            the nomComplet to set
+     */
+    public void setNomComplet(String nomComplet) {
+        this.nomComplet = nomComplet;
+    }
 
-	/**
-	 * @return the statutJuridique
-	 */
-	public StatutJuridique getStatutJuridique() {
-		return statutJuridique;
-	}
+    /**
+     * @return the statutJuridique
+     */
+    public StatutJuridique getStatutJuridique() {
+        return statutJuridique;
+    }
 
-	/**
-	 * @param statutJuridique
-	 *            the statutJuridique to set
-	 */
-	public void setStatutJuridique(StatutJuridique statutJuridique) {
-		this.statutJuridique = statutJuridique;
-	}
+    /**
+     * @param statutJuridique
+     *            the statutJuridique to set
+     */
+    public void setStatutJuridique(StatutJuridique statutJuridique) {
+        this.statutJuridique = statutJuridique;
+    }
 
-	/**
-	 * @return the capitalSociale
-	 */
-	public Integer getCapitalSociale() {
-		return capitalSociale;
-	}
+    /**
+     * @return the nbEmployees
+     */
+    public Integer getNbEmployees() {
+        return nbEmployees;
+    }
 
-	/**
-	 * @param capitalSociale
-	 *            the capitalSociale to set
-	 */
-	public void setCapitalSociale(Integer capitalSociale) {
-		this.capitalSociale = capitalSociale;
-	}
+    /**
+     * @param nbEmployees
+     *            the nbEmployees to set
+     */
+    public void setNbEmployees(Integer nbEmployees) {
+        this.nbEmployees = nbEmployees;
+    }
 
-	/**
-	 * @return the nbEmployees
-	 */
-	public Integer getNbEmployees() {
-		return nbEmployees;
-	}
+    /**
+     * @return the logo
+     */
+    public String getLogo() {
+        return logo;
+    }
 
-	/**
-	 * @param nbEmployees
-	 *            the nbEmployees to set
-	 */
-	public void setNbEmployees(Integer nbEmployees) {
-		this.nbEmployees = nbEmployees;
-	}
+    /**
+     * @param logo
+     *            the logo to set
+     */
+    public void setLogo(String logo) {
+        this.logo = logo;
+    }
 
-	/**
-	 * @return the logo
-	 */
-	public String getLogo() {
-		return logo;
-	}
+    /**
+     * @return the artisan
+     */
+    public Artisan getArtisan() {
+        return artisan;
+    }
 
-	/**
-	 * @param logo
-	 *            the logo to set
-	 */
-	public void setLogo(String logo) {
-		this.logo = logo;
-	}
+    /**
+     * @param artisan
+     *            the artisan to set
+     */
+    public void setArtisan(Artisan artisan) {
+        this.artisan = artisan;
+    }
 
-	/**
-	 * @return the artisan
-	 */
-	public Artisan getArtisan() {
-		return artisan;
-	}
+    /**
+     * @return the paiement
+     */
+    public Paiement getPaiement() {
+        return paiement;
+    }
 
-	/**
-	 * @param artisan
-	 *            the artisan to set
-	 */
-	public void setArtisan(Artisan artisan) {
-		this.artisan = artisan;
-	}
+    /**
+     * @param paiement
+     *            the paiement to set
+     */
+    public void setPaiement(Paiement paiement) {
+        this.paiement = paiement;
+    }
 
-	/**
-	 * @return the paiement
-	 */
-	public Paiement getPaiement() {
-		return paiement;
-	}
+    /**
+     * @return the adresse
+     */
+    public Adresse getAdresse() {
+        return adresse;
+    }
 
-	/**
-	 * @param paiement
-	 *            the paiement to set
-	 */
-	public void setPaiement(Paiement paiement) {
-		this.paiement = paiement;
-	}
+    /**
+     * @param adresse
+     *            the adresse to set
+     */
+    public void setAdresse(Adresse adresse) {
+        this.adresse = adresse;
+    }
 
-	/**
-	 * @return the adresse
-	 */
-	public Adresse getAdresse() {
-		return adresse;
-	}
+    /**
+     * @return the siret
+     */
+    public String getSiret() {
+        return siret;
+    }
 
-	/**
-	 * @param adresse
-	 *            the adresse to set
-	 */
-	public void setAdresse(Adresse adresse) {
-		this.adresse = adresse;
-	}
+    /**
+     * @param siret
+     *            the siret to set
+     */
+    public void setSiret(String siret) {
+        this.siret = siret;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		return Objects.hashCode(Objects.hash(this.nomComplet, this.statutJuridique, this.nbEmployees));
-	}
+    /**
+     * @return the categoriesMetier
+     */
+    public List<CategorieMetier> getCategoriesMetier() {
+        return categoriesMetier;
+    }
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object object) {
-		if (this == object) {
-			return true;
-		}
+    /**
+     * @param categoriesMetier
+     *            the categoriesMetier to set
+     */
+    public void setCategoriesMetier(List<CategorieMetier> categoriesMetier) {
+        this.categoriesMetier = categoriesMetier;
+    }
 
-		if (object instanceof Entreprise) {
-			Entreprise other = (Entreprise) object;
-			return Objects.equals(this.nomComplet, other.nomComplet)
-					&& Objects.equals(this.statutJuridique, other.statutJuridique)
-					&& Objects.equals(this.nbEmployees, other.nbEmployees);
-		}
-		return false;
-	}
+    /**
+     * @return the dateCreation
+     */
+    public Date getDateCreation() {
+        return dateCreation;
+    }
+
+    /**
+     * @param dateCreation
+     *            the dateCreation to set
+     */
+    public void setDateCreation(Date dateCreation) {
+        this.dateCreation = dateCreation;
+    }
+
+    /**
+     * @return the specialite
+     */
+    public String getSpecialite() {
+        return specialite;
+    }
+
+    /**
+     * @param specialite
+     *            the specialite to set
+     */
+    public void setSpecialite(String specialite) {
+        this.specialite = specialite;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(Objects.hash(this.nomComplet, this.statutJuridique, this.nbEmployees));
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+
+        if (object instanceof Entreprise) {
+            Entreprise other = (Entreprise) object;
+            return Objects.equals(this.nomComplet, other.nomComplet)
+                    && Objects.equals(this.statutJuridique, other.statutJuridique)
+                    && Objects.equals(this.nbEmployees, other.nbEmployees);
+        }
+        return false;
+    }
 
 }
