@@ -80,6 +80,13 @@ public class GestionArtisanFacade {
     @Inject
     private EmailService emailService;
 
+    /**
+     * Service de création d'un nouveau partenaire Artisan
+     * 
+     * @param nouveauPartenaireDTO
+     *            l'objet contenant l'ensemble des informations.
+     * @return voir la classe : {@link Constant}
+     */
     @POST
     @Path(WsPath.GESTION_PARTENAIRE_SERVICE_CREATION_PARTENAIRE)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)

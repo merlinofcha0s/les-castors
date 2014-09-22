@@ -19,6 +19,7 @@ import fr.batimen.dto.SousCategorieMetierDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.dto.enums.DelaiIntervention;
+import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.enums.TypeContact;
 import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
@@ -138,6 +139,7 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
                 nouvelleAnnonce.setNumeroEtape(4);
                 ChangementEtapeClientEvent changementEtapeEventClient = new ChangementEtapeClientEvent(target,
                         nouvelleAnnonce);
+                nouvelleAnnonce.getClient().setTypeCompte(TypeCompte.CLIENT);
                 this.send(target.getPage(), Broadcast.BREADTH, changementEtapeEventClient);
             }
 

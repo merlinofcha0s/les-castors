@@ -20,6 +20,7 @@ import fr.batimen.core.security.HashHelper;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
 import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.dto.enums.Civilite;
+import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
@@ -140,6 +141,7 @@ public class Etape2PartenaireForm extends Form<CreationPartenaireDTO> {
                         nouveauPartenaire);
                 String hashedPassword = HashHelper.hashString(nouveauPartenaire.getArtisan().getPassword());
                 nouveauPartenaire.getArtisan().setPassword(hashedPassword);
+                nouveauPartenaire.getArtisan().setTypeCompte(TypeCompte.DEFAULT_ARTISAN);
                 this.send(target.getPage(), Broadcast.BREADTH, changementEtapeEvent);
 
             }

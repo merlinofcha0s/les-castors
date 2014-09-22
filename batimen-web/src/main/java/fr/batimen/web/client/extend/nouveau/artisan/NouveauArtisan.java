@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.IAjaxIndicatorAware;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -20,6 +19,7 @@ import fr.batimen.web.client.component.NavigationWizard;
 import fr.batimen.web.client.event.MapFranceEvent;
 import fr.batimen.web.client.extend.nouveau.artisan.event.ChangementEtapeEventArtisan;
 import fr.batimen.web.client.master.MasterPage;
+import fr.batimen.ws.client.service.ArtisanService;
 
 /**
  * Page permettant d'enregistré un nouveau partenaire (artisan)
@@ -27,7 +27,7 @@ import fr.batimen.web.client.master.MasterPage;
  * @author Casaucau Cyril
  * 
  */
-public class NouveauArtisan extends MasterPage implements IAjaxIndicatorAware {
+public class NouveauArtisan extends MasterPage {
 
     private static final long serialVersionUID = 7796768527786855832L;
     private static final Logger LOGGER = LoggerFactory.getLogger(NouveauArtisan.class);
@@ -185,8 +185,7 @@ public class NouveauArtisan extends MasterPage implements IAjaxIndicatorAware {
     }
 
     private Integer creationPartenaire(CreationPartenaireDTO nouveauPartenaire) {
-        return 0;
-        // return ArtisanService.creationNouveauPartenaire(nouveauPartenaire);
+        return ArtisanService.creationNouveauPartenaire(nouveauPartenaire);
     }
 
     /*
@@ -240,10 +239,5 @@ public class NouveauArtisan extends MasterPage implements IAjaxIndicatorAware {
             targetChangementEtape.add(feedBackPanelGeneral);
             targetChangementEtape.add(this);
         }
-    }
-
-    @Override
-    public String getAjaxIndicatorMarkupId() {
-        return "waiter";
     }
 }

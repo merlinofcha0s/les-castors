@@ -19,7 +19,6 @@ public class AdresseDTO extends AbstractDTO {
     @NotNull
     @Size(min = ADRESSE_MIN, max = ADRESSE_MAX)
     private String adresse;
-    @NotNull
     @Size(max = COMPLEMENT_ADRESSE_MAX)
     private String complementAdresse;
     @NotNull

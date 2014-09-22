@@ -12,8 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
- * Entité Entreprise : Symbolise la categorie metier de l'entreprise en base de
- * données.
+ * Entité categorie metier : Symbolise la categorie metier de l'entreprise en
+ * base de données.
  * 
  * @author Casaucau Cyril
  * 

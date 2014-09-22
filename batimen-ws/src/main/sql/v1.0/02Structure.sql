@@ -2,7 +2,7 @@ create table Adresse (
         id  bigserial not null,
         adresse varchar(255) not null,
         codePostal varchar(5) not null,
-        complementAdresse varchar(255) not null,
+        complementAdresse varchar(255),
         ville varchar(45) not null,
         departement int4 not null,
         primary key (id)

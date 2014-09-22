@@ -29,7 +29,7 @@ public class Adresse extends AbstractEntity implements Serializable {
     private Long id;
     @Column(length = 255, nullable = false)
     private String adresse;
-    @Column(length = 255, nullable = false)
+    @Column(length = 255, nullable = true)
     private String complementAdresse;
     @Column(length = 5, nullable = false)
     private String codePostal;
