@@ -27,17 +27,16 @@ public class SiretValidatorHelper {
                      * 1 + (digit -10) ou : digit - 9
                      */
 
-                    if (digit > 9)
+                    if (digit > 9) {
                         digit -= 9;
-                } else
+                    }
+                } else {
                     digit = Integer.parseInt(String.valueOf(siretToValidate.charAt(i)));
-                total += digit;
+                    total += digit;
+                }
             }
             /** Si la somme est un multiple de 10 alors le SIRET est valide */
-            if ((total % 10) == 0)
-                return true;
-            else
-                return false;
+            return (total % 10) == 0;
         } else {
             return false;
         }

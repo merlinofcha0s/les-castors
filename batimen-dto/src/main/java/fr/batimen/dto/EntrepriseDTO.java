@@ -83,7 +83,7 @@ public class EntrepriseDTO extends AbstractDTO {
     }
 
     public Integer getNbEmployees() {
-        return nbEmployees == null ? 0 : nbEmployees;
+        return nbEmployees == null ? new Integer(0) : nbEmployees;
     }
 
     public String getLogo() {
