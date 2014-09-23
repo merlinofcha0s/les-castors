@@ -32,8 +32,8 @@ public class SiretValidatorHelper {
                     }
                 } else {
                     digit = Integer.parseInt(String.valueOf(siretToValidate.charAt(i)));
-                    total += digit;
                 }
+                total += digit;
             }
             /** Si la somme est un multiple de 10 alors le SIRET est valide */
             return (total % 10) == 0;
