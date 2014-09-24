@@ -75,10 +75,8 @@ public class CreationPartenaireDTO extends AbstractDTO {
      */
     @Override
     public int hashCode() {
-        return Objects.hashCode(Objects.hash(
-        /*
-         * this.entreprise.getSiret(), this .entreprise.getNomComplet() ,
-         */this.artisan.getEmail()));
+        return Objects.hashCode(Objects.hash(this.entreprise.getSiret(), this.entreprise.getNomComplet(),
+                this.artisan.getEmail()));
     }
 
     /*
@@ -95,14 +93,10 @@ public class CreationPartenaireDTO extends AbstractDTO {
 
         if (object instanceof CreationPartenaireDTO) {
             CreationPartenaireDTO other = (CreationPartenaireDTO) object;
-            return /*
-                    * Objects.equals(this.entreprise.getSiret(),
-                    * other.entreprise.getSiret()) &&
-                    * Objects.equals(this.entreprise.getNomComplet(),
-                    * other.entreprise.getNomComplet())
-                    * 
-                    * &&
-                    */Objects.equals(this.artisan.getEmail(), other.artisan.getEmail());
+            return Objects.equals(this.entreprise.getSiret(), other.entreprise.getSiret())
+                    && Objects.equals(this.entreprise.getNomComplet(), other.entreprise.getNomComplet())
+
+                    && Objects.equals(this.artisan.getEmail(), other.artisan.getEmail());
         }
         return false;
     }

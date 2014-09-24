@@ -6,6 +6,8 @@ import static fr.batimen.dto.constant.ValidatorConstant.CODE_POSTAL_REGEX;
 import static fr.batimen.dto.constant.ValidatorConstant.COMPLEMENT_ADRESSE_MAX;
 import static fr.batimen.dto.constant.ValidatorConstant.VILLE_MAX;
 
+import java.util.Objects;
+
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -105,6 +107,36 @@ public class AdresseDTO extends AbstractDTO {
      */
     public void setDepartement(Integer departement) {
         this.departement = departement;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(Objects.hash(this.getAdresse(), this.getCodePostal(), this.getVille()));
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+
+        if (object instanceof AdresseDTO) {
+            AdresseDTO other = (AdresseDTO) object;
+            return Objects.equals(this.getAdresse(), other.getAdresse())
+                    && Objects.equals(this.getCodePostal(), other.getCodePostal())
+                    && Objects.equals(this.getVille(), other.getVille());
+        }
+        return false;
     }
 
 }

@@ -128,8 +128,7 @@ public class BatimenApplication extends AuthenticatedWebApplication {
      */
     @Override
     public Session newSession(Request request, Response response) {
-        BatimenSession session = new BatimenSession(request);
-        return session;
+        return new BatimenSession(request);
     }
 
     private void getAppProperties() {
