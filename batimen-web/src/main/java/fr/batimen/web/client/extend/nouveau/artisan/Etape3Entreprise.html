@@ -98,57 +98,75 @@
 					</tr>
 				</table>
 				<div id="terminerInscriptionPartenaire">
-						<a
-							class="shortcode_button btn_small btn_type1"
-							wicket:id="validateEtape3Partenaire">Terminer</a>
-					</div>
-					<div id="champsObligatoire">
-						<span class='required'>*</span> : champs obligatoires
-					</div>
+					<a
+						class="shortcode_button btn_small btn_type1"
+						wicket:id="validateEtape3Partenaire">Terminer</a>
+				</div>
+				<div id="champsObligatoire">
+					<span class='required'>*</span> : champs obligatoires
+				</div>
 			</form>
 			<div
 				wicket:id="containerActivite"
-				id="containerActivite">
+				id="containerActivite"
+				class="fuelux">
 				<h5>Activité de votre entreprise</h5>
-				<div id="containerAjoutActivite">
-					<a
-						wicket:id="ajouterActivite"
-						id="ajouterActivite"> <img
-						wicket:id="ajouterImg"
-						width=25px; /> <span>Ajouter une activité</span>
-					</a><span class="required">*</span>
-				</div>
-				<div
-					wicket:id="containerCategorieSelection"
-					id="containerCategorieSelection">
-					<h6>Activité(s) choisie(s)</h6>
-					<ul class="list_type1">
-						<li wicket:id="entreprise.categoriesMetier"><span wicket:id="categorieSel"></span> <a
-							wicket:id="removeLinkCategorie"><img
-								wicket:id="removeImgCategorie"
-								width="20px" /></a></li>
-					</ul>
-				</div>
-			</div>
-			<div wicket:id="activiteDialog">
-				<div id="categorieMetierPartenaire">
-					<form wicket:id="formSelectionActivite">
-						<table class="tableBatimen">
-							<tr>
-								<th>Activité</th>
-								<td><select
-									wicket:id="dropdownCategoriesMetier"
-									name="activite"
-									id="activiteField"></select></td>
-							</tr>
-						</table>
-						<div id="enregistrerCategorie">
-							<a
-								class="shortcode_button btn_small btn_type1"
-								wicket:id="enregistrerCategorie">Valider</a>
-						</div>
-					</form>
-				</div>
+				<label
+					class="checkbox-custom checkbox inline"
+					id="myCheckbox5"
+					title="Electricité"> <input
+					class="sr-only"
+					wicket:id="electricite"
+					type="checkbox"
+					value="option1"><i class="checkbox"></i><span
+					class="checkbox-label icon-Lightning"
+					style="font-size: 25px;"></span>
+				</label> <label
+					class="checkbox-custom checkbox inline"
+					id="myCheckbox5"
+					title="Plomberie"> <input
+					class="sr-only"
+					type="checkbox"
+					value="option1"><i class="checkbox"></i><span
+					class="checkbox-label icon-Connection1"
+					style="font-size: 25px;"></span>
+				</label> <label
+					class="checkbox-custom checkbox inline"
+					id="myCheckbox5"
+					title="Espaces verts"> <input
+					class="sr-only"
+					type="checkbox"
+					value="option2"><i class="checkbox"></i><span
+					class="checkbox-label icon-Refresh1"
+					style="font-size: 25px;"></span>
+				</label> <label
+					class="checkbox-custom checkbox inline"
+					id="myCheckbox5"
+					title="Décoration / Maçonnerie"> <input
+					class="sr-only"
+					type="checkbox"
+					value="option3"><i class="checkbox"></i><span
+					class="checkbox-label icon-Tool"
+					style="font-size: 25px;"></span>
+				</label> <label
+					class="checkbox-custom checkbox inline"
+					id="myCheckbox5"
+					title="Gros Oeuvre"> <input
+					class="sr-only"
+					type="checkbox"
+					value="option4"><i class="checkbox"></i><span
+					class="checkbox-label icon-House"
+					style="font-size: 25px;"></span>
+				</label> <label
+					class="checkbox-custom checkbox inline"
+					id="myCheckbox5"
+					title="Equipement"> <input
+					class="sr-only"
+					type="checkbox"
+					value="option5"><i class="checkbox"></i><span
+					class="checkbox-label icon-Satellite1"
+					style="font-size: 25px;"></span>
+				</label>
 			</div>
 		</div>
 	</div>
