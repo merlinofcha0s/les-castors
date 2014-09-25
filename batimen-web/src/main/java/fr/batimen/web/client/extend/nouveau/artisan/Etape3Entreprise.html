@@ -110,62 +110,69 @@
 				wicket:id="containerActivite"
 				id="containerActivite"
 				class="fuelux">
-				<h5>Activité de votre entreprise</h5>
+				<h5>Les activités de votre entreprise :</h5>
 				<label
 					class="checkbox-custom checkbox inline"
-					id="myCheckbox5"
-					title="Electricité"> <input
+					title="Electricité" wicket:id="containerElectricite"> <input
 					class="sr-only"
 					wicket:id="electricite"
 					type="checkbox"
-					value="option1"><i class="checkbox"></i><span
-					class="checkbox-label icon-Lightning"
-					style="font-size: 25px;"></span>
+					value="option1"><i class="checkbox" wicket:id="iElectricite"></i><span
+					class="checkbox-label icon-Lightning font-glyph-entreprise"
+					></span>
 				</label> <label
 					class="checkbox-custom checkbox inline"
-					id="myCheckbox5"
-					title="Plomberie"> <input
+					title="Plomberie" wicket:id="containerPlomberie"> <input
 					class="sr-only"
-					type="checkbox"
-					value="option1"><i class="checkbox"></i><span
-					class="checkbox-label icon-Connection1"
-					style="font-size: 25px;"></span>
-				</label> <label
-					class="checkbox-custom checkbox inline"
-					id="myCheckbox5"
-					title="Espaces verts"> <input
-					class="sr-only"
+					wicket:id="plomberie"
 					type="checkbox"
 					value="option2"><i class="checkbox"></i><span
-					class="checkbox-label icon-Refresh1"
-					style="font-size: 25px;"></span>
+					class="checkbox-label icon-Connection1 font-glyph-entreprise"
+					></span>
 				</label> <label
 					class="checkbox-custom checkbox inline"
-					id="myCheckbox5"
-					title="Décoration / Maçonnerie"> <input
+					title="Espaces verts" wicket:id="containerEspaceVert"> <input
 					class="sr-only"
+					wicket:id="espaceVert"
 					type="checkbox"
 					value="option3"><i class="checkbox"></i><span
-					class="checkbox-label icon-Tool"
-					style="font-size: 25px;"></span>
+					class="checkbox-label icon-Refresh1 font-glyph-entreprise"
+					></span>
 				</label> <label
 					class="checkbox-custom checkbox inline"
-					id="myCheckbox5"
-					title="Gros Oeuvre"> <input
+					title="Décoration / Maçonnerie" wicket:id="containerDecorationMaconnerie"> <input
 					class="sr-only"
+					wicket:id="decorationMaconnerie"
 					type="checkbox"
 					value="option4"><i class="checkbox"></i><span
-					class="checkbox-label icon-House"
-					style="font-size: 25px;"></span>
+					class="checkbox-label icon-Tool font-glyph-entreprise" 
+					></span>
 				</label> <label
 					class="checkbox-custom checkbox inline"
-					id="myCheckbox5"
-					title="Equipement"> <input
+					title="Gros Oeuvre" wicket:id="containerGrosOeuvre"> <input
 					class="sr-only"
+					wicket:id="grosOeuvre"
 					type="checkbox"
 					value="option5"><i class="checkbox"></i><span
-					class="checkbox-label icon-Satellite1"
-					style="font-size: 25px;"></span>
+					class="checkbox-label icon-House font-glyph-entreprise"
+					></span>
+				</label> <label
+					class="checkbox-custom checkbox inline"
+					title="Equipement" wicket:id="containerEquipement"> <input
+					class="sr-only"
+					wicket:id="equipement"
+					type="checkbox"
+					value="option6"><i class="checkbox"></i><span
+					class="checkbox-label icon-Satellite1 font-glyph-entreprise"></span>
+				</label>
+				<label
+					class="checkbox-custom checkbox inline"
+					title="Toutes les activités" wicket:id="containerToutesLesActivites"> <input
+					class="sr-only"
+					wicket:id="touteslesActivites"
+					type="checkbox"
+					value="option7"><i class="checkbox"></i><span
+					class="checkbox-label icon-CheckMark font-glyph-entreprise"></span>
 				</label>
 			</div>
 		</div>

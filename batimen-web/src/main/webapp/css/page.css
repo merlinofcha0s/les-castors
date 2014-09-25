@@ -197,7 +197,7 @@
 #containerActivite {
 	float: right;
 	padding-right: 244px;
-	padding-top: 21px;
+	padding-top: 15px;
 }
 
 #containerCategorieSelection {
@@ -215,6 +215,10 @@
 #terminerInscriptionPartenaire {
 	float: right;
 	margin-right: 35px;
+}
+
+.font-glyph-entreprise{
+	font-size: 25px;
 }
 
 /* Composant Wicket */
