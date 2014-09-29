@@ -5,6 +5,8 @@ import java.util.List;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
+import org.apache.wicket.event.Broadcast;
+import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -14,6 +16,7 @@ import org.apache.wicket.model.Model;
 import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
 import fr.batimen.web.client.component.BatimenToolTip;
+import fr.batimen.web.client.extend.nouveau.artisan.event.UncheckedEvent;
 
 /**
  * Etape 3 de l'inscription d'un nouvel artisan : Informations sur l'entreprise
@@ -63,9 +66,10 @@ public class Etape3Entreprise extends Panel {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 if (this.getModelObject()) {
-                    checked(containerElectricite, iElectricite);
+                    checked(containerElectricite, iElectricite, this);
                 } else {
-                    unChecked(containerElectricite, iElectricite);
+                    unChecked(containerElectricite, iElectricite, this);
+                    sendUncheckedAllCheckBox(target);
                 }
                 target.add(containerActivite);
             }
@@ -86,9 +90,10 @@ public class Etape3Entreprise extends Panel {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 if (this.getModelObject()) {
-                    checked(containerPlomberie, iPlomberie);
+                    checked(containerPlomberie, iPlomberie, this);
                 } else {
-                    unChecked(containerPlomberie, iPlomberie);
+                    unChecked(containerPlomberie, iPlomberie, this);
+                    sendUncheckedAllCheckBox(target);
                 }
                 target.add(containerActivite);
             }
@@ -109,9 +114,10 @@ public class Etape3Entreprise extends Panel {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 if (this.getModelObject()) {
-                    checked(containerEspaceVert, iEspaceVert);
+                    checked(containerEspaceVert, iEspaceVert, this);
                 } else {
-                    unChecked(containerEspaceVert, iEspaceVert);
+                    unChecked(containerEspaceVert, iEspaceVert, this);
+                    sendUncheckedAllCheckBox(target);
                 }
                 target.add(containerActivite);
             }
@@ -131,9 +137,10 @@ public class Etape3Entreprise extends Panel {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 if (this.getModelObject()) {
-                    checked(containerDecorationMaconnerie, iDecorationMaconnerie);
+                    checked(containerDecorationMaconnerie, iDecorationMaconnerie, this);
                 } else {
-                    unChecked(containerDecorationMaconnerie, iDecorationMaconnerie);
+                    unChecked(containerDecorationMaconnerie, iDecorationMaconnerie, this);
+                    sendUncheckedAllCheckBox(target);
                 }
                 target.add(containerActivite);
             }
@@ -153,9 +160,11 @@ public class Etape3Entreprise extends Panel {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 if (this.getModelObject()) {
-                    checked(containerGrosOeuvre, iGrosOeuvre);
+                    checked(containerGrosOeuvre, iGrosOeuvre, this);
+                    sendUncheckedAllCheckBox(target);
                 } else {
-                    unChecked(containerGrosOeuvre, iGrosOeuvre);
+                    unChecked(containerGrosOeuvre, iGrosOeuvre, this);
+                    sendUncheckedAllCheckBox(target);
                 }
                 target.add(containerActivite);
             }
@@ -175,9 +184,11 @@ public class Etape3Entreprise extends Panel {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 if (this.getModelObject()) {
-                    checked(containerEquipement, iEquipement);
+                    checked(containerEquipement, iEquipement, this);
+                    sendUncheckedAllCheckBox(target);
                 } else {
-                    unChecked(containerEquipement, iEquipement);
+                    unChecked(containerEquipement, iEquipement, this);
+                    sendUncheckedAllCheckBox(target);
                 }
                 target.add(containerActivite);
             }
@@ -190,6 +201,7 @@ public class Etape3Entreprise extends Panel {
 
         final WebMarkupContainer containerToutesLesActivites = new WebMarkupContainer("containerToutesLesActivites");
         containerToutesLesActivites.setOutputMarkupId(true);
+
         final WebMarkupContainer iToutesActivite = new WebMarkupContainer("iToutesLesActivites");
         final AjaxCheckBox checkBoxTouteslesActivites = new AjaxCheckBox("touteslesActivites", new Model<Boolean>()) {
 
@@ -198,24 +210,41 @@ public class Etape3Entreprise extends Panel {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 if (this.getModelObject()) {
-                    checked(containerElectricite, iElectricite);
-                    checked(containerPlomberie, iPlomberie);
-                    checked(containerEspaceVert, iEspaceVert);
-                    checked(containerDecorationMaconnerie, iDecorationMaconnerie);
-                    checked(containerGrosOeuvre, iGrosOeuvre);
-                    checked(containerEquipement, iEquipement);
-                    checked(containerToutesLesActivites, iToutesActivite);
+                    checked(containerElectricite, iElectricite, checkBoxElectricite);
+                    checked(containerToutesLesActivites, iToutesActivite, this);
+                    checked(containerPlomberie, iPlomberie, checkBoxPlomberie);
+                    checked(containerEspaceVert, iEspaceVert, checkBoxEspaceVert);
+                    checked(containerDecorationMaconnerie, iDecorationMaconnerie, checkBoxDecorationMaconnerie);
+                    checked(containerGrosOeuvre, iGrosOeuvre, checkBoxGrosOeuvre);
+                    checked(containerEquipement, iEquipement, checkBoxEquipement);
+
                 } else {
-                    unChecked(containerElectricite, iElectricite);
-                    unChecked(containerPlomberie, iPlomberie);
-                    unChecked(containerEspaceVert, iEspaceVert);
-                    unChecked(containerDecorationMaconnerie, iDecorationMaconnerie);
-                    unChecked(containerGrosOeuvre, iGrosOeuvre);
-                    unChecked(containerEquipement, iEquipement);
-                    unChecked(containerToutesLesActivites, iToutesActivite);
+                    unChecked(containerElectricite, iElectricite, checkBoxElectricite);
+                    unChecked(containerToutesLesActivites, iToutesActivite, this);
+                    unChecked(containerPlomberie, iPlomberie, checkBoxPlomberie);
+                    unChecked(containerEspaceVert, iEspaceVert, checkBoxEspaceVert);
+                    unChecked(containerDecorationMaconnerie, iDecorationMaconnerie, checkBoxDecorationMaconnerie);
+                    unChecked(containerGrosOeuvre, iGrosOeuvre, checkBoxGrosOeuvre);
+                    unChecked(containerEquipement, iEquipement, checkBoxEquipement);
+
                 }
                 target.add(containerActivite);
+            }
 
+            /*
+             * (non-Javadoc)
+             * 
+             * @see
+             * org.apache.wicket.Component#onEvent(org.apache.wicket.event.IEvent
+             * )
+             */
+            @Override
+            public void onEvent(IEvent<?> event) {
+                super.onEvent(event);
+                if (event.getPayload() instanceof UncheckedEvent) {
+                    this.setModelObject(Boolean.FALSE);
+                    unChecked(containerToutesLesActivites, iToutesActivite, this);
+                }
             }
 
         };
@@ -224,13 +253,20 @@ public class Etape3Entreprise extends Panel {
         containerActivite.add(containerToutesLesActivites);
     }
 
-    private void unChecked(WebMarkupContainer containerPrincipal, WebMarkupContainer iCheck) {
+    private void unChecked(WebMarkupContainer containerPrincipal, WebMarkupContainer iCheck, AjaxCheckBox checkBox) {
         containerPrincipal.add(new AttributeModifier("class", "checkbox-custom checkbox inline"));
         iCheck.add(new AttributeModifier("class", "checkbox"));
+        checkBox.setModelObject(Boolean.FALSE);
     }
 
-    private void checked(WebMarkupContainer containerPrincipal, WebMarkupContainer iCheck) {
+    private void checked(WebMarkupContainer containerPrincipal, WebMarkupContainer iCheck, AjaxCheckBox checkBox) {
         containerPrincipal.add(new AttributeModifier("class", "checkbox-custom checkbox inline checked"));
         iCheck.add(new AttributeModifier("class", "checkbox checked"));
+        checkBox.setModelObject(Boolean.TRUE);
+    }
+
+    private void sendUncheckedAllCheckBox(AjaxRequestTarget target) {
+        UncheckedEvent uncheckedEvent = new UncheckedEvent(target);
+        this.send(target.getPage(), Broadcast.BREADTH, uncheckedEvent);
     }
 }
