@@ -15,6 +15,7 @@ import org.apache.wicket.model.Model;
 
 import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
+import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.web.client.component.BatimenToolTip;
 import fr.batimen.web.client.extend.nouveau.artisan.event.UncheckedEvent;
 
@@ -47,6 +48,7 @@ public class Etape3Entreprise extends Panel {
                 new CompoundPropertyModel<CreationPartenaireDTO>(nouveauPartenaire));
         containerActivite = new WebMarkupContainer("containerActivite");
         containerActivite.setOutputMarkupId(true);
+        containerActivite.setMarkupId("containerActivite");
 
         initActiviteSelection();
 
@@ -66,8 +68,10 @@ public class Etape3Entreprise extends Panel {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 if (this.getModelObject()) {
+                    categoriesSelectionnees.add(CategorieLoader.getCategorieElectricite());
                     checked(containerElectricite, iElectricite, this);
                 } else {
+                    categoriesSelectionnees.remove(CategorieLoader.getCategorieElectricite());
                     unChecked(containerElectricite, iElectricite, this);
                     sendUncheckedAllCheckBox(target);
                 }
@@ -76,7 +80,9 @@ public class Etape3Entreprise extends Panel {
 
         };
 
+        checkBoxElectricite.setMarkupId("electriciteCheck");
         containerElectricite.setOutputMarkupId(true);
+        containerElectricite.setMarkupId("containerElectricite");
         containerElectricite.add(checkBoxElectricite);
         containerElectricite.add(iElectricite);
         containerActivite.add(containerElectricite);
@@ -90,8 +96,10 @@ public class Etape3Entreprise extends Panel {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 if (this.getModelObject()) {
+                    categoriesSelectionnees.add(CategorieLoader.getCategoriePlomberie());
                     checked(containerPlomberie, iPlomberie, this);
                 } else {
+                    categoriesSelectionnees.remove(CategorieLoader.getCategoriePlomberie());
                     unChecked(containerPlomberie, iPlomberie, this);
                     sendUncheckedAllCheckBox(target);
                 }
@@ -100,7 +108,9 @@ public class Etape3Entreprise extends Panel {
 
         };
 
+        checkBoxPlomberie.setMarkupId("plomberieSelect");
         containerPlomberie.setOutputMarkupId(true);
+        containerPlomberie.setMarkupId("containerPlomberie");
         containerPlomberie.add(checkBoxPlomberie);
         containerPlomberie.add(iPlomberie);
         containerActivite.add(containerPlomberie);
@@ -114,8 +124,10 @@ public class Etape3Entreprise extends Panel {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 if (this.getModelObject()) {
+                    categoriesSelectionnees.add(CategorieLoader.getCategorieEspaceVert());
                     checked(containerEspaceVert, iEspaceVert, this);
                 } else {
+                    categoriesSelectionnees.remove(CategorieLoader.getCategorieEspaceVert());
                     unChecked(containerEspaceVert, iEspaceVert, this);
                     sendUncheckedAllCheckBox(target);
                 }
@@ -123,7 +135,9 @@ public class Etape3Entreprise extends Panel {
             }
         };
 
+        checkBoxEspaceVert.setMarkupId("espaceVertCheck");
         containerEspaceVert.setOutputMarkupId(true);
+        containerEspaceVert.setMarkupId("containerEspaceVert");
         containerEspaceVert.add(checkBoxEspaceVert);
         containerEspaceVert.add(iEspaceVert);
         containerActivite.add(containerEspaceVert);
@@ -137,8 +151,10 @@ public class Etape3Entreprise extends Panel {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 if (this.getModelObject()) {
+                    categoriesSelectionnees.add(CategorieLoader.getCategorieDecorationMaconnerie());
                     checked(containerDecorationMaconnerie, iDecorationMaconnerie, this);
                 } else {
+                    categoriesSelectionnees.remove(CategorieLoader.getCategorieDecorationMaconnerie());
                     unChecked(containerDecorationMaconnerie, iDecorationMaconnerie, this);
                     sendUncheckedAllCheckBox(target);
                 }
@@ -146,7 +162,9 @@ public class Etape3Entreprise extends Panel {
             }
         };
 
+        checkBoxDecorationMaconnerie.setMarkupId("decorationMaconnerieCheck");
         containerDecorationMaconnerie.setOutputMarkupId(true);
+        containerDecorationMaconnerie.setMarkupId("containerDecorationMaconnerie");
         containerDecorationMaconnerie.add(checkBoxDecorationMaconnerie);
         containerDecorationMaconnerie.add(iDecorationMaconnerie);
         containerActivite.add(containerDecorationMaconnerie);
@@ -160,9 +178,11 @@ public class Etape3Entreprise extends Panel {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 if (this.getModelObject()) {
+                    categoriesSelectionnees.add(CategorieLoader.getCategorieGrosOeuvre());
                     checked(containerGrosOeuvre, iGrosOeuvre, this);
                     sendUncheckedAllCheckBox(target);
                 } else {
+                    categoriesSelectionnees.remove(CategorieLoader.getCategorieGrosOeuvre());
                     unChecked(containerGrosOeuvre, iGrosOeuvre, this);
                     sendUncheckedAllCheckBox(target);
                 }
@@ -170,7 +190,9 @@ public class Etape3Entreprise extends Panel {
             }
         };
 
+        checkBoxGrosOeuvre.setMarkupId("grosOeuvreCheck");
         containerGrosOeuvre.setOutputMarkupId(true);
+        containerGrosOeuvre.setMarkupId("containerGrosOeuvre");
         containerGrosOeuvre.add(checkBoxGrosOeuvre);
         containerGrosOeuvre.add(iGrosOeuvre);
         containerActivite.add(containerGrosOeuvre);
@@ -184,9 +206,11 @@ public class Etape3Entreprise extends Panel {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 if (this.getModelObject()) {
+                    categoriesSelectionnees.add(CategorieLoader.getCategorieEquipement());
                     checked(containerEquipement, iEquipement, this);
                     sendUncheckedAllCheckBox(target);
                 } else {
+                    categoriesSelectionnees.remove(CategorieLoader.getCategorieEquipement());
                     unChecked(containerEquipement, iEquipement, this);
                     sendUncheckedAllCheckBox(target);
                 }
@@ -194,7 +218,9 @@ public class Etape3Entreprise extends Panel {
             }
         };
 
+        checkBoxEquipement.setMarkupId("equipementCheck");
         containerEquipement.setOutputMarkupId(true);
+        containerEquipement.setMarkupId("containerEquipement");
         containerEquipement.add(checkBoxEquipement);
         containerEquipement.add(iEquipement);
         containerActivite.add(containerEquipement);
@@ -210,6 +236,7 @@ public class Etape3Entreprise extends Panel {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
                 if (this.getModelObject()) {
+                    categoriesSelectionnees.addAll(CategorieLoader.getAllCategories());
                     checked(containerElectricite, iElectricite, checkBoxElectricite);
                     checked(containerToutesLesActivites, iToutesActivite, this);
                     checked(containerPlomberie, iPlomberie, checkBoxPlomberie);
@@ -219,6 +246,7 @@ public class Etape3Entreprise extends Panel {
                     checked(containerEquipement, iEquipement, checkBoxEquipement);
 
                 } else {
+                    categoriesSelectionnees.removeAll(CategorieLoader.getAllCategories());
                     unChecked(containerElectricite, iElectricite, checkBoxElectricite);
                     unChecked(containerToutesLesActivites, iToutesActivite, this);
                     unChecked(containerPlomberie, iPlomberie, checkBoxPlomberie);
@@ -248,6 +276,8 @@ public class Etape3Entreprise extends Panel {
             }
 
         };
+        checkBoxTouteslesActivites.setMarkupId("toutesLesActivitesCheck");
+        containerToutesLesActivites.setMarkupId("checkBoxTouteslesActivites");
         containerToutesLesActivites.add(checkBoxTouteslesActivites);
         containerToutesLesActivites.add(iToutesActivite);
         containerActivite.add(containerToutesLesActivites);

@@ -36,7 +36,7 @@ public class TestNouveauPartenaire extends AbstractITTest {
      * être un succés
      */
     @Test
-    public void testInscriptioNouveauPartenaireNominal() {
+    public void testInscriptionNouveauPartenaireNominal() {
         driver.get(appUrl + nouveauPartenaireURL);
 
         // On selectionne un departement
@@ -77,14 +77,8 @@ public class TestNouveauPartenaire extends AbstractITTest {
         driver.findElement(By.id("codePostalField")).sendKeys("06800");
         driver.findElement(By.id("villeField")).clear();
         driver.findElement(By.id("villeField")).sendKeys("Xavier City");
-        driver.findElement(By.cssSelector("#ajouterActivite > span")).click();
-        Boolean checkConditionActivite = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
-                .until(ExpectedConditions.textToBePresentInElementLocated(By.id("ui-id-2"), "Ajouter une activité"));
-
-        assertTrue(checkConditionActivite);
-
-        new Select(driver.findElement(By.id("activiteField"))).selectByVisibleText("Décoration / Maçonnerie");
-        driver.findElement(By.id("enregistrerCategorie")).click();
+        driver.findElement(By.xpath("//label[@id='containerElectricite']/span")).click();
+        driver.findElement(By.id("containerDecorationMaconnerie")).click();
         driver.findElement(By.id("validateEtape3Partenaire")).click();
 
         // Etape 4 confirmation

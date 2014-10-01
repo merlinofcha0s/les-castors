@@ -91,7 +91,7 @@ public class NouveauArtisan extends MasterPage {
         this.add(masterContainer);
 
         try {
-            changementEtape(/* nouveauPartenaire.getNumeroEtape() */3);
+            changementEtape(nouveauPartenaire.getNumeroEtape());
         } catch (FrontEndException e) {
             if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("Erreur lors du changment d'étape pendant la creation d'un nouveau partenaire", e);

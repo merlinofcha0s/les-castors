@@ -15,14 +15,18 @@ public class CategorieMetierDTO implements Serializable {
     @NotNull
     private String name;
 
+    @NotNull
+    private short codeCategorieMetier;
+
     @Valid
     private List<SousCategorieMetierDTO> sousCategories = new ArrayList<SousCategorieMetierDTO>();
 
     public CategorieMetierDTO() {
     }
 
-    public CategorieMetierDTO(String name) {
+    public CategorieMetierDTO(String name, short codeCategorieMetier) {
         this.name = name;
+        this.codeCategorieMetier = codeCategorieMetier;
     }
 
     public void addSousCategorie(SousCategorieMetierDTO sousCategorie) {
@@ -51,6 +55,21 @@ public class CategorieMetierDTO implements Serializable {
         return sousCategories;
     }
 
+    /**
+     * @return the codeCategorieMetier
+     */
+    public short getCodeCategorieMetier() {
+        return codeCategorieMetier;
+    }
+
+    /**
+     * @param codeCategorieMetier
+     *            the codeCategorieMetier to set
+     */
+    public void setCodeCategorieMetier(short codeCategorieMetier) {
+        this.codeCategorieMetier = codeCategorieMetier;
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -58,7 +77,7 @@ public class CategorieMetierDTO implements Serializable {
      */
     @Override
     public int hashCode() {
-        return Objects.hashCode(Objects.hash(this.name));
+        return Objects.hashCode(Objects.hash(this.name, this.codeCategorieMetier));
     }
 
     /**
@@ -82,7 +101,8 @@ public class CategorieMetierDTO implements Serializable {
 
         if (object instanceof CategorieMetierDTO) {
             CategorieMetierDTO other = (CategorieMetierDTO) object;
-            return Objects.equals(this.name, other.name);
+            return Objects.equals(this.name, other.name)
+                    && Objects.equals(this.codeCategorieMetier, other.codeCategorieMetier);
         }
         return false;
     }

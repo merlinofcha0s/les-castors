@@ -29,7 +29,7 @@ public class CategorieLoader {
 
     public static synchronized CategorieMetierDTO getCategorieElectricite() {
         if (electricite == null) {
-            electricite = new CategorieMetierDTO("Electricité");
+            electricite = new CategorieMetierDTO("Electricité", (short) 0);
             SousCategorieMetierDTO sousElectrique = new SousCategorieMetierDTO("Installation électrique");
             electricite.addSousCategorie(sousElectrique);
         }
@@ -38,7 +38,7 @@ public class CategorieLoader {
 
     public static synchronized CategorieMetierDTO getCategoriePlomberie() {
         if (plomberie == null) {
-            plomberie = new CategorieMetierDTO("Plomberie");
+            plomberie = new CategorieMetierDTO("Plomberie", (short) 1);
             SousCategorieMetierDTO sousPlomberie = new SousCategorieMetierDTO("Tuyauterie");
             plomberie.addSousCategorie(sousPlomberie);
         }
@@ -47,7 +47,7 @@ public class CategorieLoader {
 
     public static synchronized CategorieMetierDTO getCategorieEspaceVert() {
         if (espaceVert == null) {
-            espaceVert = new CategorieMetierDTO("Espace Vert");
+            espaceVert = new CategorieMetierDTO("Espace Vert", (short) 2);
             SousCategorieMetierDTO sousEspaceVert = new SousCategorieMetierDTO("Jardinage");
             espaceVert.addSousCategorie(sousEspaceVert);
         }
@@ -56,7 +56,7 @@ public class CategorieLoader {
 
     public static synchronized CategorieMetierDTO getCategorieDecorationMaconnerie() {
         if (decorationMaconnerie == null) {
-            decorationMaconnerie = new CategorieMetierDTO("Décoration / Maçonnerie");
+            decorationMaconnerie = new CategorieMetierDTO("Décoration / Maçonnerie", (short) 3);
             SousCategorieMetierDTO sousDecorationMaconnerie = new SousCategorieMetierDTO("Peinture");
             decorationMaconnerie.addSousCategorie(sousDecorationMaconnerie);
         }
@@ -65,7 +65,7 @@ public class CategorieLoader {
 
     public static synchronized CategorieMetierDTO getCategorieGrosOeuvre() {
         if (grosOeuvre == null) {
-            grosOeuvre = new CategorieMetierDTO("Gros oeuvre");
+            grosOeuvre = new CategorieMetierDTO("Gros oeuvre", (short) 4);
             SousCategorieMetierDTO sousGrosOeuvre = new SousCategorieMetierDTO("Fondation");
             grosOeuvre.addSousCategorie(sousGrosOeuvre);
         }
@@ -74,7 +74,7 @@ public class CategorieLoader {
 
     public static synchronized CategorieMetierDTO getCategorieEquipement() {
         if (equipement == null) {
-            equipement = new CategorieMetierDTO("Equipement");
+            equipement = new CategorieMetierDTO("Equipement", (short) 5);
             SousCategorieMetierDTO sousEquipement = new SousCategorieMetierDTO("Alarme");
             equipement.addSousCategorie(sousEquipement);
         }
@@ -83,12 +83,12 @@ public class CategorieLoader {
 
     public static synchronized CategorieMetierDTO getCategorieAll() {
         if (toutesCategories == null) {
-            toutesCategories = new CategorieMetierDTO("Toutes les catégories");
+            toutesCategories = new CategorieMetierDTO("Toutes les catégories", (short) 6);
         }
         return toutesCategories;
     }
 
-    public static synchronized List<CategorieMetierDTO> getAllCategories(boolean isForArtisan) {
+    public static synchronized List<CategorieMetierDTO> getAllCategories() {
         List<CategorieMetierDTO> allCategories = new ArrayList<CategorieMetierDTO>();
         allCategories.add(getCategorieDecorationMaconnerie());
         allCategories.add(getCategorieElectricite());
@@ -96,10 +96,6 @@ public class CategorieLoader {
         allCategories.add(getCategorieEspaceVert());
         allCategories.add(getCategorieGrosOeuvre());
         allCategories.add(getCategoriePlomberie());
-
-        if (isForArtisan) {
-            allCategories.add(getCategorieAll());
-        }
 
         return allCategories;
     }
