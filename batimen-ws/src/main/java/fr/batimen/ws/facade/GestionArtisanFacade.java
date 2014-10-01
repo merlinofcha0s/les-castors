@@ -124,6 +124,7 @@ public class GestionArtisanFacade {
 
         for (CategorieMetierDTO categorieDTO : categories) {
             CategorieMetier nouvelleCategorieMetier = new CategorieMetier();
+            nouvelleCategorieMetier.setCategorieMetier(categorieDTO.getCodeCategorieMetier());
             mapper.map(categorieDTO, nouvelleCategorieMetier);
             nouvelleCategorieMetier.setEntreprise(nouvelleEntreprise);
             categorieMetierDAO.persistCategorieMetier(nouvelleCategorieMetier);
