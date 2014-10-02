@@ -110,6 +110,7 @@
 }
 
 #champsObligatoire {
+	float : left;
 	margin-left: 16px;
 }
 
@@ -189,15 +190,15 @@
 }
 
 #formEntrepriseEtape3 {
-	float: left;
-	padding-left: 130px;
+	padding-left: 350px;
 	padding-top: 21px;
 }
 
 #containerActivite {
-	float: right;
-	padding-right: 244px;
 	padding-top: 15px;
+	padding-bottom: 15px;
+	padding-left: 420px;
+	
 }
 
 #containerCategorieSelection {
@@ -213,8 +214,7 @@
 }
 
 #terminerInscriptionPartenaire {
-	float: right;
-	margin-right: 35px;
+	padding-left: 297px;
 }
 
 .font-glyph-entreprise{
