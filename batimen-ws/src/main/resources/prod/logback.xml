@@ -1,4 +1,4 @@
-<configuration scan="true" debug="true">
+<configuration scan="true" debug="false" scanPeriod="30 seconds">
 	<contextName>batimenContext</contextName>
 
 	<property name="LOGS_FOLDER" value="${logs.address}" />
@@ -17,8 +17,7 @@
 			</fileNamePattern>
 		</rollingPolicy>
 		<encoder>
-			<pattern>%d{yyyy/MM/dd HH:mm:ss,SSS} %-5level %logger{36} - %m
-				%throwable{0}%n</pattern>
+			<pattern>%d{yyyy/MM/dd HH:mm:ss,SSS} %-5level %logger{36} - %m %throwable{0}%n</pattern>
 		</encoder>
 	</appender>
 
@@ -32,30 +31,16 @@
 			</fileNamePattern>
 			<maxIndex>10</maxIndex>
 		</rollingPolicy>
-		<triggeringPolicy
-			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+		<triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
 			<maxFileSize>10MB</maxFileSize>
 		</triggeringPolicy>
 		<encoder>
-			<pattern>%d{yyyy/MM/dd HH:mm:ss,SSS} %-5level %logger{36} - %m%n
-			</pattern>
-		</encoder>
-	</appender>
-
-
-	<!-- Permet d'avoir les logs dans la console d'eclipse et glassfish (a degager 
-		en prod) -->
-	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
-		<!-- encoders are assigned the type ch.qos.logback.classic.encoder.PatternLayoutEncoder 
-			by default -->
-		<encoder>
-			<pattern>%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n</pattern>
+			<pattern>%d{yyyy/MM/dd HH:mm:ss,SSS} %-5level %logger{36} - %m%n</pattern>
 		</encoder>
 	</appender>
 
 
 	<root level="${logs.lvl}">
-		<appender-ref ref="stdout" />
 		<appender-ref ref="log-file" />
 		<appender-ref ref="troubleshooting-file" />
 	</root>
