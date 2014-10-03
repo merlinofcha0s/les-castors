@@ -179,6 +179,9 @@
 			<resource>
 				<filtering>true</filtering>
 				<directory>src/main/resources/dev</directory>
+				<includes>
+					<include>**</include>
+				</includes>
 			</resource>
 		</resources>
 		<testResources>
@@ -399,6 +402,9 @@
 					<resource>
 						<filtering>true</filtering>
 						<directory>src/main/resources/prod</directory>
+						<includes>
+							<include>**</include>
+						</includes>
 					</resource>
 				</resources>
 				<plugins>
