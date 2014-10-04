@@ -110,6 +110,7 @@
 }
 
 #champsObligatoire {
+	float : left;
 	margin-left: 16px;
 }
 
@@ -139,11 +140,11 @@
 	margin-bottom: 13px;
 }
 
-#batimenWizard{
+#batimenWizard {
 	margin-bottom: 20px;
 }
 
-.glypheEtape2{
+.glypheEtape2 {
 	position: absolute;
 	left: 10px;
 	top: 8px;
@@ -153,18 +154,71 @@
 }
 
 /* Activation compte */
-.confirmationactivationok{
+.confirmationactivationok {
 	background: url('../img/thumbsup.png');
 	width: 143px;
 	height: 143px;
 	background-repeat: no-repeat;
 }
 
-.confirmationactivationko{
+.confirmationactivationko {
 	background: url('../img/error2.png');
 	width: 143px;
 	height: 143px;
 	background-repeat: no-repeat;
+}
+
+/* Creation partenaire */
+#formPartenaireEtape2 {
+	padding-left: 330px;
+	padding-top: 45px;
+}
+
+#validateEtape2Partenaire {
+	float: right;
+	margin-right: 17px;
+	margin-top: 20px;
+}
+
+#categorieMetierPartenaire {
+	padding-left: 16px;
+	padding-top: 10px;
+}
+
+#enregistrerCategorie {
+	float: right;
+}
+
+#formEntrepriseEtape3 {
+	padding-left: 350px;
+	padding-top: 21px;
+}
+
+#containerActivite {
+	padding-top: 15px;
+	padding-bottom: 15px;
+	padding-left: 420px;
+	
+}
+
+#containerCategorieSelection {
+	padding-top: 15px;
+}
+
+#containerAjoutActivite {
+	padding-left: 10px;
+}
+
+#containerAjoutActivite span {
+	vertical-align: text-top;
+}
+
+#terminerInscriptionPartenaire {
+	padding-left: 297px;
+}
+
+.font-glyph-entreprise{
+	font-size: 25px;
 }
 
 /* Composant Wicket */
@@ -190,12 +244,12 @@ div.upload input[type="file"] {
 	overflow: hidden !important;
 }
 
-#sliderUp{
+#sliderUp {
 	padding-bottom: 60px;
 	padding-top: 15px;
 }
 
-#sliderDown{
+#sliderDown {
 	padding-bottom: 20px;
 	padding-left: 300px;
 }
@@ -343,7 +397,7 @@ table tr td .error {
 	font-size: 13px;
 }
 
-.fuelux .wizard ul li{
+.fuelux .wizard ul li {
 	font-size: 13px;
 }
 

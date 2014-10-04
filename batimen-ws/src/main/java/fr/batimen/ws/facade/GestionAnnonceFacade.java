@@ -20,6 +20,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,7 +33,7 @@ import fr.batimen.core.exception.DuplicateEntityException;
 import fr.batimen.core.exception.EmailException;
 import fr.batimen.core.security.HashHelper;
 import fr.batimen.core.utils.PropertiesUtils;
-import fr.batimen.dto.CreationAnnonceDTO;
+import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.ws.dao.AdresseDAO;
 import fr.batimen.ws.dao.AnnonceDAO;
@@ -74,6 +75,8 @@ public class GestionAnnonceFacade {
 
     @Inject
     private EmailService emailService;
+
+    private final ModelMapper mapper = new ModelMapper();
 
     /**
      * Permet la creation d'une nouvelle annonce par le client ainsi que le
@@ -117,8 +120,9 @@ public class GestionAnnonceFacade {
                     // On recupere l'url du frontend
                     Properties urlProperties = PropertiesUtils.loadPropertiesFile("url.properties");
                     String urlFrontend = urlProperties.getProperty("url.frontend.web");
-                    emailService.envoiMailActivationCompte(nouvelleAnnonceDTO, nouvelleAnnonce.getDemandeur()
-                            .getCleActivation(), urlFrontend);
+                    emailService.envoiMailActivationCompte(nouvelleAnnonceDTO.getClient().getNom(), nouvelleAnnonceDTO
+                            .getClient().getPrenom(), nouvelleAnnonceDTO.getClient().getLogin(), nouvelleAnnonceDTO
+                            .getClient().getEmail(), nouvelleAnnonce.getDemandeur().getCleActivation(), urlFrontend);
                 }
             }
         } catch (EmailException | MandrillApiError | IOException e) {
@@ -223,6 +227,7 @@ public class GestionAnnonceFacade {
 
         // On crée la nouvelle adresse qui sera rattaché a l'annonce.
         Adresse adresseAnnonce = new Adresse();
+
         adresseAnnonce.setAdresse(nouvelleAnnonceDTO.getAdresse());
         adresseAnnonce.setComplementAdresse(nouvelleAnnonceDTO.getComplementAdresse());
         adresseAnnonce.setCodePostal(nouvelleAnnonceDTO.getCodePostal());
@@ -251,16 +256,12 @@ public class GestionAnnonceFacade {
         // On crée la liste des annonces.
         List<Annonce> annoncesNouveauClient = new ArrayList<Annonce>();
         annoncesNouveauClient.add(nouvelleAnnonce);
+
         // On bind le client à son annonce.
         nouveauClient.setDevisDemandes(annoncesNouveauClient);
         // On enregistre les infos du client dans l'entité client
-        nouveauClient.setNom(nouvelleAnnonceDTO.getClient().getNom());
-        nouveauClient.setPrenom(nouvelleAnnonceDTO.getClient().getPrenom());
-        nouveauClient.setLogin(nouvelleAnnonceDTO.getClient().getLogin());
-        nouveauClient.setPassword(nouvelleAnnonceDTO.getClient().getPassword());
-        nouveauClient.setEmail(nouvelleAnnonceDTO.getClient().getEmail());
-        nouveauClient.setNumeroTel(nouvelleAnnonceDTO.getClient().getNumeroTel());
-        nouveauClient.setIsArtisan(false);
+        mapper.map(nouvelleAnnonceDTO.getClient(), nouveauClient);
+
         nouveauClient.setIsActive(false);
 
         StringBuilder loginAndEmail = new StringBuilder(nouvelleAnnonceDTO.getClient().getLogin());

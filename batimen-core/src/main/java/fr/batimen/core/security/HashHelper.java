@@ -1,7 +1,11 @@
 package fr.batimen.core.security;
 
+import java.io.UnsupportedEncodingException;
+
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.lambdaworks.crypto.SCryptUtil;
 
@@ -12,6 +16,8 @@ import com.lambdaworks.crypto.SCryptUtil;
  * 
  */
 public class HashHelper {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(HashHelper.class);
 
     private HashHelper() {
 
@@ -55,7 +61,17 @@ public class HashHelper {
      * @return La chaine de caractére en Base64
      */
     public static String convertToBase64(String chaineAEncoder) {
-        return new String(Base64.encodeBase64(chaineAEncoder.getBytes()));
+        String chaineEncoder;
+        try {
+            chaineEncoder = new String(Base64.encodeBase64(chaineAEncoder.getBytes()), "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Impossible d'encoder la chaine de caractere en UTF-8", e);
+            }
+            return "";
+        }
+
+        return chaineEncoder;
     }
 
     /**

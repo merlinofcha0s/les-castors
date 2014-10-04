@@ -1,7 +1,6 @@
 package fr.batimen.ws.dao;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import javax.ejb.LocalBean;
@@ -10,10 +9,8 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
-import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import javax.persistence.TypedQuery;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,10 +27,7 @@ import fr.batimen.ws.entity.Annonce;
 @Stateless(name = "AnnonceDAO")
 @LocalBean
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class AnnonceDAO {
-
-    @PersistenceContext
-    private EntityManager em;
+public class AnnonceDAO extends AbstractDAO {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AnnonceDAO.class);
 
@@ -44,20 +38,20 @@ public class AnnonceDAO {
      *            le login du client dont on veut recupérer les annonces.
      * @return Liste d'annonces appartenant à l'utilisateur.
      */
-    @SuppressWarnings("unchecked")
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<Annonce> getAnnoncesByLogin(String login) {
 
         List<Annonce> listAnnonceByLogin = null;
 
         try {
-            Query query = em.createNamedQuery(QueryJPQL.ANNONCE_BY_LOGIN);
+            TypedQuery<Annonce> query = entityManager.createNamedQuery(QueryJPQL.ANNONCE_BY_LOGIN, Annonce.class);
             query.setParameter(QueryJPQL.CLIENT_LOGIN, login);
 
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Chargement requete JPQL OK ");
             }
 
-            listAnnonceByLogin = Collections.checkedList(query.getResultList(), Annonce.class);
+            listAnnonceByLogin = query.getResultList();
 
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Récuperation resultat requete JPQL OK ");
@@ -85,13 +79,13 @@ public class AnnonceDAO {
      * @return La liste d'annonce qui correspond au titre, description et
      *         utilsateur present en BDD
      */
-    @SuppressWarnings("unchecked")
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<Annonce> getAnnonceByTitleAndDescriptionAndLogin(String description, String login) {
 
         List<Annonce> annoncesBytitreAndDescription = null;
 
         try {
-            Query query = em.createNamedQuery(QueryJPQL.ANNONCE_BY_TITLE_AND_DESCRIPTION);
+            TypedQuery<Annonce> query = entityManager.createNamedQuery(QueryJPQL.ANNONCE_BY_TITLE_AND_DESCRIPTION, Annonce.class);
             query.setParameter(QueryJPQL.PARAM_ANNONCE_DESCRIPTION, description);
             query.setParameter(QueryJPQL.CLIENT_LOGIN, login);
 
@@ -99,7 +93,7 @@ public class AnnonceDAO {
                 LOGGER.debug("Chargement requete JPQL OK ");
             }
 
-            annoncesBytitreAndDescription = Collections.checkedList(query.getResultList(), Annonce.class);
+            annoncesBytitreAndDescription = query.getResultList();
 
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Récuperation resultat requete JPQL OK ");
@@ -134,7 +128,7 @@ public class AnnonceDAO {
 
         // On check si l'annonce n'existe pas déjà
         if (annoncesDupliquees.isEmpty()) {
-            em.persist(nouvelleAnnonce);
+            entityManager.persist(nouvelleAnnonce);
         } else {
             StringBuilder sbError = new StringBuilder("Impossible de perister l'annonce: ");
             sbError.append(nouvelleAnnonce.getId());

@@ -6,6 +6,8 @@ import javax.persistence.Column;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 
+import fr.batimen.dto.enums.TypeCompte;
+
 /**
  * Entité abstraite qui permet de factoriser le client et l'artisan
  * 
@@ -15,9 +17,9 @@ import javax.persistence.Temporal;
 @MappedSuperclass
 public abstract class AbstractUser extends AbstractEntity {
 
-    @Column(length = 20)
+    @Column(length = 20, nullable = false)
     protected String nom;
-    @Column(length = 20)
+    @Column(length = 20, nullable = false)
     protected String prenom;
     @Column(length = 10, nullable = false)
     protected String numeroTel;
@@ -34,6 +36,8 @@ public abstract class AbstractUser extends AbstractEntity {
     protected Boolean isActive;
     @Column(length = 255)
     protected String cleActivation;
+    @Column(nullable = false)
+    protected TypeCompte typeCompte;
 
     /**
      * @return the nom
@@ -168,6 +172,21 @@ public abstract class AbstractUser extends AbstractEntity {
      */
     public void setCleActivation(String cleActivation) {
         this.cleActivation = cleActivation;
+    }
+
+    /**
+     * @return the typeCompte
+     */
+    public TypeCompte getTypeCompte() {
+        return typeCompte;
+    }
+
+    /**
+     * @param typeCompte
+     *            the typeCompte to set
+     */
+    public void setTypeCompte(TypeCompte typeCompte) {
+        this.typeCompte = typeCompte;
     }
 
 }

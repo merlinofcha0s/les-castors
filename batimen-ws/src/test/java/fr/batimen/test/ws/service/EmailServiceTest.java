@@ -17,7 +17,7 @@ import com.microtripit.mandrillapp.lutung.view.MandrillMessage;
 
 import fr.batimen.core.exception.EmailException;
 import fr.batimen.core.utils.PropertiesUtils;
-import fr.batimen.dto.CreationAnnonceDTO;
+import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.test.ws.AbstractBatimenWsTest;
 import fr.batimen.test.ws.helper.DataHelper;
 import fr.batimen.ws.dao.ClientDAO;
@@ -100,7 +100,10 @@ public class EmailServiceTest extends AbstractBatimenWsTest {
 
         boolean noError = emailService
                 .envoiMailActivationCompte(
-                        creationAnnonceDTO,
+                        creationAnnonceDTO.getClient().getNom(),
+                        creationAnnonceDTO.getClient().getPrenom(),
+                        creationAnnonceDTO.getClient().getLogin(),
+                        creationAnnonceDTO.getClient().getEmail(),
                         "JHMwJDU0MDQwJDcxZStxT2JnTWlpejhjTk5LY3liK2c9PSRtMzdobWh3QXRweW92a1NVSXhLenkzNGY2NlZVZUNBUktOMFFaaEJoVmFZPQ==",
                         urlFrontend);
         Assert.assertTrue(noError);

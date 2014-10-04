@@ -1,5 +1,7 @@
 package fr.batimen.web.client.session;
 
+import java.util.Locale;
+
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.request.Request;
@@ -79,6 +81,16 @@ public class BatimenSession extends AuthenticatedWebSession {
     @Override
     public Roles getRoles() {
         return null;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.wicket.Session#getLocale()
+     */
+    @Override
+    public Locale getLocale() {
+        return Locale.FRENCH;
     }
 
 }

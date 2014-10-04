@@ -12,9 +12,6 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.microtripit.mandrillapp.lutung.MandrillApi;
 import com.microtripit.mandrillapp.lutung.model.MandrillApiError;
 import com.microtripit.mandrillapp.lutung.view.MandrillMessage;
@@ -34,9 +31,7 @@ import fr.batimen.core.utils.PropertiesUtils;
 @Stateless(name = "EmailDAO")
 @LocalBean
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class EmailDAO {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(EmailDAO.class);
+public class EmailDAO extends AbstractDAO {
 
     private final MandrillApi mandrillApi;
     private String apiKey;

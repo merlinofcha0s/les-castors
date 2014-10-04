@@ -29,4 +29,16 @@ public class QueryJPQL {
     // Parametre Query Entity annonce
     public static final String PARAM_ANNONCE_TITRE = "titre";
     public static final String PARAM_ANNONCE_DESCRIPTION = "description";
+
+    // Entity artisan
+    public static final String ARTISAN_BY_EMAIL = "artisanByEmail";
+
+    // Parametre Query Entity artisan
+    public static final String PARAM_ARTISAN_EMAIL = "email";
+
+    // Entity entreprise
+    public static final String ENTREPRISE_BY_SIRET = "entrepriseBySiret";
+
+    // Parametre Query Entity entreprise
+    public static final String PARAM_ENTEPRISE_SIRET = "siret";
 }

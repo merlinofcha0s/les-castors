@@ -137,6 +137,7 @@ public class WsConnector {
 
         // Preparation à la serialization en JSON
         GsonBuilder builder = new GsonBuilder().serializeNulls();
+        builder.setPrettyPrinting();
         builder.setDateFormat(DateFormat.LONG);
 
         builder.registerTypeAdapter(Date.class, new JsonSerializer<Date>() {

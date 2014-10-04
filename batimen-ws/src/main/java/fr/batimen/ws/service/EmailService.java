@@ -18,7 +18,6 @@ import com.microtripit.mandrillapp.lutung.view.MandrillMessage.MergeVar;
 
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.exception.EmailException;
-import fr.batimen.dto.CreationAnnonceDTO;
 import fr.batimen.ws.dao.EmailDAO;
 import fr.batimen.ws.entity.Annonce;
 
@@ -95,8 +94,8 @@ public class EmailService {
      * @throws MandrillApiError
      * @throws IOException
      */
-    public boolean envoiMailActivationCompte(CreationAnnonceDTO nouvelleAnnonceDTO, String cleActivation, String url)
-            throws EmailException, MandrillApiError, IOException {
+    public boolean envoiMailActivationCompte(String nom, String prenom, String login, String email,
+            String cleActivation, String url) throws EmailException, MandrillApiError, IOException {
 
         // On prepare l'entete, on ne mets pas de titre (il est géré par
         // mandrillApp).
@@ -106,16 +105,15 @@ public class EmailService {
         // On construit les recepteurs
         Map<String, String> recipients = new HashMap<String, String>();
 
-        getNomDestinataire(nouvelleAnnonceDTO.getClient().getNom(), nouvelleAnnonceDTO.getClient().getPrenom(),
-                nouvelleAnnonceDTO.getClient().getLogin(), nomDestinataire);
-        recipients.put(nomDestinataire.toString(), nouvelleAnnonceDTO.getClient().getEmail());
+        getNomDestinataire(nom, prenom, login, nomDestinataire);
+        recipients.put(nomDestinataire.toString(), email);
 
         // On charge les recepteurs
         emailDAO.prepareRecipient(activationCompteMessage, recipients, true);
 
         // On charge le contenu
         Map<String, String> templateContent = new HashMap<String, String>();
-        templateContent.put(Constant.TAG_EMAIL_USERNAME, nouvelleAnnonceDTO.getClient().getLogin());
+        templateContent.put(Constant.TAG_EMAIL_USERNAME, login);
 
         StringBuilder lienActivation = new StringBuilder(url);
         lienActivation.append(cleActivation);

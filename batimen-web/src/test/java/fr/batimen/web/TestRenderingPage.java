@@ -14,6 +14,7 @@ import fr.batimen.web.client.extend.error.AccesInterdit;
 import fr.batimen.web.client.extend.error.ErreurInterne;
 import fr.batimen.web.client.extend.error.Expiree;
 import fr.batimen.web.client.extend.error.NonTrouvee;
+import fr.batimen.web.client.extend.nouveau.artisan.NouveauArtisan;
 import fr.batimen.web.client.extend.nouveau.devis.NouveauDevis;
 
 public class TestRenderingPage {
@@ -71,6 +72,14 @@ public class TestRenderingPage {
         tester.startPage(NouveauDevis.class);
         // assert rendered page class
         tester.assertRenderedPage(NouveauDevis.class);
+    }
+
+    @Test
+    public void nouveauPartenaireRendersSuccessfully() {
+        // start and render the test page
+        tester.startPage(NouveauArtisan.class);
+        // assert rendered page class
+        tester.assertRenderedPage(NouveauArtisan.class);
     }
 
     @Test

@@ -8,35 +8,45 @@ package fr.batimen.dto.constant;
  */
 public class ValidatorConstant {
 
-	private ValidatorConstant() {
+    private ValidatorConstant() {
 
-	}
+    }
 
-	// Login DTO
-	public static final int LOGIN_RANGE_MIN = 3;
-	public static final int LOGIN_RANGE_MAX = 25;
-	public static final int PASSWORD_RANGE_MIN = 6;
-	public static final int PASSWORD_RANGE_MAX = 81;
+    // Login DTO
+    public static final int CLIENT_LOGIN_RANGE_MIN = 3;
+    public static final int CLIENT_LOGIN_RANGE_MAX = 25;
+    public static final int PASSWORD_RANGE_MIN = 6;
+    public static final int PASSWORD_RANGE_MAX = 81;
 
-	// Creation annonce DTO
-	public static final int CREATION_ANNONCE_TITRE_MIN = 3;
-	public static final int CREATION_ANNONCE_TITRE_MAX = 45;
-	public static final int CREATION_ANNONCE_DESCRIPTION_MIN = 3;
-	public static final int CREATION_ANNONCE_DESCRIPTION_MAX = 500;
-	public static final int CREATION_ANNONCE_DELAI_INTERVENTION_MAX = 15;
-	public static final int CREATION_ANNONCE_NBDEVIS_MIN = 1;
-	public static final int CREATION_ANNONCE_NBDEVIS_MAX = 10;
-	public static final int CREATION_ANNONCE_ADRESSE_MIN = 3;
-	public static final int CREATION_ANNONCE_ADRESSE_MAX = 255;
-	public static final int CREATION_ANNONCE_COMPLEMENT_ADRESSE_MAX = 255;
-	public static final int CREATION_ANNONCE_CODEPOSTAL_MAX = 5;
-	public static final int CREATION_ANNONCE_VILLE_MAX = 45;
-	public static final int CREATION_ANNONCE_NOM_MIN = 3;
-	public static final int CREATION_ANNONCE_NOM_MAX = 20;
-	public static final int CREATION_ANNONCE_PRENOM_MIN = 3;
-	public static final int CREATION_ANNONCE_PRENOM_MAX = 20;
-	// Regex
-	public static final String CREATION_ANNONCE_CODE_POSTAL_REGEX = "^[0-9]{5}$";
-	public static final String CREATION_ANNONCE_TELEPHONE_REGEX = "^0[1-9]([-. ]?[0-9]{2}){4}$";
+    // Creation annonce DTO
+    public static final int CREATION_ANNONCE_TITRE_MIN = 3;
+    public static final int CREATION_ANNONCE_TITRE_MAX = 45;
+    public static final int CREATION_ANNONCE_DESCRIPTION_MIN = 3;
+    public static final int CREATION_ANNONCE_DESCRIPTION_MAX = 500;
+    public static final int CREATION_ANNONCE_DELAI_INTERVENTION_MAX = 15;
+    public static final int CREATION_ANNONCE_NBDEVIS_MIN = 1;
+    public static final int CREATION_ANNONCE_NBDEVIS_MAX = 10;
+    // Adresse DTO
+    public static final int ADRESSE_MIN = 3;
+    public static final int ADRESSE_MAX = 255;
+    public static final int COMPLEMENT_ADRESSE_MAX = 255;
+    public static final int CODEPOSTAL_MAX = 5;
+    public static final int VILLE_MAX = 45;
+    // Client DTO
+    public static final int CLIENT_NOM_MIN = 3;
+    public static final int CLIENT_NOM_MAX = 20;
+    public static final int CLIENT_PRENOM_MIN = 3;
+    public static final int CLIENT_PRENOM_MAX = 20;
+
+    // Regex
+    public static final String CODE_POSTAL_REGEX = "^[0-9]{5}$";
+    public static final String TELEPHONE_REGEX = "^0[1-9]([-. ]?[0-9]{2}){4}$";
+
+    // Entreprise DTO
+    public static final int ENTREPRISE_SPECIALITE_MIN = 3;
+    public static final int ENTREPRISE_SPECIALITE_MAX = 40;
+    public static final int ENTREPRISE_NOM_COMPLET_MIN = 3;
+    public static final int ENTREPRISE_NOM_COMPLET_MAX = 30;
+    public static final String ENTREPRISE_SIRET_REGEXP = "^([0-9]{14})$";
 
 }

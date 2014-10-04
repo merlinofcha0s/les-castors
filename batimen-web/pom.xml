@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>fr.batimen.app</groupId>
 		<artifactId>batimen-module</artifactId>
-		<version>0.2.0-SNAPSHOT</version>
+		<version>0.3.0-SNAPSHOT</version>
 		<relativePath>../batimen-module</relativePath>
 	</parent>
 
@@ -67,7 +67,10 @@
 		<resources>
 			<resource>
 				<filtering>true</filtering>
-				<directory>src/main/resources</directory>
+				<directory>src/main/resources/dev</directory>
+				<includes>
+					<include>**</include>
+				</includes>
 			</resource>
 			<resource>
 				<filtering>false</filtering>
@@ -309,6 +312,15 @@
 				<database.password>M0ntaleign3</database.password>
 			</properties>
 			<build>
+				<resources>
+					<resource>
+						<directory>src/main/resources/prod</directory>
+						<filtering>true</filtering>
+						<includes>
+							<include>**</include>
+						</includes>
+					</resource>
+				</resources>
 				<plugins>
 					<plugin>
 						<groupId>org.glassfish.maven.plugin</groupId>

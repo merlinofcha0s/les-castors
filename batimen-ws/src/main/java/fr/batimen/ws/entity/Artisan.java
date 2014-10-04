@@ -11,11 +11,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import fr.batimen.dto.enums.Metier;
+import fr.batimen.core.constant.QueryJPQL;
+import fr.batimen.dto.enums.Civilite;
 
 /**
  * Entité Artisan : symbolise un artisan en base de données.
@@ -25,191 +28,110 @@ import fr.batimen.dto.enums.Metier;
  */
 @Entity
 @Table(name = "Artisan")
+@NamedQueries(value = { @NamedQuery(name = QueryJPQL.ARTISAN_BY_EMAIL,
+        query = "SELECT art FROM Artisan AS art WHERE art.email = :email") })
 public class Artisan extends AbstractUser implements Serializable {
 
-	private static final long serialVersionUID = -4398985801030020390L;
+    private static final long serialVersionUID = -4398985801030020390L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
-	@Column(nullable = false)
-	private Metier metier;
-	@Column(length = 14, nullable = false)
-	private Integer siret;
-	@Column(nullable = false)
-	private Integer nbAnnonce;
-	@Column(nullable = false)
-	private String activitePrincipale;
-	@Column(nullable = false)
-	private String domaineActivite;
-	@OneToMany(mappedBy = "artisan", targetEntity = Notation.class, cascade = CascadeType.REMOVE)
-	private List<Notation> scoreGlobal = new ArrayList<Notation>();
-	@OneToOne(cascade = CascadeType.REMOVE)
-	private Entreprise entreprise;
-	@OneToOne(mappedBy = "artisan", cascade = CascadeType.REMOVE)
-	private Client client;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-	/**
-	 * @return the id
-	 */
-	public Long getId() {
-		return id;
-	}
+    @Column(nullable = false)
+    protected Civilite civilite;
 
-	/**
-	 * @param id
-	 *            the id to set
-	 */
-	public void setId(Long id) {
-		this.id = id;
-	}
+    @OneToMany(mappedBy = "artisan", targetEntity = Notation.class, cascade = CascadeType.REMOVE)
+    private List<Notation> scoreGlobal = new ArrayList<Notation>();
+    @OneToOne(cascade = CascadeType.REMOVE)
+    private Entreprise entreprise;
 
-	/**
-	 * @return the metier
-	 */
-	public Metier getMetier() {
-		return metier;
-	}
+    /**
+     * @return the id
+     */
+    public Long getId() {
+        return id;
+    }
 
-	/**
-	 * @param metier
-	 *            the metier to set
-	 */
-	public void setMetier(Metier metier) {
-		this.metier = metier;
-	}
+    /**
+     * @param id
+     *            the id to set
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
 
-	/**
-	 * @return the siret
-	 */
-	public Integer getSiret() {
-		return siret;
-	}
+    /**
+     * @return the scoreGlobal
+     */
+    public List<Notation> getScoreGlobal() {
+        return scoreGlobal;
+    }
 
-	/**
-	 * @param siret
-	 *            the siret to set
-	 */
-	public void setSiret(Integer siret) {
-		this.siret = siret;
-	}
+    /**
+     * @param scoreGlobal
+     *            the scoreGlobal to set
+     */
+    public void setScoreGlobal(List<Notation> scoreGlobal) {
+        this.scoreGlobal = scoreGlobal;
+    }
 
-	/**
-	 * @return the nbAnnonce
-	 */
-	public Integer getNbAnnonce() {
-		return nbAnnonce;
-	}
+    /**
+     * @return the entreprise
+     */
+    public Entreprise getEntreprise() {
+        return entreprise;
+    }
 
-	/**
-	 * @param nbAnnonce
-	 *            the nbAnnonce to set
-	 */
-	public void setNbAnnonce(Integer nbAnnonce) {
-		this.nbAnnonce = nbAnnonce;
-	}
+    /**
+     * @param entreprise
+     *            the entreprise to set
+     */
+    public void setEntreprise(Entreprise entreprise) {
+        this.entreprise = entreprise;
+    }
 
-	/**
-	 * @return the activitePrincipale
-	 */
-	public String getActivitePrincipale() {
-		return activitePrincipale;
-	}
+    /**
+     * @return the civilite
+     */
+    public Civilite getCivilite() {
+        return civilite;
+    }
 
-	/**
-	 * @param activitePrincipale
-	 *            the activitePrincipale to set
-	 */
-	public void setActivitePrincipale(String activitePrincipale) {
-		this.activitePrincipale = activitePrincipale;
-	}
+    /**
+     * @param civilite
+     *            the civilite to set
+     */
+    public void setCivilite(Civilite civilite) {
+        this.civilite = civilite;
+    }
 
-	/**
-	 * @return the domaineActivite
-	 */
-	public String getDomaineActivite() {
-		return domaineActivite;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(Objects.hash(this.login, this.email, this.nom, this.prenom));
+    }
 
-	/**
-	 * @param domaineActivite
-	 *            the domaineActivite to set
-	 */
-	public void setDomaineActivite(String domaineActivite) {
-		this.domaineActivite = domaineActivite;
-	}
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
 
-	/**
-	 * @return the scoreGlobal
-	 */
-	public List<Notation> getScoreGlobal() {
-		return scoreGlobal;
-	}
-
-	/**
-	 * @param scoreGlobal
-	 *            the scoreGlobal to set
-	 */
-	public void setScoreGlobal(List<Notation> scoreGlobal) {
-		this.scoreGlobal = scoreGlobal;
-	}
-
-	/**
-	 * @return the entreprise
-	 */
-	public Entreprise getEntreprise() {
-		return entreprise;
-	}
-
-	/**
-	 * @param entreprise
-	 *            the entreprise to set
-	 */
-	public void setEntreprise(Entreprise entreprise) {
-		this.entreprise = entreprise;
-	}
-
-	/**
-	 * @return the client
-	 */
-	public Client getClient() {
-		return client;
-	}
-
-	/**
-	 * @param client
-	 *            the client to set
-	 */
-	public void setClient(Client client) {
-		this.client = client;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
-	@Override
-	public int hashCode() {
-		return Objects.hashCode(Objects.hash(this.login, this.email, this.nom, this.prenom));
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object object) {
-		if (this == object) {
-			return true;
-		}
-
-		if (object instanceof Artisan) {
-			Artisan other = (Artisan) object;
-			return Objects.equals(this.login, other.login) && Objects.equals(this.email, other.email)
-			        && Objects.equals(this.nom, other.nom) && Objects.equals(this.prenom, other.prenom);
-		}
-		return false;
-	}
+        if (object instanceof Artisan) {
+            Artisan other = (Artisan) object;
+            return Objects.equals(this.login, other.login) && Objects.equals(this.email, other.email)
+                    && Objects.equals(this.nom, other.nom) && Objects.equals(this.prenom, other.prenom);
+        }
+        return false;
+    }
 }
