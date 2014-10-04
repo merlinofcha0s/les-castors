@@ -77,7 +77,6 @@ public class NouveauDevis extends MasterPage {
 
     public NouveauDevis() {
         super("Nouveau devis", "devis batiment renovation", "Nouveau devis", true, "img/bg_title1.jpg");
-        super.setActiveMenu(MasterPage.NOUVEAU_DEVIS);
 
         // Etape 1 : selection du departement avec la carte de la france
         carteFrance = new MapFrance("mapFrance");

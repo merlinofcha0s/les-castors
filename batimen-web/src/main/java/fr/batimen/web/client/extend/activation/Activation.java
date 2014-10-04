@@ -29,7 +29,6 @@ public class Activation extends MasterPage {
     public Activation() {
         super("Activation d'un compte lescastors.fr", "activation compte lescastors.fr", "Activation de votre compte",
                 false, "");
-        this.setActiveMenu(NONE);
         this.setVersioned(false);
         messageActivationCompte = new Label("messageActivationCompte", new Model<String>());
         messageActivationCompte2 = new Label("messageActivationCompte2", new Model<String>());
