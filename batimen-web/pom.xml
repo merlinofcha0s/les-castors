@@ -15,7 +15,6 @@
 
 	<name>batimen-web</name>
 	<description>Application web de Batimen</description>
-	<!-- <organization> <name>company name</name> <url>company url</url> </organization> -->
 
 	<issueManagement>
 		<system>Redmine</system>
@@ -291,7 +290,7 @@
 				<!-- Infos Web App -->
 				<app.ip>127.0.0.1</app.ip>
 				<app.port>6161</app.port>
-				<app.name>${project.artifactId}</app.name>
+				<app.name>batimen-web</app.name>
 				<app.browser.target>chrome</app.browser.target>
 				<app.address.chrome.driver>/var/lib/chrome-driver/chromedriver</app.address.chrome.driver>
 
@@ -325,6 +324,15 @@
 						</includes>
 					</resource>
 				</resources>
+				<testResources>
+					<testResource>
+						<filtering>true</filtering>
+						<directory>src/test/resources</directory>
+						<includes>
+							<include>**</include>
+						</includes>
+					</testResource>
+				</testResources>
 				<plugins>
 					<plugin>
 						<groupId>org.glassfish.maven.plugin</groupId>
