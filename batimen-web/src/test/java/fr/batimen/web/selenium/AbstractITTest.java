@@ -15,6 +15,7 @@ import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -46,6 +47,8 @@ public abstract class AbstractITTest {
     private String dataSourceAddress;
     private String loginDB;
     private String passwordDB;
+    private String browser;
+    private String chromeDriverAddress;
 
     public final static String BON_MOT_DE_PASSE = "lollollol";
     public final static String MAUVAIS_MOT_DE_PASSE = "kikoulolmauvais";
@@ -90,6 +93,8 @@ public abstract class AbstractITTest {
         ipServeur = wsProperties.getProperty("app.ip");
         portServeur = wsProperties.getProperty("app.port");
         nomApp = wsProperties.getProperty("app.name");
+        browser = wsProperties.getProperty("app.browser.target");
+        chromeDriverAddress = wsProperties.getProperty("app.address.chrome.driver");
 
         StringBuilder sbUrlApp = new StringBuilder("https://");
         sbUrlApp.append(ipServeur);
@@ -98,9 +103,19 @@ public abstract class AbstractITTest {
         sbUrlApp.append("/");
         sbUrlApp.append(nomApp);
 
-        // System.setProperty("webdriver.chrome.driver",
-        // "C:\\selenium\\chromedriver.exe");
-        driver = new FirefoxDriver();
+        switch (browser) {
+        case "chrome":
+            System.setProperty("webdriver.chrome.driver", chromeDriverAddress);
+            driver = new ChromeDriver();
+            break;
+        case "firefox":
+            driver = new FirefoxDriver();
+            break;
+        default:
+            driver = new FirefoxDriver();
+            break;
+        }
+
         appUrl = sbUrlApp.toString();
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
         driver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
