@@ -150,7 +150,7 @@ public abstract class AbstractITTest {
     }
 
     protected void connexionApplication(String username, String password) {
-        driver.findElement(By.id("connexionlbl")).click();
+        driver.findElement(By.id("connexionLink")).click();
         Boolean checkCondition = (new WebDriverWait(driver, 5)).until(ExpectedConditions
                 .textToBePresentInElementLocated(By.id("ui-id-1"), "Connexion à l'espace client / artisan"));
         assertTrue(checkCondition);

@@ -1,0 +1,6 @@
+@CHARSET "UTF-8";
+
+/* MESSAGE TOAST */
+.box_close_button{
+	cursor: pointer;
+}

@@ -1,17 +1,23 @@
 package fr.batimen.web.client.extend;
 
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.model.Model;
+import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.validation.validator.EmailAddressValidator;
+import org.apache.wicket.validation.validator.StringValidator;
 
+import fr.batimen.dto.ContactMailDTO;
+import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.web.app.constants.WebConstants;
+import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
+import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.web.client.master.MasterPage;
+import fr.batimen.ws.client.service.ContactUsService;
 
 /**
  * Page de contact qui permettra aux utilisateur de contacter l'équipe
@@ -27,12 +33,12 @@ public class Contact extends MasterPage {
 	 * View Components
 	 */
 	private AjaxLink<String> resetButton;
-	private AjaxLink<String> submitButton;
+	private AjaxSubmitLink submitButton;
 	private TextField<String> nameField;
 	private TextField<String> emailField;
 	private TextField<String> subjectField;
 	private TextArea<String> messageField;
-	private Form<String> form;
+	private Form<ContactMailDTO> form;
 
 	public Contact() {
 		super("Contact de castors.fr", "", "Nous contacter", true, "img/bg_title1.jpg");
@@ -43,27 +49,52 @@ public class Contact extends MasterPage {
 	 * TODO javadoc
 	 */
 	private void initComponents() {
-		form = new Form<String>("contactForm");
+		ContactMailDTO contactMailDTO = new ContactMailDTO();
+		form = new Form<ContactMailDTO>("contactForm", new CompoundPropertyModel<ContactMailDTO>(
+				contactMailDTO));
 		form.setOutputMarkupId(true);
-		
-		nameField = new TextField<String>("nameField");
-		emailField = new TextField<String>("emailField");
-		subjectField = new TextField<String>("subjectField");
-		messageField = new TextArea<String>("messageField");
-		
+
+		nameField = new TextField<String>("name");
+		nameField.setRequired(true);
+		nameField.add(new ErrorHighlightBehavior());
+		nameField.add(StringValidator.lengthBetween(ValidatorConstant.CLIENT_NOM_MIN,
+				ValidatorConstant.CLIENT_NOM_MAX));
+		emailField = new TextField<String>("email");
+		emailField.setRequired(true);
+		emailField.add(EmailAddressValidator.getInstance());
+		emailField.add(new ErrorHighlightBehavior());
+
+		subjectField = new TextField<String>("subject");
+		subjectField.setRequired(true);
+		subjectField.add(new ErrorHighlightBehavior());
+
+		messageField = new TextArea<String>("message");
+		messageField.setRequired(true);
+		messageField.add(new ErrorHighlightBehavior());
 
 		// TODO Auto-generated method stub
-		submitButton = new AjaxLink<String>("submitButton") {
+		submitButton = new AjaxSubmitLink("submitButton") {
 			private static final long serialVersionUID = 5400416625335864317L;
 
 			@Override
-			public void onClick(AjaxRequestTarget target) {
-				// validation
-				
-				// if valid send to WS then show info zone
-				
-				// else show error zone
+			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+				// send shit to server
+				int response = ContactUsService.pushContactMail((ContactMailDTO) getForm()
+						.getModelObject());
+				// finalize
+				feedBackPanelGeneral.success("yolo");
+				target.add(feedBackPanelGeneral);
+				target.add(getForm());
+				target.appendJavaScript(WebConstants.JS_WINDOW_RESIZE_EVENT);
 			}
+
+			@Override
+			protected void onError(AjaxRequestTarget target, Form<?> form) {
+				target.add(getForm());
+				target.appendJavaScript(WebConstants.JS_WINDOW_RESIZE_EVENT);
+				this.send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target));
+			}
+
 		};
 
 		resetButton = new AjaxLink<String>("resetButton") {
@@ -72,6 +103,9 @@ public class Contact extends MasterPage {
 			@Override
 			public void onClick(AjaxRequestTarget target) {
 				nameField.clearInput();
+				emailField.clearInput();
+				subjectField.clearInput();
+				messageField.clearInput();
 				target.add(form);
 				target.appendJavaScript(WebConstants.JS_WINDOW_RESIZE_EVENT);
 			}
@@ -84,7 +118,7 @@ public class Contact extends MasterPage {
 		form.add(messageField);
 		form.add(resetButton);
 		form.add(submitButton);
-		
+
 		this.add(form);
 
 	}

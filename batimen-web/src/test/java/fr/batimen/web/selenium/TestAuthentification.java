@@ -34,7 +34,7 @@ public class TestAuthentification extends AbstractITTest {
         driver.get(appUrl);
         connexionApplication("raiden", AbstractITTest.BON_MOT_DE_PASSE);
         Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
-                .until(ExpectedConditions.textToBePresentInElementLocated(By.id("connexionlbl"), "Mon Compte"));
+                .until(ExpectedConditions.textToBePresentInElementLocated(By.id("connexionLink"), "MON COMPTE"));
         assertTrue(checkCondition);
     }
 

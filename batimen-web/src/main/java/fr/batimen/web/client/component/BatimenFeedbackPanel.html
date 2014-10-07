@@ -6,11 +6,16 @@
 			<div
 				class="shortcode_messagebox module_small_padding"
 				wicket:id="messages">
-				<h6>Message :</h6>
-				<span wicket:id="message"></span> <br /> <a
-					class="box_close"
-					href="javascript:void(0)"></a>
+				<span wicket:id="message"></span> <br /> 
+				<a class="box_close box_close_button"></a>
 			</div>
 		</div>
 	</div>
+	<!-- TODO ajouter javascript autohide -->
+	<script>
+		$('.box_close_button').on('click',function(event){
+			var parent = $(event.target).parent();
+			parent.fadeOut('slow');
+		});
+	</script>
 </wicket:panel>

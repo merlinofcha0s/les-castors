@@ -6,19 +6,19 @@
 					<h4 class="headInModule">Envoyez nous un email</h4>
 				</div>
 				<form wicket:id="contactForm" name="feedback_form" method="post" class="feedback_form">
-					<input wicket:id="nameField" type="text" name="field-name" placeholder="Nom"
+					<input wicket:id="name" type="text" name="field-name" placeholder="Nom"
 						class="field-name form_field">
 					<div class="clear"></div>
-					<input type="text" wicket:id="emailField" name="field-email" placeholder="Email"
+					<input type="text" wicket:id="email" name="field-email" placeholder="Email"
 						class="field-email form_field">
 					<div class="clear"></div>
-					<input type="text" wicket:id="subjectField" name="field-subject" placeholder="Objet" class="field-subject form_field">
+					<input type="text" wicket:id="subject" name="field-subject" placeholder="Objet" class="field-subject form_field">
 					<div class="clear"></div>
-					<textarea wicket:id="messageField" name="field-message" cols="45" rows="5" placeholder="Message"
+					<textarea wicket:id="message" name="field-message" cols="45" rows="5" placeholder="Message"
 						class="field-message form_field"></textarea>
 					<div class="clear"></div>
-					<a type="reset" wicket:id="resetButton" id="reset2" class="btn btn-info">Reinitialiser</a>
-					<a type="button" wicket:id="submitButton" class="btn btn-info" id="submit2">Envoyer</a>
+					<button type="reset" wicket:id="resetButton" id="reset2" class="btn btn-info">Reinitialiser</button>
+					<button type="button" wicket:id="submitButton" class="btn btn-info" id="submit2">Envoyer</button>
 					<div class="ajaxanswer"></div>
 				</form>
 			</div>
