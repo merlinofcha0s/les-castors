@@ -103,10 +103,6 @@ public abstract class AbstractITTest {
         sbUrlApp.append("/");
         sbUrlApp.append(nomApp);
 
-        LOGGER.error("Adresse de l'appli : " + sbUrlApp.toString());
-        LOGGER.error("Target : " + browser);
-        LOGGER.error("Adresse du driver chrome : " + chromeDriverAddress);
-
         switch (browser) {
         case "chrome":
             System.setProperty("webdriver.chrome.driver", chromeDriverAddress);
@@ -176,6 +172,14 @@ public abstract class AbstractITTest {
         driver.findElement(By.name("login")).click();
         driver.findElement(By.name("login")).clear();
         driver.findElement(By.name("login")).sendKeys(username);
+        // On le fait attendre car il y a une probabilité qu'il ecrive trop vite
+        // dans les champs et qu'il se trompe
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         driver.findElement(By.name("password")).click();
         driver.findElement(By.name("password")).clear();
         driver.findElement(By.name("password")).sendKeys(password);
