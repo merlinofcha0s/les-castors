@@ -62,6 +62,9 @@ public class TestNouveauPartenaire extends AbstractITTest {
 
         // Etape 3
         driver.findElement(By.xpath("//label[@id='containerElectricite']/span")).click();
+        // Etape 4 confirmation
+        (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX)).until(ExpectedConditions
+                .presenceOfElementLocated(By.xpath("//label[@id='containerDecorationMaconnerie']/span")));
         driver.findElement(By.xpath("//label[@id='containerDecorationMaconnerie']/span")).click();
         driver.findElement(By.id("nomComplet")).clear();
         driver.findElement(By.id("nomComplet")).sendKeys("Xav Entreprise");

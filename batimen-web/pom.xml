@@ -43,7 +43,7 @@
 		<app.ip>127.0.0.1</app.ip>
 		<app.port>8181</app.port>
 		<app.name>batimen-web</app.name>
-		<app.browser.target>chrome</app.browser.target>
+		<app.browser.target>firefox</app.browser.target>
 		<app.address.chrome.driver>C:/selenium/chromedriver.exe</app.address.chrome.driver>
 
 		<!-- Logs -->
@@ -291,7 +291,7 @@
 				<app.ip>127.0.0.1</app.ip>
 				<app.port>6161</app.port>
 				<app.name>batimen-web</app.name>
-				<app.browser.target>chrome</app.browser.target>
+				<app.browser.target>firefox</app.browser.target>
 				<app.address.chrome.driver>/var/lib/chrome-driver/chromedriver</app.address.chrome.driver>
 
 				<!-- Logs -->
