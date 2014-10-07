@@ -27,7 +27,7 @@ import fr.batimen.ws.entity.Annonce;
 @Stateless(name = "AnnonceDAO")
 @LocalBean
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class AnnonceDAO extends AbstractDAO {
+public class AnnonceDAO extends AbstractDAO<Annonce> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AnnonceDAO.class);
 
@@ -85,7 +85,8 @@ public class AnnonceDAO extends AbstractDAO {
         List<Annonce> annoncesBytitreAndDescription = null;
 
         try {
-            TypedQuery<Annonce> query = entityManager.createNamedQuery(QueryJPQL.ANNONCE_BY_TITLE_AND_DESCRIPTION, Annonce.class);
+            TypedQuery<Annonce> query = entityManager.createNamedQuery(QueryJPQL.ANNONCE_BY_TITLE_AND_DESCRIPTION,
+                    Annonce.class);
             query.setParameter(QueryJPQL.PARAM_ANNONCE_DESCRIPTION, description);
             query.setParameter(QueryJPQL.CLIENT_LOGIN, login);
 

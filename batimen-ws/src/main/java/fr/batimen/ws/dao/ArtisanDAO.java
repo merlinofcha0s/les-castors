@@ -23,7 +23,7 @@ import fr.batimen.ws.entity.Artisan;
 @Stateless(name = "ArtisanDAO")
 @LocalBean
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class ArtisanDAO extends AbstractDAO {
+public class ArtisanDAO extends AbstractDAO<Artisan> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ArtisanDAO.class);
 
