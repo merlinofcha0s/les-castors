@@ -103,6 +103,10 @@ public abstract class AbstractITTest {
         sbUrlApp.append("/");
         sbUrlApp.append(nomApp);
 
+        LOGGER.error("Adresse de l'appli : " + sbUrlApp.toString());
+        LOGGER.error("Target : " + browser);
+        LOGGER.error("Adresse du driver chrome : " + chromeDriverAddress);
+
         switch (browser) {
         case "chrome":
             System.setProperty("webdriver.chrome.driver", chromeDriverAddress);
