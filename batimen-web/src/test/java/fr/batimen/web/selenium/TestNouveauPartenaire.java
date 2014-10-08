@@ -61,6 +61,11 @@ public class TestNouveauPartenaire extends AbstractITTest {
         driver.findElement(By.id("validateEtape2Partenaire")).click();
 
         // Etape 3
+        driver.findElement(By.xpath("//label[@id='containerElectricite']/span")).click();
+        // Etape 4 confirmation
+        (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX)).until(ExpectedConditions
+                .presenceOfElementLocated(By.xpath("//label[@id='containerDecorationMaconnerie']/span")));
+        driver.findElement(By.xpath("//label[@id='containerDecorationMaconnerie']/span")).click();
         driver.findElement(By.id("nomComplet")).clear();
         driver.findElement(By.id("nomComplet")).sendKeys("Xav Entreprise");
         new Select(driver.findElement(By.id("statutJuridique"))).selectByVisibleText("SARL");
@@ -77,8 +82,7 @@ public class TestNouveauPartenaire extends AbstractITTest {
         driver.findElement(By.id("codePostalField")).sendKeys("06800");
         driver.findElement(By.id("villeField")).clear();
         driver.findElement(By.id("villeField")).sendKeys("Xavier City");
-        driver.findElement(By.xpath("//label[@id='containerElectricite']/span")).click();
-        driver.findElement(By.id("containerDecorationMaconnerie")).click();
+
         driver.findElement(By.id("validateEtape3Partenaire")).click();
 
         // Etape 4 confirmation

@@ -25,7 +25,7 @@ import fr.batimen.ws.entity.Client;
 @Stateless(name = "ClientDAO")
 @LocalBean
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class ClientDAO extends AbstractDAO {
+public class ClientDAO extends AbstractDAO<Client> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ClientDAO.class);
 

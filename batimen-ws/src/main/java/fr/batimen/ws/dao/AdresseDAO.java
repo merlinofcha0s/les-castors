@@ -22,7 +22,7 @@ import fr.batimen.ws.entity.Adresse;
 @Stateless(name = "AdresseDAO")
 @LocalBean
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class AdresseDAO extends AbstractDAO {
+public class AdresseDAO extends AbstractDAO<Adresse> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AdresseDAO.class);
 

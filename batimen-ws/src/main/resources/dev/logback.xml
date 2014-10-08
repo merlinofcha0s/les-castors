@@ -1,0 +1,15 @@
+<configuration debug="true">
+	<contextName>batimenContext</contextName>
+
+	<!-- Permet d'avoir les logs dans la console d'eclipse et glassfish (a degager 
+		en prod) -->
+	<appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n</pattern>
+		</encoder>
+	</appender>
+
+	<root level="${logs.lvl}">
+		<appender-ref ref="stdout" />
+	</root>
+</configuration>

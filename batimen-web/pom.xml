@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>fr.batimen.app</groupId>
 		<artifactId>batimen-module</artifactId>
-		<version>0.2.0-SNAPSHOT</version>
+		<version>0.3.0-SNAPSHOT</version>
 		<relativePath>../batimen-module</relativePath>
 	</parent>
 
@@ -15,7 +15,6 @@
 
 	<name>batimen-web</name>
 	<description>Application web de Batimen</description>
-	<!-- <organization> <name>company name</name> <url>company url</url> </organization> -->
 
 	<issueManagement>
 		<system>Redmine</system>
@@ -44,6 +43,8 @@
 		<app.ip>127.0.0.1</app.ip>
 		<app.port>8181</app.port>
 		<app.name>batimen-web</app.name>
+		<app.browser.target>firefox</app.browser.target>
+		<app.address.chrome.driver>C:/selenium/chromedriver.exe</app.address.chrome.driver>
 
 		<!-- Logs -->
 		<logs.address>c:/logs/log-batimen</logs.address>
@@ -67,7 +68,10 @@
 		<resources>
 			<resource>
 				<filtering>true</filtering>
-				<directory>src/main/resources</directory>
+				<directory>src/main/resources/dev</directory>
+				<includes>
+					<include>**</include>
+				</includes>
 			</resource>
 			<resource>
 				<filtering>false</filtering>
@@ -286,12 +290,14 @@
 				<!-- Infos Web App -->
 				<app.ip>127.0.0.1</app.ip>
 				<app.port>6161</app.port>
-				<app.name>${project.artifactId}</app.name>
+				<app.name>batimen-web</app.name>
+				<app.browser.target>firefox</app.browser.target>
+				<app.address.chrome.driver>/var/lib/chrome-driver/chromedriver</app.address.chrome.driver>
 
 				<!-- Logs -->
 				<logs.address>/usr/share/log-batimen</logs.address>
 				<logs.archives>${logs.address}/archived</logs.archives>
-				<logs.lvl>WARN</logs.lvl>
+				<logs.lvl>DEBUG</logs.lvl>
 
 				<!-- Logs pour les tests -->
 				<logs.test.address>/usr/share/log-test-batimen</logs.test.address>
@@ -309,6 +315,24 @@
 				<database.password>M0ntaleign3</database.password>
 			</properties>
 			<build>
+				<resources>
+					<resource>
+						<directory>src/main/resources/prod</directory>
+						<filtering>true</filtering>
+						<includes>
+							<include>**</include>
+						</includes>
+					</resource>
+				</resources>
+				<testResources>
+					<testResource>
+						<filtering>true</filtering>
+						<directory>src/test/resources</directory>
+						<includes>
+							<include>**</include>
+						</includes>
+					</testResource>
+				</testResources>
 				<plugins>
 					<plugin>
 						<groupId>org.glassfish.maven.plugin</groupId>
