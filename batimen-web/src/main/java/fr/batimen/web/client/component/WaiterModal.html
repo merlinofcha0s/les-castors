@@ -1,0 +1,33 @@
+<wicket:panel>
+<style type="text/css">
+	#waiterModal {
+		-webkit-transition: display 0.5s;
+		transition: display 0.5s;
+		display: none;
+		position: fixed;
+		z-index: 99999;
+		top: 0;
+		left: 0;
+		height: 100%;
+		width: 100%;
+		background: rgba(0, 0, 0, .8) url('img/wait_spinner.gif') 50% 50% no-repeat;
+	}
+	html.loading{
+		overflow: hidden;
+	}
+</style>
+
+<div id="waiterModal"></div>
+
+<script>	
+	function showWaiterModal() {
+		$('#waiterModal').fadeIn();
+		$('html').addClass('loading');
+	}
+
+	function hideWaiterModal() {
+		$('#waiterModal').fadeOut();
+		$('html').removeClass('loading');
+	}
+</script>
+</wicket:panel>

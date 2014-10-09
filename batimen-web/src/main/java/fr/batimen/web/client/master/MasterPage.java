@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.batimen.web.client.component.BatimenFeedbackPanel;
+import fr.batimen.web.client.component.WaiterModal;
 import fr.batimen.web.client.event.Event;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.web.client.event.LoginEvent;
@@ -111,6 +112,10 @@ public abstract class MasterPage extends WebPage {
         // dans l'onglet du navigateur)
         Label titleLbl = new Label("title", new Model<String>(titleInHeader.toString()));
         this.add(titleLbl);
+        
+        //inserting the waitermodal at the bottom of the page
+        WaiterModal waiterModal = new WaiterModal("waiterModal");
+        this.add(waiterModal);
 
         initComponentConnexion();
         initTitleHeader(isPageWithTitleHeader, title, adresseImgBackground);

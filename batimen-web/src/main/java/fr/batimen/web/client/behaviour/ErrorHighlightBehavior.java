@@ -27,7 +27,9 @@ public class ErrorHighlightBehavior extends Behavior {
 	public void onComponentTag(Component component, ComponentTag tag) {
 		FormComponent<?> fc = (FormComponent<?>) component;
 		if (!fc.isValid()) {
-			StringBuilder sb = new StringBuilder(tag.getAttribute("class"));
+			String baseCss = tag.getAttribute("class")==null? "" : tag.getAttribute("class");
+			StringBuilder sb = new StringBuilder(baseCss);
+			// class pour etat erreur input
 			sb.append(" error");
 			tag.put("class", sb.toString());
 		}
