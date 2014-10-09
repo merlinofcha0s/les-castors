@@ -1,0 +1,61 @@
+/*
+  Icon Font: font_icons8
+*/
+
+@font-face {
+  font-family: "font_icons8";
+  src: url("./font_icons8.eot");
+  src: url("./font_icons8.eot?#iefix") format("embedded-opentype"),
+       url("./font_icons8.woff") format("woff"),
+       url("fonts/font_icons8.ttf") format("truetype"),
+       url("./font_icons8.svg#font_icons8") format("svg");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+  @font-face {
+    font-family: "font_icons8";
+    src: url("./font_icons8.svg#font_icons8") format("svg");
+  }
+}
+
+[data-icon]:before { content: attr(data-icon); }
+
+[data-icon]:before,
+.icons8-1:before,
+.icons8-2:before,
+.icons8-3:before,
+.icons8-4:before,
+.icons8-5:before,
+.icons8-6:before,
+.icons8-7:before,
+.icons8-8:before,
+.icons8-9:before,
+.icons8-garden-shears:before,
+.icons8-plumbing:before {
+  display: inline-block;
+  font-family: "font_icons8";
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  line-height: 1;
+  text-decoration: inherit;
+  text-rendering: optimizeLegibility;
+  text-transform: none;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  font-smoothing: antialiased;
+}
+
+.icons8-1:before { content: "\f100"; }
+.icons8-2:before { content: "\f101"; }
+.icons8-3:before { content: "\f102"; }
+.icons8-4:before { content: "\f103"; }
+.icons8-5:before { content: "\f104"; }
+.icons8-6:before { content: "\f105"; }
+.icons8-7:before { content: "\f106"; }
+.icons8-8:before { content: "\f107"; }
+.icons8-9:before { content: "\f108"; }
+.icons8-garden-shears:before { content: "\f109"; }
+.icons8-plumbing:before { content: "\f10a"; }

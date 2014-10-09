@@ -34,9 +34,11 @@ public class TestNouveauPartenaire extends AbstractITTest {
     /**
      * Cas de test : L'utilisateur (artisan) crée son compte, l'operation doit
      * être un succés
+     * 
+     * @throws InterruptedException
      */
     @Test
-    public void testInscriptionNouveauPartenaireNominal() {
+    public void testInscriptionNouveauPartenaireNominal() throws InterruptedException {
         driver.get(appUrl + nouveauPartenaireURL);
 
         // On selectionne un departement
@@ -62,6 +64,7 @@ public class TestNouveauPartenaire extends AbstractITTest {
 
         // Etape 3
         driver.findElement(By.xpath("//label[@id='containerElectricite']/span")).click();
+        Thread.sleep(1000);
         // Etape 4 confirmation
         (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX)).until(ExpectedConditions
                 .presenceOfElementLocated(By.xpath("//label[@id='containerDecorationMaconnerie']/span")));
