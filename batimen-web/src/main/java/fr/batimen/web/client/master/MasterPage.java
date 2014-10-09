@@ -58,6 +58,9 @@ public abstract class MasterPage extends WebPage {
 
     private Dialog loginDialog;
     private AuthentificationPanel authentificationPanel;
+    
+    // waiter modal can be accessed from every child view
+	protected WaiterModal waiterModal;
     /**
      * Constructeur par defaut, initialise les composants de base de la page
      * 
@@ -114,7 +117,7 @@ public abstract class MasterPage extends WebPage {
         this.add(titleLbl);
         
         //inserting the waitermodal at the bottom of the page
-        WaiterModal waiterModal = new WaiterModal("waiterModal");
+        waiterModal = new WaiterModal("waiterModal");
         this.add(waiterModal);
 
         initComponentConnexion();
