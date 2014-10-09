@@ -23,6 +23,15 @@
 [data-icon]:before { content: attr(data-icon); }
 
 [data-icon]:before,
+.icons8-1:before,
+.icons8-2:before,
+.icons8-3:before,
+.icons8-4:before,
+.icons8-5:before,
+.icons8-6:before,
+.icons8-7:before,
+.icons8-8:before,
+.icons8-9:before,
 .icons8-garden-shears:before,
 .icons8-plumbing:before {
   display: inline-block;
@@ -39,5 +48,14 @@
   font-smoothing: antialiased;
 }
 
-.icons8-garden-shears:before { content: "\f100"; }
-.icons8-plumbing:before { content: "\f101"; }
+.icons8-1:before { content: "\f100"; }
+.icons8-2:before { content: "\f101"; }
+.icons8-3:before { content: "\f102"; }
+.icons8-4:before { content: "\f103"; }
+.icons8-5:before { content: "\f104"; }
+.icons8-6:before { content: "\f105"; }
+.icons8-7:before { content: "\f106"; }
+.icons8-8:before { content: "\f107"; }
+.icons8-9:before { content: "\f108"; }
+.icons8-garden-shears:before { content: "\f109"; }
+.icons8-plumbing:before { content: "\f10a"; }
