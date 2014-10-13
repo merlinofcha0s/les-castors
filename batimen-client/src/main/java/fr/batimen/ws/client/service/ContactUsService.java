@@ -4,9 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.batimen.core.constant.WsPath;
-import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.ContactMailDTO;
-import fr.batimen.dto.LoginDTO;
 import fr.batimen.ws.client.WsConnector;
 
 /**
@@ -32,8 +30,8 @@ public class ContactUsService {
             LOGGER.debug("Début appel service push contact mail");
         }
 
-        String jsonResponse = WsConnector.getInstance().sendRequest(WsPath.GESTION_CLIENT_SERVICE_PATH,
-                WsPath.GESTION_CLIENT_SERVICE_LOGIN, contactMail);
+        String jsonResponse = WsConnector.getInstance().sendRequest(WsPath.MAIL_SERVICE_PATH,
+                WsPath.MAIL_SERVICE_SEND_CONTACT_MAIL, contactMail);
         
         int serverResponse = Integer.valueOf(jsonResponse);
         if (LOGGER.isDebugEnabled()) {

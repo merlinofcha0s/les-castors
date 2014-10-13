@@ -102,10 +102,10 @@ public class Contact extends MasterPage {
 
 			@Override
 			public void onClick(AjaxRequestTarget target) {
-				nameField.clearInput();
-				emailField.clearInput();
-				subjectField.clearInput();
-				messageField.clearInput();
+				nameField.setDefaultModelObject("");
+				emailField.setDefaultModelObject("");
+				subjectField.setDefaultModelObject("");
+				messageField.setDefaultModelObject("");
 				target.add(form);
 				target.appendJavaScript(WebConstants.JS_WINDOW_RESIZE_EVENT);
 			}

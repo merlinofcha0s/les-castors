@@ -15,7 +15,14 @@
 	<script>
 		$('.box_close_button').on('click',function(event){
 			var parent = $(event.target).parent();
-			parent.fadeOut('slow');
+			parent.fadeOut('slow', function(){
+				this.remove();
+				// if parent panel contains no more children remove it
+				var isPanelEmpty = $(".feedbackPanel.module_messageboxes div").length===0;
+				if(isPanelEmpty){
+					$(".feedbackPanel.module_messageboxes").remove();
+				}
+			});
 		});
 	</script>
 </wicket:panel>
