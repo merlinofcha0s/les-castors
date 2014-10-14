@@ -215,6 +215,13 @@
 			<scope>compile</scope>
 		</dependency>
 
+		<!-- Sécurité -->
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-web</artifactId>
+			<version>1.2.3</version>
+		</dependency>
+
 		<!-- Logback -->
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
