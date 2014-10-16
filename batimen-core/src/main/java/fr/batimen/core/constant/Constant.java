@@ -57,6 +57,8 @@ public class Constant {
     // Template Email
     public static final String TEMPLATE_CONFIRMATION_ANNONCE = "confirmation_creation_annonce";
     public static final String TEMPLATE_ACTIVATION_COMPTE = "activation_compte";
+    public static final String TEMPLATE_EMAIL_CONTACT = "contact_email";
+    public static final String TEMPLATE_ACCUSE_RECEPTION = "accuse_reception";
 
     // Creation annonce tags Email
     public static final String TAG_EMAIL_USERNAME = "username";
@@ -66,5 +68,11 @@ public class Constant {
     public static final String TAG_EMAIL_TYPE_CONTACT = "typecontact";
     public static final String TAG_EMAIL_DELAI_INTERVENTION = "delaiintervention";
     public static final String TAG_EMAIL_ACTIVATION_LINK = "lienactivation";
+    
+    // Contact Email tags
+    public static final String TAG_EMAIL_CONTACT_NAME = "name";
+    public static final String TAG_EMAIL_CONTACT_EMAIL="email";
+    public static final String TAG_EMAIL_CONTACT_SUBJECT="subject";
+    public static final String TAG_EMAIL_CONTACT_MESSAGE="message";
 
 }
