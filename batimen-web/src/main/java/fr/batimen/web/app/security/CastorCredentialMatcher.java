@@ -17,17 +17,19 @@ public class CastorCredentialMatcher implements CredentialsMatcher {
     @Override
     public boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) {
 
+        // Les infos qui viennent du form
         UsernamePasswordToken usernamePasswordToken = (UsernamePasswordToken) token;
         String usernameForm = usernamePasswordToken.getUsername();
-        String passwordForm = String.valueOf(usernamePasswordToken.getPassword());
+        char[] passwordForm = (char[]) usernamePasswordToken.getCredentials();
 
+        // Les infos qui viennent de la base de données
         SimpleAuthenticationInfo usernamePasswordDB = (SimpleAuthenticationInfo) info;
         String usernameDB = String.valueOf(usernamePasswordDB.getPrincipals().getPrimaryPrincipal());
         String passwordDB = String.valueOf(usernamePasswordDB.getCredentials());
 
         // Vérification du password avec le hash qui se trouve dans la bdd
         boolean usernameMatch = usernameForm.equals(usernameDB);
-        boolean passwordMatch = HashHelper.check(passwordForm, passwordDB);
+        boolean passwordMatch = HashHelper.check(new String(passwordForm), passwordDB);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Verification de l'username : " + usernameMatch);

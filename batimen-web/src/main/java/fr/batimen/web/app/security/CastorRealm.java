@@ -36,7 +36,7 @@ public class CastorRealm extends AuthorizingRealm {
         // Si l'user dto est vide cela veut dire que l'authentification n'a pas
         // reussi
         if (!"".equals(clientDTO.getLogin())) {
-            info = new SimpleAuthenticationInfo(clientDTO.getLogin(), clientDTO.getPassword().toCharArray(), getName());
+            info = new SimpleAuthenticationInfo(clientDTO.getLogin(), clientDTO.getPassword(), getName());
         }
 
         return info;

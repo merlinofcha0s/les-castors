@@ -1,5 +1,7 @@
 package fr.batimen.web.client.master;
 
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.subject.Subject;
 import org.apache.wicket.Application;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
@@ -14,45 +16,47 @@ import org.apache.wicket.markup.html.link.Link;
  */
 public abstract class SecuredPage extends MasterPage {
 
-	/**
+    /**
 	 * 
 	 */
-	private static final long serialVersionUID = 1647831861906535340L;
+    private static final long serialVersionUID = 1647831861906535340L;
 
-	public SecuredPage() {
-		super();
-	}
+    public SecuredPage() {
+        super();
+    }
 
-	public SecuredPage(String metaDescription, String metaKeywords, String title, boolean isPageWithTitleHeader,
-			String adresseImgBackground) {
-		super(metaDescription, metaKeywords, title, isPageWithTitleHeader, adresseImgBackground);
-		add(new Link<String>("goToHomePage") {
-			private static final long serialVersionUID = -6480263784484841724L;
+    public SecuredPage(String metaDescription, String metaKeywords, String title, boolean isPageWithTitleHeader,
+            String adresseImgBackground) {
+        super(metaDescription, metaKeywords, title, isPageWithTitleHeader, adresseImgBackground);
+        add(new Link<String>("goToHomePage") {
+            private static final long serialVersionUID = -6480263784484841724L;
 
-			@Override
-			public void onClick() {
-				setResponsePage(getApplication().getHomePage());
-			}
-		});
+            @Override
+            public void onClick() {
+                setResponsePage(getApplication().getHomePage());
+            }
+        });
 
-		add(new Link<String>("logOut") {
-			private static final long serialVersionUID = 5031796613478728383L;
+        add(new Link<String>("logOut") {
+            private static final long serialVersionUID = 5031796613478728383L;
 
-			@Override
-			public void onClick() {
-				AuthenticatedWebSession.get().invalidate();
-				setResponsePage(getApplication().getHomePage());
-			}
-		});
-	}
+            @Override
+            public void onClick() {
+                AuthenticatedWebSession.get().invalidate();
+                Subject currentUser = SecurityUtils.getSubject();
+                currentUser.logout();
+                setResponsePage(getApplication().getHomePage());
+            }
+        });
+    }
 
-	@Override
-	protected void onConfigure() {
-		AuthenticatedWebApplication app = (AuthenticatedWebApplication) Application.get();
-		// if user is not signed in, redirect him to sign in page
-		if (!AuthenticatedWebSession.get().isSignedIn()) {
-			app.restartResponseAtSignInPage();
-		}
+    @Override
+    protected void onConfigure() {
+        AuthenticatedWebApplication app = (AuthenticatedWebApplication) Application.get();
+        // if user is not signed in, redirect him to sign in page
+        if (!AuthenticatedWebSession.get().isSignedIn()) {
+            app.restartResponseAtSignInPage();
+        }
 
-	}
+    }
 }
