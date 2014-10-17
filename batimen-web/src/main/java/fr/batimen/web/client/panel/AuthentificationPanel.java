@@ -3,7 +3,6 @@ package fr.batimen.web.client.panel;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
-import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -17,6 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.batimen.dto.constant.ValidatorConstant;
+import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.client.event.LoginEvent;
 
 /**
@@ -54,7 +54,8 @@ public class AuthentificationPanel extends Panel {
         login.setModelObject("Identifiant");
         login.setMarkupId("loginModal");
         login.setRequired(true);
-        login.add(new StringValidator(ValidatorConstant.CLIENT_LOGIN_RANGE_MIN, ValidatorConstant.CLIENT_LOGIN_RANGE_MAX));
+        login.add(new StringValidator(ValidatorConstant.CLIENT_LOGIN_RANGE_MIN,
+                ValidatorConstant.CLIENT_LOGIN_RANGE_MAX));
 
         password = new PasswordTextField("password", new Model<String>());
         password.setModelObject("Password");
@@ -69,8 +70,9 @@ public class AuthentificationPanel extends Panel {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 
-                boolean authResult = AuthenticatedWebSession.get().signIn(login.getInput(),
-                        password.getConvertedInput());
+                Authentication authentication = new Authentication();
+
+                boolean authResult = authentication.authenticate(login.getInput(), password.getConvertedInput());
 
                 // if authentication succeeds redirect user to the requested
                 // page

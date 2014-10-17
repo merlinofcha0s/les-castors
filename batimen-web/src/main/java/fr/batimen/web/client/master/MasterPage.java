@@ -1,5 +1,6 @@
 package fr.batimen.web.client.master;
 
+import org.apache.shiro.SecurityUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -36,7 +37,6 @@ import fr.batimen.web.client.extend.MonCompte;
 import fr.batimen.web.client.extend.QuiSommeNous;
 import fr.batimen.web.client.extend.nouveau.devis.NouveauDevis;
 import fr.batimen.web.client.panel.AuthentificationPanel;
-import fr.batimen.web.client.session.BatimenSession;
 
 /**
  * Page principal de l'application dans laquelle tous les autres panels seront
@@ -286,7 +286,7 @@ public abstract class MasterPage extends WebPage {
         }
 
         final Label connexionlbl = new Label("connexionlbl", new Model<String>());
-        if (BatimenSession.get().isSignedIn()) {
+        if (SecurityUtils.getSubject().isAuthenticated()) {
             connexionlbl.setDefaultModelObject("Mon Compte");
         } else {
             connexionlbl.setDefaultModelObject("Espace Membre");
@@ -301,7 +301,7 @@ public abstract class MasterPage extends WebPage {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                if (BatimenSession.get().isSignedIn()) {
+                if (SecurityUtils.getSubject().isAuthenticated()) {
                     setResponsePage(MonCompte.class);
                 } else {
                     getLoginDialog().open(target);
