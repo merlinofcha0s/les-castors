@@ -15,6 +15,7 @@ public class QueryJPQL {
     // Entity User
     public static final String CLIENT_LOGIN = "login";
     public static final String CLIENT_BY_EMAIL = "clientByLoginAndEmail";
+    public static final String HASH_BY_LOGIN = "hashByLogin";
     public static final String CLIENT_BY_ACTIVATION_KEY = "clientByActivationKey";
 
     // Parametre Query Entity client

@@ -199,7 +199,33 @@ public class ClientDAO extends AbstractDAO<Client> {
         }
 
         return clientFinded;
-
     }
 
+    /**
+     * Renvoi le hash pour un client donné
+     * 
+     * @param login
+     *            Le login du client
+     * @return
+     */
+    public String getClientByHash(String login) {
+        String hash = null;
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Debut récuperation hash pour le client : " + login);
+        }
+
+        try {
+            TypedQuery<String> query = entityManager.createNamedQuery(QueryJPQL.HASH_BY_LOGIN, String.class);
+            query.setParameter(QueryJPQL.PARAM_CLIENT_LOGIN, login);
+
+            hash = query.getSingleResult();
+        } catch (NoResultException nre) {
+            if (LOGGER.isWarnEnabled()) {
+                LOGGER.warn("Aucune correspondance trouvées pour le hash du client : " + login, nre);
+            }
+            return "";
+        }
+        return hash;
+    }
 }

@@ -1,9 +1,8 @@
 package fr.batimen.web.client.extend;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
 
 import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.client.master.MasterPage;
@@ -24,7 +23,7 @@ public final class MonCompte extends MasterPage {
         add(new Label("version", getApplication().getFrameworkSettings().getVersion()));
         Authentication authentication = new Authentication();
         add(new Label("login", "Bonjour, " + authentication.getCurrentUserInfo().getNom()));
-        AjaxLink<Void> logout = new AjaxLink<Void>("logout") {
+        Link<Void> logout = new Link<Void>("logout") {
 
             /**
              * 
@@ -32,10 +31,11 @@ public final class MonCompte extends MasterPage {
             private static final long serialVersionUID = 9041719967383711900L;
 
             @Override
-            public void onClick(AjaxRequestTarget target) {
-                SecurityUtils.getSubject().logout();
-                target.add(this);
+            public void onClick() {
+                Session.get().invalidate();
+                this.setResponsePage(Accueil.class);
             }
+
         };
 
         this.add(logout);

@@ -138,4 +138,18 @@ public class GestionClientFacadeTest extends AbstractBatimenWsTest {
         Assert.assertTrue(client.getIsActive().equals(Boolean.TRUE));
         Assert.assertTrue(codeRetour == Constant.CODE_SERVICE_RETOUR_OK);
     }
+
+    /**
+     * Test de récuperation d'un hash pour un client
+     * 
+     * @throws BackendException
+     */
+    @Test
+    @UsingDataSet("datasets/in/clients.yml")
+    public void testGetHashClient() throws BackendException {
+        String hash = clientDAO.getClientByHash("pebronne");
+        Assert.assertTrue(!hash.isEmpty());
+        Assert.assertEquals("$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=", hash);
+    }
+
 }

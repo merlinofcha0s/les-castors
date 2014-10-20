@@ -75,10 +75,24 @@ public class GestionClientFacade {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public ClientDTO login(LoginDTO toLogin) {
         ModelMapper modelMapper = new ModelMapper();
-
         Client client = clientDAO.getClientByLoginName(toLogin.getLogin());
-
         return modelMapper.map(client, ClientDTO.class);
+    }
+
+    /**
+     * Renvoi le hash d'un client, vide si il n'existe pas.
+     * 
+     * @param login
+     *            Le login du Client
+     * @return
+     */
+    @POST
+    @Path(WsPath.GESTION_CLIENT_SERVICE_HASH)
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public String getClientHash(String login) {
+        // On enleve les "" car ils sont deserializer dans la requete REST
+        String loginEscaped = DeserializeJsonHelper.parseString(login);
+        return clientDAO.getClientByHash(loginEscaped);
     }
 
     /**

@@ -92,4 +92,24 @@ public class ClientService {
 
         return resultatService;
     }
+
+    public static String getHashByLogin(String login) {
+
+        String hash = "";
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Début appel service de recuperation du hash par login + deserialization");
+        }
+
+        String objectInJSON = WsConnector.getInstance().sendRequest(WsPath.GESTION_CLIENT_SERVICE_PATH,
+                WsPath.GESTION_CLIENT_SERVICE_HASH, login);
+
+        hash = String.valueOf(objectInJSON);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Fin appel service de recuperation du hash par login + deserialization");
+        }
+
+        return hash;
+    }
 }
