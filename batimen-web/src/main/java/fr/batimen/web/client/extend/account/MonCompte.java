@@ -1,10 +1,11 @@
-package fr.batimen.web.client.extend;
+package fr.batimen.web.client.extend.account;
 
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 
 import fr.batimen.web.app.security.Authentication;
+import fr.batimen.web.client.extend.Accueil;
 import fr.batimen.web.client.master.MasterPage;
 
 /**

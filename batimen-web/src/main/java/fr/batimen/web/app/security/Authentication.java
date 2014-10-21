@@ -8,6 +8,7 @@ import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+import org.apache.wicket.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,6 +31,7 @@ public class Authentication {
         Subject currentUser = SecurityUtils.getSubject();
 
         try {
+            Session.get().replaceSession();
             currentUser.login(token);
             isOk = Boolean.TRUE;
         } catch (UnknownAccountException uae) {

@@ -39,10 +39,12 @@ import fr.batimen.ws.dao.AdresseDAO;
 import fr.batimen.ws.dao.ArtisanDAO;
 import fr.batimen.ws.dao.CategorieMetierDAO;
 import fr.batimen.ws.dao.EntrepriseDAO;
+import fr.batimen.ws.dao.PermissionDAO;
 import fr.batimen.ws.entity.Adresse;
 import fr.batimen.ws.entity.Artisan;
 import fr.batimen.ws.entity.CategorieMetier;
 import fr.batimen.ws.entity.Entreprise;
+import fr.batimen.ws.entity.Permission;
 import fr.batimen.ws.helper.JsonHelper;
 import fr.batimen.ws.interceptor.BatimenInterceptor;
 import fr.batimen.ws.service.EmailService;
@@ -76,6 +78,9 @@ public class GestionArtisanFacade {
 
     @Inject
     private CategorieMetierDAO categorieMetierDAO;
+
+    @Inject
+    private PermissionDAO permissionDAO;
 
     @Inject
     private EmailService emailService;
@@ -114,12 +119,19 @@ public class GestionArtisanFacade {
         mapper.map(nouveauPartenaireDTO.getEntreprise(), nouvelleEntreprise);
         mapper.map(nouveauPartenaireDTO.getAdresse(), nouvelleAdresse);
 
+        // On set les permissions
+        Permission permission = new Permission();
+        permission.setTypeCompte(TypeCompte.ARTISAN_DEFAULT);
+        permission.setArtisan(nouveauArtisan);
+        nouveauArtisan.getPermission().add(permission);
+
         List<CategorieMetierDTO> categories = nouveauPartenaireDTO.getEntreprise().getCategoriesMetier();
 
         nouvelleEntreprise.setAdresse(nouvelleAdresse);
         nouveauArtisan.setEntreprise(nouvelleEntreprise);
-
         artisanDAO.saveArtisan(nouveauArtisan);
+        permissionDAO.creationPermission(permission);
+
         entrepriseDAO.saveEntreprise(nouvelleEntreprise);
 
         for (CategorieMetierDTO categorieDTO : categories) {
@@ -183,7 +195,6 @@ public class GestionArtisanFacade {
         mapper.map(artisan, nouveauArtisan);
 
         nouveauArtisan.setDateInscription(new Date());
-        nouveauArtisan.setTypeCompte(TypeCompte.DEFAULT_ARTISAN);
 
         // Calcul de la clé d'activation du compte
         StringBuilder loginAndEmail = new StringBuilder(artisan.getLogin());

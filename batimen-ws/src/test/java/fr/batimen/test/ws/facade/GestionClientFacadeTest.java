@@ -18,10 +18,12 @@ import fr.batimen.core.exception.BackendException;
 import fr.batimen.core.exception.DuplicateEntityException;
 import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.LoginDTO;
+import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.test.ws.AbstractBatimenWsTest;
 import fr.batimen.ws.client.service.ClientService;
 import fr.batimen.ws.dao.ClientDAO;
 import fr.batimen.ws.entity.Client;
+import fr.batimen.ws.entity.Permission;
 
 /**
  * 
@@ -112,6 +114,11 @@ public class GestionClientFacadeTest extends AbstractBatimenWsTest {
         clientDuplicate.setNom("De la Pebronne");
         clientDuplicate.setNumeroTel("0615125645");
         clientDuplicate.setPrenom("Pebron");
+
+        Permission permission = new Permission();
+        permission.setTypeCompte(TypeCompte.ARTISAN_DEFAULT);
+
+        clientDuplicate.getPermissions().add(permission);
 
         Calendar calClient = Calendar.getInstance(Locale.FRANCE);
         calClient.set(2014, 01, 10, 00, 00, 00);

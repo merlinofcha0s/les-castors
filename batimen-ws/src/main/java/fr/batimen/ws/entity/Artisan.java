@@ -45,6 +45,8 @@ public class Artisan extends AbstractUser implements Serializable {
     private List<Notation> scoreGlobal = new ArrayList<Notation>();
     @OneToOne(cascade = CascadeType.REMOVE)
     private Entreprise entreprise;
+    @OneToMany(mappedBy = "artisan", targetEntity = Permission.class, cascade = CascadeType.REMOVE)
+    protected List<Permission> permission = new ArrayList<Permission>();
 
     /**
      * @return the id
@@ -104,6 +106,21 @@ public class Artisan extends AbstractUser implements Serializable {
      */
     public void setCivilite(Civilite civilite) {
         this.civilite = civilite;
+    }
+
+    /**
+     * @return the typeCompte
+     */
+    public List<Permission> getPermission() {
+        return permission;
+    }
+
+    /**
+     * @param permission
+     *            the typeCompte to set
+     */
+    public void setTypeCompte(List<Permission> permission) {
+        this.permission = permission;
     }
 
     /*

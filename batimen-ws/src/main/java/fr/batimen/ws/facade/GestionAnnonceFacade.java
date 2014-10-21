@@ -33,14 +33,17 @@ import fr.batimen.core.exception.DuplicateEntityException;
 import fr.batimen.core.exception.EmailException;
 import fr.batimen.core.security.HashHelper;
 import fr.batimen.core.utils.PropertiesUtils;
+import fr.batimen.dto.PermissionDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.ws.dao.AdresseDAO;
 import fr.batimen.ws.dao.AnnonceDAO;
 import fr.batimen.ws.dao.ClientDAO;
+import fr.batimen.ws.dao.PermissionDAO;
 import fr.batimen.ws.entity.Adresse;
 import fr.batimen.ws.entity.Annonce;
 import fr.batimen.ws.entity.Client;
+import fr.batimen.ws.entity.Permission;
 import fr.batimen.ws.helper.JsonHelper;
 import fr.batimen.ws.interceptor.BatimenInterceptor;
 import fr.batimen.ws.service.EmailService;
@@ -75,6 +78,9 @@ public class GestionAnnonceFacade {
 
     @Inject
     private EmailService emailService;
+
+    @Inject
+    private PermissionDAO permissionDAO;
 
     private final ModelMapper mapper = new ModelMapper();
 
@@ -209,6 +215,13 @@ public class GestionAnnonceFacade {
             DuplicateEntityException {
         Client nouveauClient = remplirClient(nouvelleAnnonceDTO, nouvelleAnnonce);
         clientDAO.saveNewClient(nouveauClient);
+        // On set les permissions
+        for (PermissionDTO permission : nouvelleAnnonceDTO.getClient().getPermissions()) {
+            Permission nouvellePermission = new Permission();
+            nouvellePermission.setTypeCompte(permission.getTypeCompte());
+            nouvellePermission.setClient(nouveauClient);
+            permissionDAO.creationPermission(nouvellePermission);
+        }
         if (nouveauClient != null) {
             nouvelleAnnonce.setDemandeur(nouveauClient);
             nouvelleAnnonce.setEtatAnnonce(EtatAnnonce.EN_ATTENTE);

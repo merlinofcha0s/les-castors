@@ -42,6 +42,8 @@ public class Client extends AbstractUser implements Serializable {
     @Column(nullable = false)
     @OneToMany(mappedBy = "demandeur", targetEntity = Annonce.class, cascade = CascadeType.REMOVE)
     private List<Annonce> devisDemandes = new ArrayList<Annonce>();
+    @OneToMany(mappedBy = "client", targetEntity = Permission.class, cascade = CascadeType.REMOVE)
+    protected List<Permission> permissions = new ArrayList<Permission>();
 
     /**
      * @return the devisDemandes
@@ -56,6 +58,13 @@ public class Client extends AbstractUser implements Serializable {
      */
     public void setDevisDemandes(List<Annonce> devisDemandes) {
         this.devisDemandes = devisDemandes;
+    }
+
+    /**
+     * @return the typeCompte
+     */
+    public List<Permission> getPermissions() {
+        return permissions;
     }
 
     /**

@@ -1,5 +1,6 @@
 package fr.batimen.test.ws.helper;
 
+import fr.batimen.dto.PermissionDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.enums.DelaiIntervention;
 import fr.batimen.dto.enums.TypeCompte;
@@ -23,7 +24,10 @@ public class DataHelper {
         creationAnnonceDTO.getClient().setNumeroTel("0615458596");
         creationAnnonceDTO.getClient().setPassword(
                 "$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=");
-        creationAnnonceDTO.getClient().setTypeCompte(TypeCompte.CLIENT);
+        PermissionDTO permissionDTO = new PermissionDTO();
+        permissionDTO.setTypeCompte(TypeCompte.CLIENT);
+
+        creationAnnonceDTO.getClient().getPermissions().add(permissionDTO);
 
         // Infos Qualification Annonce
         creationAnnonceDTO.setDescription("Peinture d'un mur");
