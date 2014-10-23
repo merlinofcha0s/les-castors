@@ -6,11 +6,7 @@ package fr.batimen.core.constant;
  * @author Casaucau Cyril
  * 
  */
-public class QueryJPQL {
-
-    private QueryJPQL() {
-
-    }
+public interface QueryJPQL {
 
     // Entity User
     public static final String CLIENT_LOGIN = "login";
@@ -42,4 +38,7 @@ public class QueryJPQL {
 
     // Parametre Query Entity entreprise
     public static final String PARAM_ENTEPRISE_SIRET = "siret";
+
+    public static final String PERMISSION_BY_LOGIN = "permissionByLogin";
+
 }

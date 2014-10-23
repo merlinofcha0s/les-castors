@@ -228,4 +228,5 @@ public class ClientDAO extends AbstractDAO<Client> {
         }
         return hash;
     }
+
 }

@@ -19,6 +19,7 @@ public class WsPath {
     public static final String GESTION_CLIENT_SERVICE_BY_EMAIL = "email";
     public static final String GESTION_CLIENT_SERVICE_ACTIVATION = "activation";
     public static final String GESTION_CLIENT_SERVICE_HASH = "hash";
+    public static final String GESTION_CLIENT_SERVICE_ROLES = "roles";
 
     // Path Gestion Annonce
     public static final String GESTION_ANNONCE_SERVICE_PATH = "gestionAnnonce";

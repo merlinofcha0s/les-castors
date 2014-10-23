@@ -22,7 +22,7 @@ public enum TypeCompte {
     /**
      * @return the roles
      */
-    public String getRoles() {
+    public String getRole() {
         return roles;
     }
 

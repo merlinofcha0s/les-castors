@@ -154,9 +154,22 @@ public class GestionClientFacadeTest extends AbstractBatimenWsTest {
     @Test
     @UsingDataSet("datasets/in/clients.yml")
     public void testGetHashClient() throws BackendException {
-        String hash = clientDAO.getClientByHash("pebronne");
+        String hash = ClientService.getHashByLogin("pebronne");
         Assert.assertTrue(!hash.isEmpty());
         Assert.assertEquals("$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=", hash);
+    }
+
+    /**
+     * Test de récuperation des roles pour un utilisateur
+     * 
+     * @throws BackendException
+     */
+    @Test
+    @UsingDataSet("datasets/in/clients.yml")
+    public void testGetRolesClient() throws BackendException {
+        String roles = ClientService.getRolesByLogin("pebronne");
+        Assert.assertTrue(!roles.isEmpty());
+        Assert.assertEquals("particulier", roles);
     }
 
 }

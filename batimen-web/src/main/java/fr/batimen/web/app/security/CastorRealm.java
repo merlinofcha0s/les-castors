@@ -14,7 +14,7 @@ import fr.batimen.ws.client.service.ClientService;
 public class CastorRealm extends AuthorizingRealm {
 
     @Override
-    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection arg0) {
+    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         // TODO Auto-generated method stub
         return null;
     }

@@ -112,4 +112,23 @@ public class ClientService {
 
         return hash;
     }
+
+    public static String getRolesByLogin(String login) {
+        String roles = "";
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Début appel service de recuperation des roles par login + deserialization");
+        }
+
+        String objectInJSON = WsConnector.getInstance().sendRequest(WsPath.GESTION_CLIENT_SERVICE_PATH,
+                WsPath.GESTION_CLIENT_SERVICE_ROLES, login);
+
+        roles = String.valueOf(objectInJSON);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Fin appel service de recuperation du hash par login + deserialization");
+        }
+
+        return roles;
+    }
 }

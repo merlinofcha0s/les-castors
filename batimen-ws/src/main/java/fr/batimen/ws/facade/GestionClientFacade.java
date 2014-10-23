@@ -32,8 +32,10 @@ import fr.batimen.dto.LoginDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 import fr.batimen.ws.dao.ClientDAO;
+import fr.batimen.ws.dao.PermissionDAO;
 import fr.batimen.ws.entity.Annonce;
 import fr.batimen.ws.entity.Client;
+import fr.batimen.ws.entity.Permission;
 import fr.batimen.ws.helper.JsonHelper;
 import fr.batimen.ws.interceptor.BatimenInterceptor;
 import fr.batimen.ws.service.EmailService;
@@ -61,6 +63,9 @@ public class GestionClientFacade {
 
     @Inject
     private EmailService emailService;
+
+    @Inject
+    private PermissionDAO permissionDAO;
 
     /**
      * Methode de login des utilisateurs
@@ -96,6 +101,34 @@ public class GestionClientFacade {
     }
 
     /**
+     * Renvoi les roles d'un utilisateur, vide si pas de roles.
+     * 
+     * @param login
+     *            Le login de l'utilisateur
+     * @return
+     */
+    @POST
+    @Path(WsPath.GESTION_CLIENT_SERVICE_ROLES)
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public String getUtilisateurRoles(String login) {
+        // On enleve les "" car ils sont deserializer dans la requete REST
+        String loginEscaped = DeserializeJsonHelper.parseString(login);
+        List<Permission> permissions = permissionDAO.getClientPermissions(loginEscaped);
+
+        StringBuilder rolesExtracted = new StringBuilder();
+
+        for (Permission permission : permissions) {
+            rolesExtracted.append(permission.getTypeCompte().getRole());
+            rolesExtracted.append(", ");
+        }
+
+        // On supprime le dernier ", "
+        rolesExtracted.delete(rolesExtracted.length() - 3, rolesExtracted.length() - 1);
+
+        return rolesExtracted.toString();
+    }
+
+    /**
      * Methode de recuperation d'un client par son email
      * 
      * @param email
@@ -109,9 +142,7 @@ public class GestionClientFacade {
 
         // Obligé pour les strings sinon il n'escape pas les ""
         String emailEscaped = DeserializeJsonHelper.parseString(email);
-
         ModelMapper modelMapper = new ModelMapper();
-
         Client client = clientDAO.getClientByEmail(emailEscaped);
 
         return modelMapper.map(client, ClientDTO.class);

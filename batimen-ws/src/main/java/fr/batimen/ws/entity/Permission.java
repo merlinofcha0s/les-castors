@@ -7,8 +7,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 
+import fr.batimen.core.constant.QueryJPQL;
 import fr.batimen.dto.enums.TypeCompte;
 
 /**
@@ -19,6 +22,8 @@ import fr.batimen.dto.enums.TypeCompte;
  */
 @Entity
 @Table(name = "Permission")
+@NamedQueries(value = { @NamedQuery(name = QueryJPQL.PERMISSION_BY_LOGIN,
+        query = "SELECT p FROM Permission AS p WHERE p.client.login = :login OR p.artisan.login = :login") })
 public class Permission extends AbstractEntity {
 
     @Id
