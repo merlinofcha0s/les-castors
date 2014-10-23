@@ -2,8 +2,12 @@ package fr.batimen.web.app;
 
 import java.util.Properties;
 
+import org.apache.wicket.Session;
+import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
+import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.protocol.http.WebApplication;
+import org.apache.wicket.request.Request;
+import org.apache.wicket.request.Response;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.resource.UrlResourceReference;
 import org.odlabs.wiquery.ui.themes.WiQueryCoreThemeResourceReference;
@@ -25,13 +29,14 @@ import fr.batimen.web.client.extend.error.Expiree;
 import fr.batimen.web.client.extend.error.NonTrouvee;
 import fr.batimen.web.client.extend.nouveau.artisan.NouveauArtisan;
 import fr.batimen.web.client.extend.nouveau.devis.NouveauDevis;
+import fr.batimen.web.client.session.BatimenSession;
 
 /**
  * Classe principale de l'application
  * 
  * @author Casaucau Cyril
  */
-public class BatimenApplication extends WebApplication {
+public class BatimenApplication extends AuthenticatedWebApplication {
 
     private boolean setStripWicketTags;
 
@@ -101,6 +106,28 @@ public class BatimenApplication extends WebApplication {
             LOGGER.debug("Init de la Web app.....OK");
         }
 
+    }
+
+    @Override
+    protected Class<? extends AbstractAuthenticatedWebSession> getWebSessionClass() {
+        return BatimenSession.class;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.apache.wicket.protocol.http.WebApplication#newSession(org.apache.
+     * wicket.request.Request, org.apache.wicket.request.Response)
+     */
+    @Override
+    public Session newSession(Request request, Response response) {
+        return new BatimenSession(request);
+    }
+
+    @Override
+    protected Class<? extends WebPage> getSignInPageClass() {
+        return Authentification.class;
     }
 
     private void getAppProperties() {
