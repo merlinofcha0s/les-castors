@@ -208,7 +208,7 @@ public class ClientDAO extends AbstractDAO<Client> {
      *            Le login du client
      * @return
      */
-    public String getClientByHash(String login) {
+    public String getHash(String login) {
         String hash = null;
 
         if (LOGGER.isDebugEnabled()) {
@@ -216,7 +216,7 @@ public class ClientDAO extends AbstractDAO<Client> {
         }
 
         try {
-            TypedQuery<String> query = entityManager.createNamedQuery(QueryJPQL.HASH_BY_LOGIN, String.class);
+            TypedQuery<String> query = entityManager.createNamedQuery(QueryJPQL.CLIENT_HASH_BY_LOGIN, String.class);
             query.setParameter(QueryJPQL.PARAM_CLIENT_LOGIN, login);
 
             hash = query.getSingleResult();

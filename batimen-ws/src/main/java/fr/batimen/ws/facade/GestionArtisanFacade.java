@@ -1,7 +1,6 @@
 package fr.batimen.ws.facade;
 
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
@@ -29,10 +28,8 @@ import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.WsPath;
 import fr.batimen.core.exception.BackendException;
 import fr.batimen.core.exception.EmailException;
-import fr.batimen.core.security.HashHelper;
 import fr.batimen.core.utils.PropertiesUtils;
 import fr.batimen.dto.CategorieMetierDTO;
-import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.ws.dao.AdresseDAO;
@@ -47,6 +44,7 @@ import fr.batimen.ws.entity.Entreprise;
 import fr.batimen.ws.entity.Permission;
 import fr.batimen.ws.helper.JsonHelper;
 import fr.batimen.ws.interceptor.BatimenInterceptor;
+import fr.batimen.ws.service.ArtisanService;
 import fr.batimen.ws.service.EmailService;
 
 /**
@@ -85,6 +83,9 @@ public class GestionArtisanFacade {
     @Inject
     private EmailService emailService;
 
+    @Inject
+    private ArtisanService artisanService;
+
     /**
      * Service de création d'un nouveau partenaire Artisan
      * 
@@ -98,15 +99,16 @@ public class GestionArtisanFacade {
     public Integer creationArtisan(CreationPartenaireDTO nouveauPartenaireDTO) {
         ModelMapper mapper = new ModelMapper();
 
-        Artisan artisanExiste = checkArtisanExiste(nouveauPartenaireDTO.getArtisan().getEmail());
+        Artisan artisanExiste = artisanService.checkArtisanExiste(nouveauPartenaireDTO.getArtisan().getEmail());
 
         if (artisanExiste != null) {
             return Constant.CODE_SERVICE_RETOUR_KO;
         }
 
-        Artisan nouveauArtisan = constructionNouveauArtisan(nouveauPartenaireDTO.getArtisan(), mapper);
+        Artisan nouveauArtisan = artisanService.constructionNouveauArtisan(nouveauPartenaireDTO.getArtisan(), mapper);
 
-        Entreprise entrepriseExiste = checkEntrepriseExiste(nouveauPartenaireDTO.getEntreprise().getSiret());
+        Entreprise entrepriseExiste = artisanService.checkEntrepriseExiste(nouveauPartenaireDTO.getEntreprise()
+                .getSiret());
 
         if (entrepriseExiste != null) {
             return Constant.CODE_SERVICE_RETOUR_KO;
@@ -166,41 +168,4 @@ public class GestionArtisanFacade {
         return Constant.CODE_SERVICE_RETOUR_OK;
     }
 
-    private Entreprise checkEntrepriseExiste(String siret) {
-        // On check que l'entreprise n'existe pas dans notre BDD
-        Entreprise entrepriseExiste = entrepriseDAO.getEntrepriseBySiret(siret);
-
-        if (entrepriseExiste.getNomComplet().isEmpty()) {
-            return null;
-        }
-
-        return entrepriseExiste;
-    }
-
-    private Artisan checkArtisanExiste(String email) {
-        Artisan artisanExiste = artisanDAO.getArtisanByEmail(email);
-
-        // On check que l'artisan n'existe pas déjà
-        if (artisanExiste.getEmail().isEmpty()) {
-            return null;
-        }
-
-        return artisanExiste;
-    }
-
-    private Artisan constructionNouveauArtisan(ClientDTO artisan, ModelMapper mapper) {
-        Artisan nouveauArtisan = new Artisan();
-
-        // Remplissage automatique des champs commun
-        mapper.map(artisan, nouveauArtisan);
-
-        nouveauArtisan.setDateInscription(new Date());
-
-        // Calcul de la clé d'activation du compte
-        StringBuilder loginAndEmail = new StringBuilder(artisan.getLogin());
-        loginAndEmail.append(artisan.getEmail());
-        nouveauArtisan.setCleActivation(HashHelper.convertToBase64(HashHelper.hashSHA256(loginAndEmail.toString())));
-
-        return nouveauArtisan;
-    }
 }

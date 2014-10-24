@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.LoginDTO;
-import fr.batimen.ws.client.service.ClientService;
+import fr.batimen.ws.client.service.UtilisateurService;
 
 public class Authentication {
 
@@ -64,7 +64,7 @@ public class Authentication {
             LoginDTO loginDTO = new LoginDTO();
             loginDTO.setLogin(username);
             AuthenticatedWebSession.get().authenticate(username, "");
-            currentUser.getSession(true).setAttribute("client", ClientService.login(loginDTO));
+            currentUser.getSession(true).setAttribute("client", UtilisateurService.login(loginDTO));
         }
         return isOk;
     }

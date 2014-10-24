@@ -32,7 +32,7 @@ public class ArtisanDAO extends AbstractDAO<Artisan> {
         entityManager.persist(nouveauArtisan);
     }
 
-    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Artisan getArtisanByEmail(String email) {
 
         Artisan artisanTrouve = null;
@@ -58,6 +58,62 @@ public class ArtisanDAO extends AbstractDAO<Artisan> {
             }
             return new Artisan();
         }
+    }
+
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Artisan getArtisanByLogin(String login) {
+
+        Artisan artisanTrouve = null;
+
+        try {
+            TypedQuery<Artisan> query = entityManager.createNamedQuery(QueryJPQL.ARTISAN_BY_LOGIN, Artisan.class);
+            query.setParameter(QueryJPQL.PARAM_CLIENT_LOGIN, login);
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Chargement requete JPQL OK ");
+            }
+
+            artisanTrouve = query.getSingleResult();
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Récuperation resultat requete JPQL artisan by login OK ");
+            }
+
+            return artisanTrouve;
+        } catch (NoResultException nre) {
+            if (LOGGER.isWarnEnabled()) {
+                LOGGER.warn("Aucune correspondance trouvées dans la BDD", nre);
+            }
+            return new Artisan();
+        }
+    }
+
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public String getHash(String login) {
+        String hash = null;
+
+        try {
+            TypedQuery<String> query = entityManager.createNamedQuery(QueryJPQL.ARTISAN_HASH_BY_LOGIN, String.class);
+            query.setParameter(QueryJPQL.PARAM_CLIENT_LOGIN, login);
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Chargement requete JPQL OK ");
+            }
+
+            hash = query.getSingleResult();
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Récuperation resultat requete JPQL hash for artisan OK ");
+            }
+
+            return hash;
+        } catch (NoResultException nre) {
+            if (LOGGER.isWarnEnabled()) {
+                LOGGER.warn("Aucune correspondance trouvées dans la BDD", nre);
+            }
+            return "";
+        }
+
     }
 
 }

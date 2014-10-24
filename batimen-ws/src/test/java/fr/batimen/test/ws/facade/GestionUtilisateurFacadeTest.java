@@ -20,7 +20,8 @@ import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.LoginDTO;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.test.ws.AbstractBatimenWsTest;
-import fr.batimen.ws.client.service.ClientService;
+import fr.batimen.ws.client.service.UtilisateurService;
+import fr.batimen.ws.dao.ArtisanDAO;
 import fr.batimen.ws.dao.ClientDAO;
 import fr.batimen.ws.entity.Client;
 import fr.batimen.ws.entity.Permission;
@@ -30,12 +31,15 @@ import fr.batimen.ws.entity.Permission;
  * @author Casaucau Cyril
  * 
  */
-public class GestionClientFacadeTest extends AbstractBatimenWsTest {
+public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GestionClientFacadeTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GestionUtilisateurFacadeTest.class);
 
     @Inject
     private ClientDAO clientDAO;
+
+    @Inject
+    private ArtisanDAO artisanDAO;
 
     @Test
     @UsingDataSet("datasets/in/clients.yml")
@@ -48,13 +52,36 @@ public class GestionClientFacadeTest extends AbstractBatimenWsTest {
         toLogin.setPassword("$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=");
 
         // Appel du service qui check le login
-        ClientDTO user = ClientService.login(toLogin);
+        ClientDTO user = UtilisateurService.login(toLogin);
 
         // Verification des infos
         assertTrue(user.getLogin().equals("pebronne"));
         assertTrue("$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=".equals(user
                 .getPassword()));
         assertTrue(user.getEmail().equals("lol@lol.com"));
+        assertTrue(user.getNumeroTel().equals("0615125645"));
+        assertTrue(user.getPrenom().equals("Pebron"));
+        assertTrue(user.getNom().equals("De la Pebronne"));
+    }
+
+    @Test
+    @UsingDataSet("datasets/in/clients.yml")
+    public void testGetArtisanForLogin() {
+
+        // L'objet que l'on doit recevoir du frontend quand l'utilisateur
+        // tentera de s'authentifier
+        LoginDTO toLogin = new LoginDTO();
+        toLogin.setLogin("pebronneArtisanne");
+        toLogin.setPassword("$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=");
+
+        // Appel du service qui check le login
+        ClientDTO user = UtilisateurService.login(toLogin);
+
+        // Verification des infos
+        assertTrue(user.getLogin().equals("pebronneArtisanne"));
+        assertTrue("$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=".equals(user
+                .getPassword()));
+        assertTrue(user.getEmail().equals("lolPebronne@lol.com"));
         assertTrue(user.getNumeroTel().equals("0615125645"));
         assertTrue(user.getPrenom().equals("Pebron"));
         assertTrue(user.getNom().equals("De la Pebronne"));
@@ -71,7 +98,7 @@ public class GestionClientFacadeTest extends AbstractBatimenWsTest {
         toLogin.setPassword("$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=");
 
         // Appel du service qui check le login
-        ClientDTO user = ClientService.login(toLogin);
+        ClientDTO user = UtilisateurService.login(toLogin);
 
         // Verification que rien n'est renvoyer ce qui veut dire que la
         // combinaison login / mdp n'est pas bonne ou que l'utilisateur n'existe
@@ -87,15 +114,31 @@ public class GestionClientFacadeTest extends AbstractBatimenWsTest {
      */
     @Test
     @UsingDataSet("datasets/in/clients.yml")
-    public void testGetClientForEmail() {
+    public void testGetClientByEmail() {
 
-        ClientDTO clientEmail = ClientService.getClientByEmail("lol@lol.com");
+        ClientDTO client = UtilisateurService.getUtilisateurByEmail("lol@lol.com");
 
         // On vérifie les differentes infos du client
-        assertTrue(clientEmail.getLogin().equals("pebronne"));
-        assertTrue(clientEmail.getPassword().equals(
+        assertTrue(client.getLogin().equals("pebronne"));
+        assertTrue(client.getPassword().equals(
                 "$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY="));
-        assertTrue(clientEmail.getEmail().equals("lol@lol.com"));
+        assertTrue(client.getEmail().equals("lol@lol.com"));
+    }
+
+    /**
+     * On vérifie que le DAO renvoi bien le bon client par rapport a son email.
+     * 
+     */
+    @Test
+    @UsingDataSet("datasets/in/clients.yml")
+    public void testGetArtisanByEmail() {
+        ClientDTO artisan = UtilisateurService.getUtilisateurByEmail("lolPebronne@lol.com");
+
+        // On vérifie les differentes infos du client
+        assertTrue(artisan.getLogin().equals("pebronneArtisanne"));
+        assertTrue(artisan.getPassword().equals(
+                "$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY="));
+        assertTrue(artisan.getEmail().equals("lolPebronne@lol.com"));
     }
 
     /**
@@ -135,11 +178,11 @@ public class GestionClientFacadeTest extends AbstractBatimenWsTest {
     @Test
     @UsingDataSet("datasets/in/clients.yml")
     public void testActivationClient() throws BackendException {
-        int codeRetour = ClientService
+        int codeRetour = UtilisateurService
                 .activateAccount("NTNkN2RmYzVkNWU2MDZkZjZlYTVjZGQ2ZGE0ZjljY2JhNGJjZWY5MmIxNmNiOWJmMjk2ZDVhNDY3OTEzMTIyZA==");
 
         // On charge le client pour vérifié les infos d'activation.
-        ClientDTO client = ClientService.getClientByEmail("mdr@lol.com");
+        ClientDTO client = UtilisateurService.getUtilisateurByEmail("mdr@lol.com");
 
         Assert.assertFalse(client.getCleActivation().equals(""));
         Assert.assertTrue(client.getIsActive().equals(Boolean.TRUE));
@@ -154,7 +197,20 @@ public class GestionClientFacadeTest extends AbstractBatimenWsTest {
     @Test
     @UsingDataSet("datasets/in/clients.yml")
     public void testGetHashClient() throws BackendException {
-        String hash = ClientService.getHashByLogin("pebronne");
+        String hash = UtilisateurService.getHashByLogin("pebronne");
+        Assert.assertTrue(!hash.isEmpty());
+        Assert.assertEquals("$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=", hash);
+    }
+
+    /**
+     * Test de récuperation d'un hash pour un client
+     * 
+     * @throws BackendException
+     */
+    @Test
+    @UsingDataSet("datasets/in/clients.yml")
+    public void testGetHashArtisan() throws BackendException {
+        String hash = UtilisateurService.getHashByLogin("pebronneArtisanne");
         Assert.assertTrue(!hash.isEmpty());
         Assert.assertEquals("$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=", hash);
     }
@@ -167,7 +223,7 @@ public class GestionClientFacadeTest extends AbstractBatimenWsTest {
     @Test
     @UsingDataSet("datasets/in/clients.yml")
     public void testGetRolesClient() throws BackendException {
-        String roles = ClientService.getRolesByLogin("pebronne");
+        String roles = UtilisateurService.getRolesByLogin("pebronne");
         Assert.assertTrue(!roles.isEmpty());
         Assert.assertEquals(TypeCompte.CLIENT.getRole(), roles);
     }
@@ -180,7 +236,7 @@ public class GestionClientFacadeTest extends AbstractBatimenWsTest {
     @Test
     @UsingDataSet("datasets/in/clients.yml")
     public void testGetRolesArtisan() throws BackendException {
-        String roles = ClientService.getRolesByLogin("pebronneArtisanne");
+        String roles = UtilisateurService.getRolesByLogin("pebronneArtisanne");
         Assert.assertTrue(!roles.isEmpty());
         Assert.assertEquals(TypeCompte.ARTISAN_DEFAULT.getRole(), roles);
     }

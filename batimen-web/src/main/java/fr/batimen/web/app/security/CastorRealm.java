@@ -9,7 +9,7 @@ import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
-import fr.batimen.ws.client.service.ClientService;
+import fr.batimen.ws.client.service.UtilisateurService;
 
 public class CastorRealm extends AuthorizingRealm {
 
@@ -26,7 +26,7 @@ public class CastorRealm extends AuthorizingRealm {
         UsernamePasswordToken usernamePasswordToken = (UsernamePasswordToken) authcToken;
         String usernameForm = usernamePasswordToken.getUsername();
 
-        String hash = ClientService.getHashByLogin(usernameForm);
+        String hash = UtilisateurService.getHashByLogin(usernameForm);
 
         if (!hash.isEmpty()) {
             info = new SimpleAuthenticationInfo(usernameForm, hash, getName());

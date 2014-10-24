@@ -86,9 +86,8 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
         Assert.assertNotNull(adresseEntreprise);
         Assert.assertEquals("250 chemin du plombier", adresseEntreprise.getAdresse());
 
-        Permission permission = artisanEnregistre.getPermission().get(0);
-        Assert.assertNotNull(permission);
-        Assert.assertEquals(TypeCompte.ARTISAN_DEFAULT, permission.getTypeCompte());
-
+        List<Permission> permissions = artisanEnregistre.getPermission();
+        Assert.assertNotNull(permissions.get(0));
+        Assert.assertEquals(TypeCompte.ARTISAN_DEFAULT, permissions.get(0).getTypeCompte());
     }
 }

@@ -11,7 +11,7 @@ public interface QueryJPQL {
     // Entity User
     public static final String CLIENT_LOGIN = "login";
     public static final String CLIENT_BY_EMAIL = "clientByLoginAndEmail";
-    public static final String HASH_BY_LOGIN = "hashByLogin";
+    public static final String CLIENT_HASH_BY_LOGIN = "hashByLogin";
     public static final String CLIENT_BY_ACTIVATION_KEY = "clientByActivationKey";
 
     // Parametre Query Entity client
@@ -29,6 +29,8 @@ public interface QueryJPQL {
 
     // Entity artisan
     public static final String ARTISAN_BY_EMAIL = "artisanByEmail";
+    public static final String ARTISAN_BY_LOGIN = "artisanByLogin";
+    public static final String ARTISAN_HASH_BY_LOGIN = "hashForArtisan";
 
     // Parametre Query Entity artisan
     public static final String PARAM_ARTISAN_EMAIL = "email";
