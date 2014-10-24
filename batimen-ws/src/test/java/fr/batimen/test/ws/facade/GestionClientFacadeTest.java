@@ -160,7 +160,7 @@ public class GestionClientFacadeTest extends AbstractBatimenWsTest {
     }
 
     /**
-     * Test de récuperation des roles pour un utilisateur
+     * Test de récuperation des roles pour un client
      * 
      * @throws BackendException
      */
@@ -169,7 +169,19 @@ public class GestionClientFacadeTest extends AbstractBatimenWsTest {
     public void testGetRolesClient() throws BackendException {
         String roles = ClientService.getRolesByLogin("pebronne");
         Assert.assertTrue(!roles.isEmpty());
-        Assert.assertEquals("particulier", roles);
+        Assert.assertEquals(TypeCompte.CLIENT.getRole(), roles);
     }
 
+    /**
+     * Test de récuperation des roles pour un artisan
+     * 
+     * @throws BackendException
+     */
+    @Test
+    @UsingDataSet("datasets/in/clients.yml")
+    public void testGetRolesArtisan() throws BackendException {
+        String roles = ClientService.getRolesByLogin("pebronneArtisanne");
+        Assert.assertTrue(!roles.isEmpty());
+        Assert.assertEquals(TypeCompte.ARTISAN_DEFAULT.getRole(), roles);
+    }
 }

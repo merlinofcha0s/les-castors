@@ -39,6 +39,8 @@ public interface QueryJPQL {
     // Parametre Query Entity entreprise
     public static final String PARAM_ENTEPRISE_SIRET = "siret";
 
-    public static final String PERMISSION_BY_LOGIN = "permissionByLogin";
+    // Entity permission
+    public static final String PERMISSION_CLIENT_BY_LOGIN = "permissionClientByLogin";
+    public static final String PERMISSION_ARTISAN_BY_LOGIN = "permissionArtisanByLogin";
 
 }

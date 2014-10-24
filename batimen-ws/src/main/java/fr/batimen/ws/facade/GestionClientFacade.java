@@ -115,6 +115,18 @@ public class GestionClientFacade {
         String loginEscaped = DeserializeJsonHelper.parseString(login);
         List<Permission> permissions = permissionDAO.getClientPermissions(loginEscaped);
 
+        // Si les permissions sont vide c'est qu'il s'agit d'un artisan
+        if (permissions.isEmpty()) {
+            permissions = permissionDAO.getArtisanPermissions(loginEscaped);
+        }
+
+        if (permissions.isEmpty()) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Erreur impossible, Cet utilisateur n'a aucun droit :" + login);
+            }
+            return "";
+        }
+
         StringBuilder rolesExtracted = new StringBuilder();
 
         for (Permission permission : permissions) {
@@ -123,7 +135,7 @@ public class GestionClientFacade {
         }
 
         // On supprime le dernier ", "
-        rolesExtracted.delete(rolesExtracted.length() - 3, rolesExtracted.length() - 1);
+        rolesExtracted.delete(rolesExtracted.length() - 2, rolesExtracted.length());
 
         return rolesExtracted.toString();
     }

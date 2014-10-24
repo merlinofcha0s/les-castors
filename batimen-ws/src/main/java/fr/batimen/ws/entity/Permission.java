@@ -22,8 +22,11 @@ import fr.batimen.dto.enums.TypeCompte;
  */
 @Entity
 @Table(name = "Permission")
-@NamedQueries(value = { @NamedQuery(name = QueryJPQL.PERMISSION_BY_LOGIN,
-        query = "SELECT p FROM Permission AS p WHERE p.client.login = :login OR p.artisan.login = :login") })
+@NamedQueries(value = {
+        @NamedQuery(name = QueryJPQL.PERMISSION_CLIENT_BY_LOGIN,
+                query = "SELECT p FROM Permission AS p WHERE p.client.login IS NOT NULL AND p.client.login = :login"),
+        @NamedQuery(name = QueryJPQL.PERMISSION_ARTISAN_BY_LOGIN,
+                query = "SELECT p FROM Permission AS p WHERE p.artisan.login IS NOT NULL AND p.artisan.login = :login") })
 public class Permission extends AbstractEntity {
 
     @Id

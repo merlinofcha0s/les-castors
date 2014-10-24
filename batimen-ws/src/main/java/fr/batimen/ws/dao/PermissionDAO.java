@@ -49,15 +49,43 @@ public class PermissionDAO extends AbstractDAO<Permission> {
      * @return
      */
     public List<Permission> getClientPermissions(String login) {
+        return getUserPermissions(login, false);
+    }
+
+    /**
+     * Renvoi les roles pour un artisan donné
+     * 
+     * @param login
+     *            Le login du client
+     * @return
+     */
+    public List<Permission> getArtisanPermissions(String login) {
+        return getUserPermissions(login, true);
+    }
+
+    /**
+     * Renvoi les roles pour un client donné
+     * 
+     * @param login
+     *            Le login du client
+     * @return
+     */
+    private List<Permission> getUserPermissions(String login, boolean isArtisan) {
         List<Permission> permissions = null;
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Debut récuperation des roles pour l'utilisateur : " + login);
+            LOGGER.debug("Type de compte artisan ? : " + isArtisan);
         }
 
         try {
-            TypedQuery<Permission> query = entityManager.createNamedQuery(QueryJPQL.PERMISSION_BY_LOGIN,
-                    Permission.class);
+            TypedQuery<Permission> query = null;
+            if (isArtisan) {
+                query = entityManager.createNamedQuery(QueryJPQL.PERMISSION_ARTISAN_BY_LOGIN, Permission.class);
+            } else {
+                query = entityManager.createNamedQuery(QueryJPQL.PERMISSION_CLIENT_BY_LOGIN, Permission.class);
+            }
+
             query.setParameter(QueryJPQL.PARAM_CLIENT_LOGIN, login);
 
             permissions = query.getResultList();
