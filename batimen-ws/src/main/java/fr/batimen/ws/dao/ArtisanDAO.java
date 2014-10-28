@@ -27,11 +27,22 @@ public class ArtisanDAO extends AbstractDAO<Artisan> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ArtisanDAO.class);
 
+    /**
+     * Sauvegarde d'un artisan dans la BDD
+     * 
+     * @param nouveauArtisan
+     */
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void saveArtisan(Artisan nouveauArtisan) {
         entityManager.persist(nouveauArtisan);
     }
 
+    /**
+     * Récuperation d"un artisan grace à son Email
+     * 
+     * @param email
+     * @return
+     */
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Artisan getArtisanByEmail(String email) {
 
@@ -60,6 +71,12 @@ public class ArtisanDAO extends AbstractDAO<Artisan> {
         }
     }
 
+    /**
+     * Récupération d'un artisan grace à son Login
+     * 
+     * @param login
+     * @return
+     */
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Artisan getArtisanByLogin(String login) {
 
@@ -88,6 +105,12 @@ public class ArtisanDAO extends AbstractDAO<Artisan> {
         }
     }
 
+    /**
+     * Récupêration du Hash d'un artisan : sert pour l'authentifier
+     * 
+     * @param login
+     * @return
+     */
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public String getHash(String login) {
         String hash = null;
@@ -115,6 +138,14 @@ public class ArtisanDAO extends AbstractDAO<Artisan> {
         }
     }
 
+    /**
+     * Récuperation d'un artisan grace a sa clé d'activation. <br/>
+     * Sa clé lui est transmise par mail et elle sert a activé son compte une
+     * fois qu'il s'est inscrit sur le site
+     * 
+     * @param activationKey
+     * @return
+     */
     public Artisan getArtisanByActivationKey(String activationKey) {
 
         Artisan artisanFinded = null;

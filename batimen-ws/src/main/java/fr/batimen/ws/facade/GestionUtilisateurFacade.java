@@ -95,7 +95,7 @@ public class GestionUtilisateurFacade {
     }
 
     /**
-     * Renvoi le hash d'un client, vide si il n'existe pas.
+     * Renvoi le hash d'un utilisateur, vide si il n'existe pas.
      * 
      * @param login
      *            Le login du Client
@@ -158,7 +158,7 @@ public class GestionUtilisateurFacade {
     }
 
     /**
-     * Methode de recuperation d'un client par son email
+     * Methode de recuperation d'un utilisateur par son email
      * 
      * @param email
      *            l'email que l'on veut tester

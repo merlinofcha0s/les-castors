@@ -32,6 +32,14 @@ public class EntrepriseDAO extends AbstractDAO<Entreprise> {
         entityManager.persist(nouvelleEntreprise);
     }
 
+    /**
+     * Récupération d'une entreprise grace à son SIRET <br/>
+     * Utile pour verifier si il n'y a pas de doublon lors de l'inscription
+     * d'une entreprise
+     * 
+     * @param siret
+     * @return
+     */
     public Entreprise getEntrepriseBySiret(String siret) {
 
         Entreprise entrepriseTrouvee = null;

@@ -37,12 +37,24 @@ public class ArtisanService {
     @Inject
     private EntrepriseDAO entrepriseDAO;
 
+    /**
+     * Active le compte d'un artisan
+     * 
+     * @param artisanByKey
+     * @return
+     */
     public Integer activateAccount(Artisan artisanByKey) {
         artisanByKey.setIsActive(Boolean.TRUE);
         artisanDAO.update(artisanByKey);
         return Constant.CODE_SERVICE_RETOUR_OK;
     }
 
+    /**
+     * Regarde dans la BDD si l'entreprise est presente dans la BDD.
+     * 
+     * @param siret
+     * @return
+     */
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Entreprise checkEntrepriseExiste(String siret) {
         // On check que l'entreprise n'existe pas dans notre BDD
@@ -55,6 +67,12 @@ public class ArtisanService {
         return entrepriseExiste;
     }
 
+    /**
+     * Regarde dans la BDD si l'artisan est présent
+     * 
+     * @param email
+     * @return
+     */
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Artisan checkArtisanExiste(String email) {
         Artisan artisanExiste = artisanDAO.getArtisanByEmail(email);
@@ -67,6 +85,15 @@ public class ArtisanService {
         return artisanExiste;
     }
 
+    /**
+     * Methode qui transforme un client DTO en artisan en vue de le persister
+     * dans la BDD.<br/>
+     * 
+     * 
+     * @param artisan
+     * @param mapper
+     * @return
+     */
     public Artisan constructionNouveauArtisan(ClientDTO artisan, ModelMapper mapper) {
         Artisan nouveauArtisan = new Artisan();
 
