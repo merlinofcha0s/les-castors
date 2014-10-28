@@ -20,7 +20,7 @@ import fr.batimen.web.client.extend.Accueil;
 import fr.batimen.web.client.extend.CGU;
 import fr.batimen.web.client.extend.Contact;
 import fr.batimen.web.client.extend.QuiSommeNous;
-import fr.batimen.web.client.extend.account.MonCompte;
+import fr.batimen.web.client.extend.account.client.MonCompte;
 import fr.batimen.web.client.extend.activation.Activation;
 import fr.batimen.web.client.extend.authentification.Authentification;
 import fr.batimen.web.client.extend.error.AccesInterdit;

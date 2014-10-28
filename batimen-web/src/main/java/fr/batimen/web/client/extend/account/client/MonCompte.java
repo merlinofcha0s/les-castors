@@ -1,4 +1,4 @@
-package fr.batimen.web.client.extend.account;
+package fr.batimen.web.client.extend.account.client;
 
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.basic.Label;
@@ -15,6 +15,7 @@ import fr.batimen.web.client.master.MasterPage;
  * @author Casaucau Cyril
  * 
  */
+
 public final class MonCompte extends MasterPage {
 
     private static final long serialVersionUID = 1902734649854998120L;

@@ -52,7 +52,7 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
         nouveauPartenaire.getArtisan().setPrenom("David");
 
         PermissionDTO permissionDTO = new PermissionDTO();
-        permissionDTO.setTypeCompte(TypeCompte.ARTISAN_DEFAULT);
+        permissionDTO.setTypeCompte(TypeCompte.ARTISAN);
 
         nouveauPartenaire.getArtisan().getPermissions().add(permissionDTO);
 
@@ -88,6 +88,6 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
 
         List<Permission> permissions = artisanEnregistre.getPermission();
         Assert.assertNotNull(permissions.get(0));
-        Assert.assertEquals(TypeCompte.ARTISAN_DEFAULT, permissions.get(0).getTypeCompte());
+        Assert.assertEquals(TypeCompte.ARTISAN, permissions.get(0).getTypeCompte());
     }
 }

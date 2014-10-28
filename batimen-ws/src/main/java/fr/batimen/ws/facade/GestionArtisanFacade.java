@@ -123,7 +123,7 @@ public class GestionArtisanFacade {
 
         // On set les permissions
         Permission permission = new Permission();
-        permission.setTypeCompte(TypeCompte.ARTISAN_DEFAULT);
+        permission.setTypeCompte(TypeCompte.ARTISAN);
         permission.setArtisan(nouveauArtisan);
         nouveauArtisan.getPermission().add(permission);
 

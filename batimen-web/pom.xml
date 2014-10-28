@@ -130,6 +130,30 @@
 					</webResources>
 				</configuration>
 			</plugin>
+			<!-- Config d'aspect J -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>aspectj-maven-plugin</artifactId>
+				<version>1.7</version>
+				<configuration>
+					<complianceLevel>1.7</complianceLevel>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
+					<outxml>true</outxml>
+					<verbose>true</verbose>
+					<showWeaveInfo>true</showWeaveInfo>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>compile</goal>       <!-- use this goal to weave all your main classes -->
+							<goal>test-compile</goal> <!-- use this goal to weave all your test classes -->
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+
 			<!-- Executions des tests unitaires (Junit) -->
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -214,6 +238,12 @@
 			<artifactId>wiquery-jquery-ui</artifactId>
 			<version>6.13.0</version>
 			<scope>compile</scope>
+		</dependency>
+		<!-- AOP -->
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+			<version>1.8.2</version>
 		</dependency>
 
 		<!-- Sécurité -->

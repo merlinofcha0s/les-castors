@@ -6,6 +6,7 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authz.AuthorizationInfo;
+import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
@@ -15,8 +16,12 @@ public class CastorRealm extends AuthorizingRealm {
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
-        // TODO Auto-generated method stub
-        return null;
+        String roles = UtilisateurService.getRolesByLogin(principalCollection.getPrimaryPrincipal().toString());
+        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
+        for (String role : roles.split(", ")) {
+            info.addRole(role);
+        }
+        return info;
     }
 
     @Override

@@ -162,7 +162,7 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
         clientDuplicate.setPrenom("Pebron");
 
         Permission permission = new Permission();
-        permission.setTypeCompte(TypeCompte.ARTISAN_DEFAULT);
+        permission.setTypeCompte(TypeCompte.ARTISAN);
 
         clientDuplicate.getPermissions().add(permission);
 
@@ -264,6 +264,6 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
     public void testGetRolesArtisan() throws BackendException {
         String roles = UtilisateurService.getRolesByLogin("pebronneArtisanne");
         Assert.assertTrue(!roles.isEmpty());
-        Assert.assertEquals(TypeCompte.ARTISAN_DEFAULT.getRole(), roles);
+        Assert.assertEquals(TypeCompte.ARTISAN.getRole(), roles);
     }
 }
