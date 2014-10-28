@@ -12,6 +12,7 @@ import javax.inject.Inject;
 
 import org.modelmapper.ModelMapper;
 
+import fr.batimen.core.constant.Constant;
 import fr.batimen.core.security.HashHelper;
 import fr.batimen.dto.ClientDTO;
 import fr.batimen.ws.dao.ArtisanDAO;
@@ -37,7 +38,9 @@ public class ArtisanService {
     private EntrepriseDAO entrepriseDAO;
 
     public Integer activateAccount(Artisan artisanByKey) {
-        return 0;
+        artisanByKey.setIsActive(Boolean.TRUE);
+        artisanDAO.update(artisanByKey);
+        return Constant.CODE_SERVICE_RETOUR_OK;
     }
 
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)

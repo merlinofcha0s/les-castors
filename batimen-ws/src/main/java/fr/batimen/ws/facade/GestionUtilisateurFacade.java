@@ -33,6 +33,7 @@ import fr.batimen.ws.entity.Client;
 import fr.batimen.ws.entity.Permission;
 import fr.batimen.ws.helper.JsonHelper;
 import fr.batimen.ws.interceptor.BatimenInterceptor;
+import fr.batimen.ws.service.ArtisanService;
 import fr.batimen.ws.service.ClientService;
 
 /**
@@ -58,6 +59,9 @@ public class GestionUtilisateurFacade {
 
     @Inject
     private ClientService clientService;
+
+    @Inject
+    private ArtisanService artisanService;
 
     @Inject
     private PermissionDAO permissionDAO;
@@ -180,7 +184,7 @@ public class GestionUtilisateurFacade {
     }
 
     /**
-     * Methode d'activation d'un compte client.
+     * Methode d'activation d'un compte d'un utilisateur.
      * 
      * @param cleActivation
      *            la clé permettant de retrouver le client et d'activer son
@@ -190,16 +194,31 @@ public class GestionUtilisateurFacade {
     @POST
     @Path(WsPath.GESTION_UTILISATEUR_SERVICE_ACTIVATION)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public int activateAccount(String cleActivation) {
+    public Integer activateAccount(String cleActivation) {
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Activation du compte avec la clé : " + cleActivation);
+        }
 
         String cleActivationEscaped = DeserializeJsonHelper.parseString(cleActivation);
         Client clientByKey = clientDAO.getClientByActivationKey(cleActivationEscaped);
 
         if (!clientByKey.getLogin().isEmpty()) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("C'est un client : " + clientByKey.getLogin());
+            }
             return clientService.activateAccount(clientByKey);
         }
 
-        return 0;
+        Artisan artisanByKey = artisanDAO.getArtisanByActivationKey(cleActivationEscaped);
 
+        if (!artisanByKey.getLogin().isEmpty()) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("C'est un artisan : " + artisanByKey.getLogin());
+            }
+            return artisanService.activateAccount(artisanByKey);
+        }
+
+        return Constant.CODE_SERVICE_ANNONCE_RETOUR_COMPTE_INEXISTANT;
     }
 }

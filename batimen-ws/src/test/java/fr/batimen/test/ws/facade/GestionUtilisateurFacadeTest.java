@@ -3,6 +3,7 @@ package fr.batimen.test.ws.facade;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 import javax.inject.Inject;
@@ -18,11 +19,13 @@ import fr.batimen.core.exception.BackendException;
 import fr.batimen.core.exception.DuplicateEntityException;
 import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.LoginDTO;
+import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.test.ws.AbstractBatimenWsTest;
 import fr.batimen.ws.client.service.UtilisateurService;
-import fr.batimen.ws.dao.ArtisanDAO;
+import fr.batimen.ws.dao.AnnonceDAO;
 import fr.batimen.ws.dao.ClientDAO;
+import fr.batimen.ws.entity.Annonce;
 import fr.batimen.ws.entity.Client;
 import fr.batimen.ws.entity.Permission;
 
@@ -39,7 +42,7 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
     private ClientDAO clientDAO;
 
     @Inject
-    private ArtisanDAO artisanDAO;
+    private AnnonceDAO annonceDAO;
 
     @Test
     @UsingDataSet("datasets/in/clients.yml")
@@ -184,7 +187,30 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
         // On charge le client pour vérifié les infos d'activation.
         ClientDTO client = UtilisateurService.getUtilisateurByEmail("mdr@lol.com");
 
-        Assert.assertFalse(client.getCleActivation().equals(""));
+        Assert.assertFalse(client.getCleActivation().isEmpty());
+        Assert.assertTrue(client.getIsActive().equals(Boolean.TRUE));
+        Assert.assertTrue(codeRetour == Constant.CODE_SERVICE_RETOUR_OK);
+
+        List<Annonce> annonces = annonceDAO.getAnnoncesByLogin(client.getLogin());
+        Annonce annonce = annonces.get(0);
+        Assert.assertEquals(EtatAnnonce.ACTIVE, annonce.getEtatAnnonce());
+    }
+
+    /**
+     * On test le service d'activation de compte
+     * 
+     * @throws BackendException
+     */
+    @Test
+    @UsingDataSet("datasets/in/clients.yml")
+    public void testActivationArtisan() throws BackendException {
+        int codeRetour = UtilisateurService
+                .activateAccount("NTNkN2RmYzVkNWU2MDZkZjZlYTVjZGQ2ZGE0ZjljY2JhNGJjZWY5MmIxNmNiOWJmMjk2ZDVhNDY3OTEzMTIyZA=0");
+
+        // On charge le client pour vérifié les infos d'activation.
+        ClientDTO client = UtilisateurService.getUtilisateurByEmail("lolPebronne@lol.com");
+
+        Assert.assertFalse(client.getCleActivation().isEmpty());
         Assert.assertTrue(client.getIsActive().equals(Boolean.TRUE));
         Assert.assertTrue(codeRetour == Constant.CODE_SERVICE_RETOUR_OK);
     }

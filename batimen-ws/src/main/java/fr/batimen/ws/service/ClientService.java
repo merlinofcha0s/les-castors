@@ -54,16 +54,27 @@ public class ClientService {
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public Integer activateAccount(Client clientByKey) {
 
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Activation du compte client : " + clientByKey.getLogin());
+        }
+
         if (!clientByKey.getLogin().isEmpty()) {
             if (clientByKey.getIsActive().equals(Boolean.FALSE)) {
-                clientByKey.setIsActive(true);
+                clientByKey.setIsActive(Boolean.TRUE);
 
                 // On active son annonce.
                 List<Annonce> annonces = clientByKey.getDevisDemandes();
                 if (!annonces.isEmpty()) {
+
                     Annonce annonceToActivate = annonces.get(0);
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug("Activation de son annonce : " + annonceToActivate.getId());
+                    }
                     annonceToActivate.setEtatAnnonce(EtatAnnonce.ACTIVE);
                     try {
+                        if (LOGGER.isDebugEnabled()) {
+                            LOGGER.debug("Envoi du mail de confirmation de l'annonce: " + annonceToActivate.getId());
+                        }
                         emailService.envoiMailConfirmationCreationAnnonce(annonceToActivate);
                     } catch (EmailException | MandrillApiError | IOException e) {
                         if (LOGGER.isErrorEnabled()) {
@@ -72,6 +83,9 @@ public class ClientService {
                     }
                 }
                 try {
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug("MAJ des infos du client dans la BDD");
+                    }
                     clientDAO.saveClient(clientByKey);
                 } catch (BackendException e) {
                     if (LOGGER.isErrorEnabled()) {
@@ -89,5 +103,4 @@ public class ClientService {
 
         return Constant.CODE_SERVICE_RETOUR_OK;
     }
-
 }

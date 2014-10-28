@@ -184,7 +184,7 @@ public class ClientDAO extends AbstractDAO<Client> {
 
         try {
             TypedQuery<Client> query = entityManager.createNamedQuery(QueryJPQL.CLIENT_BY_ACTIVATION_KEY, Client.class);
-            query.setParameter(QueryJPQL.PARAM_CLIENT_ACTIVATION_KEY, cleActivation);
+            query.setParameter(QueryJPQL.PARAM_ACTIVATION_KEY, cleActivation);
 
             clientFinded = query.getSingleResult();
         } catch (NoResultException nre) {

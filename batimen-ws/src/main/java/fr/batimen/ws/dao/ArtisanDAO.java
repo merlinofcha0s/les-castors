@@ -113,6 +113,34 @@ public class ArtisanDAO extends AbstractDAO<Artisan> {
             }
             return "";
         }
+    }
+
+    public Artisan getArtisanByActivationKey(String activationKey) {
+
+        Artisan artisanFinded = null;
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Debut récuperation compte artisan avec la clé : " + activationKey);
+        }
+
+        try {
+            TypedQuery<Artisan> query = entityManager.createNamedQuery(QueryJPQL.ARTISAN_BY_ACTIVATION_KEY,
+                    Artisan.class);
+            query.setParameter(QueryJPQL.PARAM_ACTIVATION_KEY, activationKey);
+
+            artisanFinded = query.getSingleResult();
+        } catch (NoResultException nre) {
+            if (LOGGER.isWarnEnabled()) {
+                LOGGER.warn("Aucune correspondance trouvées dans la BDD pour la clé: " + activationKey, nre);
+            }
+            return new Artisan();
+        }
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Fin récuperation compte artisan avec la clé");
+        }
+
+        return artisanFinded;
 
     }
 

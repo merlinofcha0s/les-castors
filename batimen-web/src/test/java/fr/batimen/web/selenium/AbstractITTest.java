@@ -57,8 +57,8 @@ public abstract class AbstractITTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractITTest.class);
 
     // DBSetup
-    public static final Operation DELETE_ALL = deleteAllFrom("annonce", "artisan", "categoriemetier", "entreprise",
-            "adresse", "notation", "permission", "client");
+    public static final Operation DELETE_ALL = deleteAllFrom("annonce", "permission", "artisan", "categoriemetier",
+            "entreprise", "adresse", "notation", "client");
     public static final Operation INSERT_USER_DATA = insertInto("client")
             .columns("id", "email", "nom", "prenom", "login", "password", "numeroTel", "dateInscription", "isActive",
                     "cleactivation")
@@ -190,33 +190,6 @@ public abstract class AbstractITTest {
 
     protected DriverManagerDestination getDriverManagerDestination() {
         return new DriverManagerDestination(dataSourceAddress, loginDB, passwordDB);
-    }
-
-    protected void waitForTheElementById(String id) throws InterruptedException {
-        for (int second = 0;; second++) {
-            if (second >= TEMPS_ATTENTE_AJAX)
-                fail("timeout");
-            try {
-                if (isElementPresent(By.id(id)))
-                    break;
-            } catch (Exception e) {
-            }
-            Thread.sleep(1000);
-        }
-    }
-
-    protected void waitForTheElementByXPAth(String xPath) throws InterruptedException {
-        for (int second = 0;; second++) {
-            if (second >= TEMPS_ATTENTE_AJAX)
-                fail("timeout");
-            try {
-                if (isElementPresent(By.xpath(xPath)))
-                    ;
-                break;
-            } catch (Exception e) {
-            }
-            Thread.sleep(1000);
-        }
     }
 
 }
