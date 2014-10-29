@@ -37,7 +37,9 @@ import fr.batimen.dto.enums.Civilite;
         @NamedQuery(name = QueryJPQL.ARTISAN_HASH_BY_LOGIN,
                 query = "SELECT a.password FROM Artisan AS a WHERE a.login = :login"),
         @NamedQuery(name = QueryJPQL.ARTISAN_BY_ACTIVATION_KEY,
-                query = "SELECT a FROM Artisan AS a WHERE a.cleActivation = :cleActivation") })
+                query = "SELECT a FROM Artisan AS a WHERE a.cleActivation = :cleActivation"),
+        @NamedQuery(name = QueryJPQL.ARTISAN_STATUT_BY_LOGIN,
+                query = "SELECT a.isActive FROM Artisan AS a WHERE a.login = :login") })
 public class Artisan extends AbstractUser implements Serializable {
 
     private static final long serialVersionUID = -4398985801030020390L;

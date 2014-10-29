@@ -31,7 +31,10 @@ import fr.batimen.core.constant.QueryJPQL;
         @NamedQuery(name = QueryJPQL.CLIENT_BY_EMAIL, query = "SELECT c FROM Client AS c WHERE c.email = :email"),
         @NamedQuery(name = QueryJPQL.CLIENT_BY_ACTIVATION_KEY,
                 query = "SELECT c FROM Client AS c WHERE c.cleActivation = :cleActivation"),
-        @NamedQuery(name = QueryJPQL.CLIENT_HASH_BY_LOGIN, query = "SELECT c.password FROM Client AS c WHERE c.login = :login") })
+        @NamedQuery(name = QueryJPQL.CLIENT_HASH_BY_LOGIN,
+                query = "SELECT c.password FROM Client AS c WHERE c.login = :login"),
+        @NamedQuery(name = QueryJPQL.CLIENT_STATUT_BY_LOGIN,
+                query = "SELECT c.isActive FROM Client AS c WHERE c.login = :login") })
 public class Client extends AbstractUser implements Serializable {
 
     private static final long serialVersionUID = -7591981472565360003L;

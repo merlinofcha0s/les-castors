@@ -12,6 +12,7 @@ public interface QueryJPQL {
     public static final String CLIENT_LOGIN = "login";
     public static final String CLIENT_BY_EMAIL = "clientByLoginAndEmail";
     public static final String CLIENT_HASH_BY_LOGIN = "hashByLogin";
+    public static final String CLIENT_STATUT_BY_LOGIN = "statutByLogin";
     public static final String CLIENT_BY_ACTIVATION_KEY = "clientByActivationKey";
 
     // Parametre Query Entity client
@@ -31,6 +32,7 @@ public interface QueryJPQL {
     public static final String ARTISAN_BY_EMAIL = "artisanByEmail";
     public static final String ARTISAN_BY_LOGIN = "artisanByLogin";
     public static final String ARTISAN_HASH_BY_LOGIN = "hashForArtisan";
+    public static final String ARTISAN_STATUT_BY_LOGIN = "statutForArtisan";
     public static final String ARTISAN_BY_ACTIVATION_KEY = "artisanByActivationKey";
 
     // Parametre Query Entity artisan

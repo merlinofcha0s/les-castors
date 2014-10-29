@@ -229,4 +229,32 @@ public class ClientDAO extends AbstractDAO<Client> {
         return hash;
     }
 
+    /**
+     * Renvoi le statut pour un client donné
+     * 
+     * @param login
+     *            Le login du client
+     * @return
+     */
+    public Boolean getStatutActive(String login) {
+        Boolean isActive = Boolean.FALSE;
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Debut récuperation statut pour le client : " + login);
+        }
+
+        try {
+            TypedQuery<Boolean> query = entityManager.createNamedQuery(QueryJPQL.CLIENT_STATUT_BY_LOGIN, Boolean.class);
+            query.setParameter(QueryJPQL.PARAM_CLIENT_LOGIN, login);
+
+            isActive = query.getSingleResult();
+        } catch (NoResultException nre) {
+            if (LOGGER.isWarnEnabled()) {
+                LOGGER.warn("Aucune correspondance trouvées pour le statut du client : " + login, nre);
+            }
+            return Boolean.FALSE;
+        }
+        return isActive;
+    }
+
 }

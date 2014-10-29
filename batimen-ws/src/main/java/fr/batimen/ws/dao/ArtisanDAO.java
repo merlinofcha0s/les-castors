@@ -139,6 +139,35 @@ public class ArtisanDAO extends AbstractDAO<Artisan> {
     }
 
     /**
+     * Renvoi le statut pour un artisan donné
+     * 
+     * @param login
+     *            Le login du client
+     * @return
+     */
+    public Boolean getStatutActive(String login) {
+        Boolean isActive = Boolean.FALSE;
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Debut récuperation statut pour l'artisan : " + login);
+        }
+
+        try {
+            TypedQuery<Boolean> query = entityManager
+                    .createNamedQuery(QueryJPQL.ARTISAN_STATUT_BY_LOGIN, Boolean.class);
+            query.setParameter(QueryJPQL.PARAM_CLIENT_LOGIN, login);
+
+            isActive = query.getSingleResult();
+        } catch (NoResultException nre) {
+            if (LOGGER.isWarnEnabled()) {
+                LOGGER.warn("Aucune correspondance trouvées pour le statut de l'artisan : " + login, nre);
+            }
+            return Boolean.FALSE;
+        }
+        return isActive;
+    }
+
+    /**
      * Récuperation d'un artisan grace a sa clé d'activation. <br/>
      * Sa clé lui est transmise par mail et elle sert a activé son compte une
      * fois qu'il s'est inscrit sur le site

@@ -222,7 +222,7 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
      */
     @Test
     @UsingDataSet("datasets/in/clients.yml")
-    public void testGetHashClient() throws BackendException {
+    public void testGetHashClientActivated() throws BackendException {
         String hash = UtilisateurService.getHashByLogin("pebronne");
         Assert.assertTrue(!hash.isEmpty());
         Assert.assertEquals("$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=", hash);
@@ -235,10 +235,34 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
      */
     @Test
     @UsingDataSet("datasets/in/clients.yml")
-    public void testGetHashArtisan() throws BackendException {
-        String hash = UtilisateurService.getHashByLogin("pebronneArtisanne");
+    public void testGetHashClientNotActivated() throws BackendException {
+        String hash = UtilisateurService.getHashByLogin("xavier");
+        Assert.assertTrue(hash.isEmpty());
+    }
+
+    /**
+     * Test de récuperation d'un hash pour un client
+     * 
+     * @throws BackendException
+     */
+    @Test
+    @UsingDataSet("datasets/in/clients.yml")
+    public void testGetHashArtisanActivated() throws BackendException {
+        String hash = UtilisateurService.getHashByLogin("moiArtisanne");
         Assert.assertTrue(!hash.isEmpty());
         Assert.assertEquals("$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=", hash);
+    }
+
+    /**
+     * Test de récuperation d'un hash pour un client
+     * 
+     * @throws BackendException
+     */
+    @Test
+    @UsingDataSet("datasets/in/clients.yml")
+    public void testGetHashArtisanNotActivated() throws BackendException {
+        String hash = UtilisateurService.getHashByLogin("pebronneArtisanne");
+        Assert.assertTrue(hash.isEmpty());
     }
 
     /**

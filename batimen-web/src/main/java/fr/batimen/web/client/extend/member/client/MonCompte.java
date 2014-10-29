@@ -1,4 +1,4 @@
-package fr.batimen.web.client.extend.account.client;
+package fr.batimen.web.client.extend.member.client;
 
 import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.basic.Label;

@@ -95,7 +95,8 @@ public class GestionUtilisateurFacade {
     }
 
     /**
-     * Renvoi le hash d'un utilisateur, vide si il n'existe pas.
+     * Renvoi le hash d'un utilisateur, vide si il n'existe pas.<br/>
+     * Vide également dans le cas où son compte n'est pas activé
      * 
      * @param login
      *            Le login du Client
@@ -104,17 +105,25 @@ public class GestionUtilisateurFacade {
     @POST
     @Path(WsPath.GESTION_UTILISATEUR_SERVICE_HASH)
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public String getUtilisateurHash(String login) {
+    public String getUtilisateurHashAndStatut(String login) {
         // On enleve les "" car ils sont deserializer dans la requete REST
         String loginEscaped = DeserializeJsonHelper.parseString(login);
 
         String hash = clientDAO.getHash(loginEscaped);
+        Boolean isActive = Boolean.FALSE;
 
         if (hash.isEmpty()) {
             hash = artisanDAO.getHash(loginEscaped);
+            isActive = artisanDAO.getStatutActive(loginEscaped);
+        } else {
+            isActive = clientDAO.getStatutActive(loginEscaped);
         }
 
-        return hash;
+        if (!hash.isEmpty() && isActive) {
+            return hash;
+        }
+
+        return "";
     }
 
     /**

@@ -4,7 +4,7 @@ import org.apache.wicket.markup.html.link.Link;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.batimen.web.client.extend.account.client.MonCompte;
+import fr.batimen.web.client.extend.member.client.MonCompte;
 import fr.batimen.web.client.master.MasterPage;
 
 /**

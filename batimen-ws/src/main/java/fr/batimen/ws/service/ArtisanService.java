@@ -11,6 +11,8 @@ import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.security.HashHelper;
@@ -30,6 +32,8 @@ import fr.batimen.ws.entity.Entreprise;
 @LocalBean
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class ArtisanService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ArtisanService.class);
 
     @Inject
     private ArtisanDAO artisanDAO;
