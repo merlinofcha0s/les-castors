@@ -6,7 +6,7 @@ package fr.batimen.core.constant;
  * @author Casaucau Cyril
  * 
  */
-public interface QueryJPQL {
+public class QueryJPQL {
 
     // Entity User
     public static final String CLIENT_LOGIN = "login";

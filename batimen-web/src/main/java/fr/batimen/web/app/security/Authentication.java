@@ -28,8 +28,6 @@ public class Authentication {
         UsernamePasswordToken token = new UsernamePasswordToken(username, password);
         token.setRememberMe(true);
 
-        Subject currentUser = SecurityUtils.getSubject();
-
         try {
             currentUser.login(token);
             isOk = Boolean.TRUE;

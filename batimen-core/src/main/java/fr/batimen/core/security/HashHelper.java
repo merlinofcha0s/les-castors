@@ -1,6 +1,7 @@
 package fr.batimen.core.security;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -63,7 +64,7 @@ public class HashHelper {
     public static String convertToBase64(String chaineAEncoder) {
         String chaineEncoder;
         try {
-            chaineEncoder = new String(Base64.encodeBase64(chaineAEncoder.getBytes()), "UTF-8");
+            chaineEncoder = new String(Base64.encodeBase64(chaineAEncoder.getBytes(Charset.forName("UTF-8"))), "UTF-8");
         } catch (UnsupportedEncodingException e) {
             if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("Impossible d'encoder la chaine de caractere en UTF-8", e);

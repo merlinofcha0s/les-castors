@@ -7,7 +7,7 @@ package fr.batimen.core.constant;
  * @author Casaucau Cyril
  * 
  */
-public interface WsPath {
+public class WsPath {
 
     // Path Gestion Utilisateur
     public static final String GESTION_UTILISATEUR_SERVICE_PATH = "gestionUtilisateur";
