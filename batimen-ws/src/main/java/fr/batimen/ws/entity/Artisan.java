@@ -8,6 +8,7 @@ import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,8 +29,17 @@ import fr.batimen.dto.enums.Civilite;
  */
 @Entity
 @Table(name = "Artisan")
-@NamedQueries(value = { @NamedQuery(name = QueryJPQL.ARTISAN_BY_EMAIL,
-        query = "SELECT art FROM Artisan AS art WHERE art.email = :email") })
+@NamedQueries(value = {
+        @NamedQuery(name = QueryJPQL.ARTISAN_BY_EMAIL,
+                query = "SELECT art FROM Artisan AS art WHERE art.email = :email"),
+        @NamedQuery(name = QueryJPQL.ARTISAN_BY_LOGIN,
+                query = "SELECT art FROM Artisan AS art WHERE art.login = :login"),
+        @NamedQuery(name = QueryJPQL.ARTISAN_HASH_BY_LOGIN,
+                query = "SELECT a.password FROM Artisan AS a WHERE a.login = :login"),
+        @NamedQuery(name = QueryJPQL.ARTISAN_BY_ACTIVATION_KEY,
+                query = "SELECT a FROM Artisan AS a WHERE a.cleActivation = :cleActivation"),
+        @NamedQuery(name = QueryJPQL.ARTISAN_STATUT_BY_LOGIN,
+                query = "SELECT a.isActive FROM Artisan AS a WHERE a.login = :login") })
 public class Artisan extends AbstractUser implements Serializable {
 
     private static final long serialVersionUID = -4398985801030020390L;
@@ -45,6 +55,11 @@ public class Artisan extends AbstractUser implements Serializable {
     private List<Notation> scoreGlobal = new ArrayList<Notation>();
     @OneToOne(cascade = CascadeType.REMOVE)
     private Entreprise entreprise;
+    @OneToMany(mappedBy = "artisan",
+            targetEntity = Permission.class,
+            cascade = CascadeType.REMOVE,
+            fetch = FetchType.EAGER)
+    protected List<Permission> permission = new ArrayList<Permission>();
 
     /**
      * @return the id
@@ -104,6 +119,21 @@ public class Artisan extends AbstractUser implements Serializable {
      */
     public void setCivilite(Civilite civilite) {
         this.civilite = civilite;
+    }
+
+    /**
+     * @return the typeCompte
+     */
+    public List<Permission> getPermission() {
+        return permission;
+    }
+
+    /**
+     * @param permission
+     *            the typeCompte to set
+     */
+    public void setTypeCompte(List<Permission> permission) {
+        this.permission = permission;
     }
 
     /*

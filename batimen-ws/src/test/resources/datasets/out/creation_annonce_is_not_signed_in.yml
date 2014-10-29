@@ -21,5 +21,6 @@ client:
     numerotel: "0615458596"
     prenom: Johnny
     isactive: false
-    typecompte: 3
     cleactivation: YjJjZjZiNGZkNjA5NDdjZDBiZWJmMGJhYmZhMzBhOTBiNzI2NzJmOWRmMTU3ZDhhZmIyMDZmMGJlMmM1OTUwNw==
+Permission:
+  - typecompte: 4

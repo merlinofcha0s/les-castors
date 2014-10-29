@@ -3,6 +3,7 @@ package fr.batimen.web.client.extend.nouveau.devis;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.shiro.SecurityUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -22,6 +23,7 @@ import fr.batimen.core.exception.FrontEndException;
 import fr.batimen.core.security.HashHelper;
 import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
+import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.client.component.MapFrance;
 import fr.batimen.web.client.component.NavigationWizard;
 import fr.batimen.web.client.event.Event;
@@ -32,7 +34,6 @@ import fr.batimen.web.client.extend.Contact;
 import fr.batimen.web.client.extend.nouveau.devis.event.CategorieEvent;
 import fr.batimen.web.client.extend.nouveau.devis.event.ChangementEtapeClientEvent;
 import fr.batimen.web.client.master.MasterPage;
-import fr.batimen.web.client.session.BatimenSession;
 import fr.batimen.ws.client.service.AnnonceService;
 
 /**
@@ -294,7 +295,7 @@ public class NouveauDevis extends MasterPage {
             loggerChangementEtape("Passage dans l'étape 4");
             // Si l'utilisateur est deja authentifié on saute l'inscription
             // (etape 3)
-            if (BatimenSession.get().isSignedIn()) {
+            if (SecurityUtils.getSubject().isAuthenticated()) {
                 loggerChangementEtape("L'utilisateur s'est connecté, on passe l'etape 5");
                 changementEtape(5);
             } else {
@@ -305,7 +306,7 @@ public class NouveauDevis extends MasterPage {
             loggerChangementEtape("Passage dans l'étape 5");
             // Si il est authentifié on l'enregistre dans la DTO (pour le
             // backend) et on charge le bon message de confirmation
-            if (BatimenSession.get().isSignedIn()) {
+            if (SecurityUtils.getSubject().isAuthenticated()) {
                 remplissageCreationAnnonceSiLogin();
             }
             Integer codeRetour = creationAnnonce();
@@ -320,8 +321,8 @@ public class NouveauDevis extends MasterPage {
     }
 
     private void remplissageCreationAnnonceSiLogin() {
-        BatimenSession session = (BatimenSession) BatimenSession.get();
-        ClientDTO client = session.getSessionUser();
+        Authentication authentication = new Authentication();
+        ClientDTO client = authentication.getCurrentUserInfo();
         nouvelleAnnonce.setIsSignedUp(true);
         nouvelleAnnonce.getClient().setLogin(client.getLogin());
 
@@ -450,8 +451,8 @@ public class NouveauDevis extends MasterPage {
                 LOGGER.error("Adresse mail : " + nouvelleAnnonce.getClient().getEmail());
                 LOGGER.error("Identifiant: " + nouvelleAnnonce.getClient().getLogin());
             } else {
-                BatimenSession session = (BatimenSession) BatimenSession.get();
-                ClientDTO client = session.getSessionUser();
+                Authentication authentication = new Authentication();
+                ClientDTO client = authentication.getCurrentUserInfo();
                 LOGGER.error("Ce client est deja enregistrer dans la BDD");
                 LOGGER.error("Nom  : " + client.getNom());
                 LOGGER.error("Prénom  : " + client.getPrenom());

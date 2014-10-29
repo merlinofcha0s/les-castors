@@ -15,6 +15,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 
+import fr.batimen.dto.PermissionDTO;
 import fr.batimen.dto.SousCategorieMetierDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.constant.ValidatorConstant;
@@ -139,7 +140,9 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
                 nouvelleAnnonce.setNumeroEtape(4);
                 ChangementEtapeClientEvent changementEtapeEventClient = new ChangementEtapeClientEvent(target,
                         nouvelleAnnonce);
-                nouvelleAnnonce.getClient().setTypeCompte(TypeCompte.CLIENT);
+                PermissionDTO permissionDTO = new PermissionDTO();
+                permissionDTO.setTypeCompte(TypeCompte.CLIENT);
+                nouvelleAnnonce.getClient().getPermissions().add(permissionDTO);
                 this.send(target.getPage(), Broadcast.BREADTH, changementEtapeEventClient);
             }
 

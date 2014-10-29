@@ -36,9 +36,8 @@ create table Annonce (
         numeroTel varchar(10) not null,
         password varchar(80) not null,
         prenom varchar(20) not null,
-        isActive boolean not null,
         cleActivation varchar(255),
-        typeCompte int4 not null,
+        isActive boolean not null,
         entreprise_id int8,
         primary key (id)
     );
@@ -92,7 +91,14 @@ create table Annonce (
         prenom varchar(20),
         isActive boolean not null,
         cleActivation varchar(255),
+        primary key (id)
+    );
+    
+    create table Permission (
+        id  bigserial not null,
         typeCompte int4 not null,
+        client_fk int8,
+        artisan_fk int8,
         primary key (id)
     );
     
@@ -140,5 +146,15 @@ create table Annonce (
         add constraint paiement_adresse 
         foreign key (adresseFacturation_id) 
         references Adresse;
+        
+    alter table Permission
+        add constraint artisan_permission 
+        foreign key (artisan_fk) 
+        references Artisan;
+        
+    alter table Permission
+        add constraint client_permission 
+        foreign key (client_fk) 
+        references Client;
         
      

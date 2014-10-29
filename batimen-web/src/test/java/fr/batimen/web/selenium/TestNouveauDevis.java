@@ -29,7 +29,7 @@ public class TestNouveauDevis extends AbstractITTest {
 
     @Override
     public void prepareDB() throws Exception {
-        Operation operation = sequenceOf(DELETE_ALL, INSERT_USER_DATA);
+        Operation operation = sequenceOf(DELETE_ALL, INSERT_USER_DATA, INSERT_USER_PERMISSION);
         DbSetup dbSetup = new DbSetup(getDriverManagerDestination(), operation);
         dbSetup.launch();
     }

@@ -8,7 +8,6 @@ client:
     numerotel: "0615125645"
     prenom: Pebron
     isActive: true
-    typecompte: 3
   - id: 1002
     dateinscription: "2014-01-10 01:00:00"
     email: mdr@lol.com
@@ -18,5 +17,54 @@ client:
     numerotel: "0615125645"
     prenom: Xavier
     isActive: false
-    typecompte: 3
     cleactivation: "NTNkN2RmYzVkNWU2MDZkZjZlYTVjZGQ2ZGE0ZjljY2JhNGJjZWY5MmIxNmNiOWJmMjk2ZDVhNDY3OTEzMTIyZA=="
+artisan:
+  - id: 1003
+    numerotel: "0615125645"
+    password: $s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=
+    login: pebronneArtisanne
+    email: lolPebronne@lol.com
+    dateinscription: "2014-01-10 00:00:00"
+    civilite: 0
+    prenom: Pebron
+    nom: De la Pebronne
+    isActive: false
+    cleactivation: "NTNkN2RmYzVkNWU2MDZkZjZlYTVjZGQ2ZGE0ZjljY2JhNGJjZWY5MmIxNmNiOWJmMjk2ZDVhNDY3OTEzMTIyZA=0"
+  - id: 1004
+    numerotel: "0615125645"
+    password: $s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=
+    login: moiArtisanne
+    email: moiArtisane@lol.com
+    dateinscription: "2014-01-10 00:00:00"
+    civilite: 0
+    prenom: Pebron
+    nom: De la Pebronne
+    isActive: true
+    cleactivation: "NTNkN2RmYzVkNWU2MDZkZjZlYTVjZGQ2ZGE0ZjljY2JhNGJjZWY5MmIxNmNiOWJmMjk2ZDVhNDY3OTEzMTIyZA=G"
+permission:
+  - typecompte: 4
+    client_fk: 1001
+  - typecompte: 4
+    client_fk: 1002
+  - typecompte: 3
+    artisan_fk: 1003
+  - typecompte: 3
+    artisan_fk: 1004
+annonce:
+  - datecreation: 2014-03-23 22:00:00.0
+    delaiintervention: 0
+    description: Peinture d'un mur
+    etatannonce: 1
+    categoriemetier: Electricité
+    souscategoriemetier: Installation électrique
+    nbconsultation: 0
+    typecontact: 0
+    demandeur_fk: 1002
+    adressechantier_id: 100
+adresse:
+  - adresse: 106 chemin du pébron
+    id: 100
+    codepostal: "06700"
+    complementadresse: Res des pébrons
+    ville: Nice
+    departement: 6

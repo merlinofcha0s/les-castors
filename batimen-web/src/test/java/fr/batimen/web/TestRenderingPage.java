@@ -1,8 +1,13 @@
 package fr.batimen.web;
 
+import org.apache.shiro.session.Session;
+import org.apache.shiro.subject.Subject;
+import org.apache.shiro.subject.support.SubjectThreadState;
+import org.apache.shiro.util.ThreadState;
 import org.apache.wicket.util.tester.WicketTester;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import fr.batimen.web.app.BatimenApplication;
 import fr.batimen.web.client.extend.Accueil;
@@ -20,6 +25,32 @@ import fr.batimen.web.client.extend.nouveau.devis.NouveauDevis;
 public class TestRenderingPage {
 
     private WicketTester tester;
+    private ThreadState threadState;
+    /**
+     * The Mockito mock that will be returned by
+     * {@link org.apache.shiro.SecurityUtils#getSubject()
+     * SecurityUtils.getSubject()}. Use this mock in your tests to mock
+     * authentication and authorization prerequisites.
+     */
+    protected Subject mockSubject;
+    /**
+     * The Mockito mock that will be returned by {@link Subject#getSession()
+     * SecurityUtils.getSubject().getSession()}.
+     */
+    protected Session mockShiroSession;
+
+    public static final String MOCK_PRINCIPAL = "Mr. Mock User";
+
+    @Before
+    public void attachSubject() {
+        this.mockShiroSession = Mockito.mock(Session.class);
+        this.mockSubject = Mockito.mock(Subject.class);
+        Mockito.when(this.mockSubject.getSession()).thenReturn(this.mockShiroSession);
+        this.threadState = new SubjectThreadState(this.mockSubject);
+        this.threadState.bind();
+        Mockito.when(this.mockSubject.isAuthenticated()).thenReturn(true);
+        Mockito.when(this.mockSubject.getPrincipal()).thenReturn(MOCK_PRINCIPAL);
+    }
 
     @Before
     public void setUp() {

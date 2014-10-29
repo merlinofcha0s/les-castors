@@ -33,6 +33,7 @@
 	<properties>
 		<wicket.version>6.17.0</wicket.version>
 		<jersey.client.version>1.18.1</jersey.client.version>
+		<shiro.version>1.2.3</shiro.version>
 
 		<wicket.mode>development</wicket.mode>
 
@@ -129,6 +130,30 @@
 					</webResources>
 				</configuration>
 			</plugin>
+			<!-- Config d'aspect J -->
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>aspectj-maven-plugin</artifactId>
+				<version>1.7</version>
+				<configuration>
+					<complianceLevel>1.7</complianceLevel>
+					<source>${maven.compiler.source}</source>
+					<target>${maven.compiler.target}</target>
+					<outxml>true</outxml>
+					<verbose>true</verbose>
+					<showWeaveInfo>true</showWeaveInfo>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>compile</goal>       <!-- use this goal to weave all your main classes -->
+							<goal>test-compile</goal> <!-- use this goal to weave all your test classes -->
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+
 			<!-- Executions des tests unitaires (Junit) -->
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
@@ -214,6 +239,26 @@
 			<version>6.13.0</version>
 			<scope>compile</scope>
 		</dependency>
+		<!-- AOP -->
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>aspectjrt</artifactId>
+			<version>1.8.2</version>
+		</dependency>
+
+		<!-- Sécurité -->
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-web</artifactId>
+			<version>${shiro.version}</version>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-ehcache</artifactId>
+			<version>${shiro.version}</version>
+			<scope>compile</scope>
+		</dependency>
 
 		<!-- Logback -->
 		<dependency>
@@ -249,6 +294,12 @@
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
 			<version>9.3-1102-jdbc41</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<version>1.10.8</version>
 			<scope>test</scope>
 		</dependency>
 
