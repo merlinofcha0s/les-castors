@@ -39,7 +39,7 @@ public class ContactUsService {
             LOGGER.debug("Server response : {}",serverResponse);
         }
         
-		return 0;
+		return serverResponse;
     	
     }
 

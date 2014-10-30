@@ -16,7 +16,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
-import org.apache.commons.httpclient.HttpStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -71,12 +70,12 @@ public class MailServiceFacade {
 			if (success) {
 				emailService.envoiEmailAccuseReception(mail);
 			} else {
-				return HttpStatus.SC_INTERNAL_SERVER_ERROR;
+				return Constant.CODE_SERVICE_RETOUR_KO;
 			}
 		} catch (EmailException | IOException | MandrillApiError e) {
-			LOGGER.error("Error while sending contact email, contact mail sent? :" + success, e);
+			LOGGER.error("Error while sending contact or aknowledgement email, contact mail sent? :" + success, e);
 		}
-		if (success)	return HttpStatus.SC_OK;
-		return HttpStatus.SC_INTERNAL_SERVER_ERROR;
+		if (success)	return Constant.CODE_SERVICE_RETOUR_OK;
+		return Constant.CODE_SERVICE_RETOUR_KO;
 	}
 }

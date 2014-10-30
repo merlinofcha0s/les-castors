@@ -47,7 +47,8 @@ public class Constant {
     public static final String PARTENAIRE_URL = "/nouveaupartenaire";
 
     // Email
-    public static final String EMAIL_FROM = "notifications@lescastors.fr";
+    public static final String EMAIL_CASTOR_NOTIF = "notifications@lescastors.fr";
+    public static final String EMAIL_CASTOR_CONTACT="contact@lescastors.fr";
     public static final String EMAIL_FROM_NAME = "Les Castors";
     public static final String EMAIL_SENT = "sent";
     public static final String EMAIL_QUEUED = "queued";
@@ -58,7 +59,7 @@ public class Constant {
     public static final String TEMPLATE_CONFIRMATION_ANNONCE = "confirmation_creation_annonce";
     public static final String TEMPLATE_ACTIVATION_COMPTE = "activation_compte";
     public static final String TEMPLATE_EMAIL_CONTACT = "contact_email";
-    public static final String TEMPLATE_ACCUSE_RECEPTION = "accuse_reception";
+    public static final String TEMPLATE_ACCUSE_RECEPTION = "accuse_reception_contact";
 
     // Creation annonce tags Email
     public static final String TAG_EMAIL_USERNAME = "username";
@@ -70,9 +71,9 @@ public class Constant {
     public static final String TAG_EMAIL_ACTIVATION_LINK = "lienactivation";
     
     // Contact Email tags
-    public static final String TAG_EMAIL_CONTACT_NAME = "name";
-    public static final String TAG_EMAIL_CONTACT_EMAIL="email";
-    public static final String TAG_EMAIL_CONTACT_SUBJECT="subject";
-    public static final String TAG_EMAIL_CONTACT_MESSAGE="message";
+    public static final String TAG_EMAIL_CONTACT_NAME = "CONTACTERNAME";
+    public static final String TAG_EMAIL_CONTACT_EMAIL="CONTACTEREMAIL";
+    public static final String TAG_EMAIL_CONTACT_SUBJECT="MESSAGESUBJECT";
+    public static final String TAG_EMAIL_CONTACT_MESSAGE="MESSAGECONTENT";
 
 }

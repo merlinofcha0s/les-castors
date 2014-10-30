@@ -17,6 +17,7 @@ import com.microtripit.mandrillapp.lutung.view.MandrillMessage;
 
 import fr.batimen.core.exception.EmailException;
 import fr.batimen.core.utils.PropertiesUtils;
+import fr.batimen.dto.ContactMailDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.test.ws.AbstractBatimenWsTest;
 import fr.batimen.test.ws.helper.DataHelper;
@@ -37,10 +38,12 @@ public class EmailServiceTest extends AbstractBatimenWsTest {
     private ClientDAO clientDAO;
 
     private CreationAnnonceDTO creationAnnonceDTO;
+    private ContactMailDTO contactMailDTO;
 
     @Before
     public void init() {
         creationAnnonceDTO = DataHelper.getAnnonceDTOData();
+        contactMailDTO = DataHelper.getContactMailData();
     }
 
     @Test
@@ -108,4 +111,34 @@ public class EmailServiceTest extends AbstractBatimenWsTest {
                         urlFrontend);
         Assert.assertTrue(noError);
     }
+    
+    /**
+     * Cas de test : Test qui envoi un mail de contact à l'équipe
+     * 
+     * @throws MandrillApiError
+     * @throws IOException
+     * @throws EmailException
+     */
+    @Test
+    public void sendContactMail() throws MandrillApiError, IOException, EmailException {
+        boolean noError = emailService.envoiEmailContact(contactMailDTO);
+        Assert.assertTrue(noError);
+    }
+    
+    /**
+     * Cas de test : Test qui envoi un mail accusé de reception
+     * au contacteur
+     * 
+     * @throws MandrillApiError
+     * @throws IOException
+     * @throws EmailException
+     */
+    @Test
+    public void sendAccuseReceptionMail() throws MandrillApiError, IOException, EmailException {
+        boolean noError = emailService.envoiEmailAccuseReception(contactMailDTO);
+        Assert.assertTrue(noError);
+    }
+    
+    
+    
 }

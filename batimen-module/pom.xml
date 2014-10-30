@@ -27,7 +27,7 @@
 		<app.version>0.3.0-SNAPSHOT</app.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<logback.version>1.0.13</logback.version>
+		<logback.version>1.1.2</logback.version>
 		<jersey.version>1.17</jersey.version>
 		<!-- Sonar -->
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>

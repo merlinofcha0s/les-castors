@@ -1,6 +1,5 @@
 package fr.batimen.web.client.extend;
 
-import org.apache.commons.httpclient.HttpStatus;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
@@ -12,6 +11,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 
+import fr.batimen.core.constant.Constant;
 import fr.batimen.dto.ContactMailDTO;
 import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.web.app.constants.WebConstants;
@@ -83,16 +83,14 @@ public class Contact extends MasterPage {
 				int response = ContactUsService.pushContactMail((ContactMailDTO) getForm()
 						.getModelObject());
 				// finalize
-				if(response==HttpStatus.SC_OK){
-					feedBackPanelGeneral.success("Votre message a été transmis correctement.\n"
-							+ "Vous obtiendrez une réponse sur votre email de contact indiqué.");
+				if(response==Constant.CODE_SERVICE_RETOUR_OK){
+					feedBackPanelGeneral.success("Votre message a été transmis correctement.\nVous obtiendrez une réponse sur votre email de contact indiqué.");
 					nameField.setDefaultModelObject("");
 					emailField.setDefaultModelObject("");
 					subjectField.setDefaultModelObject("");
 					messageField.setDefaultModelObject("");
 				}else{
-					feedBackPanelGeneral.error("Une erreur est survenue lors de l'envoi du message.\n"
-							+ "Nous vous prions de nous excuser et de renouveller votre envoi ulterieurement");
+					feedBackPanelGeneral.error("Une erreur est survenue lors de l'envoi du message.\nNous vous prions de nous excuser et de renouveller votre envoi ulterieurement");
 				}
 				target.add(feedBackPanelGeneral);
 				target.add(getForm());

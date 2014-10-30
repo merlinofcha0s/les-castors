@@ -152,7 +152,7 @@ public class EmailService {
         Map<String, String> recipients = new HashMap<String, String>();
 
         getNomDestinataire("", "", "CASTORS SUPPORT TEAM", nomDestinataire);
-        recipients.put(nomDestinataire.toString(), "tellouadnane@gmail.com");
+        recipients.put(nomDestinataire.toString(), Constant.EMAIL_CASTOR_CONTACT);
 
         // On charge les recepteurs
         emailDAO.prepareRecipient(contactMessage, recipients, true);
@@ -185,7 +185,7 @@ public class EmailService {
         // On construit les recepteurs
         Map<String, String> recipients = new HashMap<String, String>();
 
-        getNomDestinataire(null, null, mail.getName(), nomDestinataire);
+        getNomDestinataire("", "", mail.getName(), nomDestinataire);
         recipients.put(nomDestinataire.toString(), mail.getEmail());
 
         // On charge les recepteurs
@@ -204,7 +204,7 @@ public class EmailService {
             nomDestinataire.append(" ");
             nomDestinataire.append(prenom);
         } else {
-            nomDestinataire = new StringBuilder(login);
+            nomDestinataire.append(login);
         }
     }
 
