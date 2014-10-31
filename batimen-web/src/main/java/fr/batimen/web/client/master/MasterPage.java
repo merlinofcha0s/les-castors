@@ -13,7 +13,6 @@ import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.StatelessLink;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
@@ -28,14 +27,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.batimen.web.client.component.BatimenFeedbackPanel;
+import fr.batimen.web.client.component.WaiterModal;
 import fr.batimen.web.client.event.Event;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.web.client.event.LoginEvent;
 import fr.batimen.web.client.extend.Accueil;
-import fr.batimen.web.client.extend.Contact;
-import fr.batimen.web.client.extend.QuiSommeNous;
 import fr.batimen.web.client.extend.member.client.MonCompte;
-import fr.batimen.web.client.extend.nouveau.devis.NouveauDevis;
 import fr.batimen.web.client.panel.AuthentificationPanel;
 
 /**
@@ -56,29 +53,14 @@ public abstract class MasterPage extends WebPage {
     // Controle le tag HTML
     private final TransparentWebMarkupContainer htmlTag;
 
-    // Menu
-    private final WebMarkupContainer containerLinkMenuAccueil = new WebMarkupContainer("selectAccueil");
-    private final WebMarkupContainer containerLinkMenuQuiSommesNous = new WebMarkupContainer("selectQuiSommesNous");
-    private final WebMarkupContainer containerLinkMenuContact = new WebMarkupContainer("selectContact");
-    private final WebMarkupContainer containerLinkMenuNouveauDevis = new WebMarkupContainer("selectNouveauDevis");
-
-    private final AttributeModifier activateMenuCss = new AttributeModifier("class", new Model<String>(
-            "current-menu-parent"));
-    private final AttributeModifier deactivateMenuCss = new AttributeModifier("class", new Model<String>(""));
-
-    // Nom Pages Principales Static
-    public static final String QUI_SOMMES_NOUS = "quiSommesNous";
-    public static final String NOUVEAU_DEVIS = "nouveauDevis";
-    public static final String CONTACT = "contact";
-    public static final String ACCUEIL = "Accueil";
-    public static final String NONE = "None";
-
     // Feedback panel général
     protected BatimenFeedbackPanel feedBackPanelGeneral;
 
     private Dialog loginDialog;
     private AuthentificationPanel authentificationPanel;
-
+    
+    // waiter modal can be accessed from every child view
+	protected WaiterModal waiterModal;
     /**
      * Constructeur par defaut, initialise les composants de base de la page
      * 
@@ -133,9 +115,12 @@ public abstract class MasterPage extends WebPage {
         // dans l'onglet du navigateur)
         Label titleLbl = new Label("title", new Model<String>(titleInHeader.toString()));
         this.add(titleLbl);
+        
+        //inserting the waitermodal at the bottom of the page
+        waiterModal = new WaiterModal("waiterModal");
+        this.add(waiterModal);
 
         initComponentConnexion();
-        initMenu();
         initTitleHeader(isPageWithTitleHeader, title, adresseImgBackground);
 
         if (LOGGER.isDebugEnabled()) {
@@ -187,96 +172,6 @@ public abstract class MasterPage extends WebPage {
         bgImageAdresseCSS.append(") no-repeat center top;");
 
         containerTitleHeader.add(new AttributeModifier("style", bgImageAdresseCSS.toString()));
-    }
-
-    private void initMenu() {
-
-        StatelessLink<String> accueilLink = new StatelessLink<String>("accueilLink") {
-
-            private static final long serialVersionUID = -5109878814704325528L;
-
-            @Override
-            public void onClick() {
-                this.setResponsePage(Accueil.class);
-            }
-        };
-
-        StatelessLink<String> nouveauDevisLink = new StatelessLink<String>("nouveauDevisLink") {
-
-            private static final long serialVersionUID = 3349463856140732172L;
-
-            @Override
-            public void onClick() {
-                this.setResponsePage(NouveauDevis.class);
-            }
-        };
-
-        StatelessLink<String> quiSommesNousLink = new StatelessLink<String>("quiSommesNousLink") {
-
-            private static final long serialVersionUID = -9076993269716924371L;
-
-            @Override
-            public void onClick() {
-                this.setResponsePage(QuiSommeNous.class);
-            }
-        };
-
-        StatelessLink<String> contactLink = new StatelessLink<String>("contactLink") {
-
-            private static final long serialVersionUID = 3349463856140732172L;
-
-            @Override
-            public void onClick() {
-                this.setResponsePage(Contact.class);
-            }
-        };
-
-        containerLinkMenuAccueil.add(accueilLink);
-        containerLinkMenuContact.add(contactLink);
-        containerLinkMenuQuiSommesNous.add(quiSommesNousLink);
-        containerLinkMenuNouveauDevis.add(nouveauDevisLink);
-
-        this.add(containerLinkMenuAccueil);
-        this.add(containerLinkMenuQuiSommesNous);
-        this.add(containerLinkMenuContact);
-        this.add(containerLinkMenuNouveauDevis);
-    }
-
-    public void setActiveMenu(String nomPage) {
-
-        if (QUI_SOMMES_NOUS.equals(nomPage)) {
-            containerLinkMenuQuiSommesNous.add(activateMenuCss);
-            containerLinkMenuAccueil.add(deactivateMenuCss);
-            containerLinkMenuContact.add(deactivateMenuCss);
-            containerLinkMenuNouveauDevis.add(deactivateMenuCss);
-        }
-        if (CONTACT.equals(nomPage)) {
-            containerLinkMenuContact.add(activateMenuCss);
-            containerLinkMenuAccueil.add(deactivateMenuCss);
-            containerLinkMenuQuiSommesNous.add(deactivateMenuCss);
-            containerLinkMenuNouveauDevis.add(deactivateMenuCss);
-        }
-
-        if (ACCUEIL.equals(nomPage)) {
-            containerLinkMenuAccueil.add(activateMenuCss);
-            containerLinkMenuContact.add(deactivateMenuCss);
-            containerLinkMenuQuiSommesNous.add(deactivateMenuCss);
-            containerLinkMenuNouveauDevis.add(deactivateMenuCss);
-        }
-
-        if (NOUVEAU_DEVIS.equals(nomPage)) {
-            containerLinkMenuAccueil.add(deactivateMenuCss);
-            containerLinkMenuContact.add(deactivateMenuCss);
-            containerLinkMenuQuiSommesNous.add(deactivateMenuCss);
-            containerLinkMenuNouveauDevis.add(activateMenuCss);
-        }
-        if (NONE.equals(nomPage)) {
-            containerLinkMenuAccueil.add(deactivateMenuCss);
-            containerLinkMenuContact.add(deactivateMenuCss);
-            containerLinkMenuQuiSommesNous.add(deactivateMenuCss);
-            containerLinkMenuNouveauDevis.add(deactivateMenuCss);
-        }
-
     }
 
     private void initComponentConnexion() {

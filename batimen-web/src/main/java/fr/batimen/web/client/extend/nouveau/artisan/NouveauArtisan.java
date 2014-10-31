@@ -56,7 +56,6 @@ public class NouveauArtisan extends MasterPage {
     public NouveauArtisan() {
         super("Inscription d'un nouveau partenaire qui effectuera les travaux chez un particulier",
                 "Artisan Rénovation Inscription", "Nouveau partenaire", true, "img/bg_title1.jpg");
-        super.setActiveMenu(MasterPage.NONE);
 
         masterContainer = new WebMarkupContainer("masterContainer");
         masterContainer.setMarkupId("masterContainer");

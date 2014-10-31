@@ -26,4 +26,8 @@ public class WsPath {
     // Path Gestion Partenaire
     public static final String GESTION_PARTENAIRE_SERVICE_PATH = "gestionPartenaire";
     public static final String GESTION_PARTENAIRE_SERVICE_CREATION_PARTENAIRE = "creationPartenaire";
+    
+    // Path Envoi mail de contact
+    public static final String MAIL_SERVICE_PATH = "mailService";
+    public static final String MAIL_SERVICE_SEND_CONTACT_MAIL = "sendContactMail";
 }

@@ -28,6 +28,10 @@
 <link
 	rel="stylesheet"
 	type="text/css"
+	href="css/page.css">
+<link
+	rel="stylesheet"
+	type="text/css"
 	href="css/google_font.css">
 <link
 	rel="stylesheet"
@@ -67,21 +71,13 @@
 	type="text/css"
 	href="css/soliglyphs.css"
 	id="theme_color">
-<link
-	rel="stylesheet"
-	type="text/css"
-	href="css/font_icons8.css"
-	id="theme_color">
-<link
-	rel="stylesheet"
-	type="text/css"
-	href="css/page.css">
+<link rel="stylesheet" type="text/css" href="css/widgets.css">
 <!--[if IE 8 ]><script>
         var e = ("article,aside,figcaption,figure,footer,header,hgroup,nav,section,time").split(',');
         for (var i = 0; i < e.length; i++) {
             document.createElement(e[i]);
         }		
-    </script><![endif]-->
+    </script><![endif]--> 
 <script
 	src="js/jquery-1.9.1.js"
 	type="text/javascript"></script>
@@ -93,86 +89,41 @@
 	type="text/javascript"></script>
 </head>
 <body>
-	<header class="type2">
-		<div class="top_line">
-			<div class="container">
-				<div class="call_us">
-					<span class="ico">p</span>Call us toll free:&nbsp; +1 800 546 35 48
-				</div>
-				<div id="connexion">
-					<a wicket:id="connexion"><div
-							id="connexionlbl"
-							wicket:id="connexionlbl"></div></a>
-				</div>
-				<div class="socials">
-					<ul class="socials_list">
-						<li><a
-							href="#"
-							class="ico_social-facebook"></a></li>
-						<li><a
-							href="#"
-							class="ico_social-twitter"></a></li>
-						<li><a
-							href="#"
-							class="ico_social-youtube"></a></li>
-						<li><a
-							href="#"
-							class="ico_social-gplus"></a></li>
-						<li><a
-							href="#"
-							class="ico_social-dribbble"></a></li>
-						<li><a
-							href="#"
-							class="ico_social-delicious"></a></li>
-						<li><a
-							href="#"
-							class="ico_social-tumblr"></a></li>
-					</ul>
-				</div>
-				<div class="clear"></div>
-			</div>
-		</div>
+	<!-- HEADER -->
+	<header>
 		<!-- .top_line -->
-		<div class="header_wrapper container">
-			<a
-				href="index.html"
-				class="logo"> <img
-				src="img/logo.png"
-				alt="logo"
-				width="115"
-				height="30"
-				class="logo_def" /><img
-				alt=""
-				src="img/retina/logo.png"
-				width="115"
-				height="30"
-				class="logo_retina" /></a>
-			<nav>
-				<ul class="menu">
-					<li
-						wicket:id="selectAccueil"
-						class="current-menu-parent"><a wicket:id="accueilLink">Accueil</a></li>
-					<li wicket:id="selectNouveauDevis"><a wicket:id="nouveauDevisLink">Demande de devis</a></li>
-					<li wicket:id="selectQuiSommesNous"><a wicket:id="quiSommesNousLink">Qui sommes nous ?</a></li>
-					<li wicket:id="selectContact"><a wicket:id="contactLink">Nous contacter</a></li>
-				</ul>
-				<!-- .menu -->
-				<div class="clear"></div>
-			</nav>
-			<div class="head_search">
-				<form
-					class="search_form"
-					method="get"
-					name="search_form">
-					<input
-						type="text"
-						class="field_search"
-						title="Search..."
-						value="Search..."
-						name="s">
-				</form>
-			</div>
-		</div>
+        <div class="header_wrapper container">
+        	<a href="accueil" class="logo"><img src="img/logo.png" alt=""  width="115" height="30" class="logo_def"><img src="img/retina/logo.png" alt="" width="115" height="30" class="logo_retina"></a>
+            <nav>
+                <ul class="menu">
+                    <li>
+                        <div class="callus">
+                            <p >Besoin d'aide?</p>
+                            <p> <span class="header ico">p </span> 04 92 92 92 92 (appel gratuit)</p>
+                        </div>
+                    </li>
+                    <li>
+                        <a wicket:id="connexion" id="connexionlbl">
+                        	<wicket:container wicket:id="connexionlbl"/>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="nouveaupartenaire">DEVENER PARTENAIRE</a>
+                    </li>
+                    <li>
+                        <a href="nouveaudevis">DEMANDE DE DEVIS</a>
+                    </li>
+                </ul><!-- .menu -->
+                <div class="clear"></div>
+            </nav>
+            
+            <div class="head_search">
+                <form class="search_form" method="get" name="search_form">
+                    <input type="text" class="field_search" title="Search..." value="Search..." name="s">
+                </form>
+            </div>
+            
+        </div>
 	</header>
 	<div class="main_wrapper">
 		<!-- C O N T E N T -->
@@ -218,41 +169,31 @@
 		<!-- .content_wrapper -->
 	</div>
 	<!-- .main_wrapper -->
-	<footer>
-		<div class="footer_line container">
-			<div class="copyright">&copy; 2013 Batimen Team. All Rights Reserved.</div>
-			<div class="socials">
-				<ul class="socials_list">
-					<li><a
-						href="#"
-						class="ico_social-facebook"></a></li>
-					<li><a
-						href="#"
-						class="ico_social-twitter"></a></li>
-					<li><a
-						href="#"
-						class="ico_social-youtube"></a></li>
-					<li><a
-						href="#"
-						class="ico_social-gplus"></a></li>
-					<li><a
-						href="#"
-						class="ico_social-dribbble"></a></li>
-					<li><a
-						href="#"
-						class="ico_social-delicious"></a></li>
-					<li><a
-						href="#"
-						class="ico_social-tumblr"></a></li>
-				</ul>
-			</div>
-			<div class="clear"></div>
-			<a
-				href="javascript:void(0)"
-				class="btn2top"></a>
-		</div>
-		<div class="footer_border"></div>
-	</footer>
+	    
+    <footer>
+        <div class="footer_line container">
+        	<div class="copyright">&copy; 2014 Les Castors. All Rights Reserved.</div>
+            <div class="footer_menu">
+                <ul class="item_list">
+                    <li><a href="accueil">Accueil</a></li>
+                    <li><a href="quisommesnous">Qui sommes nous?</a></li>
+                    <li><a href="faq">FAQ</a></li>
+                    <li><a href="cgu">CGU</a></li>
+                    <li><a href="mentionslegales">Mentions Légales</a></li>
+                </ul>
+            </div>
+            <div class="socials">
+            	<ul class="socials_list">
+                	<li><a href="#" class="ico_social-facebook"></a></li>
+                    <li><a href="#" class="ico_social-twitter"></a></li>
+                    <li><a href="#" class="ico_social-gplus"></a></li>
+                </ul>            
+            </div>
+            <div class="clear"></div>
+            <a href="javascript:void(0)" class="btn2top"></a>            
+        </div>
+        <div class="footer_border"></div>
+    </footer>
 	<header class="fixed-menu"></header>
 	<div
 		class="layout_trigger clean_bg_cont"
@@ -260,5 +201,6 @@
 	<div wicket:id="loginDialog">
 		<div wicket:id="authentificationPanel"></div>
 	</div>
+	<wicket:container wicket:id="waiterModal"></wicket:container>
 </body>
 </html>

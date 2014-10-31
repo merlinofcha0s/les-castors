@@ -15,7 +15,6 @@ public class CGU extends MasterPage {
 	public CGU() {
 		super("Conditions générales d'utilisation de batimen.fr", "", "Nos conditions générales d'utilisation", true,
 		        "img/bg_title1.jpg");
-		super.setActiveMenu(MasterPage.NONE);
 	}
 
 }
