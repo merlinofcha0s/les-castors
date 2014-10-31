@@ -2,6 +2,10 @@ package fr.batimen.dto.helper;
 
 public class SiretValidatorHelper {
 
+    private SiretValidatorHelper() {
+
+    }
+
     public static boolean isSiretValide(String siretToValidate) {
 
         if (!siretToValidate.isEmpty()) {

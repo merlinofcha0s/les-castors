@@ -7,7 +7,7 @@ package fr.batimen.core.constant;
  * @author Casaucau Cyril
  * 
  */
-public interface WsPath {
+public class WsPath {
 
     // Path Gestion Utilisateur
     public static final String GESTION_UTILISATEUR_SERVICE_PATH = "gestionUtilisateur";
@@ -26,4 +26,8 @@ public interface WsPath {
     // Path Gestion Partenaire
     public static final String GESTION_PARTENAIRE_SERVICE_PATH = "gestionPartenaire";
     public static final String GESTION_PARTENAIRE_SERVICE_CREATION_PARTENAIRE = "creationPartenaire";
+    
+    // Path Envoi mail de contact
+    public static final String MAIL_SERVICE_PATH = "mailService";
+    public static final String MAIL_SERVICE_SEND_CONTACT_MAIL = "sendContactMail";
 }

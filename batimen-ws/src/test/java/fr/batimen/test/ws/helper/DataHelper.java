@@ -1,5 +1,6 @@
 package fr.batimen.test.ws.helper;
 
+import fr.batimen.dto.ContactMailDTO;
 import fr.batimen.dto.PermissionDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.enums.DelaiIntervention;
@@ -42,5 +43,18 @@ public class DataHelper {
         return creationAnnonceDTO;
 
     }
+
+    /**
+     * Genere un mail de contact de test
+     * @return
+     */
+	public static ContactMailDTO getContactMailData() {
+		ContactMailDTO res = new ContactMailDTO();
+		res.setName("dutest michel");
+		res.setEmail("pebron@delapebronne.com");
+		res.setSubject("Do you wanna know?");
+		res.setMessage("No forget about it, it's ok");
+		return res;
+	}
 
 }

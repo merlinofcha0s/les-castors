@@ -55,7 +55,7 @@ public class EmailDAO {
         MandrillMessage message = new MandrillMessage();
         message.setSubject(subject);
         message.setAutoText(true);
-        message.setFromEmail(Constant.EMAIL_FROM);
+        message.setFromEmail(Constant.EMAIL_CASTOR_NOTIF);
         message.setFromName(Constant.EMAIL_FROM_NAME);
 
         return message;

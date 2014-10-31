@@ -358,6 +358,38 @@ table tr td .error {
 	margin-bottom: 7px !important;
 	padding-left: 13px;
 }
+/* Footer menu */
+
+.footer_line{
+    padding-bottom: 20px;
+}
+.footer_menu{
+    display: inline-block;
+    font-size: 14px;
+    line-height: 16px;
+    padding: 21px 0 23px;
+    margin-left: -120px;
+    text-align: center;
+}
+
+.footer_menu .item_list li{
+    display: inline-block;
+    cursor: pointer;
+    border-right: solid grey 1px ;
+    padding-right: 10px;
+    padding-left: 5px;
+}
+
+.footer_menu .item_list li:last-child{
+    border-right: 0;
+    padding-right: 0;
+}
+@media (max-width: 768px) {
+    .footer_menu{
+        display: block;
+        margin-left: 0;
+    }
+}
 
 /* Custom CSS FuelUX */
 .fuelux .wizard ul li:before {
@@ -367,4 +399,33 @@ table tr td .error {
 
 .fuelux .wizard ul li {
 	font-size: 13px;
+}
+
+/* MENU SUPERIEUR */
+
+.menu a {
+	text-transform: uppercase !important;
+}
+.menu p{
+    color: #666666;
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 15px;
+    margin-top: -8px;
+}
+.menu .header.ico{
+    font-size: 18px;
+    margin-right: 6px;
+}
+
+.menu .callus>p{
+    text-align: right;
+}
+
+/* CONTACT */
+.feedback_form .btn{
+    text-transform: uppercase;
+    font-size: 14px;
+    padding: 7px;
 }

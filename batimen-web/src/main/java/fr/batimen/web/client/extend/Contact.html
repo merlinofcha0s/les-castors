@@ -1,3 +1,45 @@
 <wicket:extend>
-Contact
+		<div class="row-fluid">
+			<div class="span2"></div>
+			<div class="span8 module_cont module_feedback_form">
+				<div class="bg_title">
+					<h4 class="headInModule">Envoyez nous un email</h4>
+				</div>
+				<form wicket:id="contactForm" name="feedback_form" method="post" class="feedback_form">
+					<input wicket:id="name" type="text" name="field-name" placeholder="Nom"
+						class="field-name form_field">
+					<div class="clear"></div>
+					<input type="text" wicket:id="email" name="field-email" placeholder="Email"
+						class="field-email form_field">
+					<div class="clear"></div>
+					<input type="text" wicket:id="subject" name="field-subject" placeholder="Objet" class="field-subject form_field">
+					<div class="clear"></div>
+					<textarea wicket:id="message" name="field-message" cols="45" rows="5" placeholder="Message"
+						class="field-message form_field"></textarea>
+					<div class="clear"></div>
+					<button type="reset" wicket:id="resetButton" id="reset2" class="btn btn-info skipWaiter">Reinitialiser</button>
+					<button type="button" wicket:id="submitButton" class="btn btn-info" id="submit2">Envoyer</button>
+					<div class="ajaxanswer"></div>
+				</form>
+			</div>
+			<!-- .module_cont -->
+			<div class="span2"></div>
+		</div>
+		<!-- .row-fluid -->
+
+		<div class="module_line_trigger" data-option="hasShadow"
+			data-background="#e1e1e1 url(img/bg_pattern1.png) repeat 0 0"
+			data-top-padding="top_padding_normal"
+			data-bottom-padding="module_small_padding">
+			<div class="row-fluid">
+				<div
+					class="span12 module_cont module_google_map module_medium_padding">
+					<iframe width="1170" height="500"
+						src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d92485.27677103471!2d7.1048475!3d43.582281499999965!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x12cdd5459e5a91a9%3A0x40819a5fd979fb0!2sAntibes%2C+Francia!5e0!3m2!1ses-419!2sca!4v1412105602245"></iframe>
+				</div>
+				<!-- .module_cont -->
+			</div>
+			<!-- .row-fluid -->
+		</div>
+		<!-- .module_line_trigger -->
 </wicket:extend>
