@@ -28,7 +28,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<logback.version>1.1.2</logback.version>
-		<jersey.version>1.17</jersey.version>
+		<jersey.version>1.18.1</jersey.version>
 		<!-- Sonar -->
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.junit.reportsPath>${basedir}/target/surefire-reports</sonar.junit.reportsPath>

@@ -15,6 +15,7 @@ import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -46,6 +47,8 @@ public abstract class AbstractITTest {
     private String dataSourceAddress;
     private String loginDB;
     private String passwordDB;
+    private String browser;
+    private String chromeDriverAddress;
 
     public final static String BON_MOT_DE_PASSE = "lollollol";
     public final static String MAUVAIS_MOT_DE_PASSE = "kikoulolmauvais";
@@ -54,17 +57,19 @@ public abstract class AbstractITTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractITTest.class);
 
     // DBSetup
-    public static final Operation DELETE_ALL = deleteAllFrom("annonce", "artisan", "categoriemetier", "entreprise",
-            "adresse", "notation", "client");
+    public static final Operation DELETE_ALL = deleteAllFrom("annonce", "permission", "artisan", "categoriemetier",
+            "entreprise", "adresse", "notation", "client");
     public static final Operation INSERT_USER_DATA = insertInto("client")
             .columns("id", "email", "nom", "prenom", "login", "password", "numeroTel", "dateInscription", "isActive",
-                    "cleactivation", "typecompte")
+                    "cleactivation")
             .values(100001, "raiden@batimen.fr", "Casaucau", "Cyril", "raiden",
                     "$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=", "0614125696",
-                    "2014-01-08", true, "lolmdr", 2)
+                    "2014-01-08", true, "lolmdr")
             .values(100002, "xaviern@batimen.fr", "Dupont", "Xavier", "xavier",
                     "$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=", "0614125696",
-                    "2014-01-08", false, "lolmdr06", 2).build();
+                    "2014-01-08", false, "lolmdr06").build();
+    public static final Operation INSERT_USER_PERMISSION = insertInto("permission").columns("typecompte", "client_fk")
+            .values(4, 100001).values(4, 100002).build();
 
     @Before
     public void setUpITTest() throws Exception {
@@ -90,6 +95,8 @@ public abstract class AbstractITTest {
         ipServeur = wsProperties.getProperty("app.ip");
         portServeur = wsProperties.getProperty("app.port");
         nomApp = wsProperties.getProperty("app.name");
+        browser = wsProperties.getProperty("app.browser.target");
+        chromeDriverAddress = wsProperties.getProperty("app.address.chrome.driver");
 
         StringBuilder sbUrlApp = new StringBuilder("https://");
         sbUrlApp.append(ipServeur);
@@ -98,9 +105,19 @@ public abstract class AbstractITTest {
         sbUrlApp.append("/");
         sbUrlApp.append(nomApp);
 
-        // System.setProperty("webdriver.chrome.driver",
-        // "C:\\selenium\\chromedriver.exe");
-        driver = new FirefoxDriver();
+        switch (browser) {
+        case "chrome":
+            System.setProperty("webdriver.chrome.driver", chromeDriverAddress);
+            driver = new ChromeDriver();
+            break;
+        case "firefox":
+            driver = new FirefoxDriver();
+            break;
+        default:
+            driver = new FirefoxDriver();
+            break;
+        }
+
         appUrl = sbUrlApp.toString();
         driver.manage().timeouts().implicitlyWait(30, TimeUnit.SECONDS);
         driver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
@@ -157,6 +174,14 @@ public abstract class AbstractITTest {
         driver.findElement(By.name("login")).click();
         driver.findElement(By.name("login")).clear();
         driver.findElement(By.name("login")).sendKeys(username);
+        // On le fait attendre car il y a une probabilité qu'il ecrive trop vite
+        // dans les champs et qu'il se trompe
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         driver.findElement(By.name("password")).click();
         driver.findElement(By.name("password")).clear();
         driver.findElement(By.name("password")).sendKeys(password);
@@ -165,33 +190,6 @@ public abstract class AbstractITTest {
 
     protected DriverManagerDestination getDriverManagerDestination() {
         return new DriverManagerDestination(dataSourceAddress, loginDB, passwordDB);
-    }
-
-    protected void waitForTheElementById(String id) throws InterruptedException {
-        for (int second = 0;; second++) {
-            if (second >= TEMPS_ATTENTE_AJAX)
-                fail("timeout");
-            try {
-                if (isElementPresent(By.id(id)))
-                    break;
-            } catch (Exception e) {
-            }
-            Thread.sleep(1000);
-        }
-    }
-
-    protected void waitForTheElementByXPAth(String xPath) throws InterruptedException {
-        for (int second = 0;; second++) {
-            if (second >= TEMPS_ATTENTE_AJAX)
-                fail("timeout");
-            try {
-                if (isElementPresent(By.xpath(xPath)))
-                    ;
-                break;
-            } catch (Exception e) {
-            }
-            Thread.sleep(1000);
-        }
     }
 
 }

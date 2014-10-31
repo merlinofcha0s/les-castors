@@ -6,7 +6,7 @@ import org.apache.wicket.validation.ValidationError;
 
 import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.LoginDTO;
-import fr.batimen.ws.client.service.ClientService;
+import fr.batimen.ws.client.service.UtilisateurService;
 
 /**
  * Verifie que le login en cours d'inscription n'est pas deja présent en BDD
@@ -23,7 +23,7 @@ public class LoginUniquenessValidator implements IValidator<String> {
 		LoginDTO loginDTO = new LoginDTO();
 		loginDTO.setLogin(login.getValue());
 
-		ClientDTO clientChecked = ClientService.login(loginDTO);
+		ClientDTO clientChecked = UtilisateurService.login(loginDTO);
 
 		if (!clientChecked.getLogin().isEmpty()) {
 			// Permet de rajouter des variables dans le feedback

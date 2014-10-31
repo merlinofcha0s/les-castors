@@ -52,7 +52,7 @@ public class ContactUsService {
         }
 
         String objectInJSON = WsConnector.getInstance().sendRequest(WsPath.GESTION_CLIENT_SERVICE_PATH,
-                WsPath.GESTION_CLIENT_SERVICE_ACTIVATION, cleActivation);
+                WsPath.GESTION_UTILISATEUR_SERVICE_ACTIVATION, cleActivation);
 
         resultatService = Integer.parseInt(objectInJSON);
 

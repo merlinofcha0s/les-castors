@@ -15,11 +15,11 @@ import fr.batimen.ws.client.WsConnector;
  * @author Casaucau Cyril
  * 
  */
-public class ClientService {
+public class UtilisateurService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ClientService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(UtilisateurService.class);
 
-    private ClientService() {
+    private UtilisateurService() {
 
     }
 
@@ -36,8 +36,8 @@ public class ClientService {
             LOGGER.debug("Début appel service login + deserialization");
         }
 
-        String objectInJSON = WsConnector.getInstance().sendRequest(WsPath.GESTION_CLIENT_SERVICE_PATH,
-                WsPath.GESTION_CLIENT_SERVICE_LOGIN, loginDTO);
+        String objectInJSON = WsConnector.getInstance().sendRequest(WsPath.GESTION_UTILISATEUR_SERVICE_PATH,
+                WsPath.GESTION_UTILISATEUR_SERVICE_LOGIN, loginDTO);
 
         ClientDTO clientDTO = ClientDTO.deserializeUserDTO(objectInJSON);
 
@@ -55,14 +55,14 @@ public class ClientService {
      *            L'email du client
      * @return Les informations du client, vide si il n'existe pas.
      */
-    public static ClientDTO getClientByEmail(String email) {
+    public static ClientDTO getUtilisateurByEmail(String email) {
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Début appel service de recuperation client par email + deserialization");
         }
 
-        String objectInJSON = WsConnector.getInstance().sendRequest(WsPath.GESTION_CLIENT_SERVICE_PATH,
-                WsPath.GESTION_CLIENT_SERVICE_BY_EMAIL, email);
+        String objectInJSON = WsConnector.getInstance().sendRequest(WsPath.GESTION_UTILISATEUR_SERVICE_PATH,
+                WsPath.GESTION_UTILISATEUR_SERVICE_BY_EMAIL, email);
 
         ClientDTO clientDTO = ClientDTO.deserializeUserDTO(objectInJSON);
 
@@ -81,8 +81,8 @@ public class ClientService {
             LOGGER.debug("Début appel service de recuperation client par email + deserialization");
         }
 
-        String objectInJSON = WsConnector.getInstance().sendRequest(WsPath.GESTION_CLIENT_SERVICE_PATH,
-                WsPath.GESTION_CLIENT_SERVICE_ACTIVATION, cleActivation);
+        String objectInJSON = WsConnector.getInstance().sendRequest(WsPath.GESTION_UTILISATEUR_SERVICE_PATH,
+                WsPath.GESTION_UTILISATEUR_SERVICE_ACTIVATION, cleActivation);
 
         resultatService = Integer.parseInt(objectInJSON);
 
@@ -91,5 +91,44 @@ public class ClientService {
         }
 
         return resultatService;
+    }
+
+    public static String getHashByLogin(String login) {
+
+        String hash = "";
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Début appel service de recuperation du hash par login + deserialization");
+        }
+
+        String objectInJSON = WsConnector.getInstance().sendRequest(WsPath.GESTION_UTILISATEUR_SERVICE_PATH,
+                WsPath.GESTION_UTILISATEUR_SERVICE_HASH, login);
+
+        hash = String.valueOf(objectInJSON);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Fin appel service de recuperation du hash par login + deserialization");
+        }
+
+        return hash;
+    }
+
+    public static String getRolesByLogin(String login) {
+        String roles = "";
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Début appel service de recuperation des roles par login + deserialization");
+        }
+
+        String objectInJSON = WsConnector.getInstance().sendRequest(WsPath.GESTION_UTILISATEUR_SERVICE_PATH,
+                WsPath.GESTION_UTILISATEUR_SERVICE_ROLES, login);
+
+        roles = String.valueOf(objectInJSON);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Fin appel service de recuperation du hash par login + deserialization");
+        }
+
+        return roles;
     }
 }

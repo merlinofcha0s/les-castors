@@ -12,6 +12,7 @@ import org.junit.Test;
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.security.HashHelper;
 import fr.batimen.dto.CategorieMetierDTO;
+import fr.batimen.dto.PermissionDTO;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
 import fr.batimen.dto.enums.Civilite;
 import fr.batimen.dto.enums.StatutJuridique;
@@ -23,6 +24,7 @@ import fr.batimen.ws.dao.ArtisanDAO;
 import fr.batimen.ws.entity.Adresse;
 import fr.batimen.ws.entity.Artisan;
 import fr.batimen.ws.entity.Entreprise;
+import fr.batimen.ws.entity.Permission;
 
 public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
 
@@ -48,7 +50,11 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
         nouveauPartenaire.getArtisan().setNumeroTel("0645789655");
         nouveauPartenaire.getArtisan().setPassword(HashHelper.hashString("lolmdr06"));
         nouveauPartenaire.getArtisan().setPrenom("David");
-        nouveauPartenaire.getArtisan().setTypeCompte(TypeCompte.DEFAULT_ARTISAN);
+
+        PermissionDTO permissionDTO = new PermissionDTO();
+        permissionDTO.setTypeCompte(TypeCompte.ARTISAN);
+
+        nouveauPartenaire.getArtisan().getPermissions().add(permissionDTO);
 
         // Entreprise
         nouveauPartenaire.getEntreprise().setDateCreation(new Date());
@@ -77,8 +83,11 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
         Assert.assertEquals("Entreprise de la plomberie", entreprise.getNomComplet());
 
         Adresse adresseEntreprise = entreprise.getAdresse();
-        Assert.assertEquals("250 chemin du plombier", adresseEntreprise.getAdresse());
         Assert.assertNotNull(adresseEntreprise);
+        Assert.assertEquals("250 chemin du plombier", adresseEntreprise.getAdresse());
 
+        List<Permission> permissions = artisanEnregistre.getPermission();
+        Assert.assertNotNull(permissions.get(0));
+        Assert.assertEquals(TypeCompte.ARTISAN, permissions.get(0).getTypeCompte());
     }
 }

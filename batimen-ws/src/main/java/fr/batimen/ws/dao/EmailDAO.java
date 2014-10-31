@@ -31,7 +31,7 @@ import fr.batimen.core.utils.PropertiesUtils;
 @Stateless(name = "EmailDAO")
 @LocalBean
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class EmailDAO extends AbstractDAO {
+public class EmailDAO {
 
     private final MandrillApi mandrillApi;
     private String apiKey;

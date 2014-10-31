@@ -25,7 +25,7 @@ import fr.batimen.ws.entity.Client;
 @Stateless(name = "ClientDAO")
 @LocalBean
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class ClientDAO extends AbstractDAO {
+public class ClientDAO extends AbstractDAO<Client> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ClientDAO.class);
 
@@ -184,7 +184,7 @@ public class ClientDAO extends AbstractDAO {
 
         try {
             TypedQuery<Client> query = entityManager.createNamedQuery(QueryJPQL.CLIENT_BY_ACTIVATION_KEY, Client.class);
-            query.setParameter(QueryJPQL.PARAM_CLIENT_ACTIVATION_KEY, cleActivation);
+            query.setParameter(QueryJPQL.PARAM_ACTIVATION_KEY, cleActivation);
 
             clientFinded = query.getSingleResult();
         } catch (NoResultException nre) {
@@ -199,7 +199,62 @@ public class ClientDAO extends AbstractDAO {
         }
 
         return clientFinded;
+    }
 
+    /**
+     * Renvoi le hash pour un client donné
+     * 
+     * @param login
+     *            Le login du client
+     * @return
+     */
+    public String getHash(String login) {
+        String hash = null;
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Debut récuperation hash pour le client : " + login);
+        }
+
+        try {
+            TypedQuery<String> query = entityManager.createNamedQuery(QueryJPQL.CLIENT_HASH_BY_LOGIN, String.class);
+            query.setParameter(QueryJPQL.PARAM_CLIENT_LOGIN, login);
+
+            hash = query.getSingleResult();
+        } catch (NoResultException nre) {
+            if (LOGGER.isWarnEnabled()) {
+                LOGGER.warn("Aucune correspondance trouvées pour le hash du client : " + login, nre);
+            }
+            return "";
+        }
+        return hash;
+    }
+
+    /**
+     * Renvoi le statut pour un client donné
+     * 
+     * @param login
+     *            Le login du client
+     * @return
+     */
+    public Boolean getStatutActive(String login) {
+        Boolean isActive = Boolean.FALSE;
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Debut récuperation statut pour le client : " + login);
+        }
+
+        try {
+            TypedQuery<Boolean> query = entityManager.createNamedQuery(QueryJPQL.CLIENT_STATUT_BY_LOGIN, Boolean.class);
+            query.setParameter(QueryJPQL.PARAM_CLIENT_LOGIN, login);
+
+            isActive = query.getSingleResult();
+        } catch (NoResultException nre) {
+            if (LOGGER.isWarnEnabled()) {
+                LOGGER.warn("Aucune correspondance trouvées pour le statut du client : " + login, nre);
+            }
+            return Boolean.FALSE;
+        }
+        return isActive;
     }
 
 }

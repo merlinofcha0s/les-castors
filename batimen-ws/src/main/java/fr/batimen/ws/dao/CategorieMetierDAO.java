@@ -18,10 +18,16 @@ import fr.batimen.ws.entity.CategorieMetier;
 @Stateless(name = "CategorieMetierDAO")
 @LocalBean
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class CategorieMetierDAO extends AbstractDAO {
+public class CategorieMetierDAO extends AbstractDAO<CategorieMetier> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CategorieMetierDAO.class);
 
+    /**
+     * Enregistre les catégories metiers des entreprises dans la base de
+     * données.
+     * 
+     * @param nouvelleCategorieMetier
+     */
     public void persistCategorieMetier(CategorieMetier nouvelleCategorieMetier) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Persistence d'une nouvelle catégorie");

@@ -8,7 +8,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import fr.batimen.core.constant.Constant;
 import fr.batimen.web.client.master.MasterPage;
-import fr.batimen.ws.client.service.ClientService;
+import fr.batimen.ws.client.service.UtilisateurService;
 
 /**
  * Page de l'application qui sert à activer et à informer le client à propos de
@@ -43,7 +43,7 @@ public class Activation extends MasterPage {
         cleActivation = params.get("key").toString();
         if (!cleActivation.isEmpty()) {
 
-            Integer codeRetourService = ClientService.activateAccount(cleActivation);
+            Integer codeRetourService = UtilisateurService.activateAccount(cleActivation);
 
             if (codeRetourService.equals(Constant.CODE_SERVICE_RETOUR_OK)) {
                 messageActivationCompte.setDefaultModelObject("Votre compte est activé !!");

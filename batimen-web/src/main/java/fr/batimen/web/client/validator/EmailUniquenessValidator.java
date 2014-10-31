@@ -5,7 +5,7 @@ import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 
 import fr.batimen.dto.ClientDTO;
-import fr.batimen.ws.client.service.ClientService;
+import fr.batimen.ws.client.service.UtilisateurService;
 
 /**
  * Verifie que l'email en cours d'inscription n'est pas deja présent en BDD
@@ -19,7 +19,7 @@ public class EmailUniquenessValidator implements IValidator<String> {
 
 	@Override
 	public void validate(IValidatable<String> email) {
-		ClientDTO checkedClientEmail = ClientService.getClientByEmail(email.getValue());
+		ClientDTO checkedClientEmail = UtilisateurService.getUtilisateurByEmail(email.getValue());
 		if (!checkedClientEmail.getEmail().isEmpty()) {
 			// Permet de rajouter des variables dans le feedback
 			ValidationError error = new ValidationError(this);

@@ -23,7 +23,7 @@ import fr.batimen.ws.entity.Entreprise;
 @Stateless(name = "EntrepriseDAO")
 @LocalBean
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class EntrepriseDAO extends AbstractDAO {
+public class EntrepriseDAO extends AbstractDAO<Entreprise> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(EntrepriseDAO.class);
 
@@ -32,6 +32,14 @@ public class EntrepriseDAO extends AbstractDAO {
         entityManager.persist(nouvelleEntreprise);
     }
 
+    /**
+     * Récupération d'une entreprise grace à son SIRET <br/>
+     * Utile pour verifier si il n'y a pas de doublon lors de l'inscription
+     * d'une entreprise
+     * 
+     * @param siret
+     * @return
+     */
     public Entreprise getEntrepriseBySiret(String siret) {
 
         Entreprise entrepriseTrouvee = null;

@@ -11,9 +11,11 @@ import static fr.batimen.dto.constant.ValidatorConstant.PASSWORD_RANGE_MIN;
 import static fr.batimen.dto.constant.ValidatorConstant.TELEPHONE_REGEX;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -24,7 +26,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import fr.batimen.dto.enums.Civilite;
-import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 
 /**
@@ -57,8 +58,8 @@ public class ClientDTO extends AbstractDTO {
     private String cleActivation;
     @NotNull
     private Boolean isActive = false;
-    @NotNull
-    private TypeCompte typeCompte;
+    @Valid
+    private final List<PermissionDTO> permissions = new ArrayList<PermissionDTO>();
 
     /**
      * @return the login
@@ -196,18 +197,10 @@ public class ClientDTO extends AbstractDTO {
     }
 
     /**
-     * @return the typeCompte
+     * @return the permissions
      */
-    public TypeCompte getTypeCompte() {
-        return typeCompte;
-    }
-
-    /**
-     * @param typeCompte
-     *            the typeCompte to set
-     */
-    public void setTypeCompte(TypeCompte typeCompte) {
-        this.typeCompte = typeCompte;
+    public List<PermissionDTO> getPermissions() {
+        return permissions;
     }
 
     @Override

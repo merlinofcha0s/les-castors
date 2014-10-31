@@ -19,7 +19,6 @@ import fr.batimen.core.utils.PropertiesUtils;
 import fr.batimen.web.client.extend.Accueil;
 import fr.batimen.web.client.extend.CGU;
 import fr.batimen.web.client.extend.Contact;
-import fr.batimen.web.client.extend.MonCompte;
 import fr.batimen.web.client.extend.QuiSommeNous;
 import fr.batimen.web.client.extend.activation.Activation;
 import fr.batimen.web.client.extend.authentification.Authentification;
@@ -27,6 +26,7 @@ import fr.batimen.web.client.extend.error.AccesInterdit;
 import fr.batimen.web.client.extend.error.ErreurInterne;
 import fr.batimen.web.client.extend.error.Expiree;
 import fr.batimen.web.client.extend.error.NonTrouvee;
+import fr.batimen.web.client.extend.member.client.MonCompte;
 import fr.batimen.web.client.extend.nouveau.artisan.NouveauArtisan;
 import fr.batimen.web.client.extend.nouveau.devis.NouveauDevis;
 import fr.batimen.web.client.session.BatimenSession;
@@ -95,6 +95,9 @@ public class BatimenApplication extends AuthenticatedWebApplication {
         mountPage(Constant.ACTIVATION_URL, Activation.class);
         mountPage(Constant.PARTENAIRE_URL, NouveauArtisan.class);
         mountPage(Constant.NOUVEAU_DEVIS_URL, NouveauDevis.class);
+        // Page d'erreur
+        mountPage("/nontrouve", AccesInterdit.class);
+        mountPage("/expiree", Expiree.class);
         mountPage("/404", NonTrouvee.class);
 
         // Config des pages d'erreurs
@@ -109,11 +112,6 @@ public class BatimenApplication extends AuthenticatedWebApplication {
     }
 
     @Override
-    protected Class<? extends WebPage> getSignInPageClass() {
-        return Authentification.class;
-    }
-
-    @Override
     protected Class<? extends AbstractAuthenticatedWebSession> getWebSessionClass() {
         return BatimenSession.class;
     }
@@ -122,13 +120,17 @@ public class BatimenApplication extends AuthenticatedWebApplication {
      * (non-Javadoc)
      * 
      * @see
-     * org.apache.wicket.authroles.authentication.AuthenticatedWebApplication
-     * #newSession(org.apache.wicket.request.Request,
-     * org.apache.wicket.request.Response)
+     * org.apache.wicket.protocol.http.WebApplication#newSession(org.apache.
+     * wicket.request.Request, org.apache.wicket.request.Response)
      */
     @Override
     public Session newSession(Request request, Response response) {
         return new BatimenSession(request);
+    }
+
+    @Override
+    protected Class<? extends WebPage> getSignInPageClass() {
+        return Authentification.class;
     }
 
     private void getAppProperties() {

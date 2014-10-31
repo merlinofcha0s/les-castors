@@ -31,7 +31,9 @@
 .icons8-6:before,
 .icons8-7:before,
 .icons8-8:before,
-.icons8-9:before {
+.icons8-9:before,
+.icons8-garden-shears:before,
+.icons8-plumbing:before {
   display: inline-block;
   font-family: "font_icons8";
   font-style: normal;
@@ -55,3 +57,5 @@
 .icons8-7:before { content: "\f106"; }
 .icons8-8:before { content: "\f107"; }
 .icons8-9:before { content: "\f108"; }
+.icons8-garden-shears:before { content: "\f109"; }
+.icons8-plumbing:before { content: "\f10a"; }

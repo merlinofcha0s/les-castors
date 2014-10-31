@@ -8,4 +8,5 @@ client:
     numerotel: "0615458596"
     prenom: Johnny
     isactive: true
-    typecompte: 3
+permission:
+  - typecompte: 4
