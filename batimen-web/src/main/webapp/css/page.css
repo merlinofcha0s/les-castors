@@ -93,12 +93,12 @@
 
 #validateQualification {
 	float: right;
-	margin-right: 17px;
+	margin-right: 18px;
 }
 
 #validateInscription {
 	float: none;
-	margin-left: 325px;
+	margin-left: 339px;
 }
 
 .imgHelp {
@@ -177,7 +177,6 @@
 #validateEtape2Partenaire {
 	float: right;
 	margin-right: 17px;
-	margin-top: 20px;
 }
 
 #categorieMetierPartenaire {
@@ -227,7 +226,7 @@
 }
 
 #terminerInscriptionPartenaire {
-	padding-left: 297px;
+	padding-left: 311px;
 }
 
 .font-glyph-entreprise{
