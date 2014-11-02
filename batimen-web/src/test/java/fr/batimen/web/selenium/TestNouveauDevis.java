@@ -170,7 +170,7 @@ public class TestNouveauDevis extends AbstractITTest {
     }
 
     private void etape3(boolean isAlreadyAuthenticate) {
-        new Select(driver.findElement(By.id("sousCategorieSelect"))).selectByVisibleText("Installation électrique");
+        new Select(driver.findElement(By.id("sousCategorieSelect"))).selectByVisibleText("Tableaux électriques");
         driver.findElement(By.id("descriptionDevisField")).clear();
         driver.findElement(By.id("descriptionDevisField")).sendKeys("Refonte complete de l'electricite dans la maison");
         new Select(driver.findElement(By.id("typeContactField"))).selectByVisibleText("Email");

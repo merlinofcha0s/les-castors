@@ -33,6 +33,12 @@ public class TestAuthentification extends AbstractITTest {
     public void testAuthentificationSuccess() throws Exception {
         driver.get(appUrl);
         connexionApplication("raiden", AbstractITTest.BON_MOT_DE_PASSE);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.textToBePresentInElementLocated(By.id("connexionLink"), "MON COMPTE"));
         assertTrue(checkCondition);
@@ -42,19 +48,30 @@ public class TestAuthentification extends AbstractITTest {
     public void testAuthentificationFailed() throws Exception {
         driver.get(appUrl);
         connexionApplication("raiden", AbstractITTest.MAUVAIS_MOT_DE_PASSE);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.textToBePresentInElementLocated(By.id("errorLogin"), messageErreur));
         assertTrue(checkCondition);
     }
 
-    /*
-     * @Test public void testAuthentificationFailedBecauseNotActivated() throws
-     * Exception { driver.get(appUrl); connexionApplication("xavier",
-     * AbstractITTest.BON_MOT_DE_PASSE); Boolean checkCondition = (new
-     * WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
-     * .until(ExpectedConditions
-     * .textToBePresentInElementLocated(By.id("errorLogin"), messageErreur));
-     * assertTrue(checkCondition); }
-     */
+    @Test
+    public void testAuthentificationFailedBecauseNotActivated() throws Exception {
+        driver.get(appUrl);
+        connexionApplication("xavier", AbstractITTest.BON_MOT_DE_PASSE);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.textToBePresentInElementLocated(By.id("errorLogin"), messageErreur));
+        assertTrue(checkCondition);
+    }
 
 }
