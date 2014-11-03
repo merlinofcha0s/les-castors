@@ -38,7 +38,7 @@ public class Constant {
     // Nom des pages web
     public static final String ACCUEIL_URL = "/accueil";
     public static final String AUTHENTIFICATION_URL = "/connexion";
-    public static final String MON_COMPTE_URL = "/moncompte";
+    public static final String MES_DEVIS_URL = "/mesdevis";
     public static final String QUI_SOMMES_NOUS_URL = "/quisommesnous";
     public static final String CONTACT_URL = "/contact";
     public static final String CGU_URL = "/cgu";
@@ -48,7 +48,7 @@ public class Constant {
 
     // Email
     public static final String EMAIL_CASTOR_NOTIF = "notifications@lescastors.fr";
-    public static final String EMAIL_CASTOR_CONTACT="contact@lescastors.fr";
+    public static final String EMAIL_CASTOR_CONTACT = "contact@lescastors.fr";
     public static final String EMAIL_FROM_NAME = "Les Castors";
     public static final String EMAIL_SENT = "sent";
     public static final String EMAIL_QUEUED = "queued";
@@ -69,11 +69,11 @@ public class Constant {
     public static final String TAG_EMAIL_TYPE_CONTACT = "typecontact";
     public static final String TAG_EMAIL_DELAI_INTERVENTION = "delaiintervention";
     public static final String TAG_EMAIL_ACTIVATION_LINK = "lienactivation";
-    
+
     // Contact Email tags
     public static final String TAG_EMAIL_CONTACT_NAME = "CONTACTERNAME";
-    public static final String TAG_EMAIL_CONTACT_EMAIL="CONTACTEREMAIL";
-    public static final String TAG_EMAIL_CONTACT_SUBJECT="MESSAGESUBJECT";
-    public static final String TAG_EMAIL_CONTACT_MESSAGE="MESSAGECONTENT";
+    public static final String TAG_EMAIL_CONTACT_EMAIL = "CONTACTEREMAIL";
+    public static final String TAG_EMAIL_CONTACT_SUBJECT = "MESSAGESUBJECT";
+    public static final String TAG_EMAIL_CONTACT_MESSAGE = "MESSAGECONTENT";
 
 }

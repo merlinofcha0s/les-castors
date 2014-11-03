@@ -441,3 +441,17 @@ table tr td .error {
     font-size: 14px;
     padding: 7px;
 }
+
+/* Menu */
+#ulMenu{
+	padding: 5px 0 5px;
+	content: "";
+}
+
+#ulMenu li:BEFORE{
+	content: "";
+}
+
+#ulMenu li{
+	padding: 0 0 0 0px;
+}

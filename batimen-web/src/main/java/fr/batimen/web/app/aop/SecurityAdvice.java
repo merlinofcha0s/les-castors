@@ -42,7 +42,7 @@ public class SecurityAdvice {
         Subject utilisateur = SecurityUtils.getSubject();
         try {
             // On check le role de l'utilisateur
-            utilisateur.checkRole(TypeCompte.ARTISAN.getRole());
+            utilisateur.checkRole(TypeCompte.CLIENT.getRole());
             // On laisse passer vu qu'aucune exception n'a été levé
             joinPoint.proceed();
         } catch (AuthorizationException ae) {

@@ -32,7 +32,7 @@ import fr.batimen.web.client.event.Event;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.web.client.event.LoginEvent;
 import fr.batimen.web.client.extend.Accueil;
-import fr.batimen.web.client.extend.member.client.MonCompte;
+import fr.batimen.web.client.extend.member.client.MesDevis;
 import fr.batimen.web.client.panel.AuthentificationPanel;
 
 /**
@@ -197,7 +197,7 @@ public abstract class MasterPage extends WebPage {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 if (SecurityUtils.getSubject().isAuthenticated()) {
-                    setResponsePage(MonCompte.class);
+                    setResponsePage(MesDevis.class);
                 } else {
                     getLoginDialog().open(target);
                 }
