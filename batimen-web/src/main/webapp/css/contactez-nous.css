@@ -1,0 +1,24 @@
+.contacteznous{
+    padding-bottom: 20px;
+}
+.contacteznous .contactmethod{
+    line-height: 50px;
+    text-align: center;
+}
+
+.contacteznous .contactmethod .ico{
+    font-size: 50px;
+    margin-right: 20px;
+}
+.contacteznous .contactmethod p {
+    font-size: 1.8em;
+    display: inline-block;
+}
+
+.contacteznous .contactmethod:first-child p {
+    font-size: 2.2em;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-family: "Open Sans",sans-serif;
+    padding-top: 15px;
+}

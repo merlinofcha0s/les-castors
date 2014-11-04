@@ -455,3 +455,26 @@ table tr td .error {
 #ulMenu li{
 	padding: 0 0 0 0px;
 }
+
+/* Espace client - mes devis */
+#divInfoClientContenant{
+	text-align: center;
+}
+
+#divInfoClientContenu{
+	display: inline-block;
+}
+
+#divInfoClientContenu div {
+	padding-top: 18px;
+}
+
+#btnDonnezAvis{
+	font-size: 20px;
+	padding: 10px;
+}
+
+.iconsMesDevis{
+	font-size: 15px;
+	margin-right: 5px;
+}

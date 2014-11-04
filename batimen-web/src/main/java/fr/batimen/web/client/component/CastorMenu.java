@@ -1,8 +1,10 @@
 package fr.batimen.web.client.component;
 
+import org.apache.wicket.Session;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 
+import fr.batimen.web.client.extend.Accueil;
 import fr.batimen.web.client.extend.member.client.MesDevis;
 
 public class CastorMenu extends Panel {
@@ -12,6 +14,10 @@ public class CastorMenu extends Panel {
     public CastorMenu(String id) {
         super(id);
 
+        initLink();
+    }
+
+    private void initLink() {
         Link<Void> mesDevisLink = new Link<Void>("mesDevis") {
 
             private static final long serialVersionUID = 9041719967383711900L;
@@ -22,7 +28,19 @@ public class CastorMenu extends Panel {
             }
         };
 
+        Link<Void> logout = new Link<Void>("logout") {
+            private static final long serialVersionUID = 9041719967383711900L;
+
+            @Override
+            public void onClick() {
+                Session.get().invalidate();
+                this.setResponsePage(Accueil.class);
+            }
+
+        };
+
         this.add(mesDevisLink);
+        this.add(logout);
     }
 
 }

@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import fr.batimen.core.exception.FrontEndException;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
+import fr.batimen.web.client.component.ContactezNous;
 import fr.batimen.web.client.component.MapFrance;
 import fr.batimen.web.client.component.NavigationWizard;
 import fr.batimen.web.client.event.MapFranceEvent;
@@ -82,10 +83,13 @@ public class NouveauArtisan extends MasterPage {
         etape4Confirmation = new Etape4Confirmation("etape4Confirmation");
         etape4Confirmation.setVisible(false);
 
+        ContactezNous contactezNous = new ContactezNous("contactezNous");
+
         masterContainer.add(carteFrance);
         masterContainer.add(containerEtape2);
         masterContainer.add(etape3Entreprise);
         masterContainer.add(etape4Confirmation);
+        masterContainer.add(contactezNous);
 
         this.add(masterContainer);
 

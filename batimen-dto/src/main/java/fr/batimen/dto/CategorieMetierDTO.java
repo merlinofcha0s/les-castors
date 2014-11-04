@@ -16,7 +16,7 @@ public class CategorieMetierDTO implements Serializable {
     private String name;
 
     @NotNull
-    private short codeCategorieMetier;
+    private Short codeCategorieMetier;
 
     @Valid
     private List<SousCategorieMetierDTO> sousCategories = new ArrayList<SousCategorieMetierDTO>();
@@ -58,7 +58,7 @@ public class CategorieMetierDTO implements Serializable {
     /**
      * @return the codeCategorieMetier
      */
-    public short getCodeCategorieMetier() {
+    public Short getCodeCategorieMetier() {
         return codeCategorieMetier;
     }
 
@@ -66,7 +66,7 @@ public class CategorieMetierDTO implements Serializable {
      * @param codeCategorieMetier
      *            the codeCategorieMetier to set
      */
-    public void setCodeCategorieMetier(short codeCategorieMetier) {
+    public void setCodeCategorieMetier(Short codeCategorieMetier) {
         this.codeCategorieMetier = codeCategorieMetier;
     }
 

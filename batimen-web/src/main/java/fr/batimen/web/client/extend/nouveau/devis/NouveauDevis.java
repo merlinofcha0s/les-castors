@@ -24,6 +24,7 @@ import fr.batimen.core.security.HashHelper;
 import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.web.app.security.Authentication;
+import fr.batimen.web.client.component.ContactezNous;
 import fr.batimen.web.client.component.MapFrance;
 import fr.batimen.web.client.component.NavigationWizard;
 import fr.batimen.web.client.event.Event;
@@ -165,12 +166,15 @@ public class NouveauDevis extends MasterPage {
             }
         }
 
+        ContactezNous contactezNous = new ContactezNous("contactezNous");
+
         this.add(carteFrance);
         this.add(etape2Categorie);
         this.add(containerQualification);
         this.add(containerInscription);
         this.add(containerConfirmation);
         this.add(navigationWizard);
+        this.add(contactezNous);
 
         try {
             changementEtape(nouvelleAnnonce.getNumeroEtape());

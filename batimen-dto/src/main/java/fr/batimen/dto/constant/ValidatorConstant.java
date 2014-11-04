@@ -21,8 +21,8 @@ public class ValidatorConstant {
     // Creation annonce DTO
     public static final int CREATION_ANNONCE_TITRE_MIN = 3;
     public static final int CREATION_ANNONCE_TITRE_MAX = 45;
-    public static final int CREATION_ANNONCE_DESCRIPTION_MIN = 3;
-    public static final int CREATION_ANNONCE_DESCRIPTION_MAX = 500;
+    public static final int ANNONCE_DESCRIPTION_MIN = 3;
+    public static final int ANNONCE_DESCRIPTION_MAX = 500;
     public static final int CREATION_ANNONCE_DELAI_INTERVENTION_MAX = 15;
     public static final int CREATION_ANNONCE_NBDEVIS_MIN = 1;
     public static final int CREATION_ANNONCE_NBDEVIS_MAX = 10;

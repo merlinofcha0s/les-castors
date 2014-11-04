@@ -23,13 +23,20 @@ public class CategorieLoader {
     private static CategorieMetierDTO equipement;
     private static CategorieMetierDTO toutesCategories;
 
+    public static final Short electriciteCode = 0;
+    public static final Short plomberieCode = 1;
+    public static final Short espaceVertCode = 2;
+    public static final Short decorationMaconnerieCode = 3;
+    public static final Short grosOeuvreCode = 4;
+    public static final Short equipementCode = 5;
+
     private CategorieLoader() {
 
     }
 
     public static synchronized CategorieMetierDTO getCategorieElectricite() {
         if (electricite == null) {
-            electricite = new CategorieMetierDTO("Electricité", (short) 0);
+            electricite = new CategorieMetierDTO("Electricité", electriciteCode);
             SousCategorieMetierDTO tableauxElectriques = new SousCategorieMetierDTO("Tableaux électriques");
             SousCategorieMetierDTO reseauxBranchementElectrique = new SousCategorieMetierDTO(
                     "Réseaux-branchements électriques");
@@ -54,7 +61,7 @@ public class CategorieLoader {
 
     public static synchronized CategorieMetierDTO getCategoriePlomberie() {
         if (plomberie == null) {
-            plomberie = new CategorieMetierDTO("Plomberie", (short) 1);
+            plomberie = new CategorieMetierDTO("Plomberie", plomberieCode);
             SousCategorieMetierDTO sousPlomberie = new SousCategorieMetierDTO("Plomberie");
             SousCategorieMetierDTO petitTravaux = new SousCategorieMetierDTO("Petit travaux");
             SousCategorieMetierDTO installation = new SousCategorieMetierDTO("Installation");
@@ -92,7 +99,7 @@ public class CategorieLoader {
 
     public static synchronized CategorieMetierDTO getCategorieEspaceVert() {
         if (espaceVert == null) {
-            espaceVert = new CategorieMetierDTO("Espace Vert", (short) 2);
+            espaceVert = new CategorieMetierDTO("Espace Vert", espaceVertCode);
             SousCategorieMetierDTO cloture = new SousCategorieMetierDTO("Cloture");
             SousCategorieMetierDTO elagage = new SousCategorieMetierDTO("Elagage, Debroussaillage");
             SousCategorieMetierDTO arrosageAutomatique = new SousCategorieMetierDTO("Arrosage automatique");
@@ -123,7 +130,7 @@ public class CategorieLoader {
 
     public static synchronized CategorieMetierDTO getCategorieDecorationMaconnerie() {
         if (decorationMaconnerie == null) {
-            decorationMaconnerie = new CategorieMetierDTO("Décoration / Maçonnerie", (short) 3);
+            decorationMaconnerie = new CategorieMetierDTO("Décoration / Maçonnerie", decorationMaconnerieCode);
             SousCategorieMetierDTO sousDecorationMaconnerie = new SousCategorieMetierDTO("Peinture");
             decorationMaconnerie.addSousCategorie(sousDecorationMaconnerie);
         }
@@ -132,7 +139,7 @@ public class CategorieLoader {
 
     public static synchronized CategorieMetierDTO getCategorieGrosOeuvre() {
         if (grosOeuvre == null) {
-            grosOeuvre = new CategorieMetierDTO("Gros oeuvre", (short) 4);
+            grosOeuvre = new CategorieMetierDTO("Gros oeuvre", grosOeuvreCode);
             SousCategorieMetierDTO porteFenetre = new SousCategorieMetierDTO("Porte / Fenètre");
             SousCategorieMetierDTO pluieDeLumiere = new SousCategorieMetierDTO("Pluie de lumière (Vélux)");
             SousCategorieMetierDTO portailFerronerie = new SousCategorieMetierDTO("Portail / Ferronerie");
@@ -188,7 +195,7 @@ public class CategorieLoader {
 
     public static synchronized CategorieMetierDTO getCategorieEquipement() {
         if (equipement == null) {
-            equipement = new CategorieMetierDTO("Equipement", (short) 5);
+            equipement = new CategorieMetierDTO("Equipement", equipementCode);
             SousCategorieMetierDTO sousEquipement = new SousCategorieMetierDTO("Alarme");
             equipement.addSousCategorie(sousEquipement);
         }
@@ -214,4 +221,19 @@ public class CategorieLoader {
         return allCategories;
     }
 
+    public static String getIconForCategorie(Short codeCategorieMetier) {
+        if (codeCategorieMetier.equals(electriciteCode)) {
+            return "icon-Lightning";
+        } else if (codeCategorieMetier.equals(plomberieCode)) {
+            return "icons8-plumbing";
+        } else if (codeCategorieMetier.equals(espaceVertCode)) {
+            return "icons8-garden-shears";
+        } else if (codeCategorieMetier.equals(decorationMaconnerieCode)) {
+            return "icon-Tool";
+        } else if (codeCategorieMetier.equals(grosOeuvreCode)) {
+            return "icon-House";
+        } else {
+            return "icon-Satellite1";
+        }
+    }
 }
