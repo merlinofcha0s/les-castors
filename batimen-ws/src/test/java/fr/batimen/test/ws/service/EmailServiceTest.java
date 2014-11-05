@@ -80,7 +80,6 @@ public class EmailServiceTest extends AbstractBatimenWsTest {
     public void sendConfirmationCreationAnnonce() throws MandrillApiError, IOException, EmailException {
         Client johnny = clientDAO.getClientByLoginName("johnny06");
 
-        System.out.println("Taille de devis demande : " + johnny.getDevisDemandes().size());
         Assert.assertTrue(johnny.getDevisDemandes().size() > 0);
         boolean noError = emailService.envoiMailConfirmationCreationAnnonce(johnny.getDevisDemandes().get(0));
 
@@ -111,7 +110,7 @@ public class EmailServiceTest extends AbstractBatimenWsTest {
                         urlFrontend);
         Assert.assertTrue(noError);
     }
-    
+
     /**
      * Cas de test : Test qui envoi un mail de contact à l'équipe
      * 
@@ -124,10 +123,9 @@ public class EmailServiceTest extends AbstractBatimenWsTest {
         boolean noError = emailService.envoiEmailContact(contactMailDTO);
         Assert.assertTrue(noError);
     }
-    
+
     /**
-     * Cas de test : Test qui envoi un mail accusé de reception
-     * au contacteur
+     * Cas de test : Test qui envoi un mail accusé de reception au contacteur
      * 
      * @throws MandrillApiError
      * @throws IOException
@@ -138,7 +136,5 @@ public class EmailServiceTest extends AbstractBatimenWsTest {
         boolean noError = emailService.envoiEmailAccuseReception(contactMailDTO);
         Assert.assertTrue(noError);
     }
-    
-    
-    
+
 }

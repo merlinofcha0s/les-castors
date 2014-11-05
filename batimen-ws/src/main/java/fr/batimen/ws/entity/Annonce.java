@@ -59,7 +59,7 @@ public class Annonce extends AbstractEntity implements Serializable {
     @Column(length = 255, nullable = true)
     private String photo;
     @Column(nullable = false)
-    private String categorieMetier;
+    private Short categorieMetier;
     @Column(nullable = false)
     private String sousCategorieMetier;
     @Column(nullable = false)
@@ -255,7 +255,7 @@ public class Annonce extends AbstractEntity implements Serializable {
     /**
      * @return the categorieMetier
      */
-    public String getCategorieMetier() {
+    public Short getCategorieMetier() {
         return categorieMetier;
     }
 
@@ -270,7 +270,7 @@ public class Annonce extends AbstractEntity implements Serializable {
      * @param categorieMetier
      *            the categorieMetier to set
      */
-    public void setCategorieMetier(String categorieMetier) {
+    public void setCategorieMetier(Short categorieMetier) {
         this.categorieMetier = categorieMetier;
     }
 

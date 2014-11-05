@@ -1,5 +1,9 @@
 package fr.batimen.web.client.extend.member.client;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -8,6 +12,9 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 
 import fr.batimen.dto.AnnonceDTO;
+import fr.batimen.dto.enums.DelaiIntervention;
+import fr.batimen.dto.enums.EtatAnnonce;
+import fr.batimen.dto.enums.TypeContact;
 import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.client.component.CastorMenu;
@@ -27,12 +34,15 @@ public final class MesDevis extends MasterPage {
 
     private static final long serialVersionUID = 1902734649854998120L;
 
+    private List<AnnonceDTO> annonces;
+
     public MesDevis() {
         super("Page accueil de batimen", "lol", "Bienvenue sur lescastors.fr", true, "img/bg_title1.jpg");
         Authentication authentication = new Authentication();
 
         initLink();
         initStaticComposant();
+        getAnnonceData();
         initRepeaterDevis();
         this.setOutputMarkupId(true);
     }
@@ -59,34 +69,61 @@ public final class MesDevis extends MasterPage {
     }
 
     private void initRepeaterDevis() {
-        ListView<AnnonceDTO> listViewAnnonce = new ListView<AnnonceDTO>("listAnnonce") {
+
+        Label nbAnnonce = new Label("nbAnnonce", annonces.size());
+
+        ListView<AnnonceDTO> listViewAnnonce = new ListView<AnnonceDTO>("listAnnonce", annonces) {
             private static final long serialVersionUID = 9041719964383711900L;
 
             @Override
             protected void populateItem(ListItem<AnnonceDTO> item) {
                 AnnonceDTO annonce = item.getModelObject();
 
-                StringBuilder descriptionCut = new StringBuilder(annonce.getDescription().substring(0, 20));
-                descriptionCut.append("...");
+                StringBuilder descriptionCutting = new StringBuilder(annonce.getDescription().substring(0, 30));
+                descriptionCutting.append("...");
 
                 WebMarkupContainer iconCategorie = new WebMarkupContainer("iconCategorie");
-                // TODO : Modifier l'argument de gitIconForCategorie une fois
+                // TODO : Modifier l'argument de getIconForCategorie une fois
                 // que la categorie sera refactorer dans la BDD.
-                iconCategorie.add(new AttributeModifier("class", CategorieLoader.getIconForCategorie((short) 0)));
+                StringBuilder classCssIcon = new StringBuilder("iconsMesDevis");
+                classCssIcon.append(" ").append(CategorieLoader.getIconForCategorie(annonce.getCategorieMetier()));
 
-                Label categorie = new Label("categorie", annonce.getCategorieMetier());
-                Label description = new Label("description", descriptionCut.toString());
+                iconCategorie.add(new AttributeModifier("class", classCssIcon.toString()));
+
+                Label categorie = new Label("categorie", CategorieLoader.getCategorieByCode(annonce
+                        .getCategorieMetier()));
+                Label description = new Label("description", descriptionCutting.toString());
                 Label nbDevis = new Label("nbDevis", annonce.getNbDevis());
                 Label etatAnnonce = new Label("etatAnnonce", annonce.getEtatAnnonce().getType());
 
+                item.add(iconCategorie);
                 item.add(categorie);
                 item.add(description);
                 item.add(nbDevis);
                 item.add(etatAnnonce);
-                item.add(iconCategorie);
             }
         };
 
+        this.add(nbAnnonce);
         this.add(listViewAnnonce);
+    }
+
+    private void getAnnonceData() {
+        annonces = new ArrayList<AnnonceDTO>();
+
+        AnnonceDTO annonce = new AnnonceDTO();
+        annonce.setDateCreation(new Date());
+        annonce.setDateMAJ(new Date());
+        annonce.setDelaiIntervention(DelaiIntervention.LE_PLUS_RAPIDEMENT_POSSIBLE);
+        annonce.setDescription("Une description de la plus pure des descriptions");
+        annonce.setEtatAnnonce(EtatAnnonce.ACTIVE);
+        annonce.setNbConsultation(0);
+        annonce.setNbDevis(0);
+        annonce.setCategorieMetier((short) 0);
+        annonce.setSousCategorieMetier("La sous cateogrie du lol");
+        annonce.setTypeContact(TypeContact.EMAIL);
+
+        annonces.add(annonce);
+
     }
 }

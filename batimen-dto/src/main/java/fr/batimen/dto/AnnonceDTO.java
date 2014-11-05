@@ -30,7 +30,7 @@ public class AnnonceDTO extends AbstractDTO {
     private Integer nbConsultation;
     private String photo;
     @NotNull
-    private String categorieMetier;
+    private Short categorieMetier;
     @NotNull
     private String sousCategorieMetier;
     @NotNull
@@ -90,7 +90,7 @@ public class AnnonceDTO extends AbstractDTO {
     /**
      * @return the categorieMetier
      */
-    public String getCategorieMetier() {
+    public Short getCategorieMetier() {
         return categorieMetier;
     }
 
@@ -168,7 +168,7 @@ public class AnnonceDTO extends AbstractDTO {
      * @param categorieMetier
      *            the categorieMetier to set
      */
-    public void setCategorieMetier(String categorieMetier) {
+    public void setCategorieMetier(Short categorieMetier) {
         this.categorieMetier = categorieMetier;
     }
 

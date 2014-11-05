@@ -17,7 +17,7 @@ annonce:
     delaiintervention: 0
     description: Peinture d'un mur
     etatannonce: 0
-    categoriemetier: Electricité
+    categoriemetier: 0
     souscategoriemetier: Installation électrique
     nbconsultation: 0
     typecontact: 0

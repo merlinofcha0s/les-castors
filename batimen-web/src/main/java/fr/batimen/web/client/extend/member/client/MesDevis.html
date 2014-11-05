@@ -46,9 +46,9 @@
 				<div
 					class="bg_title"
 					style="clear: both;">
-					<h4 class="headInModule">Mes demandes de devis (1)</h4>
+					<h4 class="headInModule">Mes demandes de devis (<span wicket:id="nbAnnonce"></span>)</h4>
 				</div>
-				<table class="table table-hover">
+				<table class="table table-hover" wicket:id="listAnnonce">
 					<thead>
 						<tr>
 							<th>Catégorie</th>
@@ -59,7 +59,7 @@
 					</thead>
 					<tbody>
 						<tr>
-							<td><span wicket:id="iconCategorie"></span><span wicket:id="categorie"></span></td>
+							<td><span class="iconsMesDevis" wicket:id="iconCategorie"></span><span wicket:id="categorie"></span></td>
 							<td><span wicket:id="description"></span></td>
 							<td><span wicket:id="nbDevis"></span></td>
 							<td><span wicket:id="etatAnnonce"></span></td>

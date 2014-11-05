@@ -236,4 +236,23 @@ public class CategorieLoader {
             return "icon-Satellite1";
         }
     }
+
+    public static CategorieMetierDTO getCategorieByCode(Short codeCategorie) {
+        switch (codeCategorie) {
+        case 0:
+            return CategorieLoader.getCategorieElectricite();
+        case 1:
+            return CategorieLoader.getCategoriePlomberie();
+        case 2:
+            return CategorieLoader.getCategorieEspaceVert();
+        case 3:
+            return CategorieLoader.getCategorieDecorationMaconnerie();
+        case 4:
+            return CategorieLoader.getCategorieGrosOeuvre();
+        case 5:
+            return CategorieLoader.getCategorieEquipement();
+        default:
+            return new CategorieMetierDTO();
+        }
+    }
 }
