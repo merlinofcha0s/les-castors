@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import fr.batimen.core.constant.Constant;
+import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.test.ws.AbstractBatimenWsTest;
 import fr.batimen.test.ws.helper.DataHelper;
@@ -82,6 +83,14 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         Integer isCreationOK = AnnonceService.creationAnnonce(creationAnnonceDTO);
         // Le service doit remonter une erreur
         Assert.assertTrue(isCreationOK == Constant.CODE_SERVICE_ANNONCE_RETOUR_DUPLICATE);
+    }
+
+    @Test
+    @UsingDataSet("datasets/in/annonces.yml")
+    public void testGetAnnonceByLogin() {
+        List<AnnonceDTO> annonces = AnnonceService.getAnnonceByLogin("pebronne");
+        Assert.assertEquals(2, annonces.size());
+
     }
 
     private void creationVerificationAnnonce() {

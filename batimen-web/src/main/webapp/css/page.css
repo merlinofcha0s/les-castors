@@ -478,3 +478,10 @@ table tr td .error {
 	font-size: 15px;
 	margin-right: 5px;
 }
+
+.badgeMesdevis{
+	vertical-align: bottom !important;
+}
+.promoMesDevis{
+	padding-top: 52px;
+}

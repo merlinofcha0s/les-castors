@@ -1,6 +1,8 @@
 package fr.batimen.ws.facade;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import javax.annotation.security.RolesAllowed;
@@ -17,6 +19,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,7 +31,9 @@ import fr.batimen.core.exception.BackendException;
 import fr.batimen.core.exception.DuplicateEntityException;
 import fr.batimen.core.exception.EmailException;
 import fr.batimen.core.utils.PropertiesUtils;
+import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
+import fr.batimen.dto.helper.DeserializeJsonHelper;
 import fr.batimen.ws.dao.AnnonceDAO;
 import fr.batimen.ws.entity.Annonce;
 import fr.batimen.ws.helper.JsonHelper;
@@ -118,6 +123,41 @@ public class GestionAnnonceFacade {
         }
 
         return Constant.CODE_SERVICE_RETOUR_OK;
+    }
+
+    /**
+     * Permet de récuperer les annonces d'un client à partir de son login
+     * 
+     * @param login
+     *            l'identifiant de l'utilisateur
+     * @return La liste des annonces de cet utilisateur
+     */
+    @POST
+    @Path(WsPath.GESTION_ANNONCE_SERVICE_GET_ANNONCE_BY_LOGIN)
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public List<AnnonceDTO> getAnnonceByClient(String login) {
+        // On escape les ""
+        String loginEscaped = DeserializeJsonHelper.parseString(login);
+        // On recupere les annonces de l'utilisateur
+        List<Annonce> annonces = annonceDAO.getAnnoncesByLogin(loginEscaped);
+        // On crée la liste qui accueuillera les DTO
+        List<AnnonceDTO> annoncesDTO = new ArrayList<AnnonceDTO>();
+        ModelMapper modelMapper = new ModelMapper();
+
+        for (Annonce annonce : annonces) {
+            // On crée le nouvel objet
+            AnnonceDTO annonceDTO = new AnnonceDTO();
+            // On transfert les données d'un objet a l'autre
+            modelMapper.map(annonce, annonceDTO);
+            // On rempli les champs à calculer
+            Integer nbDevis = annonce.getArtisans().size();
+            annonceDTO.setNbDevis(nbDevis);
+
+            // On ajoute à la liste
+            annoncesDTO.add(annonceDTO);
+        }
+
+        return annoncesDTO;
     }
 
 }

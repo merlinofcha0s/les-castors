@@ -22,6 +22,19 @@ public class Authentication {
 
     private final Subject currentUser = SecurityUtils.getSubject();
 
+    private static Authentication authentication = null;
+
+    private Authentication() {
+
+    }
+
+    public static Authentication getInstance() {
+        if (authentication == null) {
+            authentication = new Authentication();
+        }
+        return authentication;
+    }
+
     public Boolean authenticate(String username, String password) {
         Boolean isOk = null;
 

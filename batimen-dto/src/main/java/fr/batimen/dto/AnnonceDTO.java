@@ -3,15 +3,21 @@ package fr.batimen.dto;
 import static fr.batimen.dto.constant.ValidatorConstant.ANNONCE_DESCRIPTION_MAX;
 import static fr.batimen.dto.constant.ValidatorConstant.ANNONCE_DESCRIPTION_MIN;
 
+import java.lang.reflect.Type;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import fr.batimen.dto.enums.DelaiIntervention;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.TypeContact;
+import fr.batimen.dto.helper.DeserializeJsonHelper;
 
 public class AnnonceDTO extends AbstractDTO {
 
@@ -233,6 +239,18 @@ public class AnnonceDTO extends AbstractDTO {
                     && Objects.equals(this.description, other.description);
         }
         return false;
+    }
+
+    public static AnnonceDTO deserializeAnnonceDTO(String json) {
+        Gson gson = DeserializeJsonHelper.createGsonObject();
+        return gson.fromJson(json, AnnonceDTO.class);
+    }
+
+    public static List<AnnonceDTO> deserializeAnnonceDTOList(String json) {
+        Gson gson = DeserializeJsonHelper.createGsonObject();
+        Type collectionType = new TypeToken<List<AnnonceDTO>>() {
+        }.getType();
+        return gson.fromJson(json, collectionType);
     }
 
 }

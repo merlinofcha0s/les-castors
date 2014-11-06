@@ -102,6 +102,13 @@ create table Annonce (
         primary key (id)
     );
     
+    create table annonce_artisan (
+        Annonce_id int8 not null,
+        artisans_id int8 not null,
+        Artisan_id int8 not null,
+        annonces_id int8 not null
+    );
+    
     alter table Annonce 
         add constraint annonce_adresse
         foreign key (adresseChantier_id) 
@@ -156,5 +163,26 @@ create table Annonce (
         add constraint client_permission 
         foreign key (client_fk) 
         references Client;
+        
+    alter table annonce_artisan 
+        add constraint annonce_artisan 
+        foreign key (artisans_id) 
+        references Artisan;
+        
+    alter table annonce_artisan 
+        add constraint artisan_annonce 
+        foreign key (Annonce_id) 
+        references Annonce;
+        
+    alter table annonce_artisan 
+        add constraint annonce_artisan2 
+        foreign key (annonces_id) 
+        references Annonce;
+        
+    alter table annonce_artisan 
+        add constraint artisan_annonce2
+        foreign key (Artisan_id) 
+        references Artisan;
+        
         
      

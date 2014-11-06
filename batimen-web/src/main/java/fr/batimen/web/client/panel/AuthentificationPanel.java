@@ -70,7 +70,7 @@ public class AuthentificationPanel extends Panel {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 
-                Authentication authentication = new Authentication();
+                Authentication authentication = Authentication.getInstance();
 
                 boolean authResult = authentication.authenticate(login.getInput(), password.getConvertedInput());
 

@@ -12,6 +12,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -59,7 +61,10 @@ public class Artisan extends AbstractUser implements Serializable {
             targetEntity = Permission.class,
             cascade = CascadeType.REMOVE,
             fetch = FetchType.EAGER)
-    protected List<Permission> permission = new ArrayList<Permission>();
+    private List<Permission> permission = new ArrayList<Permission>();
+    @ManyToMany
+    @JoinTable(name = "annonce_artisan")
+    private final List<Annonce> annonces = new ArrayList<Annonce>();
 
     /**
      * @return the id
@@ -133,6 +138,21 @@ public class Artisan extends AbstractUser implements Serializable {
      *            the typeCompte to set
      */
     public void setTypeCompte(List<Permission> permission) {
+        this.permission = permission;
+    }
+
+    /**
+     * @return the annonces
+     */
+    public List<Annonce> getAnnonces() {
+        return annonces;
+    }
+
+    /**
+     * @param permission
+     *            the permission to set
+     */
+    public void setPermission(List<Permission> permission) {
         this.permission = permission;
     }
 

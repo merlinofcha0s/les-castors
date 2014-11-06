@@ -38,7 +38,7 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
      *            le login du client dont on veut recupérer les annonces.
      * @return Liste d'annonces appartenant à l'utilisateur.
      */
-    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public List<Annonce> getAnnoncesByLogin(String login) {
 
         List<Annonce> listAnnonceByLogin = null;
@@ -79,7 +79,7 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
      * @return La liste d'annonce qui correspond au titre, description et
      *         utilsateur present en BDD
      */
-    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public List<Annonce> getAnnonceByTitleAndDescriptionAndLogin(String description, String login) {
 
         List<Annonce> annoncesBytitreAndDescription = null;

@@ -1,7 +1,5 @@
 package fr.batimen.web.client.extend.member.client;
 
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
@@ -12,15 +10,12 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 
 import fr.batimen.dto.AnnonceDTO;
-import fr.batimen.dto.enums.DelaiIntervention;
-import fr.batimen.dto.enums.EtatAnnonce;
-import fr.batimen.dto.enums.TypeContact;
 import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.web.app.security.Authentication;
-import fr.batimen.web.client.component.CastorMenu;
 import fr.batimen.web.client.component.ContactezNous;
 import fr.batimen.web.client.extend.Contact;
 import fr.batimen.web.client.master.MasterPage;
+import fr.batimen.ws.client.service.AnnonceService;
 
 /**
  * Page ou l'utilisateur pourra consulter son compte ainsi que l'avancement de
@@ -38,7 +33,6 @@ public final class MesDevis extends MasterPage {
 
     public MesDevis() {
         super("Page accueil de batimen", "lol", "Bienvenue sur lescastors.fr", true, "img/bg_title1.jpg");
-        Authentication authentication = new Authentication();
 
         initLink();
         initStaticComposant();
@@ -48,10 +42,7 @@ public final class MesDevis extends MasterPage {
     }
 
     private void initStaticComposant() {
-        CastorMenu menu = new CastorMenu("menu");
         ContactezNous contactezNous = new ContactezNous("contactezNous");
-
-        this.add(menu);
         this.add(contactezNous);
     }
 
@@ -83,8 +74,6 @@ public final class MesDevis extends MasterPage {
                 descriptionCutting.append("...");
 
                 WebMarkupContainer iconCategorie = new WebMarkupContainer("iconCategorie");
-                // TODO : Modifier l'argument de getIconForCategorie une fois
-                // que la categorie sera refactorer dans la BDD.
                 StringBuilder classCssIcon = new StringBuilder("iconsMesDevis");
                 classCssIcon.append(" ").append(CategorieLoader.getIconForCategorie(annonce.getCategorieMetier()));
 
@@ -109,21 +98,25 @@ public final class MesDevis extends MasterPage {
     }
 
     private void getAnnonceData() {
-        annonces = new ArrayList<AnnonceDTO>();
-
-        AnnonceDTO annonce = new AnnonceDTO();
-        annonce.setDateCreation(new Date());
-        annonce.setDateMAJ(new Date());
-        annonce.setDelaiIntervention(DelaiIntervention.LE_PLUS_RAPIDEMENT_POSSIBLE);
-        annonce.setDescription("Une description de la plus pure des descriptions");
-        annonce.setEtatAnnonce(EtatAnnonce.ACTIVE);
-        annonce.setNbConsultation(0);
-        annonce.setNbDevis(0);
-        annonce.setCategorieMetier((short) 0);
-        annonce.setSousCategorieMetier("La sous cateogrie du lol");
-        annonce.setTypeContact(TypeContact.EMAIL);
-
-        annonces.add(annonce);
+        Authentication authentication = Authentication.getInstance();
+        annonces = AnnonceService.getAnnonceByLogin(authentication.getCurrentUserInfo().getLogin());
+        /*
+         * annonces = new ArrayList<AnnonceDTO>();
+         * 
+         * AnnonceDTO annonce = new AnnonceDTO(); annonce.setDateCreation(new
+         * Date()); annonce.setDateMAJ(new Date());
+         * annonce.setDelaiIntervention(
+         * DelaiIntervention.LE_PLUS_RAPIDEMENT_POSSIBLE);
+         * annonce.setDescription
+         * ("Une description de la plus pure des descriptions");
+         * annonce.setEtatAnnonce(EtatAnnonce.ACTIVE);
+         * annonce.setNbConsultation(0); annonce.setNbDevis(0);
+         * annonce.setCategorieMetier((short) 0);
+         * annonce.setSousCategorieMetier("La sous cateogrie du lol");
+         * annonce.setTypeContact(TypeContact.EMAIL);
+         * 
+         * annonces.add(annonce);
+         */
 
     }
 }

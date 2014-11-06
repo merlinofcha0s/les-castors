@@ -1,7 +1,9 @@
 package fr.batimen.ws.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.CascadeType;
@@ -11,6 +13,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -34,7 +38,7 @@ import fr.batimen.dto.enums.TypeContact;
 @Table(name = "Annonce")
 @NamedQueries(value = {
         @NamedQuery(name = QueryJPQL.ANNONCE_BY_LOGIN,
-                query = "SELECT a FROM Annonce AS a WHERE a.demandeur.login = :login"),
+                query = "SELECT a FROM Annonce AS a LEFT OUTER JOIN FETCH a.artisans WHERE a.demandeur.login = :login"),
         @NamedQuery(name = QueryJPQL.ANNONCE_BY_TITLE_AND_DESCRIPTION,
                 query = "SELECT a FROM Annonce AS a WHERE a.description = :description AND a.demandeur.login = :login") })
 public class Annonce extends AbstractEntity implements Serializable {
@@ -71,6 +75,9 @@ public class Annonce extends AbstractEntity implements Serializable {
     private Notation notationAnnonce;
     @OneToOne(cascade = CascadeType.REMOVE)
     private Adresse adresseChantier;
+    @ManyToMany
+    @JoinTable(name = "annonce_artisan")
+    private List<Artisan> artisans = new ArrayList<Artisan>();
 
     /**
      * @return the id
@@ -280,6 +287,21 @@ public class Annonce extends AbstractEntity implements Serializable {
      */
     public void setSousCategorieMetier(String sousCategorieMetier) {
         this.sousCategorieMetier = sousCategorieMetier;
+    }
+
+    /**
+     * @return the artisans
+     */
+    public List<Artisan> getArtisans() {
+        return artisans;
+    }
+
+    /**
+     * @param artisans
+     *            the artisans to set
+     */
+    public void setArtisans(List<Artisan> artisans) {
+        this.artisans = artisans;
     }
 
     /*
