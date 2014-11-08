@@ -12,9 +12,6 @@ import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.microtripit.mandrillapp.lutung.model.MandrillApiError;
 import com.microtripit.mandrillapp.lutung.view.MandrillMessage;
 import com.microtripit.mandrillapp.lutung.view.MandrillMessage.MergeVar;
@@ -29,7 +26,7 @@ import fr.batimen.ws.entity.Annonce;
  * Classe de gestion d'envoi de mail.
  * 
  * @author Casaucau Cyril
- * 
+ * @author Adnane
  */
 @Stateless(name = "EmailService")
 @LocalBean
@@ -39,7 +36,6 @@ public class EmailService {
     @Inject
     private EmailDAO emailDAO;
     
-    private static final Logger LOGGER = LoggerFactory.getLogger(EmailService.class);
 
     /**
      * Preparation et envoi d'un mail de confirmation, dans le but d'informer
@@ -139,6 +135,7 @@ public class EmailService {
     
     /**
      * Envoi un email de contact contenant l'information contenue dans le DTO
+     * 
      * @param mail DTO contenant l'information du mail de contact saisie par le client
      * @return état d'envoi du mail
      */
@@ -146,13 +143,11 @@ public class EmailService {
     	// On prepare l'entete, on ne mets pas de titre (il est géré par
         // mandrillApp).
         MandrillMessage contactMessage = emailDAO.prepareEmail(null);
-
-        StringBuilder nomDestinataire = new StringBuilder();
+        
         // On construit les recepteurs
         Map<String, String> recipients = new HashMap<String, String>();
 
-        getNomDestinataire("", "", "CASTORS SUPPORT TEAM", nomDestinataire);
-        recipients.put(nomDestinataire.toString(), Constant.EMAIL_CASTOR_CONTACT);
+        recipients.put(Constant.EMAIL_FROM_NAME, Constant.EMAIL_CASTOR_CONTACT);
 
         // On charge les recepteurs
         emailDAO.prepareRecipient(contactMessage, recipients, true);
@@ -173,6 +168,7 @@ public class EmailService {
     
     /**
      * Envoi un email d'accusé de reception du message de contact
+     * 
      * @param mail DTO contenant l'information du mail de contact saisie par le client
      * @return état d'envoi du mail
      */
@@ -181,12 +177,9 @@ public class EmailService {
         // mandrillApp).
         MandrillMessage accuseReception = emailDAO.prepareEmail(null);
 
-        StringBuilder nomDestinataire = new StringBuilder();
         // On construit les recepteurs
         Map<String, String> recipients = new HashMap<String, String>();
-
-        getNomDestinataire("", "", mail.getName(), nomDestinataire);
-        recipients.put(nomDestinataire.toString(), mail.getEmail());
+        recipients.put(mail.getName(), mail.getEmail());
 
         // On charge les recepteurs
         emailDAO.prepareRecipient(accuseReception, recipients, true);
@@ -198,6 +191,13 @@ public class EmailService {
         return noError;
     }
 
+    /**
+     * Util method to generate destinatary name
+     * @param nom
+     * @param prenom
+     * @param login
+     * @param nomDestinataire
+     */
     private void getNomDestinataire(String nom, String prenom, String login, StringBuilder nomDestinataire) {
         if (!nom.isEmpty() && !prenom.isEmpty()) {
             nomDestinataire.append(nom);

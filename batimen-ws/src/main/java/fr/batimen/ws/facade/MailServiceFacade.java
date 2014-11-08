@@ -51,12 +51,10 @@ public class MailServiceFacade {
 	private EmailService emailService;
 
 	/**
-	 * Methode de login des utilisateurs
-	 * 
-	 * @param LoginDTO
-	 *            loginDTO objet permettant l'authentification
-	 * @return vide si la combinaison login / mdp ne corresponds pas ou si
-	 *         inexistant
+	 * Sends a contact mail to the team, and an acknowledgement mail to the customer
+	 * @param mail object created by customer
+	 * @return if success : 0
+	 * 			else : 1
 	 */
 	@POST
 	@Path(WsPath.MAIL_SERVICE_SEND_CONTACT_MAIL)
@@ -65,6 +63,7 @@ public class MailServiceFacade {
 		boolean success = false;
 		try {
 			success = emailService.envoiEmailContact(mail);
+			
 			// si operation accomplie avec succes
 			// envoi email accuse de reception
 			if (success) {
@@ -73,9 +72,13 @@ public class MailServiceFacade {
 				return Constant.CODE_SERVICE_RETOUR_KO;
 			}
 		} catch (EmailException | IOException | MandrillApiError e) {
-			LOGGER.error("Error while sending contact or aknowledgement email, contact mail sent? :" + success, e);
+			LOGGER.error(
+					"Error while sending contact or aknowledgement email, contact mail sent? :"
+							+ success, e);
 		}
-		if (success)	return Constant.CODE_SERVICE_RETOUR_OK;
+		if (success){
+			return Constant.CODE_SERVICE_RETOUR_OK;
+		}
 		return Constant.CODE_SERVICE_RETOUR_KO;
 	}
 }

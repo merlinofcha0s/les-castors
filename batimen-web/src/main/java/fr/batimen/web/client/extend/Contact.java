@@ -47,7 +47,7 @@ public class Contact extends MasterPage {
 	}
 
 	/**
-	 * TODO javadoc
+	 * Component initialization method
 	 */
 	private void initComponents() {
 		ContactMailDTO contactMailDTO = new ContactMailDTO();
@@ -73,7 +73,7 @@ public class Contact extends MasterPage {
 		messageField.setRequired(true);
 		messageField.add(new ErrorHighlightBehavior());
 
-		// TODO Auto-generated method stub
+		// Init du submit button
 		submitButton = new AjaxSubmitLink("submitButton") {
 			private static final long serialVersionUID = 5400416625335864317L;
 
@@ -129,6 +129,5 @@ public class Contact extends MasterPage {
 		form.add(submitButton);
 
 		this.add(form);
-
 	}
 }

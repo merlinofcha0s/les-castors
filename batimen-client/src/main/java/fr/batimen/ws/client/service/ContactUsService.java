@@ -21,7 +21,7 @@ public class ContactUsService {
     }
     
     /**
-     * 
+     * Webservice Client, in charge of pushing a contact email to the mail WS
      * @param contactMail
      * @return server operation code
      */
@@ -40,26 +40,5 @@ public class ContactUsService {
         }
         
 		return serverResponse;
-    	
-    }
-
-    public static int activateAccount(String cleActivation) {
-
-        int resultatService;
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Début appel service de recuperation client par email + deserialization");
-        }
-
-        String objectInJSON = WsConnector.getInstance().sendRequest(WsPath.GESTION_CLIENT_SERVICE_PATH,
-                WsPath.GESTION_UTILISATEUR_SERVICE_ACTIVATION, cleActivation);
-
-        resultatService = Integer.parseInt(objectInJSON);
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Fin appel service service de recuperation client par email + deserialization");
-        }
-
-        return resultatService;
     }
 }
