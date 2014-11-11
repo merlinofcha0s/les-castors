@@ -36,7 +36,12 @@ public class EmailService {
 
     @Inject
     private EmailDAO emailDAO;
+<<<<<<< HEAD
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(EmailService.class);
+=======
+    
+>>>>>>> master
 
     /**
      * Preparation et envoi d'un mail de confirmation, dans le but d'informer
@@ -138,9 +143,13 @@ public class EmailService {
     /**
      * Envoi un email de contact contenant l'information contenue dans le DTO
      * 
+<<<<<<< HEAD
      * @param mail
      *            DTO contenant l'information du mail de contact saisie par le
      *            client
+=======
+     * @param mail DTO contenant l'information du mail de contact saisie par le client
+>>>>>>> master
      * @return état d'envoi du mail
      */
     public boolean envoiEmailContact(ContactMailDTO mail) throws EmailException, MandrillApiError, IOException {
@@ -172,9 +181,13 @@ public class EmailService {
     /**
      * Envoi un email d'accusé de reception du message de contact
      * 
+<<<<<<< HEAD
      * @param mail
      *            DTO contenant l'information du mail de contact saisie par le
      *            client
+=======
+     * @param mail DTO contenant l'information du mail de contact saisie par le client
+>>>>>>> master
      * @return état d'envoi du mail
      */
     public boolean envoiEmailAccuseReception(ContactMailDTO mail) throws EmailException, MandrillApiError, IOException {

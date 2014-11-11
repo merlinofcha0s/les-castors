@@ -439,6 +439,7 @@ table tr td .error {
 .feedback_form .btn{
     font-size: 14px;
     padding: 7px;
+<<<<<<< HEAD
 }
 
 /* Menu */
@@ -484,3 +485,6 @@ table tr td .error {
 .promoMesDevis{
 	padding-top: 52px;
 }
+=======
+}
+>>>>>>> master

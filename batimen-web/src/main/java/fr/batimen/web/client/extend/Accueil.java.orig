@@ -1,9 +1,13 @@
 package fr.batimen.web.client.extend;
 
+<<<<<<< HEAD
+import fr.batimen.web.client.component.ContactezNous;
+=======
 import org.apache.wicket.markup.html.link.Link;
 
 import fr.batimen.web.client.extend.nouveau.artisan.NouveauArtisan;
 import fr.batimen.web.client.extend.nouveau.devis.NouveauDevis;
+>>>>>>> master
 import fr.batimen.web.client.master.MasterPage;
 
 /**
@@ -17,11 +21,17 @@ public class Accueil extends MasterPage {
 
     private static final long serialVersionUID = -690817359101639588L;
 
+<<<<<<< HEAD
     public Accueil() {
         super("Page d'accueil de batimen.fr", "lol", "Accueil batimen", false, "img/bg_title1.jpg");
- ContactezNous contactezNous = new ContactezNous("contactezNous");
+        ContactezNous contactezNous = new ContactezNous("contactezNous");
         this.add(contactezNous);
-initLinks();
+    }
+=======
+	public Accueil() {
+		super("Page d'accueil de batimen.fr", "lol", "Accueil batimen", false, "img/bg_title1.jpg");
+		initLinks();
+	}
 
 	private void initLinks() {
 		Link<String> nouveauDevis = new Link<String>("nouveauDevisLink") {
@@ -82,6 +92,7 @@ initLinks();
 		this.add(nouveauDevis2);
 		this.add(rejoignezNousLink);
 		this.add(contactLink);
-    }
+	}
+>>>>>>> master
 
 }
