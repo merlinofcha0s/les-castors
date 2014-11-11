@@ -61,7 +61,9 @@ public class Artisan extends AbstractUser implements Serializable {
             targetEntity = Permission.class,
             cascade = CascadeType.REMOVE,
             fetch = FetchType.EAGER)
-    private List<Permission> permission = new ArrayList<Permission>();
+    private List<Permission> permissions = new ArrayList<Permission>();
+    @OneToMany(mappedBy = "artisanNotifier", targetEntity = Notification.class, cascade = CascadeType.REMOVE)
+    private final List<Notification> notifications = new ArrayList<Notification>();
     @ManyToMany
     @JoinTable(name = "annonce_artisan")
     private final List<Annonce> annonces = new ArrayList<Annonce>();
@@ -130,7 +132,7 @@ public class Artisan extends AbstractUser implements Serializable {
      * @return the typeCompte
      */
     public List<Permission> getPermission() {
-        return permission;
+        return permissions;
     }
 
     /**
@@ -138,7 +140,7 @@ public class Artisan extends AbstractUser implements Serializable {
      *            the typeCompte to set
      */
     public void setTypeCompte(List<Permission> permission) {
-        this.permission = permission;
+        this.permissions = permission;
     }
 
     /**
@@ -153,7 +155,29 @@ public class Artisan extends AbstractUser implements Serializable {
      *            the permission to set
      */
     public void setPermission(List<Permission> permission) {
-        this.permission = permission;
+        this.permissions = permission;
+    }
+
+    /**
+     * @return the permissions
+     */
+    public List<Permission> getPermissions() {
+        return permissions;
+    }
+
+    /**
+     * @return the notifications
+     */
+    public List<Notification> getNotifications() {
+        return notifications;
+    }
+
+    /**
+     * @param permissions
+     *            the permissions to set
+     */
+    public void setPermissions(List<Permission> permissions) {
+        this.permissions = permissions;
     }
 
     /*

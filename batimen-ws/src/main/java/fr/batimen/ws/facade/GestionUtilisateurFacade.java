@@ -1,5 +1,6 @@
 package fr.batimen.ws.facade;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
@@ -24,12 +25,15 @@ import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.WsPath;
 import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.LoginDTO;
+import fr.batimen.dto.NotificationDTO;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 import fr.batimen.ws.dao.ArtisanDAO;
 import fr.batimen.ws.dao.ClientDAO;
+import fr.batimen.ws.dao.NotificationDAO;
 import fr.batimen.ws.dao.PermissionDAO;
 import fr.batimen.ws.entity.Artisan;
 import fr.batimen.ws.entity.Client;
+import fr.batimen.ws.entity.Notification;
 import fr.batimen.ws.entity.Permission;
 import fr.batimen.ws.helper.JsonHelper;
 import fr.batimen.ws.interceptor.BatimenInterceptor;
@@ -68,6 +72,9 @@ public class GestionUtilisateurFacade {
 
     @Inject
     private ArtisanDAO artisanDAO;
+
+    @Inject
+    private NotificationDAO notificationDAO;
 
     /**
      * Methode de login des utilisateurs
@@ -229,5 +236,32 @@ public class GestionUtilisateurFacade {
         }
 
         return Constant.CODE_SERVICE_ANNONCE_RETOUR_COMPTE_INEXISTANT;
+    }
+
+    /**
+     * Methode de récuperation des notifications d'un utilisateurs
+     * 
+     * @param login
+     * @return
+     */
+    @POST
+    @Path(WsPath.GESTION_UTILISATEUR_SERVICE_NOTIFICATION)
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public List<NotificationDTO> getNotificationByLogin(String login) {
+        List<NotificationDTO> notificationsDTO = new ArrayList<NotificationDTO>();
+        ModelMapper mapper = new ModelMapper();
+        String loginEscaped = DeserializeJsonHelper.parseString(login);
+        List<Notification> notifications = notificationDAO.getNotificationForClient(loginEscaped);
+
+        if (notifications.isEmpty()) {
+            notifications = notificationDAO.getNotificationForArtisan(loginEscaped);
+        }
+
+        for (Notification notification : notifications) {
+            NotificationDTO notificationDTO = new NotificationDTO();
+            mapper.map(notification, notificationDTO);
+            notificationsDTO.add(notificationDTO);
+        }
+        return notificationsDTO;
     }
 }

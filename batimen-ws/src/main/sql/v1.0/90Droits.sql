@@ -14,5 +14,9 @@ public.Annonce,
 public.Artisan,
 public.Entreprise,
 public.Notation,
-public.Paiement
+public.Paiement,
+public.annonce_artisan,
+public.categoriemetier,
+public.notification,
+public.permission
 TO batimen_usr;

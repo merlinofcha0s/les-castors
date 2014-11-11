@@ -109,6 +109,15 @@ create table Annonce (
         annonces_id int8 not null
     );
     
+    create table Notification (
+        id  bigserial not null,
+        dateNotification timestamp not null,
+        typeNotification int4 not null,
+        id_artisan int8,
+        id_client int8,
+        primary key (id)
+    );
+    
     alter table Annonce 
         add constraint annonce_adresse
         foreign key (adresseChantier_id) 
@@ -184,5 +193,14 @@ create table Annonce (
         foreign key (Artisan_id) 
         references Artisan;
         
+    alter table Notification 
+        add constraint notification_artisan2
+        foreign key (id_artisan) 
+        references Artisan;
+        
+    alter table Notification 
+        add constraint notification_client
+        foreign key (id_client) 
+        references Client;
         
      

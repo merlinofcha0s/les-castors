@@ -290,4 +290,5 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
         Assert.assertTrue(!roles.isEmpty());
         Assert.assertEquals(TypeCompte.ARTISAN.getRole(), roles);
     }
+
 }

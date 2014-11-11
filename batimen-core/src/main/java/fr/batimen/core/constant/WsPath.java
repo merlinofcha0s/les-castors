@@ -16,8 +16,9 @@ public class WsPath {
     public static final String GESTION_UTILISATEUR_SERVICE_ACTIVATION = "activation";
     public static final String GESTION_UTILISATEUR_SERVICE_HASH = "hash";
     public static final String GESTION_UTILISATEUR_SERVICE_ROLES = "roles";
+    public static final String GESTION_UTILISATEUR_SERVICE_NOTIFICATION = "getNotificationByLogin";
 
-    public static final String GESTION_CLIENT_SERVICE_PATH = "gestionClient";
+    // public static final String GESTION_CLIENT_SERVICE_PATH = "gestionClient";
 
     // Path Gestion Annonce
     public static final String GESTION_ANNONCE_SERVICE_PATH = "gestionAnnonce";
@@ -31,4 +32,8 @@ public class WsPath {
     // Path Envoi mail de contact
     public static final String MAIL_SERVICE_PATH = "mailService";
     public static final String MAIL_SERVICE_SEND_CONTACT_MAIL = "sendContactMail";
+
+    // Path Gestion client
+    public static final String GESTION_CLIENT_SERVICE_PATH = "gestionClient";
+    public static final String GESTION_CLIENT_SERVICE_INFOS_MES_ANNONCES = "getInfoForMesAnnoncesByLogin";
 }
