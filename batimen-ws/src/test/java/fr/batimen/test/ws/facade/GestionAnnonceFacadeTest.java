@@ -85,10 +85,15 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         Assert.assertTrue(isCreationOK == Constant.CODE_SERVICE_ANNONCE_RETOUR_DUPLICATE);
     }
 
+    /**
+     * Cas de test : récupération des annonces des clients. /!\ charge
+     * automatiquement les artisans qui sont inscrits a l'annonce.
+     * 
+     */
     @Test
     @UsingDataSet("datasets/in/annonces.yml")
     public void testGetAnnonceByLogin() {
-        List<AnnonceDTO> annonces = AnnonceService.getAnnonceByLogin("pebronne");
+        List<AnnonceDTO> annonces = AnnonceService.getAnnonceByLoginForClient("pebronne");
         Assert.assertEquals(2, annonces.size());
 
     }

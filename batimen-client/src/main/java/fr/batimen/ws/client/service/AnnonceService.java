@@ -52,13 +52,13 @@ public class AnnonceService {
     }
 
     /**
-     * Appel le webservice pour recuperer les annonces par login.
+     * Appel le webservice pour recuperer les annonces par login client.
      * 
      * @param login
      *            L'identifiant du client
      * @return
      */
-    public static List<AnnonceDTO> getAnnonceByLogin(String login) {
+    public static List<AnnonceDTO> getAnnonceByLoginForClient(String login) {
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Début appel service creation annonce.....");

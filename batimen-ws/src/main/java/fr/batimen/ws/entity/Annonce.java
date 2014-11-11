@@ -38,6 +38,8 @@ import fr.batimen.dto.enums.TypeContact;
 @Table(name = "Annonce")
 @NamedQueries(value = {
         @NamedQuery(name = QueryJPQL.ANNONCE_BY_LOGIN,
+                query = "SELECT a FROM Annonce AS a WHERE a.demandeur.login = :login"),
+        @NamedQuery(name = QueryJPQL.ANNONCE_BY_LOGIN_FETCH_ARTISAN,
                 query = "SELECT a FROM Annonce AS a LEFT OUTER JOIN FETCH a.artisans WHERE a.demandeur.login = :login"),
         @NamedQuery(name = QueryJPQL.ANNONCE_BY_TITLE_AND_DESCRIPTION,
                 query = "SELECT a FROM Annonce AS a WHERE a.description = :description AND a.demandeur.login = :login") })

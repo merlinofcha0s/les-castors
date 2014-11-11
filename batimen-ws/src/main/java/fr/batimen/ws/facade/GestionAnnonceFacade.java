@@ -135,11 +135,11 @@ public class GestionAnnonceFacade {
     @POST
     @Path(WsPath.GESTION_ANNONCE_SERVICE_GET_ANNONCE_BY_LOGIN)
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public List<AnnonceDTO> getAnnonceByClient(String login) {
+    public List<AnnonceDTO> getAnnonceByClientLogin(String login) {
         // On escape les ""
         String loginEscaped = DeserializeJsonHelper.parseString(login);
         // On recupere les annonces de l'utilisateur
-        List<Annonce> annonces = annonceDAO.getAnnoncesByLogin(loginEscaped);
+        List<Annonce> annonces = annonceDAO.getAnnoncesByLoginWithFetchArtisan(loginEscaped);
         // On crée la liste qui accueuillera les DTO
         List<AnnonceDTO> annoncesDTO = new ArrayList<AnnonceDTO>();
         ModelMapper modelMapper = new ModelMapper();
@@ -159,5 +159,4 @@ public class GestionAnnonceFacade {
 
         return annoncesDTO;
     }
-
 }
