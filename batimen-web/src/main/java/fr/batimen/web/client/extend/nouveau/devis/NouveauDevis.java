@@ -324,7 +324,7 @@ public class NouveauDevis extends MasterPage {
     }
 
     private void remplissageCreationAnnonceSiLogin() {
-        Authentication authentication = Authentication.getInstance();
+        Authentication authentication = new Authentication();
         ClientDTO client = authentication.getCurrentUserInfo();
         nouvelleAnnonce.setIsSignedUp(true);
         nouvelleAnnonce.getClient().setLogin(client.getLogin());
@@ -454,7 +454,7 @@ public class NouveauDevis extends MasterPage {
                 LOGGER.error("Adresse mail : " + nouvelleAnnonce.getClient().getEmail());
                 LOGGER.error("Identifiant: " + nouvelleAnnonce.getClient().getLogin());
             } else {
-                Authentication authentication = Authentication.getInstance();
+                Authentication authentication = new Authentication();
                 ClientDTO client = authentication.getCurrentUserInfo();
                 LOGGER.error("Ce client est deja enregistrer dans la BDD");
                 LOGGER.error("Nom  : " + client.getNom());

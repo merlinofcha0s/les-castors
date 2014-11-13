@@ -98,7 +98,7 @@ public final class MesDevis extends MasterPage {
     }
 
     private void getAnnonceData() {
-        Authentication authentication = Authentication.getInstance();
+        Authentication authentication = new Authentication();
         annonces = AnnonceService.getAnnonceByLoginForClient(authentication.getCurrentUserInfo().getLogin());
         /*
          * annonces = new ArrayList<AnnonceDTO>();
