@@ -113,6 +113,8 @@ create table Annonce (
         id  bigserial not null,
         dateNotification timestamp not null,
         typeNotification int4 not null,
+        pourQuiNotification int4 not null,
+        statutNotification int4 not null,
         id_artisan int8,
         id_client int8,
         primary key (id)

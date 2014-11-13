@@ -17,6 +17,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 
 import fr.batimen.core.constant.QueryJPQL;
+import fr.batimen.dto.enums.StatutNotification;
+import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.enums.TypeNotification;
 
 /**
@@ -44,6 +46,10 @@ public class Notification extends AbstractEntity implements Serializable {
     @Column(nullable = false)
     @Temporal(javax.persistence.TemporalType.TIMESTAMP)
     private Date dateNotification;
+    @Column(nullable = false)
+    private StatutNotification statutNotification;
+    @Column(nullable = false)
+    private TypeCompte pourQuiNotification;
     @ManyToOne
     @JoinColumn(name = "id_artisan")
     private Artisan artisanNotifier;

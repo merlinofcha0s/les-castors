@@ -10,6 +10,7 @@ import fr.batimen.core.exception.BackendException;
 import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.NotificationDTO;
 import fr.batimen.dto.aggregate.MesAnnoncesPageDTO;
+import fr.batimen.dto.enums.TypeNotification;
 import fr.batimen.test.ws.AbstractBatimenWsTest;
 import fr.batimen.ws.client.service.ClientsService;
 
@@ -30,5 +31,27 @@ public class GestionClientFacadeTest extends AbstractBatimenWsTest {
 
         Assert.assertEquals(1, notifications.size());
         Assert.assertEquals(1, annonces.size());
+
+        // Check de la notification.
+        Boolean notificationPresent = Boolean.FALSE;
+
+        for (NotificationDTO notification : notifications) {
+            if (notification.getNotification().getAffichage().equals(TypeNotification.INSCRIT_A_ANNONCE.getAffichage())) {
+                notificationPresent = Boolean.TRUE;
+            }
+        }
+
+        Assert.assertTrue(notificationPresent);
+
+        // Check de l'annonce.
+        Boolean rightDescription = Boolean.FALSE;
+
+        for (AnnonceDTO annonce : annonces) {
+            if (annonce.getDescription().equals("Peinture d'un mur")) {
+                rightDescription = Boolean.TRUE;
+            }
+        }
+
+        Assert.assertTrue(rightDescription);
     }
 }
