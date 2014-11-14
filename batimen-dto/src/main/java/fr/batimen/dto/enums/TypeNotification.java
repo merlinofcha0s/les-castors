@@ -2,7 +2,7 @@ package fr.batimen.dto.enums;
 
 public enum TypeNotification {
 
-    INSCRIT_A_ANNONCE("s'est inscrit à votre annonce"), REPONDU_A_ANNONCE("a répondu à votre annonce");
+    INSCRIT_A_ANNONCE("s'est inscrit à votre"), REPONDU_A_ANNONCE("a répondu à votre");
 
     private TypeNotification(String affichage) {
         this.affichage = affichage;

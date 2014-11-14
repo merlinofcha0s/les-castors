@@ -19,11 +19,11 @@
 					class="bg_title"
 					style="clear: both;">
 					<h4 class="headInModule">
-						Mes notifications <span class="badgeMesdevis badge badge-info">5</span>
+						Mes notifications <span class="badgeMesdevis badge badge-info" wicket:id="nbNotification">5</span>
 					</h4>
 				</div>
 				<div>Retrouvez ici toutes les notifications sur vos demandes de devis</div>
-				<table class="table table-hover">
+				<table class="table table-hover" wicket:id="listNotification">
 					<thead>
 						<tr>
 							<th></th>
@@ -33,9 +33,8 @@
 					</thead>
 					<tbody>
 						<tr>
-							<td><span class="icon-Lightning iconsMesDevis"></span><span>Voltage</span></td>
-							<td>Voltage a repondu à votre devis</td>
-							<td>10/11/2014 à 12:15</td>
+							<td wicket:id="notification"></td>
+							<td wicket:id="dateNotification">10/11/2014 à 12:15</td>
 						</tr>
 					</tbody>
 				</table>

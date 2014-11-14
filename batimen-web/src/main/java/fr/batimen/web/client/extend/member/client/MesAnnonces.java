@@ -1,5 +1,6 @@
 package fr.batimen.web.client.extend.member.client;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
@@ -10,6 +11,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 
 import fr.batimen.dto.AnnonceDTO;
+import fr.batimen.dto.NotificationDTO;
 import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.client.component.ContactezNous;
@@ -25,18 +27,20 @@ import fr.batimen.ws.client.service.AnnonceService;
  * 
  */
 
-public final class MesDevis extends MasterPage {
+public final class MesAnnonces extends MasterPage {
 
     private static final long serialVersionUID = 1902734649854998120L;
 
     private List<AnnonceDTO> annonces;
+    private List<NotificationDTO> notifications;
 
-    public MesDevis() {
+    public MesAnnonces() {
         super("Page accueil de batimen", "lol", "Bienvenue sur lescastors.fr", true, "img/bg_title1.jpg");
 
         initLink();
         initStaticComposant();
         getAnnonceData();
+        initRepeaterNotifications();
         initRepeaterDevis();
         this.setOutputMarkupId(true);
     }
@@ -57,6 +61,41 @@ public final class MesDevis extends MasterPage {
             }
         };
         this.add(contactLink);
+    }
+
+    private void initRepeaterNotifications() {
+        Label nbNotification = new Label("nbNotification", notifications.size());
+
+        ListView<NotificationDTO> listViewNotification = new ListView<NotificationDTO>("listNotification",
+                notifications) {
+
+            /**
+                     * 
+                     */
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected void populateItem(ListItem<NotificationDTO> item) {
+                NotificationDTO notification = item.getModelObject();
+
+                StringBuilder contenuNotification = new StringBuilder("blablaEntreprise");
+                contenuNotification.append(notification.getTypeNotification().getAffichage());
+                Label notificationLbl = new Label("notification", contenuNotification);
+
+                SimpleDateFormat dateNotificationFormatter = new SimpleDateFormat("jj/mm/aaaa hh:MM");
+                String dateNotificationForLabel = dateNotificationFormatter.format(notification.getDateNotification());
+
+                Label dateNotification = new Label("dateNotification", dateNotificationForLabel);
+
+                this.add(notificationLbl);
+                this.add(dateNotification);
+            }
+
+        };
+
+        this.add(nbNotification);
+        this.add(listViewNotification);
+
     }
 
     private void initRepeaterDevis() {

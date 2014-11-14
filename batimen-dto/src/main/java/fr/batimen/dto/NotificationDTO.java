@@ -11,6 +11,8 @@ import javax.validation.constraints.Past;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import fr.batimen.dto.enums.StatutNotification;
+import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.enums.TypeNotification;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 
@@ -19,16 +21,28 @@ public class NotificationDTO extends AbstractDTO {
     private static final long serialVersionUID = 5544266173747817936L;
 
     @NotNull
-    private TypeNotification notification;
+    private TypeNotification typeNotification;
     @Past
     @NotNull
     private Date dateNotification;
+    @NotNull
+    private StatutNotification statutNotification;
+    @NotNull
+    private TypeCompte pourQuiNotification;
 
     /**
-     * @return the notification
+     * @return the typeNotification
      */
-    public TypeNotification getNotification() {
-        return notification;
+    public TypeNotification getTypeNotification() {
+        return typeNotification;
+    }
+
+    /**
+     * @param typeNotification
+     *            the typeNotification to set
+     */
+    public void setTypeNotification(TypeNotification typeNotification) {
+        this.typeNotification = typeNotification;
     }
 
     /**
@@ -39,19 +53,41 @@ public class NotificationDTO extends AbstractDTO {
     }
 
     /**
-     * @param notification
-     *            the notification to set
-     */
-    public void setNotification(TypeNotification notification) {
-        this.notification = notification;
-    }
-
-    /**
      * @param dateNotification
      *            the dateNotification to set
      */
     public void setDateNotification(Date dateNotification) {
         this.dateNotification = dateNotification;
+    }
+
+    /**
+     * @return the statutNotification
+     */
+    public StatutNotification getStatutNotification() {
+        return statutNotification;
+    }
+
+    /**
+     * @return the pourQuiNotification
+     */
+    public TypeCompte getPourQuiNotification() {
+        return pourQuiNotification;
+    }
+
+    /**
+     * @param statutNotification
+     *            the statutNotification to set
+     */
+    public void setStatutNotification(StatutNotification statutNotification) {
+        this.statutNotification = statutNotification;
+    }
+
+    /**
+     * @param pourQuiNotification
+     *            the pourQuiNotification to set
+     */
+    public void setPourQuiNotification(TypeCompte pourQuiNotification) {
+        this.pourQuiNotification = pourQuiNotification;
     }
 
     /*
@@ -61,7 +97,8 @@ public class NotificationDTO extends AbstractDTO {
      */
     @Override
     public int hashCode() {
-        return Objects.hashCode(Objects.hash(this.notification, this.dateNotification));
+        return Objects.hashCode(Objects.hash(this.typeNotification, this.dateNotification, this.statutNotification,
+                this.pourQuiNotification));
     }
 
     /*
@@ -77,8 +114,10 @@ public class NotificationDTO extends AbstractDTO {
 
         if (object instanceof NotificationDTO) {
             NotificationDTO other = (NotificationDTO) object;
-            return Objects.equals(this.notification, other.notification)
-                    && Objects.equals(this.dateNotification, other.dateNotification);
+            return Objects.equals(this.typeNotification, other.typeNotification)
+                    && Objects.equals(this.dateNotification, other.dateNotification)
+                    && Objects.equals(this.statutNotification, other.statutNotification)
+                    && Objects.equals(this.pourQuiNotification, other.pourQuiNotification);
         }
         return false;
     }

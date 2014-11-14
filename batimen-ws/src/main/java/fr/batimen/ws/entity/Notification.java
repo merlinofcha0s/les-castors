@@ -142,6 +142,36 @@ public class Notification extends AbstractEntity implements Serializable {
         this.clientNotifier = clientNotifier;
     }
 
+    /**
+     * @return the statutNotification
+     */
+    public StatutNotification getStatutNotification() {
+        return statutNotification;
+    }
+
+    /**
+     * @return the pourQuiNotification
+     */
+    public TypeCompte getPourQuiNotification() {
+        return pourQuiNotification;
+    }
+
+    /**
+     * @param statutNotification
+     *            the statutNotification to set
+     */
+    public void setStatutNotification(StatutNotification statutNotification) {
+        this.statutNotification = statutNotification;
+    }
+
+    /**
+     * @param pourQuiNotification
+     *            the pourQuiNotification to set
+     */
+    public void setPourQuiNotification(TypeCompte pourQuiNotification) {
+        this.pourQuiNotification = pourQuiNotification;
+    }
+
     /*
      * (non-Javadoc)
      * 

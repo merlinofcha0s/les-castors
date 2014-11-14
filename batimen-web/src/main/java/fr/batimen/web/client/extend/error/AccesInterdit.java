@@ -4,7 +4,7 @@ import org.apache.wicket.markup.html.link.Link;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.batimen.web.client.extend.member.client.MesDevis;
+import fr.batimen.web.client.extend.member.client.MesAnnonces;
 import fr.batimen.web.client.master.MasterPage;
 
 /**
@@ -32,7 +32,7 @@ public class AccesInterdit extends MasterPage {
 
             @Override
             public void onClick() {
-                this.setResponsePage(MesDevis.class);
+                this.setResponsePage(MesAnnonces.class);
             }
         };
 

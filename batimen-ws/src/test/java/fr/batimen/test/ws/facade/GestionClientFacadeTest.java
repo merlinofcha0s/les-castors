@@ -6,10 +6,11 @@ import org.jboss.arquillian.persistence.UsingDataSet;
 import org.junit.Assert;
 import org.junit.Test;
 
-import fr.batimen.core.exception.BackendException;
 import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.NotificationDTO;
 import fr.batimen.dto.aggregate.MesAnnoncesPageDTO;
+import fr.batimen.dto.enums.StatutNotification;
+import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.enums.TypeNotification;
 import fr.batimen.test.ws.AbstractBatimenWsTest;
 import fr.batimen.ws.client.service.ClientsService;
@@ -17,9 +18,9 @@ import fr.batimen.ws.client.service.ClientsService;
 public class GestionClientFacadeTest extends AbstractBatimenWsTest {
 
     /**
-     * Test de récuperation des roles pour un artisan
+     * Cas de test : Le client se rend sur la page "mes annonces" <br/>
+     * Ce test verifie que les données remontent de maniere correctes
      * 
-     * @throws BackendException
      */
     @Test
     @UsingDataSet("datasets/in/client_notification_annonce.yml")
@@ -36,7 +37,9 @@ public class GestionClientFacadeTest extends AbstractBatimenWsTest {
         Boolean notificationPresent = Boolean.FALSE;
 
         for (NotificationDTO notification : notifications) {
-            if (notification.getNotification().getAffichage().equals(TypeNotification.INSCRIT_A_ANNONCE.getAffichage())) {
+            if (notification.getTypeNotification().equals(TypeNotification.INSCRIT_A_ANNONCE)
+                    && notification.getPourQuiNotification().equals(TypeCompte.CLIENT)
+                    && notification.getStatutNotification().equals(StatutNotification.VU)) {
                 notificationPresent = Boolean.TRUE;
             }
         }

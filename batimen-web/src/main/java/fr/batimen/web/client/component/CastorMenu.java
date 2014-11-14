@@ -5,7 +5,7 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.panel.Panel;
 
 import fr.batimen.web.client.extend.Accueil;
-import fr.batimen.web.client.extend.member.client.MesDevis;
+import fr.batimen.web.client.extend.member.client.MesAnnonces;
 
 public class CastorMenu extends Panel {
 
@@ -24,7 +24,7 @@ public class CastorMenu extends Panel {
 
             @Override
             public void onClick() {
-                this.setResponsePage(MesDevis.class);
+                this.setResponsePage(MesAnnonces.class);
             }
         };
 
