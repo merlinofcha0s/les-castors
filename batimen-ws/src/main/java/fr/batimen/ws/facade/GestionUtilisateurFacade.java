@@ -1,5 +1,7 @@
 package fr.batimen.ws.facade;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -260,8 +262,21 @@ public class GestionUtilisateurFacade {
         for (Notification notification : notifications) {
             NotificationDTO notificationDTO = new NotificationDTO();
             mapper.map(notification, notificationDTO);
+
+            notificationDTO.setClientLogin(notification.getClientNotifier().getLogin());
+            notificationDTO.setArtisanLogin(notification.getArtisanNotifier().getLogin());
+            try {
+                notificationDTO.setNomEntrepriseUrlized(URLEncoder.encode(notification.getArtisanNotifier()
+                        .getEntreprise().getNomComplet(), "UTF-8"));
+            } catch (UnsupportedEncodingException e) {
+                if (LOGGER.isErrorEnabled()) {
+                    LOGGER.error("Erreur lors de l'encodage du nom de l'entreprise en URL", e);
+                }
+            }
+
             notificationsDTO.add(notificationDTO);
         }
+
         return notificationsDTO;
     }
 }

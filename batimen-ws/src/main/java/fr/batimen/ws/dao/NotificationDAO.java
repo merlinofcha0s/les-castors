@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.persistence.NoResultException;
@@ -35,6 +37,7 @@ public class NotificationDAO extends AbstractDAO<Notification> {
      *            Le login du client.
      * @return Toutes les notifications du client
      */
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public List<Notification> getNotificationForClient(String login) {
         return getNotificationsForUser(login, QueryJPQL.NOTIFICATION_BY_CLIENT_LOGIN);
     }
@@ -46,10 +49,12 @@ public class NotificationDAO extends AbstractDAO<Notification> {
      *            Le login de l'artisan.
      * @return Toutes les notifications de l'artisan
      */
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public List<Notification> getNotificationForArtisan(String login) {
         return getNotificationsForUser(login, QueryJPQL.NOTIFICATION_BY_ARTISAN_LOGIN);
     }
 
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     private List<Notification> getNotificationsForUser(String login, String queryName) {
         List<Notification> notificationFinded = null;
 

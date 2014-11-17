@@ -33,7 +33,7 @@ import fr.batimen.dto.enums.TypeNotification;
         @NamedQuery(name = QueryJPQL.NOTIFICATION_BY_CLIENT_LOGIN,
                 query = "SELECT n FROM Notification AS n WHERE n.clientNotifier.login = :login ORDER BY dateNotification ASC"),
         @NamedQuery(name = QueryJPQL.NOTIFICATION_BY_ARTISAN_LOGIN,
-                query = "SELECT n FROM Notification AS n WHERE n.artisanNotifier.login = :login ORDER BY dateNotification ASC") })
+                query = "SELECT n FROM Notification AS n INNER JOIN FETCH n.artisanNotifier AS art INNER JOIN FETCH art.entreprise WHERE n.artisanNotifier.login = :login ORDER BY dateNotification ASC") })
 public class Notification extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = 1953843726850626949L;

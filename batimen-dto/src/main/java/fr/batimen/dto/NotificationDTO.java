@@ -1,5 +1,10 @@
 package fr.batimen.dto;
 
+import static fr.batimen.dto.constant.ValidatorConstant.CLIENT_LOGIN_RANGE_MAX;
+import static fr.batimen.dto.constant.ValidatorConstant.CLIENT_LOGIN_RANGE_MIN;
+import static fr.batimen.dto.constant.ValidatorConstant.ENTREPRISE_NOM_COMPLET_MAX;
+import static fr.batimen.dto.constant.ValidatorConstant.ENTREPRISE_NOM_COMPLET_MIN;
+
 import java.lang.reflect.Type;
 import java.util.Date;
 import java.util.List;
@@ -7,6 +12,7 @@ import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -29,6 +35,15 @@ public class NotificationDTO extends AbstractDTO {
     private StatutNotification statutNotification;
     @NotNull
     private TypeCompte pourQuiNotification;
+    @NotNull
+    @Size(min = CLIENT_LOGIN_RANGE_MIN, max = CLIENT_LOGIN_RANGE_MAX)
+    private String clientLogin;
+    @NotNull
+    @Size(min = CLIENT_LOGIN_RANGE_MIN, max = CLIENT_LOGIN_RANGE_MAX)
+    private String artisanLogin;
+    @NotNull
+    @Size(min = ENTREPRISE_NOM_COMPLET_MIN, max = ENTREPRISE_NOM_COMPLET_MAX)
+    private String nomEntrepriseUrlized;
 
     /**
      * @return the typeNotification
@@ -88,6 +103,51 @@ public class NotificationDTO extends AbstractDTO {
      */
     public void setPourQuiNotification(TypeCompte pourQuiNotification) {
         this.pourQuiNotification = pourQuiNotification;
+    }
+
+    /**
+     * @return the clientLogin
+     */
+    public String getClientLogin() {
+        return clientLogin;
+    }
+
+    /**
+     * @return the artisanLogin
+     */
+    public String getArtisanLogin() {
+        return artisanLogin;
+    }
+
+    /**
+     * @return the nomEntrepriseUrlized
+     */
+    public String getNomEntrepriseUrlized() {
+        return nomEntrepriseUrlized;
+    }
+
+    /**
+     * @param clientLogin
+     *            the clientLogin to set
+     */
+    public void setClientLogin(String clientLogin) {
+        this.clientLogin = clientLogin;
+    }
+
+    /**
+     * @param artisanLogin
+     *            the artisanLogin to set
+     */
+    public void setArtisanLogin(String artisanLogin) {
+        this.artisanLogin = artisanLogin;
+    }
+
+    /**
+     * @param nomEntrepriseUrlized
+     *            the nomEntrepriseUrlized to set
+     */
+    public void setNomEntrepriseUrlized(String nomEntrepriseUrlized) {
+        this.nomEntrepriseUrlized = nomEntrepriseUrlized;
     }
 
     /*
