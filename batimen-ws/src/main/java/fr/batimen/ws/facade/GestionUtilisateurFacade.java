@@ -1,7 +1,5 @@
 package fr.batimen.ws.facade;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +26,7 @@ import fr.batimen.core.constant.WsPath;
 import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.LoginDTO;
 import fr.batimen.dto.NotificationDTO;
+import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 import fr.batimen.ws.dao.ArtisanDAO;
 import fr.batimen.ws.dao.ClientDAO;
@@ -249,13 +248,15 @@ public class GestionUtilisateurFacade {
     @POST
     @Path(WsPath.GESTION_UTILISATEUR_SERVICE_NOTIFICATION)
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public List<NotificationDTO> getNotificationByLogin(String login) {
+    public List<NotificationDTO> getNotificationByLogin(String login, TypeCompte typeCompte) {
         List<NotificationDTO> notificationsDTO = new ArrayList<NotificationDTO>();
         ModelMapper mapper = new ModelMapper();
         String loginEscaped = DeserializeJsonHelper.parseString(login);
-        List<Notification> notifications = notificationDAO.getNotificationForClient(loginEscaped);
+        List<Notification> notifications = null;
 
-        if (notifications.isEmpty()) {
+        if (typeCompte.equals(TypeCompte.CLIENT)) {
+            notifications = notificationDAO.getNotificationForClient(loginEscaped);
+        } else if (typeCompte.equals(TypeCompte.ARTISAN)) {
             notifications = notificationDAO.getNotificationForArtisan(loginEscaped);
         }
 
@@ -265,14 +266,7 @@ public class GestionUtilisateurFacade {
 
             notificationDTO.setClientLogin(notification.getClientNotifier().getLogin());
             notificationDTO.setArtisanLogin(notification.getArtisanNotifier().getLogin());
-            try {
-                notificationDTO.setNomEntrepriseUrlized(URLEncoder.encode(notification.getArtisanNotifier()
-                        .getEntreprise().getNomComplet(), "UTF-8"));
-            } catch (UnsupportedEncodingException e) {
-                if (LOGGER.isErrorEnabled()) {
-                    LOGGER.error("Erreur lors de l'encodage du nom de l'entreprise en URL", e);
-                }
-            }
+            notificationDTO.setNomEntreprise(notification.getArtisanNotifier().getEntreprise().getNomComplet());
 
             notificationsDTO.add(notificationDTO);
         }

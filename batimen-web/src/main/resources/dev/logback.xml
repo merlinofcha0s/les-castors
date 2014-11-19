@@ -8,6 +8,8 @@
 			<pattern>%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n</pattern>
 		</encoder>
 	</appender>
+	
+	<logger name="org.apache.wicket" level="WARN" />
 
 	<root level="${logs.lvl}">
 		<appender-ref ref="stdout" />

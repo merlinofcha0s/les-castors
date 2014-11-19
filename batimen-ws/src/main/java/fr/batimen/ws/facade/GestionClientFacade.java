@@ -24,6 +24,7 @@ import fr.batimen.core.constant.WsPath;
 import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.NotificationDTO;
 import fr.batimen.dto.aggregate.MesAnnoncesPageDTO;
+import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 import fr.batimen.ws.helper.JsonHelper;
 import fr.batimen.ws.interceptor.BatimenInterceptor;
@@ -67,7 +68,8 @@ public class GestionClientFacade {
         MesAnnoncesPageDTO mesAnnoncesDTO = new MesAnnoncesPageDTO();
         String loginEscaped = DeserializeJsonHelper.parseString(login);
 
-        List<NotificationDTO> notificationsDTO = gestionUtilisationFacade.getNotificationByLogin(loginEscaped);
+        List<NotificationDTO> notificationsDTO = gestionUtilisationFacade.getNotificationByLogin(loginEscaped,
+                TypeCompte.CLIENT);
         List<AnnonceDTO> annoncesDTO = gestionAnnonceFacade.getAnnonceByClientLogin(loginEscaped);
 
         mesAnnoncesDTO.setNotifications(notificationsDTO);

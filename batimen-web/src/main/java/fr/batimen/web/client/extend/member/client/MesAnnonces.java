@@ -12,12 +12,13 @@ import org.apache.wicket.markup.html.list.ListView;
 
 import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.NotificationDTO;
+import fr.batimen.dto.aggregate.MesAnnoncesPageDTO;
 import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.client.component.ContactezNous;
 import fr.batimen.web.client.extend.Contact;
 import fr.batimen.web.client.master.MasterPage;
-import fr.batimen.ws.client.service.AnnonceService;
+import fr.batimen.ws.client.service.ClientsService;
 
 /**
  * Page ou l'utilisateur pourra consulter son compte ainsi que l'avancement de
@@ -39,7 +40,7 @@ public final class MesAnnonces extends MasterPage {
 
         initLink();
         initStaticComposant();
-        getAnnonceData();
+        getMesInfosForPage();
         initRepeaterNotifications();
         initRepeaterDevis();
         this.setOutputMarkupId(true);
@@ -78,17 +79,40 @@ public final class MesAnnonces extends MasterPage {
             protected void populateItem(ListItem<NotificationDTO> item) {
                 NotificationDTO notification = item.getModelObject();
 
-                StringBuilder contenuNotification = new StringBuilder("blablaEntreprise");
-                contenuNotification.append(notification.getTypeNotification().getAffichage());
-                Label notificationLbl = new Label("notification", contenuNotification);
+                Link<Void> linkEntreprise = new Link<Void>("linkEntreprise") {
 
-                SimpleDateFormat dateNotificationFormatter = new SimpleDateFormat("jj/mm/aaaa hh:MM");
-                String dateNotificationForLabel = dateNotificationFormatter.format(notification.getDateNotification());
+                    private static final long serialVersionUID = 1L;
 
-                Label dateNotification = new Label("dateNotification", dateNotificationForLabel);
+                    @Override
+                    public void onClick() {
+                        // TODO Auto-generated method stub
 
-                this.add(notificationLbl);
-                this.add(dateNotification);
+                    }
+
+                };
+
+                Label lblLinkEntreprise = new Label("lblLinkEntreprise", notification.getNomEntreprise());
+                linkEntreprise.add(lblLinkEntreprise);
+
+                StringBuilder contenuNotification = new StringBuilder(" ");
+                contenuNotification.append(notification.getTypeNotification().getAffichage()).append(" ");
+                Label typeNotification = new Label("typeNotification", contenuNotification.toString());
+                Link<Void> linkAnnonce = new Link<Void>("linkAnnonce") {
+
+                    private static final long serialVersionUID = 1L;
+
+                    @Override
+                    public void onClick() {
+                    }
+                };
+                SimpleDateFormat dateNotificationFormatter = new SimpleDateFormat("dd/MM/yyyy kk:mm");
+                Label dateNotification = new Label("dateNotification", dateNotificationFormatter.format(notification
+                        .getDateNotification()));
+
+                item.add(linkEntreprise);
+                item.add(typeNotification);
+                item.add(linkAnnonce);
+                item.add(dateNotification);
             }
 
         };
@@ -136,9 +160,14 @@ public final class MesAnnonces extends MasterPage {
         this.add(listViewAnnonce);
     }
 
-    private void getAnnonceData() {
+    private void getMesInfosForPage() {
         Authentication authentication = new Authentication();
-        annonces = AnnonceService.getAnnonceByLoginForClient(authentication.getCurrentUserInfo().getLogin());
+
+        MesAnnoncesPageDTO mesInfos = ClientsService.getMesInfosAnnoncePage(authentication.getCurrentUserInfo()
+                .getLogin());
+
+        annonces = mesInfos.getAnnonces();
+        notifications = mesInfos.getNotifications();
         /*
          * annonces = new ArrayList<AnnonceDTO>();
          * 

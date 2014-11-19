@@ -39,7 +39,10 @@ public class GestionClientFacadeTest extends AbstractBatimenWsTest {
         for (NotificationDTO notification : notifications) {
             if (notification.getTypeNotification().equals(TypeNotification.INSCRIT_A_ANNONCE)
                     && notification.getPourQuiNotification().equals(TypeCompte.CLIENT)
-                    && notification.getStatutNotification().equals(StatutNotification.VU)) {
+                    && notification.getStatutNotification().equals(StatutNotification.VU)
+                    && notification.getArtisanLogin().equals("pebronneArtisanne")
+                    && notification.getClientLogin().equals("pebronne")
+                    && notification.getNomEntreprise().equals("Pebronne enterprise")) {
                 notificationPresent = Boolean.TRUE;
             }
         }

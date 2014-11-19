@@ -43,7 +43,7 @@ public class NotificationDTO extends AbstractDTO {
     private String artisanLogin;
     @NotNull
     @Size(min = ENTREPRISE_NOM_COMPLET_MIN, max = ENTREPRISE_NOM_COMPLET_MAX)
-    private String nomEntrepriseUrlized;
+    private String nomEntreprise;
 
     /**
      * @return the typeNotification
@@ -122,8 +122,8 @@ public class NotificationDTO extends AbstractDTO {
     /**
      * @return the nomEntrepriseUrlized
      */
-    public String getNomEntrepriseUrlized() {
-        return nomEntrepriseUrlized;
+    public String getNomEntreprise() {
+        return nomEntreprise;
     }
 
     /**
@@ -143,11 +143,11 @@ public class NotificationDTO extends AbstractDTO {
     }
 
     /**
-     * @param nomEntrepriseUrlized
+     * @param nomEntreprise
      *            the nomEntrepriseUrlized to set
      */
-    public void setNomEntrepriseUrlized(String nomEntrepriseUrlized) {
-        this.nomEntrepriseUrlized = nomEntrepriseUrlized;
+    public void setNomEntreprise(String nomEntreprise) {
+        this.nomEntreprise = nomEntreprise;
     }
 
     /*
