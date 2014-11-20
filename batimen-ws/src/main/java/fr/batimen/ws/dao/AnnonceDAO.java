@@ -147,8 +147,8 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
     }
 
     /**
-     * Sauvegarde d'une annonce, check dans la bdd si elle existe déjà pour un
-     * utilisateur donné.
+     * Sauvegarde d'une annonce lors de son initialisation, check dans la bdd si
+     * elle existe déjà pour un utilisateur donné.
      * 
      * @param nouvelleAnnonce
      *            L'annonce a sauvegarder dans la bdd
@@ -156,7 +156,7 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
      *             Exception throw si l'entité existe déjà.
      */
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void saveAnnonce(Annonce nouvelleAnnonce) throws DuplicateEntityException {
+    public void saveAnnonceFirstTime(Annonce nouvelleAnnonce) throws DuplicateEntityException {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Debut persistence d'une nouvelle annonce......");
         }

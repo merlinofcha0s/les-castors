@@ -117,5 +117,11 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         Assert.assertNotNull(annoncesDeJohnny);
         // On test qu'il y a bien une annonce liée à Johnny boy
         Assert.assertTrue(annoncesDeJohnny.size() == 1);
+
+        for (Annonce annonce : annoncesDeJohnny) {
+            Assert.assertFalse(annonce.getHashID().isEmpty());
+            Assert.assertFalse(annonce.getSelHashID().isEmpty());
+        }
+
     }
 }

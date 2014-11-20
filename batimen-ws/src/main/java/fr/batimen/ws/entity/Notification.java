@@ -31,7 +31,7 @@ import fr.batimen.dto.enums.TypeNotification;
 @Table(name = "Notification")
 @NamedQueries(value = {
         @NamedQuery(name = QueryJPQL.NOTIFICATION_BY_CLIENT_LOGIN,
-                query = "SELECT n FROM Notification AS n INNER JOIN FETCH n.artisanNotifier AS art INNER JOIN FETCH art.entreprise WHERE n.clientNotifier.login = :login AND pourQuiNotification = 4 ORDER BY dateNotification ASC"),
+                query = "SELECT n, art.login, ent.nomComplet  FROM Notification AS n INNER JOIN n.artisanNotifier AS art INNER JOIN art.entreprise AS ent INNER JOIN n.annonce AS ann WHERE n.clientNotifier.login = :login AND pourQuiNotification = 4 ORDER BY dateNotification ASC"),
         @NamedQuery(name = QueryJPQL.NOTIFICATION_BY_ARTISAN_LOGIN,
                 query = "SELECT n FROM Notification AS n INNER JOIN FETCH n.artisanNotifier AS art INNER JOIN FETCH art.entreprise WHERE n.artisanNotifier.login = :login AND pourQuiNotification = 3 ORDER BY dateNotification ASC") })
 public class Notification extends AbstractEntity implements Serializable {
@@ -56,6 +56,9 @@ public class Notification extends AbstractEntity implements Serializable {
     @ManyToOne
     @JoinColumn(name = "id_client")
     private Client clientNotifier;
+    @ManyToOne
+    @JoinColumn(name = "id_annonce")
+    private Annonce annonce;
 
     /**
      * @return the id
@@ -100,16 +103,6 @@ public class Notification extends AbstractEntity implements Serializable {
      */
     public void setDateNotification(Date dateNotification) {
         this.dateNotification = dateNotification;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#hashCode()
-     */
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(Objects.hash(this.typeNotification, this.dateNotification));
     }
 
     /**
@@ -170,6 +163,31 @@ public class Notification extends AbstractEntity implements Serializable {
      */
     public void setPourQuiNotification(TypeCompte pourQuiNotification) {
         this.pourQuiNotification = pourQuiNotification;
+    }
+
+    /**
+     * @return the annonce
+     */
+    public Annonce getAnnonce() {
+        return annonce;
+    }
+
+    /**
+     * @param annonce
+     *            the annonce to set
+     */
+    public void setAnnonce(Annonce annonce) {
+        this.annonce = annonce;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(Objects.hash(this.typeNotification, this.dateNotification));
     }
 
     /*

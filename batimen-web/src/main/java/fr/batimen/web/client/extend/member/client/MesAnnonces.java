@@ -9,6 +9,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.Model;
 
 import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.NotificationDTO;
@@ -16,6 +17,7 @@ import fr.batimen.dto.aggregate.MesAnnoncesPageDTO;
 import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.client.component.ContactezNous;
+import fr.batimen.web.client.component.LinkLabel;
 import fr.batimen.web.client.extend.Contact;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.ws.client.service.ClientsService;
@@ -70,40 +72,39 @@ public final class MesAnnonces extends MasterPage {
         ListView<NotificationDTO> listViewNotification = new ListView<NotificationDTO>("listNotification",
                 notifications) {
 
-            /**
-                     * 
-                     */
             private static final long serialVersionUID = 1L;
 
             @Override
             protected void populateItem(ListItem<NotificationDTO> item) {
                 NotificationDTO notification = item.getModelObject();
 
-                Link<Void> linkEntreprise = new Link<Void>("linkEntreprise") {
+                final Model<String> nomEntrepriseModelForLbl = new Model<String>(notification.getNomEntreprise());
+
+                LinkLabel linkEntreprise = new LinkLabel("linkEntreprise", nomEntrepriseModelForLbl) {
 
                     private static final long serialVersionUID = 1L;
 
                     @Override
                     public void onClick() {
-                        // TODO Auto-generated method stub
-
+                        // TODO A Completer quand la page entreprise sera prete
                     }
 
                 };
 
-                Label lblLinkEntreprise = new Label("lblLinkEntreprise", notification.getNomEntreprise());
-                linkEntreprise.add(lblLinkEntreprise);
-
                 StringBuilder contenuNotification = new StringBuilder(" ");
                 contenuNotification.append(notification.getTypeNotification().getAffichage()).append(" ");
                 Label typeNotification = new Label("typeNotification", contenuNotification.toString());
+
                 Link<Void> linkAnnonce = new Link<Void>("linkAnnonce") {
 
                     private static final long serialVersionUID = 1L;
 
                     @Override
                     public void onClick() {
+                        // TODO A Completer quand la page consultation annonce
+                        // sera prete
                     }
+
                 };
                 SimpleDateFormat dateNotificationFormatter = new SimpleDateFormat("dd/MM/yyyy kk:mm");
                 Label dateNotification = new Label("dateNotification", dateNotificationFormatter.format(notification
@@ -148,11 +149,23 @@ public final class MesAnnonces extends MasterPage {
                 Label nbDevis = new Label("nbDevis", annonce.getNbDevis());
                 Label etatAnnonce = new Label("etatAnnonce", annonce.getEtatAnnonce().getType());
 
+                Link<Void> voirAnnonce = new Link<Void>("voirAnnonce") {
+
+                    private static final long serialVersionUID = 1L;
+
+                    @Override
+                    public void onClick() {
+                        // TODO Mettre en place quand la page annonce sera prete
+                    }
+
+                };
+
                 item.add(iconCategorie);
                 item.add(categorie);
                 item.add(description);
                 item.add(nbDevis);
                 item.add(etatAnnonce);
+                item.add(voirAnnonce);
             }
         };
 

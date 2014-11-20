@@ -197,4 +197,10 @@ public class AnnonceService {
         return nouveauClient;
     }
 
+    public void remplirSelAndHash(Annonce nouvelleAnnonce) {
+        String salt = HashHelper.generateSalt();
+        nouvelleAnnonce.setSelHashID(salt);
+        nouvelleAnnonce.setHashID(HashHelper.hashID(nouvelleAnnonce.getId(), salt));
+    }
+
 }

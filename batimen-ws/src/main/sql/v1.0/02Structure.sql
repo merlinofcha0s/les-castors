@@ -20,6 +20,8 @@ create table Annonce (
         nbConsultation int4 not null,
         photo varchar(255),
         typeContact int4 not null,
+        hashID varchar(255),
+        selHashID varchar(255),
         adresseChantier_id int8,
         demandeur_fk int8,
         notationAnnonce_id int8,
@@ -117,6 +119,7 @@ create table Annonce (
         statutNotification int4 not null,
         id_artisan int8,
         id_client int8,
+        id_annonce int8,
         primary key (id)
     );
     
@@ -204,5 +207,10 @@ create table Annonce (
         add constraint notification_client
         foreign key (id_client) 
         references Client;
+        
+    alter table Notification 
+        add constraint notification_annonce
+        foreign key (id_annonce) 
+        references Annonce;
         
      

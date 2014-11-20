@@ -18,6 +18,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -70,6 +71,10 @@ public class Annonce extends AbstractEntity implements Serializable {
     private String sousCategorieMetier;
     @Column(nullable = false)
     private EtatAnnonce etatAnnonce;
+    @Column(nullable = false)
+    private String hashID;
+    @Column(nullable = false)
+    private String selHashID;
     @ManyToOne
     @JoinColumn(name = "demandeur_fk")
     private Client demandeur;
@@ -80,6 +85,8 @@ public class Annonce extends AbstractEntity implements Serializable {
     @ManyToMany
     @JoinTable(name = "annonce_artisan")
     private List<Artisan> artisans = new ArrayList<Artisan>();
+    @OneToMany(mappedBy = "annonce", targetEntity = Notification.class, cascade = CascadeType.REMOVE)
+    private List<Notification> notifications = new ArrayList<Notification>();
 
     /**
      * @return the id
@@ -304,6 +311,51 @@ public class Annonce extends AbstractEntity implements Serializable {
      */
     public void setArtisans(List<Artisan> artisans) {
         this.artisans = artisans;
+    }
+
+    /**
+     * @return the notifications
+     */
+    public List<Notification> getNotifications() {
+        return notifications;
+    }
+
+    /**
+     * @param notifications
+     *            the notifications to set
+     */
+    public void setNotifications(List<Notification> notifications) {
+        this.notifications = notifications;
+    }
+
+    /**
+     * @return the hashID
+     */
+    public String getHashID() {
+        return hashID;
+    }
+
+    /**
+     * @return the selHashID
+     */
+    public String getSelHashID() {
+        return selHashID;
+    }
+
+    /**
+     * @param hashID
+     *            the hashID to set
+     */
+    public void setHashID(String hashID) {
+        this.hashID = hashID;
+    }
+
+    /**
+     * @param selHashID
+     *            the selHashID to set
+     */
+    public void setSelHashID(String selHashID) {
+        this.selHashID = selHashID;
     }
 
     /*
