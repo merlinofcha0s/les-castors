@@ -18,6 +18,7 @@ public class QueryJPQL {
     // Parametre Query Entity client
     public static final String PARAM_CLIENT_LOGIN = "login";
     public static final String PARAM_CLIENT_EMAIL = "email";
+    public static final String PARAM_TYPE_COMPTE = "typeCompte";
     public static final String PARAM_ACTIVATION_KEY = "cleActivation";
 
     // Entity Annonce

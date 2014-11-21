@@ -44,6 +44,8 @@ public class NotificationDTO extends AbstractDTO {
     @NotNull
     @Size(min = ENTREPRISE_NOM_COMPLET_MIN, max = ENTREPRISE_NOM_COMPLET_MAX)
     private String nomEntreprise;
+    @NotNull
+    private String hashIDAnnonce;
 
     /**
      * @return the typeNotification
@@ -148,6 +150,21 @@ public class NotificationDTO extends AbstractDTO {
      */
     public void setNomEntreprise(String nomEntreprise) {
         this.nomEntreprise = nomEntreprise;
+    }
+
+    /**
+     * @return the hashIDAnnonce
+     */
+    public String getHashIDAnnonce() {
+        return hashIDAnnonce;
+    }
+
+    /**
+     * @param hashIDAnnonce
+     *            the hashIDAnnonce to set
+     */
+    public void setHashIDAnnonce(String hashIDAnnonce) {
+        this.hashIDAnnonce = hashIDAnnonce;
     }
 
     /*

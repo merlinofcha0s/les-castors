@@ -29,11 +29,13 @@ notification:
     pourQuiNotification: 4
     id_client: 1001
     id_artisan: 1003
+    id_annonce: 1006
 permission:
   - typecompte: 4
     client_fk: 1001
 annonce:
-  - datecreation: 2014-03-23 22:00:00.0
+  - id: 1006
+    datecreation: 2014-03-23 22:00:00.0
     delaiintervention: 0
     description: Peinture d'un mur
     etatannonce: 1
@@ -43,6 +45,8 @@ annonce:
     typecontact: 0
     demandeur_fk: 1001
     adressechantier_id: 100
+    hashID: 88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21
+    selHashID: 5Whe5wlRCzzUhgFfRHFkIbtxRMyGrS1eaUntnp9SxEY=
 adresse:
   - adresse: 106 chemin du pébron
     id: 100

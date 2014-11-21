@@ -34,7 +34,6 @@ import fr.batimen.ws.dao.NotificationDAO;
 import fr.batimen.ws.dao.PermissionDAO;
 import fr.batimen.ws.entity.Artisan;
 import fr.batimen.ws.entity.Client;
-import fr.batimen.ws.entity.Notification;
 import fr.batimen.ws.entity.Permission;
 import fr.batimen.ws.helper.JsonHelper;
 import fr.batimen.ws.interceptor.BatimenInterceptor;
@@ -252,7 +251,7 @@ public class GestionUtilisateurFacade {
         List<NotificationDTO> notificationsDTO = new ArrayList<NotificationDTO>();
         ModelMapper mapper = new ModelMapper();
         String loginEscaped = DeserializeJsonHelper.parseString(login);
-        List<Notification> notifications = null;
+        List<Object[]> notifications = null;
 
         if (typeCompte.equals(TypeCompte.CLIENT)) {
             notifications = notificationDAO.getNotificationForClient(loginEscaped);
@@ -260,13 +259,14 @@ public class GestionUtilisateurFacade {
             notifications = notificationDAO.getNotificationForArtisan(loginEscaped);
         }
 
-        for (Notification notification : notifications) {
+        for (Object[] notification : notifications) {
             NotificationDTO notificationDTO = new NotificationDTO();
-            mapper.map(notification, notificationDTO);
+            mapper.map(notification[0], notificationDTO);
 
-            notificationDTO.setClientLogin(notification.getClientNotifier().getLogin());
-            notificationDTO.setArtisanLogin(notification.getArtisanNotifier().getLogin());
-            notificationDTO.setNomEntreprise(notification.getArtisanNotifier().getEntreprise().getNomComplet());
+            notificationDTO.setArtisanLogin(String.valueOf(notification[1]));
+            notificationDTO.setClientLogin(String.valueOf(notification[2]));
+            notificationDTO.setNomEntreprise(String.valueOf(notification[3]));
+            notificationDTO.setHashIDAnnonce(String.valueOf(notification[4]));
 
             notificationsDTO.add(notificationDTO);
         }
