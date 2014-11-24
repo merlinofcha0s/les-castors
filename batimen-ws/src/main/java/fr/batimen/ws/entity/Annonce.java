@@ -41,7 +41,7 @@ import fr.batimen.dto.enums.TypeContact;
         @NamedQuery(name = QueryJPQL.ANNONCE_BY_LOGIN,
                 query = "SELECT a FROM Annonce AS a WHERE a.demandeur.login = :login"),
         @NamedQuery(name = QueryJPQL.ANNONCE_BY_LOGIN_FETCH_ARTISAN,
-                query = "SELECT a FROM Annonce AS a LEFT OUTER JOIN FETCH a.artisans WHERE a.demandeur.login = :login ORDER BY dateCreation ASC"),
+                query = "SELECT a, count(art) FROM Annonce AS a LEFT OUTER JOIN a.artisans AS art WHERE a.demandeur.login = :login GROUP BY a ORDER BY dateCreation ASC"),
         @NamedQuery(name = QueryJPQL.ANNONCE_BY_TITLE_AND_DESCRIPTION,
                 query = "SELECT a FROM Annonce AS a WHERE a.description = :description AND a.demandeur.login = :login") })
 public class Annonce extends AbstractEntity implements Serializable {

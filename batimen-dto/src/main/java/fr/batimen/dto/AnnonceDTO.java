@@ -42,7 +42,7 @@ public class AnnonceDTO extends AbstractDTO {
     @NotNull
     private EtatAnnonce etatAnnonce;
     @NotNull
-    private Integer nbDevis;
+    private Long nbDevis;
 
     /**
      * @return the description
@@ -197,7 +197,7 @@ public class AnnonceDTO extends AbstractDTO {
     /**
      * @return the nbDevis
      */
-    public Integer getNbDevis() {
+    public Long getNbDevis() {
         return nbDevis;
     }
 
@@ -205,7 +205,7 @@ public class AnnonceDTO extends AbstractDTO {
      * @param nbDevis
      *            the nbDevis to set
      */
-    public void setNbDevis(Integer nbDevis) {
+    public void setNbDevis(Long nbDevis) {
         this.nbDevis = nbDevis;
     }
 

@@ -106,7 +106,7 @@ public final class MesAnnonces extends MasterPage {
                     }
 
                 };
-                SimpleDateFormat dateNotificationFormatter = new SimpleDateFormat("dd/MM/yyyy kk:mm");
+                SimpleDateFormat dateNotificationFormatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                 Label dateNotification = new Label("dateNotification", dateNotificationFormatter.format(notification
                         .getDateNotification()));
 

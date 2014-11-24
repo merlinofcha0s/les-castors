@@ -40,13 +40,13 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
      * @return Liste d'annonces appartenant à l'utilisateur.
      */
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public List<Annonce> getAnnoncesByLoginWithFetchArtisan(String login) {
+    public List<Object[]> getAnnoncesByLoginWithFetchArtisan(String login) {
 
-        List<Annonce> listAnnonceByLogin = null;
+        List<Object[]> listAnnonceByLogin = null;
 
         try {
-            TypedQuery<Annonce> query = entityManager.createNamedQuery(QueryJPQL.ANNONCE_BY_LOGIN_FETCH_ARTISAN,
-                    Annonce.class);
+            TypedQuery<Object[]> query = entityManager.createNamedQuery(QueryJPQL.ANNONCE_BY_LOGIN_FETCH_ARTISAN,
+                    Object[].class);
             query.setParameter(QueryJPQL.PARAM_CLIENT_LOGIN, login);
 
             if (LOGGER.isDebugEnabled()) {
@@ -64,7 +64,7 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
             if (LOGGER.isWarnEnabled()) {
                 LOGGER.warn("Aucune correspondance trouvées dans la BDD", nre);
             }
-            return new ArrayList<Annonce>();
+            return new ArrayList<Object[]>();
         }
     }
 

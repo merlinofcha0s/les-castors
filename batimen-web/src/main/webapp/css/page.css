@@ -481,6 +481,16 @@ table tr td .error {
 .badgeMesdevis{
 	vertical-align: bottom !important;
 }
+
 .promoMesDevis{
 	padding-top: 52px;
 }
+
+.iconNotif{
+	font-size: 16px;
+}
+
+.td-IconNotif{
+	width: 10px;
+}
+

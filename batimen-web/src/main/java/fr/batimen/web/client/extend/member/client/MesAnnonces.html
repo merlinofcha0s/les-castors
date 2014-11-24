@@ -1,6 +1,5 @@
 <wicket:extend>
-	<div
-		class="row-fluid">
+	<div class="row-fluid">
 		<div
 			class="span2"
 			id="divInfoClientContenant">
@@ -19,11 +18,14 @@
 					class="bg_title"
 					style="clear: both;">
 					<h4 class="headInModule">
-						Mes notifications <span class="badgeMesdevis badge badge-info" wicket:id="nbNotification">5</span>
+						Mes notifications <span
+							class="badgeMesdevis badge badge-info"
+							wicket:id="nbNotification">5</span>
 					</h4>
 				</div>
 				<div>Retrouvez ici toutes les notifications sur vos demandes de devis</div>
-				<table class="table table-hover" wicket:id="listNotification">
+				<table
+					class="table table-hover">
 					<thead>
 						<tr>
 							<th></th>
@@ -32,7 +34,8 @@
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
+						<tr wicket:id="listNotification">
+							<td class="td-IconNotif"><span class="iconNotif icon-Info"></span></td>
 							<td><a wicket:id="linkEntreprise"></a><span wicket:id="typeNotification"></span><a wicket:id="linkAnnonce">annonce</a></td>
 							<td wicket:id="dateNotification">10/11/2014 à 12:15</td>
 						</tr>
@@ -43,25 +46,32 @@
 				<div
 					class="bg_title"
 					style="clear: both;">
-					<h4 class="headInModule">Mes demandes de devis <span class="badgeMesdevis badge badge-info" wicket:id="nbAnnonce"></span></h4>
+					<h4 class="headInModule">
+						Mes demandes de devis <span
+							class="badgeMesdevis badge badge-info"
+							wicket:id="nbAnnonce"></span>
+					</h4>
 				</div>
-				<table class="table table-hover" wicket:id="listAnnonce">
+				<table
+					class="table table-hover">
 					<thead>
 						<tr>
 							<th>Catégorie</th>
 							<th>Description</th>
 							<th>Nb devis</th>
 							<th>Etat devis</th>
-							<th>Consulter</th>
+							<th></th>
 						</tr>
 					</thead>
 					<tbody>
-						<tr>
-							<td><span class="iconsMesDevis" wicket:id="iconCategorie"></span><span wicket:id="categorie"></span></td>
+						<tr wicket:id="listAnnonce">
+							<td><span
+								class="iconsMesDevis"
+								wicket:id="iconCategorie"></span><span wicket:id="categorie"></span></td>
 							<td><span wicket:id="description"></span></td>
 							<td><span wicket:id="nbDevis"></span></td>
 							<td><span wicket:id="etatAnnonce"></span></td>
-							<td><a wicket:id="voirAnnonce">Voir annonce</a></td>
+							<td><a wicket:id="voirAnnonce">Voir / modifier annonce</a></td>
 						</tr>
 					</tbody>
 				</table>
@@ -82,9 +92,10 @@
 							<h1>Un commentaire ? Votre avis nous intéresse</h1>
 						</div>
 						<div class="span3 promo_button_block">
-							<a 
+							<a
 								wicket:id="contact"
-								class="btn btn-info" id="btnDonnezAvis">Donnez votre avis</a>
+								class="btn btn-info"
+								id="btnDonnezAvis">Donnez votre avis</a>
 						</div>
 					</div>
 				</div>

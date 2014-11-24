@@ -141,18 +141,18 @@ public class GestionAnnonceFacade {
         // On escape les ""
         String loginEscaped = DeserializeJsonHelper.parseString(login);
         // On recupere les annonces de l'utilisateur
-        List<Annonce> annonces = annonceDAO.getAnnoncesByLoginWithFetchArtisan(loginEscaped);
+        List<Object[]> queryAnnoncesResult = annonceDAO.getAnnoncesByLoginWithFetchArtisan(loginEscaped);
         // On crée la liste qui accueuillera les DTO
         List<AnnonceDTO> annoncesDTO = new ArrayList<AnnonceDTO>();
         ModelMapper modelMapper = new ModelMapper();
 
-        for (Annonce annonce : annonces) {
+        for (Object[] annonce : queryAnnoncesResult) {
             // On crée le nouvel objet
             AnnonceDTO annonceDTO = new AnnonceDTO();
             // On transfert les données d'un objet a l'autre
-            modelMapper.map(annonce, annonceDTO);
+            modelMapper.map(annonce[0], annonceDTO);
             // On rempli les champs à calculer
-            Integer nbDevis = annonce.getArtisans().size();
+            Long nbDevis = (Long) annonce[1];
             annonceDTO.setNbDevis(nbDevis);
 
             // On ajoute à la liste
