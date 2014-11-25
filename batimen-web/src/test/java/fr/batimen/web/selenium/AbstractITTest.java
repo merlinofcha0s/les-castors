@@ -57,8 +57,8 @@ public abstract class AbstractITTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractITTest.class);
 
     // DBSetup
-    public static final Operation DELETE_ALL = deleteAllFrom("annonce", "permission", "artisan", "categoriemetier",
-            "entreprise", "adresse", "notation", "client");
+    public static final Operation DELETE_ALL = deleteAllFrom("notification", "annonce", "permission", "artisan",
+            "categoriemetier", "entreprise", "adresse", "notation", "client");
     public static final Operation INSERT_USER_DATA = insertInto("client")
             .columns("id", "email", "nom", "prenom", "login", "password", "numeroTel", "dateInscription", "isActive",
                     "cleactivation")

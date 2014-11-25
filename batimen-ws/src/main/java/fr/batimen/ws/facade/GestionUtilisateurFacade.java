@@ -242,10 +242,10 @@ public class GestionUtilisateurFacade {
     }
 
     /**
-     * Methode de récuperation des notifications d'un utilisateurs
+     * Methode de récuperation des notifications d'un utilisateur
      * 
      * @param login
-     * @return
+     * @return La liste de notification de l'utilisateur.
      */
     @POST
     @Path(WsPath.GESTION_UTILISATEUR_SERVICE_NOTIFICATION)
@@ -256,12 +256,21 @@ public class GestionUtilisateurFacade {
         List<Object[]> notifications = null;
 
         if (typeCompte.equals(TypeCompte.CLIENT)) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Query notification pour client en préparation");
+            }
             notifications = notificationDAO.getNotificationForClient(loginEscaped);
         } else if (typeCompte.equals(TypeCompte.ARTISAN)) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Query notification pour artisan en préparation");
+            }
             notifications = notificationDAO.getNotificationForArtisan(loginEscaped);
         }
 
         for (Object[] notification : notifications) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Génération de la DTO de notification");
+            }
             NotificationDTO notificationDTO = new NotificationDTO();
             notificationDTO.setTypeNotification((TypeNotification) notification[0]);
             notificationDTO.setDateNotification((Timestamp) notification[1]);

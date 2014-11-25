@@ -32,8 +32,7 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
     private static final Logger LOGGER = LoggerFactory.getLogger(AnnonceDAO.class);
 
     /**
-     * Récupère les annonces par login de leur utilsateurs charge par défaut les
-     * artisans s'étant inscrits à l'annonce.
+     * Récupère les annonces par login de leurs utilsateurs
      * 
      * @param login
      *            le login du client dont on veut recupérer les annonces.

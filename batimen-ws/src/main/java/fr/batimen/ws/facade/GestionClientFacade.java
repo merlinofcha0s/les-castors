@@ -65,11 +65,24 @@ public class GestionClientFacade {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public MesAnnoncesPageDTO getInfoForMesAnnoncesPage(String login) {
 
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Récuperation des annonces / notifs pour : " + login);
+        }
+
         MesAnnoncesPageDTO mesAnnoncesDTO = new MesAnnoncesPageDTO();
         String loginEscaped = DeserializeJsonHelper.parseString(login);
 
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Récuperation notification.........");
+        }
+
         List<NotificationDTO> notificationsDTO = gestionUtilisationFacade.getNotificationByLogin(loginEscaped,
                 TypeCompte.CLIENT);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Récuperation annonce.........");
+        }
+
         List<AnnonceDTO> annoncesDTO = gestionAnnonceFacade.getAnnonceByClientLogin(loginEscaped);
 
         mesAnnoncesDTO.setNotifications(notificationsDTO);

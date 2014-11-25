@@ -10,6 +10,8 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.NotificationDTO;
@@ -34,26 +36,42 @@ public final class MesAnnonces extends MasterPage {
 
     private static final long serialVersionUID = 1902734649854998120L;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(MesAnnonces.class);
+
     private List<AnnonceDTO> annonces;
     private List<NotificationDTO> notifications;
 
     public MesAnnonces() {
         super("Page accueil de batimen", "lol", "Bienvenue sur lescastors.fr", true, "img/bg_title1.jpg");
 
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Init de la page mes annonces");
+        }
+
         initLink();
         initStaticComposant();
         getMesInfosForPage();
         initRepeaterNotifications();
-        initRepeaterDevis();
+        initRepeaterAnnonces();
         this.setOutputMarkupId(true);
     }
 
     private void initStaticComposant() {
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Init des composants statiques");
+        }
+
         ContactezNous contactezNous = new ContactezNous("contactezNous");
         this.add(contactezNous);
     }
 
     private void initLink() {
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Init des liens de la page mes annonces");
+        }
+
         Link<Void> contactLink = new Link<Void>("contact") {
 
             private static final long serialVersionUID = 9041719967383711900L;
@@ -67,6 +85,11 @@ public final class MesAnnonces extends MasterPage {
     }
 
     private void initRepeaterNotifications() {
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Init du repeater des notifications");
+        }
+
         Label nbNotification = new Label("nbNotification", notifications.size());
 
         ListView<NotificationDTO> listViewNotification = new ListView<NotificationDTO>("listNotification",
@@ -123,7 +146,11 @@ public final class MesAnnonces extends MasterPage {
 
     }
 
-    private void initRepeaterDevis() {
+    private void initRepeaterAnnonces() {
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Init du repeater des annonces");
+        }
 
         Label nbAnnonce = new Label("nbAnnonce", annonces.size());
 
@@ -174,6 +201,11 @@ public final class MesAnnonces extends MasterPage {
     }
 
     private void getMesInfosForPage() {
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Appel webservice pour la récupération des données a afficher");
+        }
+
         Authentication authentication = new Authentication();
 
         MesAnnoncesPageDTO mesInfos = ClientsService.getMesInfosAnnoncePage(authentication.getCurrentUserInfo()
@@ -181,23 +213,5 @@ public final class MesAnnonces extends MasterPage {
 
         annonces = mesInfos.getAnnonces();
         notifications = mesInfos.getNotifications();
-        /*
-         * annonces = new ArrayList<AnnonceDTO>();
-         * 
-         * AnnonceDTO annonce = new AnnonceDTO(); annonce.setDateCreation(new
-         * Date()); annonce.setDateMAJ(new Date());
-         * annonce.setDelaiIntervention(
-         * DelaiIntervention.LE_PLUS_RAPIDEMENT_POSSIBLE);
-         * annonce.setDescription
-         * ("Une description de la plus pure des descriptions");
-         * annonce.setEtatAnnonce(EtatAnnonce.ACTIVE);
-         * annonce.setNbConsultation(0); annonce.setNbDevis(0);
-         * annonce.setCategorieMetier((short) 0);
-         * annonce.setSousCategorieMetier("La sous cateogrie du lol");
-         * annonce.setTypeContact(TypeContact.EMAIL);
-         * 
-         * annonces.add(annonce);
-         */
-
     }
 }
