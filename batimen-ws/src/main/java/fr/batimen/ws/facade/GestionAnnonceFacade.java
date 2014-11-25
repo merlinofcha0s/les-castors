@@ -19,7 +19,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
-import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,6 +32,7 @@ import fr.batimen.core.exception.EmailException;
 import fr.batimen.core.utils.PropertiesUtils;
 import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
+import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 import fr.batimen.ws.dao.AnnonceDAO;
 import fr.batimen.ws.entity.Annonce;
@@ -141,18 +141,18 @@ public class GestionAnnonceFacade {
         // On escape les ""
         String loginEscaped = DeserializeJsonHelper.parseString(login);
         // On recupere les annonces de l'utilisateur
-        List<Object[]> queryAnnoncesResult = annonceDAO.getAnnoncesByLoginWithFetchArtisan(loginEscaped);
+        List<Object[]> queryAnnoncesResult = annonceDAO.getAnnoncesByLoginForAnnoncePage(loginEscaped);
         // On crée la liste qui accueuillera les DTO
         List<AnnonceDTO> annoncesDTO = new ArrayList<AnnonceDTO>();
-        ModelMapper modelMapper = new ModelMapper();
 
         for (Object[] annonce : queryAnnoncesResult) {
             // On crée le nouvel objet
             AnnonceDTO annonceDTO = new AnnonceDTO();
             // On transfert les données d'un objet a l'autre
-            modelMapper.map(annonce[0], annonceDTO);
-            // On rempli les champs à calculer
-            Long nbDevis = (Long) annonce[1];
+            annonceDTO.setCategorieMetier((Short) annonce[0]);
+            annonceDTO.setDescription((String) annonce[1]);
+            annonceDTO.setEtatAnnonce((EtatAnnonce) annonce[2]);
+            Long nbDevis = (Long) annonce[3];
             annonceDTO.setNbDevis(nbDevis);
 
             // On ajoute à la liste

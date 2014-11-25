@@ -40,7 +40,7 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
      * @return Liste d'annonces appartenant à l'utilisateur.
      */
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public List<Object[]> getAnnoncesByLoginWithFetchArtisan(String login) {
+    public List<Object[]> getAnnoncesByLoginForAnnoncePage(String login) {
 
         List<Object[]> listAnnonceByLogin = null;
 

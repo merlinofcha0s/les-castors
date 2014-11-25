@@ -31,9 +31,9 @@ import fr.batimen.dto.enums.TypeNotification;
 @Table(name = "Notification")
 @NamedQueries(value = {
         @NamedQuery(name = QueryJPQL.NOTIFICATION_BY_CLIENT_LOGIN,
-                query = "SELECT n, artisanNotifier.login, clientNotifier.login, artisanNotifier.entreprise.nomComplet, annonce.hashID  FROM Notification AS n WHERE n.clientNotifier.login = :login AND pourQuiNotification = :typeCompte ORDER BY dateNotification ASC"),
+                query = "SELECT n.typeNotification, n.dateNotification, n.statutNotification, n.pourQuiNotification, artisanNotifier.login, clientNotifier.login, artisanNotifier.entreprise.nomComplet, annonce.hashID  FROM Notification AS n WHERE n.clientNotifier.login = :login AND pourQuiNotification = :typeCompte ORDER BY dateNotification ASC"),
         @NamedQuery(name = QueryJPQL.NOTIFICATION_BY_ARTISAN_LOGIN,
-                query = "SELECT n, artisanNotifier.login, clientNotifier.login, artisanNotifier.entreprise.nomComplet, annonce.hashID  FROM Notification AS n WHERE n.artisanNotifier.login = :login AND pourQuiNotification = :typeCompte ORDER BY dateNotification ASC") })
+                query = "SELECT n.typeNotification, n.dateNotification, n.statutNotification, n.pourQuiNotification, artisanNotifier.login, clientNotifier.login, artisanNotifier.entreprise.nomComplet, annonce.hashID  FROM Notification AS n WHERE n.artisanNotifier.login = :login AND pourQuiNotification = :typeCompte ORDER BY dateNotification ASC") })
 public class Notification extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = 1953843726850626949L;

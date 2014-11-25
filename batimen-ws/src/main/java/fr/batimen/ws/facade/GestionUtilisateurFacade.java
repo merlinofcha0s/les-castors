@@ -1,5 +1,6 @@
 package fr.batimen.ws.facade;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +27,9 @@ import fr.batimen.core.constant.WsPath;
 import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.LoginDTO;
 import fr.batimen.dto.NotificationDTO;
+import fr.batimen.dto.enums.StatutNotification;
 import fr.batimen.dto.enums.TypeCompte;
+import fr.batimen.dto.enums.TypeNotification;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 import fr.batimen.ws.dao.ArtisanDAO;
 import fr.batimen.ws.dao.ClientDAO;
@@ -249,7 +252,6 @@ public class GestionUtilisateurFacade {
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public List<NotificationDTO> getNotificationByLogin(String login, TypeCompte typeCompte) {
         List<NotificationDTO> notificationsDTO = new ArrayList<NotificationDTO>();
-        ModelMapper mapper = new ModelMapper();
         String loginEscaped = DeserializeJsonHelper.parseString(login);
         List<Object[]> notifications = null;
 
@@ -261,12 +263,14 @@ public class GestionUtilisateurFacade {
 
         for (Object[] notification : notifications) {
             NotificationDTO notificationDTO = new NotificationDTO();
-            mapper.map(notification[0], notificationDTO);
-
-            notificationDTO.setArtisanLogin(String.valueOf(notification[1]));
-            notificationDTO.setClientLogin(String.valueOf(notification[2]));
-            notificationDTO.setNomEntreprise(String.valueOf(notification[3]));
-            notificationDTO.setHashIDAnnonce(String.valueOf(notification[4]));
+            notificationDTO.setTypeNotification((TypeNotification) notification[0]);
+            notificationDTO.setDateNotification((Timestamp) notification[1]);
+            notificationDTO.setStatutNotification((StatutNotification) notification[2]);
+            notificationDTO.setPourQuiNotification((TypeCompte) notification[3]);
+            notificationDTO.setArtisanLogin(String.valueOf(notification[4]));
+            notificationDTO.setClientLogin(String.valueOf(notification[5]));
+            notificationDTO.setNomEntreprise(String.valueOf(notification[6]));
+            notificationDTO.setHashIDAnnonce(String.valueOf(notification[7]));
 
             notificationsDTO.add(notificationDTO);
         }
