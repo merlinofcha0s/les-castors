@@ -1,49 +1,7 @@
 <configuration scan="true" debug="true">
 	<contextName>batimenContext</contextName>
 
-	<property name="LOGS_FOLDER" value="${logs.test.address}" />
-	<property name="LOGS_TO_COLLECT_FOLDER" value="${logs.test.archives}" />
-
-	<!-- Fait pour la prod, ne log qu'a partir du lvl warn et archive les fichiers 
-		par date -->
-
 	<logger name="org.dbunit" level="WARN" />
-
-	<appender name="log-file"
-		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${LOGS_FOLDER}/batimen_ws.log</file>
-		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-			<level>${logs.test.lvl}</level>
-		</filter>
-		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${LOGS_TO_COLLECT_FOLDER}/batimen_ws.%d{yyyyMMdd}.log
-			</fileNamePattern>
-		</rollingPolicy>
-		<encoder>
-			<pattern>%d{yyyy/MM/dd HH:mm:ss,SSS} %-5level %logger{36} - %m
-				%throwable{0}%n</pattern>
-		</encoder>
-	</appender>
-
-	<!-- Level de log dependant du root. Efface le fichier des qu'il atteint 
-		10Mo -->
-	<appender name="troubleshooting-file"
-		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>${LOGS_FOLDER}/batimen_ws-troubleshooting.log</file>
-		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-			<fileNamePattern>${LOGS_FOLDER}/batimen_ws-troubleshooting.%i.log
-			</fileNamePattern>
-			<maxIndex>10</maxIndex>
-		</rollingPolicy>
-		<triggeringPolicy
-			class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-			<maxFileSize>10MB</maxFileSize>
-		</triggeringPolicy>
-		<encoder>
-			<pattern>%d{yyyy/MM/dd HH:mm:ss,SSS} %-5level %logger{36} - %m%n
-			</pattern>
-		</encoder>
-	</appender>
 
 
 	<!-- Permet d'avoir les logs dans la console d'eclipse et glassfish (a degager 
@@ -59,7 +17,5 @@
 
 	<root level="DEBUG">
 		<appender-ref ref="stdout" />
-		<appender-ref ref="log-file" />
-		<appender-ref ref="troubleshooting-file" />
 	</root>
 </configuration>

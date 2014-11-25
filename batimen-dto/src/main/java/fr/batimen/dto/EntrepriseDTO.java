@@ -29,6 +29,7 @@ public class EntrepriseDTO extends AbstractDTO {
     @NotNull
     private final List<CategorieMetierDTO> categoriesMetier = new ArrayList<CategorieMetierDTO>();
 
+    @NotNull
     @Size(min = ValidatorConstant.ENTREPRISE_NOM_COMPLET_MIN, max = ENTREPRISE_NOM_COMPLET_MAX)
     private String nomComplet;
 

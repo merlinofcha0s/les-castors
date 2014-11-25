@@ -32,20 +32,56 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
     private static final Logger LOGGER = LoggerFactory.getLogger(AnnonceDAO.class);
 
     /**
-     * Recupere les annonces par login de leur utilsateurs
+     * Récupère les annonces par login de leurs utilsateurs
      * 
      * @param login
      *            le login du client dont on veut recupérer les annonces.
      * @return Liste d'annonces appartenant à l'utilisateur.
      */
-    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public List<Object[]> getAnnoncesByLoginForAnnoncePage(String login) {
+
+        List<Object[]> listAnnonceByLogin = null;
+
+        try {
+            TypedQuery<Object[]> query = entityManager.createNamedQuery(QueryJPQL.ANNONCE_BY_LOGIN_FETCH_ARTISAN,
+                    Object[].class);
+            query.setParameter(QueryJPQL.PARAM_CLIENT_LOGIN, login);
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Chargement requete JPQL OK ");
+            }
+
+            listAnnonceByLogin = query.getResultList();
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Récuperation resultat requete JPQL OK ");
+            }
+
+            return listAnnonceByLogin;
+        } catch (NoResultException nre) {
+            if (LOGGER.isWarnEnabled()) {
+                LOGGER.warn("Aucune correspondance trouvées dans la BDD", nre);
+            }
+            return new ArrayList<Object[]>();
+        }
+    }
+
+    /**
+     * Récupère les annonces par login de leurs utilsateurs
+     * 
+     * @param login
+     *            le login du client dont on veut recupérer les annonces.
+     * @return Liste d'annonces appartenant à l'utilisateur.
+     */
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public List<Annonce> getAnnoncesByLogin(String login) {
 
         List<Annonce> listAnnonceByLogin = null;
 
         try {
             TypedQuery<Annonce> query = entityManager.createNamedQuery(QueryJPQL.ANNONCE_BY_LOGIN, Annonce.class);
-            query.setParameter(QueryJPQL.CLIENT_LOGIN, login);
+            query.setParameter(QueryJPQL.PARAM_CLIENT_LOGIN, login);
 
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Chargement requete JPQL OK ");
@@ -79,7 +115,7 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
      * @return La liste d'annonce qui correspond au titre, description et
      *         utilsateur present en BDD
      */
-    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public List<Annonce> getAnnonceByTitleAndDescriptionAndLogin(String description, String login) {
 
         List<Annonce> annoncesBytitreAndDescription = null;
@@ -110,8 +146,8 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
     }
 
     /**
-     * Sauvegarde d'une annonce, check dans la bdd si elle existe déjà pour un
-     * utilisateur donné.
+     * Sauvegarde d'une annonce lors de son initialisation, check dans la bdd si
+     * elle existe déjà pour un utilisateur donné.
      * 
      * @param nouvelleAnnonce
      *            L'annonce a sauvegarder dans la bdd
@@ -119,7 +155,7 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
      *             Exception throw si l'entité existe déjà.
      */
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void saveAnnonce(Annonce nouvelleAnnonce) throws DuplicateEntityException {
+    public void saveAnnonceFirstTime(Annonce nouvelleAnnonce) throws DuplicateEntityException {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Debut persistence d'une nouvelle annonce......");
         }

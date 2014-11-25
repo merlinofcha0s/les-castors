@@ -2,8 +2,18 @@
 GRANT USAGE ON SCHEMA public TO batimen_usr;
 
 --- Sur les sequences ---
-GRANT UPDATE ON 
-public.hibernate_sequence
+GRANT USAGE,SELECT,UPDATE ON 
+public.hibernate_sequence,
+public.annonce_id_seq,
+public.adresse_id_seq,
+public.artisan_id_seq,
+public.categoriemetier_id_seq,
+public.client_id_seq,
+public.entreprise_id_seq,
+public.notation_id_seq,
+public.notification_id_seq,
+public.paiement_id_seq,
+public.permission_id_seq
 TO batimen_usr;
 
 --- Sur les tables ---
@@ -14,5 +24,9 @@ public.Annonce,
 public.Artisan,
 public.Entreprise,
 public.Notation,
-public.Paiement
+public.Paiement,
+public.annonce_artisan,
+public.categoriemetier,
+public.notification,
+public.permission
 TO batimen_usr;

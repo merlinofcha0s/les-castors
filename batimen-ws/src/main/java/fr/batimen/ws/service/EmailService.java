@@ -19,6 +19,7 @@ import com.microtripit.mandrillapp.lutung.view.MandrillMessage.MergeVar;
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.exception.EmailException;
 import fr.batimen.dto.ContactMailDTO;
+import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.ws.dao.EmailDAO;
 import fr.batimen.ws.entity.Annonce;
 
@@ -35,7 +36,7 @@ public class EmailService {
 
     @Inject
     private EmailDAO emailDAO;
-    
+
 
     /**
      * Preparation et envoi d'un mail de confirmation, dans le but d'informer
@@ -67,7 +68,8 @@ public class EmailService {
         // On charge le contenu
         Map<String, String> templateContent = new HashMap<String, String>();
         templateContent.put(Constant.TAG_EMAIL_USERNAME, nouvelleAnnonce.getDemandeur().getLogin());
-        templateContent.put(Constant.TAG_EMAIL_METIER, nouvelleAnnonce.getCategorieMetier());
+        templateContent.put(Constant.TAG_EMAIL_METIER,
+                CategorieLoader.getCategorieByCode(nouvelleAnnonce.getCategorieMetier()).getName());
         templateContent.put(Constant.TAG_EMAIL_SOUS_CATEGORIE_METIER, nouvelleAnnonce.getSousCategorieMetier());
         templateContent.put(Constant.TAG_EMAIL_DELAI_INTERVENTION, nouvelleAnnonce.getDelaiIntervention().getType());
         templateContent.put(Constant.TAG_EMAIL_TYPE_CONTACT, nouvelleAnnonce.getTypeContact().getAffichage());
@@ -132,15 +134,17 @@ public class EmailService {
 
         return noError;
     }
-    
+
     /**
      * Envoi un email de contact contenant l'information contenue dans le DTO
      * 
-     * @param mail DTO contenant l'information du mail de contact saisie par le client
+     * @param mail
+     *            DTO contenant l'information du mail de contact saisie par le
+     *            client
      * @return état d'envoi du mail
      */
     public boolean envoiEmailContact(ContactMailDTO mail) throws EmailException, MandrillApiError, IOException {
-    	// On prepare l'entete, on ne mets pas de titre (il est géré par
+        // On prepare l'entete, on ne mets pas de titre (il est géré par
         // mandrillApp).
         MandrillMessage contactMessage = emailDAO.prepareEmail(null);
         
@@ -160,20 +164,21 @@ public class EmailService {
         templateContent.put(Constant.TAG_EMAIL_CONTACT_MESSAGE, mail.getMessage());
 
         // On envoi le mail
-        boolean noError = emailDAO.sendEmailTemplate(contactMessage, Constant.TEMPLATE_EMAIL_CONTACT,
-                templateContent);
+        boolean noError = emailDAO.sendEmailTemplate(contactMessage, Constant.TEMPLATE_EMAIL_CONTACT, templateContent);
 
         return noError;
     }
-    
+
     /**
      * Envoi un email d'accusé de reception du message de contact
      * 
-     * @param mail DTO contenant l'information du mail de contact saisie par le client
+     * @param mail
+     *            DTO contenant l'information du mail de contact saisie par le
+     *            client
      * @return état d'envoi du mail
      */
     public boolean envoiEmailAccuseReception(ContactMailDTO mail) throws EmailException, MandrillApiError, IOException {
-    	// On prepare l'entete, on ne mets pas de titre (il est géré par
+        // On prepare l'entete, on ne mets pas de titre (il est géré par
         // mandrillApp).
         MandrillMessage accuseReception = emailDAO.prepareEmail(null);
 
@@ -185,8 +190,7 @@ public class EmailService {
         emailDAO.prepareRecipient(accuseReception, recipients, true);
 
         // On envoi le mail
-        boolean noError = emailDAO.sendEmailTemplate(accuseReception, Constant.TEMPLATE_ACCUSE_RECEPTION,
-                null);
+        boolean noError = emailDAO.sendEmailTemplate(accuseReception, Constant.TEMPLATE_ACCUSE_RECEPTION, null);
 
         return noError;
     }

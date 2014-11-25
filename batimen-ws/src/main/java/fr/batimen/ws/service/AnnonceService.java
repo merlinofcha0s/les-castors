@@ -80,7 +80,7 @@ public class AnnonceService {
         nouvelleAnnonce.setDelaiIntervention(nouvelleAnnonceDTO.getDelaiIntervention());
         nouvelleAnnonce.setDescription(nouvelleAnnonceDTO.getDescription());
 
-        nouvelleAnnonce.setCategorieMetier(nouvelleAnnonceDTO.getCategorieMetier().getName());
+        nouvelleAnnonce.setCategorieMetier(nouvelleAnnonceDTO.getCategorieMetier().getCodeCategorieMetier());
         nouvelleAnnonce.setSousCategorieMetier(nouvelleAnnonceDTO.getSousCategorie().getName());
         nouvelleAnnonce.setNbConsultation(0);
         nouvelleAnnonce.setTypeContact(nouvelleAnnonceDTO.getTypeContact());
@@ -195,6 +195,12 @@ public class AnnonceService {
         nouveauClient.setCleActivation(HashHelper.convertToBase64(HashHelper.hashSHA256(loginAndEmail.toString())));
 
         return nouveauClient;
+    }
+
+    public void remplirSelAndHash(Annonce nouvelleAnnonce) {
+        String salt = HashHelper.generateSalt();
+        nouvelleAnnonce.setSelHashID(salt);
+        nouvelleAnnonce.setHashID(HashHelper.hashID(nouvelleAnnonce.getId(), salt));
     }
 
 }

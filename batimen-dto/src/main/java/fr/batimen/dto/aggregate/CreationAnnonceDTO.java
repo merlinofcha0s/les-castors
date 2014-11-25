@@ -4,8 +4,8 @@ import static fr.batimen.dto.constant.ValidatorConstant.ADRESSE_MAX;
 import static fr.batimen.dto.constant.ValidatorConstant.ADRESSE_MIN;
 import static fr.batimen.dto.constant.ValidatorConstant.CODE_POSTAL_REGEX;
 import static fr.batimen.dto.constant.ValidatorConstant.COMPLEMENT_ADRESSE_MAX;
-import static fr.batimen.dto.constant.ValidatorConstant.CREATION_ANNONCE_DESCRIPTION_MAX;
-import static fr.batimen.dto.constant.ValidatorConstant.CREATION_ANNONCE_DESCRIPTION_MIN;
+import static fr.batimen.dto.constant.ValidatorConstant.ANNONCE_DESCRIPTION_MAX;
+import static fr.batimen.dto.constant.ValidatorConstant.ANNONCE_DESCRIPTION_MIN;
 import static fr.batimen.dto.constant.ValidatorConstant.VILLE_MAX;
 
 import java.io.File;
@@ -50,7 +50,7 @@ public class CreationAnnonceDTO extends AbstractDTO {
     @NotNull
     private SousCategorieMetierDTO sousCategorie;
     @NotNull
-    @Size(min = CREATION_ANNONCE_DESCRIPTION_MIN, max = CREATION_ANNONCE_DESCRIPTION_MAX)
+    @Size(min = ANNONCE_DESCRIPTION_MIN, max = ANNONCE_DESCRIPTION_MAX)
     private String description;
     @NotNull
     private TypeContact typeContact;

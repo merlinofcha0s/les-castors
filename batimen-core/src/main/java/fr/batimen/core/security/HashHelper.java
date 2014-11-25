@@ -1,10 +1,15 @@
 package fr.batimen.core.security;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+import java.security.SecureRandom;
+import java.util.Random;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -86,4 +91,55 @@ public class HashHelper {
         return DigestUtils.sha256Hex(chaineAEncoder);
     }
 
+    /**
+     * Hash une chaine de caractére en SHA-512
+     * 
+     * @param chaineAEncoder
+     *            La chaine a hasher
+     * @return La chaine en SHA-512
+     */
+    public static String hashSHA512(String chaineAEncoder) {
+        return DigestUtils.sha512Hex(chaineAEncoder);
+    }
+
+    /**
+     * Génération d'un sel 32 Bytes
+     * 
+     * @return Sel random encodé en UTF-8
+     */
+    public static String generateSalt() {
+        final Random r = new SecureRandom();
+        byte[] salt = new byte[32];
+        r.nextBytes(salt);
+        salt = Base64.encodeBase64(salt);
+
+        ByteArrayInputStream bisSalt = new ByteArrayInputStream(salt);
+
+        String saltString = "";
+        try {
+            saltString = IOUtils.toString(bisSalt, "UTF-8");
+        } catch (IOException e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Probleme d'encodage avec le sel : " + salt, e);
+            }
+        }
+
+        return saltString;
+    }
+
+    /**
+     * Hash l'id d'une table pour la stocker en bdd, on s'en sert principalement
+     * pour generer des urls qui ne montre pas le nombre d'annonce ou de profil
+     * que l'on a dans la BDD
+     * 
+     * 
+     * @param id
+     *            l'id a hasher
+     * @return L'id hashé
+     */
+    public static String hashID(Long id, String salt) {
+        StringBuilder idTohash = new StringBuilder(String.valueOf(id));
+        idTohash.append(salt);
+        return hashSHA512(idTohash.toString());
+    }
 }

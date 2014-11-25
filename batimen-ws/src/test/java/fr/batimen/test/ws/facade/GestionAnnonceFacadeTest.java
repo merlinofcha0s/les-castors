@@ -11,6 +11,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import fr.batimen.core.constant.Constant;
+import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.test.ws.AbstractBatimenWsTest;
 import fr.batimen.test.ws.helper.DataHelper;
@@ -84,6 +85,19 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         Assert.assertTrue(isCreationOK == Constant.CODE_SERVICE_ANNONCE_RETOUR_DUPLICATE);
     }
 
+    /**
+     * Cas de test : récupération des annonces des clients. /!\ charge
+     * automatiquement les artisans qui sont inscrits a l'annonce.
+     * 
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonces.yml")
+    public void testGetAnnonceByLogin() {
+        List<AnnonceDTO> annonces = AnnonceService.getAnnonceByLoginForClient("pebronne");
+        Assert.assertEquals(2, annonces.size());
+
+    }
+
     private void creationVerificationAnnonce() {
 
         String loginDeJohnny = "johnny06";
@@ -103,5 +117,11 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         Assert.assertNotNull(annoncesDeJohnny);
         // On test qu'il y a bien une annonce liée à Johnny boy
         Assert.assertTrue(annoncesDeJohnny.size() == 1);
+
+        for (Annonce annonce : annoncesDeJohnny) {
+            Assert.assertFalse(annonce.getHashID().isEmpty());
+            Assert.assertFalse(annonce.getSelHashID().isEmpty());
+        }
+
     }
 }

@@ -18,11 +18,13 @@ public class QueryJPQL {
     // Parametre Query Entity client
     public static final String PARAM_CLIENT_LOGIN = "login";
     public static final String PARAM_CLIENT_EMAIL = "email";
+    public static final String PARAM_TYPE_COMPTE = "typeCompte";
     public static final String PARAM_ACTIVATION_KEY = "cleActivation";
 
     // Entity Annonce
     public static final String ANNONCE_BY_LOGIN = "annonceByLogin";
     public static final String ANNONCE_BY_TITLE_AND_DESCRIPTION = "annonceByTitleAndDescription";
+    public static final String ANNONCE_BY_LOGIN_FETCH_ARTISAN = "annonceByLoginFetchArtisan";
 
     // Parametre Query Entity annonce
     public static final String PARAM_ANNONCE_TITRE = "titre";
@@ -47,5 +49,9 @@ public class QueryJPQL {
     // Entity permission
     public static final String PERMISSION_CLIENT_BY_LOGIN = "permissionClientByLogin";
     public static final String PERMISSION_ARTISAN_BY_LOGIN = "permissionArtisanByLogin";
+
+    // Entity notification
+    public static final String NOTIFICATION_BY_CLIENT_LOGIN = "notificationClientByLogin";
+    public static final String NOTIFICATION_BY_ARTISAN_LOGIN = "notificationArtisanByLogin";
 
 }

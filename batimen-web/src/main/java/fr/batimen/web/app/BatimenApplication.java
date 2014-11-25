@@ -26,7 +26,7 @@ import fr.batimen.web.client.extend.error.AccesInterdit;
 import fr.batimen.web.client.extend.error.ErreurInterne;
 import fr.batimen.web.client.extend.error.Expiree;
 import fr.batimen.web.client.extend.error.NonTrouvee;
-import fr.batimen.web.client.extend.member.client.MonCompte;
+import fr.batimen.web.client.extend.member.client.MesAnnonces;
 import fr.batimen.web.client.extend.nouveau.artisan.NouveauArtisan;
 import fr.batimen.web.client.extend.nouveau.devis.NouveauDevis;
 import fr.batimen.web.client.session.BatimenSession;
@@ -88,7 +88,7 @@ public class BatimenApplication extends AuthenticatedWebApplication {
         // Cfg urls des pages principales
         mountPage(Constant.ACCUEIL_URL, Accueil.class);
         mountPage(Constant.AUTHENTIFICATION_URL, Authentification.class);
-        mountPage(Constant.MON_COMPTE_URL, MonCompte.class);
+        mountPage(Constant.MES_ANNONCES_URL, MesAnnonces.class);
         mountPage(Constant.QUI_SOMMES_NOUS_URL, QuiSommeNous.class);
         mountPage(Constant.CONTACT_URL, Contact.class);
         mountPage(Constant.CGU_URL, CGU.class);
@@ -96,7 +96,7 @@ public class BatimenApplication extends AuthenticatedWebApplication {
         mountPage(Constant.PARTENAIRE_URL, NouveauArtisan.class);
         mountPage(Constant.NOUVEAU_DEVIS_URL, NouveauDevis.class);
         // Page d'erreur
-        mountPage("/nontrouve", AccesInterdit.class);
+        mountPage("/interdit", AccesInterdit.class);
         mountPage("/expiree", Expiree.class);
         mountPage("/404", NonTrouvee.class);
 

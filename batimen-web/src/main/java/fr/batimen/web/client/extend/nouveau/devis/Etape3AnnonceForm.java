@@ -73,8 +73,8 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
 
         TextArea<String> descriptionDevisField = new TextArea<String>("description");
         descriptionDevisField.setRequired(true);
-        descriptionDevisField.add(StringValidator.lengthBetween(ValidatorConstant.CREATION_ANNONCE_DESCRIPTION_MIN,
-                ValidatorConstant.CREATION_ANNONCE_DESCRIPTION_MAX));
+        descriptionDevisField.add(StringValidator.lengthBetween(ValidatorConstant.ANNONCE_DESCRIPTION_MIN,
+                ValidatorConstant.ANNONCE_DESCRIPTION_MAX));
         descriptionDevisField.setMarkupId("descriptionDevisField");
         descriptionDevisField.add(new ErrorHighlightBehavior());
         descriptionDevisField.add(new RequiredBorderBehaviour());

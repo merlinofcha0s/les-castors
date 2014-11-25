@@ -1,7 +1,9 @@
 package fr.batimen.ws.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 import javax.persistence.CascadeType;
@@ -11,9 +13,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -35,6 +40,8 @@ import fr.batimen.dto.enums.TypeContact;
 @NamedQueries(value = {
         @NamedQuery(name = QueryJPQL.ANNONCE_BY_LOGIN,
                 query = "SELECT a FROM Annonce AS a WHERE a.demandeur.login = :login"),
+        @NamedQuery(name = QueryJPQL.ANNONCE_BY_LOGIN_FETCH_ARTISAN,
+                query = "SELECT a.categorieMetier, a.description, a.etatAnnonce, count(art) FROM Annonce AS a LEFT OUTER JOIN a.artisans AS art WHERE a.demandeur.login = :login GROUP BY a ORDER BY dateCreation ASC"),
         @NamedQuery(name = QueryJPQL.ANNONCE_BY_TITLE_AND_DESCRIPTION,
                 query = "SELECT a FROM Annonce AS a WHERE a.description = :description AND a.demandeur.login = :login") })
 public class Annonce extends AbstractEntity implements Serializable {
@@ -59,11 +66,15 @@ public class Annonce extends AbstractEntity implements Serializable {
     @Column(length = 255, nullable = true)
     private String photo;
     @Column(nullable = false)
-    private String categorieMetier;
+    private Short categorieMetier;
     @Column(nullable = false)
     private String sousCategorieMetier;
     @Column(nullable = false)
     private EtatAnnonce etatAnnonce;
+    @Column(nullable = false)
+    private String hashID;
+    @Column(nullable = false)
+    private String selHashID;
     @ManyToOne
     @JoinColumn(name = "demandeur_fk")
     private Client demandeur;
@@ -71,6 +82,11 @@ public class Annonce extends AbstractEntity implements Serializable {
     private Notation notationAnnonce;
     @OneToOne(cascade = CascadeType.REMOVE)
     private Adresse adresseChantier;
+    @ManyToMany
+    @JoinTable(name = "annonce_artisan")
+    private List<Artisan> artisans = new ArrayList<Artisan>();
+    @OneToMany(mappedBy = "annonce", targetEntity = Notification.class, cascade = CascadeType.REMOVE)
+    private List<Notification> notifications = new ArrayList<Notification>();
 
     /**
      * @return the id
@@ -255,7 +271,7 @@ public class Annonce extends AbstractEntity implements Serializable {
     /**
      * @return the categorieMetier
      */
-    public String getCategorieMetier() {
+    public Short getCategorieMetier() {
         return categorieMetier;
     }
 
@@ -270,7 +286,7 @@ public class Annonce extends AbstractEntity implements Serializable {
      * @param categorieMetier
      *            the categorieMetier to set
      */
-    public void setCategorieMetier(String categorieMetier) {
+    public void setCategorieMetier(Short categorieMetier) {
         this.categorieMetier = categorieMetier;
     }
 
@@ -280,6 +296,66 @@ public class Annonce extends AbstractEntity implements Serializable {
      */
     public void setSousCategorieMetier(String sousCategorieMetier) {
         this.sousCategorieMetier = sousCategorieMetier;
+    }
+
+    /**
+     * @return the artisans
+     */
+    public List<Artisan> getArtisans() {
+        return artisans;
+    }
+
+    /**
+     * @param artisans
+     *            the artisans to set
+     */
+    public void setArtisans(List<Artisan> artisans) {
+        this.artisans = artisans;
+    }
+
+    /**
+     * @return the notifications
+     */
+    public List<Notification> getNotifications() {
+        return notifications;
+    }
+
+    /**
+     * @param notifications
+     *            the notifications to set
+     */
+    public void setNotifications(List<Notification> notifications) {
+        this.notifications = notifications;
+    }
+
+    /**
+     * @return the hashID
+     */
+    public String getHashID() {
+        return hashID;
+    }
+
+    /**
+     * @return the selHashID
+     */
+    public String getSelHashID() {
+        return selHashID;
+    }
+
+    /**
+     * @param hashID
+     *            the hashID to set
+     */
+    public void setHashID(String hashID) {
+        this.hashID = hashID;
+    }
+
+    /**
+     * @param selHashID
+     *            the selHashID to set
+     */
+    public void setSelHashID(String selHashID) {
+        this.selHashID = selHashID;
     }
 
     /*

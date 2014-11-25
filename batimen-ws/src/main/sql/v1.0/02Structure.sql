@@ -15,11 +15,13 @@ create table Annonce (
         delaiIntervention int4 not null,
         description varchar(500) not null,
         etatAnnonce int4 not null,
-        categorieMetier varchar(40),
-        sousCategorieMetier varchar(40),
+        categorieMetier int2 not null,
+        sousCategorieMetier varchar(40) not null,
         nbConsultation int4 not null,
         photo varchar(255),
         typeContact int4 not null,
+        hashID varchar(255),
+        selHashID varchar(255),
         adresseChantier_id int8,
         demandeur_fk int8,
         notationAnnonce_id int8,
@@ -102,6 +104,25 @@ create table Annonce (
         primary key (id)
     );
     
+    create table annonce_artisan (
+        Annonce_id int8 not null,
+        artisans_id int8 not null,
+        Artisan_id int8 not null,
+        annonces_id int8 not null
+    );
+    
+    create table Notification (
+        id  bigserial not null,
+        dateNotification timestamp not null,
+        typeNotification int4 not null,
+        pourQuiNotification int4 not null,
+        statutNotification int4 not null,
+        id_artisan int8,
+        id_client int8,
+        id_annonce int8,
+        primary key (id)
+    );
+    
     alter table Annonce 
         add constraint annonce_adresse
         foreign key (adresseChantier_id) 
@@ -156,5 +177,40 @@ create table Annonce (
         add constraint client_permission 
         foreign key (client_fk) 
         references Client;
+        
+    alter table annonce_artisan 
+        add constraint annonce_artisan 
+        foreign key (artisans_id) 
+        references Artisan;
+        
+    alter table annonce_artisan 
+        add constraint artisan_annonce 
+        foreign key (Annonce_id) 
+        references Annonce;
+        
+    alter table annonce_artisan 
+        add constraint annonce_artisan2 
+        foreign key (annonces_id) 
+        references Annonce;
+        
+    alter table annonce_artisan 
+        add constraint artisan_annonce2
+        foreign key (Artisan_id) 
+        references Artisan;
+        
+    alter table Notification 
+        add constraint notification_artisan2
+        foreign key (id_artisan) 
+        references Artisan;
+        
+    alter table Notification 
+        add constraint notification_client
+        foreign key (id_client) 
+        references Client;
+        
+    alter table Notification 
+        add constraint notification_annonce
+        foreign key (id_annonce) 
+        references Annonce;
         
      

@@ -47,6 +47,8 @@ public class Client extends AbstractUser implements Serializable {
     private List<Annonce> devisDemandes = new ArrayList<Annonce>();
     @OneToMany(mappedBy = "client", targetEntity = Permission.class, cascade = CascadeType.REMOVE)
     protected List<Permission> permissions = new ArrayList<Permission>();
+    @OneToMany(mappedBy = "clientNotifier", targetEntity = Notification.class, cascade = CascadeType.REMOVE)
+    protected List<Notification> notifications = new ArrayList<Notification>();
 
     /**
      * @return the devisDemandes
@@ -83,6 +85,29 @@ public class Client extends AbstractUser implements Serializable {
      */
     public void setId(Long id) {
         this.id = id;
+    }
+
+    /**
+     * @return the notifications
+     */
+    public List<Notification> getNotifications() {
+        return notifications;
+    }
+
+    /**
+     * @param permissions
+     *            the permissions to set
+     */
+    public void setPermissions(List<Permission> permissions) {
+        this.permissions = permissions;
+    }
+
+    /**
+     * @param notifications
+     *            the notifications to set
+     */
+    public void setNotifications(List<Notification> notifications) {
+        this.notifications = notifications;
     }
 
     /*
