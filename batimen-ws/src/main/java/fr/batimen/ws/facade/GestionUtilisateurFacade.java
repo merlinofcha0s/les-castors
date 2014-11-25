@@ -255,33 +255,44 @@ public class GestionUtilisateurFacade {
         String loginEscaped = DeserializeJsonHelper.parseString(login);
         List<Object[]> notifications = null;
 
+        Boolean clientOrArtisan = Boolean.FALSE;
+
         if (typeCompte.equals(TypeCompte.CLIENT)) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Query notification pour client en préparation");
             }
             notifications = notificationDAO.getNotificationForClient(loginEscaped);
+            clientOrArtisan = Boolean.TRUE;
         } else if (typeCompte.equals(TypeCompte.ARTISAN)) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Query notification pour artisan en préparation");
             }
             notifications = notificationDAO.getNotificationForArtisan(loginEscaped);
+            clientOrArtisan = Boolean.TRUE;
         }
 
-        for (Object[] notification : notifications) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Génération de la DTO de notification");
-            }
-            NotificationDTO notificationDTO = new NotificationDTO();
-            notificationDTO.setTypeNotification((TypeNotification) notification[0]);
-            notificationDTO.setDateNotification((Timestamp) notification[1]);
-            notificationDTO.setStatutNotification((StatutNotification) notification[2]);
-            notificationDTO.setPourQuiNotification((TypeCompte) notification[3]);
-            notificationDTO.setArtisanLogin(String.valueOf(notification[4]));
-            notificationDTO.setClientLogin(String.valueOf(notification[5]));
-            notificationDTO.setNomEntreprise(String.valueOf(notification[6]));
-            notificationDTO.setHashIDAnnonce(String.valueOf(notification[7]));
+        if (clientOrArtisan) {
+            for (Object[] notification : notifications) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("Génération de la DTO de notification");
+                }
+                NotificationDTO notificationDTO = new NotificationDTO();
+                notificationDTO.setTypeNotification((TypeNotification) notification[0]);
+                notificationDTO.setDateNotification((Timestamp) notification[1]);
+                notificationDTO.setStatutNotification((StatutNotification) notification[2]);
+                notificationDTO.setPourQuiNotification((TypeCompte) notification[3]);
+                notificationDTO.setArtisanLogin(String.valueOf(notification[4]));
+                notificationDTO.setClientLogin(String.valueOf(notification[5]));
+                notificationDTO.setNomEntreprise(String.valueOf(notification[6]));
+                notificationDTO.setHashIDAnnonce(String.valueOf(notification[7]));
 
-            notificationsDTO.add(notificationDTO);
+                notificationsDTO.add(notificationDTO);
+            }
+        } else {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error(login + " n'est ni client ni artisan, cas impossible");
+                LOGGER.error("Type de compte : " + typeCompte);
+            }
         }
 
         return notificationsDTO;

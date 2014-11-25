@@ -262,7 +262,6 @@
 			<version>1.2</version>
 		</dependency>
 
-
 		<!-- Security -->
 		<dependency>
 			<groupId>com.lambdaworks</groupId>

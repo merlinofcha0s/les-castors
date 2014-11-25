@@ -1,5 +1,6 @@
 package fr.batimen.ws.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
@@ -13,7 +14,9 @@ import javax.persistence.Temporal;
  * 
  */
 @MappedSuperclass
-public abstract class AbstractUser extends AbstractEntity {
+public abstract class AbstractUser extends AbstractEntity implements Serializable {
+
+    private static final long serialVersionUID = -1912354567380321743L;
 
     @Column(length = 20, nullable = false)
     protected String nom;

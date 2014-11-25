@@ -9,6 +9,10 @@ package fr.batimen.core.constant;
  */
 public class WsPath {
 
+    private WsPath() {
+
+    }
+
     // Path Gestion Utilisateur
     public static final String GESTION_UTILISATEUR_SERVICE_PATH = "gestionUtilisateur";
     public static final String GESTION_UTILISATEUR_SERVICE_LOGIN = "login";

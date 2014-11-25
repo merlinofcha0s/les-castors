@@ -166,7 +166,7 @@ public class NouveauDevis extends MasterPage {
             }
         }
 
-        ContactezNous contactezNous = new ContactezNous("contactezNous");
+        ContactezNous contactezNousComposant = new ContactezNous("contactezNous");
 
         this.add(carteFrance);
         this.add(etape2Categorie);
@@ -174,7 +174,7 @@ public class NouveauDevis extends MasterPage {
         this.add(containerInscription);
         this.add(containerConfirmation);
         this.add(navigationWizard);
-        this.add(contactezNous);
+        this.add(contactezNousComposant);
 
         try {
             changementEtape(nouvelleAnnonce.getNumeroEtape());

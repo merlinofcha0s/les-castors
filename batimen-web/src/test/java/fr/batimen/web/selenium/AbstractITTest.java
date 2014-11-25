@@ -179,8 +179,9 @@ public abstract class AbstractITTest {
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Fail to wait authentication", e);
+            }
         }
         driver.findElement(By.name("password")).click();
         driver.findElement(By.name("password")).clear();

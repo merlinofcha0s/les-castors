@@ -197,32 +197,33 @@ public class WsConnector {
         // non la verification du certificat.
         try {
             context.init(null, TrustManagerSingleton.getTrustedCertificate(), TrustManagerSingleton.secureRandomOrNot());
+
+            HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Config de client config.....");
+            }
+
+            ClientConfig config = new DefaultClientConfig();
+            config.getProperties().put(HTTPSProperties.PROPERTY_HTTPS_PROPERTIES,
+                    new HTTPSProperties(new HostnameVerifier() {
+                        @Override
+                        public boolean verify(String s, SSLSession sslSession) {
+                            return true;
+                        }
+                    }, context));
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Config de client config.....OK");
+            }
+
+            return config;
         } catch (KeyManagementException e) {
             if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("Problème de chargement de certificat", e);
             }
+            return null;
         }
-
-        HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Config de client config.....");
-        }
-
-        ClientConfig config = new DefaultClientConfig();
-        config.getProperties().put(HTTPSProperties.PROPERTY_HTTPS_PROPERTIES,
-                new HTTPSProperties(new HostnameVerifier() {
-                    @Override
-                    public boolean verify(String s, SSLSession sslSession) {
-                        return true;
-                    }
-                }, context));
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Config de client config.....OK");
-        }
-
-        return config;
     }
 
     /**
