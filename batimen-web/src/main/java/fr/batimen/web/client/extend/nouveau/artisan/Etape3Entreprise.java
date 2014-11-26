@@ -169,62 +169,6 @@ public class Etape3Entreprise extends Panel {
         containerDecorationMaconnerie.add(iDecorationMaconnerie);
         containerActivite.add(containerDecorationMaconnerie);
 
-        final WebMarkupContainer containerGrosOeuvre = new WebMarkupContainer("containerGrosOeuvre");
-        final WebMarkupContainer iGrosOeuvre = new WebMarkupContainer("iGrosOeuvre");
-        final AjaxCheckBox checkBoxGrosOeuvre = new AjaxCheckBox("grosOeuvre", new Model<Boolean>()) {
-
-            private static final long serialVersionUID = 4680845561587623070L;
-
-            @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-                if (this.getModelObject()) {
-                    categoriesSelectionnees.add(CategorieLoader.getCategorieGrosOeuvre());
-                    checked(containerGrosOeuvre, iGrosOeuvre, this);
-                    sendUncheckedAllCheckBox(target);
-                } else {
-                    categoriesSelectionnees.remove(CategorieLoader.getCategorieGrosOeuvre());
-                    unChecked(containerGrosOeuvre, iGrosOeuvre, this);
-                    sendUncheckedAllCheckBox(target);
-                }
-                target.add(containerActivite);
-            }
-        };
-
-        checkBoxGrosOeuvre.setMarkupId("grosOeuvreCheck");
-        containerGrosOeuvre.setOutputMarkupId(true);
-        containerGrosOeuvre.setMarkupId("containerGrosOeuvre");
-        containerGrosOeuvre.add(checkBoxGrosOeuvre);
-        containerGrosOeuvre.add(iGrosOeuvre);
-        containerActivite.add(containerGrosOeuvre);
-
-        final WebMarkupContainer containerEquipement = new WebMarkupContainer("containerEquipement");
-        final WebMarkupContainer iEquipement = new WebMarkupContainer("iEquipement");
-        final AjaxCheckBox checkBoxEquipement = new AjaxCheckBox("equipement", new Model<Boolean>()) {
-
-            private static final long serialVersionUID = -6356759804303259948L;
-
-            @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-                if (this.getModelObject()) {
-                    categoriesSelectionnees.add(CategorieLoader.getCategorieEquipement());
-                    checked(containerEquipement, iEquipement, this);
-                    sendUncheckedAllCheckBox(target);
-                } else {
-                    categoriesSelectionnees.remove(CategorieLoader.getCategorieEquipement());
-                    unChecked(containerEquipement, iEquipement, this);
-                    sendUncheckedAllCheckBox(target);
-                }
-                target.add(containerActivite);
-            }
-        };
-
-        checkBoxEquipement.setMarkupId("equipementCheck");
-        containerEquipement.setOutputMarkupId(true);
-        containerEquipement.setMarkupId("containerEquipement");
-        containerEquipement.add(checkBoxEquipement);
-        containerEquipement.add(iEquipement);
-        containerActivite.add(containerEquipement);
-
         final WebMarkupContainer containerToutesLesActivites = new WebMarkupContainer("containerToutesLesActivites");
         containerToutesLesActivites.setOutputMarkupId(true);
 
@@ -242,9 +186,6 @@ public class Etape3Entreprise extends Panel {
                     checked(containerPlomberie, iPlomberie, checkBoxPlomberie);
                     checked(containerEspaceVert, iEspaceVert, checkBoxEspaceVert);
                     checked(containerDecorationMaconnerie, iDecorationMaconnerie, checkBoxDecorationMaconnerie);
-                    checked(containerGrosOeuvre, iGrosOeuvre, checkBoxGrosOeuvre);
-                    checked(containerEquipement, iEquipement, checkBoxEquipement);
-
                 } else {
                     categoriesSelectionnees.removeAll(CategorieLoader.getAllCategories());
                     unChecked(containerElectricite, iElectricite, checkBoxElectricite);
@@ -252,8 +193,6 @@ public class Etape3Entreprise extends Panel {
                     unChecked(containerPlomberie, iPlomberie, checkBoxPlomberie);
                     unChecked(containerEspaceVert, iEspaceVert, checkBoxEspaceVert);
                     unChecked(containerDecorationMaconnerie, iDecorationMaconnerie, checkBoxDecorationMaconnerie);
-                    unChecked(containerGrosOeuvre, iGrosOeuvre, checkBoxGrosOeuvre);
-                    unChecked(containerEquipement, iEquipement, checkBoxEquipement);
 
                 }
                 target.add(containerActivite);

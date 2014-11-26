@@ -19,16 +19,12 @@ public class CategorieLoader {
     private static CategorieMetierDTO plomberie;
     private static CategorieMetierDTO espaceVert;
     private static CategorieMetierDTO decorationMaconnerie;
-    private static CategorieMetierDTO grosOeuvre;
-    private static CategorieMetierDTO equipement;
     private static CategorieMetierDTO toutesCategories;
 
     public static final Short ELECTRICITE_CODE = 0;
     public static final Short PLOMBERIE_CODE = 1;
     public static final Short ESPACE_VERT_CODE = 2;
     public static final Short DECORATION_MACONNERIE_CODE = 3;
-    public static final Short GROS_OEUVRE_CODE = 4;
-    public static final Short EQUIPEMENT_CODE = 5;
 
     private CategorieLoader() {
 
@@ -55,6 +51,7 @@ public class CategorieLoader {
             electricite.addSousCategorie(alarme);
             electricite.addSousCategorie(videoSurveillance);
             electricite.addSousCategorie(desenfumage);
+
         }
         return electricite;
     }
@@ -131,15 +128,8 @@ public class CategorieLoader {
     public static synchronized CategorieMetierDTO getCategorieDecorationMaconnerie() {
         if (decorationMaconnerie == null) {
             decorationMaconnerie = new CategorieMetierDTO("Décoration / Maçonnerie", DECORATION_MACONNERIE_CODE);
-            SousCategorieMetierDTO sousDecorationMaconnerie = new SousCategorieMetierDTO("Peinture");
-            decorationMaconnerie.addSousCategorie(sousDecorationMaconnerie);
-        }
-        return decorationMaconnerie;
-    }
 
-    public static synchronized CategorieMetierDTO getCategorieGrosOeuvre() {
-        if (grosOeuvre == null) {
-            grosOeuvre = new CategorieMetierDTO("Gros oeuvre", GROS_OEUVRE_CODE);
+            SousCategorieMetierDTO sousDecorationMaconnerie = new SousCategorieMetierDTO("Peinture");
             SousCategorieMetierDTO porteFenetre = new SousCategorieMetierDTO("Porte / Fenètre");
             SousCategorieMetierDTO pluieDeLumiere = new SousCategorieMetierDTO("Pluie de lumière (Vélux)");
             SousCategorieMetierDTO portailFerronerie = new SousCategorieMetierDTO("Portail / Ferronerie");
@@ -165,41 +155,33 @@ public class CategorieLoader {
             SousCategorieMetierDTO surelevation = new SousCategorieMetierDTO("Surélévation");
             SousCategorieMetierDTO constructionAnnexes = new SousCategorieMetierDTO("Construction annexes");
 
-            grosOeuvre.addSousCategorie(porteFenetre);
-            grosOeuvre.addSousCategorie(pluieDeLumiere);
-            grosOeuvre.addSousCategorie(portailFerronerie);
-            grosOeuvre.addSousCategorie(serrurier);
-            grosOeuvre.addSousCategorie(storeVolet);
-            grosOeuvre.addSousCategorie(vitrerie);
-            grosOeuvre.addSousCategorie(peinture);
-            grosOeuvre.addSousCategorie(revetementDecoratif);
-            grosOeuvre.addSousCategorie(papierPeintTapisserie);
-            grosOeuvre.addSousCategorie(lambris);
-            grosOeuvre.addSousCategorie(toiture);
-            grosOeuvre.addSousCategorie(charpente);
-            grosOeuvre.addSousCategorie(etancheite);
-            grosOeuvre.addSousCategorie(gouttiere);
-            grosOeuvre.addSousCategorie(traitementBoisCharpente);
-            grosOeuvre.addSousCategorie(combles);
-            grosOeuvre.addSousCategorie(constructionBois);
-            grosOeuvre.addSousCategorie(constructionMaison);
-            grosOeuvre.addSousCategorie(extensionMaison);
-            grosOeuvre.addSousCategorie(fondation);
-            grosOeuvre.addSousCategorie(ascenseur);
-            grosOeuvre.addSousCategorie(carrelage);
-            grosOeuvre.addSousCategorie(surelevation);
-            grosOeuvre.addSousCategorie(constructionAnnexes);
+            decorationMaconnerie.addSousCategorie(porteFenetre);
+            decorationMaconnerie.addSousCategorie(pluieDeLumiere);
+            decorationMaconnerie.addSousCategorie(portailFerronerie);
+            decorationMaconnerie.addSousCategorie(serrurier);
+            decorationMaconnerie.addSousCategorie(storeVolet);
+            decorationMaconnerie.addSousCategorie(vitrerie);
+            decorationMaconnerie.addSousCategorie(peinture);
+            decorationMaconnerie.addSousCategorie(revetementDecoratif);
+            decorationMaconnerie.addSousCategorie(papierPeintTapisserie);
+            decorationMaconnerie.addSousCategorie(lambris);
+            decorationMaconnerie.addSousCategorie(toiture);
+            decorationMaconnerie.addSousCategorie(charpente);
+            decorationMaconnerie.addSousCategorie(etancheite);
+            decorationMaconnerie.addSousCategorie(gouttiere);
+            decorationMaconnerie.addSousCategorie(traitementBoisCharpente);
+            decorationMaconnerie.addSousCategorie(combles);
+            decorationMaconnerie.addSousCategorie(constructionBois);
+            decorationMaconnerie.addSousCategorie(constructionMaison);
+            decorationMaconnerie.addSousCategorie(extensionMaison);
+            decorationMaconnerie.addSousCategorie(fondation);
+            decorationMaconnerie.addSousCategorie(ascenseur);
+            decorationMaconnerie.addSousCategorie(carrelage);
+            decorationMaconnerie.addSousCategorie(surelevation);
+            decorationMaconnerie.addSousCategorie(constructionAnnexes);
+            decorationMaconnerie.addSousCategorie(sousDecorationMaconnerie);
         }
-        return grosOeuvre;
-    }
-
-    public static synchronized CategorieMetierDTO getCategorieEquipement() {
-        if (equipement == null) {
-            equipement = new CategorieMetierDTO("Equipement", EQUIPEMENT_CODE);
-            SousCategorieMetierDTO sousEquipement = new SousCategorieMetierDTO("Alarme");
-            equipement.addSousCategorie(sousEquipement);
-        }
-        return equipement;
+        return decorationMaconnerie;
     }
 
     public static synchronized CategorieMetierDTO getCategorieAll() {
@@ -213,9 +195,7 @@ public class CategorieLoader {
         List<CategorieMetierDTO> allCategories = new ArrayList<CategorieMetierDTO>();
         allCategories.add(getCategorieDecorationMaconnerie());
         allCategories.add(getCategorieElectricite());
-        allCategories.add(getCategorieEquipement());
         allCategories.add(getCategorieEspaceVert());
-        allCategories.add(getCategorieGrosOeuvre());
         allCategories.add(getCategoriePlomberie());
 
         return allCategories;
@@ -228,12 +208,8 @@ public class CategorieLoader {
             return "icons8-plumbing";
         } else if (codeCategorieMetier.equals(ESPACE_VERT_CODE)) {
             return "icons8-garden-shears";
-        } else if (codeCategorieMetier.equals(DECORATION_MACONNERIE_CODE)) {
-            return "icon-Tool";
-        } else if (codeCategorieMetier.equals(GROS_OEUVRE_CODE)) {
-            return "icon-House";
         } else {
-            return "icon-Satellite1";
+            return "icon-Tool";
         }
     }
 
@@ -247,10 +223,6 @@ public class CategorieLoader {
             return CategorieLoader.getCategorieEspaceVert();
         case 3:
             return CategorieLoader.getCategorieDecorationMaconnerie();
-        case 4:
-            return CategorieLoader.getCategorieGrosOeuvre();
-        case 5:
-            return CategorieLoader.getCategorieEquipement();
         default:
             return new CategorieMetierDTO();
         }
