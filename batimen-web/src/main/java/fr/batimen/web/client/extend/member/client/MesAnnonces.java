@@ -109,6 +109,8 @@ public final class MesAnnonces extends MasterPage {
 
                     @Override
                     public void onClick() {
+                        // URLEncoder.encode(notification.getArtisanNotifier().getEntreprise().getNomComplet(),
+                        // "UTF-8")
                         // TODO A Completer quand la page entreprise sera prete
                     }
 
