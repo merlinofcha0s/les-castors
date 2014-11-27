@@ -1,5 +1,8 @@
 <wicket:head>
-	<link rel="stylesheet" type="text/css" href="css/font_icons8.css">
+	<link
+		rel="stylesheet"
+		type="text/css"
+		href="css/font_icons8.css">
 </wicket:head>
 <wicket:extend>
 	<div wicket:id="navigationWizard"></div>
@@ -44,6 +47,23 @@
 								wicket:id="delaiIntervention"
 								name="delaiInterventionField"
 								id="delaiInterventionField"></select></td>
+						</tr>
+						<tr>
+							<th>Quel est le type de travaux ?</th>
+							<td class="fuelux"><span wicket:id="typeTravaux">
+									<label
+										class="radio radio-custom"
+										id="radioTypeTravauxNeuf"> <input
+										type="radio"
+										name="typeChantier"
+										wicket:id="neuf"> <i class="radio"></i>Neuf
+									</label>
+									<label class="radio radio-custom" id="radioTypeTravauxRenovation"> <input
+										type="radio"
+										name="typeChantier" 
+										wicket:id="renovation"> <i class="radio"></i>Rénovation
+									</label>
+								</span></td>
 						</tr>
 						<tr>
 							<th>Quelle est l'adresse du chantier ?</th>

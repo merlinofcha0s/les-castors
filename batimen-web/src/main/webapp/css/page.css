@@ -153,6 +153,16 @@
 	font-size: 22px;
 }
 
+#radioTypeTravauxNeuf{
+	float: left;
+	padding-right: 30px;
+}
+
+#radioTypeTravauxRenovation{
+	float: left;
+	padding-right: 52px;
+}
+
 /* Activation compte */
 .confirmationactivationok {
 	background: url('../img/thumbsup.png');

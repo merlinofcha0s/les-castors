@@ -8,10 +8,13 @@ import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.Radio;
+import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.MultiFileUploadField;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 
@@ -93,6 +96,12 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
         delaiInterventionField.add(new ErrorHighlightBehavior());
         delaiInterventionField.add(new RequiredBorderBehaviour());
 
+        RadioGroup<String> typeTravaux = new RadioGroup<String>("typeTravaux", new Model<String>());
+        typeTravaux.add(new Radio<String>("neuf", new Model<String>("Neuf")));
+        typeTravaux.add(new Radio<String>("renovation", new Model<String>("Rénovation")));
+        typeTravaux.setRequired(true);
+        typeTravaux.add(new RequiredBorderBehaviour());
+
         MultiFileUploadField photoField = new MultiFileUploadField("photos", 5);
         photoField.setMarkupId("photoField");
 
@@ -173,5 +182,6 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
         this.add(codePostalField);
         this.add(villeField);
         this.add(validateQualification);
+        this.add(typeTravaux);
     }
 }
