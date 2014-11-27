@@ -88,46 +88,10 @@ public class Etape2Categorie extends Panel {
         decorationMaconnerieLink.setOutputMarkupId(true);
         decorationMaconnerieLink.setMarkupId("decorationMaconnerie");
 
-        AjaxLink<String> grosOeuvreLink = new AjaxLink<String>("grosOeuvre") {
-
-            /**
-             * 
-             */
-            private static final long serialVersionUID = -5125845408338328259L;
-
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                createAndTriggerEvent(target, CategorieLoader.getCategorieGrosOeuvre());
-            }
-
-        };
-
-        grosOeuvreLink.setOutputMarkupId(true);
-        grosOeuvreLink.setMarkupId("grosOeuvre");
-
-        AjaxLink<String> equipementLink = new AjaxLink<String>("equipement") {
-
-            /**
-             * 
-             */
-            private static final long serialVersionUID = 5693979328585286647L;
-
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-                createAndTriggerEvent(target, CategorieLoader.getCategorieEquipement());
-            }
-
-        };
-
-        equipementLink.setOutputMarkupId(true);
-        equipementLink.setMarkupId("equipement");
-
         add(electriciteLink);
         add(plomberieLink);
         add(espacesVertLink);
         add(decorationMaconnerieLink);
-        add(grosOeuvreLink);
-        add(equipementLink);
     }
 
     private void createAndTriggerEvent(AjaxRequestTarget target, CategorieMetierDTO categorieMetier) {

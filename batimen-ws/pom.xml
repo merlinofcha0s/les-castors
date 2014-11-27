@@ -262,7 +262,6 @@
 			<version>1.2</version>
 		</dependency>
 
-
 		<!-- Security -->
 		<dependency>
 			<groupId>com.lambdaworks</groupId>
@@ -389,7 +388,7 @@
 				<!-- Config Arquillian -->
 				<glassfish.location>/usr/share/glassfish3</glassfish.location>
 				<glassfish.adminHost>127.0.0.1</glassfish.adminHost>
-				<glassfish.adminPort>4949</glassfish.adminPort>
+				<glassfish.adminPort>4747</glassfish.adminPort>
 				<glassfish.adminHttps>false</glassfish.adminHttps>
 				<glassfish.adminUser>admin</glassfish.adminUser>
 				<glassfish.adminPassword>OIOIUenoBueno</glassfish.adminPassword>
@@ -430,7 +429,7 @@
 							</components>
 							<domain>
 								<name>batimendomain</name>
-								<adminPort>4949</adminPort>
+								<adminPort>4747</adminPort>
 								<httpPort>6060</httpPort>
 								<httpsPort>6161</httpsPort>
 							</domain>

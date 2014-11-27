@@ -25,6 +25,8 @@ public class HashHelper {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(HashHelper.class);
 
+    private static String CHARSET_UTF_8 = "UTF-8";
+
     private HashHelper() {
 
     }
@@ -69,7 +71,8 @@ public class HashHelper {
     public static String convertToBase64(String chaineAEncoder) {
         String chaineEncoder;
         try {
-            chaineEncoder = new String(Base64.encodeBase64(chaineAEncoder.getBytes(Charset.forName("UTF-8"))), "UTF-8");
+            chaineEncoder = new String(Base64.encodeBase64(chaineAEncoder.getBytes(Charset.forName(CHARSET_UTF_8))),
+                    CHARSET_UTF_8);
         } catch (UnsupportedEncodingException e) {
             if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("Impossible d'encoder la chaine de caractere en UTF-8", e);
@@ -117,10 +120,10 @@ public class HashHelper {
 
         String saltString = "";
         try {
-            saltString = IOUtils.toString(bisSalt, "UTF-8");
+            saltString = IOUtils.toString(bisSalt, CHARSET_UTF_8);
         } catch (IOException e) {
             if (LOGGER.isErrorEnabled()) {
-                LOGGER.error("Probleme d'encodage avec le sel : " + salt, e);
+                LOGGER.error("Probleme d'encodage avec le sel", e);
             }
         }
 

@@ -10,6 +10,14 @@ import org.slf4j.LoggerFactory;
 
 import fr.batimen.core.security.HashHelper;
 
+/**
+ * Classe d'implémentation de la sécurité avec shiro. Décrit la maniere
+ * permettant de savoir si les infos d'authentification match avec le contenu de
+ * la BDD
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class CastorCredentialMatcher implements CredentialsMatcher {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CastorCredentialMatcher.class);
@@ -19,23 +27,19 @@ public class CastorCredentialMatcher implements CredentialsMatcher {
 
         // Les infos qui viennent du form
         UsernamePasswordToken usernamePasswordToken = (UsernamePasswordToken) token;
-        String usernameForm = usernamePasswordToken.getUsername();
         char[] passwordForm = (char[]) usernamePasswordToken.getCredentials();
 
         // Les infos qui viennent de la base de données
         SimpleAuthenticationInfo usernamePasswordDB = (SimpleAuthenticationInfo) info;
-        String usernameDB = String.valueOf(usernamePasswordDB.getPrincipals().getPrimaryPrincipal());
         String passwordDB = String.valueOf(usernamePasswordDB.getCredentials());
 
         // Vérification du password avec le hash qui se trouve dans la bdd
-        boolean usernameMatch = usernameForm.equals(usernameDB);
         boolean passwordMatch = HashHelper.check(new String(passwordForm), passwordDB);
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Verification de l'username : " + usernameMatch);
             LOGGER.debug("Verification du password : " + passwordMatch);
         }
 
-        return usernameMatch && passwordMatch;
+        return passwordMatch;
     }
 }

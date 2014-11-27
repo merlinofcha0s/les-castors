@@ -11,6 +11,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.ninja_squad.dbsetup.DbSetup;
 import com.ninja_squad.dbsetup.operation.Operation;
@@ -26,6 +28,8 @@ import fr.batimen.web.utils.UtilsSelenium;
 public class TestNouveauDevis extends AbstractITTest {
 
     private final String nouveauDevisDepartementURL = "/nouveaudevis/";
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(TestNouveauDevis.class);
 
     @Override
     public void prepareDB() throws Exception {
@@ -47,6 +51,13 @@ public class TestNouveauDevis extends AbstractITTest {
 
         // On passe à l'etape 1
         UtilsSelenium.selectionDepartement(driver);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Fail to wait authentication", e);
+            }
+        }
         // On remplit l'étape 2
         etape2();
         // On passe l'etape 3
@@ -123,6 +134,13 @@ public class TestNouveauDevis extends AbstractITTest {
         driver.get(appUrl + nouveauDevisDepartementURL);
         // On selectionne le bon département
         UtilsSelenium.selectionDepartement(driver);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Fail to wait authentication", e);
+            }
+        }
         // On remplit l'étape 2
         etape2();
         // On remplit l'étape 3
@@ -150,6 +168,13 @@ public class TestNouveauDevis extends AbstractITTest {
         UtilsSelenium.selectionDepartement(driver);
         // On remplit l'étape 2
         etape2();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Fail to wait authentication", e);
+            }
+        }
         // On passe à l'étape 3
         etape3(false);
 

@@ -401,7 +401,7 @@
 							</components>
 							<domain>
 								<name>batimendomain</name>
-								<adminPort>4949</adminPort>
+								<adminPort>4747</adminPort>
 								<httpPort>6060</httpPort>
 								<httpsPort>6161</httpsPort>
 							</domain>
