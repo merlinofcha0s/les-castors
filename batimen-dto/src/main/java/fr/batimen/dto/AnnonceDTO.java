@@ -17,6 +17,7 @@ import com.google.gson.reflect.TypeToken;
 import fr.batimen.dto.enums.DelaiIntervention;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.TypeContact;
+import fr.batimen.dto.enums.TypeTravaux;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 
 public class AnnonceDTO extends AbstractDTO {
@@ -43,6 +44,8 @@ public class AnnonceDTO extends AbstractDTO {
     private EtatAnnonce etatAnnonce;
     @NotNull
     private Long nbDevis;
+    @NotNull
+    private TypeTravaux typeTravaux;
 
     /**
      * @return the description
@@ -207,6 +210,21 @@ public class AnnonceDTO extends AbstractDTO {
      */
     public void setNbDevis(Long nbDevis) {
         this.nbDevis = nbDevis;
+    }
+
+    /**
+     * @return the typeTravaux
+     */
+    public TypeTravaux getTypeTravaux() {
+        return typeTravaux;
+    }
+
+    /**
+     * @param typeTravaux
+     *            the typeTravaux to set
+     */
+    public void setTypeTravaux(TypeTravaux typeTravaux) {
+        this.typeTravaux = typeTravaux;
     }
 
     /*

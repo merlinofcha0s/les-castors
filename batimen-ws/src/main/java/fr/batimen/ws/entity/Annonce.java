@@ -27,6 +27,7 @@ import fr.batimen.core.constant.QueryJPQL;
 import fr.batimen.dto.enums.DelaiIntervention;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.TypeContact;
+import fr.batimen.dto.enums.TypeTravaux;
 
 /**
  * Entité Annonce, est utilisée pour symbolisé l'annonce d'un particulier en
@@ -75,6 +76,8 @@ public class Annonce extends AbstractEntity implements Serializable {
     private String hashID;
     @Column(nullable = false)
     private String selHashID;
+    @Column(nullable = false)
+    private TypeTravaux typeTravaux;
     @ManyToOne
     @JoinColumn(name = "demandeur_fk")
     private Client demandeur;
@@ -348,6 +351,21 @@ public class Annonce extends AbstractEntity implements Serializable {
      */
     public void setHashID(String hashID) {
         this.hashID = hashID;
+    }
+
+    /**
+     * @return the typeTravaux
+     */
+    public TypeTravaux getTypeTravaux() {
+        return typeTravaux;
+    }
+
+    /**
+     * @param typeTravaux
+     *            the typeTravaux to set
+     */
+    public void setTypeTravaux(TypeTravaux typeTravaux) {
+        this.typeTravaux = typeTravaux;
     }
 
     /**

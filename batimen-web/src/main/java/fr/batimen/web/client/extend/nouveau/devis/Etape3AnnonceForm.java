@@ -13,6 +13,7 @@ import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.MultiFileUploadField;
+import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.validator.PatternValidator;
@@ -25,6 +26,7 @@ import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.dto.enums.DelaiIntervention;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.enums.TypeContact;
+import fr.batimen.dto.enums.TypeTravaux;
 import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
@@ -51,6 +53,7 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
         this.setMarkupId("formEtape3");
 
         nouvelleAnnonce = model.getObject();
+        CompoundPropertyModel<CreationAnnonceDTO> modelCompound = (CompoundPropertyModel<CreationAnnonceDTO>) model;
 
         DropDownChoice<SousCategorieMetierDTO> sousCategorieSelect = new DropDownChoice<SousCategorieMetierDTO>(
                 "sousCategorie") {
@@ -96,9 +99,10 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
         delaiInterventionField.add(new ErrorHighlightBehavior());
         delaiInterventionField.add(new RequiredBorderBehaviour());
 
-        RadioGroup<String> typeTravaux = new RadioGroup<String>("typeTravaux", new Model<String>());
-        typeTravaux.add(new Radio<String>("neuf", new Model<String>("Neuf")));
-        typeTravaux.add(new Radio<String>("renovation", new Model<String>("Rénovation")));
+        RadioGroup<TypeTravaux> typeTravaux = new RadioGroup<TypeTravaux>("typeTravaux");
+        typeTravaux.add(new Radio<TypeTravaux>("typeTravaux.neuf", new Model<TypeTravaux>(TypeTravaux.NEUF)));
+        typeTravaux
+                .add(new Radio<TypeTravaux>("typeTravaux.renovation", new Model<TypeTravaux>(TypeTravaux.RENOVATION)));
         typeTravaux.setRequired(true);
         typeTravaux.add(new RequiredBorderBehaviour());
 
