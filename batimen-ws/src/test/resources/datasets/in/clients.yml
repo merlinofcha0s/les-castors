@@ -58,6 +58,7 @@ annonce:
     categoriemetier: 0
     souscategoriemetier: Installation électrique
     nbconsultation: 0
+    typeTravaux: 0
     typecontact: 0
     demandeur_fk: 1002
     adressechantier_id: 100
