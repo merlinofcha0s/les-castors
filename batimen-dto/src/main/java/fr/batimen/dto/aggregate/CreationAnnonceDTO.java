@@ -2,10 +2,10 @@ package fr.batimen.dto.aggregate;
 
 import static fr.batimen.dto.constant.ValidatorConstant.ADRESSE_MAX;
 import static fr.batimen.dto.constant.ValidatorConstant.ADRESSE_MIN;
-import static fr.batimen.dto.constant.ValidatorConstant.CODE_POSTAL_REGEX;
-import static fr.batimen.dto.constant.ValidatorConstant.COMPLEMENT_ADRESSE_MAX;
 import static fr.batimen.dto.constant.ValidatorConstant.ANNONCE_DESCRIPTION_MAX;
 import static fr.batimen.dto.constant.ValidatorConstant.ANNONCE_DESCRIPTION_MIN;
+import static fr.batimen.dto.constant.ValidatorConstant.CODE_POSTAL_REGEX;
+import static fr.batimen.dto.constant.ValidatorConstant.COMPLEMENT_ADRESSE_MAX;
 import static fr.batimen.dto.constant.ValidatorConstant.VILLE_MAX;
 
 import java.io.File;
@@ -30,6 +30,7 @@ import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.SousCategorieMetierDTO;
 import fr.batimen.dto.enums.DelaiIntervention;
 import fr.batimen.dto.enums.TypeContact;
+import fr.batimen.dto.enums.TypeTravaux;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 
 /**
@@ -75,6 +76,8 @@ public class CreationAnnonceDTO extends AbstractDTO {
     @Min(value = 01)
     @Max(value = 100)
     private Integer departement;
+    @NotNull
+    private TypeTravaux typeTravaux;
 
     // Inscription
     @Valid
@@ -231,6 +234,21 @@ public class CreationAnnonceDTO extends AbstractDTO {
 
     public void setSousCategorie(SousCategorieMetierDTO sousCategorie) {
         this.sousCategorie = sousCategorie;
+    }
+
+    /**
+     * @return the typeTravaux
+     */
+    public TypeTravaux getTypeTravaux() {
+        return typeTravaux;
+    }
+
+    /**
+     * @param typeTravaux
+     *            the typeTravaux to set
+     */
+    public void setTypeTravaux(TypeTravaux typeTravaux) {
+        this.typeTravaux = typeTravaux;
     }
 
     /*

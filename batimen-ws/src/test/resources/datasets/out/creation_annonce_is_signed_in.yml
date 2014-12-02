@@ -6,6 +6,7 @@ annonce:
     categoriemetier: 0
     souscategoriemetier: Tableaux électriques
     nbconsultation: 0
+    typeTravaux: 0
     typecontact: 0
 adresse:
   - adresse: 106 chemin du pébron

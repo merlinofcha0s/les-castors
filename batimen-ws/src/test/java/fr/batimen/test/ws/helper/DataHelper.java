@@ -6,6 +6,7 @@ import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.enums.DelaiIntervention;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.enums.TypeContact;
+import fr.batimen.dto.enums.TypeTravaux;
 import fr.batimen.dto.helper.CategorieLoader;
 
 public class DataHelper {
@@ -39,6 +40,7 @@ public class DataHelper {
         creationAnnonceDTO.setSousCategorie(CategorieLoader.getCategorieElectricite().getSousCategories().get(0));
         creationAnnonceDTO.setTypeContact(TypeContact.EMAIL);
         creationAnnonceDTO.setVille("Nice");
+        creationAnnonceDTO.setTypeTravaux(TypeTravaux.NEUF);
 
         return creationAnnonceDTO;
 
@@ -46,15 +48,16 @@ public class DataHelper {
 
     /**
      * Genere un mail de contact de test
+     * 
      * @return
      */
-	public static ContactMailDTO getContactMailData() {
-		ContactMailDTO res = new ContactMailDTO();
-		res.setName("dutest michel");
-		res.setEmail("pebron@delapebronne.com");
-		res.setSubject("Do you wanna know?");
-		res.setMessage("No forget about it, it's ok");
-		return res;
-	}
+    public static ContactMailDTO getContactMailData() {
+        ContactMailDTO res = new ContactMailDTO();
+        res.setName("dutest michel");
+        res.setEmail("pebron@delapebronne.com");
+        res.setSubject("Do you wanna know?");
+        res.setMessage("No forget about it, it's ok");
+        return res;
+    }
 
 }

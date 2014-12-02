@@ -84,6 +84,7 @@ public class AnnonceService {
         nouvelleAnnonce.setSousCategorieMetier(nouvelleAnnonceDTO.getSousCategorie().getName());
         nouvelleAnnonce.setNbConsultation(0);
         nouvelleAnnonce.setTypeContact(nouvelleAnnonceDTO.getTypeContact());
+        nouvelleAnnonce.setTypeTravaux(nouvelleAnnonceDTO.getTypeTravaux());
 
         return nouvelleAnnonce;
     }

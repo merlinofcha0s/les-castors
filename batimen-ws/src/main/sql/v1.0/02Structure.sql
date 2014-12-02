@@ -15,6 +15,7 @@ create table Annonce (
         delaiIntervention int4 not null,
         description varchar(500) not null,
         etatAnnonce int4 not null,
+        typeTravaux int4 not null,
         categorieMetier int2 not null,
         sousCategorieMetier varchar(40) not null,
         nbConsultation int4 not null,

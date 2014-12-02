@@ -20,6 +20,7 @@ annonce:
     souscategoriemetier: Installation électrique
     nbconsultation: 0
     typecontact: 0
+    typeTravaux: 0
     demandeur_fk: 1001
     adressechantier_id: 100
   - datecreation: 2014-04-23 21:00:00.0
@@ -30,6 +31,7 @@ annonce:
     souscategoriemetier: Plomberie
     nbconsultation: 0
     typecontact: 0
+    typeTravaux: 0
     demandeur_fk: 1001
     adressechantier_id: 101
 adresse:

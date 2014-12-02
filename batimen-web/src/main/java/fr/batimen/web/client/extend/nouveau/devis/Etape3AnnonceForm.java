@@ -8,10 +8,14 @@ import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.Radio;
+import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.MultiFileUploadField;
+import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 
@@ -22,6 +26,7 @@ import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.dto.enums.DelaiIntervention;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.enums.TypeContact;
+import fr.batimen.dto.enums.TypeTravaux;
 import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
@@ -48,6 +53,7 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
         this.setMarkupId("formEtape3");
 
         nouvelleAnnonce = model.getObject();
+        CompoundPropertyModel<CreationAnnonceDTO> modelCompound = (CompoundPropertyModel<CreationAnnonceDTO>) model;
 
         DropDownChoice<SousCategorieMetierDTO> sousCategorieSelect = new DropDownChoice<SousCategorieMetierDTO>(
                 "sousCategorie") {
@@ -92,6 +98,16 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
         delaiInterventionField.setMarkupId("delaiInterventionField");
         delaiInterventionField.add(new ErrorHighlightBehavior());
         delaiInterventionField.add(new RequiredBorderBehaviour());
+
+        RadioGroup<TypeTravaux> typeTravaux = new RadioGroup<TypeTravaux>("typeTravaux");
+        Radio<TypeTravaux> neuf = new Radio<TypeTravaux>("typeTravaux.neuf", new Model<TypeTravaux>(TypeTravaux.NEUF));
+        Radio<TypeTravaux> renovation = new Radio<TypeTravaux>("typeTravaux.renovation", new Model<TypeTravaux>(
+                TypeTravaux.RENOVATION));
+        typeTravaux.add(neuf);
+        typeTravaux.add(renovation);
+        typeTravaux.setRequired(true);
+        typeTravaux.add(new RequiredBorderBehaviour());
+        typeTravaux.setMarkupId("typeTravaux");
 
         MultiFileUploadField photoField = new MultiFileUploadField("photos", 5);
         photoField.setMarkupId("photoField");
@@ -173,5 +189,6 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
         this.add(codePostalField);
         this.add(villeField);
         this.add(validateQualification);
+        this.add(typeTravaux);
     }
 }
