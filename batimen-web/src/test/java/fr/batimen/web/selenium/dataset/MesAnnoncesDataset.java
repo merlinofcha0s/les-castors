@@ -16,13 +16,13 @@ public class MesAnnoncesDataset {
     public static final Operation INSERT_ANNONCE_DATA = insertInto("annonce")
             .columns("id", "datecreation", "datemaj", "delaiintervention", "description", "etatannonce",
                     "categoriemetier", "souscategoriemetier", "nbconsultation", "typecontact", "hashID", "selHashID",
-                    "adressechantier_id", "demandeur_fk")
+                    "typeTravaux", "adressechantier_id", "demandeur_fk")
             .values(200010, "2014-01-10", "2014-01-10", "0",
                     "Construction compliqué qui necessite des connaissance en geologie", "1", 0,
-                    "Installation électrique", 0, 0, "toto", "tata", 200005, 100001)
+                    "Installation électrique", 0, 0, "toto", "tata", 0, 200005, 100001)
             .values(200011, "2014-01-10", "2014-01-10", "0",
                     "Construction compliqué qui necessite des connaissance en geologie", "1", 0,
-                    "Installation électrique", 0, 0, "toto", "tata", 200005, 100001).build();
+                    "Installation électrique", 0, 0, "toto", "tata", 0, 200005, 100001).build();
 
     public static final Operation INSERT_ARTISAN_DATA = insertInto("artisan")
             .columns("civilite", "email", "nom", "prenom", "login", "password", "id", "numeroTel", "dateInscription",

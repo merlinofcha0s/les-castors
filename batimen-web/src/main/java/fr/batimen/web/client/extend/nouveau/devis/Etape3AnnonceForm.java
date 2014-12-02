@@ -100,11 +100,16 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
         delaiInterventionField.add(new RequiredBorderBehaviour());
 
         RadioGroup<TypeTravaux> typeTravaux = new RadioGroup<TypeTravaux>("typeTravaux");
-        typeTravaux.add(new Radio<TypeTravaux>("typeTravaux.neuf", new Model<TypeTravaux>(TypeTravaux.NEUF)));
-        typeTravaux
-                .add(new Radio<TypeTravaux>("typeTravaux.renovation", new Model<TypeTravaux>(TypeTravaux.RENOVATION)));
+        Radio<TypeTravaux> neuf = new Radio<TypeTravaux>("typeTravaux.neuf", new Model<TypeTravaux>(TypeTravaux.NEUF));
+        neuf.setMarkupId("typeTravauxNeuf");
+        Radio<TypeTravaux> renovation = new Radio<TypeTravaux>("typeTravaux.renovation", new Model<TypeTravaux>(
+                TypeTravaux.RENOVATION));
+        renovation.setMarkupId("typeTravauxRenovation");
+        typeTravaux.add(neuf);
+        typeTravaux.add(renovation);
         typeTravaux.setRequired(true);
         typeTravaux.add(new RequiredBorderBehaviour());
+        typeTravaux.setMarkupId("typeTravaux");
 
         MultiFileUploadField photoField = new MultiFileUploadField("photos", 5);
         photoField.setMarkupId("photoField");

@@ -201,6 +201,7 @@ public class TestNouveauDevis extends AbstractITTest {
         new Select(driver.findElement(By.id("typeContactField"))).selectByVisibleText("Email");
         new Select(driver.findElement(By.id("delaiInterventionField")))
                 .selectByVisibleText("Le plus rapidement possible");
+        driver.findElement(By.id("radioTypeTravauxRenovation")).click();
         driver.findElement(By.id("adresseField")).clear();
         driver.findElement(By.id("adresseField")).sendKeys("106 avenue du test selenium");
         driver.findElement(By.id("adresseComplementField")).clear();
