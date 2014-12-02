@@ -101,10 +101,8 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
 
         RadioGroup<TypeTravaux> typeTravaux = new RadioGroup<TypeTravaux>("typeTravaux");
         Radio<TypeTravaux> neuf = new Radio<TypeTravaux>("typeTravaux.neuf", new Model<TypeTravaux>(TypeTravaux.NEUF));
-        neuf.setMarkupId("typeTravauxNeuf");
         Radio<TypeTravaux> renovation = new Radio<TypeTravaux>("typeTravaux.renovation", new Model<TypeTravaux>(
                 TypeTravaux.RENOVATION));
-        renovation.setMarkupId("typeTravauxRenovation");
         typeTravaux.add(neuf);
         typeTravaux.add(renovation);
         typeTravaux.setRequired(true);
