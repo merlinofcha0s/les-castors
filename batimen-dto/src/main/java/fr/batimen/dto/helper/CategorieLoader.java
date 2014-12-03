@@ -154,6 +154,7 @@ public class CategorieLoader {
             SousCategorieMetierDTO carrelage = new SousCategorieMetierDTO("Carrelage");
             SousCategorieMetierDTO surelevation = new SousCategorieMetierDTO("Surélévation");
             SousCategorieMetierDTO constructionAnnexes = new SousCategorieMetierDTO("Construction annexes");
+            SousCategorieMetierDTO muretMurSoutennement = new SousCategorieMetierDTO("Muret / Mur soutennement");
 
             decorationMaconnerie.addSousCategorie(porteFenetre);
             decorationMaconnerie.addSousCategorie(pluieDeLumiere);
@@ -180,6 +181,7 @@ public class CategorieLoader {
             decorationMaconnerie.addSousCategorie(surelevation);
             decorationMaconnerie.addSousCategorie(constructionAnnexes);
             decorationMaconnerie.addSousCategorie(sousDecorationMaconnerie);
+            decorationMaconnerie.addSousCategorie(muretMurSoutennement);
         }
         return decorationMaconnerie;
     }
