@@ -5,6 +5,8 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -30,7 +32,7 @@ public class TestAuthentification extends AbstractITTest {
     }
 
     @Test
-    public void testAuthentificationSuccess() throws Exception {
+    public void testAuthentificationAndDisconnectSuccess() throws Exception {
         driver.get(appUrl);
         connexionApplication("raiden", AbstractITTest.BON_MOT_DE_PASSE);
         try {
@@ -39,9 +41,19 @@ public class TestAuthentification extends AbstractITTest {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+        Boolean checkConditionMonCompte = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.textToBePresentInElementLocated(By.id("connexionLink"), "MON COMPTE"));
-        assertTrue(checkCondition);
+        assertTrue(checkConditionMonCompte);
+
+        WebElement iconConnected = driver.findElement(By.cssSelector("#iconConnected"));
+        WebElement logout = driver.findElement(By.id("logout"));
+        Actions builder = new Actions(driver);
+        builder.click(iconConnected).moveToElement(logout).click().build().perform();
+
+        Boolean checkConditionEspaceMembre = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.textToBePresentInElementLocated(By.id("connexionLink"), "ESPACE MEMBRE"));
+        assertTrue(checkConditionEspaceMembre);
+
     }
 
     @Test

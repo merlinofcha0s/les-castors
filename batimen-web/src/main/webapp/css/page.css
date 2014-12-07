@@ -413,6 +413,10 @@ table tr td .error {
     }
 }
 
+#iconConnected{
+	font-family: icomoon !important;
+}
+
 /* Custom CSS FuelUX */
 .fuelux .wizard ul li:before {
 	content: "";
