@@ -345,6 +345,9 @@ public abstract class MasterPage extends WebPage {
 
         };
 
+        logout.setMarkupId("logout");
+        logout.setOutputMarkupId(true);
+
         menuConnected.add(logout);
 
         menu.add(connexion);
