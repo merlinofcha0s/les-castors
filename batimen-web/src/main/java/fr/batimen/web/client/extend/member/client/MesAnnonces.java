@@ -20,6 +20,7 @@ import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.client.component.ContactezNous;
 import fr.batimen.web.client.component.LinkLabel;
+import fr.batimen.web.client.component.Profil;
 import fr.batimen.web.client.extend.Contact;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.ws.client.service.ClientsService;
@@ -62,7 +63,9 @@ public final class MesAnnonces extends MasterPage {
             LOGGER.debug("Init des composants statiques");
         }
 
+        Profil profil = new Profil("profil");
         ContactezNous contactezNous = new ContactezNous("contactezNous");
+        this.add(profil);
         this.add(contactezNous);
     }
 

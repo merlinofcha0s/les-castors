@@ -5,10 +5,12 @@ import java.util.Properties;
 import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
+import org.apache.wicket.core.request.mapper.MountedMapper;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.request.Url;
+import org.apache.wicket.request.mapper.parameter.UrlPathPageParametersEncoder;
 import org.apache.wicket.request.resource.UrlResourceReference;
 import org.odlabs.wiquery.ui.themes.WiQueryCoreThemeResourceReference;
 import org.slf4j.Logger;
@@ -27,6 +29,7 @@ import fr.batimen.web.client.extend.error.ErreurInterne;
 import fr.batimen.web.client.extend.error.Expiree;
 import fr.batimen.web.client.extend.error.NonTrouvee;
 import fr.batimen.web.client.extend.member.client.MesAnnonces;
+import fr.batimen.web.client.extend.member.client.MonProfil;
 import fr.batimen.web.client.extend.nouveau.artisan.NouveauArtisan;
 import fr.batimen.web.client.extend.nouveau.devis.NouveauDevis;
 import fr.batimen.web.client.session.BatimenSession;
@@ -95,6 +98,7 @@ public class BatimenApplication extends AuthenticatedWebApplication {
         mountPage(Constant.ACTIVATION_URL, Activation.class);
         mountPage(Constant.PARTENAIRE_URL, NouveauArtisan.class);
         mountPage(Constant.NOUVEAU_DEVIS_URL, NouveauDevis.class);
+        mount(new MountedMapper(Constant.MON_PROFIL_CLIENT_URL, MonProfil.class, new UrlPathPageParametersEncoder()));
         // Page d'erreur
         mountPage("/interdit", AccesInterdit.class);
         mountPage("/expiree", Expiree.class);
