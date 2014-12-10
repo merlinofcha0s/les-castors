@@ -98,7 +98,7 @@ public class BatimenApplication extends AuthenticatedWebApplication {
         mountPage(Constant.ACTIVATION_URL, Activation.class);
         mountPage(Constant.PARTENAIRE_URL, NouveauArtisan.class);
         mountPage(Constant.NOUVEAU_DEVIS_URL, NouveauDevis.class);
-        mount(new MountedMapper(Constant.MON_PROFIL_CLIENT_URL, MonProfil.class, new UrlPathPageParametersEncoder()));
+        mount(new MountedMapper(Constant.MON_PROFIL_URL, MonProfil.class, new UrlPathPageParametersEncoder()));
         // Page d'erreur
         mountPage("/interdit", AccesInterdit.class);
         mountPage("/expiree", Expiree.class);

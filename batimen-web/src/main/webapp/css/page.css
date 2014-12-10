@@ -508,3 +508,24 @@ table tr td .error {
 	width: 10px;
 }
 
+/* Mon profil */
+#infoPerso{
+	padding-bottom: 80px;
+}
+
+.rater{
+	float: left;
+}
+
+.rater-label{
+	padding-left: 5px;
+	font-size: 15px;
+	font-weight: bold;
+}
+
+.rater div div{
+	font-size: 20px;
+	width: 24px;
+	vertical-align: sub !important;
+}
+
