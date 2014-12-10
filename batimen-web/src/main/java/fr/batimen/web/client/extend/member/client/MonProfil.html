@@ -1,19 +1,43 @@
 <wicket:extend>
 	<div class="row-fluid">
-		<div class="span2">
-			<div wicket:id="profil"></div>
-		</div>
+		<div wicket:id="profil"></div>
 		<div class="span10">
 			<div id="infoPerso">
-				<h1>Michel M</h1>
-				<h2>
+				<div id="infoNomClient">
+					<img
+						alt="profile"
+						src="img/profile.png"
+						class="iconMonProfil">
+					<h1>Michel M</h1>
+				</div>
+				<img
+					alt="roller brush"
+					src="img/roller-brush.png"
+					class="iconMonProfil">
+				<h2 id="nbTravauxRealisesLbl">
 					Nombre de travaux réalisés : <span>4</span>
 				</h2>
 			</div>
 			<div>
 				<h2>Avis sur les artisans</h2>
-				<div wicket:id="raterCastor"></div>
+				<!-- Repeated -->
+				<div id="avisClientContainer">
+					<div
+						wicket:id="raterCastor"
+						class="avisRater"></div>
+					<div class="commentaireRater">Très bien</div>
+					<div class="nomEntreprise">Nissa plomberie</div>
+					<div class="commentaireClient">Artisan très sympathique, je referai appel à lui sans hésitation !</div>
+				</div>
+				<div id="avisClientContainer">
+					<!-- <div wicket:id="raterCastor" class="avisRater"></div> -->
+					<div class="commentaireRater">Très bien</div>
+					<div class="nomEntreprise">Nissa plomberie</div>
+					<div class="commentaireClient">Artisan très sympathique, je referai appel à lui sans hésitation !</div>
+				</div>
 			</div>
 		</div>
 	</div>
+	<div wicket:id="commentaire"></div>
+	<div wicket:id="contactezNous"></div>
 </wicket:extend>

@@ -2,6 +2,8 @@ package fr.batimen.web.client.extend.member.client;
 
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import fr.batimen.web.client.component.Commentaire;
+import fr.batimen.web.client.component.ContactezNous;
 import fr.batimen.web.client.component.Profil;
 import fr.batimen.web.client.component.RaterCastor;
 import fr.batimen.web.client.master.MasterPage;
@@ -21,9 +23,16 @@ public class MonProfil extends MasterPage {
 
     private void initComposants() {
         Profil profil = new Profil("profil");
-        RaterCastor rater = new RaterCastor("raterCastor");
+
+        ContactezNous contactezNous = new ContactezNous("contactezNous");
+        Commentaire commentaire = new Commentaire("commentaire");
+
+        RaterCastor rater = new RaterCastor("raterCastor", 3);
+        rater.setIsReadOnly(true);
+
         this.add(profil);
+        this.add(contactezNous);
+        this.add(commentaire);
         this.add(rater);
     }
-
 }
