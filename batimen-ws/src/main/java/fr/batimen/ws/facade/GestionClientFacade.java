@@ -24,6 +24,7 @@ import fr.batimen.core.constant.WsPath;
 import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.NotificationDTO;
 import fr.batimen.dto.aggregate.MesAnnoncesPageDTO;
+import fr.batimen.dto.aggregate.MonProfilDTO;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 import fr.batimen.ws.helper.JsonHelper;
@@ -89,6 +90,31 @@ public class GestionClientFacade {
         mesAnnoncesDTO.setAnnonces(annoncesDTO);
 
         return mesAnnoncesDTO;
+    }
+
+    /**
+     * Methode de récuperation des informations de la page de mes annonces
+     * (notifications + annonces) d'un client
+     * 
+     * @param login
+     * @return
+     */
+    @POST
+    @Path(WsPath.GESTION_CLIENT_SERVICE_INFOS_MON_PROFIL)
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public MonProfilDTO getInfoForMonProfil(String login) {
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Récuperation des infos de la page de mon profil pour : " + login);
+        }
+
+        String loginEscaped = DeserializeJsonHelper.parseString(login);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Récuperation notification.........");
+        }
+
+        return new MonProfilDTO();
     }
 
 }

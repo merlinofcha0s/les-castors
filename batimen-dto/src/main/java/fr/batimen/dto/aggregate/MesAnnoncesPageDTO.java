@@ -8,12 +8,14 @@ import java.util.Objects;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import fr.batimen.dto.AbstractDTO;
 import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.NotificationDTO;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 
-public class MesAnnoncesPageDTO {
+public class MesAnnoncesPageDTO extends AbstractDTO {
 
+    private static final long serialVersionUID = -8241631062405568121L;
     private List<NotificationDTO> notifications = new ArrayList<NotificationDTO>();
     private List<AnnonceDTO> annonces = new ArrayList<AnnonceDTO>();
 
