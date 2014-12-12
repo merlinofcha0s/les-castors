@@ -11,8 +11,12 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import fr.batimen.core.constant.QueryJPQL;
 
 /**
  * Entité Notation : Symbolise la notation en base de données. Permet de noté le
@@ -23,6 +27,8 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "Notation")
+@NamedQueries(value = { @NamedQuery(name = QueryJPQL.NOTATION_BY_CLIENT_LOGIN,
+        query = "SELECT n FROM Notation AS n WHERE n.annonce.demandeur.login = :login") })
 public class Notation extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = -1038954593364210382L;

@@ -1,6 +1,7 @@
 package fr.batimen.dto.aggregate;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -18,8 +19,8 @@ public class MonProfilDTO extends AbstractDTO {
 
     private String nomPrenomLogin;
     private String nomEntreprise;
-    private Integer nbAnnonce;
-    private List<NotationDTO> notations;
+    private Long nbAnnonce;
+    private List<NotationDTO> notations = new ArrayList<NotationDTO>();
 
     /**
      * @return the nomPrenomLogin
@@ -38,7 +39,7 @@ public class MonProfilDTO extends AbstractDTO {
     /**
      * @return the nbAnnonce
      */
-    public Integer getNbAnnonce() {
+    public Long getNbAnnonce() {
         return nbAnnonce;
     }
 
@@ -69,7 +70,7 @@ public class MonProfilDTO extends AbstractDTO {
      * @param nbAnnonce
      *            the nbAnnonce to set
      */
-    public void setNbAnnonce(Integer nbAnnonce) {
+    public void setNbAnnonce(Long nbAnnonce) {
         this.nbAnnonce = nbAnnonce;
     }
 

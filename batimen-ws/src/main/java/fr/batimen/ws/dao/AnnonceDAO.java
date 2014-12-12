@@ -182,4 +182,29 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
             LOGGER.debug("Fin persistence d'une nouvelle annonce......OK");
         }
     }
+
+    /**
+     * Sauvegarde d'une annonce lors de son initialisation, check dans la bdd si
+     * elle existe déjà pour un utilisateur donné.
+     * 
+     * @param nouvelleAnnonce
+     *            L'annonce a sauvegarder dans la bdd
+     * @throws DuplicateEntityException
+     *             Exception throw si l'entité existe déjà.
+     */
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Long getNbAnnonceByLogin(String login) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Debut comptage du nb d'annonce");
+        }
+
+        TypedQuery<Long> query = entityManager.createNamedQuery(QueryJPQL.NB_ANNONCE_BY_LOGIN, Long.class);
+        query.setParameter(QueryJPQL.PARAM_CLIENT_LOGIN, login);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Fin comptage du nb d'annonce");
+        }
+
+        return query.getSingleResult();
+    }
 }

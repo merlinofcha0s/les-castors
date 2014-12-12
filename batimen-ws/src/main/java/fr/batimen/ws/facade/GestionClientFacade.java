@@ -16,17 +16,22 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.WsPath;
 import fr.batimen.dto.AnnonceDTO;
+import fr.batimen.dto.NotationDTO;
 import fr.batimen.dto.NotificationDTO;
 import fr.batimen.dto.aggregate.MesAnnoncesPageDTO;
 import fr.batimen.dto.aggregate.MonProfilDTO;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
+import fr.batimen.ws.dao.AnnonceDAO;
+import fr.batimen.ws.dao.NotationDAO;
+import fr.batimen.ws.entity.Notation;
 import fr.batimen.ws.helper.JsonHelper;
 import fr.batimen.ws.interceptor.BatimenInterceptor;
 
@@ -52,7 +57,13 @@ public class GestionClientFacade {
     private GestionAnnonceFacade gestionAnnonceFacade;
 
     @Inject
-    private GestionUtilisateurFacade gestionUtilisationFacade;
+    private GestionUtilisateurFacade gestionUtilisateurFacade;
+
+    @Inject
+    private AnnonceDAO annonceDAO;
+
+    @Inject
+    private NotationDAO notationDAO;
 
     /**
      * Methode de récuperation des informations de la page de mes annonces
@@ -77,7 +88,7 @@ public class GestionClientFacade {
             LOGGER.debug("Récuperation notification.........");
         }
 
-        List<NotificationDTO> notificationsDTO = gestionUtilisationFacade.getNotificationByLogin(loginEscaped,
+        List<NotificationDTO> notificationsDTO = gestionUtilisateurFacade.getNotificationByLogin(loginEscaped,
                 TypeCompte.CLIENT);
 
         if (LOGGER.isDebugEnabled()) {
@@ -107,14 +118,24 @@ public class GestionClientFacade {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Récuperation des infos de la page de mon profil pour : " + login);
         }
-
         String loginEscaped = DeserializeJsonHelper.parseString(login);
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Récuperation notification.........");
+        // Recup des données
+        Long nbAnnonce = annonceDAO.getNbAnnonceByLogin(loginEscaped);
+        List<Notation> notations = notationDAO.getNotationByLoginClient(loginEscaped);
+
+        // Remplissage de la DTO
+        MonProfilDTO monProfilDTO = new MonProfilDTO();
+        monProfilDTO.setNbAnnonce(nbAnnonce);
+
+        // Extraction de l'entité puis transfert dans la DTO
+        ModelMapper mapper = new ModelMapper();
+        for (Notation notation : notations) {
+            NotationDTO notationDTO = new NotationDTO();
+            mapper.map(notation, notationDTO);
+            monProfilDTO.getNotations().add(notationDTO);
         }
 
-        return new MonProfilDTO();
+        return monProfilDTO;
     }
-
 }

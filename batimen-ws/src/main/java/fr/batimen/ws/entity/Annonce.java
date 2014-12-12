@@ -44,7 +44,9 @@ import fr.batimen.dto.enums.TypeTravaux;
         @NamedQuery(name = QueryJPQL.ANNONCE_BY_LOGIN_FETCH_ARTISAN,
                 query = "SELECT a.categorieMetier, a.description, a.etatAnnonce, count(art) FROM Annonce AS a LEFT OUTER JOIN a.artisans AS art WHERE a.demandeur.login = :login GROUP BY a ORDER BY dateCreation ASC"),
         @NamedQuery(name = QueryJPQL.ANNONCE_BY_TITLE_AND_DESCRIPTION,
-                query = "SELECT a FROM Annonce AS a WHERE a.description = :description AND a.demandeur.login = :login") })
+                query = "SELECT a FROM Annonce AS a WHERE a.description = :description AND a.demandeur.login = :login"),
+        @NamedQuery(name = QueryJPQL.NB_ANNONCE_BY_LOGIN,
+                query = "SELECT count(a) FROM Annonce AS a WHERE a.demandeur.login = :login") })
 public class Annonce extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = 3160372354800747789L;

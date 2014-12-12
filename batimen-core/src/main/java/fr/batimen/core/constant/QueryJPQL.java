@@ -29,6 +29,7 @@ public class QueryJPQL {
     public static final String ANNONCE_BY_LOGIN = "annonceByLogin";
     public static final String ANNONCE_BY_TITLE_AND_DESCRIPTION = "annonceByTitleAndDescription";
     public static final String ANNONCE_BY_LOGIN_FETCH_ARTISAN = "annonceByLoginFetchArtisan";
+    public static final String NB_ANNONCE_BY_LOGIN = "nbAnnonceByLogin";
 
     // Parametre Query Entity annonce
     public static final String PARAM_ANNONCE_TITRE = "titre";
@@ -57,5 +58,8 @@ public class QueryJPQL {
     // Entity notification
     public static final String NOTIFICATION_BY_CLIENT_LOGIN = "notificationClientByLogin";
     public static final String NOTIFICATION_BY_ARTISAN_LOGIN = "notificationArtisanByLogin";
+
+    // Entity notation
+    public static final String NOTATION_BY_CLIENT_LOGIN = "notationByClientLogin";
 
 }

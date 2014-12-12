@@ -67,7 +67,7 @@ public class GestionClientFacadeTest extends AbstractBatimenWsTest {
     }
 
     /**
-     * Cas de test : Le client se rend sur la page "mes annonces" <br/>
+     * Cas de test : Le client se rend sur la page "mon profil" <br/>
      * Ce test verifie que les données remontent de maniere correctes
      * 
      */
@@ -76,9 +76,8 @@ public class GestionClientFacadeTest extends AbstractBatimenWsTest {
     public void testGetInfoForMonProfil() {
         MonProfilDTO monProfilDTO = ClientsService.getMesInfosForMonProfil("pebronne");
 
+        Assert.assertEquals(monProfilDTO.getNbAnnonce(), Long.valueOf("2"));
         Assert.assertEquals(monProfilDTO.getNomEntreprise(), "Pebronne enterprise");
-        Assert.assertEquals(monProfilDTO.getNomPrenomLogin(), "De la Pebronne Pebron");
-        Assert.assertEquals(monProfilDTO.getNbAnnonce(), Integer.valueOf("2"));
 
         Boolean isDataCorrectForNotation1 = Boolean.FALSE;
         Boolean isDataCorrectForNotation2 = Boolean.FALSE;
