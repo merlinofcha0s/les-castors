@@ -2,6 +2,7 @@ package fr.batimen.ws.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -35,10 +36,10 @@ public class Permission extends AbstractEntity {
 
     @Column(length = 255, nullable = false)
     private TypeCompte typeCompte;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "artisan_fk")
     private Artisan artisan;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_fk")
     private Client client;
 

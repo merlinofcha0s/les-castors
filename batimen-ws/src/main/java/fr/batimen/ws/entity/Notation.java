@@ -6,6 +6,7 @@ import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -40,9 +41,10 @@ public class Notation extends AbstractEntity implements Serializable {
     private Double score;
     @Column(length = 500, nullable = false)
     private String commentaire;
-    @OneToOne(mappedBy = "notationAnnonce", cascade = CascadeType.REMOVE)
+    @OneToOne(mappedBy = "notationAnnonce", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @JoinColumn(name = "notationannonce_id")
     private Annonce annonce;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "artisan_fk")
     private Artisan artisan;
 

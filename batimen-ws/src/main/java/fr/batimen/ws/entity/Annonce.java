@@ -9,6 +9,7 @@ import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -20,6 +21,7 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 
@@ -80,17 +82,24 @@ public class Annonce extends AbstractEntity implements Serializable {
     private String selHashID;
     @Column(nullable = false)
     private TypeTravaux typeTravaux;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "entreprise_selectionnee_fk")
+    private Entreprise entrepriseSelectionnee;
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "demandeur_fk")
     private Client demandeur;
-    @OneToOne(cascade = CascadeType.REMOVE)
+    @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @PrimaryKeyJoinColumn
     private Notation notationAnnonce;
-    @OneToOne(cascade = CascadeType.REMOVE)
+    @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private Adresse adresseChantier;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "annonce_artisan")
     private List<Artisan> artisans = new ArrayList<Artisan>();
-    @OneToMany(mappedBy = "annonce", targetEntity = Notification.class, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "annonce",
+            targetEntity = Notification.class,
+            cascade = CascadeType.REMOVE,
+            fetch = FetchType.LAZY)
     private List<Notification> notifications = new ArrayList<Notification>();
 
     /**
@@ -376,6 +385,21 @@ public class Annonce extends AbstractEntity implements Serializable {
      */
     public void setSelHashID(String selHashID) {
         this.selHashID = selHashID;
+    }
+
+    /**
+     * @return the entrepriseSelectionnee
+     */
+    public Entreprise getEntrepriseSelectionnee() {
+        return entrepriseSelectionnee;
+    }
+
+    /**
+     * @param entrepriseSelectionnee
+     *            the entrepriseSelectionnee to set
+     */
+    public void setEntrepriseSelectionnee(Entreprise entrepriseSelectionnee) {
+        this.entrepriseSelectionnee = entrepriseSelectionnee;
     }
 
     /*

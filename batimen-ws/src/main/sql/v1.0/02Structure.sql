@@ -26,6 +26,7 @@ create table Annonce (
         adresseChantier_id int8,
         demandeur_fk int8,
         notationAnnonce_id int8,
+        entreprise_selectionnee_fk int8,
         primary key (id)
     );
     
@@ -138,6 +139,11 @@ create table Annonce (
         add constraint annonce_notation 
         foreign key (notationAnnonce_id) 
         references Notation;
+        
+    alter table Annonce 
+        add constraint annonce_entreprise
+        foreign key (entreprise_selectionnee_fk) 
+        references Entreprise;
 
     alter table Artisan 
         add constraint artisan_entreprise 

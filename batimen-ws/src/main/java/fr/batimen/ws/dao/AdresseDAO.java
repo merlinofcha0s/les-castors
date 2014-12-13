@@ -7,10 +7,13 @@ import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.persistence.EntityExistsException;
+import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.batimen.core.constant.QueryJPQL;
 import fr.batimen.core.exception.BackendException;
 import fr.batimen.ws.entity.Adresse;
 
@@ -61,6 +64,41 @@ public class AdresseDAO extends AbstractDAO<Adresse> {
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Fin persistence d'une nouvelle adresse......OK");
+        }
+    }
+
+    /**
+     * Récupération d'une entreprise grace au login de l'artisan <br/>
+     * 
+     * @param login
+     *            Identifiant de l'artisan
+     * @return
+     */
+    public Adresse getAdresseByEntrepriseID(String idEntreprise) {
+
+        Adresse adresseTrouvee = null;
+
+        try {
+            TypedQuery<Adresse> query = entityManager.createNamedQuery(QueryJPQL.ADRESSE_BY_ENTREPRISE_ID,
+                    Adresse.class);
+            query.setParameter(QueryJPQL.PARAM_ENTREPRISE_ID, idEntreprise);
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Chargement requete JPQL adresse by entreprise ID OK ");
+            }
+
+            adresseTrouvee = query.getSingleResult();
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Récuperation resultat requete JPQL adresse by entreprise ID OK ");
+            }
+
+            return adresseTrouvee;
+        } catch (NoResultException nre) {
+            if (LOGGER.isWarnEnabled()) {
+                LOGGER.warn("Aucune correspondance trouvées dans la BDD", nre);
+            }
+            return new Adresse();
         }
     }
 }

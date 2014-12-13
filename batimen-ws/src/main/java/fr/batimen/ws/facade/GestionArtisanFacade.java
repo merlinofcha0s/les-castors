@@ -129,7 +129,17 @@ public class GestionArtisanFacade {
 
         List<CategorieMetierDTO> categories = nouveauPartenaireDTO.getEntreprise().getCategoriesMetier();
 
+        try {
+            adresseDAO.saveAdresse(nouvelleAdresse);
+        } catch (BackendException e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("L'adresse existe déjà dans la BDD ", e);
+            }
+            return Constant.CODE_SERVICE_RETOUR_KO;
+        }
+
         nouvelleEntreprise.setAdresse(nouvelleAdresse);
+
         nouveauArtisan.setEntreprise(nouvelleEntreprise);
         artisanDAO.saveArtisan(nouveauArtisan);
         permissionDAO.creationPermission(permission);
@@ -144,14 +154,6 @@ public class GestionArtisanFacade {
             categorieMetierDAO.persistCategorieMetier(nouvelleCategorieMetier);
         }
 
-        try {
-            adresseDAO.saveAdresse(nouvelleAdresse);
-        } catch (BackendException e) {
-            if (LOGGER.isErrorEnabled()) {
-                LOGGER.error("L'adresse existe déjà dans la BDD ", e);
-            }
-            return Constant.CODE_SERVICE_RETOUR_KO;
-        }
         // On recupere l'url du frontend
         Properties urlProperties = PropertiesUtils.loadPropertiesFile("url.properties");
         String urlFrontend = urlProperties.getProperty("url.frontend.web");
