@@ -25,7 +25,7 @@ import fr.batimen.core.constant.WsPath;
 import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.NotationDTO;
 import fr.batimen.dto.NotificationDTO;
-import fr.batimen.dto.aggregate.MesAnnoncesPageDTO;
+import fr.batimen.dto.aggregate.MesAnnoncesDTO;
 import fr.batimen.dto.aggregate.MonProfilDTO;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
@@ -75,13 +75,13 @@ public class GestionClientFacade {
     @POST
     @Path(WsPath.GESTION_CLIENT_SERVICE_INFOS_MES_ANNONCES)
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public MesAnnoncesPageDTO getInfoForMesAnnoncesPage(String login) {
+    public MesAnnoncesDTO getInfoForMesAnnonces(String login) {
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Récuperation des annonces / notifs pour : " + login);
         }
 
-        MesAnnoncesPageDTO mesAnnoncesDTO = new MesAnnoncesPageDTO();
+        MesAnnoncesDTO mesAnnoncesDTO = new MesAnnoncesDTO();
         String loginEscaped = DeserializeJsonHelper.parseString(login);
 
         if (LOGGER.isDebugEnabled()) {
@@ -122,7 +122,7 @@ public class GestionClientFacade {
 
         // Recup des données
         Long nbAnnonce = annonceDAO.getNbAnnonceByLogin(loginEscaped);
-        List<Notation> notations = notationDAO.getNotationByLoginClient(loginEscaped);
+        List<Object[]> notations = notationDAO.getNotationByLoginClient(loginEscaped);
 
         // Remplissage de la DTO
         MonProfilDTO monProfilDTO = new MonProfilDTO();
@@ -130,9 +130,17 @@ public class GestionClientFacade {
 
         // Extraction de l'entité puis transfert dans la DTO
         ModelMapper mapper = new ModelMapper();
-        for (Notation notation : notations) {
+        for (Object[] notation : notations) {
+            // On crée la DTO
             NotationDTO notationDTO = new NotationDTO();
-            mapper.map(notation, notationDTO);
+            // On cast object en entity
+            Notation notationCasted = (Notation) notation[0];
+            // on le passe dans le mapper pour extraire les infos dans la DTO
+            mapper.map(notationCasted, notationDTO);
+            // On charge le nom de l'entreprise concernant cette notation
+            notationDTO.setNomEntreprise(String.valueOf(notation[1]));
+            // On ajoute la notation a la liste qui sera presente dans la DTO
+            // MonProfil
             monProfilDTO.getNotations().add(notationDTO);
         }
 

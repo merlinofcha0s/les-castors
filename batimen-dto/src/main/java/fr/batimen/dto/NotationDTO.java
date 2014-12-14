@@ -22,6 +22,8 @@ public class NotationDTO extends AbstractDTO {
     @NotNull
     @Size(max = NOTATION_MAX_COMMENTAIRE)
     private String commentaire;
+    @NotNull
+    private String nomEntreprise;
 
     /**
      * @return the score
@@ -53,6 +55,21 @@ public class NotationDTO extends AbstractDTO {
         this.commentaire = commentaire;
     }
 
+    /**
+     * @return the nomEntreprise
+     */
+    public String getNomEntreprise() {
+        return nomEntreprise;
+    }
+
+    /**
+     * @param nomEntreprise
+     *            the nomEntreprise to set
+     */
+    public void setNomEntreprise(String nomEntreprise) {
+        this.nomEntreprise = nomEntreprise;
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -60,7 +77,7 @@ public class NotationDTO extends AbstractDTO {
      */
     @Override
     public int hashCode() {
-        return Objects.hashCode(Objects.hash(this.score, this.commentaire));
+        return Objects.hashCode(Objects.hash(this.score, this.commentaire, this.nomEntreprise));
     }
 
     /*
@@ -76,7 +93,8 @@ public class NotationDTO extends AbstractDTO {
 
         if (object instanceof NotationDTO) {
             NotationDTO other = (NotationDTO) object;
-            return Objects.equals(this.score, other.score) && Objects.equals(this.commentaire, other.commentaire);
+            return Objects.equals(this.score, other.score) && Objects.equals(this.commentaire, other.commentaire)
+                    && Objects.equals(this.nomEntreprise, other.nomEntreprise);
         }
         return false;
     }

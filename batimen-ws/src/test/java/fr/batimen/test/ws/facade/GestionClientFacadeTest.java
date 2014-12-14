@@ -9,7 +9,7 @@ import org.junit.Test;
 import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.NotationDTO;
 import fr.batimen.dto.NotificationDTO;
-import fr.batimen.dto.aggregate.MesAnnoncesPageDTO;
+import fr.batimen.dto.aggregate.MesAnnoncesDTO;
 import fr.batimen.dto.aggregate.MonProfilDTO;
 import fr.batimen.dto.enums.StatutNotification;
 import fr.batimen.dto.enums.TypeCompte;
@@ -26,11 +26,11 @@ public class GestionClientFacadeTest extends AbstractBatimenWsTest {
      */
     @Test
     @UsingDataSet("datasets/in/client_notification_annonce.yml")
-    public void testGetInfoForMesAnnoncesPage() {
-        MesAnnoncesPageDTO mesAnnoncesPage = ClientsService.getMesInfosAnnoncePage("pebronne");
+    public void testGetInfoForMesAnnonces() {
+        MesAnnoncesDTO mesAnnonces = ClientsService.getMesInfosAnnonce("pebronne");
 
-        List<NotificationDTO> notifications = mesAnnoncesPage.getNotifications();
-        List<AnnonceDTO> annonces = mesAnnoncesPage.getAnnonces();
+        List<NotificationDTO> notifications = mesAnnonces.getNotifications();
+        List<AnnonceDTO> annonces = mesAnnonces.getAnnonces();
 
         Assert.assertEquals(1, notifications.size());
         Assert.assertEquals(1, annonces.size());
@@ -76,18 +76,21 @@ public class GestionClientFacadeTest extends AbstractBatimenWsTest {
     public void testGetInfoForMonProfil() {
         MonProfilDTO monProfilDTO = ClientsService.getMesInfosForMonProfil("pebronne");
 
-        Assert.assertEquals(monProfilDTO.getNbAnnonce(), Long.valueOf("2"));
-        Assert.assertEquals(monProfilDTO.getNomEntreprise(), "Pebronne enterprise");
+        Assert.assertEquals(Long.valueOf("2"), monProfilDTO.getNbAnnonce());
 
         Boolean isDataCorrectForNotation1 = Boolean.FALSE;
         Boolean isDataCorrectForNotation2 = Boolean.FALSE;
 
+        Assert.assertEquals(2, monProfilDTO.getNotations().size());
+
         for (NotationDTO notation : monProfilDTO.getNotations()) {
-            if (notation.getScore().equals(Double.valueOf("3")) && notation.getCommentaire().equals("Bon Travail")) {
+            if (notation.getScore().equals(Double.valueOf("3")) && notation.getCommentaire().equals("Bon Travail")
+                    && notation.getNomEntreprise().equals("Pebronne enterprise")) {
                 isDataCorrectForNotation1 = Boolean.TRUE;
             }
-            if (notation.getScore().equals(Double.valueOf("5")) && notation.getCommentaire().equals("Excellent")) {
-                isDataCorrectForNotation1 = Boolean.TRUE;
+            if (notation.getScore().equals(Double.valueOf("5")) && notation.getCommentaire().equals("Excellent")
+                    && notation.getNomEntreprise().equals("Pebronne enterprise")) {
+                isDataCorrectForNotation2 = Boolean.TRUE;
             }
         }
 

@@ -18,7 +18,6 @@ public class MonProfilDTO extends AbstractDTO {
     private static final long serialVersionUID = -3221651801848840575L;
 
     private String nomPrenomLogin;
-    private String nomEntreprise;
     private Long nbAnnonce;
     private List<NotationDTO> notations = new ArrayList<NotationDTO>();
 
@@ -27,13 +26,6 @@ public class MonProfilDTO extends AbstractDTO {
      */
     public String getNomPrenomLogin() {
         return nomPrenomLogin;
-    }
-
-    /**
-     * @return the nomEntreprise
-     */
-    public String getNomEntreprise() {
-        return nomEntreprise;
     }
 
     /**
@@ -59,14 +51,6 @@ public class MonProfilDTO extends AbstractDTO {
     }
 
     /**
-     * @param nomEntreprise
-     *            the nomEntreprise to set
-     */
-    public void setNomEntreprise(String nomEntreprise) {
-        this.nomEntreprise = nomEntreprise;
-    }
-
-    /**
      * @param nbAnnonce
      *            the nbAnnonce to set
      */
@@ -89,7 +73,7 @@ public class MonProfilDTO extends AbstractDTO {
      */
     @Override
     public int hashCode() {
-        return Objects.hashCode(Objects.hash(this.nomPrenomLogin, this.nomEntreprise, this.nbAnnonce));
+        return Objects.hashCode(Objects.hash(this.nomPrenomLogin, this.nbAnnonce));
     }
 
     /*
@@ -106,7 +90,6 @@ public class MonProfilDTO extends AbstractDTO {
         if (object instanceof MonProfilDTO) {
             MonProfilDTO other = (MonProfilDTO) object;
             return Objects.equals(this.nomPrenomLogin, other.nomPrenomLogin)
-                    && Objects.equals(this.nomEntreprise, other.nomEntreprise)
                     && Objects.equals(this.nbAnnonce, other.nbAnnonce);
         }
         return false;

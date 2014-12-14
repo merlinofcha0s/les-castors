@@ -56,9 +56,8 @@ public class Artisan extends AbstractUser implements Serializable {
 
     @OneToMany(mappedBy = "artisan", targetEntity = Notation.class, cascade = CascadeType.REMOVE)
     private List<Notation> scoreGlobal = new ArrayList<Notation>();
-
-    @PrimaryKeyJoinColumn(name = "entreprise_id")
     @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, optional = false)
+    @PrimaryKeyJoinColumn(name = "entreprise_id")
     private Entreprise entreprise;
     @OneToMany(mappedBy = "artisan",
             targetEntity = Permission.class,

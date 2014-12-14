@@ -29,7 +29,7 @@ import fr.batimen.core.constant.QueryJPQL;
 @Entity
 @Table(name = "Notation")
 @NamedQueries(value = { @NamedQuery(name = QueryJPQL.NOTATION_BY_CLIENT_LOGIN,
-        query = "SELECT n FROM Notation AS n WHERE n.annonce.demandeur.login = :login") })
+        query = "SELECT n, n.annonce.entrepriseSelectionnee.nomComplet FROM Notation AS n WHERE n.annonce.demandeur.login = :login") })
 public class Notation extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = -1038954593364210382L;

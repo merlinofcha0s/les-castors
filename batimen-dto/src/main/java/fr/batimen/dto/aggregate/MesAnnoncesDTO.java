@@ -13,7 +13,7 @@ import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.NotificationDTO;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 
-public class MesAnnoncesPageDTO extends AbstractDTO {
+public class MesAnnoncesDTO extends AbstractDTO {
 
     private static final long serialVersionUID = -8241631062405568121L;
     private List<NotificationDTO> notifications = new ArrayList<NotificationDTO>();
@@ -71,22 +71,22 @@ public class MesAnnoncesPageDTO extends AbstractDTO {
             return true;
         }
 
-        if (object instanceof MesAnnoncesPageDTO) {
-            MesAnnoncesPageDTO other = (MesAnnoncesPageDTO) object;
+        if (object instanceof MesAnnoncesDTO) {
+            MesAnnoncesDTO other = (MesAnnoncesDTO) object;
             return Objects.equals(this.notifications, other.notifications)
                     && Objects.equals(this.annonces, other.annonces);
         }
         return false;
     }
 
-    public static MesAnnoncesPageDTO deserializeMesDevisDTO(String json) {
+    public static MesAnnoncesDTO deserializeMesDevisDTO(String json) {
         Gson gson = DeserializeJsonHelper.createGsonObject();
-        return gson.fromJson(json, MesAnnoncesPageDTO.class);
+        return gson.fromJson(json, MesAnnoncesDTO.class);
     }
 
-    public static List<MesAnnoncesPageDTO> deserializeMesDevisDTOList(String json) {
+    public static List<MesAnnoncesDTO> deserializeMesDevisDTOList(String json) {
         Gson gson = DeserializeJsonHelper.createGsonObject();
-        Type collectionType = new TypeToken<List<MesAnnoncesPageDTO>>() {
+        Type collectionType = new TypeToken<List<MesAnnoncesDTO>>() {
         }.getType();
         return gson.fromJson(json, collectionType);
     }

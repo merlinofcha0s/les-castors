@@ -36,7 +36,7 @@ import fr.batimen.dto.enums.StatutJuridique;
         @NamedQuery(name = QueryJPQL.ENTREPRISE_BY_SIRET,
                 query = "SELECT ent FROM Entreprise AS ent WHERE ent.siret = :siret"),
         @NamedQuery(name = QueryJPQL.ENTREPRISE_BY_ARTISAN,
-                query = "SELECT ent FROM Entreprise AS ent WHERE ent.artisan.login = :login") })
+                query = "SELECT ent FROM Entreprise AS ent WHERE ent.artisan.login = :login"), })
 public class Entreprise extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = 8234078910852637284L;

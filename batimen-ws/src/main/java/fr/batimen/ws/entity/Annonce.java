@@ -89,7 +89,7 @@ public class Annonce extends AbstractEntity implements Serializable {
     @JoinColumn(name = "demandeur_fk")
     private Client demandeur;
     @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    @PrimaryKeyJoinColumn
+    @PrimaryKeyJoinColumn(name = "notationannonce_id")
     private Notation notationAnnonce;
     @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private Adresse adresseChantier;

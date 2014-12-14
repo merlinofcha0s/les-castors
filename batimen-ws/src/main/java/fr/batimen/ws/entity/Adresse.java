@@ -48,7 +48,7 @@ public class Adresse extends AbstractEntity implements Serializable {
     @OneToOne(mappedBy = "adresse", cascade = CascadeType.REMOVE, optional = false)
     private Entreprise entreprise;
     @OneToOne(mappedBy = "adresseFacturation", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    @PrimaryKeyJoinColumn
+    @PrimaryKeyJoinColumn(name = "adressefacturation_id")
     private Paiement paiement;
     @OneToOne(mappedBy = "adresseChantier", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private Annonce annonce;
