@@ -1,42 +1,42 @@
+<wicket:head>
+	<link rel="stylesheet" type="text/css" href="css/components/bootstrap-modal/bootstrap-modal.css">
+</wicket:head>
 <wicket:panel>
-	<div
-		wicket:id="errorLogin"
-		id="errorLogin"></div>
-	<form
-		wicket:id="loginForm"
-		id="authentificationPanel">
-		<table class="tableBatimenLogin">
-			<tr>
-				<th><img
-					src="img/user.png"
-					alt="user"
-					width="30px" /></th>
-				<td><input
-					type="text"
-					wicket:id="login"
-					onClick="if(this.value=='Identifiant'){this.value=''}"
-					onblur="if(this.value==''){this.value='Identifiant'}" /></td>
-				<td><img
-					src="img/lock.png"
-					alt="lock"
-					width="22px"
-					style="margin-bottom: 11px;"
-					name="Votre identifiant" /></td>
-				<td><input
-					type="password"
-					wicket:id="password"
-					onClick="if(this.value=='Mot de passe'){this.value=''}"
-					onblur="if(this.value==''){this.value='Mot de passe'}"
-					name="Votre mot de passe" /></td>
-			</tr>
-			<tr>
-				<th></th>
-				<td></td>
-				<td></td>
-				<td><a
-					class="shortcode_button btn_small btn_type1"
-					wicket:id="signIn">Se connecter</a></td>
-			</tr>
-		</table>
-	</form>
+	<div id="authenticationModal" class="modal hide fade" tabindex="-1" role="dialog">
+		<div class="modal-header">
+			<button type="button" class="close" data-dismiss="modal"
+				aria-hidden="true">×</button>
+			<span id="myModalLabel">Connexion à l'espace client / artisan</span>
+		</div>
+		<div class="modal-body">
+			<div wicket:id="errorLogin" id="errorLogin"></div>
+			<form class="form-inline" wicket:id="loginForm">
+				<div>
+					<i class="icon-Person"></i> 
+					<input type="text" class="input-medium"	placeholder="Identifiant" wicket:id="login"  >
+				</div>
+				<div id="pswDiv">
+					<i class="icon-Key"></i> 
+					<input type="password" class="input-medium" placeholder="Mot de passe" wicket:id="password">
+				</div>
+				<div class="cnxBtn">
+					<button wicket:id="signIn" class="btn btn-info">Se Connecter</button>
+				</div>
+			</form>
+		</div>
+	</div>
+	
+	<script>	
+		var fakeCall = new Wicket.Ajax.Call();	
+	
+		function showAuthenticationModal(){
+			$('#authenticationModal').modal('show');
+		}
+		
+		function hideAuthenticationModal(){
+			$('#authenticationModal').modal('hide');
+		}
+		
+			
+	</script>
 </wicket:panel>
