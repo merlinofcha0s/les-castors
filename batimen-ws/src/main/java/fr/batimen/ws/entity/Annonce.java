@@ -25,6 +25,9 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 
+import org.hibernate.annotations.LazyToOne;
+import org.hibernate.annotations.LazyToOneOption;
+
 import fr.batimen.core.constant.QueryJPQL;
 import fr.batimen.dto.enums.DelaiIntervention;
 import fr.batimen.dto.enums.EtatAnnonce;
@@ -92,6 +95,7 @@ public class Annonce extends AbstractEntity implements Serializable {
     @PrimaryKeyJoinColumn(name = "notationannonce_id")
     private Notation notationAnnonce;
     @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @LazyToOne(LazyToOneOption.NO_PROXY)
     private Adresse adresseChantier;
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "annonce_artisan")

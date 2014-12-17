@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.NotificationDTO;
-import fr.batimen.dto.aggregate.MesAnnoncesPageDTO;
+import fr.batimen.dto.aggregate.MesAnnoncesDTO;
 import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.client.component.Commentaire;
@@ -196,8 +196,7 @@ public final class MesAnnonces extends MasterPage {
 
         Authentication authentication = new Authentication();
 
-        MesAnnoncesPageDTO mesInfos = ClientsService.getMesInfosAnnoncePage(authentication.getCurrentUserInfo()
-                .getLogin());
+        MesAnnoncesDTO mesInfos = ClientsService.getMesInfosAnnonce(authentication.getCurrentUserInfo().getLogin());
 
         annonces = mesInfos.getAnnonces();
         notifications = mesInfos.getNotifications();

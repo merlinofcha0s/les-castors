@@ -74,14 +74,14 @@ public class AdresseDAO extends AbstractDAO<Adresse> {
      *            Identifiant de l'artisan
      * @return
      */
-    public Adresse getAdresseByEntrepriseID(String idEntreprise) {
+    public Adresse getAdresseByNomCompletEntreprise(String idEntreprise) {
 
         Adresse adresseTrouvee = null;
 
         try {
-            TypedQuery<Adresse> query = entityManager.createNamedQuery(QueryJPQL.ADRESSE_BY_ENTREPRISE_ID,
+            TypedQuery<Adresse> query = entityManager.createNamedQuery(QueryJPQL.ADRESSE_BY_NOM_COMPLET_ENTREPRISE,
                     Adresse.class);
-            query.setParameter(QueryJPQL.PARAM_ENTREPRISE_ID, idEntreprise);
+            query.setParameter(QueryJPQL.PARAM_ENTREPRISE_NOM_COMPLET, idEntreprise);
 
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Chargement requete JPQL adresse by entreprise ID OK ");

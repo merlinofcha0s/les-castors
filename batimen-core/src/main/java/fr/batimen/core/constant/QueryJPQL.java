@@ -51,6 +51,7 @@ public class QueryJPQL {
 
     // Parametre Query Entity entreprise
     public static final String PARAM_ENTEPRISE_SIRET = "siret";
+    public static final String PARAM_ENTREPRISE_NOM_COMPLET = "entrepriseNomComplet";
 
     // Entity permission
     public static final String PERMISSION_CLIENT_BY_LOGIN = "permissionClientByLogin";
@@ -64,9 +65,6 @@ public class QueryJPQL {
     public static final String NOTATION_BY_CLIENT_LOGIN = "notationByClientLogin";
 
     // Entity adresse
-    public static final String ADRESSE_BY_ENTREPRISE_ID = "adresseByEntrepriseID";
-
-    // Parametre adresse
-    public static final String PARAM_ENTREPRISE_ID = "entrepriseId";
+    public static final String ADRESSE_BY_NOM_COMPLET_ENTREPRISE = "adresseByNomCompletEntreprise";
 
 }

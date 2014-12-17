@@ -219,5 +219,3 @@ create table Annonce (
         add constraint notification_annonce
         foreign key (id_annonce) 
         references Annonce;
-        
-     

@@ -9,7 +9,8 @@
 			<!-- Properties for Hibernate -->
 			<property name="hibernate.hbm2ddl.auto" value="validate" />
 
-			<property name="hibernate.generate_statistics" value="true" />
+	
+			<property name="hibernate.ejb.use_class_enhancer" value="true" />
 
 			<!-- Pour que Glassfish charge hibernate -->
 			<property name="hibernate.transaction.jta.platform"
@@ -20,6 +21,7 @@
 			<property name="hibernate.show_sql" value="${hibernate.show_sql}" />
 			<property name="hibernate.format_sql" value="${hibernate.format_sql}" />
 			<property name="hibernate.use_sql_comments" value="${hibernate.use_sql_comments}" />
+					<property name="hibernate.generate_statistics" value="${hibernate.generate_statistics}" />
 			<property name="hibernate.cache.use_second_level_cache"
 				value="false" />
 			<property name="hibernate.cache.use_query_cache" value="false" />

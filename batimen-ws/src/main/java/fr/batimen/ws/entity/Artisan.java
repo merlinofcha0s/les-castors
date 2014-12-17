@@ -18,8 +18,10 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.LazyToOne;
+import org.hibernate.annotations.LazyToOneOption;
 
 import fr.batimen.core.constant.QueryJPQL;
 import fr.batimen.dto.enums.Civilite;
@@ -56,8 +58,8 @@ public class Artisan extends AbstractUser implements Serializable {
 
     @OneToMany(mappedBy = "artisan", targetEntity = Notation.class, cascade = CascadeType.REMOVE)
     private List<Notation> scoreGlobal = new ArrayList<Notation>();
-    @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, optional = false)
-    @PrimaryKeyJoinColumn(name = "entreprise_id")
+    @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @LazyToOne(LazyToOneOption.NO_PROXY)
     private Entreprise entreprise;
     @OneToMany(mappedBy = "artisan",
             targetEntity = Permission.class,

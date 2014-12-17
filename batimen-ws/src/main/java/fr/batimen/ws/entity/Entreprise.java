@@ -17,9 +17,11 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
+
+import org.hibernate.annotations.LazyToOne;
+import org.hibernate.annotations.LazyToOneOption;
 
 import fr.batimen.core.constant.QueryJPQL;
 import fr.batimen.dto.enums.StatutJuridique;
@@ -59,12 +61,13 @@ public class Entreprise extends AbstractEntity implements Serializable {
     private String logo;
     @Column(length = 50, nullable = true)
     private String specialite;
-    @OneToOne(mappedBy = "entreprise", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY, optional = false)
+    @OneToOne(mappedBy = "entreprise", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @LazyToOne(LazyToOneOption.NO_PROXY)
     private Artisan artisan;
     @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private Paiement paiement;
-    @OneToOne(cascade = CascadeType.REMOVE)
-    @PrimaryKeyJoinColumn(name = "adresse_id")
+    @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @LazyToOne(LazyToOneOption.NO_PROXY)
     private Adresse adresse;
     @OneToMany(mappedBy = "entrepriseSelectionnee",
             targetEntity = Annonce.class,

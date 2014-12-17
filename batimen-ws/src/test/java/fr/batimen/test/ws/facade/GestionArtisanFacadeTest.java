@@ -90,7 +90,7 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
         Assert.assertNotNull(entreprise);
         Assert.assertEquals("Entreprise de la plomberie", entreprise.getNomComplet());
 
-        Adresse adresseEntreprise = adresseDAO.getAdresseByEntrepriseID(entreprise.getNomComplet());
+        Adresse adresseEntreprise = entreprise.getAdresse();
         Assert.assertNotNull(adresseEntreprise);
         Assert.assertEquals("250 chemin du plombier", adresseEntreprise.getAdresse());
 
