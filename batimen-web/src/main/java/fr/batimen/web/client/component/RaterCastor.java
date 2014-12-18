@@ -36,4 +36,23 @@ public class RaterCastor extends Panel {
             }
         }
     }
+
+    public String getCommentaireScore(Integer nbEtoile) {
+
+        switch (nbEtoile) {
+        case 1:
+            return "Pas satisfait";
+        case 2:
+            return "Peu mieux faire";
+        case 3:
+            return "Prestation correct";
+        case 4:
+            return "Bonne prestation";
+        case 5:
+            return "Très bonne prestation";
+        default:
+            return "";
+        }
+
+    }
 }
