@@ -184,13 +184,11 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
     }
 
     /**
-     * Sauvegarde d'une annonce lors de son initialisation, check dans la bdd si
-     * elle existe déjà pour un utilisateur donné.
+     * Calcul le nb d'annonce qu'un client a postés
      * 
-     * @param nouvelleAnnonce
-     *            L'annonce a sauvegarder dans la bdd
-     * @throws DuplicateEntityException
-     *             Exception throw si l'entité existe déjà.
+     * @param login
+     *            le login du client
+     * @return Le nb d'annonce
      */
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public Long getNbAnnonceByLogin(String login) {

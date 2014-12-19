@@ -13,6 +13,12 @@ import fr.batimen.dto.NotationDTO;
 import fr.batimen.dto.NotificationDTO;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 
+/**
+ * Objet de transfert a destination de la page de mon profil (coté client)
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class MonProfilDTO extends AbstractDTO {
 
     private static final long serialVersionUID = -3221651801848840575L;

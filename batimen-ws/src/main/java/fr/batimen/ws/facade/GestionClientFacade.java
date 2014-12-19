@@ -104,8 +104,8 @@ public class GestionClientFacade {
     }
 
     /**
-     * Methode de récuperation des informations de la page de mes annonces
-     * (notifications + annonces) d'un client
+     * Methode de récuperation des informations de la page de mon profil d'un
+     * client
      * 
      * @param login
      * @return

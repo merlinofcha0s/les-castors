@@ -16,6 +16,13 @@ import fr.batimen.web.client.component.RaterCastor;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.ws.client.service.ClientsService;
 
+/**
+ * Page où les utilisateurs pourront voir un resumé de leurs activités sur le
+ * site
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class MonProfil extends MasterPage {
 
     private static final long serialVersionUID = -7816716629862060521L;

@@ -25,6 +25,16 @@ import fr.batimen.ws.entity.Notation;
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class NotationDAO extends AbstractDAO<Notation> {
 
+    /**
+     * Recupere les notations pour un client via ces annonces par ordre
+     * decroissant ainsi que le nom complet des entreprises correspondantes.
+     * 
+     * @param login
+     *            le login du client
+     * @param limitToThreeNotation
+     *            limite la requete aux 3 derniers avis
+     * @return les notations et les noms complets associés des entreprises
+     */
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public List<Object[]> getNotationByLoginClient(String login, Boolean limitToThreeNotation) {
         List<Object[]> notations = null;

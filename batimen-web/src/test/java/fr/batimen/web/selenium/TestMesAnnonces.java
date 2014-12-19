@@ -27,8 +27,8 @@ public class TestMesAnnonces extends AbstractITTest {
     public void prepareDB() throws Exception {
         Operation operation = sequenceOf(DELETE_ALL, INSERT_USER_DATA, INSERT_USER_PERMISSION,
                 MesAnnoncesDataset.INSERT_ADRESSE_DATA, MesAnnoncesDataset.INSERT_ENTREPRISE_DATA,
-                MesAnnoncesDataset.INSERT_ARTISAN_DATA, MesAnnoncesDataset.INSERT_ANNONCE_DATA,
-                MesAnnoncesDataset.INSERT_NOTIFICATION_DATA);
+                MesAnnoncesDataset.INSERT_ARTISAN_DATA, MesAnnoncesDataset.INSERT_NOTATION_DATA,
+                MesAnnoncesDataset.INSERT_ANNONCE_DATA, MesAnnoncesDataset.INSERT_NOTIFICATION_DATA);
         DbSetup dbSetup = new DbSetup(getDriverManagerDestination(), operation);
         dbSetup.launch();
     }
