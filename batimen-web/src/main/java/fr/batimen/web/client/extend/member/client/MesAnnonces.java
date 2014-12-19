@@ -149,8 +149,13 @@ public final class MesAnnonces extends MasterPage {
             protected void populateItem(ListItem<AnnonceDTO> item) {
                 AnnonceDTO annonce = item.getModelObject();
 
-                StringBuilder descriptionCutting = new StringBuilder(annonce.getDescription().substring(0, 30));
-                descriptionCutting.append("...");
+                StringBuilder descriptionCutting = new StringBuilder();
+                if (annonce.getDescription().length() > 30) {
+                    descriptionCutting.append(annonce.getDescription().substring(0, 30));
+                    descriptionCutting.append("...");
+                } else {
+                    descriptionCutting.append(annonce.getDescription());
+                }
 
                 WebMarkupContainer iconCategorie = new WebMarkupContainer("iconCategorie");
                 StringBuilder classCssIcon = new StringBuilder("iconsMesDevis");

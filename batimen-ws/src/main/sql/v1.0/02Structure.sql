@@ -71,6 +71,7 @@ create table Annonce (
         id  bigserial not null,
         commentaire varchar(500) not null,
         score float8 not null,
+        dateNotation timestamp not null,
         artisan_fk int8,
         primary key (id)
     );

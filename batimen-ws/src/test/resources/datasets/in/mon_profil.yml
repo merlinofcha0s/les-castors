@@ -83,8 +83,10 @@ notation:
   - id: 1020
     score: 3
     commentaire: Bon Travail
+    dateNotation: 2014-03-23 22:00:00.0
     artisan_fk: 1003
   - id: 1021
     score: 5
     commentaire: Excellent
+    dateNotation: 2014-03-23 21:00:00.0
     artisan_fk: 1003

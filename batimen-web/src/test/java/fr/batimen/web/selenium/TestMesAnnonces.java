@@ -40,7 +40,7 @@ public class TestMesAnnonces extends AbstractITTest {
      * 
      */
     @Test
-    public void testAccessToMesAnnoncePage() {
+    public void testAccessToMesAnnonce() {
         driver.get(appUrl);
         // On s'authentifie à l'application
         connexionApplication("raiden", AbstractITTest.BON_MOT_DE_PASSE);

@@ -1,6 +1,7 @@
 package fr.batimen.ws.entity;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Objects;
 
 import javax.persistence.CascadeType;
@@ -16,6 +17,11 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.hibernate.annotations.LazyToOne;
+import org.hibernate.annotations.LazyToOneOption;
 
 import fr.batimen.core.constant.QueryJPQL;
 
@@ -29,7 +35,7 @@ import fr.batimen.core.constant.QueryJPQL;
 @Entity
 @Table(name = "Notation")
 @NamedQueries(value = { @NamedQuery(name = QueryJPQL.NOTATION_BY_CLIENT_LOGIN,
-        query = "SELECT n, n.annonce.entrepriseSelectionnee.nomComplet FROM Notation AS n WHERE n.annonce.demandeur.login = :login") })
+        query = "SELECT n, n.annonce.entrepriseSelectionnee.nomComplet FROM Notation AS n WHERE n.annonce.demandeur.login = :login ORDER BY n.dateNotation DESC") })
 public class Notation extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = -1038954593364210382L;
@@ -41,8 +47,12 @@ public class Notation extends AbstractEntity implements Serializable {
     private Double score;
     @Column(length = 500, nullable = false)
     private String commentaire;
+    @Column
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateNotation;
     @OneToOne(mappedBy = "notationAnnonce", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @JoinColumn(name = "notationannonce_id")
+    @LazyToOne(LazyToOneOption.NO_PROXY)
     private Annonce annonce;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "artisan_fk")

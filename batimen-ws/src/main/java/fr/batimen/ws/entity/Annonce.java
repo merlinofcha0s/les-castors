@@ -21,7 +21,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 
@@ -92,7 +91,7 @@ public class Annonce extends AbstractEntity implements Serializable {
     @JoinColumn(name = "demandeur_fk")
     private Client demandeur;
     @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    @PrimaryKeyJoinColumn(name = "notationannonce_id")
+    @LazyToOne(LazyToOneOption.NO_PROXY)
     private Notation notationAnnonce;
     @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @LazyToOne(LazyToOneOption.NO_PROXY)

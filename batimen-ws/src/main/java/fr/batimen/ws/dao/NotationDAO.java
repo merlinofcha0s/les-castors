@@ -26,13 +26,17 @@ import fr.batimen.ws.entity.Notation;
 public class NotationDAO extends AbstractDAO<Notation> {
 
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public List<Object[]> getNotationByLoginClient(String login) {
+    public List<Object[]> getNotationByLoginClient(String login, Boolean limitToThreeNotation) {
         List<Object[]> notations = null;
 
         try {
             TypedQuery<Object[]> query = entityManager.createNamedQuery(QueryJPQL.NOTATION_BY_CLIENT_LOGIN,
                     Object[].class);
             query.setParameter(QueryJPQL.PARAM_CLIENT_LOGIN, login);
+
+            if (limitToThreeNotation) {
+                query.setMaxResults(3);
+            }
 
             notations = query.getResultList();
         } catch (NoResultException nre) {

@@ -55,7 +55,7 @@ public class MonProfil extends MasterPage {
     private void initLabel() {
         Label login = new Label("login", client.getLogin());
         Label nbAnnonce = new Label("nbAnnonce", monProfilDTO.getNbAnnonce());
-        Label isAvisEmpty = new Label("avisEmpty", "Pas d'avis pour le moment") {
+        Label isAvisEmpty = new Label("avisEmptyLabel", "Pas d'avis pour le moment") {
 
             private static final long serialVersionUID = 1L;
 

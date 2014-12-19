@@ -122,7 +122,7 @@ public class GestionClientFacade {
 
         // Recup des données
         Long nbAnnonce = annonceDAO.getNbAnnonceByLogin(loginEscaped);
-        List<Object[]> notations = notationDAO.getNotationByLoginClient(loginEscaped);
+        List<Object[]> notations = notationDAO.getNotationByLoginClient(loginEscaped, Boolean.TRUE);
 
         // Remplissage de la DTO
         MonProfilDTO monProfilDTO = new MonProfilDTO();
