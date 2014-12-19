@@ -8,6 +8,7 @@ import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -43,11 +44,20 @@ public class Client extends AbstractUser implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(nullable = false)
-    @OneToMany(mappedBy = "demandeur", targetEntity = Annonce.class, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "demandeur",
+            targetEntity = Annonce.class,
+            cascade = CascadeType.REMOVE,
+            fetch = FetchType.LAZY)
     private List<Annonce> devisDemandes = new ArrayList<Annonce>();
-    @OneToMany(mappedBy = "client", targetEntity = Permission.class, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "client",
+            targetEntity = Permission.class,
+            cascade = CascadeType.REMOVE,
+            fetch = FetchType.LAZY)
     protected List<Permission> permissions = new ArrayList<Permission>();
-    @OneToMany(mappedBy = "clientNotifier", targetEntity = Notification.class, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "clientNotifier",
+            targetEntity = Notification.class,
+            cascade = CascadeType.REMOVE,
+            fetch = FetchType.LAZY)
     protected List<Notification> notifications = new ArrayList<Notification>();
 
     /**

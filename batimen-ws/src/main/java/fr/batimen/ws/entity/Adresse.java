@@ -6,11 +6,19 @@ import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.LazyToOne;
+import org.hibernate.annotations.LazyToOneOption;
+
+import fr.batimen.core.constant.QueryJPQL;
 
 /**
  * Entité qui symbolise l'adresse en base de données.
@@ -20,6 +28,8 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "Adresse")
+@NamedQueries(value = { @NamedQuery(name = QueryJPQL.ADRESSE_BY_NOM_COMPLET_ENTREPRISE,
+        query = "SELECT a FROM Adresse AS a WHERE a.entreprise.nomComplet = :entrepriseNomComplet") })
 public class Adresse extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = 3650281700578111213L;
@@ -37,11 +47,13 @@ public class Adresse extends AbstractEntity implements Serializable {
     private String ville;
     @Column(nullable = false)
     private Integer departement;
-    @OneToOne(mappedBy = "adresse", cascade = CascadeType.REMOVE)
+    @OneToOne(mappedBy = "adresse", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private Entreprise entreprise;
-    @OneToOne(mappedBy = "adresseFacturation", cascade = CascadeType.REMOVE)
+    @OneToOne(mappedBy = "adresseFacturation", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @LazyToOne(LazyToOneOption.NO_PROXY)
     private Paiement paiement;
-    @OneToOne(mappedBy = "adresseChantier", cascade = CascadeType.REMOVE)
+    @OneToOne(mappedBy = "adresseChantier", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @LazyToOne(LazyToOneOption.NO_PROXY)
     private Annonce annonce;
 
     /**

@@ -40,6 +40,7 @@
 		<hibernate.show_sql>true</hibernate.show_sql>
 		<hibernate.format_sql>true</hibernate.format_sql>
 		<hibernate.use_sql_comments>true</hibernate.use_sql_comments>
+		<hibernate.generate_statistics>true</hibernate.generate_statistics>
 
 		<!-- Config Arquillian -->
 		<glassfish.location>D:\dev\glassfish3wp</glassfish.location>
@@ -198,6 +199,35 @@
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.hibernate.orm.tooling</groupId>
+				<artifactId>hibernate-enhance-maven-plugin</artifactId>
+				<version>4.2.16.Final</version>
+				<executions>
+					<execution>
+						<phase>compile</phase>
+						<goals>
+							<goal>enhance</goal>
+						</goals>
+					</execution>
+				</executions>
+				<dependencies>
+					<!-- Yes, you really must have an explicit dependency on the thing you 
+						want to enhance -->
+					<dependency>
+						<groupId>${project.groupId}</groupId>
+						<artifactId>batimen-dto</artifactId>
+						<version>${project.version}</version>
+					</dependency>
+					<!-- Yes, you really must have an explicit dependency on the thing you 
+						want to enhance -->
+					<dependency>
+						<groupId>${project.groupId}</groupId>
+						<artifactId>batimen-ws</artifactId>
+						<version>${project.version}</version>
+					</dependency>
+				</dependencies>
 			</plugin>
 		</plugins>
 		<resources>
@@ -421,6 +451,7 @@
 				<hibernate.show_sql>false</hibernate.show_sql>
 				<hibernate.format_sql>false</hibernate.format_sql>
 				<hibernate.use_sql_comments>false</hibernate.use_sql_comments>
+				<hibernate.generate_statistics>true</hibernate.generate_statistics>
 
 				<!-- Config Arquillian -->
 				<glassfish.location>/usr/share/glassfish3</glassfish.location>

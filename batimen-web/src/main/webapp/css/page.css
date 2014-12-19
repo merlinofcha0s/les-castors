@@ -110,7 +110,7 @@
 }
 
 #champsObligatoire {
-	float : left;
+	float: left;
 	margin-left: 16px;
 }
 
@@ -153,12 +153,12 @@
 	font-size: 22px;
 }
 
-#radioTypeTravauxNeuf{
+#radioTypeTravauxNeuf {
 	float: left;
 	padding-right: 30px;
 }
 
-#radioTypeTravauxRenovation{
+#radioTypeTravauxRenovation {
 	float: left;
 	padding-right: 52px;
 }
@@ -206,20 +206,20 @@
 #containerActivite {
 	padding-top: 15px;
 	padding-bottom: 15px;
-	padding-left: 480px;	
+	padding-left: 480px;
 }
 
-#containerPlomberie{
+#containerPlomberie {
 	padding-bottom: 7px;
 	padding-left: 15px;
 }
 
-#containerEspaceVert{
+#containerEspaceVert {
 	padding-bottom: 7px;
 	padding-left: 10px;
 }
 
-#containerDecorationMaconnerie{
+#containerDecorationMaconnerie {
 	padding-left: 7px;
 }
 
@@ -239,7 +239,7 @@
 	padding-left: 311px;
 }
 
-.font-glyph-entreprise{
+.font-glyph-entreprise {
 	font-size: 25px;
 }
 
@@ -381,39 +381,40 @@ table tr td .error {
 	padding-left: 13px;
 }
 /* Footer menu */
-
-.footer_line{
-    padding-bottom: 20px;
-}
-.footer_menu{
-    display: inline-block;
-    font-size: 14px;
-    line-height: 16px;
-    padding: 21px 0 23px;
-    margin-left: -120px;
-    text-align: center;
+.footer_line {
+	padding-bottom: 20px;
 }
 
-.footer_menu .item_list li{
-    display: inline-block;
-    cursor: pointer;
-    border-right: solid grey 1px ;
-    padding-right: 10px;
-    padding-left: 5px;
+.footer_menu {
+	display: inline-block;
+	font-size: 14px;
+	line-height: 16px;
+	padding: 21px 0 23px;
+	margin-left: -120px;
+	text-align: center;
 }
 
-.footer_menu .item_list li:last-child{
-    border-right: 0;
-    padding-right: 0;
-}
-@media (max-width: 768px) {
-    .footer_menu{
-        display: block;
-        margin-left: 0;
-    }
+.footer_menu .item_list li {
+	display: inline-block;
+	cursor: pointer;
+	border-right: solid grey 1px;
+	padding-right: 10px;
+	padding-left: 5px;
 }
 
-#iconConnected{
+.footer_menu .item_list li:last-child {
+	border-right: 0;
+	padding-right: 0;
+}
+
+@media ( max-width : 768px) {
+	.footer_menu {
+		display: block;
+		margin-left: 0;
+	}
+}
+
+#iconConnected {
 	font-family: icomoon !important;
 }
 
@@ -428,53 +429,54 @@ table tr td .error {
 }
 
 /* MENU SUPERIEUR */
-
 .menu a {
 	text-transform: uppercase !important;
 }
-.menu p{
-    color: #666666;
-    display: block;
-    font-size: 13px;
-    font-weight: 600;
-    line-height: 15px;
-    margin-top: -8px;
-}
-.menu .header.ico{
-    font-size: 18px;
-    margin-right: 6px;
+
+.menu p {
+	color: #666666;
+	display: block;
+	font-size: 13px;
+	font-weight: 600;
+	line-height: 15px;
+	margin-top: -8px;
 }
 
-.menu .callus>p{
-    text-align: right;
+.menu .header.ico {
+	font-size: 18px;
+	margin-right: 6px;
+}
+
+.menu .callus>p {
+	text-align: right;
 }
 
 /* CONTACT */
-.feedback_form .btn{
-    font-size: 14px;
-    padding: 7px;
+.feedback_form .btn {
+	font-size: 14px;
+	padding: 7px;
 }
 
 /* Menu */
-#ulMenu{
+#ulMenu {
 	padding: 5px 0 5px;
 	content: "";
 }
 
-#ulMenu li:BEFORE{
+#ulMenu li:BEFORE {
 	content: "";
 }
 
-#ulMenu li{
+#ulMenu li {
 	padding: 0 0 0 0px;
 }
 
 /* Espace client - mes devis */
-#divInfoClientContenant{
+#divInfoClientContenant {
 	text-align: center;
 }
 
-#divInfoClientContenu{
+#divInfoClientContenu {
 	display: inline-block;
 }
 
@@ -482,29 +484,86 @@ table tr td .error {
 	padding-top: 18px;
 }
 
-#btnDonnezAvis{
+#btnDonnezAvis {
 	font-size: 20px;
 	padding: 10px;
 }
 
-.iconsMesDevis{
+.iconsMesDevis {
 	font-size: 15px;
 	margin-right: 5px;
 }
 
-.badgeMesdevis{
+.badgeMesdevis {
 	vertical-align: bottom !important;
 }
 
-.promoMesDevis{
+.promoMesDevis {
 	padding-top: 52px;
 }
 
-.iconNotif{
+.iconNotif {
 	font-size: 16px;
 }
 
-.td-IconNotif{
+.td-IconNotif {
 	width: 10px;
 }
 
+/* Mon profil */
+#infoPerso {
+	padding-bottom: 80px;
+}
+
+.iconMonProfil{
+	clear: both;
+	float: left;
+	width: 43px;
+	margin-right: 20px;
+}
+
+#infoNomClient{
+	padding-bottom: 20px;
+}
+
+#nbTravauxRealisesLbl{
+	margin-top: 10px;
+}
+
+.raterContainer div div {
+	font-size: 20px;
+	width: 24px;
+	vertical-align: sub !important;
+}
+
+.avisRater {
+	float: left;
+	padding-right: 10px;
+}
+
+#avisClientContainer{
+	width: 265px;
+	float: left;
+	margin-right: 30px;
+}
+
+.commentaireRater {
+	padding-top: 2px;
+	font-size: 15px;
+	font-weight: bold;
+}
+
+.nomEntreprise {
+	clear: both;
+	padding-top: 11px;
+	font-weight: bold;
+}
+
+#travauxEffectuesContainer{
+	padding-top: 45px;
+	clear: both;
+}
+
+#generalContainerAvis{
+	margin-top: 20px;
+}

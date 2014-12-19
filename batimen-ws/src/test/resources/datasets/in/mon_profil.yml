@@ -1,0 +1,92 @@
+client:
+  - id: 1001
+    dateinscription: "2014-01-10 00:00:00"
+    email: lol@lol.com
+    password: $s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=
+    login: pebronne
+    nom: De la Pebronne
+    numerotel: "0615125645"
+    prenom: Pebron
+    isActive: true
+artisan:
+  - id: 1003
+    numerotel: "0615125645"
+    password: $s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=
+    login: pebronneArtisanne
+    email: lolPebronne@lol.com
+    dateinscription: "2014-01-10 10:00:00"
+    civilite: 0
+    prenom: Pebron
+    nom: De la Pebronne
+    isActive: false
+    cleactivation: "NTNkN2RmYzVkNWU2MDZkZjZlYTVjZGQ2ZGE0ZjljY2JhNGJjZWY5MmIxNmNiOWJmMjk2ZDVhNDY3OTEzMTIyZA=0"
+    entreprise_id: 1003
+permission:
+  - typecompte: 4
+    client_fk: 1001
+annonce:
+  - id: 1020
+    datecreation: 2014-03-23 22:00:00.0
+    delaiintervention: 0
+    description: Peinture d'un mur
+    etatannonce: 1
+    categoriemetier: 0
+    souscategoriemetier: Installation électrique
+    nbconsultation: 0
+    typecontact: 0
+    typeTravaux: 0
+    demandeur_fk: 1001
+    adressechantier_id: 100
+    hashID: 88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21
+    selHashID: 5Whe5wlRCzzUhgFfRHFkIbtxRMyGrS1eaUntnp9SxEY=
+    notationannonce_id: 1020
+    entreprise_selectionnee_fk: 1003
+  - id: 1021
+    datecreation: 2014-03-23 22:00:00.0
+    delaiintervention: 0
+    description: Peinture d'un mur
+    etatannonce: 1
+    categoriemetier: 0
+    souscategoriemetier: Installation électrique
+    nbconsultation: 0
+    typecontact: 0
+    typeTravaux: 0
+    demandeur_fk: 1001
+    adressechantier_id: 100
+    hashID: 88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21
+    selHashID: 5Whe5wlRCzzUhgFfRHFkIbtxRMyGrS1eaUntnp9SxEY=
+    notationannonce_id: 1021
+    entreprise_selectionnee_fk: 1003
+adresse:
+  - adresse: 106 chemin du pébron
+    id: 100
+    codepostal: "06700"
+    complementadresse: Res des pébrons
+    ville: Nice
+    departement: 6
+  - adresse: 106 chemin de lentreprise
+    id: 101
+    codepostal: "06700"
+    complementadresse: Res de l'artisan
+    ville: Nice
+    departement: 6 
+entreprise:
+  - id: 1003
+    nomComplet: Pebronne enterprise
+    statutJuridique: 0
+    datecreation: 2014-03-23 22:00:00.0
+    siret: 43394298400017
+    specialite: brique
+    nbemployees: 10
+    adresse_id: 101
+notation:
+  - id: 1020
+    score: 3
+    commentaire: Bon Travail
+    dateNotation: 2014-03-23 22:00:00.0
+    artisan_fk: 1003
+  - id: 1021
+    score: 5
+    commentaire: Excellent
+    dateNotation: 2014-03-23 21:00:00.0
+    artisan_fk: 1003

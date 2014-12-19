@@ -20,6 +20,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.LazyToOne;
+import org.hibernate.annotations.LazyToOneOption;
+
 import fr.batimen.core.constant.QueryJPQL;
 import fr.batimen.dto.enums.Civilite;
 
@@ -55,16 +58,20 @@ public class Artisan extends AbstractUser implements Serializable {
 
     @OneToMany(mappedBy = "artisan", targetEntity = Notation.class, cascade = CascadeType.REMOVE)
     private List<Notation> scoreGlobal = new ArrayList<Notation>();
-    @OneToOne(cascade = CascadeType.REMOVE)
+    @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @LazyToOne(LazyToOneOption.NO_PROXY)
     private Entreprise entreprise;
     @OneToMany(mappedBy = "artisan",
             targetEntity = Permission.class,
             cascade = CascadeType.REMOVE,
             fetch = FetchType.EAGER)
     private List<Permission> permissions = new ArrayList<Permission>();
-    @OneToMany(mappedBy = "artisanNotifier", targetEntity = Notification.class, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "artisanNotifier",
+            targetEntity = Notification.class,
+            cascade = CascadeType.REMOVE,
+            fetch = FetchType.LAZY)
     private final List<Notification> notifications = new ArrayList<Notification>();
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "annonce_artisan")
     private final List<Annonce> annonces = new ArrayList<Annonce>();
 

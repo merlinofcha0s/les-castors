@@ -9,6 +9,7 @@ import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -18,6 +19,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
+
+import org.hibernate.annotations.LazyToOne;
+import org.hibernate.annotations.LazyToOneOption;
 
 import fr.batimen.core.constant.QueryJPQL;
 import fr.batimen.dto.enums.StatutJuridique;
@@ -30,8 +34,11 @@ import fr.batimen.dto.enums.StatutJuridique;
  */
 @Entity
 @Table(name = "Entreprise")
-@NamedQueries(value = { @NamedQuery(name = QueryJPQL.ENTREPRISE_BY_SIRET,
-        query = "SELECT ent FROM Entreprise AS ent WHERE ent.siret = :siret") })
+@NamedQueries(value = {
+        @NamedQuery(name = QueryJPQL.ENTREPRISE_BY_SIRET,
+                query = "SELECT ent FROM Entreprise AS ent WHERE ent.siret = :siret"),
+        @NamedQuery(name = QueryJPQL.ENTREPRISE_BY_ARTISAN,
+                query = "SELECT ent FROM Entreprise AS ent WHERE ent.artisan.login = :login"), })
 public class Entreprise extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = 8234078910852637284L;
@@ -54,13 +61,23 @@ public class Entreprise extends AbstractEntity implements Serializable {
     private String logo;
     @Column(length = 50, nullable = true)
     private String specialite;
-    @OneToOne(mappedBy = "entreprise", cascade = CascadeType.REMOVE)
+    @OneToOne(mappedBy = "entreprise", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @LazyToOne(LazyToOneOption.NO_PROXY)
     private Artisan artisan;
-    @OneToOne(cascade = CascadeType.REMOVE)
+    @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private Paiement paiement;
-    @OneToOne(cascade = CascadeType.REMOVE)
+    @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @LazyToOne(LazyToOneOption.NO_PROXY)
     private Adresse adresse;
-    @OneToMany(mappedBy = "entreprise", targetEntity = CategorieMetier.class, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "entrepriseSelectionnee",
+            targetEntity = Annonce.class,
+            cascade = CascadeType.REMOVE,
+            fetch = FetchType.LAZY)
+    private List<Annonce> annonceEntrepriseSelecionnee;
+    @OneToMany(mappedBy = "entreprise",
+            targetEntity = CategorieMetier.class,
+            cascade = CascadeType.REMOVE,
+            fetch = FetchType.LAZY)
     private List<CategorieMetier> categoriesMetier = new ArrayList<CategorieMetier>();
 
     /**
@@ -241,6 +258,21 @@ public class Entreprise extends AbstractEntity implements Serializable {
      */
     public void setSpecialite(String specialite) {
         this.specialite = specialite;
+    }
+
+    /**
+     * @return the annonceEntrepriseSelecionnee
+     */
+    public List<Annonce> getAnnonceEntrepriseSelecionnee() {
+        return annonceEntrepriseSelecionnee;
+    }
+
+    /**
+     * @param annonceEntrepriseSelecionnee
+     *            the annonceEntrepriseSelecionnee to set
+     */
+    public void setAnnonceEntrepriseSelecionnee(List<Annonce> annonceEntrepriseSelecionnee) {
+        this.annonceEntrepriseSelecionnee = annonceEntrepriseSelecionnee;
     }
 
     /*

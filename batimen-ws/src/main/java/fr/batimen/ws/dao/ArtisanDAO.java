@@ -43,7 +43,7 @@ public class ArtisanDAO extends AbstractDAO<Artisan> {
      * @param email
      * @return
      */
-    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public Artisan getArtisanByEmail(String email) {
 
         Artisan artisanTrouve = null;

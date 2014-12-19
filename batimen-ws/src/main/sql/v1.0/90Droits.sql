@@ -3,7 +3,6 @@ GRANT USAGE ON SCHEMA public TO batimen_usr;
 
 --- Sur les sequences ---
 GRANT USAGE,SELECT,UPDATE ON 
-public.hibernate_sequence,
 public.annonce_id_seq,
 public.adresse_id_seq,
 public.artisan_id_seq,

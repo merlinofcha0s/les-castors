@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.batimen.core.constant.QueryJPQL;
+import fr.batimen.dto.helper.DeserializeJsonHelper;
 import fr.batimen.ws.entity.Entreprise;
 
 /**
@@ -57,6 +58,43 @@ public class EntrepriseDAO extends AbstractDAO<Entreprise> {
 
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Récuperation resultat requete JPQL entreprise by siret OK ");
+            }
+
+            return entrepriseTrouvee;
+        } catch (NoResultException nre) {
+            if (LOGGER.isWarnEnabled()) {
+                LOGGER.warn("Aucune correspondance trouvées dans la BDD", nre);
+            }
+            return new Entreprise();
+        }
+    }
+
+    /**
+     * Récupération d'une entreprise grace au login de l'artisan <br/>
+     * 
+     * @param login
+     *            Identifiant de l'artisan
+     * @return
+     */
+    public Entreprise getEntrepriseByArtisan(String login) {
+
+        String loginEscaped = DeserializeJsonHelper.parseString(login);
+
+        Entreprise entrepriseTrouvee = null;
+
+        try {
+            TypedQuery<Entreprise> query = entityManager.createNamedQuery(QueryJPQL.ENTREPRISE_BY_ARTISAN,
+                    Entreprise.class);
+            query.setParameter(QueryJPQL.PARAM_CLIENT_LOGIN, loginEscaped);
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Chargement requete JPQL entreprise by login OK ");
+            }
+
+            entrepriseTrouvee = query.getSingleResult();
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Récuperation resultat requete JPQL entreprise by login OK ");
             }
 
             return entrepriseTrouvee;

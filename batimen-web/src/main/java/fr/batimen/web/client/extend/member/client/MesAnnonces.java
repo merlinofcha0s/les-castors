@@ -15,12 +15,13 @@ import org.slf4j.LoggerFactory;
 
 import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.NotificationDTO;
-import fr.batimen.dto.aggregate.MesAnnoncesPageDTO;
+import fr.batimen.dto.aggregate.MesAnnoncesDTO;
 import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.web.app.security.Authentication;
+import fr.batimen.web.client.component.Commentaire;
 import fr.batimen.web.client.component.ContactezNous;
 import fr.batimen.web.client.component.LinkLabel;
-import fr.batimen.web.client.extend.Contact;
+import fr.batimen.web.client.component.Profil;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.ws.client.service.ClientsService;
 
@@ -48,7 +49,6 @@ public final class MesAnnonces extends MasterPage {
             LOGGER.debug("Init de la page mes annonces");
         }
 
-        initLink();
         initStaticComposant();
         getMesInfosForPage();
         initRepeaterNotifications();
@@ -62,26 +62,12 @@ public final class MesAnnonces extends MasterPage {
             LOGGER.debug("Init des composants statiques");
         }
 
+        Profil profil = new Profil("profil");
         ContactezNous contactezNous = new ContactezNous("contactezNous");
+        Commentaire commentaire = new Commentaire("commentaire");
+        this.add(profil);
+        this.add(commentaire);
         this.add(contactezNous);
-    }
-
-    private void initLink() {
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Init des liens de la page mes annonces");
-        }
-
-        Link<Void> contactLink = new Link<Void>("contact") {
-
-            private static final long serialVersionUID = 9041719967383711900L;
-
-            @Override
-            public void onClick() {
-                this.setResponsePage(Contact.class);
-            }
-        };
-        this.add(contactLink);
     }
 
     private void initRepeaterNotifications() {
@@ -163,8 +149,13 @@ public final class MesAnnonces extends MasterPage {
             protected void populateItem(ListItem<AnnonceDTO> item) {
                 AnnonceDTO annonce = item.getModelObject();
 
-                StringBuilder descriptionCutting = new StringBuilder(annonce.getDescription().substring(0, 30));
-                descriptionCutting.append("...");
+                StringBuilder descriptionCutting = new StringBuilder();
+                if (annonce.getDescription().length() > 30) {
+                    descriptionCutting.append(annonce.getDescription().substring(0, 30));
+                    descriptionCutting.append("...");
+                } else {
+                    descriptionCutting.append(annonce.getDescription());
+                }
 
                 WebMarkupContainer iconCategorie = new WebMarkupContainer("iconCategorie");
                 StringBuilder classCssIcon = new StringBuilder("iconsMesDevis");
@@ -210,8 +201,7 @@ public final class MesAnnonces extends MasterPage {
 
         Authentication authentication = new Authentication();
 
-        MesAnnoncesPageDTO mesInfos = ClientsService.getMesInfosAnnoncePage(authentication.getCurrentUserInfo()
-                .getLogin());
+        MesAnnoncesDTO mesInfos = ClientsService.getMesInfosAnnonce(authentication.getCurrentUserInfo().getLogin());
 
         annonces = mesInfos.getAnnonces();
         notifications = mesInfos.getNotifications();

@@ -9,6 +9,7 @@ import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -22,6 +23,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
+
+import org.hibernate.annotations.LazyToOne;
+import org.hibernate.annotations.LazyToOneOption;
 
 import fr.batimen.core.constant.QueryJPQL;
 import fr.batimen.dto.enums.DelaiIntervention;
@@ -44,7 +48,9 @@ import fr.batimen.dto.enums.TypeTravaux;
         @NamedQuery(name = QueryJPQL.ANNONCE_BY_LOGIN_FETCH_ARTISAN,
                 query = "SELECT a.categorieMetier, a.description, a.etatAnnonce, count(art) FROM Annonce AS a LEFT OUTER JOIN a.artisans AS art WHERE a.demandeur.login = :login GROUP BY a ORDER BY dateCreation ASC"),
         @NamedQuery(name = QueryJPQL.ANNONCE_BY_TITLE_AND_DESCRIPTION,
-                query = "SELECT a FROM Annonce AS a WHERE a.description = :description AND a.demandeur.login = :login") })
+                query = "SELECT a FROM Annonce AS a WHERE a.description = :description AND a.demandeur.login = :login"),
+        @NamedQuery(name = QueryJPQL.NB_ANNONCE_BY_LOGIN,
+                query = "SELECT count(a) FROM Annonce AS a WHERE a.demandeur.login = :login") })
 public class Annonce extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = 3160372354800747789L;
@@ -78,17 +84,25 @@ public class Annonce extends AbstractEntity implements Serializable {
     private String selHashID;
     @Column(nullable = false)
     private TypeTravaux typeTravaux;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "entreprise_selectionnee_fk")
+    private Entreprise entrepriseSelectionnee;
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "demandeur_fk")
     private Client demandeur;
-    @OneToOne(cascade = CascadeType.REMOVE)
+    @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @LazyToOne(LazyToOneOption.NO_PROXY)
     private Notation notationAnnonce;
-    @OneToOne(cascade = CascadeType.REMOVE)
+    @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @LazyToOne(LazyToOneOption.NO_PROXY)
     private Adresse adresseChantier;
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name = "annonce_artisan")
     private List<Artisan> artisans = new ArrayList<Artisan>();
-    @OneToMany(mappedBy = "annonce", targetEntity = Notification.class, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "annonce",
+            targetEntity = Notification.class,
+            cascade = CascadeType.REMOVE,
+            fetch = FetchType.LAZY)
     private List<Notification> notifications = new ArrayList<Notification>();
 
     /**
@@ -374,6 +388,21 @@ public class Annonce extends AbstractEntity implements Serializable {
      */
     public void setSelHashID(String selHashID) {
         this.selHashID = selHashID;
+    }
+
+    /**
+     * @return the entrepriseSelectionnee
+     */
+    public Entreprise getEntrepriseSelectionnee() {
+        return entrepriseSelectionnee;
+    }
+
+    /**
+     * @param entrepriseSelectionnee
+     *            the entrepriseSelectionnee to set
+     */
+    public void setEntrepriseSelectionnee(Entreprise entrepriseSelectionnee) {
+        this.entrepriseSelectionnee = entrepriseSelectionnee;
     }
 
     /*

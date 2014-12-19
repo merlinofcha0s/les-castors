@@ -7,6 +7,7 @@ import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -37,9 +38,9 @@ public class Paiement extends AbstractEntity implements Serializable {
     private Date dateExpiration;
     @Column(length = 255, nullable = false)
     private String codeSecurite;
-    @OneToOne(mappedBy = "paiement", cascade = CascadeType.REMOVE)
+    @OneToOne(mappedBy = "paiement", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private Entreprise entreprise;
-    @OneToOne(cascade = CascadeType.REMOVE)
+    @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private Adresse adresseFacturation;
 
     /**

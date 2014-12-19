@@ -40,4 +40,5 @@ public class WsPath {
     // Path Gestion client
     public static final String GESTION_CLIENT_SERVICE_PATH = "gestionClient";
     public static final String GESTION_CLIENT_SERVICE_INFOS_MES_ANNONCES = "getInfoForMesAnnoncesByLogin";
+    public static final String GESTION_CLIENT_SERVICE_INFOS_MON_PROFIL = "getInfoForMonProfil";
 }

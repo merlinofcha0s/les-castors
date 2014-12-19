@@ -20,7 +20,9 @@ import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.test.ws.AbstractBatimenWsTest;
 import fr.batimen.ws.client.service.ArtisanService;
+import fr.batimen.ws.dao.AdresseDAO;
 import fr.batimen.ws.dao.ArtisanDAO;
+import fr.batimen.ws.dao.EntrepriseDAO;
 import fr.batimen.ws.entity.Adresse;
 import fr.batimen.ws.entity.Artisan;
 import fr.batimen.ws.entity.Entreprise;
@@ -30,6 +32,12 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
 
     @Inject
     private ArtisanDAO artisanDAO;
+
+    @Inject
+    private EntrepriseDAO entrepriseDAO;
+
+    @Inject
+    private AdresseDAO adresseDAO;
 
     @Test
     public void nouveauPartenaireTestNominal() {
@@ -78,7 +86,7 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
         Assert.assertNotNull(artisanEnregistre);
         Assert.assertEquals("plombier@tuyaux.com", artisanEnregistre.getEmail());
 
-        Entreprise entreprise = artisanEnregistre.getEntreprise();
+        Entreprise entreprise = entrepriseDAO.getEntrepriseByArtisan(artisanEnregistre.getLogin());
         Assert.assertNotNull(entreprise);
         Assert.assertEquals("Entreprise de la plomberie", entreprise.getNomComplet());
 

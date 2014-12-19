@@ -141,7 +141,7 @@ public class GestionAnnonceFacade {
         // On escape les ""
         String loginEscaped = DeserializeJsonHelper.parseString(login);
         // On recupere les annonces de l'utilisateur
-        List<Object[]> queryAnnoncesResult = annonceDAO.getAnnoncesByLoginForAnnoncePage(loginEscaped);
+        List<Object[]> queryAnnoncesResult = annonceDAO.getAnnoncesByLoginForMesAnnonces(loginEscaped);
         // On crée la liste qui accueuillera les DTO
         List<AnnonceDTO> annoncesDTO = new ArrayList<AnnonceDTO>();
 

@@ -1,17 +1,6 @@
 <wicket:extend>
 	<div class="row-fluid">
-		<div
-			class="span2"
-			id="divInfoClientContenant">
-			<div id="divInfoClientContenu">
-				<img
-					width="80"
-					src="img/person.png" />
-				<div>
-					<a href="#">Voir le profil</a><br /> <a href="#">Modifier le profil</a>
-				</div>
-			</div>
-		</div>
+		<div wicket:id="profil"></div>
 		<div class="span10">
 			<div>
 				<div
@@ -78,35 +67,7 @@
 			</div>
 		</div>
 	</div>
-	<div
-		class="module_line_trigger promoMesDevis"
-		data-option="hasShadow"
-		data-background="#e1e1e1 url(img/bg_pattern1.png) repeat 0 0"
-		data-top-padding="top_padding_medium"
-		data-bottom-padding="module_normal_padding">
-		<div class="row-fluid">
-			<div class="span12 module_cont module_promo_text">
-				<div class="shortcode_promoblock ">
-					<div class="row-fluid">
-						<div class="span9 promo_text_block">
-							<h1>Un commentaire ? Votre avis nous intéresse</h1>
-						</div>
-						<div class="span3 promo_button_block">
-							<a
-								wicket:id="contact"
-								class="btn btn-info"
-								id="btnDonnezAvis">Donnez votre avis</a>
-						</div>
-					</div>
-				</div>
-			</div>
-			<!--.module_cont -->
-			<div class="clear">
-				<!-- ClearFIX -->
-			</div>
-		</div>
-		<!-- .row-fluid -->
-	</div>
+	<div wicket:id="commentaire"></div>
 	<div wicket:id="contactezNous"></div>
 	<!-- .module_line_trigger -->
 </wicket:extend>

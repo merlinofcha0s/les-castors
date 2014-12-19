@@ -49,4 +49,7 @@ public class ValidatorConstant {
     public static final int ENTREPRISE_NOM_COMPLET_MAX = 30;
     public static final String ENTREPRISE_SIRET_REGEXP = "^([0-9]{14})$";
 
+    // NotationDTO
+    public static final int NOTATION_MAX_COMMENTAIRE = 500;
+
 }

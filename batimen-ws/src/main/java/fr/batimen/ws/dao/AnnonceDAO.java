@@ -39,7 +39,7 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
      * @return Liste d'annonces appartenant à l'utilisateur.
      */
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public List<Object[]> getAnnoncesByLoginForAnnoncePage(String login) {
+    public List<Object[]> getAnnoncesByLoginForMesAnnonces(String login) {
 
         List<Object[]> listAnnonceByLogin = null;
 
@@ -181,5 +181,28 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Fin persistence d'une nouvelle annonce......OK");
         }
+    }
+
+    /**
+     * Calcul le nb d'annonce qu'un client a postés
+     * 
+     * @param login
+     *            le login du client
+     * @return Le nb d'annonce
+     */
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Long getNbAnnonceByLogin(String login) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Debut comptage du nb d'annonce");
+        }
+
+        TypedQuery<Long> query = entityManager.createNamedQuery(QueryJPQL.NB_ANNONCE_BY_LOGIN, Long.class);
+        query.setParameter(QueryJPQL.PARAM_CLIENT_LOGIN, login);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Fin comptage du nb d'annonce");
+        }
+
+        return query.getSingleResult();
     }
 }
