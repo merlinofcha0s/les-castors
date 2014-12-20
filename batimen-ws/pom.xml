@@ -440,7 +440,7 @@
 				<!-- Logs -->
 				<logs.address>/usr/share/log-batimen</logs.address>
 				<logs.archives>${logs.address}/archived</logs.archives>
-				<logs.lvl>WARN</logs.lvl>
+				<logs.lvl>DEBUG</logs.lvl>
 
 				<!-- Logs pour les tests -->
 				<logs.test.address>/usr/share/log-test-batimen</logs.test.address>
