@@ -71,7 +71,7 @@
 		<location>/404</location>
 	</error-page>
 
-	<listener>
+	<!--  <listener>
 		<listener-class>fr.batimen.web.app.context.LogBackContextListener</listener-class>
-	</listener>
+	</listener> -->
 </web-app>
