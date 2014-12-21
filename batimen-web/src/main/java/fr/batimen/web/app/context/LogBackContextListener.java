@@ -22,39 +22,39 @@ import ch.qos.logback.core.util.StatusPrinter;
  */
 public class LogBackContextListener implements ServletContextListener {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(LogBackContextListener.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LogBackContextListener.class);
 
-	@Override
-	public void contextDestroyed(ServletContextEvent arg0) {
-	}
+    @Override
+    public void contextDestroyed(ServletContextEvent arg0) {
+    }
 
-	@Override
-	public void contextInitialized(ServletContextEvent arg0) {
-		// Initialisation des logs (on force logback a trouvé le fichier de
-		// config
-		LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
-		JoranConfigurator jc = new JoranConfigurator();
-		jc.setContext(context);
-		context.reset();
-		// override default configuration
-		// inject the name of the current application as "application-name"
-		// property of the LoggerContext
-		context.putProperty("application-name", "batimen");
-		try {
-			InputStream is = getClass().getClassLoader().getResourceAsStream("logback.xml");
-			if (is == null) {
-				if (LOGGER.isErrorEnabled()) {
-					LOGGER.error("Logback xml file finded");
-				}
+    @Override
+    public void contextInitialized(ServletContextEvent arg0) {
+        // Initialisation des logs (on force logback a trouvé le fichier de
+        // config
+        LoggerContext context = (LoggerContext) LoggerFactory.getILoggerFactory();
+        JoranConfigurator jc = new JoranConfigurator();
+        jc.setContext(context);
+        context.reset();
+        // override default configuration
+        // inject the name of the current application as "application-name"
+        // property of the LoggerContext
+        context.putProperty("application-name", "batimen-web");
+        try {
+            InputStream is = getClass().getClassLoader().getResourceAsStream("logback.xml");
+            if (is == null) {
+                if (LOGGER.isErrorEnabled()) {
+                    LOGGER.error("Logback xml file finded");
+                }
 
-			} else {
-				jc.doConfigure(is);
-			}
-		} catch (JoranException ex) {
-			if (LOGGER.isErrorEnabled()) {
-				LOGGER.error("Logback contextInitialized error", ex);
-			}
-			StatusPrinter.print(context);
-		}
-	}
+            } else {
+                jc.doConfigure(is);
+            }
+        } catch (JoranException ex) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Logback contextInitialized error", ex);
+            }
+            StatusPrinter.print(context);
+        }
+    }
 }

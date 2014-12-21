@@ -1,8 +1,10 @@
 <configuration scan="true" debug="true">
-	<contextName>batimenContext</contextName>
+	<contextName>batimenWebContext</contextName>
 
 	<logger name="org.dbunit" level="WARN" />
-
+	
+	<property name="LOGS_FOLDER" value="${logs.address}" />
+	<property name="LOGS_TO_COLLECT_FOLDER" value="${logs.archives}" />
 
 	<!-- Permet d'avoir les logs dans la console d'eclipse et glassfish (a degager 
 		en prod) -->

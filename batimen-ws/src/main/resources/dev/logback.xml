@@ -1,5 +1,5 @@
 <configuration debug="true">
-	<contextName>batimenContext</contextName>
+	<contextName>batimenWSContext</contextName>
 
 	<!-- Permet d'avoir les logs dans la console d'eclipse et glassfish (a degager 
 		en prod) -->

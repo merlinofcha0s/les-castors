@@ -45,7 +45,11 @@ public abstract class AbstractBatimenWsTest {
                                         "org.hibernate:hibernate-entitymanager:4.2.15.Final",
                                         "com.sun.jersey:jersey-server:1.18.1", "com.sun.jersey:jersey-servlet:1.18.1",
                                         "com.sun.jersey:jersey-json:1.18.1", "org.modelmapper:modelmapper:0.7.1",
-                                        "com.mandrillapp.wrapper.lutung:lutung:0.0.5").withTransitivity().asFile());
+                                        "com.mandrillapp.wrapper.lutung:lutung:0.0.5").withTransitivity().asFile())
+                .addAsLibraries(
+                        resolver.loadPomFromFile("pom.xml")
+                                .resolve("ch.qos.logback:logback-classic:1.1.2", "ch.qos.logback:logback-access:1.1.2",
+                                        "ch.qos.logback:logback-core:1.1.2").withoutTransitivity().asFile());
 
         // Ajout des ressources
         batimenWsTest.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")

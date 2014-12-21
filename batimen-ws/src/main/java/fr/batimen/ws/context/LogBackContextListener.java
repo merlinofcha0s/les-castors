@@ -41,7 +41,7 @@ public class LogBackContextListener implements ServletContextListener {
         // override default configuration
         // inject the name of the current application as "application-name"
         // property of the LoggerContext
-        context.putProperty("application-name", "batimen");
+        context.putProperty("application-name", "batimen-ws");
         try {
             InputStream is = getClass().getClassLoader().getResourceAsStream("logback.xml");
             if (is == null) {
