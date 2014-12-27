@@ -69,13 +69,13 @@ adresse:
     codepostal: "06700"
     complementadresse: Res de l'artisan
     ville: Nice
-    departement: 6 
-    - adresse: 106 chemin de lentreprise
+    departement: 6
+  - adresse: 2010 chemin de lentreprise
     id: 102
-    codepostal: "06700"
-    complementadresse: Res de l'artisan
+    codepostal: "06800"
+    complementadresse: Residence de l'artisan
     ville: Nice
-    departement: 6 
+    departement: 6
 entreprise:
   - id: 1003
     nomComplet: Pebronne enterprise
