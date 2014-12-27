@@ -185,17 +185,11 @@ public class WsConnector {
         }
 
         SSLContext context = null;
-        try {
-            context = SSLContext.getInstance("SSLv3");
-        } catch (NoSuchAlgorithmException e) {
-            if (LOGGER.isErrorEnabled()) {
-                LOGGER.error("Algorithme SSL introuvable", e);
-            }
-        }
 
         // On initialise le context avec le bon trust manager qui activera ou
         // non la verification du certificat.
         try {
+            context = SSLContext.getInstance("SSLv3");
             context.init(null, TrustManagerSingleton.getTrustedCertificate(), TrustManagerSingleton.secureRandomOrNot());
 
             HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
@@ -221,6 +215,11 @@ public class WsConnector {
         } catch (KeyManagementException e) {
             if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("Problème de chargement de certificat", e);
+            }
+            return null;
+        } catch (NoSuchAlgorithmException e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Algorithme SSL introuvable", e);
             }
             return null;
         }
