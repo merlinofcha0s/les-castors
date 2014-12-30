@@ -46,6 +46,7 @@ public class Constant {
     public static final String ACTIVATION_URL = "/activation";
     public static final String PARTENAIRE_URL = "/nouveaupartenaire";
     public static final String MON_PROFIL_URL = "/profil";
+    public static final String MODIFIER_MON_PROFIL = "/modifiermonprofil";
 
     // Email
     public static final String EMAIL_CASTOR_NOTIF = "notifications@lescastors.fr";

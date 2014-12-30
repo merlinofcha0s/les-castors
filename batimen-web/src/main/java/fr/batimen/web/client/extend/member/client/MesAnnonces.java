@@ -43,7 +43,7 @@ public final class MesAnnonces extends MasterPage {
     private List<NotificationDTO> notifications;
 
     public MesAnnonces() {
-        super("Page accueil de batimen", "lol", "Bienvenue sur lescastors.fr", true, "img/bg_title1.jpg");
+        super("Mes annonces ", "lol", "Bienvenue sur lescastors.fr", true, "img/bg_title1.jpg");
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Init de la page mes annonces");

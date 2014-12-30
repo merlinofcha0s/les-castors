@@ -45,6 +45,8 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
     private final TextField<String> numeroTelField;
     private final TextField<String> emailField;
     private final TextField<String> loginField;
+    private AjaxSubmitLink validateInscription;
+    private final String idValidateInscription = "validateInscription";
 
     public Etape4InscriptionForm(String id, IModel<CreationAnnonceDTO> model) {
         super(id, model);
@@ -52,8 +54,6 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
         this.setMarkupId("formEtape4");
 
         nouvelleAnnonce = model.getObject();
-
-        String idValidateInscription = "validateInscription";
 
         nomField = new TextField<String>("client.nom");
         nomField.setMarkupId("nom");
@@ -123,7 +123,7 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
 
         cguLink.setMarkupId("cguLink");
 
-        AjaxSubmitLink validateInscription = new AjaxSubmitLink(idValidateInscription) {
+        validateInscription = new AjaxSubmitLink(idValidateInscription) {
 
             private static final long serialVersionUID = 6200004097590331163L;
 
@@ -213,6 +213,21 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
      */
     public TextField<String> getLoginField() {
         return loginField;
+    }
+
+    /**
+     * @param validateInscription
+     *            the validateInscription to set
+     */
+    public void setValidateInscription(AjaxSubmitLink validateInscription) {
+        this.validateInscription = validateInscription;
+    }
+
+    /**
+     * @return the idValidateInscription
+     */
+    public String getIdValidateInscription() {
+        return idValidateInscription;
     }
 
 }
