@@ -100,7 +100,8 @@ public class NouveauDevis extends MasterPage {
         containerInscription = new WebMarkupContainer("containerInscription");
         containerInscription.setVisible(false);
 
-        etape4InscriptionForm = new Etape4InscriptionForm("formInscription", propertyModelNouvelleAnnonce);
+        etape4InscriptionForm = new Etape4InscriptionForm("formInscription", propertyModelNouvelleAnnonce,
+                Boolean.FALSE);
 
         AjaxLink<String> connexionLink = new AjaxLink<String>("connexion") {
 

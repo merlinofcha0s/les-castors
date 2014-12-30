@@ -54,6 +54,15 @@
 								id="login"
 								value="" /></td>
 						</tr>
+						<tr wicket:id="oldPasswordContainer">
+							<th>Ancien mot de passe :</th>
+							<td><input
+								wicket:id="client.oldPassword"
+								type="password"
+								name="oldpassword"
+								id="oldpassword"
+								value="" /></td>
+						</tr>
 						<tr>
 							<th>Mot de passe :</th>
 							<td><input
@@ -72,7 +81,7 @@
 								id="confirmPassword"
 								value="" /></td>
 						</tr>
-						<tr>
+						<tr wicket:id="CGUContainer">
 							<th>J'accepte les <a
 								wicket:id="cguLink"
 								target="_blank">CGU</a></th>

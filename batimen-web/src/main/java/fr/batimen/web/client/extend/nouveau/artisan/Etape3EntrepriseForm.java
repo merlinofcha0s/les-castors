@@ -27,8 +27,8 @@ import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.batimen.web.client.component.CastorDatePicker;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.web.client.extend.nouveau.artisan.event.ChangementEtapeEventArtisan;
-import fr.batimen.web.client.extend.nouveau.artisan.validator.SiretValidator;
 import fr.batimen.web.client.master.MasterPage;
+import fr.batimen.web.client.validator.SiretValidator;
 
 /**
  * Form de l'etape 3 permettant au nouvel artisan de renseigner les informayions

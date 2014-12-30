@@ -3,6 +3,7 @@ package fr.batimen.web.client.extend.nouveau.devis;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.event.Broadcast;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
@@ -23,6 +24,7 @@ import fr.batimen.web.client.component.BatimenToolTip;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.web.client.extend.CGU;
 import fr.batimen.web.client.extend.nouveau.devis.event.ChangementEtapeClientEvent;
+import fr.batimen.web.client.validator.ChangePasswordValidator;
 import fr.batimen.web.client.validator.CheckBoxTrueValidator;
 import fr.batimen.web.client.validator.EmailUniquenessValidator;
 import fr.batimen.web.client.validator.LoginUniquenessValidator;
@@ -40,6 +42,8 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
     private final CreationAnnonceDTO nouvelleAnnonce;
 
     private final PasswordTextField passwordField;
+    private final PasswordTextField confirmPassword;
+    private final PasswordTextField oldPasswordField;
     private final TextField<String> nomField;
     private final TextField<String> prenomField;
     private final TextField<String> numeroTelField;
@@ -47,8 +51,10 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
     private final TextField<String> loginField;
     private AjaxSubmitLink validateInscription;
     private final String idValidateInscription = "validateInscription";
+    private WebMarkupContainer cguContainer;
+    private CheckBox cguConfirm;
 
-    public Etape4InscriptionForm(String id, IModel<CreationAnnonceDTO> model) {
+    public Etape4InscriptionForm(String id, IModel<CreationAnnonceDTO> model, final Boolean forModification) {
         super(id, model);
 
         this.setMarkupId("formEtape4");
@@ -89,27 +95,47 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
         loginField.add(new LoginUniquenessValidator());
 
         passwordField = new PasswordTextField("client.password");
-        passwordField.setMarkupId("password");
-        passwordField.setRequired(true);
-        passwordField.add(new RequiredBorderBehaviour());
-        passwordField.add(new ErrorHighlightBehavior());
         passwordField.add(StringValidator.lengthBetween(ValidatorConstant.PASSWORD_RANGE_MIN,
                 ValidatorConstant.PASSWORD_RANGE_MAX));
 
-        PasswordTextField confirmPassword = new PasswordTextField("confirmPassword", new Model<String>());
-        confirmPassword.setMarkupId("confirmPassword");
-        confirmPassword.setRequired(true);
-        confirmPassword.add(new RequiredBorderBehaviour());
-        confirmPassword.add(new ErrorHighlightBehavior());
+        confirmPassword = new PasswordTextField("confirmPassword", new Model<String>());
         confirmPassword.add(StringValidator.lengthBetween(ValidatorConstant.PASSWORD_RANGE_MIN,
                 ValidatorConstant.PASSWORD_RANGE_MAX));
 
+        oldPasswordField = new PasswordTextField("client.oldPassword");
+        oldPasswordField.add(StringValidator.lengthBetween(ValidatorConstant.PASSWORD_RANGE_MIN,
+                ValidatorConstant.PASSWORD_RANGE_MAX));
+
+        WebMarkupContainer oldPasswordContainer = new WebMarkupContainer("oldPasswordContainer") {
+
+            private static final long serialVersionUID = 7652901872189255854L;
+
+            /*
+             * (non-Javadoc)
+             * 
+             * @see org.apache.wicket.Component#isVisible()
+             */
+            @Override
+            public boolean isVisible() {
+                return forModification;
+            }
+
+        };
+
+        oldPasswordContainer.add(oldPasswordField);
+
         this.add(new EqualPasswordInputValidator(passwordField, confirmPassword));
 
-        CheckBox cguConfirm = new CheckBox("cguConfirmation", Model.of(Boolean.FALSE));
-        cguConfirm.setRequired(true);
-        cguConfirm.add(new CheckBoxTrueValidator());
-        cguConfirm.add(new RequiredBorderBehaviour());
+        cguContainer = new WebMarkupContainer("CGUContainer") {
+
+            private static final long serialVersionUID = 2137784015650154163L;
+
+            @Override
+            public boolean isVisible() {
+                return !forModification;
+            }
+
+        };
 
         Link<String> cguLink = new Link<String>("cguLink") {
 
@@ -122,6 +148,12 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
         };
 
         cguLink.setMarkupId("cguLink");
+        cguContainer.add(cguLink);
+
+        cguConfirm = new CheckBox("cguConfirmation", Model.of(Boolean.FALSE));
+        cguContainer.add(cguConfirm);
+
+        initChooser(forModification);
 
         validateInscription = new AjaxSubmitLink(idValidateInscription) {
 
@@ -167,10 +199,33 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
         this.add(loginField);
         this.add(passwordField);
         this.add(confirmPassword);
-        this.add(cguConfirm);
-        this.add(cguLink);
+        this.add(oldPasswordContainer);
+        this.add(cguContainer);
         this.add(validateInscription);
         this.add(BatimenToolTip.getTooltipBehaviour());
+    }
+
+    public void initChooser(final Boolean forModification) {
+
+        if (!forModification) {
+            cguConfirm.setRequired(true);
+            cguConfirm.add(new CheckBoxTrueValidator());
+            cguConfirm.add(new RequiredBorderBehaviour());
+            confirmPassword.setMarkupId("confirmPassword");
+            confirmPassword.setRequired(true);
+            confirmPassword.add(new RequiredBorderBehaviour());
+            confirmPassword.add(new ErrorHighlightBehavior());
+            passwordField.setMarkupId("password");
+            passwordField.setRequired(true);
+            passwordField.add(new RequiredBorderBehaviour());
+            passwordField.add(new ErrorHighlightBehavior());
+        } else {
+            passwordField.setRequired(Boolean.FALSE);
+            confirmPassword.setRequired(Boolean.FALSE);
+            oldPasswordField.setRequired(Boolean.FALSE);
+            this.add(new ChangePasswordValidator(oldPasswordField, passwordField, confirmPassword));
+        }
+
     }
 
     /**

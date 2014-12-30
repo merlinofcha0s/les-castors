@@ -1,4 +1,4 @@
-package fr.batimen.web.client.extend.nouveau.artisan.validator;
+package fr.batimen.web.client.validator;
 
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;

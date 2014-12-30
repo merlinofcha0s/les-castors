@@ -46,6 +46,8 @@ public class ClientDTO extends AbstractDTO {
     private String login;
     @Size(min = PASSWORD_RANGE_MIN, max = PASSWORD_RANGE_MAX)
     private String password;
+    @Size(min = PASSWORD_RANGE_MIN, max = PASSWORD_RANGE_MAX)
+    private String oldPassword;
     @Email
     @Size(max = 128)
     private String email;
@@ -201,6 +203,21 @@ public class ClientDTO extends AbstractDTO {
      */
     public List<PermissionDTO> getPermissions() {
         return permissions;
+    }
+
+    /**
+     * @return the oldPassword
+     */
+    public String getOldPassword() {
+        return oldPassword;
+    }
+
+    /**
+     * @param oldPassword
+     *            the oldPassword to set
+     */
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
     }
 
     @Override

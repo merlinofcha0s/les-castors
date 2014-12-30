@@ -33,7 +33,7 @@ public class ModifierMonProfil extends MasterPage {
         Profil profil = new Profil("profil");
 
         Etape4InscriptionForm inscriptionForm = new Etape4InscriptionForm("formInscription",
-                propertyModelNouvelleAnnonce);
+                propertyModelNouvelleAnnonce, Boolean.TRUE);
 
         this.add(profil);
         this.add(inscriptionForm);
