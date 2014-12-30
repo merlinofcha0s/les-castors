@@ -17,7 +17,7 @@
 	<packaging>war</packaging>
 
 	<properties>
-		<hibernate.version>4.2.15.Final</hibernate.version>
+		<hibernate.version>4.2.16.Final</hibernate.version>
 
 		<!-- Propriétés de la BDD pour les tests -->
 		<database.address>127.0.0.1</database.address>
@@ -311,11 +311,6 @@
 			<version>0.0.5</version>
 			<scope>compile</scope>
 		</dependency>
-		<dependency>
-			<groupId>commons-logging</groupId>
-			<artifactId>commons-logging</artifactId>
-			<version>1.2</version>
-		</dependency>
 
 		<!-- Security -->
 		<dependency>
@@ -328,14 +323,28 @@
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
-			<scope>provided</scope>
+			<scope>compile</scope>
 		</dependency>
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-access</artifactId>
-			<scope>provided</scope>
+			<scope>compile</scope>
 		</dependency>
-
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>log4j-over-slf4j</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>${slf4j.version}</version>
+		</dependency>
 		<!-- Dependence intra projet -->
 		<dependency>
 			<groupId>${project.groupId}</groupId>
@@ -440,7 +449,7 @@
 				<!-- Logs -->
 				<logs.address>/usr/share/log-batimen</logs.address>
 				<logs.archives>${logs.address}/archived</logs.archives>
-				<logs.lvl>WARN</logs.lvl>
+				<logs.lvl>DEBUG</logs.lvl>
 
 				<!-- Logs pour les tests -->
 				<logs.test.address>/usr/share/log-test-batimen</logs.test.address>
@@ -451,7 +460,7 @@
 				<hibernate.show_sql>false</hibernate.show_sql>
 				<hibernate.format_sql>false</hibernate.format_sql>
 				<hibernate.use_sql_comments>false</hibernate.use_sql_comments>
-				<hibernate.generate_statistics>true</hibernate.generate_statistics>
+				<hibernate.generate_statistics>false</hibernate.generate_statistics>
 
 				<!-- Config Arquillian -->
 				<glassfish.location>/usr/share/glassfish3</glassfish.location>

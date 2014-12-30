@@ -1,8 +1,10 @@
 <configuration scan="true" debug="true">
-	<contextName>batimenContext</contextName>
+	<contextName>batimenWebContext</contextName>
 
 	<logger name="org.dbunit" level="WARN" />
-
+	
+	<property name="LOGS_FOLDER" value="${logs.address}" />
+	<property name="LOGS_TO_COLLECT_FOLDER" value="${logs.archives}" />
 
 	<!-- Permet d'avoir les logs dans la console d'eclipse et glassfish (a degager 
 		en prod) -->
@@ -13,9 +15,25 @@
 			<pattern>%d{HH:mm:ss.SSS} %-5level %logger{36} - %msg%n</pattern>
 		</encoder>
 	</appender>
+	
+	<appender name="log-file"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOGS_FOLDER}/batimen_ws.log</file>
+		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+			<level>${logs.lvl}</level>
+		</filter>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOGS_TO_COLLECT_FOLDER}/batimen_ws.%d{yyyyMMdd}.log
+			</fileNamePattern>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{yyyy/MM/dd HH:mm:ss,SSS} %-5level %logger{36} - %m
+				%throwable{0}%n</pattern>
+		</encoder>
+	</appender>
 
-
-	<root level="DEBUG">
+	<root level="${logs.lvl}">
 		<appender-ref ref="stdout" />
+		<appender-ref ref="log-file" />
 	</root>
 </configuration>

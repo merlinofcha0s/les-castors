@@ -15,9 +15,9 @@
 		<servlet-name>batimen-ws-test</servlet-name>
 		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
-	<listener>
+	<!--  <listener>
 		<listener-class>fr.batimen.ws.context.LogBackContextListener</listener-class>
-	</listener>
+	</listener> -->
 	<security-constraint>
 		<display-name>BatimenSec</display-name>
 		<web-resource-collection>

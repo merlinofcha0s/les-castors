@@ -15,9 +15,6 @@
 		<servlet-name>${project.artifactId}</servlet-name>
 		<url-pattern>/*</url-pattern>
 	</servlet-mapping>
-	<listener>
-		<listener-class>fr.batimen.ws.context.LogBackContextListener</listener-class>
-	</listener>
 	<security-constraint>
 		<display-name>BatimenSec</display-name>
 		<web-resource-collection>

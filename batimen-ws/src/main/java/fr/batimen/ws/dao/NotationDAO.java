@@ -12,6 +12,9 @@ import javax.ejb.TransactionManagementType;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import fr.batimen.core.constant.QueryJPQL;
 import fr.batimen.ws.entity.Notation;
 
@@ -24,6 +27,8 @@ import fr.batimen.ws.entity.Notation;
 @LocalBean
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class NotationDAO extends AbstractDAO<Notation> {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(NotationDAO.class);
 
     /**
      * Recupere les notations pour un client via ces annonces par ordre
@@ -50,6 +55,9 @@ public class NotationDAO extends AbstractDAO<Notation> {
 
             notations = query.getResultList();
         } catch (NoResultException nre) {
+            if (LOGGER.isWarnEnabled()) {
+                LOGGER.warn("Pas de résultat sur la requète de notation", nre);
+            }
             return new ArrayList<Object[]>();
         }
 

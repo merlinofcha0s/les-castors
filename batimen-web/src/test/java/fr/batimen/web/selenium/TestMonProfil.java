@@ -9,6 +9,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.ninja_squad.dbsetup.DbSetup;
 import com.ninja_squad.dbsetup.operation.Operation;
@@ -16,6 +18,8 @@ import com.ninja_squad.dbsetup.operation.Operation;
 import fr.batimen.web.selenium.dataset.MesAnnoncesDataset;
 
 public class TestMonProfil extends AbstractITTest {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(TestMonProfil.class);
 
     @Override
     public void prepareDB() throws Exception {
@@ -43,11 +47,27 @@ public class TestMonProfil extends AbstractITTest {
 
         By voirProfil = By.linkText("Voir le profil");
 
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Fail to wait in testAccessToMonProfil", e);
+            }
+        }
+
         WebElement checkConditionVoirProfil = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.presenceOfElementLocated(voirProfil));
         assertNotNull(checkConditionVoirProfil);
 
         driver.findElement(voirProfil).click();
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Fail to wait in testAccessToMonProfil", e);
+            }
+        }
 
         WebElement checkConditionLoginPresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("#infoNomClient > h1")));

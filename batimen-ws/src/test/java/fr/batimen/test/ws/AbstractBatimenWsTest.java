@@ -33,19 +33,11 @@ public abstract class AbstractBatimenWsTest {
         WebArchive batimenWsTest = ShrinkWrap.create(WebArchive.class, "batimen-ws-test.war");
 
         // Ajout des dépendences
-        batimenWsTest
-                .addPackages(true, "fr/batimen/ws")
-                .addPackages(true, "fr/batimen/test/ws")
-                .addAsLibraries(
-                        resolver.loadPomFromFile("pom.xml")
-                                .resolve("fr.batimen.app:batimen-dto:0.3.0-SNAPSHOT",
-                                        "fr.batimen.app:batimen-core:0.3.0-SNAPSHOT",
-                                        "fr.batimen.app:batimen-client:0.3.0-SNAPSHOT",
-                                        "org.hibernate:hibernate-core:4.2.15.Final",
-                                        "org.hibernate:hibernate-entitymanager:4.2.15.Final",
-                                        "com.sun.jersey:jersey-server:1.18.1", "com.sun.jersey:jersey-servlet:1.18.1",
-                                        "com.sun.jersey:jersey-json:1.18.1", "org.modelmapper:modelmapper:0.7.1",
-                                        "com.mandrillapp.wrapper.lutung:lutung:0.0.5").withTransitivity().asFile());
+        batimenWsTest.addPackages(true, "fr/batimen/ws").addPackages(true, "fr/batimen/test/ws")
+                .addAsLibraries(resolver.loadPomFromFile("pom.xml").importCompileAndRuntimeDependencies()
+                // Seul dependence a specifier car elle ne fait pas partie du
+                // pom ws
+                        .resolve("fr.batimen.app:batimen-client").withTransitivity().asFile());
 
         // Ajout des ressources
         batimenWsTest.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
