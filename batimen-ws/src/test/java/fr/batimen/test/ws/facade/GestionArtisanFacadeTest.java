@@ -56,7 +56,7 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
         nouveauPartenaire.getArtisan().setLogin("plombier06");
         nouveauPartenaire.getArtisan().setNom("Dupont");
         nouveauPartenaire.getArtisan().setNumeroTel("0645789655");
-        nouveauPartenaire.getArtisan().setPassword(HashHelper.hashString("lolmdr06"));
+        nouveauPartenaire.getArtisan().setPassword(HashHelper.hashScrypt("lolmdr06"));
         nouveauPartenaire.getArtisan().setPrenom("David");
 
         PermissionDTO permissionDTO = new PermissionDTO();

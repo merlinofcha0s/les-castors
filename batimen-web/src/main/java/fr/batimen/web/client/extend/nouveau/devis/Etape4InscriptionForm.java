@@ -16,6 +16,7 @@ import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 
+import fr.batimen.core.constant.Constant;
 import fr.batimen.core.security.HashHelper;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.constant.ValidatorConstant;
@@ -30,6 +31,7 @@ import fr.batimen.web.client.validator.ChangePasswordValidator;
 import fr.batimen.web.client.validator.CheckBoxTrueValidator;
 import fr.batimen.web.client.validator.EmailUniquenessValidator;
 import fr.batimen.web.client.validator.LoginUniquenessValidator;
+import fr.batimen.ws.client.service.UtilisateurService;
 
 /**
  * Form de l'etape 4 de création d'annonce.
@@ -172,21 +174,40 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 if (forModification) {
-                    // TODO : Verifier le mot de passe, hasher le input equals
-                    // recup en session
-                    String oldPassword = nouvelleAnnonce.getClient().getOldPassword();
-                    String newPassword = nouvelleAnnonce.getClient().getPassword();
+                    // Si l'utilisateur veut modifier son mot de passe (pas
+                    // besoin de reverifier tout les champs, le validateur l'a
+                    // deja fait)
                     Authentication authentication = new Authentication();
-                    Boolean isPasswordMatch = HashHelper.check(oldPassword, authentication.getCurrentUserInfo()
-                            .getPassword());
-                    // TODO : SI c'est bon hash go to clientDTO
-                    if (isPasswordMatch) {
-                        nouvelleAnnonce.getClient().setPassword(HashHelper.hashString(newPassword));
+                    if (!passwordField.getInput().isEmpty()) {
+                        String oldPassword = nouvelleAnnonce.getClient().getOldPassword();
+                        String newPassword = nouvelleAnnonce.getClient().getPassword();
+                        Boolean isPasswordMatch = HashHelper.check(oldPassword, authentication.getCurrentUserInfo()
+                                .getPassword());
+                        // SI le password match avec le hash
+                        if (isPasswordMatch) {
+                            nouvelleAnnonce.getClient().setPassword(HashHelper.hashScrypt(newPassword));
+                        }
+                        // Si il ne veut pas changer son mot de passe on le set
+                        // pour eviter l'ecrasement de celui ci (pour model
+                        // mapper)
+                    } else {
+                        nouvelleAnnonce.getClient().setPassword(authentication.getCurrentUserInfo().getPassword());
                     }
 
-                    // TODO : Call ws service avec creationAnnonce.getClient()
-                    // TODO : Si tout est ok setter les infos du client dto dans
-                    // la session
+                    // Call ws service pour la mise a jour des données.
+                    Integer codeRetour = UtilisateurService.updateUtilisateurInfos(nouvelleAnnonce.getClient());
+
+                    if (codeRetour.equals(Constant.CODE_SERVICE_RETOUR_OK)) {
+                        // Si tout est ok setter les infos du client dto dans
+                        // la session
+                        authentication.setCurrentUserInfo(nouvelleAnnonce.getClient());
+                        success("Vos données ont bien été mises à jour");
+                    } else {
+                        error("Problème de mise à jour avec vos données, veuillez réessayer plus tard");
+                    }
+
+                    target.add(getForm());
+                    this.send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target));
                 } else {
                     nouvelleAnnonce.setNumeroEtape(5);
                     ChangementEtapeClientEvent changementEtapeEventClient = new ChangementEtapeClientEvent(target,

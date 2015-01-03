@@ -64,13 +64,18 @@ public class Authentication {
             LoginDTO loginDTO = new LoginDTO();
             loginDTO.setLogin(username);
             AuthenticatedWebSession.get().authenticate(username, "");
-            currentUser.getSession(true).setAttribute(CLIENT_KEY, UtilisateurService.login(loginDTO));
+            ClientDTO client = UtilisateurService.login(loginDTO);
+            currentUser.getSession(true).setAttribute(CLIENT_KEY, client);
         }
         return isOk;
     }
 
     public ClientDTO getCurrentUserInfo() {
         return (ClientDTO) currentUser.getSession().getAttribute(CLIENT_KEY);
+    }
+
+    public void setCurrentUserInfo(ClientDTO clientDTO) {
+        currentUser.getSession().setAttribute(CLIENT_KEY, clientDTO);
     }
 
 }

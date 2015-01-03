@@ -44,7 +44,7 @@ public class HashHelper {
      *            La chaine de caractere que l'on veut hasher
      * @return Le hash
      */
-    public static String hashString(String input) {
+    public static String hashScrypt(String input) {
         return SCryptUtil.scrypt(input, CPU_COST, MEMORY_COST, PARALLELIZATION_COST);
     }
 

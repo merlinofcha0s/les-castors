@@ -4,6 +4,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.client.component.Profil;
@@ -45,7 +46,9 @@ public class ModifierMonProfil extends MasterPage {
         // DTO mais on ne rempli que les informations du client
         CreationAnnonceDTO creationAnnonceDTO = new CreationAnnonceDTO();
         // Rempli avec le client dto présent en session.
-        creationAnnonceDTO.setClient(authentication.getCurrentUserInfo());
+        // TODO : Faire passer le mot de passe par le constructeur du composant
+        ClientDTO client = authentication.getCurrentUserInfo();
+        creationAnnonceDTO.setClient(client);
         propertyModelNouvelleAnnonce = new CompoundPropertyModel<CreationAnnonceDTO>(creationAnnonceDTO);
     }
 }

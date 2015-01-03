@@ -15,12 +15,13 @@ public class WsPath {
 
     // Path Gestion Utilisateur
     public static final String GESTION_UTILISATEUR_SERVICE_PATH = "gestionUtilisateur";
-    public static final String GESTION_UTILISATEUR_SERVICE_LOGIN = "login";
-    public static final String GESTION_UTILISATEUR_SERVICE_BY_EMAIL = "email";
+    public static final String GESTION_UTILISATEUR_SERVICE_LOGIN = "byLogin";
+    public static final String GESTION_UTILISATEUR_SERVICE_BY_EMAIL = "byEmail";
     public static final String GESTION_UTILISATEUR_SERVICE_ACTIVATION = "activation";
-    public static final String GESTION_UTILISATEUR_SERVICE_HASH = "hash";
-    public static final String GESTION_UTILISATEUR_SERVICE_ROLES = "roles";
-    public static final String GESTION_UTILISATEUR_SERVICE_NOTIFICATION = "getNotificationByLogin";
+    public static final String GESTION_UTILISATEUR_SERVICE_HASH = "byHash";
+    public static final String GESTION_UTILISATEUR_SERVICE_ROLES = "getRoles";
+    public static final String GESTION_UTILISATEUR_SERVICE_NOTIFICATION = "notificationByLogin";
+    public static final String GESTION_UTILISATEUR_SERVICE_UPDATE_INFO = "update";
 
     // public static final String GESTION_CLIENT_SERVICE_PATH = "gestionClient";
 
