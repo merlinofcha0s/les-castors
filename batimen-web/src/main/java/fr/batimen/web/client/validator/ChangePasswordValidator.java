@@ -12,6 +12,10 @@ public class ChangePasswordValidator extends AbstractFormValidator {
     /** form components to be checked. */
     private final FormComponent<?>[] components;
 
+    private final static String confirmePasswordKey = "ChangePasswordValidator.confirmeNewPassword";
+    private final static String oldPasswordKey = "ChangePasswordValidator.oldPassword";
+    private final static String newPasswordKey = "ChangePasswordValidator.newPassword";
+
     public ChangePasswordValidator(FormComponent<?> oldPassword, FormComponent<?> newPassword,
             FormComponent<?> confirmeNewPassword) {
 
@@ -36,27 +40,27 @@ public class ChangePasswordValidator extends AbstractFormValidator {
         if (!oldPassword.getInput().isEmpty()
                 && (newPassword.getInput().isEmpty() || confirmeNewPassword.getInput().isEmpty())) {
             if (newPassword.getInput().isEmpty()) {
-                error(newPassword);
+                error(newPassword, newPasswordKey);
             } else {
-                error(confirmeNewPassword);
+                error(confirmeNewPassword, confirmePasswordKey);
             }
 
         } else if (!newPassword.getInput().isEmpty()
                 && (oldPassword.getInput().isEmpty() || confirmeNewPassword.getInput().isEmpty())) {
             if (oldPassword.getInput().isEmpty()) {
-                error(oldPassword);
+                error(oldPassword, oldPasswordKey);
             } else {
-                error(confirmeNewPassword);
+                error(confirmeNewPassword, confirmePasswordKey);
             }
-            error(newPassword);
+            // error(newPassword, newPasswordKey);
         } else if (!confirmeNewPassword.getInput().isEmpty()
                 && (newPassword.getInput().isEmpty() || oldPassword.getInput().isEmpty())) {
             if (newPassword.getInput().isEmpty()) {
-                error(newPassword);
+                error(newPassword, newPasswordKey);
             } else {
-                error(oldPassword);
+                error(oldPassword, oldPasswordKey);
             }
-            error(confirmeNewPassword);
+            // error(confirmeNewPassword, confirmePasswordKey);
         }
     }
 }

@@ -41,7 +41,7 @@ public class ModifierMonProfil extends MasterPage {
 
     private void initData() {
         Authentication authentication = new Authentication();
-        // Pour les besoin du form etape 4 qu'on reutilise ici, on instancie sa
+        // Pour les besoins du form etape 4 qu'on reutilise ici, on instancie sa
         // DTO mais on ne rempli que les informations du client
         CreationAnnonceDTO creationAnnonceDTO = new CreationAnnonceDTO();
         // Rempli avec le client dto présent en session.

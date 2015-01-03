@@ -16,8 +16,10 @@ import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 
+import fr.batimen.core.security.HashHelper;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.constant.ValidatorConstant;
+import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.batimen.web.client.component.BatimenToolTip;
@@ -169,10 +171,29 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
              */
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                nouvelleAnnonce.setNumeroEtape(5);
-                ChangementEtapeClientEvent changementEtapeEventClient = new ChangementEtapeClientEvent(target,
-                        nouvelleAnnonce);
-                target.getPage().send(target.getPage(), Broadcast.BREADTH, changementEtapeEventClient);
+                if (forModification) {
+                    // TODO : Verifier le mot de passe, hasher le input equals
+                    // recup en session
+                    String oldPassword = nouvelleAnnonce.getClient().getOldPassword();
+                    String newPassword = nouvelleAnnonce.getClient().getPassword();
+                    Authentication authentication = new Authentication();
+                    Boolean isPasswordMatch = HashHelper.check(oldPassword, authentication.getCurrentUserInfo()
+                            .getPassword());
+                    // TODO : SI c'est bon hash go to clientDTO
+                    if (isPasswordMatch) {
+                        nouvelleAnnonce.getClient().setPassword(HashHelper.hashString(newPassword));
+                    }
+
+                    // TODO : Call ws service avec creationAnnonce.getClient()
+                    // TODO : Si tout est ok setter les infos du client dto dans
+                    // la session
+                } else {
+                    nouvelleAnnonce.setNumeroEtape(5);
+                    ChangementEtapeClientEvent changementEtapeEventClient = new ChangementEtapeClientEvent(target,
+                            nouvelleAnnonce);
+                    target.getPage().send(target.getPage(), Broadcast.BREADTH, changementEtapeEventClient);
+                }
+
             }
 
             /*

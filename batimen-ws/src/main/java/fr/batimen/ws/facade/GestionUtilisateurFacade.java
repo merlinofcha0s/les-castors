@@ -294,7 +294,6 @@ public class GestionUtilisateurFacade {
                 LOGGER.error("Type de compte : " + typeCompte);
             }
         }
-
         return notificationsDTO;
     }
 }
