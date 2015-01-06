@@ -15,6 +15,8 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.apache.wicket.validation.validator.StringValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.security.HashHelper;
@@ -26,6 +28,7 @@ import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.batimen.web.client.component.BatimenToolTip;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.web.client.extend.CGU;
+import fr.batimen.web.client.extend.member.client.ModifierMonProfil;
 import fr.batimen.web.client.extend.nouveau.devis.event.ChangementEtapeClientEvent;
 import fr.batimen.web.client.validator.ChangePasswordValidator;
 import fr.batimen.web.client.validator.CheckBoxTrueValidator;
@@ -42,6 +45,8 @@ import fr.batimen.ws.client.service.UtilisateurService;
 public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
 
     private static final long serialVersionUID = 2500892594731116597L;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ModifierMonProfil.class);
 
     private final CreationAnnonceDTO nouvelleAnnonce;
 
@@ -174,38 +179,7 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 if (forModification) {
-                    // Si l'utilisateur veut modifier son mot de passe (pas
-                    // besoin de reverifier tout les champs, le validateur l'a
-                    // deja fait)
-                    Authentication authentication = new Authentication();
-                    if (!passwordField.getInput().isEmpty()) {
-                        String oldPassword = nouvelleAnnonce.getClient().getOldPassword();
-                        String newPassword = nouvelleAnnonce.getClient().getPassword();
-                        Boolean isPasswordMatch = HashHelper.check(oldPassword, authentication.getCurrentUserInfo()
-                                .getPassword());
-                        // SI le password match avec le hash
-                        if (isPasswordMatch) {
-                            nouvelleAnnonce.getClient().setPassword(HashHelper.hashScrypt(newPassword));
-                        }
-                        // Si il ne veut pas changer son mot de passe on le set
-                        // pour eviter l'ecrasement de celui ci (pour model
-                        // mapper)
-                    } else {
-                        nouvelleAnnonce.getClient().setPassword(authentication.getCurrentUserInfo().getPassword());
-                    }
-
-                    // Call ws service pour la mise a jour des données.
-                    Integer codeRetour = UtilisateurService.updateUtilisateurInfos(nouvelleAnnonce.getClient());
-
-                    if (codeRetour.equals(Constant.CODE_SERVICE_RETOUR_OK)) {
-                        // Si tout est ok setter les infos du client dto dans
-                        // la session
-                        authentication.setCurrentUserInfo(nouvelleAnnonce.getClient());
-                        success("Vos données ont bien été mises à jour");
-                    } else {
-                        error("Problème de mise à jour avec vos données, veuillez réessayer plus tard");
-                    }
-
+                    modificationCheckAndRecording();
                     target.add(getForm());
                     this.send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target));
                 } else {
@@ -268,6 +242,78 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
             this.add(new ChangePasswordValidator(oldPasswordField, passwordField, confirmPassword));
         }
 
+    }
+
+    private void modificationCheckAndRecording() {
+        // Si l'utilisateur veut modifier son mot de passe (pas
+        // besoin de reverifier tout les champs, le validateur l'a
+        // deja fait)
+        Authentication authentication = new Authentication();
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Modification des données de l'utilisateur : "
+                    + authentication.getCurrentUserInfo().getLogin());
+        }
+
+        Boolean isPasswordMatch = Boolean.FALSE;
+        if (!passwordField.getInput().isEmpty()) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Modification de mot de passe detectée");
+            }
+            String oldPassword = nouvelleAnnonce.getClient().getOldPassword();
+            String newPassword = nouvelleAnnonce.getClient().getPassword();
+            isPasswordMatch = HashHelper.check(oldPassword, authentication.getCurrentUserInfo().getPassword());
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Check de l'ancien pasword : " + isPasswordMatch);
+            }
+            // SI le password match avec le hash
+            if (isPasswordMatch) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("Hashing du nouveau mot de passe");
+                }
+                nouvelleAnnonce.getClient().setPassword(HashHelper.hashScrypt(newPassword));
+            } else {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("Ancien mot de passe invalide");
+                }
+                error("Ancien mot de passe invalide");
+            }
+            // Si il ne veut pas changer son mot de passe on le set
+            // pour eviter l'ecrasement de celui ci (pour model
+            // mapper)
+        } else {
+            // Dans ce cas, il n'y a pas de modification de mot de
+            // passe, on considere qu'il match pour activer l'appel
+            // au webservice
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Pas de modification de mot de passe");
+                LOGGER.debug("On set le password actuel de l'utilisateur");
+            }
+            isPasswordMatch = Boolean.TRUE;
+            nouvelleAnnonce.getClient().setPassword(authentication.getCurrentUserInfo().getPassword());
+        }
+
+        if (isPasswordMatch) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Les données et le champs requis sont valides, on appel le webservice pour enregistrer les données");
+            }
+            // Call ws service pour la mise a jour des données.
+            Integer codeRetour = UtilisateurService.updateUtilisateurInfos(nouvelleAnnonce.getClient());
+
+            if (codeRetour.equals(Constant.CODE_SERVICE_RETOUR_OK)) {
+                // Si tout est ok setter les infos du client dto
+                // dans la session
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("Set des nouvelles informations en session de l'utilisateur");
+                }
+                authentication.setCurrentUserInfo(nouvelleAnnonce.getClient());
+                success("Vos données ont bien été mises à jour");
+            } else {
+                error("Problème de mise à jour avec vos données, veuillez réessayer plus tard");
+            }
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Résultat de l'appel du webservice : " + codeRetour);
+            }
+        }
     }
 
     /**

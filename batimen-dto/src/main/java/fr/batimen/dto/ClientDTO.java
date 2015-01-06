@@ -21,6 +21,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
+import org.modelmapper.ModelMapper;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -255,4 +256,10 @@ public class ClientDTO extends AbstractDTO {
         return gson.fromJson(json, collectionType);
     }
 
+    public static ClientDTO copy(ClientDTO clientSource) {
+        ModelMapper mapper = new ModelMapper();
+        ClientDTO clientCopied = new ClientDTO();
+        mapper.map(clientSource, clientCopied);
+        return clientCopied;
+    }
 }
