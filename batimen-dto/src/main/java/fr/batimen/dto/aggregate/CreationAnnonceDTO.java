@@ -81,7 +81,7 @@ public class CreationAnnonceDTO extends AbstractDTO {
 
     // Inscription
     @Valid
-    private final ClientDTO client = new ClientDTO();
+    private ClientDTO client = new ClientDTO();
 
     private Boolean isSignedUp = false;
 
@@ -249,6 +249,14 @@ public class CreationAnnonceDTO extends AbstractDTO {
      */
     public void setTypeTravaux(TypeTravaux typeTravaux) {
         this.typeTravaux = typeTravaux;
+    }
+
+    /**
+     * @param client
+     *            the client to set
+     */
+    public void setClient(ClientDTO client) {
+        this.client = client;
     }
 
     /*

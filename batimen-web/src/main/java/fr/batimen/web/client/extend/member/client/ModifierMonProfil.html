@@ -1,0 +1,108 @@
+<wicket:extend>
+	<div class="row-fluid">
+		<div wicket:id="profil"></div>
+		<div class="span10">
+			<div class="row-fluid">
+				<div class="span12 module_cont module_text_area module_small_padding">
+					<div class="bg_title">
+						<h4 class="headInModule">Modifier mon profil</h4>
+					</div>
+					<form wicket:id="formInscription">
+						<table class="tableBatimen">
+							<tr>
+								<th>Nom :</th>
+								<td><input
+									wicket:id="client.nom"
+									type="text"
+									name="nom"
+									id="nom"
+									value="" /></td>
+							</tr>
+							<tr>
+								<th>Prénom :</th>
+								<td><input
+									wicket:id="client.prenom"
+									type="text"
+									name="prenom"
+									id="prenom"
+									value="" /></td>
+							</tr>
+							<tr>
+								<th>Numéro de téléphone :</th>
+								<td><input
+									wicket:id="client.numeroTel"
+									type="text"
+									name="numeroTel"
+									id="numeroTel"
+									value="" /></td>
+							</tr>
+							<tr>
+								<th>Adresse mail :</th>
+								<td><input
+									wicket:id="client.email"
+									type="text"
+									name="email"
+									id="email"
+									value="" /></td>
+							</tr>
+							<tr>
+								<th>Identifiant :</th>
+								<td><input
+									wicket:id="client.login"
+									type="text"
+									name="login"
+									id="login"
+									value="" /></td>
+							</tr>
+							<tr wicket:id="oldPasswordContainer">
+								<th>Ancien mot de passe :</th>
+								<td><input
+									wicket:id="client.oldPassword"
+									type="password"
+									name="oldpassword"
+									id="oldpassword"
+									value="" /></td>
+							</tr>
+							<tr>
+								<th>Nouveau mot de passe :</th>
+								<td><input
+									wicket:id="client.password"
+									type="password"
+									name="password"
+									id="password"
+									value="" /></td>
+							</tr>
+							<tr>
+								<th>Confirmer le mot de passe :</th>
+								<td><input
+									wicket:id="confirmPassword"
+									type="password"
+									name="confirmPassword"
+									id="confirmPassword"
+									value="" /></td>
+							</tr>
+							<tr wicket:id="CGUContainer">
+								<th>J'accepte les <a
+									wicket:id="cguLink"
+									target="_blank">CGU</a></th>
+								<td><input
+									type="checkbox"
+									wicket:id="cguConfirmation" /></td>
+							</tr>
+						</table>
+						<div id="terminerAnnonce">
+							<a
+								class="btn btn-info"
+								wicket:id="validateInscription">Terminer</a>
+						</div>
+						<div id="champsObligatoire">
+							<span class='required'>*</span> : champs obligatoires
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div wicket:id="commentaire"></div>
+	<div wicket:id="contactezNous"></div>
+</wicket:extend>

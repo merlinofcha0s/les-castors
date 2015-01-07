@@ -186,7 +186,7 @@ public class GestionUtilisateurFacade {
     @POST
     @Path(WsPath.GESTION_UTILISATEUR_SERVICE_BY_EMAIL)
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public ClientDTO utilisateurByEmail(String email) {
+    public ClientDTO getUtilisateurByEmail(String email) {
         // Obligé pour les strings sinon il n'escape pas les ""
         String emailEscaped = DeserializeJsonHelper.parseString(email);
         ModelMapper modelMapper = new ModelMapper();
@@ -294,7 +294,45 @@ public class GestionUtilisateurFacade {
                 LOGGER.error("Type de compte : " + typeCompte);
             }
         }
-
         return notificationsDTO;
+    }
+
+    /**
+     * Methode de mise à jour des infos d'un client
+     * 
+     * @param clientDTO
+     *            les infos du clients
+     * @return Code retour @see {@link Constant}
+     */
+    @POST
+    @Path(WsPath.GESTION_UTILISATEUR_SERVICE_UPDATE_INFO)
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public Integer updateUtilisateurInfos(ClientDTO clientDTO) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Récuperation de l'entité client pour : " + clientDTO.getLogin());
+        }
+        Client clientInDB = clientDAO.getClientByEmail(clientDTO.getEmail());
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Mapping de la dto avec l'entité.....");
+        }
+        ModelMapper mapper = new ModelMapper();
+        mapper.map(clientDTO, clientInDB);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Mise a jour de l'entité dans la BDD");
+        }
+        if (clientDAO.update(clientInDB) != null) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Code retour du service : " + Constant.CODE_SERVICE_RETOUR_OK);
+            }
+            return Constant.CODE_SERVICE_RETOUR_OK;
+        } else {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Code retour du service : " + Constant.CODE_SERVICE_RETOUR_KO);
+            }
+            return Constant.CODE_SERVICE_RETOUR_KO;
+        }
+
     }
 }

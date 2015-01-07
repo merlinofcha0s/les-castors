@@ -102,7 +102,7 @@ public class TestNouveauDevis extends AbstractITTest {
         driver.findElement(By.id("password")).sendKeys("mdrlollol");
         driver.findElement(By.id("confirmPassword")).clear();
         driver.findElement(By.id("confirmPassword")).sendKeys("mdrlollol");
-        driver.findElement(By.name("cguConfirmation")).click();
+        driver.findElement(By.name("CGUContainer:cguConfirmation")).click();
         driver.findElement(By.id("validateInscription")).click();
 
         Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))

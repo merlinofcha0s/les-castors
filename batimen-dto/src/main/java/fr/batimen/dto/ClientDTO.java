@@ -21,6 +21,7 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
+import org.modelmapper.ModelMapper;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -46,6 +47,8 @@ public class ClientDTO extends AbstractDTO {
     private String login;
     @Size(min = PASSWORD_RANGE_MIN, max = PASSWORD_RANGE_MAX)
     private String password;
+    @Size(min = PASSWORD_RANGE_MIN, max = PASSWORD_RANGE_MAX)
+    private String oldPassword;
     @Email
     @Size(max = 128)
     private String email;
@@ -203,6 +206,21 @@ public class ClientDTO extends AbstractDTO {
         return permissions;
     }
 
+    /**
+     * @return the oldPassword
+     */
+    public String getOldPassword() {
+        return oldPassword;
+    }
+
+    /**
+     * @param oldPassword
+     *            the oldPassword to set
+     */
+    public void setOldPassword(String oldPassword) {
+        this.oldPassword = oldPassword;
+    }
+
     @Override
     public boolean equals(Object object) {
         if (this == object) {
@@ -238,4 +256,10 @@ public class ClientDTO extends AbstractDTO {
         return gson.fromJson(json, collectionType);
     }
 
+    public static ClientDTO copy(ClientDTO clientSource) {
+        ModelMapper mapper = new ModelMapper();
+        ClientDTO clientCopied = new ClientDTO();
+        mapper.map(clientSource, clientCopied);
+        return clientCopied;
+    }
 }

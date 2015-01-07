@@ -3,6 +3,7 @@ package fr.batimen.ws.client.service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.WsPath;
 import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.LoginDTO;
@@ -111,6 +112,32 @@ public class UtilisateurService {
         }
 
         return hash;
+    }
+
+    /**
+     * Mise a jour des infos de l'utilisateur
+     * 
+     * @param utilisateurToUpdate
+     *            DTO contenant les informations
+     * @return code retour @see {@link Constant}
+     */
+    public static Integer updateUtilisateurInfos(ClientDTO utilisateurToUpdate) {
+        Integer codeRetour;
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Début appel service de mise a jour des informations du client");
+        }
+
+        String objectInJSON = WsConnector.getInstance().sendRequest(WsPath.GESTION_UTILISATEUR_SERVICE_PATH,
+                WsPath.GESTION_UTILISATEUR_SERVICE_UPDATE_INFO, utilisateurToUpdate);
+
+        codeRetour = Integer.valueOf(objectInJSON);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Fin appel service de mise a jour des informations du client");
+        }
+
+        return codeRetour;
     }
 
     public static String getRolesByLogin(String login) {

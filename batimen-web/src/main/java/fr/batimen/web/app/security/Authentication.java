@@ -22,6 +22,8 @@ public class Authentication {
 
     private final Subject currentUser = SecurityUtils.getSubject();
 
+    private static final String CLIENT_KEY = "client";
+
     public Boolean authenticate(String username, String password) {
         Boolean isOk = null;
 
@@ -62,13 +64,18 @@ public class Authentication {
             LoginDTO loginDTO = new LoginDTO();
             loginDTO.setLogin(username);
             AuthenticatedWebSession.get().authenticate(username, "");
-            currentUser.getSession(true).setAttribute("client", UtilisateurService.login(loginDTO));
+            ClientDTO client = UtilisateurService.login(loginDTO);
+            currentUser.getSession(true).setAttribute(CLIENT_KEY, client);
         }
         return isOk;
     }
 
     public ClientDTO getCurrentUserInfo() {
-        return (ClientDTO) currentUser.getSession().getAttribute("client");
+        return (ClientDTO) currentUser.getSession().getAttribute(CLIENT_KEY);
+    }
+
+    public void setCurrentUserInfo(ClientDTO clientDTO) {
+        currentUser.getSession().setAttribute(CLIENT_KEY, clientDTO);
     }
 
 }

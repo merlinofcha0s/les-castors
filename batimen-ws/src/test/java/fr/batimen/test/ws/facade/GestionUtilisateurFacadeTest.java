@@ -8,6 +8,7 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import org.jboss.arquillian.persistence.ShouldMatchDataSet;
 import org.jboss.arquillian.persistence.UsingDataSet;
 import org.junit.Assert;
 import org.junit.Test;
@@ -289,6 +290,28 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
         String roles = UtilisateurService.getRolesByLogin("pebronneArtisanne");
         Assert.assertTrue(!roles.isEmpty());
         Assert.assertEquals(TypeCompte.ARTISAN.getRole(), roles);
+    }
+
+    /**
+     * Test de récuperation des roles pour un artisan
+     * 
+     * @throws BackendException
+     */
+    @Test
+    @UsingDataSet("datasets/in/update_utilisateur.yml")
+    @ShouldMatchDataSet(value = "datasets/out/update_utilisateur.yml", excludeColumns = { "id", "datemaj" })
+    public void testUpdateUtilisateurInfos() throws BackendException {
+        // On charge le client de la bdd
+        ClientDTO client = UtilisateurService.getUtilisateurByEmail("lol@lol.com");
+        Assert.assertNotNull(client);
+
+        // On change quelques données
+        client.setNom("Du pébron");
+        client.setNumeroTel("0512458596");
+
+        // On appel le ws
+        Integer codeRetour = UtilisateurService.updateUtilisateurInfos(client);
+        Assert.assertEquals(Constant.CODE_SERVICE_RETOUR_OK, codeRetour);
     }
 
 }

@@ -29,6 +29,7 @@ import fr.batimen.web.client.extend.error.ErreurInterne;
 import fr.batimen.web.client.extend.error.Expiree;
 import fr.batimen.web.client.extend.error.NonTrouvee;
 import fr.batimen.web.client.extend.member.client.MesAnnonces;
+import fr.batimen.web.client.extend.member.client.ModifierMonProfil;
 import fr.batimen.web.client.extend.member.client.MonProfil;
 import fr.batimen.web.client.extend.nouveau.artisan.NouveauArtisan;
 import fr.batimen.web.client.extend.nouveau.devis.NouveauDevis;
@@ -98,6 +99,7 @@ public class BatimenApplication extends AuthenticatedWebApplication {
         mountPage(Constant.ACTIVATION_URL, Activation.class);
         mountPage(Constant.PARTENAIRE_URL, NouveauArtisan.class);
         mountPage(Constant.NOUVEAU_DEVIS_URL, NouveauDevis.class);
+        mountPage(Constant.MODIFIER_MON_PROFIL, ModifierMonProfil.class);
         mount(new MountedMapper(Constant.MON_PROFIL_URL, MonProfil.class, new UrlPathPageParametersEncoder()));
         // Page d'erreur
         mountPage("/interdit", AccesInterdit.class);

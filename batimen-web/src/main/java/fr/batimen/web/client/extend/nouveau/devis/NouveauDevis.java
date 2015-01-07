@@ -100,7 +100,8 @@ public class NouveauDevis extends MasterPage {
         containerInscription = new WebMarkupContainer("containerInscription");
         containerInscription.setVisible(false);
 
-        etape4InscriptionForm = new Etape4InscriptionForm("formInscription", propertyModelNouvelleAnnonce);
+        etape4InscriptionForm = new Etape4InscriptionForm("formInscription", propertyModelNouvelleAnnonce,
+                Boolean.FALSE);
 
         AjaxLink<String> connexionLink = new AjaxLink<String>("connexion") {
 
@@ -413,7 +414,7 @@ public class NouveauDevis extends MasterPage {
 
             if (nouvelleAnnonce.getNumeroEtape().equals(Integer.valueOf(5))) {
                 String password = nouvelleAnnonce.getClient().getPassword();
-                nouvelleAnnonce.getClient().setPassword(HashHelper.hashString(password));
+                nouvelleAnnonce.getClient().setPassword(HashHelper.hashScrypt(password));
             }
 
             try {

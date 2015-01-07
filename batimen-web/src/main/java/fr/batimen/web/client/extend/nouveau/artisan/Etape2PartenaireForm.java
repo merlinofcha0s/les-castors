@@ -140,7 +140,7 @@ public class Etape2PartenaireForm extends Form<CreationPartenaireDTO> {
                 nouveauPartenaire.setNumeroEtape(3);
                 ChangementEtapeEventArtisan changementEtapeEvent = new ChangementEtapeEventArtisan(target,
                         nouveauPartenaire);
-                String hashedPassword = HashHelper.hashString(nouveauPartenaire.getArtisan().getPassword());
+                String hashedPassword = HashHelper.hashScrypt(nouveauPartenaire.getArtisan().getPassword());
                 nouveauPartenaire.getArtisan().setPassword(hashedPassword);
                 PermissionDTO permissionDTO = new PermissionDTO();
                 permissionDTO.setTypeCompte(TypeCompte.ARTISAN);

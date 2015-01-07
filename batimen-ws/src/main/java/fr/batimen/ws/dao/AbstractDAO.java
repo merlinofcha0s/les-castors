@@ -4,6 +4,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,7 +33,14 @@ public class AbstractDAO<T> {
             LOGGER.debug("Mise à jour de : " + t.getClass().getSimpleName());
         }
         t = entityManager.merge(t);
-        entityManager.flush();
+        try {
+            entityManager.flush();
+        } catch (PersistenceException pe) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Problème de flush pendant l'update de : " + t.getClass().getSimpleName(), pe);
+            }
+            return null;
+        }
         return t;
     }
 
@@ -46,7 +54,13 @@ public class AbstractDAO<T> {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Fin suppression de : " + t.getClass().getSimpleName());
         }
-        entityManager.flush();
+        try {
+            entityManager.flush();
+        } catch (PersistenceException pe) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Problème de flush pendant l'update de : " + t.getClass().getSimpleName(), pe);
+            }
+        }
     }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -58,7 +72,13 @@ public class AbstractDAO<T> {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Fin merge de : " + t.getClass().getSimpleName());
         }
-        entityManager.flush();
+        try {
+            entityManager.flush();
+        } catch (PersistenceException pe) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Problème de flush pendant l'update de : " + t.getClass().getSimpleName(), pe);
+            }
+        }
     }
 
 }

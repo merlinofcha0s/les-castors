@@ -20,7 +20,7 @@ public class HashTest {
 			logger.debug("pwd : " + password);
 		}
 
-		String hashedPassword = HashHelper.hashString(password);
+		String hashedPassword = HashHelper.hashScrypt(password);
 
 		if (logger.isDebugEnabled()) {
 			logger.debug("hash : " + hashedPassword);
