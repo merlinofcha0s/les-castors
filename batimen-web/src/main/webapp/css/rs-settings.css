@@ -235,6 +235,8 @@ website:   	http://www.themepunch.com
 	white-space: nowrap;
 }
 
+
+
 .tp-caption.very_big_white {
 	position: absolute;
 	color: #fff;
@@ -1017,4 +1019,24 @@ website:   	http://www.themepunch.com
 	border-radius: 3px;
 	-moz-border-radius: 3px;
 	-webkit-border-radius: 3px;
+}
+
+/*********************************************
+
+				-	CSS PERSO	-
+
+***********************************************/
+
+.tp-caption.bold_blue_text {
+	position: absolute;
+	color: #1d78cb;
+	text-shadow: none;
+	font-weight: 800;
+	font-size: 15px;
+	line-height: 20px;
+	font-family: 'Open Sans', sans;
+	margin: 0px;
+	border-width: 0px;
+	border-style: none;
+	white-space: nowrap;
 }
