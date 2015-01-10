@@ -40,7 +40,7 @@ public class TestAuthentification extends AbstractITTest {
             e.printStackTrace();
         }
         Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
-                .until(ExpectedConditions.textToBePresentInElementLocated(By.id("connexionLink"), "MON COMPTE"));
+                .until(ExpectedConditions.textToBePresentInElementLocated(By.id("connexionlbl"), "MON COMPTE"));
         assertTrue(checkCondition);
     }
 

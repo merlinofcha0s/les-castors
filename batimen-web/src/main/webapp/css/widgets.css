@@ -6,6 +6,11 @@
 }
 
 /* AUTHENTICATION MODAL */
+
+.modal.fade.in {
+top: 25%;
+}
+
 .modal-backdrop {
   background-color: #000000;
   z-index: 90000;

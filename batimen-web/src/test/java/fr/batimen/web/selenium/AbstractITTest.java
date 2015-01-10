@@ -167,13 +167,13 @@ public abstract class AbstractITTest {
     }
 
     protected void connexionApplication(String username, String password) {
-        driver.findElement(By.id("connexionLink")).click();
+        driver.findElement(By.id("connexionlbl")).click();
         Boolean checkCondition = (new WebDriverWait(driver, 5)).until(ExpectedConditions
-                .textToBePresentInElementLocated(By.id("ui-id-1"), "Connexion à l'espace client / artisan"));
+                .textToBePresentInElementLocated(By.id("myModalLabel"), "Connexion à l'espace client / artisan"));
         assertTrue(checkCondition);
-        driver.findElement(By.name("login")).click();
-        driver.findElement(By.name("login")).clear();
-        driver.findElement(By.name("login")).sendKeys(username);
+        driver.findElement(By.id("loginModal")).click();
+        driver.findElement(By.id("loginModal")).clear();
+        driver.findElement(By.id("loginModal")).sendKeys(username);
         // On le fait attendre car il y a une probabilité qu'il ecrive trop vite
         // dans les champs et qu'il se trompe
         try {
@@ -182,9 +182,9 @@ public abstract class AbstractITTest {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
-        driver.findElement(By.name("password")).click();
-        driver.findElement(By.name("password")).clear();
-        driver.findElement(By.name("password")).sendKeys(password);
+        driver.findElement(By.id("passwordModal")).click();
+        driver.findElement(By.id("passwordModal")).clear();
+        driver.findElement(By.id("passwordModal")).sendKeys(password);
         driver.findElement(By.id("signInButton")).click();
     }
 
