@@ -192,10 +192,8 @@ public abstract class MasterPage extends WebPage {
         // add behaviour to page
         loginDialogBehaviour = new LoginDialogBehaviour();
         this.add(loginDialogBehaviour);
-
-        //render javascript for ajax call on class fix
-//        this.add(new Label("fakeCall", getJSForClickListenerOnConnexion(loginDialogBehaviour.getCallbackScript())).setEscapeModelStrings(false));
         
+        // link to show authentication panel
         connexionlbl = new Label("connexionlbl", new Model<String>());
         if (SecurityUtils.getSubject().isAuthenticated()) {
             connexionlbl.setDefaultModelObject("Mon Compte");
@@ -205,31 +203,7 @@ public abstract class MasterPage extends WebPage {
 
         connexionlbl.setOutputMarkupId(true);
 
-        
-//        // Lien qui amene à la page de connexion : n'est visible que quand
-//        // l'utilisateur n'est pas encore loggé
-//        final AjaxLink<String> connexion = new AjaxLink<String>("connexion") {
-//            private static final long serialVersionUID = -5109878814704325528L;
-//            
-//            @Override
-//            public void onClick(AjaxRequestTarget target) {
-//
-//            }
-//
-//            // On fait souscrire ce container a l'event loginEvent pour que le
-//            // panel Authentification puisse lui dire de se mettre a jour quand
-//            // l'utilisateur se connecte
-//            @Override
-//            public void onEvent(IEvent<?> event) {
-//                
-//            }
-//
-//        };
-//        connexion.setMarkupId("connexionLink");
-//        connexion.setOutputMarkupId(true);
-//        connexion.add(connexionlbl);
         this.add(connexionlbl);
-//        this.add(connexion);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Initialisation du composant de connexion.....OK");
