@@ -79,12 +79,10 @@
 <link
 	rel="stylesheet"
 	type="text/css"
-	href="css/soliglyphs.css">
-<link	
-	rel="stylesheet"
-	type="text/css"
-href="css/lineglyphs.css"> 
-<link rel="stylesheet" type="text/css" href="css/page.css">
+	href="css/soliglyphs.css"
+	id="theme_color">
+<link
+	rel="stylesheet" type="text/css" href="css/page.css">
 <link rel="stylesheet" type="text/css" href="css/widgets.css">
 <!--[if IE 8 ]><script>
         var e = ("article,aside,figcaption,figure,footer,header,hgroup,nav,section,time").split(',');
@@ -101,7 +99,7 @@ href="css/lineglyphs.css">
         <div class="header_wrapper container">
         	<a href="accueil" class="logo"><img src="img/logo.png" alt=""  width="115" height="30" class="logo_def"><img src="img/retina/logo.png" alt="" width="115" height="30" class="logo_retina"></a>
             <nav>
-                <ul class="menu" wicket:id="menu">
+                <ul class="menu">
                     <li>
                         <div class="callus">
                             <p >Besoin d'aide?</p>
@@ -113,19 +111,11 @@ href="css/lineglyphs.css">
                         	<wicket:container wicket:id="connexionlbl"/>
                         </a>
                     </li>
-                    <li wicket:id="devenirPartenaireContainer">
-                        <a wicket:id="devenirPartenaire"></a>
+                    <li>
+                        <a href="nouveaupartenaire">DEVENIR PARTENAIRE</a>
                     </li>
-                    <li wicket:id="demandeDevisContainer">
-                        <a wicket:id="demandeDevis"></a>
-                    </li>
-                     <li class="has-menu level1" wicket:id="menuConnected">
-                        <a href="#" class="icon-Setting1" id="iconConnected"></a>
-                        <ul class="sub-menu">
-                       		 <li>
-                       		 	<a wicket:id="logout">Deconnexion</a>
-                        	</li>
-                        </ul>
+                    <li>
+                        <a href="nouveaudevis">DEMANDE DE DEVIS</a>
                     </li>
                 </ul><!-- .menu -->
                 <div class="clear"></div>

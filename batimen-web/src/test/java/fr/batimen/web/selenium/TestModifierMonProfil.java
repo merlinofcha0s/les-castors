@@ -37,8 +37,7 @@ public class TestModifierMonProfil extends AbstractITTest {
     public void modifyInformationsProfilInitial() {
         driver.get(appUrl);
         connexionApplication("raiden", BON_MOT_DE_PASSE);
-        driver.findElement(By.id("signInButton")).click();
-        driver.findElement(By.id("connexionLink")).click();
+        driver.findElement(By.id("connexionlbl")).click();
         driver.findElement(By.linkText("Modifier le profil")).click();
 
         assertModificationPage();
@@ -59,8 +58,7 @@ public class TestModifierMonProfil extends AbstractITTest {
     public void modifyInformationsProfilPasswordInformation() {
         driver.get(appUrl);
         connexionApplication("raiden", BON_MOT_DE_PASSE);
-        driver.findElement(By.id("signInButton")).click();
-        driver.findElement(By.id("connexionLink")).click();
+        driver.findElement(By.id("connexionlbl")).click();
         driver.findElement(By.linkText("Modifier le profil")).click();
         assertModificationPage();
         modificationMotDePasse("lollollol");
@@ -78,8 +76,7 @@ public class TestModifierMonProfil extends AbstractITTest {
     public void modifyInformationsProfilPasswordInformationWrong() {
         driver.get(appUrl);
         connexionApplication("raiden", BON_MOT_DE_PASSE);
-        driver.findElement(By.id("signInButton")).click();
-        driver.findElement(By.id("connexionLink")).click();
+        driver.findElement(By.id("connexionlbl")).click();
         driver.findElement(By.linkText("Modifier le profil")).click();
         assertModificationPage();
         modificationMotDePasse("lollol");

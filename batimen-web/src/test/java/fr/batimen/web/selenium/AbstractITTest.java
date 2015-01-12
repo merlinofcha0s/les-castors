@@ -187,6 +187,10 @@ public abstract class AbstractITTest {
         driver.findElement(By.id("passwordModal")).clear();
         driver.findElement(By.id("passwordModal")).sendKeys(password);
         driver.findElement(By.id("signInButton")).click();
+
+        Boolean checkConditionMonCompteLabel = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.textToBePresentInElementLocated(By.id("connexionlbl"), "MON COMPTE"));
+        assertTrue(checkConditionMonCompteLabel);
     }
 
     protected DriverManagerDestination getDriverManagerDestination() {
