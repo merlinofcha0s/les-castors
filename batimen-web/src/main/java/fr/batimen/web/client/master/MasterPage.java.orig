@@ -26,8 +26,11 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+<<<<<<< HEAD
 import fr.batimen.dto.enums.TypeCompte;
+=======
 import fr.batimen.web.client.behaviour.LoginDialogBehaviour;
+>>>>>>> Batimen/adnane3
 import fr.batimen.web.client.component.BatimenFeedbackPanel;
 import fr.batimen.web.client.component.LinkLabel;
 import fr.batimen.web.client.component.WaiterModal;
@@ -63,12 +66,19 @@ public abstract class MasterPage extends WebPage {
     protected BatimenFeedbackPanel feedBackPanelGeneral;
 
     private AuthentificationPanel authentificationPanel;
+<<<<<<< HEAD
 
+    // waiter modal can be accessed from every child view
+    protected WaiterModal waiterModal;
+
+=======
+    
     private Label connexionlbl;
     
     // waiter modal can be accessed from every child view
-    protected WaiterModal waiterModal;
+	protected WaiterModal waiterModal;
 	private LoginDialogBehaviour loginDialogBehaviour;
+>>>>>>> Batimen/adnane3
     /**
      * Constructeur par defaut, initialise les composants de base de la page
      * 
@@ -194,13 +204,20 @@ public abstract class MasterPage extends WebPage {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Initialisation du composant du menu.....");
         }
+<<<<<<< HEAD
+
+        final WebMarkupContainer menu = new WebMarkupContainer("menu");
+        menu.setOutputMarkupId(Boolean.TRUE);
+
+        final Label connexionlbl = new Label("connexionlbl", new Model<String>());
+=======
         // add behaviour to page
         loginDialogBehaviour = new LoginDialogBehaviour();
         this.add(loginDialogBehaviour);
         
         // link to show authentication panel
         connexionlbl = new Label("connexionlbl", new Model<String>());
-
+>>>>>>> Batimen/adnane3
         if (SecurityUtils.getSubject().isAuthenticated()) {
             connexionlbl.setDefaultModelObject("Mon Compte");
         } else {
@@ -209,7 +226,45 @@ public abstract class MasterPage extends WebPage {
 
         connexionlbl.setOutputMarkupId(true);
 
+<<<<<<< HEAD
+        // Lien qui amene à la page de connexion : n'est visible que quand
+        // l'utilisateur n'est pas encore loggé
+        final AjaxLink<String> connexion = new AjaxLink<String>("connexion") {
+            private static final long serialVersionUID = -5109878814704325528L;
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                if (SecurityUtils.getSubject().isAuthenticated()) {
+                    setResponsePage(MesAnnonces.class);
+                } else {
+                    getLoginDialog().open(target);
+                }
+            }
+
+            // On fait souscrire ce container a l'event loginEvent pour que le
+            // panel Authentification puisse lui dire de se mettre a jour quand
+            // l'utilisateur se connecte
+            @Override
+            public void onEvent(IEvent<?> event) {
+                if (event.getPayload() instanceof LoginEvent) {
+
+                    Event update = (Event) event.getPayload();
+                    connexionlbl.setDefaultModelObject("Mon Compte");
+
+                    update.getTarget().add(menu);
+                    getLoginDialog().close(update.getTarget());
+                }
+            }
+
+        };
+
+        connexion.setMarkupId("connexionLink");
+        connexion.setOutputMarkupId(true);
+        connexion.add(connexionlbl);
+=======
         this.add(connexionlbl);
+>>>>>>> Batimen/adnane3
+
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Initialisation du composant du menu.....OK");
         }

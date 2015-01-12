@@ -41,8 +41,9 @@ public class TestAuthentification extends AbstractITTest {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+<<<<<<< HEAD
         Boolean checkConditionMonCompte = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
-                .until(ExpectedConditions.textToBePresentInElementLocated(By.id("connexionlbl"), "MON COMPTE"));
+                .until(ExpectedConditions.textToBePresentInElementLocated(By.id("connexionLink"), "MON COMPTE"));
         assertTrue(checkConditionMonCompte);
 
         WebElement iconConnected = driver.findElement(By.cssSelector("#iconConnected"));
@@ -54,6 +55,11 @@ public class TestAuthentification extends AbstractITTest {
                 .until(ExpectedConditions.textToBePresentInElementLocated(By.id("connexionLink"), "ESPACE MEMBRE"));
         assertTrue(checkConditionEspaceMembre);
 
+=======
+        Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.textToBePresentInElementLocated(By.id("connexionlbl"), "MON COMPTE"));
+        assertTrue(checkCondition);
+>>>>>>> Batimen/adnane3
     }
 
     @Test

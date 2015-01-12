@@ -79,12 +79,18 @@
 <link
 	rel="stylesheet"
 	type="text/css"
+<<<<<<< HEAD
 	href="css/soliglyphs.css">
-<link	
+ <link
 	rel="stylesheet"
 	type="text/css"
-href="css/lineglyphs.css"> 
-<link rel="stylesheet" type="text/css" href="css/page.css">
+	href="css/lineglyphs.css"> 
+=======
+	href="css/soliglyphs.css"
+	id="theme_color">
+<link
+	rel="stylesheet" type="text/css" href="css/page.css">
+>>>>>>> Batimen/adnane3
 <link rel="stylesheet" type="text/css" href="css/widgets.css">
 <!--[if IE 8 ]><script>
         var e = ("article,aside,figcaption,figure,footer,header,hgroup,nav,section,time").split(',');

@@ -350,7 +350,7 @@ header nav ul.menu>li:hover>ul.sub-menu>li:hover>ul.sub-menu {
 	top: -100px;
 	width: 100% !important;
 	background: #ffffff !important;
-	z-index: 99999;
+	z-index: 10000;
 	opacity: 0;
 	filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0);
 	width: 100% !important;

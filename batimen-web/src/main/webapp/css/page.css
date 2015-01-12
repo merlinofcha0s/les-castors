@@ -16,14 +16,6 @@
 	text-decoration: none;
 }
 
-#authentificationPanel {
-	padding-top: 1px;
-}
-
-#signInButton {
-	margin-left: 103px;
-}
-
 .errorLoginActivated {
 	margin-bottom: 10px;
 	border: 1px solid;
@@ -431,6 +423,7 @@ table tr td .error {
 /* MENU SUPERIEUR */
 .menu a {
 	text-transform: uppercase !important;
+	cursor: pointer;
 }
 
 .menu p {
