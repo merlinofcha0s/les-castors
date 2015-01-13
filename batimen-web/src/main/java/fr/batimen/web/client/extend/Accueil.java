@@ -19,7 +19,7 @@ public class Accueil extends MasterPage {
     private static final long serialVersionUID = -690817359101639588L;
 
     public Accueil() {
-        super("Page d'accueil de batimen.fr", "lol", "Accueil batimen", false, "img/bg_title1.jpg");
+        super("Page d'accueil de lescastors.fr", "lol", "Accueil lescastors", false, "img/bg_title1.jpg");
         ContactezNous contactezNous = new ContactezNous("contactezNous");
         this.add(contactezNous);
         initLinks();
