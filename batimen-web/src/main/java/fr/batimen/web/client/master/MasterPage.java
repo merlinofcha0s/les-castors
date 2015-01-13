@@ -2,6 +2,7 @@ package fr.batimen.web.client.master;
 
 import org.apache.shiro.SecurityUtils;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.event.Broadcast;
@@ -13,6 +14,7 @@ import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
@@ -24,8 +26,10 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.web.client.behaviour.LoginDialogBehaviour;
 import fr.batimen.web.client.component.BatimenFeedbackPanel;
+import fr.batimen.web.client.component.LinkLabel;
 import fr.batimen.web.client.component.WaiterModal;
 import fr.batimen.web.client.event.Event;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
@@ -33,6 +37,8 @@ import fr.batimen.web.client.event.LoginDialogEvent;
 import fr.batimen.web.client.event.LoginEvent;
 import fr.batimen.web.client.extend.Accueil;
 import fr.batimen.web.client.extend.member.client.MesAnnonces;
+import fr.batimen.web.client.extend.nouveau.artisan.NouveauArtisan;
+import fr.batimen.web.client.extend.nouveau.devis.NouveauDevis;
 import fr.batimen.web.client.panel.AuthentificationPanel;
 
 /**
@@ -112,7 +118,7 @@ public abstract class MasterPage extends WebPage {
         this.metaKeywords = metaKeywords;
 
         StringBuilder titleInHeader = new StringBuilder(title);
-        titleInHeader.append(" - Bati-men.fr");
+        titleInHeader.append(" - lesCastors.fr");
 
         // Le titre qui se trouve dans la balise title (et donc qui s'affiche
         // dans l'onglet du navigateur)
@@ -187,6 +193,8 @@ public abstract class MasterPage extends WebPage {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Initialisation du composant de connexion.....");
         }
+        final WebMarkupContainer menu = new WebMarkupContainer("menu");
+        menu.setOutputMarkupId(Boolean.TRUE);
         // add behaviour to page
         loginDialogBehaviour = new LoginDialogBehaviour();
         this.add(loginDialogBehaviour);
@@ -201,11 +209,130 @@ public abstract class MasterPage extends WebPage {
 
         connexionlbl.setOutputMarkupId(true);
 
-        this.add(connexionlbl);
+        menu.add(connexionlbl);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Initialisation du composant de connexion.....OK");
         }
+
+        final LinkLabel demandeDevis = new LinkLabel("demandeDevis", new Model<String>("DEMANDE DE DEVIS")) {
+
+            private static final long serialVersionUID = 737917087176303983L;
+
+            @Override
+            public void onClick() {
+                this.setResponsePage(NouveauDevis.class);
+            }
+
+        };
+
+        demandeDevis.setMarkupId("demandeDevis");
+
+        WebMarkupContainer demandeDevisContainer = new WebMarkupContainer("demandeDevisContainer") {
+
+            private static final long serialVersionUID = 5440920791930232343L;
+
+            /*
+             * (non-Javadoc)
+             * 
+             * @see org.apache.wicket.Component#isVisible()
+             */
+            @Override
+            public boolean isVisible() {
+                if (SecurityUtils.getSubject().isAuthenticated()) {
+                    if (SecurityUtils.getSubject().hasRole(TypeCompte.ARTISAN.getRole())) {
+                        return Boolean.FALSE;
+                    } else {
+                        return Boolean.TRUE;
+                    }
+                } else {
+                    return Boolean.TRUE;
+                }
+            }
+
+        };
+
+        demandeDevisContainer.setOutputMarkupId(true);
+        demandeDevisContainer.add(demandeDevis);
+
+        final LinkLabel devenirPartenaire = new LinkLabel("devenirPartenaire", new Model<String>("DEVENIR PARTENAIRE")) {
+
+            private static final long serialVersionUID = 3349463856140732172L;
+
+            @Override
+            public void onClick() {
+                this.setResponsePage(NouveauArtisan.class);
+            }
+
+        };
+
+        devenirPartenaire.setMarkupId("devenirPartenaire");
+
+        WebMarkupContainer devenirPartenaireContainer = new WebMarkupContainer("devenirPartenaireContainer") {
+
+            private static final long serialVersionUID = 5440920791930232343L;
+
+            /*
+             * (non-Javadoc)
+             * 
+             * @see org.apache.wicket.Component#isVisible()
+             */
+            @Override
+            public boolean isVisible() {
+                if (SecurityUtils.getSubject().isAuthenticated()) {
+                    if (SecurityUtils.getSubject().hasRole(TypeCompte.CLIENT.getRole())) {
+                        return Boolean.FALSE;
+                    } else {
+                        return Boolean.TRUE;
+                    }
+                } else {
+                    return Boolean.TRUE;
+                }
+            }
+
+        };
+
+        devenirPartenaireContainer.setOutputMarkupId(true);
+        devenirPartenaireContainer.add(devenirPartenaire);
+
+        WebMarkupContainer menuConnected = new WebMarkupContainer("menuConnected") {
+
+            private static final long serialVersionUID = -8141527173339087230L;
+
+            /*
+             * (non-Javadoc)
+             * 
+             * @see org.apache.wicket.Component#isVisible()
+             */
+            @Override
+            public boolean isVisible() {
+                return SecurityUtils.getSubject().isAuthenticated();
+            }
+
+        };
+
+        Link<Void> logout = new Link<Void>("logout") {
+
+            private static final long serialVersionUID = 963494446704131066L;
+
+            @Override
+            public void onClick() {
+                Session.get().invalidate();
+                this.setResponsePage(Accueil.class);
+            }
+
+        };
+
+        logout.setMarkupId("logout");
+        logout.setOutputMarkupId(true);
+
+        menuConnected.add(logout);
+
+        menu.add(devenirPartenaireContainer);
+        menu.add(demandeDevisContainer);
+        menu.add(menuConnected);
+
+        this.add(menu);
 
     }
 

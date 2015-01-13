@@ -34,7 +34,7 @@ public class TestAuthentification extends AbstractITTest {
     @Test
     public void testAuthentificationAndDisconnectSuccess() throws Exception {
         driver.get(appUrl);
-        connexionApplication("raiden", AbstractITTest.BON_MOT_DE_PASSE);
+        connexionApplication("raiden", AbstractITTest.BON_MOT_DE_PASSE, Boolean.TRUE);
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
@@ -51,7 +51,7 @@ public class TestAuthentification extends AbstractITTest {
         builder.click(iconConnected).moveToElement(logout).click().build().perform();
 
         Boolean checkConditionEspaceMembre = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
-                .until(ExpectedConditions.textToBePresentInElementLocated(By.id("connexionLink"), "ESPACE MEMBRE"));
+                .until(ExpectedConditions.textToBePresentInElementLocated(By.id("connexionlbl"), "ESPACE MEMBRE"));
         assertTrue(checkConditionEspaceMembre);
 
     }
@@ -59,7 +59,7 @@ public class TestAuthentification extends AbstractITTest {
     @Test
     public void testAuthentificationFailed() throws Exception {
         driver.get(appUrl);
-        connexionApplication("raiden", AbstractITTest.MAUVAIS_MOT_DE_PASSE);
+        connexionApplication("raiden", AbstractITTest.MAUVAIS_MOT_DE_PASSE, Boolean.FALSE);
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
@@ -74,7 +74,7 @@ public class TestAuthentification extends AbstractITTest {
     @Test
     public void testAuthentificationFailedBecauseNotActivated() throws Exception {
         driver.get(appUrl);
-        connexionApplication("xavier", AbstractITTest.BON_MOT_DE_PASSE);
+        connexionApplication("xavier", AbstractITTest.BON_MOT_DE_PASSE, Boolean.FALSE);
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {

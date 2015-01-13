@@ -40,10 +40,9 @@ public class TestMonProfil extends AbstractITTest {
     public void testAccessToMonProfil() {
         driver.get(appUrl);
         // On s'authentifie à l'application
-        connexionApplication("raiden", AbstractITTest.BON_MOT_DE_PASSE);
+        connexionApplication("raiden", AbstractITTest.BON_MOT_DE_PASSE, Boolean.TRUE);
 
-        driver.findElement(By.id("signInButton")).click();
-        driver.findElement(By.id("connexionLink")).click();
+        driver.findElement(By.id("connexionlbl")).click();
 
         By voirProfil = By.linkText("Voir le profil");
 
