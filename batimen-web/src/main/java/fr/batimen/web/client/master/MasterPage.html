@@ -6,6 +6,19 @@
 <head>
 <!-- Mobile Specific Metas
     +++++++++++++++++++++++++++ -->
+<script
+	src="js/jquery-1.9.1.js"
+	type="text/javascript"></script>
+<script
+	src="js/jquery-ui.min.js"
+	type="text/javascript"></script>
+
+<script src="js/bootstrap.js"></script>
+<script src="js/components/bootstrap-modal/bootstrap-modalmanager.js"></script>
+<script src="js/components/bootstrap-modal/bootstrap-modal.js"></script>
+<script
+	src="js/theme.js"
+	type="text/javascript"></script>
 <meta
 	name="viewport"
 	content="width=device-width, initial-scale=1, maximum-scale=1" />
@@ -25,10 +38,7 @@
 	sizes="114x114"
 	href="img/apple_icons_114x114.png">
 <title wicket:id="title"></title>
-<link
-	rel="stylesheet"
-	type="text/css"
-	href="css/page.css">
+
 <link
 	rel="stylesheet"
 	type="text/css"
@@ -69,11 +79,10 @@
 <link
 	rel="stylesheet"
 	type="text/css"
-	href="css/soliglyphs.css">
- <link
-	rel="stylesheet"
-	type="text/css"
-	href="css/lineglyphs.css"> 
+	href="css/soliglyphs.css"
+	id="theme_color">
+<link
+	rel="stylesheet" type="text/css" href="css/page.css">
 <link rel="stylesheet" type="text/css" href="css/widgets.css">
 <!--[if IE 8 ]><script>
         var e = ("article,aside,figcaption,figure,footer,header,hgroup,nav,section,time").split(',');
@@ -81,15 +90,7 @@
             document.createElement(e[i]);
         }		
     </script><![endif]--> 
-<script
-	src="js/jquery-1.9.1.js"
-	type="text/javascript"></script>
-<script
-	src="js/jquery-ui.min.js"
-	type="text/javascript"></script>
-<script
-	src="js/theme.js"
-	type="text/javascript"></script>
+
 </head>
 <body>
 	<!-- HEADER -->
@@ -98,7 +99,7 @@
         <div class="header_wrapper container">
         	<a href="accueil" class="logo"><img src="img/logo.png" alt=""  width="115" height="30" class="logo_def"><img src="img/retina/logo.png" alt="" width="115" height="30" class="logo_retina"></a>
             <nav>
-                <ul class="menu" wicket:id="menu">
+               <ul class="menu" wicket:id="menu">
                     <li>
                         <div class="callus">
                             <p >Besoin d'aide?</p>
@@ -106,7 +107,7 @@
                         </div>
                     </li>
                     <li>
-                        <a wicket:id="connexion" id="connexionlbl">
+                        <a id="connexionlbl" class="connexionLink skipWaiter">
                         	<wicket:container wicket:id="connexionlbl"/>
                         </a>
                     </li>
@@ -201,17 +202,18 @@
                 </ul>            
             </div>
             <div class="clear"></div>
-            <a href="javascript:void(0)" class="btn2top"></a>            
+            <a href="javascript:void(0)" class="btn2top"></a>
         </div>
         <div class="footer_border"></div>
     </footer>
 	<header class="fixed-menu"></header>
 	<div
 		class="layout_trigger clean_bg_cont"
-		style="background-color: #ffffff;"></div>
-	<div wicket:id="loginDialog">
-		<div wicket:id="authentificationPanel"></div>
+		style="background-color: #ffffff;">
 	</div>
+	
+	<div wicket:id="authentificationPanel"></div>
+	
 	<wicket:container wicket:id="waiterModal"></wicket:container>
 </body>
 </html>

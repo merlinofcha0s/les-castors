@@ -43,10 +43,9 @@ public class TestMesAnnonces extends AbstractITTest {
     public void testAccessToMesAnnonce() {
         driver.get(appUrl);
         // On s'authentifie à l'application
-        connexionApplication("raiden", AbstractITTest.BON_MOT_DE_PASSE);
+        connexionApplication("raiden", AbstractITTest.BON_MOT_DE_PASSE, Boolean.TRUE);
 
-        driver.findElement(By.id("signInButton")).click();
-        driver.findElement(By.id("connexionLink")).click();
+        driver.findElement(By.id("connexionlbl")).click();
 
         Boolean checkConditionNotificationPresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//td[2]/span"),

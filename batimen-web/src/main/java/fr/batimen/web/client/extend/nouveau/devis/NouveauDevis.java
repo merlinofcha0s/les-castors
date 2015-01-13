@@ -109,7 +109,7 @@ public class NouveauDevis extends MasterPage {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                getLoginDialog().open(target);
+            	getLoginDialog().open(target);
             }
 
         };

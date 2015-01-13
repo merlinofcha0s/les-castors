@@ -58,14 +58,6 @@ public class TestRenderingPage {
     }
 
     @Test
-    public void authentificationRendersSuccessfully() {
-        // start and render the test page
-        tester.startPage(Authentification.class);
-        // assert rendered page class
-        tester.assertRenderedPage(Authentification.class);
-    }
-
-    @Test
     public void accueilRendersSuccessfully() {
         // start and render the test page
         tester.startPage(Accueil.class);

@@ -34,15 +34,16 @@ public class TestAuthentification extends AbstractITTest {
     @Test
     public void testAuthentificationAndDisconnectSuccess() throws Exception {
         driver.get(appUrl);
-        connexionApplication("raiden", AbstractITTest.BON_MOT_DE_PASSE, Boolean.TRUE);
+        connexionApplication("raiden", AbstractITTest.BON_MOT_DE_PASSE);
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+<<<<<<< HEAD
         Boolean checkConditionMonCompte = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
-                .until(ExpectedConditions.textToBePresentInElementLocated(By.id("connexionlbl"), "MON COMPTE"));
+                .until(ExpectedConditions.textToBePresentInElementLocated(By.id("connexionLink"), "MON COMPTE"));
         assertTrue(checkConditionMonCompte);
 
         WebElement iconConnected = driver.findElement(By.cssSelector("#iconConnected"));
@@ -51,15 +52,20 @@ public class TestAuthentification extends AbstractITTest {
         builder.click(iconConnected).moveToElement(logout).click().build().perform();
 
         Boolean checkConditionEspaceMembre = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
-                .until(ExpectedConditions.textToBePresentInElementLocated(By.id("connexionlbl"), "ESPACE MEMBRE"));
+                .until(ExpectedConditions.textToBePresentInElementLocated(By.id("connexionLink"), "ESPACE MEMBRE"));
         assertTrue(checkConditionEspaceMembre);
 
+=======
+        Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.textToBePresentInElementLocated(By.id("connexionlbl"), "MON COMPTE"));
+        assertTrue(checkCondition);
+>>>>>>> Batimen/adnane3
     }
 
     @Test
     public void testAuthentificationFailed() throws Exception {
         driver.get(appUrl);
-        connexionApplication("raiden", AbstractITTest.MAUVAIS_MOT_DE_PASSE, Boolean.FALSE);
+        connexionApplication("raiden", AbstractITTest.MAUVAIS_MOT_DE_PASSE);
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
@@ -74,7 +80,7 @@ public class TestAuthentification extends AbstractITTest {
     @Test
     public void testAuthentificationFailedBecauseNotActivated() throws Exception {
         driver.get(appUrl);
-        connexionApplication("xavier", AbstractITTest.BON_MOT_DE_PASSE, Boolean.FALSE);
+        connexionApplication("xavier", AbstractITTest.BON_MOT_DE_PASSE);
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
