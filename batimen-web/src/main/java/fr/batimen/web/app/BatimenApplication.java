@@ -24,6 +24,7 @@ import fr.batimen.web.client.extend.Contact;
 import fr.batimen.web.client.extend.QuiSommeNous;
 import fr.batimen.web.client.extend.activation.Activation;
 import fr.batimen.web.client.extend.authentification.Authentification;
+import fr.batimen.web.client.extend.connected.Annonce;
 import fr.batimen.web.client.extend.error.AccesInterdit;
 import fr.batimen.web.client.extend.error.ErreurInterne;
 import fr.batimen.web.client.extend.error.Expiree;
@@ -101,6 +102,7 @@ public class BatimenApplication extends AuthenticatedWebApplication {
         mountPage(Constant.NOUVEAU_DEVIS_URL, NouveauDevis.class);
         mountPage(Constant.MODIFIER_MON_PROFIL, ModifierMonProfil.class);
         mount(new MountedMapper(Constant.MON_PROFIL_URL, MonProfil.class, new UrlPathPageParametersEncoder()));
+        mount(new MountedMapper(Constant.ANNONCE, Annonce.class, new UrlPathPageParametersEncoder()));
         // Page d'erreur
         mountPage("/interdit", AccesInterdit.class);
         mountPage("/expiree", Expiree.class);

@@ -10,6 +10,7 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,6 +23,7 @@ import fr.batimen.web.client.component.Commentaire;
 import fr.batimen.web.client.component.ContactezNous;
 import fr.batimen.web.client.component.LinkLabel;
 import fr.batimen.web.client.component.Profil;
+import fr.batimen.web.client.extend.connected.Annonce;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.ws.client.service.ClientsService;
 
@@ -85,7 +87,7 @@ public final class MesAnnonces extends MasterPage {
 
             @Override
             protected void populateItem(ListItem<NotificationDTO> item) {
-                NotificationDTO notification = item.getModelObject();
+                final NotificationDTO notification = item.getModelObject();
 
                 final Model<String> nomEntrepriseModelForLbl = new Model<String>(notification.getNomEntreprise());
 
@@ -112,8 +114,9 @@ public final class MesAnnonces extends MasterPage {
 
                     @Override
                     public void onClick() {
-                        // TODO A Completer quand la page consultation annonce
-                        // sera prete
+                        PageParameters params = new PageParameters();
+                        params.add("idAnnonce", notification.getHashIDAnnonce());
+                        this.setResponsePage(Annonce.class, params);
                     }
 
                 };
@@ -147,7 +150,7 @@ public final class MesAnnonces extends MasterPage {
 
             @Override
             protected void populateItem(ListItem<AnnonceDTO> item) {
-                AnnonceDTO annonce = item.getModelObject();
+                final AnnonceDTO annonce = item.getModelObject();
 
                 StringBuilder descriptionCutting = new StringBuilder();
                 if (annonce.getDescription().length() > 30) {
@@ -175,7 +178,10 @@ public final class MesAnnonces extends MasterPage {
 
                     @Override
                     public void onClick() {
-                        // TODO Mettre en place quand la page annonce sera prete
+                        // TODO : Rajouter les hash id dans l'annonce DTO
+                        PageParameters params = new PageParameters();
+                        // params.add("idAnnonce", annonce.getHashIDAnnonce());
+                        this.setResponsePage(Annonce.class, params);
                     }
 
                 };
