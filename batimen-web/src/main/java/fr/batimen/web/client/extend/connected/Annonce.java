@@ -26,6 +26,7 @@ public class Annonce extends MasterPage {
         // s'est inscrit a l'annonce (l'a payé)
         // TODO : Acces en mode degradé : Quelles données sont affichés ? est ce
         // qu'il va juste avoir accés a la liste d'annonce ?
+
         initComposants();
     }
 
