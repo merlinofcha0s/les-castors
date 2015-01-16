@@ -3,63 +3,58 @@
 		<div wicket:id="profil"></div>
 		<div class="span7">
 			<h2 class="headInModule">Description</h2>
-			<div style="width: 600px;">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+			<div id="containerDescription">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
 				incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
 				ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
 				fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit
 				anim id est laborum.</div>
-			<div style="padding-top: 25px;">
+			<div id="containerInformationsAnnonce">
 				<div class="bg_title">
 					<h2 class="headInModule">Informations sur l'annonce</h2>
 				</div>
 				<div>
-					<div style="float: left;">
+					<div class="containerGlyph">
 						<span
-							style="font-size: 26px;"
-							class="icon-Lightning"></span>
+							class="icon-Lightning glyphAnnonce"></span>
 					</div>
-					<div style="padding-left: 20px; float: left; padding-right: 5px; padding-top: 7px;">Electricité</div>
-					<div style="float: left; padding-top: 7px;">&nbsp;:&nbsp;</div>
-					<div style="padding-top: 7px;">Domotiques</div>
+					<div class="labelAnnonce">Electricité</div>
+					<div id="categorieLabelSpace">&nbsp;:&nbsp;</div>
+					<div id="sousCategorieLabel">Domotiques</div>
 				</div>
-				<div style="padding-top: 10px;">
-					<div style="float: left;">
+				<div class="containerInformationAnnonce">
+					<div class="containerGlyph">
 						<span
-							style="font-size: 26px;"
-							class="icon-Label"></span>
+							class="icon-Label glyphAnnonce"></span>
 					</div>
-					<div style="padding-left: 20px; float: left; padding-right: 5px; padding-top: 7px;">Type de travaux :</div>
-					<div style="padding-left: 20px; padding-top: 7px;">Renovation</div>
+					<div class="labelAnnonce">Type de travaux :</div>
+					<div class="informationAnnonce">Renovation</div>
 				</div>
-				<div style="padding-top: 10px;">
-					<div style="float: left;">
+				<div class="containerInformationAnnonce">
+					<div class="containerGlyph">
 						<span
-							style="font-size: 26px;"
-							class="icon-Alarm-Clock"></span>
+							class="icon-Alarm-Clock glyphAnnonce"></span>
 					</div>
-					<div style="padding-left: 20px; float: left; padding-right: 5px; padding-top: 7px;">Délai d'intervention :</div>
-					<div style="padding-left: 20px; padding-top: 7px;">Le plus rapidement possible</div>
+					<div class="labelAnnonce">Délai d'intervention :</div>
+					<div class="informationAnnonce">Le plus rapidement possible</div>
 				</div>
-				<div style="padding-top: 10px;">
-					<div style="float: left;">
+				<div class="containerInformationAnnonce">
+					<div class="containerGlyph">
 						<span
-							style="font-size: 26px;"
-							class="icon-Calendar"></span>
+							class="icon-Calendar glyphAnnonce"></span>
 					</div>
-					<div style="padding-left: 20px; float: left; padding-right: 5px; padding-top: 7px;">Date de création :</div>
-					<div style="padding-left: 20px; padding-top: 7px;">10/11/2014</div>
+					<div class="labelAnnonce">Date de création :</div>
+					<div class="informationAnnonce">10/11/2014</div>
 				</div>
-				<div style="padding-top: 10px;">
-					<div style="float: left;">
+				<div class="containerInformationAnnonce">
+					<div class="containerGlyph">
 						<span
-							style="font-size: 26px;"
-							class="icon-Chart1"></span>
+							class="icon-Chart1 glyphAnnonce"></span>
 					</div>
-					<div style="padding-left: 20px; float: left; padding-right: 5px; padding-top: 7px;">Nombres de consultation :</div>
-					<div style="padding-left: 20px; padding-top: 7px;">2</div>
+					<div class="labelAnnonce">Nombres de consultation :</div>
+					<div class="informationAnnonce">2</div>
 				</div>
 			</div>
-			<div style="padding-top: 40px;">
+			<div id="containerPhoto">
 				<div class="row-fluid">
 					<div class="span12 module_cont module_gallery">
 						<div class="bg_title">
@@ -128,6 +123,29 @@
 		</div>
 		<div class="span3">
 			<h2 class="headInModule">Contact</h2>
+			<div>
+				<div class="containerGlyph">
+					<span
+						class="icon-MapPin1 glyphAnnonce"></span>
+				</div>
+				<div class="contactInfo">210 chemin du devis, 06600 Castors cedex</div>
+			</div>
+			<div class="containerInfo">
+				<div class="containerGlyph">
+					<span
+						class="icon-Handset glyphAnnonce"></span>
+				</div>
+				<div class="contactInfoWithPaddingTop">0493524585</div>
+			</div>
+			<div class="containerInfo">
+				<div class="containerGlyph">
+					<span
+						class="icon-Envelope1 glyphAnnonce"></span>
+				</div>
+				<div class="contactInfoWithPaddingTop">
+					<a href="mailto:client@castors.fr">client@castors.fr</a>
+				</div>
+			</div>
 		</div>
 	</div>
 	<div wicket:id="commentaire"></div>
