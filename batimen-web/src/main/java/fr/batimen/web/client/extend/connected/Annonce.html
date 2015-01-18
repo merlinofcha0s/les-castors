@@ -3,7 +3,7 @@
 		<div wicket:id="profil"></div>
 		<div class="span7">
 			<h2 class="headInModule">Description</h2>
-			<div id="containerDescription">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+			<div>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
 				incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
 				ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
 				fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit
@@ -14,8 +14,7 @@
 				</div>
 				<div>
 					<div class="containerGlyph">
-						<span
-							class="icon-Lightning glyphAnnonce"></span>
+						<span class="icon-Lightning glyphAnnonce"></span>
 					</div>
 					<div class="labelAnnonce">Electricité</div>
 					<div id="categorieLabelSpace">&nbsp;:&nbsp;</div>
@@ -23,32 +22,28 @@
 				</div>
 				<div class="containerInformationAnnonce">
 					<div class="containerGlyph">
-						<span
-							class="icon-Label glyphAnnonce"></span>
+						<span class="icon-Label glyphAnnonce"></span>
 					</div>
 					<div class="labelAnnonce">Type de travaux :</div>
 					<div class="informationAnnonce">Renovation</div>
 				</div>
 				<div class="containerInformationAnnonce">
 					<div class="containerGlyph">
-						<span
-							class="icon-Alarm-Clock glyphAnnonce"></span>
+						<span class="icon-Alarm-Clock glyphAnnonce"></span>
 					</div>
 					<div class="labelAnnonce">Délai d'intervention :</div>
 					<div class="informationAnnonce">Le plus rapidement possible</div>
 				</div>
 				<div class="containerInformationAnnonce">
 					<div class="containerGlyph">
-						<span
-							class="icon-Calendar glyphAnnonce"></span>
+						<span class="icon-Calendar glyphAnnonce"></span>
 					</div>
 					<div class="labelAnnonce">Date de création :</div>
 					<div class="informationAnnonce">10/11/2014</div>
 				</div>
 				<div class="containerInformationAnnonce">
 					<div class="containerGlyph">
-						<span
-							class="icon-Chart1 glyphAnnonce"></span>
+						<span class="icon-Chart1 glyphAnnonce"></span>
 					</div>
 					<div class="labelAnnonce">Nombres de consultation :</div>
 					<div class="informationAnnonce">2</div>
@@ -58,7 +53,7 @@
 				<div class="row-fluid">
 					<div class="span12 module_cont module_gallery">
 						<div class="bg_title">
-							<h2 class="headInModule">Photo du chantier</h2>
+							<h2 class="headInModule">Photos du chantier</h2>
 						</div>
 						<div class="list-of-images">
 							<div class="gallery_item view view-tenth">
@@ -122,28 +117,62 @@
 			<!-- .row-fluid -->
 		</div>
 		<div class="span3">
-			<h2 class="headInModule">Contact</h2>
+			<div class="containerActions">
+				<h2 class="headInModule">Action</h2>
+				<div>
+					<div class="containerGlyph">
+						<span class="icon-Write glyphAnnonce"></span>
+					</div>
+					<div class="sidebarRightWithPaddingTop">
+						<a href="#" wicket:id="modifierAnnonce">Modifier votre annonce</a>
+					</div>
+				</div>
+				<div class="containerAction">
+					<div class="containerGlyph">
+						<span class="icon-Trash glyphAnnonce"></span>
+					</div>
+					<div class="sidebarRightWithPaddingTop">
+						<a href="#">Supprimer l'annonce</a>
+					</div>
+				</div>
+				<div class="containerAction">
+					<div class="containerGlyph">
+						<span class="icon-Plus glyphAnnonce"></span>
+					</div>
+					<div class="sidebarRightWithPaddingTop">
+						<a href="#">S'inscrire à l'annonce</a>
+					</div>
+				</div>
+				<div class="containerAction">
+					<div class="containerGlyph">
+						<span class="icon-Envelope4 glyphAnnonce"></span>
+					</div>
+					<div class="sidebarRightWithPaddingTop">
+						<a href="#">Envoyer votre devis</a>
+					</div>
+				</div>
+			</div>
 			<div>
-				<div class="containerGlyph">
-					<span
-						class="icon-MapPin1 glyphAnnonce"></span>
+				<h2 class="headInModule">Contact</h2>
+				<div>
+					<div class="containerGlyph">
+						<span class="icon-MapPin1 glyphAnnonce"></span>
+					</div>
+					<div class="contactInfo">210 chemin du devis, 06600 Castors cedex</div>
 				</div>
-				<div class="contactInfo">210 chemin du devis, 06600 Castors cedex</div>
-			</div>
-			<div class="containerInfo">
-				<div class="containerGlyph">
-					<span
-						class="icon-Handset glyphAnnonce"></span>
+				<div class="containerInfo">
+					<div class="containerGlyph">
+						<span class="icon-Handset glyphAnnonce"></span>
+					</div>
+					<div class="sidebarRightWithPaddingTop">0493524585</div>
 				</div>
-				<div class="contactInfoWithPaddingTop">0493524585</div>
-			</div>
-			<div class="containerInfo">
-				<div class="containerGlyph">
-					<span
-						class="icon-Envelope1 glyphAnnonce"></span>
-				</div>
-				<div class="contactInfoWithPaddingTop">
-					<a href="mailto:client@castors.fr">client@castors.fr</a>
+				<div class="containerInfo">
+					<div class="containerGlyph">
+						<span class="icon-Envelope1 glyphAnnonce"></span>
+					</div>
+					<div class="sidebarRightWithPaddingTop">
+						<a href="mailto:client@castors.fr">client@castors.fr</a>
+					</div>
 				</div>
 			</div>
 		</div>

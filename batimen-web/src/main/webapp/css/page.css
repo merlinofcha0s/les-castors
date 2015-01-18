@@ -562,10 +562,6 @@ table tr td .error {
 }
 
 /* Espace client - annonce */
-#containerDescription{
-	width: 600px;
-}
-
 #containerInformationsAnnonce{
 	padding-top: 25px;
 }
@@ -616,7 +612,21 @@ table tr td .error {
 	padding-right: 5px;
 }
 
-.contactInfoWithPaddingTop{
+.sidebarRightWithPaddingTop{
+	padding-left: 33px; 
+	padding-right: 5px;
+	padding-top: 7px;
+}
+
+.containerActions{
+	padding-bottom: 20px;
+}
+
+.containerAction{
+	padding-top: 10px;
+}
+
+.actionUser{
 	padding-left: 33px; 
 	padding-right: 5px;
 	padding-top: 7px;
