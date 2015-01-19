@@ -7,10 +7,13 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.string.StringValue;
 
+import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.enums.TypeCompte;
+import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.client.component.Commentaire;
 import fr.batimen.web.client.component.ContactezNous;
 import fr.batimen.web.client.component.Profil;
+import fr.batimen.web.client.extend.error.AccesInterdit;
 import fr.batimen.web.client.master.MasterPage;
 
 public class Annonce extends MasterPage {
@@ -22,8 +25,13 @@ public class Annonce extends MasterPage {
     private AjaxLink<Void> inscrireAnnonce;
     private Link<Void> envoyerDevis;
 
+    private AnnonceDTO annonceDTO;
+
+    private Boolean modeInscris;
+
     private Annonce() {
         super("", "", "Annonce particulier", true, "img/bg_title1.jpg");
+        // verifyRightForAnnonce();
         initComposants();
         initAction();
     }
@@ -31,13 +39,25 @@ public class Annonce extends MasterPage {
     public Annonce(PageParameters params) {
         this();
         StringValue idAnnonce = params.get("idAnnonce");
+        annonceDTO = new AnnonceDTO();
         // TODO : Passer l'id au webservice pour charger les données de
         // l'annonce
-        // TODO : Pour l'acces complet : Controle d'accés : Celui qui possede
-        // l'annonce, celui qui
-        // s'est inscrit a l'annonce (l'a payé)
-        // TODO : Acces en mode degradé : Quelles données sont affichés ? est ce
-        // qu'il va juste avoir accés a la liste d'annonce ?
+
+    }
+
+    private void verifyRightForAnnonce() {
+        Authentication auth = new Authentication();
+        String login = auth.getCurrentUserInfo().getLogin();
+
+        if (!login.equals(annonceDTO.getLoginOwner())) {
+            this.setResponsePage(AccesInterdit.class);
+        }
+
+        // TODO : Acces en mode degradé si pas inscrit à l'annonce : affichage
+        // de tout sauf des
+        // informations de contacts et des autres artisans inscrits dans le cas
+        // d'un partenaire.
+
     }
 
     private void initComposants() {

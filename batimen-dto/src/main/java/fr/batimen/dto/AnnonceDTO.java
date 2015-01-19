@@ -47,6 +47,9 @@ public class AnnonceDTO extends AbstractDTO {
     @NotNull
     private TypeTravaux typeTravaux;
 
+    // Rempli que pour l'affichage
+    private String loginOwner;
+
     /**
      * @return the description
      */
@@ -225,6 +228,21 @@ public class AnnonceDTO extends AbstractDTO {
      */
     public void setTypeTravaux(TypeTravaux typeTravaux) {
         this.typeTravaux = typeTravaux;
+    }
+
+    /**
+     * @return the loginOwner
+     */
+    public String getLoginOwner() {
+        return loginOwner;
+    }
+
+    /**
+     * @param loginOwner
+     *            the loginOwner to set
+     */
+    public void setLoginOwner(String loginOwner) {
+        this.loginOwner = loginOwner;
     }
 
     /*
