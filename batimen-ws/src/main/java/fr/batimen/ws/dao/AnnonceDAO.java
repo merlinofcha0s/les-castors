@@ -205,4 +205,35 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
 
         return query.getSingleResult();
     }
+
+    /**
+     * Calcul le nb d'annonce qu'un client a postés
+     * 
+     * @param login
+     *            le login du client
+     * @return Le nb d'annonce
+     */
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Annonce getAnnonceByID(String id) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Debut de la récuperation de l'annonce par l'id");
+        }
+
+        try {
+            TypedQuery<Annonce> query = entityManager.createNamedQuery(QueryJPQL.ANNONCE_BY_ID, Annonce.class);
+            query.setParameter(QueryJPQL.PARAM_ANNONCE_ID, id);
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Fin de la récuperation de l'annonce par l'id");
+            }
+
+            return query.getSingleResult();
+        } catch (NoResultException nre) {
+            if (LOGGER.isWarnEnabled()) {
+                LOGGER.warn("Aucune correspondance trouvées dans la BDD", nre);
+            }
+            return null;
+        }
+
+    }
 }

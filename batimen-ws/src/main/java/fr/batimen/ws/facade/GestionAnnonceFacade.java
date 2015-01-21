@@ -33,6 +33,7 @@ import fr.batimen.core.utils.PropertiesUtils;
 import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
+import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 import fr.batimen.ws.dao.AnnonceDAO;
 import fr.batimen.ws.entity.Annonce;
@@ -128,16 +129,17 @@ public class GestionAnnonceFacade {
     }
 
     /**
-     * Permet de récuperer les annonces d'un client à partir de son login
+     * Permet de récuperer les annonces d'un client à partir de son login <br/>
+     * Service servant principalement a la page mes annonces
      * 
      * @param login
      *            l'identifiant de l'utilisateur
      * @return La liste des annonces de cet utilisateur
      */
     @POST
-    @Path(WsPath.GESTION_ANNONCE_SERVICE_GET_ANNONCE_BY_LOGIN)
+    @Path(WsPath.GESTION_ANNONCE_SERVICE_GET_ANNONCES_BY_LOGIN)
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public List<AnnonceDTO> getAnnonceByClientLogin(String login) {
+    public List<AnnonceDTO> getAnnoncesByClientLoginForMesAnnonces(String login) {
         // On escape les ""
         String loginEscaped = DeserializeJsonHelper.parseString(login);
         // On recupere les annonces de l'utilisateur
@@ -160,5 +162,38 @@ public class GestionAnnonceFacade {
         }
 
         return annoncesDTO;
+    }
+
+    /**
+     * Permet de récuperer les annonces d'un client à partir de son login <br/>
+     * Service servant principalement a la page mes annonces
+     * 
+     * @param login
+     *            l'identifiant de l'utilisateur
+     * @return La liste des annonces de cet utilisateur
+     */
+    @POST
+    @Path(WsPath.GESTION_ANNONCE_SERVICE_GET_ANNONCES_BY_ID)
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public AnnonceDTO getAnnonceById(String hash, String loginDemandeur, TypeCompte typeCompte) {
+        // TODO : Si le type de compte est artisan alors on regarde si il est
+        // inscrit, si il ne l'est pas on charge l'annonce, sans les infos de
+        // contacts (Rajouter un champs isInscrit dans DTO ???)
+        // TODO : Si le type de compte est artisan et qu'il est inscrit on
+        // affiche les informations de contacts
+        // TODO : Dans tous les cas si c'est un artisan on cache les artisans
+        // deja inscrit.
+        // TODO : Si c'est un client, on regarde si l'annonce lui appartient, si
+        // ce n'est pas le cas KO !!!
+        // TODO : Dans le cas contraire on lui renvoi les infos de l'annonce +
+        // les artisans inscrits a son annonce.
+        // On escape les ""
+        String loginEscaped = DeserializeJsonHelper.parseString(hash);
+        // On recupere les annonces de l'utilisateur
+        Annonce annonceResult = annonceDAO.getAnnonceByID(hash);
+        // On crée l'objet qui contiendra les infos
+        AnnonceDTO annonceDTO = new AnnonceDTO();
+
+        return annonceDTO;
     }
 }

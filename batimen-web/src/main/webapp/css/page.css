@@ -594,6 +594,11 @@ table tr td .error {
 	padding-top: 10px;
 }
 
+.containerEnptrepriseSelectionnee{
+	padding-top: 10px;
+	clear: both;
+}
+
 .informationAnnonce{
 	padding-left: 20px; 
 	padding-top: 7px;

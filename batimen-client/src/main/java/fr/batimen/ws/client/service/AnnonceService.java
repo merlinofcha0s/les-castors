@@ -65,7 +65,7 @@ public class AnnonceService {
         }
 
         String objectInJSON = WsConnector.getInstance().sendRequest(WsPath.GESTION_ANNONCE_SERVICE_PATH,
-                WsPath.GESTION_ANNONCE_SERVICE_GET_ANNONCE_BY_LOGIN, login);
+                WsPath.GESTION_ANNONCE_SERVICE_GET_ANNONCES_BY_LOGIN, login);
 
         List<AnnonceDTO> annonces = AnnonceDTO.deserializeAnnonceDTOList(objectInJSON);
 
@@ -74,6 +74,31 @@ public class AnnonceService {
         }
 
         return annonces;
+    }
+
+    /**
+     * Appel le webservice pour recuperer les annonces par login client.
+     * 
+     * @param login
+     *            L'identifiant du client
+     * @return
+     */
+    public static AnnonceDTO getAnnonceByID(String hashID) {
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Début appel service creation annonce.....");
+        }
+
+        String objectInJSON = WsConnector.getInstance().sendRequest(WsPath.GESTION_ANNONCE_SERVICE_PATH,
+                WsPath.GESTION_ANNONCE_SERVICE_GET_ANNONCES_BY_ID, hashID);
+
+        AnnonceDTO annonce = AnnonceDTO.deserializeAnnonceDTO(objectInJSON);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Fin appel service creation annonce.....");
+        }
+
+        return annonce;
     }
 
 }

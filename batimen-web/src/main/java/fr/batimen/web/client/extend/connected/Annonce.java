@@ -57,6 +57,7 @@ public class Annonce extends MasterPage {
         // de tout sauf des
         // informations de contacts et des autres artisans inscrits dans le cas
         // d'un partenaire.
+        // TODO : Mettre un bouton "Selectionner cet artisan" sur l'annonce ?
 
     }
 

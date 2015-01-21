@@ -98,8 +98,23 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
     }
 
-    private void creationVerificationAnnonce() {
+    /**
+     * Cas de test : récupération des annonces des clients. /!\ charge
+     * automatiquement les artisans qui sont inscrits a l'annonce.
+     * 
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonces_by_id.yml")
+    public void testGetAnnonceByID() {
+        AnnonceDTO annonce = AnnonceService
+                .getAnnonceByID("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
+        Assert.assertNotNull(annonce);
+        Assert.assertEquals("Peinture d'un mur", annonce.getDescription());
+        // Assert.assertEquals("Pebronne enterprise",
+        // annonce.getgetDescription());
+    }
 
+    private void creationVerificationAnnonce() {
         String loginDeJohnny = "johnny06";
         Integer isCreationOK = AnnonceService.creationAnnonce(creationAnnonceDTO);
 
@@ -122,6 +137,5 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
             Assert.assertFalse(annonce.getHashID().isEmpty());
             Assert.assertFalse(annonce.getSelHashID().isEmpty());
         }
-
     }
 }

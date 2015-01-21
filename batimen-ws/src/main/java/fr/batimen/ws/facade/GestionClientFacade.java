@@ -95,7 +95,7 @@ public class GestionClientFacade {
             LOGGER.debug("Récuperation annonce.........");
         }
 
-        List<AnnonceDTO> annoncesDTO = gestionAnnonceFacade.getAnnonceByClientLogin(loginEscaped);
+        List<AnnonceDTO> annoncesDTO = gestionAnnonceFacade.getAnnoncesByClientLoginForMesAnnonces(loginEscaped);
 
         mesAnnoncesDTO.setNotifications(notificationsDTO);
         mesAnnoncesDTO.setAnnonces(annoncesDTO);

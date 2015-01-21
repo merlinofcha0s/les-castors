@@ -28,7 +28,8 @@ public class WsPath {
     // Path Gestion Annonce
     public static final String GESTION_ANNONCE_SERVICE_PATH = "gestionAnnonce";
     public static final String GESTION_ANNONCE_SERVICE_CREATION_ANNONCE = "creationAnnonce";
-    public static final String GESTION_ANNONCE_SERVICE_GET_ANNONCE_BY_LOGIN = "getAnnonceByLogin";
+    public static final String GESTION_ANNONCE_SERVICE_GET_ANNONCES_BY_LOGIN = "getAnnonceByLogin";
+    public static final String GESTION_ANNONCE_SERVICE_GET_ANNONCES_BY_ID = "getAnnonceByID";
 
     // Path Gestion Partenaire
     public static final String GESTION_PARTENAIRE_SERVICE_PATH = "gestionPartenaire";
