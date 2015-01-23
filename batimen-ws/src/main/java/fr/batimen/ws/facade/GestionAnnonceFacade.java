@@ -19,6 +19,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,12 +32,17 @@ import fr.batimen.core.exception.DuplicateEntityException;
 import fr.batimen.core.exception.EmailException;
 import fr.batimen.core.utils.PropertiesUtils;
 import fr.batimen.dto.AnnonceDTO;
+import fr.batimen.dto.ClientDTO;
+import fr.batimen.dto.DemandeAnnonceDTO;
+import fr.batimen.dto.EntrepriseDTO;
+import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 import fr.batimen.ws.dao.AnnonceDAO;
 import fr.batimen.ws.entity.Annonce;
+import fr.batimen.ws.entity.Artisan;
 import fr.batimen.ws.helper.JsonHelper;
 import fr.batimen.ws.interceptor.BatimenInterceptor;
 import fr.batimen.ws.service.AnnonceService;
@@ -175,25 +181,101 @@ public class GestionAnnonceFacade {
     @POST
     @Path(WsPath.GESTION_ANNONCE_SERVICE_GET_ANNONCES_BY_ID)
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public AnnonceDTO getAnnonceById(String hash, String loginDemandeur, TypeCompte typeCompte) {
-        // TODO : Si le type de compte est artisan alors on regarde si il est
-        // inscrit, si il ne l'est pas on charge l'annonce, sans les infos de
+    public AnnonceAffichageDTO getAnnonceById(DemandeAnnonceDTO demandeAnnonce) {
+        String loginDemandeur = demandeAnnonce.getLoginDemandeur();
+        String hashID = demandeAnnonce.getHashID();
+        TypeCompte typeCompteDemandeur = demandeAnnonce.getTypeCompteDemandeur();
+
+        Annonce annonce = annonceDAO.getAnnonceByID(hashID);
+
+        Boolean isArtisan = Boolean.FALSE;
+        Boolean isArtisanInscrit = Boolean.FALSE;
+        // On crée l'objet qui contiendra les infos
+        AnnonceAffichageDTO annonceAffichageDTO = new AnnonceAffichageDTO();
+
+        // Vérification des droits : soit l'artisan est inscrit soit il ne l'est
+        // pas
+        if (typeCompteDemandeur.getRole().contains(TypeCompte.ARTISAN.getRole())) {
+            isArtisan = Boolean.TRUE;
+            for (Artisan artisanInscrit : annonce.getArtisans()) {
+                // On regarde si il n'est pas inscrit...
+                if (!artisanInscrit.getLogin().equals(loginDemandeur)) {
+                    return new AnnonceAffichageDTO();
+                } else {
+                    isArtisanInscrit = Boolean.TRUE;
+                }
+            }
+            // Vérification des droits : Si c'est un client, est ce que c'est
+            // bien le possesseur de l'annonce.
+        } else if (typeCompteDemandeur.getRole().contains(TypeCompte.CLIENT.getRole())) {
+            if (!annonce.getDemandeur().getLogin().equals(loginDemandeur)) {
+                return new AnnonceAffichageDTO();
+            }
+        }
+
+        // TODO : Si le type de compte est artisan alors on regarde si il
+        // est
+        // inscrit, si il ne l'est pas on charge l'annonce, sans les infos
+        // de
         // contacts (Rajouter un champs isInscrit dans DTO ???)
+
         // TODO : Si le type de compte est artisan et qu'il est inscrit on
         // affiche les informations de contacts
-        // TODO : Dans tous les cas si c'est un artisan on cache les artisans
+        // TODO : Dans tous les cas si c'est un artisan on cache les
+        // artisans
         // deja inscrit.
-        // TODO : Si c'est un client, on regarde si l'annonce lui appartient, si
+        // TODO : Si c'est un client, on regarde si l'annonce lui
+        // appartient, si
         // ce n'est pas le cas KO !!!
-        // TODO : Dans le cas contraire on lui renvoi les infos de l'annonce +
+        // TODO : Dans le cas contraire on lui renvoi les infos de l'annonce
+        // +
         // les artisans inscrits a son annonce.
-        // On escape les ""
-        String loginEscaped = DeserializeJsonHelper.parseString(hash);
-        // On recupere les annonces de l'utilisateur
-        Annonce annonceResult = annonceDAO.getAnnonceByID(hash);
-        // On crée l'objet qui contiendra les infos
-        AnnonceDTO annonceDTO = new AnnonceDTO();
 
-        return annonceDTO;
+        // Si on arrive jusque la c'est que l'utilisateur a les droits, donc on
+        // mappe et on renvoi le résultat au front
+        doMapping(annonce, annonceAffichageDTO, isArtisan, isArtisanInscrit);
+
+        return annonceAffichageDTO;
+    }
+
+    private AnnonceAffichageDTO doMapping(Annonce annonce, AnnonceAffichageDTO annonceAffichageDTO, Boolean isArtisan,
+            Boolean isArtisanInscrit) {
+        ModelMapper mapper = new ModelMapper();
+        // Remplissage données de l'annonce
+        mapper.map(annonce, annonceAffichageDTO.getAnnonce());
+        annonceAffichageDTO.getAnnonce().setLoginOwner(annonce.getDemandeur().getLogin());
+        mapper.map(annonce.getAdresseChantier(), annonceAffichageDTO.getAdresse());
+
+        if (isArtisan) {
+            return annonceAffichageDTO;
+        }
+
+        // Informations sur les artisans inscrits à l'annonce.
+        // N'est envoyé vers le backend que si et seulement
+        // c'est un client qui a
+        // fait la demande.
+        for (Artisan artisan : annonce.getArtisans()) {
+            // Creation des objets de transferts
+            ClientDTO artisanDTO = new ClientDTO();
+            EntrepriseDTO entrepriseDTO = new EntrepriseDTO();
+            // Transfert des données des entités vers les DTOs
+            mapper.map(artisan, artisanDTO);
+            mapper.map(artisan.getEntreprise(), entrepriseDTO);
+            // On met en place les liens
+            entrepriseDTO.setArtisan(artisanDTO);
+            annonceAffichageDTO.getEntreprises().add(entrepriseDTO);
+        }
+
+        // Si il y a une entreprise selectionnée
+        // Creation des objets de transferts
+        ClientDTO artisanSelectionneDTO = new ClientDTO();
+        EntrepriseDTO entrepriseSelectionneDTO = new EntrepriseDTO();
+        // Transfert des données des entités vers les DTOs
+        mapper.map(annonce.getEntrepriseSelectionnee(), entrepriseSelectionneDTO);
+        mapper.map(annonce.getEntrepriseSelectionnee().getArtisan(), artisanSelectionneDTO);
+        entrepriseSelectionneDTO.setArtisan(artisanSelectionneDTO);
+        annonceAffichageDTO.setEntrepriseSelectionnee(entrepriseSelectionneDTO);
+
+        return annonceAffichageDTO;
     }
 }

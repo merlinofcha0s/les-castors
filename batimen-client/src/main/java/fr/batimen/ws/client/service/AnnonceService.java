@@ -7,6 +7,8 @@ import org.slf4j.LoggerFactory;
 
 import fr.batimen.core.constant.WsPath;
 import fr.batimen.dto.AnnonceDTO;
+import fr.batimen.dto.DemandeAnnonceDTO;
+import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.ws.client.WsConnector;
 
@@ -83,16 +85,16 @@ public class AnnonceService {
      *            L'identifiant du client
      * @return
      */
-    public static AnnonceDTO getAnnonceByID(String hashID) {
+    public static AnnonceAffichageDTO getAnnonceByID(DemandeAnnonceDTO demandeAnnonceDTO) {
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Début appel service creation annonce.....");
         }
 
         String objectInJSON = WsConnector.getInstance().sendRequest(WsPath.GESTION_ANNONCE_SERVICE_PATH,
-                WsPath.GESTION_ANNONCE_SERVICE_GET_ANNONCES_BY_ID, hashID);
+                WsPath.GESTION_ANNONCE_SERVICE_GET_ANNONCES_BY_ID, demandeAnnonceDTO);
 
-        AnnonceDTO annonce = AnnonceDTO.deserializeAnnonceDTO(objectInJSON);
+        AnnonceAffichageDTO annonce = AnnonceAffichageDTO.deserializeAnnonceAffichageDTO(objectInJSON);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Fin appel service creation annonce.....");

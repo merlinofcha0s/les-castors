@@ -45,6 +45,8 @@ public class EntrepriseDTO extends AbstractDTO {
     @Size(min = ENTREPRISE_SPECIALITE_MIN, max = ENTREPRISE_SPECIALITE_MAX)
     private String specialite;
 
+    private ClientDTO artisan;
+
     /**
      * @return the dateCreation
      */
@@ -121,6 +123,21 @@ public class EntrepriseDTO extends AbstractDTO {
 
     public List<CategorieMetierDTO> getCategoriesMetier() {
         return categoriesMetier;
+    }
+
+    /**
+     * @return the artisan
+     */
+    public ClientDTO getArtisan() {
+        return artisan;
+    }
+
+    /**
+     * @param artisan
+     *            the artisan to set
+     */
+    public void setArtisan(ClientDTO artisan) {
+        this.artisan = artisan;
     }
 
     /*

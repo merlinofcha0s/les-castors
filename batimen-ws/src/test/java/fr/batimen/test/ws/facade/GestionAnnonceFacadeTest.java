@@ -12,7 +12,10 @@ import org.junit.Test;
 
 import fr.batimen.core.constant.Constant;
 import fr.batimen.dto.AnnonceDTO;
+import fr.batimen.dto.DemandeAnnonceDTO;
+import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
+import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.test.ws.AbstractBatimenWsTest;
 import fr.batimen.test.ws.helper.DataHelper;
 import fr.batimen.ws.client.service.AnnonceService;
@@ -106,12 +109,39 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
     public void testGetAnnonceByID() {
-        AnnonceDTO annonce = AnnonceService
-                .getAnnonceByID("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
+        DemandeAnnonceDTO demandeAnnonceDTO = createDemandeAnnonceDTO(
+                "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
+                "pebronne", TypeCompte.CLIENT);
+
+        AnnonceAffichageDTO annonce = AnnonceService.getAnnonceByID(demandeAnnonceDTO);
         Assert.assertNotNull(annonce);
-        Assert.assertEquals("Peinture d'un mur", annonce.getDescription());
         // Assert.assertEquals("Pebronne enterprise",
         // annonce.getgetDescription());
+    }
+
+    /**
+     * Cas de test : Récuperation d'une annonce par son id a partir d'un artisan
+     * qui n'est pas inscrit a cette derniere.
+     * 
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonces_by_id.yml")
+    public void testGetAnnonceByIDWithArtisanNotInscritAtAnnonce() {
+        DemandeAnnonceDTO demandeAnnonceDTO = createDemandeAnnonceDTO(
+                "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
+                "pebronArtisanPasInsc", TypeCompte.ARTISAN);
+
+        AnnonceAffichageDTO annonceInfos = AnnonceService.getAnnonceByID(demandeAnnonceDTO);
+        Assert.assertNotNull(annonceInfos);
+        Assert.assertNull(annonceInfos.getAnnonce());
+    }
+
+    private DemandeAnnonceDTO createDemandeAnnonceDTO(String hashID, String login, TypeCompte typeCompte) {
+        DemandeAnnonceDTO demandeAnnonceDTO = new DemandeAnnonceDTO();
+        demandeAnnonceDTO.setHashID(hashID);
+        demandeAnnonceDTO.setLoginDemandeur(login);
+        demandeAnnonceDTO.setTypeCompteDemandeur(typeCompte);
+        return demandeAnnonceDTO;
     }
 
     private void creationVerificationAnnonce() {
