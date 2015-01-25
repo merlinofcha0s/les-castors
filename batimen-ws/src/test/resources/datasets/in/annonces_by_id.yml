@@ -49,6 +49,7 @@ adresse:
 annonce:
   - id: 1020
     datecreation: 2014-03-30 22:00:00.0
+    datemaj: 2014-04-24 22:00:00.0
     delaiintervention: 0
     description: Peinture d'un mur
     etatannonce: 1
@@ -61,6 +62,7 @@ annonce:
     selHashID: 5Whe5wlRCzzUhgFfRHFkIbtxRMyGrS1eaUntnp9SxEY=
     demandeur_fk: 1001
     adressechantier_id: 102
+    entreprise_selectionnee_fk: 1003
 annonce_artisan:
    - annonce_id: 1020
      artisans_id: 1003

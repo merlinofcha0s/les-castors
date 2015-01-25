@@ -102,8 +102,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     }
 
     /**
-     * Cas de test : récupération des annonces des clients. /!\ charge
-     * automatiquement les artisans qui sont inscrits a l'annonce.
+     * Cas de test : récupération de l'annonce d'un client par un client.
      * 
      */
     @Test
@@ -113,15 +112,22 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
                 "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
                 "pebronne", TypeCompte.CLIENT);
 
-        AnnonceAffichageDTO annonce = AnnonceService.getAnnonceByID(demandeAnnonceDTO);
-        Assert.assertNotNull(annonce);
-        // Assert.assertEquals("Pebronne enterprise",
-        // annonce.getgetDescription());
+        AnnonceAffichageDTO annonceAffichage = AnnonceService.getAnnonceByID(demandeAnnonceDTO);
+        Assert.assertNotNull(annonceAffichage);
+        Assert.assertNotNull(annonceAffichage.getAnnonce().getDescription());
+        Assert.assertNotNull(annonceAffichage.getAnnonce().getDateCreation());
+        Assert.assertNotNull(annonceAffichage.getAnnonce().getDateMAJ());
+
+        Assert.assertNotNull(annonceAffichage.getEntreprises().get(0));
+        Assert.assertNotNull(annonceAffichage.getEntreprises().get(0).getDateCreation());
+
+        Assert.assertNotNull(annonceAffichage.getAdresse());
+        Assert.assertNotNull(annonceAffichage.getEntrepriseSelectionnee());
     }
 
     /**
      * Cas de test : Récuperation d'une annonce par son id a partir d'un artisan
-     * qui n'est pas inscrit a cette derniere.
+     * qui n'est pas inscrit à cette derniere.
      * 
      */
     @Test
@@ -131,9 +137,32 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
                 "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
                 "pebronArtisanPasInsc", TypeCompte.ARTISAN);
 
-        AnnonceAffichageDTO annonceInfos = AnnonceService.getAnnonceByID(demandeAnnonceDTO);
-        Assert.assertNotNull(annonceInfos);
-        Assert.assertNull(annonceInfos.getAnnonce());
+        AnnonceAffichageDTO annonceAffichage = AnnonceService.getAnnonceByID(demandeAnnonceDTO);
+        Assert.assertNotNull(annonceAffichage);
+        Assert.assertFalse(annonceAffichage.getIsArtisanInscrit());
+        Assert.assertNotNull(annonceAffichage.getAnnonce().getDescription());
+        Assert.assertNotNull(annonceAffichage.getAnnonce().getDateCreation());
+        Assert.assertNotNull(annonceAffichage.getAnnonce().getDateMAJ());
+    }
+
+    /**
+     * Cas de test : Récuperation d'une annonce par son id a partir d'un artisan
+     * qui est inscrit à cette derniere.
+     * 
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonces_by_id.yml")
+    public void testGetAnnonceByIDWithArtisanInscritAtAnnonce() {
+        DemandeAnnonceDTO demandeAnnonceDTO = createDemandeAnnonceDTO(
+                "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
+                "pebronneArtisanne", TypeCompte.ARTISAN);
+
+        AnnonceAffichageDTO annonceAffichage = AnnonceService.getAnnonceByID(demandeAnnonceDTO);
+        Assert.assertNotNull(annonceAffichage);
+        Assert.assertTrue(annonceAffichage.getIsArtisanInscrit());
+        Assert.assertNotNull(annonceAffichage.getAnnonce().getDescription());
+        Assert.assertNotNull(annonceAffichage.getAnnonce().getDateCreation());
+        Assert.assertNotNull(annonceAffichage.getAnnonce().getDateMAJ());
     }
 
     private DemandeAnnonceDTO createDemandeAnnonceDTO(String hashID, String login, TypeCompte typeCompte) {

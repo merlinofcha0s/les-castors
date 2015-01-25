@@ -34,6 +34,9 @@ public class AnnonceAffichageDTO extends AbstractDTO {
     @Valid
     private EntrepriseDTO entrepriseSelectionnee;
 
+    @NotNull
+    private Boolean isArtisanInscrit;
+
     /**
      * @return the annonce
      */
@@ -84,6 +87,21 @@ public class AnnonceAffichageDTO extends AbstractDTO {
      */
     public void setEntrepriseSelectionnee(EntrepriseDTO entrepriseSelectionnee) {
         this.entrepriseSelectionnee = entrepriseSelectionnee;
+    }
+
+    /**
+     * @return the isArtisanInscrit
+     */
+    public Boolean getIsArtisanInscrit() {
+        return isArtisanInscrit;
+    }
+
+    /**
+     * @param isArtisanInscrit
+     *            the isArtisanInscrit to set
+     */
+    public void setIsArtisanInscrit(Boolean isArtisanInscrit) {
+        this.isArtisanInscrit = isArtisanInscrit;
     }
 
     /*

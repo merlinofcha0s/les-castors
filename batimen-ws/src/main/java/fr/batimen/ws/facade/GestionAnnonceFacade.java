@@ -31,6 +31,7 @@ import fr.batimen.core.exception.BackendException;
 import fr.batimen.core.exception.DuplicateEntityException;
 import fr.batimen.core.exception.EmailException;
 import fr.batimen.core.utils.PropertiesUtils;
+import fr.batimen.dto.AdresseDTO;
 import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.DemandeAnnonceDTO;
@@ -196,43 +197,38 @@ public class GestionAnnonceFacade {
         // Vérification des droits : soit l'artisan est inscrit soit il ne l'est
         // pas
         if (typeCompteDemandeur.getRole().contains(TypeCompte.ARTISAN.getRole())) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("C'est un artisan qui fait la demande d'affichage d'annonce");
+            }
             isArtisan = Boolean.TRUE;
             for (Artisan artisanInscrit : annonce.getArtisans()) {
-                // On regarde si il n'est pas inscrit...
-                if (!artisanInscrit.getLogin().equals(loginDemandeur)) {
-                    return new AnnonceAffichageDTO();
-                } else {
+                // On regarde si il est inscrit...
+                if (artisanInscrit.getLogin().equals(loginDemandeur)) {
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug("Il est inscrit à l'annonce");
+                    }
                     isArtisanInscrit = Boolean.TRUE;
                 }
             }
             // Vérification des droits : Si c'est un client, est ce que c'est
             // bien le possesseur de l'annonce.
         } else if (typeCompteDemandeur.getRole().contains(TypeCompte.CLIENT.getRole())) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("C'est un client");
+            }
             if (!annonce.getDemandeur().getLogin().equals(loginDemandeur)) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("Il ne possede par les droits d'affichage, on sort du service...");
+                }
                 return new AnnonceAffichageDTO();
             }
         }
 
-        // TODO : Si le type de compte est artisan alors on regarde si il
-        // est
-        // inscrit, si il ne l'est pas on charge l'annonce, sans les infos
-        // de
-        // contacts (Rajouter un champs isInscrit dans DTO ???)
-
-        // TODO : Si le type de compte est artisan et qu'il est inscrit on
-        // affiche les informations de contacts
-        // TODO : Dans tous les cas si c'est un artisan on cache les
-        // artisans
-        // deja inscrit.
-        // TODO : Si c'est un client, on regarde si l'annonce lui
-        // appartient, si
-        // ce n'est pas le cas KO !!!
-        // TODO : Dans le cas contraire on lui renvoi les infos de l'annonce
-        // +
-        // les artisans inscrits a son annonce.
-
         // Si on arrive jusque la c'est que l'utilisateur a les droits, donc on
         // mappe et on renvoi le résultat au front
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Mapping des entités vers les DTOs");
+        }
         doMapping(annonce, annonceAffichageDTO, isArtisan, isArtisanInscrit);
 
         return annonceAffichageDTO;
@@ -241,10 +237,16 @@ public class GestionAnnonceFacade {
     private AnnonceAffichageDTO doMapping(Annonce annonce, AnnonceAffichageDTO annonceAffichageDTO, Boolean isArtisan,
             Boolean isArtisanInscrit) {
         ModelMapper mapper = new ModelMapper();
+        AnnonceDTO annonceDTO = new AnnonceDTO();
+        AdresseDTO adresseDTO = new AdresseDTO();
+
+        annonceAffichageDTO.setAnnonce(annonceDTO);
+        annonceAffichageDTO.setAdresse(adresseDTO);
+        annonceAffichageDTO.setIsArtisanInscrit(isArtisanInscrit);
         // Remplissage données de l'annonce
-        mapper.map(annonce, annonceAffichageDTO.getAnnonce());
+        mapper.map(annonce, annonceDTO);
         annonceAffichageDTO.getAnnonce().setLoginOwner(annonce.getDemandeur().getLogin());
-        mapper.map(annonce.getAdresseChantier(), annonceAffichageDTO.getAdresse());
+        mapper.map(annonce.getAdresseChantier(), adresseDTO);
 
         if (isArtisan) {
             return annonceAffichageDTO;
@@ -252,8 +254,7 @@ public class GestionAnnonceFacade {
 
         // Informations sur les artisans inscrits à l'annonce.
         // N'est envoyé vers le backend que si et seulement
-        // c'est un client qui a
-        // fait la demande.
+        // c'est un client qui a fait la demande.
         for (Artisan artisan : annonce.getArtisans()) {
             // Creation des objets de transferts
             ClientDTO artisanDTO = new ClientDTO();
@@ -266,15 +267,17 @@ public class GestionAnnonceFacade {
             annonceAffichageDTO.getEntreprises().add(entrepriseDTO);
         }
 
-        // Si il y a une entreprise selectionnée
-        // Creation des objets de transferts
-        ClientDTO artisanSelectionneDTO = new ClientDTO();
-        EntrepriseDTO entrepriseSelectionneDTO = new EntrepriseDTO();
-        // Transfert des données des entités vers les DTOs
-        mapper.map(annonce.getEntrepriseSelectionnee(), entrepriseSelectionneDTO);
-        mapper.map(annonce.getEntrepriseSelectionnee().getArtisan(), artisanSelectionneDTO);
-        entrepriseSelectionneDTO.setArtisan(artisanSelectionneDTO);
-        annonceAffichageDTO.setEntrepriseSelectionnee(entrepriseSelectionneDTO);
+        if (annonce.getEntrepriseSelectionnee() != null) {
+            // Si il y a une entreprise selectionnée
+            // Creation des objets de transferts
+            ClientDTO artisanSelectionneDTO = new ClientDTO();
+            EntrepriseDTO entrepriseSelectionneDTO = new EntrepriseDTO();
+            // Transfert des données des entités vers les DTOs
+            mapper.map(annonce.getEntrepriseSelectionnee(), entrepriseSelectionneDTO);
+            mapper.map(annonce.getEntrepriseSelectionnee().getArtisan(), artisanSelectionneDTO);
+            entrepriseSelectionneDTO.setArtisan(artisanSelectionneDTO);
+            annonceAffichageDTO.setEntrepriseSelectionnee(entrepriseSelectionneDTO);
+        }
 
         return annonceAffichageDTO;
     }
