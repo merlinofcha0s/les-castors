@@ -3,50 +3,64 @@
 		<div wicket:id="profil"></div>
 		<div class="span7">
 			<h2 class="headInModule">Description</h2>
-			<div>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-				dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
-				commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-				pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est
-				laborum.</div>
+			<div wicket:id="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+				incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
+				ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
+				fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit
+				anim id est laborum.</div>
 			<div id="containerInformationsAnnonce">
 				<div class="bg_title">
 					<h2 class="headInModule">Informations sur l'annonce</h2>
 				</div>
 				<div>
 					<div class="containerGlyph">
-						<span class="icon-Lightning glyphAnnonce"></span>
+						<span
+							wicket:id="iconCategorie"
+							class="glyphAnnonce"></span>
 					</div>
-					<div class="labelAnnonce">Electricité</div>
+					<div
+						class="labelAnnonce"
+						wicket:id="categorie">Electricité</div>
 					<div id="categorieLabelSpace">&nbsp;:&nbsp;</div>
-					<div id="sousCategorieLabel">Domotiques</div>
+					<div
+						id="sousCategorieLabel"
+						wicket:id="sousCategorie">Domotiques</div>
 				</div>
 				<div class="containerInformationAnnonce">
 					<div class="containerGlyph">
 						<span class="icon-Label glyphAnnonce"></span>
 					</div>
 					<div class="labelAnnonce">Type de travaux :</div>
-					<div class="informationAnnonce">Renovation</div>
+					<div
+						class="informationAnnonce"
+						wicket:id="typeTravaux">Renovation</div>
 				</div>
 				<div class="containerInformationAnnonce">
 					<div class="containerGlyph">
 						<span class="icon-Alarm-Clock glyphAnnonce"></span>
 					</div>
 					<div class="labelAnnonce">Délai d'intervention :</div>
-					<div class="informationAnnonce">Le plus rapidement possible</div>
+					<div
+						class="informationAnnonce"
+						wicket:id="delaiIntervention">Le plus rapidement possible</div>
 				</div>
 				<div class="containerInformationAnnonce">
 					<div class="containerGlyph">
 						<span class="icon-Calendar glyphAnnonce"></span>
 					</div>
 					<div class="labelAnnonce">Date de création :</div>
-					<div class="informationAnnonce">10/11/2014</div>
+					<div
+						class="informationAnnonce"
+						wicket:id="dateCreation">10/11/2014</div>
 				</div>
 				<div class="containerInformationAnnonce">
 					<div class="containerGlyph">
 						<span class="icon-Chart1 glyphAnnonce"></span>
 					</div>
 					<div class="labelAnnonce">Nombres de consultation :</div>
-					<div class="informationAnnonce">2</div>
+					<div
+						class="informationAnnonce"
+						wicket:id="nbConsultation">2</div>
 				</div>
 			</div>
 			<div id="containerPhoto">
@@ -121,30 +135,18 @@
 						<div class="bg_title">
 							<h2 class="headInModule">Entreprises qui vous proposent des devis</h2>
 						</div>
-						<div class="containerEnptrepriseSelectionnee">
+						<div
+							class="containerEnptrepriseSelectionnee"
+							wicket:id="entreprises">
 							<div class="containerGlyph">
 								<span class="icon-Profile glyphAnnonce"></span>
 							</div>
-							<a class="labelAnnonce" href="#">Ké buenos enterprise</a>
+							<a
+								class="labelAnnonce"
+								href="#"
+								wicket:id="linkEntreprise">Ké buenos enterprise</a>
 						</div>
-						<div class="containerEnptrepriseSelectionnee">
-							<div class="containerGlyph">
-								<span class="icon-Profile glyphAnnonce"></span>
-							</div>
-							<a class="labelAnnonce" href="#">Ké buenos enterprise</a>
-						</div>
-						<div class="containerEnptrepriseSelectionnee">
-							<div class="containerGlyph">
-								<span class="icon-Profile glyphAnnonce"></span>
-							</div>
-							<a class="labelAnnonce" href="#">Ké buenos enterprise</a>
-						</div>
-						<div class="containerEnptrepriseSelectionnee">
-							<div class="containerGlyph">
-								<span class="icon-Profile glyphAnnonce"></span>
-							</div>
-							<a class="labelAnnonce" href="#">Ké buenos enterprise</a>
-						</div>
+						<div wicket:id="aucuneEntreprise"></div>
 					</div>
 				</div>
 				<!-- .module_cont -->
@@ -154,7 +156,7 @@
 		<div class="span3">
 			<div class="containerActions">
 				<h2 class="headInModule">Action</h2>
-				<div>
+				<div wicket:id="modifierAnnonceContainer">
 					<div class="containerGlyph">
 						<span class="icon-Write glyphAnnonce"></span>
 					</div>
@@ -164,28 +166,34 @@
 							wicket:id="modifierAnnonce">Modifier votre annonce</a>
 					</div>
 				</div>
-				<div class="containerAction">
+				<div class="containerAction" wicket:id="supprimerAnnonceContainer">
 					<div class="containerGlyph">
 						<span class="icon-Trash glyphAnnonce"></span>
 					</div>
 					<div class="sidebarRightWithPaddingTop">
-						<a href="#">Supprimer l'annonce</a>
+						<a
+							href="#"
+							wicket:id="supprimerAnnonce">Supprimer l'annonce</a>
 					</div>
 				</div>
-				<div class="containerAction">
+				<div class="containerAction" wicket:id="inscrireAnnonceContainer">
 					<div class="containerGlyph">
 						<span class="icon-Plus glyphAnnonce"></span>
 					</div>
 					<div class="sidebarRightWithPaddingTop">
-						<a href="#">S'inscrire à l'annonce</a>
+						<a
+							href="#"
+							wicket:id="inscrireAnnonce">S'inscrire à l'annonce</a>
 					</div>
 				</div>
-				<div class="containerAction">
-					<div class="containerGlyph">
-						<span class="icon-Envelope4 glyphAnnonce"></span>
-					</div>
-					<div class="sidebarRightWithPaddingTop">
-						<a href="#">Envoyer votre devis</a>
+				<div class="containerAction" wicket:id="envoyerDevisContainer">
+					<div wicket:id="envoyerDevis">
+						<div class="containerGlyph">
+							<span class="icon-Envelope4 glyphAnnonce"></span>
+						</div>
+						<div class="sidebarRightWithPaddingTop">
+							<a href="#">Envoyer votre devis</a>
+						</div>
 					</div>
 				</div>
 			</div>

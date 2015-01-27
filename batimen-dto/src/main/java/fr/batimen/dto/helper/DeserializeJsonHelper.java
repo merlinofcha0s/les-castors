@@ -44,7 +44,7 @@ public class DeserializeJsonHelper {
                         LOGGER.warn("Erreur lors du parsing d'un date en JSON : " + json.getAsString(), e);
                         LOGGER.warn("Essai de parsing de la date : " + json.getAsString() + " en long!");
                     }
-                    return new Date(json.getAsJsonPrimitive().getAsLong());
+                    return new Date(json.getAsLong());
                 }
             }
         });

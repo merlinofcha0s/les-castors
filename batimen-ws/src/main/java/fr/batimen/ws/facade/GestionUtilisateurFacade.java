@@ -27,6 +27,7 @@ import fr.batimen.core.constant.WsPath;
 import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.LoginDTO;
 import fr.batimen.dto.NotificationDTO;
+import fr.batimen.dto.PermissionDTO;
 import fr.batimen.dto.enums.StatutNotification;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.enums.TypeNotification;
@@ -98,9 +99,18 @@ public class GestionUtilisateurFacade {
         // Si on a pas trouvé le particulier, on va chercher l'artisan
         if (client.getLogin().isEmpty()) {
             artisan = artisanDAO.getArtisanByLogin(toLogin.getLogin());
-            return modelMapper.map(artisan, ClientDTO.class);
+            ClientDTO clientDTO = modelMapper.map(artisan, ClientDTO.class);
+            for (Permission permission : artisan.getPermissions()) {
+                clientDTO.getPermissions().add(modelMapper.map(permission, PermissionDTO.class));
+            }
+
+            return clientDTO;
         } else {
-            return modelMapper.map(client, ClientDTO.class);
+            ClientDTO clientDTO = modelMapper.map(client, ClientDTO.class);
+            for (Permission permission : client.getPermissions()) {
+                clientDTO.getPermissions().add(modelMapper.map(permission, PermissionDTO.class));
+            }
+            return clientDTO;
         }
     }
 

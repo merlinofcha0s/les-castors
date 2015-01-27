@@ -186,50 +186,56 @@ public class GestionAnnonceFacade {
         String loginDemandeur = demandeAnnonce.getLoginDemandeur();
         String hashID = demandeAnnonce.getHashID();
         TypeCompte typeCompteDemandeur = demandeAnnonce.getTypeCompteDemandeur();
-
-        Annonce annonce = annonceDAO.getAnnonceByID(hashID);
-
-        Boolean isArtisan = Boolean.FALSE;
-        Boolean isArtisanInscrit = Boolean.FALSE;
         // On crée l'objet qui contiendra les infos
         AnnonceAffichageDTO annonceAffichageDTO = new AnnonceAffichageDTO();
 
-        // Vérification des droits : soit l'artisan est inscrit soit il ne l'est
-        // pas
-        if (typeCompteDemandeur.getRole().contains(TypeCompte.ARTISAN.getRole())) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("C'est un artisan qui fait la demande d'affichage d'annonce");
-            }
-            isArtisan = Boolean.TRUE;
-            for (Artisan artisanInscrit : annonce.getArtisans()) {
-                // On regarde si il est inscrit...
-                if (artisanInscrit.getLogin().equals(loginDemandeur)) {
-                    if (LOGGER.isDebugEnabled()) {
-                        LOGGER.debug("Il est inscrit à l'annonce");
-                    }
-                    isArtisanInscrit = Boolean.TRUE;
-                }
-            }
-            // Vérification des droits : Si c'est un client, est ce que c'est
-            // bien le possesseur de l'annonce.
-        } else if (typeCompteDemandeur.getRole().contains(TypeCompte.CLIENT.getRole())) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("C'est un client");
-            }
-            if (!annonce.getDemandeur().getLogin().equals(loginDemandeur)) {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("Il ne possede par les droits d'affichage, on sort du service...");
-                }
-                return new AnnonceAffichageDTO();
-            }
-        }
+        Annonce annonce = annonceDAO.getAnnonceByID(hashID);
 
-        // Si on arrive jusque la c'est que l'utilisateur a les droits, donc on
-        // mappe et on renvoi le résultat au front
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Mapping des entités vers les DTOs");
+        if (annonce != null) {
+
+            Boolean isArtisan = Boolean.FALSE;
+            Boolean isArtisanInscrit = Boolean.FALSE;
+
+            // Vérification des droits : soit l'artisan est inscrit soit il ne
+            // l'est
+            // pas
+            if (typeCompteDemandeur.getRole().contains(TypeCompte.ARTISAN.getRole())) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("C'est un artisan qui fait la demande d'affichage d'annonce");
+                }
+                isArtisan = Boolean.TRUE;
+                for (Artisan artisanInscrit : annonce.getArtisans()) {
+                    // On regarde si il est inscrit...
+                    if (artisanInscrit.getLogin().equals(loginDemandeur)) {
+                        if (LOGGER.isDebugEnabled()) {
+                            LOGGER.debug("Il est inscrit à l'annonce");
+                        }
+                        isArtisanInscrit = Boolean.TRUE;
+                    }
+                }
+                // Vérification des droits : Si c'est un client, est ce que
+                // c'est
+                // bien le possesseur de l'annonce.
+            } else if (typeCompteDemandeur.getRole().contains(TypeCompte.CLIENT.getRole())) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("C'est un client");
+                }
+                if (!annonce.getDemandeur().getLogin().equals(loginDemandeur)) {
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug("Il ne possede par les droits d'affichage, on sort du service...");
+                    }
+                    return new AnnonceAffichageDTO();
+                }
+            }
+
+            // Si on arrive jusque la c'est que l'utilisateur a les droits, donc
+            // on
+            // mappe et on renvoi le résultat au front
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Mapping des entités vers les DTOs");
+            }
+            doMapping(annonce, annonceAffichageDTO, isArtisan, isArtisanInscrit);
         }
-        doMapping(annonce, annonceAffichageDTO, isArtisan, isArtisanInscrit);
 
         return annonceAffichageDTO;
     }

@@ -66,6 +66,7 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
         assertTrue(user.getNumeroTel().equals("0615125645"));
         assertTrue(user.getPrenom().equals("Pebron"));
         assertTrue(user.getNom().equals("De la Pebronne"));
+        Assert.assertEquals(user.getPermissions().get(0).getTypeCompte(), TypeCompte.CLIENT);
     }
 
     @Test
