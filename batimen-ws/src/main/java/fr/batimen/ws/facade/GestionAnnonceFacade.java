@@ -204,6 +204,9 @@ public class GestionAnnonceFacade {
                     LOGGER.debug("C'est un artisan qui fait la demande d'affichage d'annonce");
                 }
                 isArtisan = Boolean.TRUE;
+                // On charge le téléphone et le numéro de téléphone du client
+                annonceAffichageDTO.setTelephoneClient(annonce.getDemandeur().getNumeroTel());
+                annonceAffichageDTO.setEmailClient(annonce.getDemandeur().getEmail());
                 for (Artisan artisanInscrit : annonce.getArtisans()) {
                     // On regarde si il est inscrit...
                     if (artisanInscrit.getLogin().equals(loginDemandeur)) {
@@ -229,8 +232,7 @@ public class GestionAnnonceFacade {
             }
 
             // Si on arrive jusque la c'est que l'utilisateur a les droits, donc
-            // on
-            // mappe et on renvoi le résultat au front
+            // on mappe et on renvoi le résultat au front
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Mapping des entités vers les DTOs");
             }

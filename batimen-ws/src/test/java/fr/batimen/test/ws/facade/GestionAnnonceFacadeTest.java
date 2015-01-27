@@ -143,6 +143,8 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         Assert.assertNotNull(annonceAffichage.getAnnonce().getDescription());
         Assert.assertNotNull(annonceAffichage.getAnnonce().getDateCreation());
         Assert.assertNotNull(annonceAffichage.getAnnonce().getDateMAJ());
+        Assert.assertEquals("0615125645", annonceAffichage.getTelephoneClient());
+        Assert.assertEquals("lol@lol.com", annonceAffichage.getEmailClient());
     }
 
     /**
@@ -163,6 +165,8 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         Assert.assertNotNull(annonceAffichage.getAnnonce().getDescription());
         Assert.assertNotNull(annonceAffichage.getAnnonce().getDateCreation());
         Assert.assertNotNull(annonceAffichage.getAnnonce().getDateMAJ());
+        Assert.assertEquals("0615125645", annonceAffichage.getTelephoneClient());
+        Assert.assertEquals("lol@lol.com", annonceAffichage.getEmailClient());
     }
 
     private DemandeAnnonceDTO createDemandeAnnonceDTO(String hashID, String login, TypeCompte typeCompte) {

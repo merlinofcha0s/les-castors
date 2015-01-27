@@ -7,6 +7,7 @@ import org.apache.shiro.authz.AuthorizationException;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.extensions.markup.html.basic.SmartLinkLabel;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
@@ -17,6 +18,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.EntrepriseDTO;
 import fr.batimen.dto.PermissionDTO;
@@ -28,11 +30,17 @@ import fr.batimen.web.client.component.Commentaire;
 import fr.batimen.web.client.component.ContactezNous;
 import fr.batimen.web.client.component.LinkLabel;
 import fr.batimen.web.client.component.Profil;
-import fr.batimen.web.client.extend.error.AccesInterdit;
 import fr.batimen.web.client.extend.member.client.MesAnnonces;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.ws.client.service.AnnonceService;
 
+/**
+ * TODO Terminer de brancher les contacts, faire la couche de sécurité TODO :
+ * Mettre un bouton "Selectionner cet artisan" sur l'annonce ?
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class Annonce extends MasterPage {
 
     private static final long serialVersionUID = -3604005728078066454L;
@@ -49,6 +57,8 @@ public class Annonce extends MasterPage {
 
     private Boolean modeInscris;
 
+    private ClientDTO userConnected;
+
     public Annonce() {
         super("", "", "Annonce particulier", true, "img/bg_title1.jpg");
     }
@@ -57,41 +67,25 @@ public class Annonce extends MasterPage {
         this();
         idAnnonce = params.get("idAnnonce").toString();
         loadAnnonceInfos(idAnnonce);
-        verifyRightForAnnonce();
         initComposants();
         initAction();
         affichageDonneesAnnonce();
         affichageEntreprisesInscrites();
-
+        affichageContactAnnonce();
     }
 
     private void loadAnnonceInfos(String idAnnonce) {
         Authentication authentication = new Authentication();
+        userConnected = authentication.getCurrentUserInfo();
         DemandeAnnonceDTO demandeAnnonceDTO = new DemandeAnnonceDTO();
         demandeAnnonceDTO.setHashID(idAnnonce.toString());
-        demandeAnnonceDTO.setLoginDemandeur(authentication.getCurrentUserInfo().getLogin());
+        demandeAnnonceDTO.setLoginDemandeur(userConnected.getLogin());
 
-        for (PermissionDTO permissionDTO : authentication.getCurrentUserInfo().getPermissions()) {
+        for (PermissionDTO permissionDTO : userConnected.getPermissions()) {
             demandeAnnonceDTO.setTypeCompteDemandeur(permissionDTO.getTypeCompte());
         }
 
         annonceAffichageDTO = AnnonceService.getAnnonceByID(demandeAnnonceDTO);
-
-    }
-
-    private void verifyRightForAnnonce() {
-        Authentication authentication = new Authentication();
-        String login = authentication.getCurrentUserInfo().getLogin();
-
-        if (!login.equals(annonceAffichageDTO.getAnnonce().getLoginOwner())) {
-            this.setResponsePage(AccesInterdit.class);
-        }
-
-        // TODO : Acces en mode degradé si pas inscrit à l'annonce : affichage
-        // de tout sauf des
-        // informations de contacts et des autres artisans inscrits dans le cas
-        // d'un partenaire.
-        // TODO : Mettre un bouton "Selectionner cet artisan" sur l'annonce ?
 
     }
 
@@ -268,6 +262,21 @@ public class Annonce extends MasterPage {
 
                 itemEntreprise.add(linkEntreprise);
             }
+
+            /*
+             * (non-Javadoc)
+             * 
+             * @see org.apache.wicket.Component#isVisible()
+             */
+            @Override
+            public boolean isVisible() {
+                try {
+                    SecurityUtils.getSubject().checkRole(TypeCompte.ARTISAN.getRole());
+                    return false;
+                } catch (AuthorizationException ae) {
+                    return true;
+                }
+            }
         };
 
         Label aucuneEntreprise = new Label("aucuneEntreprise", "Aucune entreprise ne s'est inscrite pour le moment") {
@@ -286,6 +295,55 @@ public class Annonce extends MasterPage {
         };
 
         add(listViewEntrepriseInscrite, aucuneEntreprise);
+    }
+
+    private void affichageContactAnnonce() {
+
+        String complementAdresse = annonceAffichageDTO.getAdresse().getComplementAdresse();
+
+        StringBuilder adresseComplete = new StringBuilder(annonceAffichageDTO.getAdresse().getAdresse());
+        adresseComplete.append(" ");
+
+        if (!complementAdresse.isEmpty()) {
+            adresseComplete.append(complementAdresse).append(" ");
+        }
+
+        adresseComplete.append(annonceAffichageDTO.getAdresse().getCodePostal()).append(" ")
+                .append(annonceAffichageDTO.getAdresse().getVille()).append(" ")
+                .append(annonceAffichageDTO.getAdresse().getDepartement());
+
+        Label adresse = new Label("adresse", adresseComplete.toString());
+        Model<String> telephoneValue = null;
+        Model<String> emailValue = null;
+        // Tout dépends si c'est un artisan qui envoi les données => le
+        // webservice renvoi le téléphone et l'adresse mail.
+        // Sinon c'est que c'est le client
+        try {
+            SecurityUtils.getSubject().checkRoles(TypeCompte.ARTISAN.getRole());
+            telephoneValue = new Model<String>(annonceAffichageDTO.getTelephoneClient());
+            emailValue = new Model<String>(annonceAffichageDTO.getEmailClient());
+        } catch (AuthorizationException ae) {
+            if (LOGGER.isWarnEnabled()) {
+                LOGGER.warn(SecurityUtils.getSubject().getPrincipal() + " ne possede pas le role : "
+                        + TypeCompte.ARTISAN.getRole());
+            }
+        }
+        try {
+            SecurityUtils.getSubject().checkRoles(TypeCompte.CLIENT.getRole());
+            telephoneValue = new Model<String>(userConnected.getNumeroTel());
+            emailValue = new Model<String>(userConnected.getEmail());
+        } catch (AuthorizationException ae) {
+            if (LOGGER.isWarnEnabled()) {
+                LOGGER.warn(SecurityUtils.getSubject().getPrincipal() + " ne possede pas le role : "
+                        + TypeCompte.CLIENT.getRole());
+            }
+        }
+
+        Label telephone = new Label("telephone", telephoneValue);
+        SmartLinkLabel email = new SmartLinkLabel("email", emailValue);
+
+        add(adresse, telephone, email);
+
     }
 
     private Boolean checkClientAndAdminRoles() {

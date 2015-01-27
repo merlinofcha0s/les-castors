@@ -7,6 +7,9 @@ import java.util.Objects;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.Email;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -36,6 +39,11 @@ public class AnnonceAffichageDTO extends AbstractDTO {
 
     @NotNull
     private Boolean isArtisanInscrit;
+    @NotNull
+    @Size(max = 10)
+    private String telephoneClient;
+    @Email
+    private String emailClient;
 
     /**
      * @return the annonce
@@ -102,6 +110,36 @@ public class AnnonceAffichageDTO extends AbstractDTO {
      */
     public void setIsArtisanInscrit(Boolean isArtisanInscrit) {
         this.isArtisanInscrit = isArtisanInscrit;
+    }
+
+    /**
+     * @return the telephoneClient
+     */
+    public String getTelephoneClient() {
+        return telephoneClient;
+    }
+
+    /**
+     * @return the emailClient
+     */
+    public String getEmailClient() {
+        return emailClient;
+    }
+
+    /**
+     * @param telephoneClient
+     *            the telephoneClient to set
+     */
+    public void setTelephoneClient(String telephoneClient) {
+        this.telephoneClient = telephoneClient;
+    }
+
+    /**
+     * @param emailClient
+     *            the emailClient to set
+     */
+    public void setEmailClient(String emailClient) {
+        this.emailClient = emailClient;
     }
 
     /*
