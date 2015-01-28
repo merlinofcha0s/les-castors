@@ -2,8 +2,6 @@ package fr.batimen.web.client.extend.connected;
 
 import java.text.SimpleDateFormat;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.AuthorizationException;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -26,6 +24,7 @@ import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.web.app.security.Authentication;
+import fr.batimen.web.app.security.RolesUtils;
 import fr.batimen.web.client.component.Commentaire;
 import fr.batimen.web.client.component.ContactezNous;
 import fr.batimen.web.client.component.LinkLabel;
@@ -35,8 +34,13 @@ import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.ws.client.service.AnnonceService;
 
 /**
- * TODO Terminer de brancher les contacts, faire la couche de sécurité TODO :
- * Mettre un bouton "Selectionner cet artisan" sur l'annonce ?
+ * TODO : Rajouter les champs etat annonce, type de contact <br/>
+ * TODO : Faire les tests d'affichage et de sécurité <br/>
+ * TODO : Mettre un bouton "Selectionner cet artisan" sur l'annonce ? <br/>
+ * TODO : Faire le compteur de consultation, exclure admin <br/>
+ * TODO : Mettre en place les quatres actions, modifier, supprimer, s'inscrire,
+ * envoyer devis <br/>
+ * TODO : Mettre en face de chaque entreprise, choisir l'entreprise<br/>
  * 
  * @author Casaucau Cyril
  * 
@@ -55,9 +59,9 @@ public class Annonce extends MasterPage {
 
     private AnnonceAffichageDTO annonceAffichageDTO;
 
-    private Boolean modeInscris;
-
     private ClientDTO userConnected;
+
+    private RolesUtils roleUtils;
 
     public Annonce() {
         super("", "", "Annonce particulier", true, "img/bg_title1.jpg");
@@ -66,6 +70,7 @@ public class Annonce extends MasterPage {
     public Annonce(PageParameters params) {
         this();
         idAnnonce = params.get("idAnnonce").toString();
+        roleUtils = new RolesUtils();
         loadAnnonceInfos(idAnnonce);
         initComposants();
         initAction();
@@ -156,12 +161,7 @@ public class Annonce extends MasterPage {
 
             @Override
             public boolean isVisible() {
-                try {
-                    SecurityUtils.getSubject().checkRole(TypeCompte.ARTISAN.getRole());
-                    return true;
-                } catch (AuthorizationException ae) {
-                    return false;
-                }
+                return roleUtils.checkRoles(TypeCompte.ARTISAN);
             }
         };
 
@@ -183,12 +183,7 @@ public class Annonce extends MasterPage {
 
             @Override
             public boolean isVisible() {
-                try {
-                    SecurityUtils.getSubject().checkRole(TypeCompte.ARTISAN.getRole());
-                    return true;
-                } catch (AuthorizationException ae) {
-                    return false;
-                }
+                return roleUtils.checkRoles(TypeCompte.ARTISAN);
             }
         };
 
@@ -270,12 +265,7 @@ public class Annonce extends MasterPage {
              */
             @Override
             public boolean isVisible() {
-                try {
-                    SecurityUtils.getSubject().checkRole(TypeCompte.ARTISAN.getRole());
-                    return false;
-                } catch (AuthorizationException ae) {
-                    return true;
-                }
+                return roleUtils.checkRoles(TypeCompte.CLIENT);
             }
         };
 
@@ -299,6 +289,36 @@ public class Annonce extends MasterPage {
 
     private void affichageContactAnnonce() {
 
+        WebMarkupContainer containerContact = new WebMarkupContainer("containerContact") {
+
+            private static final long serialVersionUID = 1L;
+
+            /*
+             * (non-Javadoc)
+             * 
+             * @see org.apache.wicket.Component#isVisible()
+             */
+            @Override
+            public boolean isVisible() {
+                if (roleUtils.checkRoles(TypeCompte.CLIENT)
+                        && annonceAffichageDTO.getAnnonce().getLoginOwner().equals(userConnected.getLogin())) {
+                    return true;
+                } else if (roleUtils.checkRoles(TypeCompte.ARTISAN)) {
+                    for (EntrepriseDTO entreprise : annonceAffichageDTO.getEntreprises()) {
+                        if (userConnected.getLogin().equals(entreprise.getArtisan().getLogin())) {
+                            return true;
+                        }
+                    }
+                } else if (roleUtils.checkRoles(TypeCompte.ADMINISTRATEUR_MANAGER)) {
+                    return true;
+                } else {
+                    return false;
+                }
+                return false;
+            }
+
+        };
+
         String complementAdresse = annonceAffichageDTO.getAdresse().getComplementAdresse();
 
         StringBuilder adresseComplete = new StringBuilder(annonceAffichageDTO.getAdresse().getAdresse());
@@ -318,54 +338,29 @@ public class Annonce extends MasterPage {
         // Tout dépends si c'est un artisan qui envoi les données => le
         // webservice renvoi le téléphone et l'adresse mail.
         // Sinon c'est que c'est le client
-        try {
-            SecurityUtils.getSubject().checkRoles(TypeCompte.ARTISAN.getRole());
+        if (roleUtils.checkRoles(TypeCompte.ARTISAN) || roleUtils.checkRoles(TypeCompte.ADMINISTRATEUR_MANAGER)) {
             telephoneValue = new Model<String>(annonceAffichageDTO.getTelephoneClient());
             emailValue = new Model<String>(annonceAffichageDTO.getEmailClient());
-        } catch (AuthorizationException ae) {
-            if (LOGGER.isWarnEnabled()) {
-                LOGGER.warn(SecurityUtils.getSubject().getPrincipal() + " ne possede pas le role : "
-                        + TypeCompte.ARTISAN.getRole());
-            }
-        }
-        try {
-            SecurityUtils.getSubject().checkRoles(TypeCompte.CLIENT.getRole());
+        } else {
             telephoneValue = new Model<String>(userConnected.getNumeroTel());
             emailValue = new Model<String>(userConnected.getEmail());
-        } catch (AuthorizationException ae) {
-            if (LOGGER.isWarnEnabled()) {
-                LOGGER.warn(SecurityUtils.getSubject().getPrincipal() + " ne possede pas le role : "
-                        + TypeCompte.CLIENT.getRole());
-            }
         }
 
         Label telephone = new Label("telephone", telephoneValue);
         SmartLinkLabel email = new SmartLinkLabel("email", emailValue);
 
-        add(adresse, telephone, email);
+        containerContact.add(adresse, telephone, email);
+        add(containerContact);
 
     }
 
     private Boolean checkClientAndAdminRoles() {
-        try {
-            SecurityUtils.getSubject().checkRoles(TypeCompte.CLIENT.getRole());
+        if (roleUtils.checkRoles(TypeCompte.CLIENT)) {
             return Boolean.TRUE;
-        } catch (AuthorizationException ae) {
-            if (LOGGER.isWarnEnabled()) {
-                LOGGER.warn(SecurityUtils.getSubject().getPrincipal() + " ne possede pas le role : "
-                        + TypeCompte.CLIENT.getRole());
-            }
-        }
-
-        try {
-            SecurityUtils.getSubject().checkRoles(TypeCompte.ADMINISTRATEUR_MANAGER.getRole());
+        } else if (roleUtils.checkRoles(TypeCompte.ADMINISTRATEUR_MANAGER)) {
             return Boolean.TRUE;
-        } catch (AuthorizationException ae) {
-            if (LOGGER.isWarnEnabled()) {
-                LOGGER.warn(SecurityUtils.getSubject().getPrincipal() + " ne possede pas le role : "
-                        + TypeCompte.ADMINISTRATEUR_MANAGER.getRole());
-            }
+        } else {
+            return Boolean.FALSE;
         }
-        return Boolean.FALSE;
     }
 }
