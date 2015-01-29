@@ -20,6 +20,12 @@ import fr.batimen.core.constant.Constant;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.web.selenium.dataset.AnnonceDataset;
 
+/**
+ * Test d'intégration pour la page d'affichage d'une annonce.
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class TestAnnonce extends AbstractITTest {
 
     @Override
@@ -33,6 +39,11 @@ public class TestAnnonce extends AbstractITTest {
         dbSetup.launch();
     }
 
+    /**
+     * Cas de test : Le client accede a son annonce en se connectant a les
+     * castors, il doit y arriver
+     * 
+     */
     @Test
     public void testAnnonceAffichageWithClient() {
         connectAndGoToAnnonce(TypeCompte.CLIENT, "toto");
@@ -40,8 +51,16 @@ public class TestAnnonce extends AbstractITTest {
 
         assertEquals("ENTREPRISES QUI VOUS PROPOSENT DES DEVIS", driver
                 .findElement(By.xpath("//div[4]/div/div/div/h2")).getText());
+        assertEquals("Modifier votre annonce", driver.findElement(By.linkText("Modifier votre annonce")).getText());
+        assertEquals("Supprimer l'annonce", driver.findElement(By.id("supprimerAnnonce")).getText());
     }
 
+    /**
+     * Cas de test : L'artisan essaye d'acceder a une annonce en se connectant a
+     * les castors, il doit y arriver mais l'encar avec les entreprises deja
+     * inscrite ne doit pas s'afficher
+     * 
+     */
     @Test(expected = NoSuchElementException.class)
     public void testAnnonceAffichageWithArtisan() {
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
@@ -49,12 +68,37 @@ public class TestAnnonce extends AbstractITTest {
         connectAndGoToAnnonce(TypeCompte.ARTISAN, "toto");
         assertCoreInformationOfAnnonce();
 
+        // Les entreprises qui vous proposent des devis
         Assert.assertFalse(driver.findElement(By.xpath("//div[4]/div/div/div/h2")).isDisplayed());
     }
 
-    // @Test
+    /**
+     * Cas de test : L'admin essaye d'acceder a une annonce en se connectant a
+     * les castors, il doit y arriver et tout doit s'afficher
+     * 
+     */
+    @Test
     public void testAnnonceAffichageWithAdmin() {
+        connectAndGoToAnnonce(TypeCompte.ADMINISTRATEUR, "toto");
+        assertCoreInformationOfAnnonce();
+        assertEquals("ENTREPRISES QUI VOUS PROPOSENT DES DEVIS", driver
+                .findElement(By.xpath("//div[4]/div/div/div/h2")).getText());
+        assertEquals("Modifier votre annonce", driver.findElement(By.linkText("Modifier votre annonce")).getText());
+        assertEquals("Supprimer l'annonce", driver.findElement(By.id("supprimerAnnonce")).getText());
 
+    }
+
+    /**
+     * Cas de test : L'utilisateur essaye d'acceder à l'annonce mais n'y arrive
+     * pas car il n'est pas connecté.
+     */
+    @Test
+    public void testAnnonceAffichageRefuseAccessCauseNotConnected() {
+        StringBuilder appUrlAnnonce = new StringBuilder(appUrl);
+        appUrlAnnonce.append(Constant.ANNONCE).append("?idAnnonce=").append("toto");
+        driver.get(appUrlAnnonce.toString());
+        assertEquals("OOPS! VOUS N'AVEZ PAS LE DROIT D'ETRE ICI :(",
+                driver.findElement(By.cssSelector("h1.titleAccessDenied")).getText());
     }
 
     public void connectAndGoToAnnonce(TypeCompte typeCompteWanted, String idAnnonce) {
@@ -65,15 +109,19 @@ public class TestAnnonce extends AbstractITTest {
         } else if (typeCompteWanted.equals(TypeCompte.ARTISAN)) {
             connexionApplication("pebron", AbstractITTest.BON_MOT_DE_PASSE, Boolean.TRUE);
         } else {
-            connexionApplication("raidenAdmin", AbstractITTest.BON_MOT_DE_PASSE, Boolean.TRUE);
+            connexionApplication("admin", AbstractITTest.BON_MOT_DE_PASSE, Boolean.TRUE);
         }
         driver.findElement(By.id("connexionlbl")).click();
 
+        // On calcul l'url d'accées direct à l'annonce.
         StringBuilder appUrlAnnonce = new StringBuilder(appUrl);
         appUrlAnnonce.append(Constant.ANNONCE).append("?idAnnonce=").append(idAnnonce);
         driver.get(appUrlAnnonce.toString());
     }
 
+    /**
+     * Vérifie les informations principales de l'annonce
+     */
     public void assertCoreInformationOfAnnonce() {
         Boolean checkSousCategoriePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.textToBePresentInElementLocated(By.id("sousCategorieLabel"),

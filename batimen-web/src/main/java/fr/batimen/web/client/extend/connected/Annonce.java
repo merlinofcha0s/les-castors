@@ -154,6 +154,9 @@ public class Annonce extends MasterPage {
 
         };
 
+        supprimerAnnonce.setOutputMarkupId(true);
+        supprimerAnnonceContainer.setMarkupId("supprimerAnnonce");
+
         WebMarkupContainer inscrireAnnonceContainer = new WebMarkupContainer("inscrireAnnonceContainer") {
             /**
              * 
@@ -244,7 +247,7 @@ public class Annonce extends MasterPage {
              */
             @Override
             public boolean isVisible() {
-                return roleUtils.checkRoles(TypeCompte.CLIENT);
+                return roleUtils.checkRoles(TypeCompte.CLIENT) || roleUtils.checkRoles(TypeCompte.ADMINISTRATEUR);
             }
 
         };
@@ -275,16 +278,6 @@ public class Annonce extends MasterPage {
                 };
 
                 itemEntreprise.add(linkEntreprise);
-            }
-
-            /*
-             * (non-Javadoc)
-             * 
-             * @see org.apache.wicket.Component#isVisible()
-             */
-            @Override
-            public boolean isVisible() {
-                return roleUtils.checkRoles(TypeCompte.CLIENT);
             }
         };
 
@@ -377,7 +370,7 @@ public class Annonce extends MasterPage {
     private Boolean checkClientAndAdminRoles() {
         if (roleUtils.checkRoles(TypeCompte.CLIENT)) {
             return Boolean.TRUE;
-        } else if (roleUtils.checkRoles(TypeCompte.ADMINISTRATEUR_MANAGER)) {
+        } else if (roleUtils.checkRoles(TypeCompte.ADMINISTRATEUR)) {
             return Boolean.TRUE;
         } else {
             return Boolean.FALSE;

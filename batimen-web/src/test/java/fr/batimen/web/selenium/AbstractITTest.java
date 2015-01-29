@@ -68,9 +68,9 @@ public abstract class AbstractITTest {
             .values(100002, "xaviern@batimen.fr", "Dupont", "Xavier", "xavier",
                     "$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=", "0614125696",
                     "2014-01-08", false, "lolmdr06")
-            .values(100003, "admin@lescastors.fr", "Casaucau", "Cyril", "raidenAdmin",
+            .values(100003, "admin@lescastors.fr", "Casaucau", "Cyril", "admin",
                     "$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=", "0614125696",
-                    "2014-01-08", false, "lolmdr101").build();
+                    "2014-01-08", true, "lolmdr101").build();
     public static final Operation INSERT_USER_PERMISSION = insertInto("permission").columns("typecompte", "client_fk")
             .values(4, 100001).values(4, 100002).values(0, 100003).build();
 
