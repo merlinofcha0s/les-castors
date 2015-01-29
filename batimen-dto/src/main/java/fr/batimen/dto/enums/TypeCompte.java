@@ -30,5 +30,4 @@ public enum TypeCompte {
     public String toString() {
         return nomCompte;
     }
-
 }

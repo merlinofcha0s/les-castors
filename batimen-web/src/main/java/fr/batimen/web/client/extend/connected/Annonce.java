@@ -34,7 +34,8 @@ import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.ws.client.service.AnnonceService;
 
 /**
- * TODO : Rajouter les champs etat annonce, type de contact <br/>
+ * TODO : Mettre un message d'erreur quand le client n'a pas les droits pour
+ * afficher l'annonce <br/>
  * TODO : Faire les tests d'affichage et de sécurité <br/>
  * TODO : Mettre un bouton "Selectionner cet artisan" sur l'annonce ? <br/>
  * TODO : Faire le compteur de consultation, exclure admin <br/>
@@ -224,12 +225,30 @@ public class Annonce extends MasterPage {
         SimpleDateFormat sdf = new SimpleDateFormat("DD/MM/yyyy");
         Label dateCreation = new Label("dateCreation", sdf.format(annonceAffichageDTO.getAnnonce().getDateCreation()));
         Label nbConsultation = new Label("nbConsultation", annonceAffichageDTO.getAnnonce().getNbConsultation());
+        Label etatAnnonce = new Label("etatAnnonce", annonceAffichageDTO.getAnnonce().getEtatAnnonce().getType());
+        Label typeContact = new Label("typeContact", annonceAffichageDTO.getAnnonce().getTypeContact().getAffichage());
 
         add(description, iconCategorie, categorie, sousCategorie, typeTravaux, delaiIntervention, dateCreation,
-                nbConsultation);
+                nbConsultation, etatAnnonce, typeContact);
     }
 
     private void affichageEntreprisesInscrites() {
+        WebMarkupContainer containerEnteprisesInscrites = new WebMarkupContainer("containerEnteprisesInscrites") {
+
+            private static final long serialVersionUID = 1L;
+
+            /*
+             * (non-Javadoc)
+             * 
+             * @see org.apache.wicket.Component#isVisible()
+             */
+            @Override
+            public boolean isVisible() {
+                return roleUtils.checkRoles(TypeCompte.CLIENT);
+            }
+
+        };
+
         ListView<EntrepriseDTO> listViewEntrepriseInscrite = new ListView<EntrepriseDTO>("entreprises",
                 annonceAffichageDTO.getEntreprises()) {
             /**
@@ -284,7 +303,8 @@ public class Annonce extends MasterPage {
             }
         };
 
-        add(listViewEntrepriseInscrite, aucuneEntreprise);
+        containerEnteprisesInscrites.add(listViewEntrepriseInscrite, aucuneEntreprise);
+        add(containerEnteprisesInscrites);
     }
 
     private void affichageContactAnnonce() {

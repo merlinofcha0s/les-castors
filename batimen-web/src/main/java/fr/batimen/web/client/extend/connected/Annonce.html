@@ -20,11 +20,11 @@
 					</div>
 					<div
 						class="labelAnnonce"
-						wicket:id="categorie">Electricité</div>
+						wicket:id="categorie"></div>
 					<div id="categorieLabelSpace">&nbsp;:&nbsp;</div>
 					<div
 						id="sousCategorieLabel"
-						wicket:id="sousCategorie">Domotiques</div>
+						wicket:id="sousCategorie"></div>
 				</div>
 				<div class="containerInformationAnnonce">
 					<div class="containerGlyph">
@@ -33,7 +33,7 @@
 					<div class="labelAnnonce">Type de travaux :</div>
 					<div
 						class="informationAnnonce"
-						wicket:id="typeTravaux">Renovation</div>
+						wicket:id="typeTravaux"></div>
 				</div>
 				<div class="containerInformationAnnonce">
 					<div class="containerGlyph">
@@ -45,13 +45,31 @@
 						wicket:id="delaiIntervention">Le plus rapidement possible</div>
 				</div>
 				<div class="containerInformationAnnonce">
+                    <div class="containerGlyph">
+                        <span class="icon-Speech-Buble5 glyphAnnonce"></span>
+                    </div>
+                    <div class="labelAnnonce">Type de contact préféré :</div>
+                    <div
+                        class="informationAnnonce"
+                        wicket:id="typeContact"></div>
+                </div>
+				<div class="containerInformationAnnonce">
+					<div class="containerGlyph">
+						<span class="icon-Open glyphAnnonce"></span>
+					</div>
+					<div class="labelAnnonce">Etat de l'annonce :</div>
+					<div
+						class="informationAnnonce"
+						wicket:id="etatAnnonce"></div>
+				</div>
+				<div class="containerInformationAnnonce">
 					<div class="containerGlyph">
 						<span class="icon-Calendar glyphAnnonce"></span>
 					</div>
 					<div class="labelAnnonce">Date de création :</div>
 					<div
 						class="informationAnnonce"
-						wicket:id="dateCreation">10/11/2014</div>
+						wicket:id="dateCreation"></div>
 				</div>
 				<div class="containerInformationAnnonce">
 					<div class="containerGlyph">
@@ -60,7 +78,7 @@
 					<div class="labelAnnonce">Nombres de consultation :</div>
 					<div
 						class="informationAnnonce"
-						wicket:id="nbConsultation">2</div>
+						wicket:id="nbConsultation"></div>
 				</div>
 			</div>
 			<div id="containerPhoto">
@@ -129,7 +147,7 @@
 				<!-- .module_cont -->
 			</div>
 			<!-- .row-fluid -->
-			<div>
+			<div wicket:id="containerEnteprisesInscrites">
 				<div class="row-fluid">
 					<div class="span12">
 						<div class="bg_title">
@@ -176,7 +194,7 @@
 							wicket:id="supprimerAnnonce">Supprimer l'annonce</a>
 					</div>
 				</div>
-				<div class="containerAction" wicket:id="inscrireAnnonceContainer">
+				<div  wicket:id="inscrireAnnonceContainer">
 					<div class="containerGlyph">
 						<span class="icon-Plus glyphAnnonce"></span>
 					</div>

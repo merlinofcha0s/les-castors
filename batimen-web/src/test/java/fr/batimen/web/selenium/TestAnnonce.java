@@ -1,0 +1,97 @@
+package fr.batimen.web.selenium;
+
+import static com.ninja_squad.dbsetup.Operations.sequenceOf;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.util.concurrent.TimeUnit;
+
+import org.junit.Assert;
+import org.junit.Test;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+import com.ninja_squad.dbsetup.DbSetup;
+import com.ninja_squad.dbsetup.operation.Operation;
+
+import fr.batimen.core.constant.Constant;
+import fr.batimen.dto.enums.TypeCompte;
+import fr.batimen.web.selenium.dataset.AnnonceDataset;
+
+public class TestAnnonce extends AbstractITTest {
+
+    @Override
+    public void prepareDB() throws Exception {
+        Operation operation = sequenceOf(DELETE_ALL, INSERT_USER_DATA, INSERT_USER_PERMISSION,
+                AnnonceDataset.INSERT_ADRESSE_DATA, AnnonceDataset.INSERT_ENTREPRISE_DATA,
+                AnnonceDataset.INSERT_ARTISAN_DATA, AnnonceDataset.INSERT_ARTISAN_PERMISSION,
+                AnnonceDataset.INSERT_NOTATION_DATA, AnnonceDataset.INSERT_ANNONCE_DATA,
+                AnnonceDataset.INSERT_NOTIFICATION_DATA);
+        DbSetup dbSetup = new DbSetup(getDriverManagerDestination(), operation);
+        dbSetup.launch();
+    }
+
+    @Test
+    public void testAnnonceAffichageWithClient() {
+        connectAndGoToAnnonce(TypeCompte.CLIENT, "toto");
+        assertCoreInformationOfAnnonce();
+
+        assertEquals("ENTREPRISES QUI VOUS PROPOSENT DES DEVIS", driver
+                .findElement(By.xpath("//div[4]/div/div/div/h2")).getText());
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void testAnnonceAffichageWithArtisan() {
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        driver.manage().timeouts().pageLoadTimeout(5, TimeUnit.SECONDS);
+        connectAndGoToAnnonce(TypeCompte.ARTISAN, "toto");
+        assertCoreInformationOfAnnonce();
+
+        Assert.assertFalse(driver.findElement(By.xpath("//div[4]/div/div/div/h2")).isDisplayed());
+    }
+
+    // @Test
+    public void testAnnonceAffichageWithAdmin() {
+
+    }
+
+    public void connectAndGoToAnnonce(TypeCompte typeCompteWanted, String idAnnonce) {
+        driver.get(appUrl);
+        // On s'authentifie à l'application
+        if (typeCompteWanted.equals(TypeCompte.CLIENT)) {
+            connexionApplication("raiden", AbstractITTest.BON_MOT_DE_PASSE, Boolean.TRUE);
+        } else if (typeCompteWanted.equals(TypeCompte.ARTISAN)) {
+            connexionApplication("pebron", AbstractITTest.BON_MOT_DE_PASSE, Boolean.TRUE);
+        } else {
+            connexionApplication("raidenAdmin", AbstractITTest.BON_MOT_DE_PASSE, Boolean.TRUE);
+        }
+        driver.findElement(By.id("connexionlbl")).click();
+
+        StringBuilder appUrlAnnonce = new StringBuilder(appUrl);
+        appUrlAnnonce.append(Constant.ANNONCE).append("?idAnnonce=").append(idAnnonce);
+        driver.get(appUrlAnnonce.toString());
+    }
+
+    public void assertCoreInformationOfAnnonce() {
+        Boolean checkSousCategoriePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.textToBePresentInElementLocated(By.id("sousCategorieLabel"),
+                        "Installation électrique"));
+        assertTrue(checkSousCategoriePresent);
+
+        assertEquals("Construction compliqué qui necessite des connaissance en geologie",
+                driver.findElement(By.cssSelector("div.span7 > div")).getText());
+        assertEquals("Electricité", driver.findElement(By.cssSelector("div.labelAnnonce")).getText());
+        assertEquals("Neuf", driver.findElement(By.cssSelector("div.informationAnnonce")).getText());
+        assertEquals("Le plus rapidement possible",
+                driver.findElement(By.xpath("//div[@id='containerInformationsAnnonce']/div[4]/div[3]")).getText());
+        assertEquals("Email", driver.findElement(By.xpath("//div[@id='containerInformationsAnnonce']/div[5]/div[3]"))
+                .getText());
+        assertEquals("Désactive",
+                driver.findElement(By.xpath("//div[@id='containerInformationsAnnonce']/div[6]/div[3]")).getText());
+        assertEquals("10/01/2014",
+                driver.findElement(By.xpath("//div[@id='containerInformationsAnnonce']/div[7]/div[3]")).getText());
+    }
+
+}
