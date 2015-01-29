@@ -30,12 +30,15 @@ public class QueryJPQL {
     public static final String ANNONCE_BY_TITLE_AND_DESCRIPTION = "annonceByTitleAndDescription";
     public static final String ANNONCE_BY_LOGIN_FETCH_ARTISAN = "annonceByLoginFetchArtisan";
     public static final String NB_ANNONCE_BY_LOGIN = "nbAnnonceByLogin";
+    public static final String ANNONCE_BY_ID_FETCH_ARTISAN_ENTREPRISE_CLIENT_ADRESSE = "annonceByIDFetchArtisanEntrepriseClientAdresse";
     public static final String ANNONCE_BY_ID = "annonceByID";
+    public static final String ANNONCE_UPDATE_NB_CONSULTATION = "annonceUpdateNbConsultation";
 
     // Parametre Query Entity annonce
     public static final String PARAM_ANNONCE_TITRE = "titre";
     public static final String PARAM_ANNONCE_DESCRIPTION = "description";
     public static final String PARAM_ANNONCE_ID = "hashID";
+    public static final String PARAM_ANNONCE_NB_CONSULTATION = "nbConsultation";
 
     // Entity artisan
     public static final String ARTISAN_BY_EMAIL = "artisanByEmail";

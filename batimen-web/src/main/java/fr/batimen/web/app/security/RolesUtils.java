@@ -28,4 +28,12 @@ public class RolesUtils implements Serializable {
         }
     }
 
+    public Boolean checkClientAndAdminRoles() {
+        if (checkRoles(TypeCompte.CLIENT) || checkRoles(TypeCompte.ADMINISTRATEUR)) {
+            return Boolean.TRUE;
+        } else {
+            return Boolean.FALSE;
+        }
+    }
+
 }

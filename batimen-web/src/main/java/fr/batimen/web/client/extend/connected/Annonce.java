@@ -34,9 +34,6 @@ import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.ws.client.service.AnnonceService;
 
 /**
- * TODO : Mettre un message d'erreur quand le client n'a pas les droits pour
- * afficher l'annonce <br/>
- * TODO : Faire les tests d'affichage et de sécurité <br/>
  * TODO : Mettre un bouton "Selectionner cet artisan" sur l'annonce ? <br/>
  * TODO : Faire le compteur de consultation, exclure admin <br/>
  * TODO : Mettre en place les quatres actions, modifier, supprimer, s'inscrire,
@@ -78,6 +75,7 @@ public class Annonce extends MasterPage {
         affichageDonneesAnnonce();
         affichageEntreprisesInscrites();
         affichageContactAnnonce();
+        calculateNbConsultation();
     }
 
     private void loadAnnonceInfos(String idAnnonce) {
@@ -116,7 +114,7 @@ public class Annonce extends MasterPage {
 
             @Override
             public boolean isVisible() {
-                return checkClientAndAdminRoles();
+                return roleUtils.checkClientAndAdminRoles();
             }
         };
 
@@ -139,7 +137,7 @@ public class Annonce extends MasterPage {
 
             @Override
             public boolean isVisible() {
-                return checkClientAndAdminRoles();
+                return roleUtils.checkClientAndAdminRoles();
             }
         };
 
@@ -364,16 +362,14 @@ public class Annonce extends MasterPage {
 
         containerContact.add(adresse, telephone, email);
         add(containerContact);
-
     }
 
-    private Boolean checkClientAndAdminRoles() {
-        if (roleUtils.checkRoles(TypeCompte.CLIENT)) {
-            return Boolean.TRUE;
-        } else if (roleUtils.checkRoles(TypeCompte.ADMINISTRATEUR)) {
-            return Boolean.TRUE;
-        } else {
-            return Boolean.FALSE;
+    private void calculateNbConsultation() {
+        if (roleUtils.checkRoles(TypeCompte.ARTISAN)) {
+            Integer nbConsultation = annonceAffichageDTO.getAnnonce().getNbConsultation();
+            nbConsultation++;
+            // TODO Appel du webservice pour enregistrer la valeur
         }
+
     }
 }

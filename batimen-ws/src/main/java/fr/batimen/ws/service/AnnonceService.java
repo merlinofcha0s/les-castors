@@ -17,7 +17,12 @@ import org.slf4j.LoggerFactory;
 import fr.batimen.core.exception.BackendException;
 import fr.batimen.core.exception.DuplicateEntityException;
 import fr.batimen.core.security.HashHelper;
+import fr.batimen.dto.AdresseDTO;
+import fr.batimen.dto.AnnonceDTO;
+import fr.batimen.dto.ClientDTO;
+import fr.batimen.dto.EntrepriseDTO;
 import fr.batimen.dto.PermissionDTO;
+import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.ws.dao.AdresseDAO;
@@ -25,6 +30,7 @@ import fr.batimen.ws.dao.ClientDAO;
 import fr.batimen.ws.dao.PermissionDAO;
 import fr.batimen.ws.entity.Adresse;
 import fr.batimen.ws.entity.Annonce;
+import fr.batimen.ws.entity.Artisan;
 import fr.batimen.ws.entity.Client;
 import fr.batimen.ws.entity.Permission;
 
@@ -202,6 +208,54 @@ public class AnnonceService {
         String salt = HashHelper.generateSalt();
         nouvelleAnnonce.setSelHashID(salt);
         nouvelleAnnonce.setHashID(HashHelper.hashID(nouvelleAnnonce.getId(), salt));
+    }
+
+    public AnnonceAffichageDTO doMappingAnnonceAffichageDTO(Annonce annonce, AnnonceAffichageDTO annonceAffichageDTO,
+            Boolean isArtisan, Boolean isArtisanInscrit) {
+        ModelMapper mapper = new ModelMapper();
+        AnnonceDTO annonceDTO = new AnnonceDTO();
+        AdresseDTO adresseDTO = new AdresseDTO();
+
+        annonceAffichageDTO.setAnnonce(annonceDTO);
+        annonceAffichageDTO.setAdresse(adresseDTO);
+        annonceAffichageDTO.setIsArtisanInscrit(isArtisanInscrit);
+        // Remplissage données de l'annonce
+        mapper.map(annonce, annonceDTO);
+        annonceAffichageDTO.getAnnonce().setLoginOwner(annonce.getDemandeur().getLogin());
+        mapper.map(annonce.getAdresseChantier(), adresseDTO);
+
+        if (isArtisan) {
+            return annonceAffichageDTO;
+        }
+
+        // Informations sur les artisans inscrits à l'annonce.
+        // N'est envoyé vers le backend que si et seulement
+        // c'est un client qui a fait la demande.
+        for (Artisan artisan : annonce.getArtisans()) {
+            // Creation des objets de transferts
+            ClientDTO artisanDTO = new ClientDTO();
+            EntrepriseDTO entrepriseDTO = new EntrepriseDTO();
+            // Transfert des données des entités vers les DTOs
+            mapper.map(artisan, artisanDTO);
+            mapper.map(artisan.getEntreprise(), entrepriseDTO);
+            // On met en place les liens
+            entrepriseDTO.setArtisan(artisanDTO);
+            annonceAffichageDTO.getEntreprises().add(entrepriseDTO);
+        }
+
+        if (annonce.getEntrepriseSelectionnee() != null) {
+            // Si il y a une entreprise selectionnée
+            // Creation des objets de transferts
+            ClientDTO artisanSelectionneDTO = new ClientDTO();
+            EntrepriseDTO entrepriseSelectionneDTO = new EntrepriseDTO();
+            // Transfert des données des entités vers les DTOs
+            mapper.map(annonce.getEntrepriseSelectionnee(), entrepriseSelectionneDTO);
+            mapper.map(annonce.getEntrepriseSelectionnee().getArtisan(), artisanSelectionneDTO);
+            entrepriseSelectionneDTO.setArtisan(artisanSelectionneDTO);
+            annonceAffichageDTO.setEntrepriseSelectionnee(entrepriseSelectionneDTO);
+        }
+
+        return annonceAffichageDTO;
     }
 
 }

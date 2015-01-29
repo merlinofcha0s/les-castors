@@ -19,7 +19,6 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
-import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,11 +30,8 @@ import fr.batimen.core.exception.BackendException;
 import fr.batimen.core.exception.DuplicateEntityException;
 import fr.batimen.core.exception.EmailException;
 import fr.batimen.core.utils.PropertiesUtils;
-import fr.batimen.dto.AdresseDTO;
 import fr.batimen.dto.AnnonceDTO;
-import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.DemandeAnnonceDTO;
-import fr.batimen.dto.EntrepriseDTO;
 import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
@@ -189,7 +185,7 @@ public class GestionAnnonceFacade {
         // On crée l'objet qui contiendra les infos
         AnnonceAffichageDTO annonceAffichageDTO = new AnnonceAffichageDTO();
 
-        Annonce annonce = annonceDAO.getAnnonceByID(hashID);
+        Annonce annonce = annonceDAO.getAnnonceByIDForAffichage(hashID);
 
         if (annonce != null) {
 
@@ -236,57 +232,17 @@ public class GestionAnnonceFacade {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Mapping des entités vers les DTOs");
             }
-            doMapping(annonce, annonceAffichageDTO, isArtisan, isArtisanInscrit);
+            annonceService.doMappingAnnonceAffichageDTO(annonce, annonceAffichageDTO, isArtisan, isArtisanInscrit);
         }
-
         return annonceAffichageDTO;
     }
 
-    private AnnonceAffichageDTO doMapping(Annonce annonce, AnnonceAffichageDTO annonceAffichageDTO, Boolean isArtisan,
-            Boolean isArtisanInscrit) {
-        ModelMapper mapper = new ModelMapper();
-        AnnonceDTO annonceDTO = new AnnonceDTO();
-        AdresseDTO adresseDTO = new AdresseDTO();
-
-        annonceAffichageDTO.setAnnonce(annonceDTO);
-        annonceAffichageDTO.setAdresse(adresseDTO);
-        annonceAffichageDTO.setIsArtisanInscrit(isArtisanInscrit);
-        // Remplissage données de l'annonce
-        mapper.map(annonce, annonceDTO);
-        annonceAffichageDTO.getAnnonce().setLoginOwner(annonce.getDemandeur().getLogin());
-        mapper.map(annonce.getAdresseChantier(), adresseDTO);
-
-        if (isArtisan) {
-            return annonceAffichageDTO;
+    public Integer updateNbConsultationAnnonce(String hashID, Integer nbConsultation) {
+        Boolean updatedSuccess = annonceDAO.updateAnnonceNbConsultationByHashId(nbConsultation, hashID);
+        if (updatedSuccess == Boolean.TRUE) {
+            return 0;
+        } else {
+            return 1;
         }
-
-        // Informations sur les artisans inscrits à l'annonce.
-        // N'est envoyé vers le backend que si et seulement
-        // c'est un client qui a fait la demande.
-        for (Artisan artisan : annonce.getArtisans()) {
-            // Creation des objets de transferts
-            ClientDTO artisanDTO = new ClientDTO();
-            EntrepriseDTO entrepriseDTO = new EntrepriseDTO();
-            // Transfert des données des entités vers les DTOs
-            mapper.map(artisan, artisanDTO);
-            mapper.map(artisan.getEntreprise(), entrepriseDTO);
-            // On met en place les liens
-            entrepriseDTO.setArtisan(artisanDTO);
-            annonceAffichageDTO.getEntreprises().add(entrepriseDTO);
-        }
-
-        if (annonce.getEntrepriseSelectionnee() != null) {
-            // Si il y a une entreprise selectionnée
-            // Creation des objets de transferts
-            ClientDTO artisanSelectionneDTO = new ClientDTO();
-            EntrepriseDTO entrepriseSelectionneDTO = new EntrepriseDTO();
-            // Transfert des données des entités vers les DTOs
-            mapper.map(annonce.getEntrepriseSelectionnee(), entrepriseSelectionneDTO);
-            mapper.map(annonce.getEntrepriseSelectionnee().getArtisan(), artisanSelectionneDTO);
-            entrepriseSelectionneDTO.setArtisan(artisanSelectionneDTO);
-            annonceAffichageDTO.setEntrepriseSelectionnee(entrepriseSelectionneDTO);
-        }
-
-        return annonceAffichageDTO;
     }
 }

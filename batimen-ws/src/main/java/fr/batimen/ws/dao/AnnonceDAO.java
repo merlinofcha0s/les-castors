@@ -10,6 +10,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.persistence.NoResultException;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.slf4j.Logger;
@@ -207,6 +208,37 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
     }
 
     /**
+     * Récupère les informations d'une annonce dans le but de les afficher.
+     * 
+     * @param login
+     *            le login du client
+     * @return Le nb d'annonce
+     */
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Annonce getAnnonceByIDForAffichage(String id) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Debut de la récuperation de l'annonce par l'id");
+        }
+
+        try {
+            TypedQuery<Annonce> query = entityManager.createNamedQuery(
+                    QueryJPQL.ANNONCE_BY_ID_FETCH_ARTISAN_ENTREPRISE_CLIENT_ADRESSE, Annonce.class);
+            query.setParameter(QueryJPQL.PARAM_ANNONCE_ID, id);
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Fin de la récuperation de l'annonce par l'id");
+            }
+
+            return query.getSingleResult();
+        } catch (NoResultException nre) {
+            if (LOGGER.isWarnEnabled()) {
+                LOGGER.warn("Aucune correspondance trouvées dans la BDD", nre);
+            }
+            return null;
+        }
+    }
+
+    /**
      * Calcul le nb d'annonce qu'un client a postés
      * 
      * @param login
@@ -234,6 +266,41 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
             }
             return null;
         }
+    }
 
+    /**
+     * Calcul le nb d'annonce qu'un client a postés
+     * 
+     * @param login
+     *            le login du client
+     * @return Le nb d'annonce
+     */
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public Boolean updateAnnonceNbConsultationByHashId(Integer nbConsultation, String id) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Debut de la récuperation de l'annonce par l'id");
+        }
+
+        try {
+            Query query = entityManager.createNamedQuery(QueryJPQL.ANNONCE_UPDATE_NB_CONSULTATION);
+            query.setParameter(QueryJPQL.PARAM_ANNONCE_ID, id);
+            query.setParameter(QueryJPQL.PARAM_ANNONCE_NB_CONSULTATION, nbConsultation);
+            Integer nbUpdated = query.executeUpdate();
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Fin de la récuperation de l'annonce par l'id");
+            }
+
+            if (nbUpdated == 0 || nbUpdated != 1) {
+                return Boolean.FALSE;
+            }
+
+            return Boolean.TRUE;
+        } catch (NoResultException nre) {
+            if (LOGGER.isWarnEnabled()) {
+                LOGGER.warn("Aucune correspondance trouvées dans la BDD", nre);
+            }
+            return null;
+        }
     }
 }
