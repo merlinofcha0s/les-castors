@@ -55,7 +55,7 @@ import fr.batimen.dto.enums.TypeTravaux;
                 query = "SELECT a FROM Annonce AS a LEFT OUTER JOIN FETCH a.artisans AS art LEFT OUTER JOIN FETCH art.entreprise AS ent LEFT OUTER JOIN FETCH a.adresseChantier AS adr LEFT OUTER JOIN FETCH a.demandeur AS dem WHERE a.hashID = :hashID"),
         @NamedQuery(name = QueryJPQL.ANNONCE_BY_ID, query = "SELECT a FROM Annonce AS a WHERE a.hashID = :hashID"),
         @NamedQuery(name = QueryJPQL.ANNONCE_UPDATE_NB_CONSULTATION,
-                query = "UPDATE annonce a set a.nbConsultation = :nbConsultation WHERE a.hashID = :hashID") })
+                query = "UPDATE Annonce AS a set a.nbConsultation = :nbConsultation WHERE a.hashID = :hashID") })
 public class Annonce extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = 3160372354800747789L;

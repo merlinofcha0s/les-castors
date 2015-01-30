@@ -34,6 +34,7 @@ import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
+import fr.batimen.dto.aggregate.NbConsultationDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
@@ -168,17 +169,20 @@ public class GestionAnnonceFacade {
     }
 
     /**
-     * Permet de récuperer les annonces d'un client à partir de son login <br/>
-     * Service servant principalement a la page mes annonces
+     * Permet de récuperer une annonce dans le but de l'afficher <br/>
+     * Récupère également les informations sur les artisans et les entreprise
+     * inscrites a cette annonce
      * 
-     * @param login
-     *            l'identifiant de l'utilisateur
-     * @return La liste des annonces de cet utilisateur
+     * @param demandeAnnonce
+     *            le hashID avec le login du demandeur dans le but de vérifier
+     *            les droits.
+     * @return l'ensemble des informations qui permettent d'afficher l'annonce
+     *         correctement
      */
     @POST
     @Path(WsPath.GESTION_ANNONCE_SERVICE_GET_ANNONCES_BY_ID)
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public AnnonceAffichageDTO getAnnonceById(DemandeAnnonceDTO demandeAnnonce) {
+    public AnnonceAffichageDTO getAnnonceByIdForAffichage(DemandeAnnonceDTO demandeAnnonce) {
         String loginDemandeur = demandeAnnonce.getLoginDemandeur();
         String hashID = demandeAnnonce.getHashID();
         TypeCompte typeCompteDemandeur = demandeAnnonce.getTypeCompteDemandeur();
@@ -237,12 +241,20 @@ public class GestionAnnonceFacade {
         return annonceAffichageDTO;
     }
 
-    public Integer updateNbConsultationAnnonce(String hashID, Integer nbConsultation) {
-        Boolean updatedSuccess = annonceDAO.updateAnnonceNbConsultationByHashId(nbConsultation, hashID);
+    @POST
+    @Path(WsPath.GESTION_ANNONCE_SERVICE_UPDATE_NB_CONSULTATION)
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public Integer updateNbConsultationAnnonce(NbConsultationDTO nbConsultationDTO) {
+
+        Integer nbConsultation = nbConsultationDTO.getNbConsultation();
+
+        Boolean updatedSuccess = annonceDAO.updateAnnonceNbConsultationByHashId(++nbConsultation,
+                nbConsultationDTO.getHashID());
+
         if (updatedSuccess == Boolean.TRUE) {
-            return 0;
+            return Constant.CODE_SERVICE_RETOUR_OK;
         } else {
-            return 1;
+            return Constant.CODE_SERVICE_RETOUR_KO;
         }
     }
 }

@@ -21,6 +21,7 @@ import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.EntrepriseDTO;
 import fr.batimen.dto.PermissionDTO;
 import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
+import fr.batimen.dto.aggregate.NbConsultationDTO;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.web.app.security.Authentication;
@@ -34,8 +35,9 @@ import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.ws.client.service.AnnonceService;
 
 /**
+ * TODO : Rajouter dans les tests d'int"gration le fait que le nb de
+ * consultation s'incremente quand un artisan conseulte l'annonce. <br/>
  * TODO : Mettre un bouton "Selectionner cet artisan" sur l'annonce ? <br/>
- * TODO : Faire le compteur de consultation, exclure admin <br/>
  * TODO : Mettre en place les quatres actions, modifier, supprimer, s'inscrire,
  * envoyer devis <br/>
  * TODO : Mettre en face de chaque entreprise, choisir l'entreprise<br/>
@@ -70,12 +72,13 @@ public class Annonce extends MasterPage {
         idAnnonce = params.get("idAnnonce").toString();
         roleUtils = new RolesUtils();
         loadAnnonceInfos(idAnnonce);
+        calculateNbConsultation();
         initComposants();
         initAction();
         affichageDonneesAnnonce();
         affichageEntreprisesInscrites();
         affichageContactAnnonce();
-        calculateNbConsultation();
+
     }
 
     private void loadAnnonceInfos(String idAnnonce) {
@@ -89,7 +92,7 @@ public class Annonce extends MasterPage {
             demandeAnnonceDTO.setTypeCompteDemandeur(permissionDTO.getTypeCompte());
         }
 
-        annonceAffichageDTO = AnnonceService.getAnnonceByID(demandeAnnonceDTO);
+        annonceAffichageDTO = AnnonceService.getAnnonceByIDForAffichage(demandeAnnonceDTO);
 
     }
 
@@ -366,9 +369,10 @@ public class Annonce extends MasterPage {
 
     private void calculateNbConsultation() {
         if (roleUtils.checkRoles(TypeCompte.ARTISAN)) {
-            Integer nbConsultation = annonceAffichageDTO.getAnnonce().getNbConsultation();
-            nbConsultation++;
-            // TODO Appel du webservice pour enregistrer la valeur
+            NbConsultationDTO nbConsultationDTO = new NbConsultationDTO();
+            nbConsultationDTO.setHashID(idAnnonce);
+            nbConsultationDTO.setNbConsultation(annonceAffichageDTO.getAnnonce().getNbConsultation());
+            AnnonceService.updateNbConsultationAnnonce(nbConsultationDTO);
         }
 
     }

@@ -15,6 +15,7 @@ import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
+import fr.batimen.dto.aggregate.NbConsultationDTO;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.test.ws.AbstractBatimenWsTest;
 import fr.batimen.test.ws.helper.DataHelper;
@@ -112,7 +113,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
                 "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
                 "pebronne", TypeCompte.CLIENT);
 
-        AnnonceAffichageDTO annonceAffichage = AnnonceService.getAnnonceByID(demandeAnnonceDTO);
+        AnnonceAffichageDTO annonceAffichage = AnnonceService.getAnnonceByIDForAffichage(demandeAnnonceDTO);
         Assert.assertNotNull(annonceAffichage);
         Assert.assertNotNull(annonceAffichage.getAnnonce().getDescription());
         Assert.assertNotNull(annonceAffichage.getAnnonce().getDateCreation());
@@ -137,7 +138,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
                 "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
                 "pebronArtisanPasInsc", TypeCompte.ARTISAN);
 
-        AnnonceAffichageDTO annonceAffichage = AnnonceService.getAnnonceByID(demandeAnnonceDTO);
+        AnnonceAffichageDTO annonceAffichage = AnnonceService.getAnnonceByIDForAffichage(demandeAnnonceDTO);
         Assert.assertNotNull(annonceAffichage);
         Assert.assertFalse(annonceAffichage.getIsArtisanInscrit());
         Assert.assertNotNull(annonceAffichage.getAnnonce().getDescription());
@@ -159,7 +160,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
                 "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
                 "pebronneArtisanne", TypeCompte.ARTISAN);
 
-        AnnonceAffichageDTO annonceAffichage = AnnonceService.getAnnonceByID(demandeAnnonceDTO);
+        AnnonceAffichageDTO annonceAffichage = AnnonceService.getAnnonceByIDForAffichage(demandeAnnonceDTO);
         Assert.assertNotNull(annonceAffichage);
         Assert.assertTrue(annonceAffichage.getIsArtisanInscrit());
         Assert.assertNotNull(annonceAffichage.getAnnonce().getDescription());
@@ -167,6 +168,28 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         Assert.assertNotNull(annonceAffichage.getAnnonce().getDateMAJ());
         Assert.assertEquals("0615125645", annonceAffichage.getTelephoneClient());
         Assert.assertEquals("lol@lol.com", annonceAffichage.getEmailClient());
+    }
+
+    /**
+     * Cas de test : Incrémentation du nb de consultation quand un artisan
+     * accede à la page d'annonce.
+     * 
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonces_by_id.yml")
+    public void testUpdateNbConsultation() {
+        NbConsultationDTO nbConsultationDTO = new NbConsultationDTO();
+        nbConsultationDTO
+                .setHashID("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
+        nbConsultationDTO.setNbConsultation(1);
+
+        Integer updateOK = AnnonceService.updateNbConsultationAnnonce(nbConsultationDTO);
+
+        Assert.assertEquals(Constant.CODE_SERVICE_RETOUR_OK, updateOK);
+
+        Annonce annonce = annonceDAO
+                .getAnnonceByID("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
+        Assert.assertEquals(annonce.getNbConsultation(), Integer.valueOf("2"));
     }
 
     private DemandeAnnonceDTO createDemandeAnnonceDTO(String hashID, String login, TypeCompte typeCompte) {
