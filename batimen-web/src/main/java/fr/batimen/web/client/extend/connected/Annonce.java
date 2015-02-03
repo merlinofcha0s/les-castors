@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.extensions.markup.html.basic.SmartLinkLabel;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -30,14 +31,13 @@ import fr.batimen.web.client.component.Commentaire;
 import fr.batimen.web.client.component.ContactezNous;
 import fr.batimen.web.client.component.LinkLabel;
 import fr.batimen.web.client.component.Profil;
+import fr.batimen.web.client.event.SuppressionOpenEvent;
 import fr.batimen.web.client.extend.member.client.MesAnnonces;
 import fr.batimen.web.client.master.MasterPage;
+import fr.batimen.web.client.panel.SuppressionPanel;
 import fr.batimen.ws.client.service.AnnonceService;
 
 /**
- * TODO : Rajouter dans les tests d'int"gration le fait que le nb de
- * consultation s'incremente quand un artisan conseulte l'annonce. <br/>
- * TODO : Mettre un bouton "Selectionner cet artisan" sur l'annonce ? <br/>
  * TODO : Mettre en place les quatres actions, modifier, supprimer, s'inscrire,
  * envoyer devis <br/>
  * TODO : Mettre en face de chaque entreprise, choisir l'entreprise<br/>
@@ -78,7 +78,7 @@ public class Annonce extends MasterPage {
         affichageDonneesAnnonce();
         affichageEntreprisesInscrites();
         affichageContactAnnonce();
-
+        initPopupSuppression();
     }
 
     private void loadAnnonceInfos(String idAnnonce) {
@@ -150,7 +150,7 @@ public class Annonce extends MasterPage {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                this.setResponsePage(MesAnnonces.class);
+                this.send(target.getPage(), Broadcast.BREADTH, new SuppressionOpenEvent(target));
             }
 
         };
@@ -373,7 +373,12 @@ public class Annonce extends MasterPage {
             nbConsultationDTO.setHashID(idAnnonce);
             nbConsultationDTO.setNbConsultation(annonceAffichageDTO.getAnnonce().getNbConsultation());
             AnnonceService.updateNbConsultationAnnonce(nbConsultationDTO);
+            annonceAffichageDTO.getAnnonce().setNbConsultation(nbConsultationDTO.getNbConsultation() + 1);
         }
+    }
 
+    private void initPopupSuppression() {
+        SuppressionPanel suppressionPanel = new SuppressionPanel("suppressionPanel");
+        add(suppressionPanel);
     }
 }

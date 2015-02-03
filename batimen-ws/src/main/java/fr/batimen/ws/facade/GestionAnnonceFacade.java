@@ -257,4 +257,20 @@ public class GestionAnnonceFacade {
             return Constant.CODE_SERVICE_RETOUR_KO;
         }
     }
+
+    @POST
+    @Path(WsPath.GESTION_ANNONCE_SERVICE_SUPRESS_ANNONCE)
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public Integer suppressionAnnonce(DemandeAnnonceDTO demandeAnnonce) {
+
+        Boolean retourDAO = annonceDAO.suppressionAnnonce(demandeAnnonce.getHashID(),
+                demandeAnnonce.getLoginDemandeur());
+
+        if (retourDAO) {
+            return Constant.CODE_SERVICE_RETOUR_OK;
+        } else {
+            return Constant.CODE_SERVICE_RETOUR_KO;
+        }
+    }
+
 }

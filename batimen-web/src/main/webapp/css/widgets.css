@@ -73,3 +73,19 @@ top: 25%;
 html.loading {
 	overflow: hidden;
 }
+
+/* SUPPRESSION MODAL */
+#suppressionModal{
+    width: 390px;   
+    z-index: 90001;
+}
+
+#textSuppressionAnnonce{
+	padding-bottom: 15px;
+}
+
+#yes{
+	margin-right: 20px; 
+	margin-left: 113px;
+}
+

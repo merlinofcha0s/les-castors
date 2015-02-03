@@ -1,0 +1,27 @@
+<wicket:head>
+    <link rel="stylesheet" type="text/css" href="css/components/bootstrap-modal/bootstrap-modal.css">
+</wicket:head>
+<wicket:panel>
+    <div id="suppressionModal" class="modal hide fade" tabindex="-1" role="dialog">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"
+                aria-hidden="true">×</button>
+            <span id="myModalLabel">Suppression de mon annonce</span>
+        </div>
+        <div class="modal-body">
+           <div id="textSuppressionAnnonce"> Êtes vous sûr de vouloir supprimer cette annonce ? <br/> </div>
+           <a id="yes"  wicket:id="yes" class="btn btn-danger">Oui</a>
+           <a wicket:id="no" class="btn btn-info">Non</a>
+        </div>
+    </div>
+    
+    <script>   
+        function showSuppressionModal(){
+            $('#suppressionModal').modal('show');
+        }
+        
+        function hideSuppressionModal(){
+            $('#suppressionModal').modal('hide');
+        }   
+    </script>
+</wicket:panel>

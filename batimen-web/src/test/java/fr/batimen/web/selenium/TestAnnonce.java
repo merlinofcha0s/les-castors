@@ -68,6 +68,9 @@ public class TestAnnonce extends AbstractITTest {
         connectAndGoToAnnonce(TypeCompte.ARTISAN, "toto");
         assertCoreInformationOfAnnonce();
 
+        assertEquals("1", driver.findElement(By.xpath("//div[@id='containerInformationsAnnonce']/div[8]/div[3]"))
+                .getText());
+
         // Les entreprises qui vous proposent des devis
         Assert.assertFalse(driver.findElement(By.xpath("//div[4]/div/div/div/h2")).isDisplayed());
     }
@@ -85,7 +88,6 @@ public class TestAnnonce extends AbstractITTest {
                 .findElement(By.xpath("//div[4]/div/div/div/h2")).getText());
         assertEquals("Modifier votre annonce", driver.findElement(By.linkText("Modifier votre annonce")).getText());
         assertEquals("Supprimer l'annonce", driver.findElement(By.id("supprimerAnnonce")).getText());
-
     }
 
     /**

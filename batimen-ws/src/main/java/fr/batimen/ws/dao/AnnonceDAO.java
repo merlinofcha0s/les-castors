@@ -303,4 +303,42 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
             return null;
         }
     }
+
+    /**
+     * Calcul le nb d'annonce qu'un client a postés
+     * 
+     * @param login
+     *            le login du client
+     * @return Le nb d'annonce
+     */
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public Boolean suppressionAnnonce(String hashID, String loginDemandeur) {
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Debut de la suppression de l'annonce : " + hashID);
+            LOGGER.debug("A la demande de : " + loginDemandeur);
+        }
+
+        try {
+            Query query = entityManager.createNamedQuery(QueryJPQL.ANNONCE_SUPRESS_ANNONCE);
+            query.setParameter(QueryJPQL.PARAM_ANNONCE_ID, hashID);
+            query.setParameter(QueryJPQL.PARAM_CLIENT_LOGIN, loginDemandeur);
+            Integer nbUpdated = query.executeUpdate();
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Fin de la suppression de l'annonce");
+            }
+
+            if (nbUpdated == 0 || nbUpdated != 1) {
+                return Boolean.FALSE;
+            }
+
+            return Boolean.TRUE;
+        } catch (NoResultException nre) {
+            if (LOGGER.isWarnEnabled()) {
+                LOGGER.warn("Aucune correspondance trouvées dans la BDD", nre);
+            }
+            return null;
+        }
+    }
 }

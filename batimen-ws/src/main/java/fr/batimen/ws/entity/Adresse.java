@@ -52,7 +52,7 @@ public class Adresse extends AbstractEntity implements Serializable {
     @OneToOne(mappedBy = "adresseFacturation", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @LazyToOne(LazyToOneOption.NO_PROXY)
     private Paiement paiement;
-    @OneToOne(mappedBy = "adresseChantier", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "adresseChantier", fetch = FetchType.LAZY)
     @LazyToOne(LazyToOneOption.NO_PROXY)
     private Annonce annonce;
 

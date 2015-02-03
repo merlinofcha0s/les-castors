@@ -137,4 +137,33 @@ public class AnnonceService {
         return updateOK;
     }
 
+    /**
+     * Permet de récuperer une annonce dans le but de l'afficher <br/>
+     * Récupère également les informations sur les artisans et les entreprise
+     * inscrites a cette annonce
+     * 
+     * @param demandeAnnonce
+     *            le hashID avec le login du demandeur dans le but de vérifier
+     *            les droits.
+     * @return l'ensemble des informations qui permettent d'afficher l'annonce
+     *         correctement
+     */
+    public static Integer suppressionAnnonce(DemandeAnnonceDTO demandeAnnonceDTO) {
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Début appel service suppression annonce.....");
+        }
+
+        String objectInJSON = WsConnector.getInstance().sendRequest(WsPath.GESTION_ANNONCE_SERVICE_PATH,
+                WsPath.GESTION_ANNONCE_SERVICE_SUPRESS_ANNONCE, demandeAnnonceDTO);
+
+        Integer updateOK = Integer.valueOf(objectInJSON);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Fin appel service suppression annonce.....");
+        }
+
+        return updateOK;
+    }
+
 }

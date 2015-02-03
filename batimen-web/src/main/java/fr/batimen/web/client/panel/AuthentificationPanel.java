@@ -27,14 +27,14 @@ import fr.batimen.web.client.event.LoginEvent;
  * 
  */
 public class AuthentificationPanel extends Panel {
-	
-	/**
-	 * JAVASCRIPT FUNCTIONS
-	 */
-	private static final String SHOW_AUTHENTICATION_MODAL = "showAuthenticationModal()";
-	private static final String HIDE_AUTHENTICATION_MODAL = "hideAuthenticationModal()";
-	public static final String REGISTER_AUTHENTICATION_MODAL = "registerClickAuthenticationModal()";
-	public static final String UNREGISTER_AUTHENTICATION_MODAL = "unregisterClickAuthenticationModal";
+
+    /**
+     * JAVASCRIPT FUNCTIONS
+     */
+    private static final String SHOW_AUTHENTICATION_MODAL = "showAuthenticationModal()";
+    private static final String HIDE_AUTHENTICATION_MODAL = "hideAuthenticationModal()";
+    public static final String REGISTER_AUTHENTICATION_MODAL = "registerClickAuthenticationModal()";
+    public static final String UNREGISTER_AUTHENTICATION_MODAL = "unregisterClickAuthenticationModal";
     private static final long serialVersionUID = -1634093925835447825L;
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthentificationPanel.class);
 
@@ -58,7 +58,6 @@ public class AuthentificationPanel extends Panel {
         loginForm = new StatelessForm<AuthentificationPanel>("loginForm", new Model<AuthentificationPanel>());
 
         login = new TextField<String>("login", new Model<String>());
-		// login.setModelObject("Identifiant");
         login.setMarkupId("loginModal");
         login.setRequired(true);
         login.add(new StringValidator(ValidatorConstant.CLIENT_LOGIN_RANGE_MIN,
@@ -131,36 +130,40 @@ public class AuthentificationPanel extends Panel {
         errorLogin.add(new AttributeModifier("class", "errorLoginActivated"));
         target.add(errorLogin);
     }
-    
+
     /**
      * TODO
+     * 
      * @param target
      */
-    public void open(AjaxRequestTarget target){
-    	target.appendJavaScript(SHOW_AUTHENTICATION_MODAL);
-    }
-    
-    /**
-     * TODO
-     * @param target
-     */
-    public void close(AjaxRequestTarget target){
-    	target.appendJavaScript(HIDE_AUTHENTICATION_MODAL);
+    public void open(AjaxRequestTarget target) {
+        target.appendJavaScript(SHOW_AUTHENTICATION_MODAL);
     }
 
     /**
      * TODO
+     * 
      * @param target
      */
-    public void registerClickListenerConnexionLink(AjaxRequestTarget target){
-    	target.appendJavaScript(SHOW_AUTHENTICATION_MODAL);
+    public void close(AjaxRequestTarget target) {
+        target.appendJavaScript(HIDE_AUTHENTICATION_MODAL);
     }
-    
+
     /**
      * TODO
+     * 
      * @param target
      */
-    public void unregisterClickListenerConnexionLink(AjaxRequestTarget target){
-    	target.appendJavaScript(HIDE_AUTHENTICATION_MODAL);
+    public void registerClickListenerConnexionLink(AjaxRequestTarget target) {
+        target.appendJavaScript(SHOW_AUTHENTICATION_MODAL);
+    }
+
+    /**
+     * TODO
+     * 
+     * @param target
+     */
+    public void unregisterClickListenerConnexionLink(AjaxRequestTarget target) {
+        target.appendJavaScript(HIDE_AUTHENTICATION_MODAL);
     }
 }

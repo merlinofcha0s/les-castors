@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -50,11 +49,11 @@ public class Notation extends AbstractEntity implements Serializable {
     @Column
     @Temporal(TemporalType.TIMESTAMP)
     private Date dateNotation;
-    @OneToOne(mappedBy = "notationAnnonce", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "notationAnnonce", fetch = FetchType.LAZY)
     @JoinColumn(name = "notationannonce_id")
     @LazyToOne(LazyToOneOption.NO_PROXY)
     private Annonce annonce;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "artisan_fk")
     private Artisan artisan;
 
