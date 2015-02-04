@@ -2,13 +2,20 @@ package fr.batimen.web.client.panel;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.batimen.core.constant.Constant;
+import fr.batimen.dto.ClientDTO;
+import fr.batimen.dto.DemandeAnnonceDTO;
+import fr.batimen.web.app.security.Authentication;
+import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.web.client.event.SuppressionCloseEvent;
 import fr.batimen.web.client.event.SuppressionOpenEvent;
+import fr.batimen.ws.client.service.AnnonceService;
 
 public class SuppressionPanel extends Panel {
 
@@ -22,15 +29,36 @@ public class SuppressionPanel extends Panel {
     private final AjaxFallbackLink<Void> yes;
     private final AjaxFallbackLink<Void> no;
 
-    public SuppressionPanel(String id) {
+    public SuppressionPanel(String id, final String hashID) {
         super(id);
+
         yes = new AjaxFallbackLink<Void>("yes") {
 
             private static final long serialVersionUID = 1L;
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                // TODO Faire l'appel du service de suppression de l'annonce.
+                Authentication authentication = new Authentication();
+                FeedBackPanelEvent feedBackPanelEvent = new FeedBackPanelEvent(target);
+
+                ClientDTO clientConnected = authentication.getCurrentUserInfo();
+
+                DemandeAnnonceDTO demandeAnnonceDTO = new DemandeAnnonceDTO();
+                demandeAnnonceDTO.setHashID(hashID);
+                demandeAnnonceDTO.setLoginDemandeur(clientConnected.getLogin());
+                demandeAnnonceDTO.setTypeCompteDemandeur(clientConnected.getPermissions().get(0).getTypeCompte());
+
+                Integer codeRetour = AnnonceService.suppressionAnnonce(demandeAnnonceDTO);
+
+                if (codeRetour.equals(Constant.CODE_SERVICE_RETOUR_OK)) {
+                    // TODO : Mettre des niveaux dans le set message du feedback
+                    // panel
+                    feedBackPanelEvent.setMessage("Votre annonce a bien été supprimée");
+                } else {
+                    feedBackPanelEvent
+                            .setMessage("Problème technique, impossible de supprimer votre annonce :( Veuillez reessayer plus tard");
+                }
+                this.send(target.getPage(), Broadcast.BREADTH, feedBackPanelEvent);
                 close(target);
             }
         };

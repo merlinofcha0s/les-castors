@@ -63,8 +63,24 @@ annonce:
     demandeur_fk: 1001
     adressechantier_id: 102
     entreprise_selectionnee_fk: 1003
+    notationannonce_id: 1030
 annonce_artisan:
    - annonce_id: 1020
      artisans_id: 1003
      artisan_id: 1003
      annonces_id: 1020
+notification:
+   - id: 1002
+     typenotification: 0
+     datenotification: "2014-01-10 15:01:00"
+     statutNotification: 0
+     pourQuiNotification: 4
+     id_client: 1001
+     id_artisan: 1003
+     id_annonce: 1020
+notation:
+   - id: 1030
+     commentaire: ké buenosss !!!
+     score: 4
+     dateNotation: "2014-12-31"
+     artisan_fk: 1003

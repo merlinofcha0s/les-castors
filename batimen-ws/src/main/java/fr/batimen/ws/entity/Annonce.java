@@ -57,7 +57,7 @@ import fr.batimen.dto.enums.TypeTravaux;
         @NamedQuery(name = QueryJPQL.ANNONCE_UPDATE_NB_CONSULTATION,
                 query = "UPDATE Annonce AS a set a.nbConsultation = :nbConsultation WHERE a.hashID = :hashID"),
         @NamedQuery(name = QueryJPQL.ANNONCE_SUPRESS_ANNONCE,
-                query = "DELETE FROM Annonce a WHERE a.hashID IN (SELECT a. FROM Annonce a = :hashID AND dem.login = :login") })
+                query = "DELETE FROM Annonce a WHERE a IN (SELECT a FROM Annonce AS a WHERE a.demandeur.login  = :login AND a.hashID = :hashID)") })
 public class Annonce extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = 3160372354800747789L;
