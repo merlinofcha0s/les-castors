@@ -18,6 +18,7 @@ import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.NotificationDTO;
 import fr.batimen.dto.aggregate.MesAnnoncesDTO;
 import fr.batimen.dto.helper.CategorieLoader;
+import fr.batimen.web.app.constants.FeedbackMessageLevel;
 import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.client.component.Commentaire;
 import fr.batimen.web.client.component.ContactezNous;
@@ -56,6 +57,11 @@ public final class MesAnnonces extends MasterPage {
         initRepeaterNotifications();
         initRepeaterAnnonces();
         this.setOutputMarkupId(true);
+    }
+
+    public MesAnnonces(String messageToFeedBack, FeedbackMessageLevel messageLevel) {
+        this();
+        this.feedBackPanelGeneral.sendMessage(messageToFeedBack, messageLevel);
     }
 
     private void initStaticComposant() {

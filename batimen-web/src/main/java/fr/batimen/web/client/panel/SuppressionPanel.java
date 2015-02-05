@@ -2,7 +2,6 @@ package fr.batimen.web.client.panel;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
-import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.slf4j.Logger;
@@ -11,10 +10,11 @@ import org.slf4j.LoggerFactory;
 import fr.batimen.core.constant.Constant;
 import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.DemandeAnnonceDTO;
+import fr.batimen.web.app.constants.FeedbackMessageLevel;
 import fr.batimen.web.app.security.Authentication;
-import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.web.client.event.SuppressionCloseEvent;
 import fr.batimen.web.client.event.SuppressionOpenEvent;
+import fr.batimen.web.client.extend.member.client.MesAnnonces;
 import fr.batimen.ws.client.service.AnnonceService;
 
 public class SuppressionPanel extends Panel {
@@ -39,8 +39,8 @@ public class SuppressionPanel extends Panel {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 Authentication authentication = new Authentication();
-                FeedBackPanelEvent feedBackPanelEvent = new FeedBackPanelEvent(target);
 
+                MesAnnonces mesAnnonces = null;
                 ClientDTO clientConnected = authentication.getCurrentUserInfo();
 
                 DemandeAnnonceDTO demandeAnnonceDTO = new DemandeAnnonceDTO();
@@ -51,14 +51,16 @@ public class SuppressionPanel extends Panel {
                 Integer codeRetour = AnnonceService.suppressionAnnonce(demandeAnnonceDTO);
 
                 if (codeRetour.equals(Constant.CODE_SERVICE_RETOUR_OK)) {
-                    // TODO : Mettre des niveaux dans le set message du feedback
-                    // panel
-                    feedBackPanelEvent.setMessage("Votre annonce a bien été supprimée");
+                    mesAnnonces = new MesAnnonces("Votre annonce a bien été supprimée", FeedbackMessageLevel.SUCCESS);
+                    this.setResponsePage(mesAnnonces);
                 } else {
-                    feedBackPanelEvent
-                            .setMessage("Problème technique, impossible de supprimer votre annonce :( Veuillez reessayer plus tard");
+                    mesAnnonces = new MesAnnonces(
+                            "Problème technique, impossible de supprimer votre annonce :( Veuillez reessayer plus tard",
+                            FeedbackMessageLevel.ERROR);
+
                 }
-                this.send(target.getPage(), Broadcast.BREADTH, feedBackPanelEvent);
+                this.setResponsePage(mesAnnonces);
+
                 close(target);
             }
         };

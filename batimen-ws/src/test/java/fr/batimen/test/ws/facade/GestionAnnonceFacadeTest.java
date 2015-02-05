@@ -215,6 +215,29 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         Assert.assertNull(annonce);
     }
 
+    /**
+     * Cas de test : Incrémentation du nb de consultation quand un artisan
+     * accede à la page d'annonce.
+     * 
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonces_by_id.yml")
+    public void testSuppressionAnnonceWithInValidDemandeur() {
+        DemandeAnnonceDTO demandeAnnonceDTO = new DemandeAnnonceDTO();
+        demandeAnnonceDTO
+                .setHashID("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
+        demandeAnnonceDTO.setLoginDemandeur("pebronnelol");
+        demandeAnnonceDTO.setTypeCompteDemandeur(TypeCompte.CLIENT);
+
+        Integer updateKO = AnnonceService.suppressionAnnonce(demandeAnnonceDTO);
+
+        Assert.assertEquals(Constant.CODE_SERVICE_RETOUR_KO, updateKO);
+
+        Annonce annonce = annonceDAO
+                .getAnnonceByID("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
+        Assert.assertNotNull(annonce);
+    }
+
     private DemandeAnnonceDTO createDemandeAnnonceDTO(String hashID, String login, TypeCompte typeCompte) {
         DemandeAnnonceDTO demandeAnnonceDTO = new DemandeAnnonceDTO();
         demandeAnnonceDTO.setHashID(hashID);
