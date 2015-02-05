@@ -23,6 +23,7 @@ import fr.batimen.core.exception.FrontEndException;
 import fr.batimen.core.security.HashHelper;
 import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
+import fr.batimen.web.app.constants.Etape;
 import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.client.component.ContactezNous;
 import fr.batimen.web.client.component.MapFrance;
@@ -78,27 +79,84 @@ public class NouveauDevis extends MasterPage {
     private Image imageConfirmation;
     private final Link<String> contactezNous;
 
+    private Etape etapeEncours;
+
     public NouveauDevis() {
         super("Nouveau devis", "devis batiment renovation", "Nouveau devis", true, "img/bg_title1.jpg");
 
         // Etape 1 : selection du departement avec la carte de la france
-        carteFrance = new MapFrance("mapFrance");
+        carteFrance = new MapFrance("mapFrance") {
+
+            private static final long serialVersionUID = -7657021021902246878L;
+
+            @Override
+            public boolean isVisible() {
+                if (etapeEncours.equals(Etape.ETAPE_1)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+        };
 
         // Etape 2 : Selection de la catégorie principale des travaux
-        etape2Categorie = new Etape2Categorie("etape2Categorie");
-        etape2Categorie.setVisible(false);
+        etape2Categorie = new Etape2Categorie("etape2Categorie") {
+
+            private static final long serialVersionUID = -3369100260215727230L;
+
+            @Override
+            public boolean isVisible() {
+                if (etapeEncours.equals(Etape.ETAPE_2)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+        };
 
         // Etape 3 : Qualification du devis.
-        containerQualification = new WebMarkupContainer("containerQualification");
-        containerQualification.setVisible(false);
+        containerQualification = new WebMarkupContainer("containerQualification") {
+
+            private static final long serialVersionUID = -656007360631664917L;
+
+            /*
+             * (non-Javadoc)
+             * 
+             * @see org.apache.wicket.Component#isVisible()
+             */
+            @Override
+            public boolean isVisible() {
+                if (etapeEncours.equals(Etape.ETAPE_3)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        };
 
         etape3AnnonceForm = new Etape3AnnonceForm("formQualification", propertyModelNouvelleAnnonce);
 
         containerQualification.add(etape3AnnonceForm);
 
         // Etape 4 : Enregistrement des informations du client
-        containerInscription = new WebMarkupContainer("containerInscription");
-        containerInscription.setVisible(false);
+        containerInscription = new WebMarkupContainer("containerInscription") {
+
+            /**
+             * 
+             */
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public boolean isVisible() {
+                if (etapeEncours.equals(Etape.ETAPE_4)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        };
 
         etape4InscriptionForm = new Etape4InscriptionForm("formInscription", propertyModelNouvelleAnnonce,
                 Boolean.FALSE);
@@ -109,17 +167,28 @@ public class NouveauDevis extends MasterPage {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-            	getLoginDialog().open(target);
+                getLoginDialog().open(target);
             }
 
         };
 
-        containerInscription.add(etape4InscriptionForm);
-        containerInscription.add(connexionLink);
+        containerInscription.add(etape4InscriptionForm, connexionLink);
 
         // Etape 5 : Confirmation
-        containerConfirmation = new WebMarkupContainer("containerConfirmation");
-        containerConfirmation.setVisible(false);
+        containerConfirmation = new WebMarkupContainer("containerConfirmation") {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public boolean isVisible() {
+                if (etapeEncours.equals(Etape.ETAPE_5)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        };
+        // containerConfirmation.setVisible(false);
         confirmation1 = new Label("confirmation1", new Model<String>());
         confirmation2 = new Label("confirmation2", new Model<String>());
         contactezNous = new Link<String>("contactezNous") {
@@ -147,10 +216,7 @@ public class NouveauDevis extends MasterPage {
         retourAccueil.setOutputMarkupId(true);
         retourAccueil.setMarkupId("retourAccueil");
 
-        containerConfirmation.add(confirmation1);
-        containerConfirmation.add(confirmation2);
-        containerConfirmation.add(contactezNous);
-        containerConfirmation.add(retourAccueil);
+        containerConfirmation.add(confirmation1, confirmation2, contactezNous, retourAccueil);
 
         List<String> etapes = new ArrayList<String>();
         etapes.add("Sélectionner un departement");
@@ -169,13 +235,8 @@ public class NouveauDevis extends MasterPage {
 
         ContactezNous contactezNousComposant = new ContactezNous("contactezNous");
 
-        this.add(carteFrance);
-        this.add(etape2Categorie);
-        this.add(containerQualification);
-        this.add(containerInscription);
-        this.add(containerConfirmation);
-        this.add(navigationWizard);
-        this.add(contactezNousComposant);
+        this.add(carteFrance, etape2Categorie, containerQualification, containerInscription, containerConfirmation,
+                navigationWizard, contactezNousComposant);
 
         try {
             changementEtape(nouvelleAnnonce.getNumeroEtape());
@@ -249,51 +310,20 @@ public class NouveauDevis extends MasterPage {
         containerConfirmation.addOrReplace(imageConfirmation);
     }
 
-    private void etape2Categorie() {
-        carteFrance.setVisible(false);
-        etape2Categorie.setVisible(true);
-        containerQualification.setVisible(false);
-        containerInscription.setVisible(false);
-        containerConfirmation.setVisible(false);
-    }
-
-    private void etape3Qualification() {
-        carteFrance.setVisible(false);
-        etape2Categorie.setVisible(false);
-        containerQualification.setVisible(true);
-        containerInscription.setVisible(false);
-        containerConfirmation.setVisible(false);
-    }
-
-    private void etape4Inscription() {
-        carteFrance.setVisible(false);
-        etape2Categorie.setVisible(false);
-        containerQualification.setVisible(false);
-        containerInscription.setVisible(true);
-        containerConfirmation.setVisible(false);
-    }
-
-    private void etape5Confirmation() {
-        carteFrance.setVisible(false);
-        etape2Categorie.setVisible(false);
-        containerQualification.setVisible(false);
-        containerInscription.setVisible(false);
-        containerConfirmation.setVisible(true);
-    }
-
     private void changementEtape(Integer numeroEtape) throws FrontEndException {
         // On charge l'etape demandé grace au numero d'etape passé en parametre
         switch (numeroEtape) {
         case 1:
             loggerChangementEtape("Passage dans l'étape 1");
+            etapeEncours = Etape.ETAPE_1;
             break;
         case 2:
             loggerChangementEtape("Passage dans l'étape 2");
-            etape2Categorie();
+            etapeEncours = Etape.ETAPE_2;
             break;
         case 3:
             loggerChangementEtape("Passage dans l'étape 3");
-            etape3Qualification();
+            etapeEncours = Etape.ETAPE_3;
             break;
         case 4:
             loggerChangementEtape("Passage dans l'étape 4");
@@ -303,7 +333,7 @@ public class NouveauDevis extends MasterPage {
                 loggerChangementEtape("L'utilisateur s'est connecté, on passe l'etape 5");
                 changementEtape(5);
             } else {
-                etape4Inscription();
+                etapeEncours = Etape.ETAPE_4;
             }
             break;
         case 5:
@@ -315,7 +345,7 @@ public class NouveauDevis extends MasterPage {
             }
             Integer codeRetour = creationAnnonce();
             chooseConfirmationMessage(true, codeRetour);
-            etape5Confirmation();
+            etapeEncours = Etape.ETAPE_5;
             break;
         default:
             throw new FrontEndException("Aucune étape du nouveau devis chargées, Situation Impossible");
