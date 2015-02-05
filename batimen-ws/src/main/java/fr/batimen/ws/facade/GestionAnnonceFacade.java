@@ -241,6 +241,13 @@ public class GestionAnnonceFacade {
         return annonceAffichageDTO;
     }
 
+    /**
+     * Met à jour le nombre de consultation d'une annonce
+     * 
+     * @param nbConsultationDTO
+     *            Objet contenant toutes les informations necessaires
+     * @return
+     */
     @POST
     @Path(WsPath.GESTION_ANNONCE_SERVICE_UPDATE_NB_CONSULTATION)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
@@ -252,8 +259,16 @@ public class GestionAnnonceFacade {
                 nbConsultationDTO.getHashID());
 
         if (updatedSuccess == Boolean.TRUE) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Mise à jour du nb de consultation ok pour cette annonce: "
+                        + nbConsultationDTO.getHashID());
+            }
             return Constant.CODE_SERVICE_RETOUR_OK;
         } else {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Probleme de mise à jour du nb de consultation pour l'annonce: "
+                        + nbConsultationDTO.getHashID());
+            }
             return Constant.CODE_SERVICE_RETOUR_KO;
         }
     }
@@ -263,8 +278,12 @@ public class GestionAnnonceFacade {
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public Integer suppressionAnnonce(DemandeAnnonceDTO demandeAnnonce) {
 
-        Boolean retourDAO = annonceDAO.suppressionAnnonce(demandeAnnonce.getHashID(),
-                demandeAnnonce.getLoginDemandeur());
+        Boolean retourDAO = Boolean.FALSE;
+
+        if (demandeAnnonce.getTypeCompteDemandeur().equals(TypeCompte.CLIENT)
+                || demandeAnnonce.getTypeCompteDemandeur().equals(TypeCompte.ADMINISTRATEUR)) {
+            retourDAO = annonceDAO.suppressionAnnonce(demandeAnnonce);
+        }
 
         if (retourDAO) {
             return Constant.CODE_SERVICE_RETOUR_OK;
@@ -272,5 +291,4 @@ public class GestionAnnonceFacade {
             return Constant.CODE_SERVICE_RETOUR_KO;
         }
     }
-
 }

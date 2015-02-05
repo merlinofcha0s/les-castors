@@ -33,7 +33,8 @@ public class QueryJPQL {
     public static final String ANNONCE_BY_ID_FETCH_ARTISAN_ENTREPRISE_CLIENT_ADRESSE = "annonceByIDFetchArtisanEntrepriseClientAdresse";
     public static final String ANNONCE_BY_ID = "annonceByID";
     public static final String ANNONCE_UPDATE_NB_CONSULTATION = "annonceUpdateNbConsultation";
-    public static final String ANNONCE_SUPRESS_ANNONCE = "annonceSuppression";
+    public static final String ANNONCE_SUPRESS_ANNONCE_BY_CLIENT = "annonceSuppressionByClient";
+    public static final String ANNONCE_SUPRESS_ANNONCE_BY_ADMIN = "annonceSuppressionByAdmin";
 
     // Parametre Query Entity annonce
     public static final String PARAM_ANNONCE_TITRE = "titre";

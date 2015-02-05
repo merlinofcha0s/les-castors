@@ -193,8 +193,8 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     }
 
     /**
-     * Cas de test : Incrémentation du nb de consultation quand un artisan
-     * accede à la page d'annonce.
+     * Cas de test : Suppression d'une annonce par un client, le test doit
+     * l'effacer correctement.
      * 
      */
     @Test
@@ -216,8 +216,8 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     }
 
     /**
-     * Cas de test : Incrémentation du nb de consultation quand un artisan
-     * accede à la page d'annonce.
+     * Cas de test : Un client essai d'effacer d'une annonce qui n'est pas a
+     * lui, le webservice refuse.
      * 
      */
     @Test
@@ -236,6 +236,29 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         Annonce annonce = annonceDAO
                 .getAnnonceByID("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
         Assert.assertNotNull(annonce);
+    }
+
+    /**
+     * Cas de test : Suppression d'une annonce par un admin, le test doit
+     * l'effacer correctement.
+     * 
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonces_by_id.yml")
+    public void testSuppressionAnnonceWithAdmin() {
+        DemandeAnnonceDTO demandeAnnonceDTO = new DemandeAnnonceDTO();
+        demandeAnnonceDTO
+                .setHashID("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
+        demandeAnnonceDTO.setLoginDemandeur("admin");
+        demandeAnnonceDTO.setTypeCompteDemandeur(TypeCompte.ADMINISTRATEUR);
+
+        Integer updateOK = AnnonceService.suppressionAnnonce(demandeAnnonceDTO);
+
+        Assert.assertEquals(Constant.CODE_SERVICE_RETOUR_OK, updateOK);
+
+        Annonce annonce = annonceDAO
+                .getAnnonceByID("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
+        Assert.assertNull(annonce);
     }
 
     private DemandeAnnonceDTO createDemandeAnnonceDTO(String hashID, String login, TypeCompte typeCompte) {

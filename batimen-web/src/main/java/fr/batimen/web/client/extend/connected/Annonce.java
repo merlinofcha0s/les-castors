@@ -72,7 +72,7 @@ public class Annonce extends MasterPage {
         idAnnonce = params.get("idAnnonce").toString();
         roleUtils = new RolesUtils();
         loadAnnonceInfos(idAnnonce);
-        calculateNbConsultation();
+        updateNbConsultation();
         initComposants();
         initAction();
         affichageDonneesAnnonce();
@@ -156,7 +156,7 @@ public class Annonce extends MasterPage {
         };
 
         supprimerAnnonce.setOutputMarkupId(true);
-        supprimerAnnonceContainer.setMarkupId("supprimerAnnonce");
+        supprimerAnnonce.setMarkupId("supprimerAnnonce");
 
         WebMarkupContainer inscrireAnnonceContainer = new WebMarkupContainer("inscrireAnnonceContainer") {
             /**
@@ -367,7 +367,7 @@ public class Annonce extends MasterPage {
         add(containerContact);
     }
 
-    private void calculateNbConsultation() {
+    private void updateNbConsultation() {
         if (roleUtils.checkRoles(TypeCompte.ARTISAN)) {
             NbConsultationDTO nbConsultationDTO = new NbConsultationDTO();
             nbConsultationDTO.setHashID(idAnnonce);

@@ -18,6 +18,8 @@ import org.slf4j.LoggerFactory;
 
 import fr.batimen.core.constant.QueryJPQL;
 import fr.batimen.core.exception.DuplicateEntityException;
+import fr.batimen.dto.DemandeAnnonceDTO;
+import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.ws.entity.Annonce;
 
 /**
@@ -269,26 +271,29 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
     }
 
     /**
-     * Calcul le nb d'annonce qu'un client a postés
+     * Mets a jour le nb de consultation d'une annonce dans la BDD
      * 
-     * @param login
-     *            le login du client
-     * @return Le nb d'annonce
+     * @param nbConsultation
+     *            le nb de consultation deja incrémenté
+     * @param hashID
+     *            L'identifiant unique de l'annonce.
+     * @return True si la mise a jour s'est bien passé .
      */
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public Boolean updateAnnonceNbConsultationByHashId(Integer nbConsultation, String id) {
+    public Boolean updateAnnonceNbConsultationByHashId(Integer nbConsultation, String hashID) {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Debut de la récuperation de l'annonce par l'id");
+            LOGGER.debug("Debut de mise a jour du nb de consultation d'une annonce");
         }
 
         try {
             Query query = entityManager.createNamedQuery(QueryJPQL.ANNONCE_UPDATE_NB_CONSULTATION);
-            query.setParameter(QueryJPQL.PARAM_ANNONCE_ID, id);
+            query.setParameter(QueryJPQL.PARAM_ANNONCE_ID, hashID);
             query.setParameter(QueryJPQL.PARAM_ANNONCE_NB_CONSULTATION, nbConsultation);
             Integer nbUpdated = query.executeUpdate();
 
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Fin de la récuperation de l'annonce par l'id");
+                LOGGER.debug("nb de row updated: " + nbUpdated);
+                LOGGER.debug("Fin de la mise a jour du nb de consultation d'une annonce");
             }
 
             if (nbUpdated == 0 || nbUpdated != 1) {
@@ -305,24 +310,32 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
     }
 
     /**
-     * Calcul le nb d'annonce qu'un client a postés
+     * Supprime une annonce présente en base de données.
      * 
-     * @param login
-     *            le login du client
-     * @return Le nb d'annonce
+     * @param demandeAnnonceDTO
+     *            Objet qui possede les infos pour verifier que l'utilisateur a
+     *            les droits et pour supprimer l'annonce.
+     * @return True si la suppression s'est bien passée.
      */
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public Boolean suppressionAnnonce(String hashID, String loginDemandeur) {
+    public Boolean suppressionAnnonce(DemandeAnnonceDTO demandeAnnonceDTO) {
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Debut de la suppression de l'annonce : " + hashID);
-            LOGGER.debug("A la demande de : " + loginDemandeur);
+            LOGGER.debug("Debut de la suppression de l'annonce : " + demandeAnnonceDTO.getHashID());
+            LOGGER.debug("A la demande de : " + demandeAnnonceDTO.getLoginDemandeur());
+            LOGGER.debug("Et qui possede le role : " + demandeAnnonceDTO.getTypeCompteDemandeur());
         }
-
+        Query query = null;
         try {
-            Query query = entityManager.createNamedQuery(QueryJPQL.ANNONCE_SUPRESS_ANNONCE);
-            query.setParameter(QueryJPQL.PARAM_ANNONCE_ID, hashID);
-            query.setParameter(QueryJPQL.PARAM_CLIENT_LOGIN, loginDemandeur);
+            if (demandeAnnonceDTO.getTypeCompteDemandeur().equals(TypeCompte.CLIENT)) {
+                query = entityManager.createNamedQuery(QueryJPQL.ANNONCE_SUPRESS_ANNONCE_BY_CLIENT);
+                query.setParameter(QueryJPQL.PARAM_CLIENT_LOGIN, demandeAnnonceDTO.getLoginDemandeur());
+            } else if (demandeAnnonceDTO.getTypeCompteDemandeur().equals(TypeCompte.ADMINISTRATEUR)) {
+                query = entityManager.createNamedQuery(QueryJPQL.ANNONCE_SUPRESS_ANNONCE_BY_ADMIN);
+            }
+
+            query.setParameter(QueryJPQL.PARAM_ANNONCE_ID, demandeAnnonceDTO.getHashID());
+
             Integer nbUpdated = query.executeUpdate();
 
             if (LOGGER.isDebugEnabled()) {

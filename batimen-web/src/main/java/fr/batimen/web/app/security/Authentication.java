@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 
 import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.LoginDTO;
+import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.ws.client.service.UtilisateurService;
 
 public class Authentication {
@@ -76,6 +77,10 @@ public class Authentication {
 
     public void setCurrentUserInfo(ClientDTO clientDTO) {
         currentUser.getSession().setAttribute(CLIENT_KEY, clientDTO);
+    }
+
+    public TypeCompte getCurrentUserRolePrincipal() {
+        return getCurrentUserInfo().getPermissions().get(0).getTypeCompte();
     }
 
 }

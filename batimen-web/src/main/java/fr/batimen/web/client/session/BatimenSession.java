@@ -41,7 +41,6 @@ public class BatimenSession extends AuthenticatedWebSession {
 
     @Override
     public Roles getRoles() {
-        // TODO Auto-generated method stub
         return null;
     }
 

@@ -132,7 +132,7 @@ public class AuthentificationPanel extends Panel {
     }
 
     /**
-     * TODO
+     * Ouvre la fenetre modal de login
      * 
      * @param target
      */
@@ -141,7 +141,7 @@ public class AuthentificationPanel extends Panel {
     }
 
     /**
-     * TODO
+     * Ferme la fenetre modal de login
      * 
      * @param target
      */
@@ -149,21 +149,4 @@ public class AuthentificationPanel extends Panel {
         target.appendJavaScript(HIDE_AUTHENTICATION_MODAL);
     }
 
-    /**
-     * TODO
-     * 
-     * @param target
-     */
-    public void registerClickListenerConnexionLink(AjaxRequestTarget target) {
-        target.appendJavaScript(SHOW_AUTHENTICATION_MODAL);
-    }
-
-    /**
-     * TODO
-     * 
-     * @param target
-     */
-    public void unregisterClickListenerConnexionLink(AjaxRequestTarget target) {
-        target.appendJavaScript(HIDE_AUTHENTICATION_MODAL);
-    }
 }

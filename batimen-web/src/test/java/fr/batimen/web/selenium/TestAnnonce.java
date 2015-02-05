@@ -103,6 +103,35 @@ public class TestAnnonce extends AbstractITTest {
                 driver.findElement(By.cssSelector("h1.titleAccessDenied")).getText());
     }
 
+    /**
+     * Cas de test : L'utilisateur se rend sur son annonce puis la supprime : la
+     * suppression doit se passer correctement
+     */
+    @Test
+    public void testSuppressionAnnonceByClient() {
+        connectAndGoToAnnonce(TypeCompte.CLIENT, "toto");
+        assertCoreInformationOfAnnonce();
+        driver.findElement(By.id("supprimerAnnonce")).click();
+        driver.findElement(By.id("yes")).click();
+        assertEquals("Votre annonce a bien été supprimée", driver.findElement(By.cssSelector("span.box_type4"))
+                .getText());
+
+    }
+
+    /**
+     * Cas de test : L'utilisateur se rend sur son annonce puis la supprime : la
+     * suppression doit se passer correctement
+     */
+    @Test
+    public void testSuppressionAnnonceByAdmin() {
+        connectAndGoToAnnonce(TypeCompte.ADMINISTRATEUR, "toto");
+        assertCoreInformationOfAnnonce();
+        driver.findElement(By.id("supprimerAnnonce")).click();
+        driver.findElement(By.id("yes")).click();
+        // TODO Verifier que l'on a bien redirigé l'admin sur la bonne page
+        // quand la page d'accueil admin sera faites
+    }
+
     public void connectAndGoToAnnonce(TypeCompte typeCompteWanted, String idAnnonce) {
         driver.get(appUrl);
         // On s'authentifie à l'application
