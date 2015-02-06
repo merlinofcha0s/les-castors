@@ -278,7 +278,32 @@ public class Annonce extends MasterPage {
                     }
                 };
 
-                itemEntreprise.add(linkEntreprise);
+                AjaxLink<Void> linkAcceptDevis = new AjaxLink<Void>("linkAcceptDevis") {
+
+                    private static final long serialVersionUID = 1L;
+
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        // TODO Appeler le service de selection d'une entreprise
+                        // pour un devis
+
+                    }
+
+                };
+
+                AjaxLink<Void> linkRefusDevis = new AjaxLink<Void>("linkRefusDevis") {
+
+                    private static final long serialVersionUID = 1L;
+
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        // TODO Appeler le service pour la deselection d'un
+                        // entreprise concernant une annonce
+                    }
+
+                };
+
+                itemEntreprise.add(linkEntreprise, linkAcceptDevis, linkRefusDevis);
             }
         };
 

@@ -636,3 +636,28 @@ table tr td .error {
 	padding-right: 5px;
 	padding-top: 7px;
 }
+
+.imgEntreprise{
+	width: 50px;
+}
+
+.linkEntreprise{
+	padding-top: 15px; 
+	padding-left: 10px;
+	display: inline-block;
+}
+
+.containerAcceptDevis{
+	padding-top: 6px;
+}
+
+.linkAcceptDevis{
+	padding-left: 13px; 
+	display: inline-block;
+	vertical-align: text-top;
+	padding-top: 6px;
+}
+
+.containerLinkRefuser{
+	padding-left: 10px;
+}

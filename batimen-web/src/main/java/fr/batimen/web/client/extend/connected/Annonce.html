@@ -45,14 +45,14 @@
 						wicket:id="delaiIntervention">Le plus rapidement possible</div>
 				</div>
 				<div class="containerInformationAnnonce">
-                    <div class="containerGlyph">
-                        <span class="icon-Speech-Buble5 glyphAnnonce"></span>
-                    </div>
-                    <div class="labelAnnonce">Type de contact préféré :</div>
-                    <div
-                        class="informationAnnonce"
-                        wicket:id="typeContact"></div>
-                </div>
+					<div class="containerGlyph">
+						<span class="icon-Speech-Buble5 glyphAnnonce"></span>
+					</div>
+					<div class="labelAnnonce">Type de contact préféré :</div>
+					<div
+						class="informationAnnonce"
+						wicket:id="typeContact"></div>
+				</div>
 				<div class="containerInformationAnnonce">
 					<div class="containerGlyph">
 						<span class="icon-Open glyphAnnonce"></span>
@@ -154,17 +154,22 @@
 							<h2 class="headInModule">Entreprises qui vous proposent des devis</h2>
 						</div>
 						<div
-							class="containerEnptrepriseSelectionnee"
+							class="containerEnptrepriseSelectionnee row-fluid"
 							wicket:id="entreprises">
-							<div class="containerGlyph">
-								<img style="width: 60px;" src="img/store.png" />
+							<div class="span4">
+								<div class="containerGlyph">
+									<img class="imgEntreprise"
+										src="img/store.png" />
+								</div>
+								<a
+									class="linkEntreprise"
+									href="#"
+									wicket:id="linkEntreprise">Ké buenos enterprise</a>
 							</div>
-							<a
-								class="labelAnnonce"
-								href="#"
-								wicket:id="linkEntreprise">Ké buenos enterprise</a>
-								<a><span class="icon-like glyphAnnonce"></span>Accepter ce devis</a>
-								<a><span class="icon-Chart1 glyphAnnonce"></span>Refuser ce devis</a>
+							<div class="span8 containerAcceptDevis">
+								<span class="icon-like glyphAnnonce"></span> <a class="linkAcceptDevis" href="#" wicket:id="linkAcceptDevis">Accepter ce devis</a>
+								 <span class="icon-Cross glyphAnnonce containerLinkRefuser"></span> <a href="#" class="linkAcceptDevis" wicket:id="linkRefusDevis">Refuser ce devis</a>
+							</div>
 						</div>
 						<div wicket:id="aucuneEntreprise"></div>
 					</div>
@@ -186,7 +191,9 @@
 							wicket:id="modifierAnnonce">Modifier votre annonce</a>
 					</div>
 				</div>
-				<div class="containerAction" wicket:id="supprimerAnnonceContainer">
+				<div
+					class="containerAction"
+					wicket:id="supprimerAnnonceContainer">
 					<div class="containerGlyph">
 						<span class="icon-Trash glyphAnnonce"></span>
 					</div>
@@ -196,7 +203,7 @@
 							wicket:id="supprimerAnnonce">Supprimer l'annonce</a>
 					</div>
 				</div>
-				<div  wicket:id="inscrireAnnonceContainer">
+				<div wicket:id="inscrireAnnonceContainer">
 					<div class="containerGlyph">
 						<span class="icon-Plus glyphAnnonce"></span>
 					</div>
@@ -206,7 +213,9 @@
 							wicket:id="inscrireAnnonce">S'inscrire à l'annonce</a>
 					</div>
 				</div>
-				<div class="containerAction" wicket:id="envoyerDevisContainer">
+				<div
+					class="containerAction"
+					wicket:id="envoyerDevisContainer">
 					<div wicket:id="envoyerDevis">
 						<div class="containerGlyph">
 							<span class="icon-Envelope4 glyphAnnonce"></span>
@@ -223,20 +232,24 @@
 					<div class="containerGlyph">
 						<span class="icon-MapPin1 glyphAnnonce"></span>
 					</div>
-					<div class="contactInfo" wicket:id="adresse">210 chemin du devis, 06600 Castors cedex</div>
+					<div
+						class="contactInfo"
+						wicket:id="adresse">210 chemin du devis, 06600 Castors cedex</div>
 				</div>
 				<div class="containerInfo">
 					<div class="containerGlyph">
 						<span class="icon-Handset glyphAnnonce"></span>
 					</div>
-					<div class="sidebarRightWithPaddingTop" wicket:id="telephone">0493524585</div>
+					<div
+						class="sidebarRightWithPaddingTop"
+						wicket:id="telephone">0493524585</div>
 				</div>
 				<div class="containerInfo">
 					<div class="containerGlyph">
 						<span class="icon-Envelope1 glyphAnnonce"></span>
 					</div>
 					<div class="sidebarRightWithPaddingTop">
-						<a  wicket:id="email">client@castors.fr</a>
+						<a wicket:id="email">client@castors.fr</a>
 					</div>
 				</div>
 			</div>
