@@ -286,7 +286,6 @@ public class Annonce extends MasterPage {
                     public void onClick(AjaxRequestTarget target) {
                         // TODO Appeler le service de selection d'une entreprise
                         // pour un devis
-
                     }
 
                 };

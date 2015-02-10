@@ -212,6 +212,11 @@ public class AnnonceService {
 
     public AnnonceAffichageDTO doMappingAnnonceAffichageDTO(Annonce annonce, AnnonceAffichageDTO annonceAffichageDTO,
             Boolean isArtisan, Boolean isArtisanInscrit) {
+
+        if (isArtisanInscrit) {
+            annonceAffichageDTO.setTelephoneClient(annonce.getDemandeur().getNumeroTel());
+            annonceAffichageDTO.setEmailClient(annonce.getDemandeur().getEmail());
+        }
         ModelMapper mapper = new ModelMapper();
         AnnonceDTO annonceDTO = new AnnonceDTO();
         AdresseDTO adresseDTO = new AdresseDTO();

@@ -248,7 +248,23 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
      * @return Le nb d'annonce
      */
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Annonce getAnnonceByID(String id) {
+    public Annonce getAnnonceByIDWithoutTransaction(String id) {
+        return getAnnonceByID(id);
+    }
+
+    /**
+     * Calcul le nb d'annonce qu'un client a postés
+     * 
+     * @param login
+     *            le login du client
+     * @return Le nb d'annonce
+     */
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public Annonce getAnnonceByIDWithTransaction(String id) {
+        return getAnnonceByID(id);
+    }
+
+    private Annonce getAnnonceByID(String id) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Debut de la récuperation de l'annonce par l'id");
         }
@@ -328,10 +344,10 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
         Query query = null;
         try {
             if (demandeAnnonceDTO.getTypeCompteDemandeur().equals(TypeCompte.CLIENT)) {
-                query = entityManager.createNamedQuery(QueryJPQL.ANNONCE_SUPRESS_ANNONCE_BY_CLIENT);
+                query = entityManager.createNamedQuery(QueryJPQL.ANNONCE_SUPRESS_ANNONCE_FOR_CLIENT);
                 query.setParameter(QueryJPQL.PARAM_CLIENT_LOGIN, demandeAnnonceDTO.getLoginDemandeur());
             } else if (demandeAnnonceDTO.getTypeCompteDemandeur().equals(TypeCompte.ADMINISTRATEUR)) {
-                query = entityManager.createNamedQuery(QueryJPQL.ANNONCE_SUPRESS_ANNONCE_BY_ADMIN);
+                query = entityManager.createNamedQuery(QueryJPQL.ANNONCE_SUPRESS_ANNONCE_FOR_ADMIN);
             }
 
             query.setParameter(QueryJPQL.PARAM_ANNONCE_ID, demandeAnnonceDTO.getHashID());

@@ -10,6 +10,7 @@ import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
+import fr.batimen.dto.aggregate.DemAnnonceSelectEntrepriseDTO;
 import fr.batimen.dto.aggregate.NbConsultationDTO;
 import fr.batimen.ws.client.WsConnector;
 
@@ -109,15 +110,11 @@ public class AnnonceService {
     }
 
     /**
-     * Permet de récuperer une annonce dans le but de l'afficher <br/>
-     * Récupère également les informations sur les artisans et les entreprise
-     * inscrites a cette annonce
+     * Permet de mettre à jour le nombre de consultation d'une annonce.
      * 
-     * @param demandeAnnonce
-     *            le hashID avec le login du demandeur dans le but de vérifier
-     *            les droits.
-     * @return l'ensemble des informations qui permettent d'afficher l'annonce
-     *         correctement
+     * @param nbConsultationDTO
+     *            le hashID avec le nb de consultation
+     * @return 0 si c'est OK
      */
     public static Integer updateNbConsultationAnnonce(NbConsultationDTO nbConsultationDTO) {
 
@@ -138,15 +135,12 @@ public class AnnonceService {
     }
 
     /**
-     * Permet de récuperer une annonce dans le but de l'afficher <br/>
-     * Récupère également les informations sur les artisans et les entreprise
-     * inscrites a cette annonce
+     * Permet de supprimer une annonce.
      * 
      * @param demandeAnnonce
      *            le hashID avec le login du demandeur dans le but de vérifier
      *            les droits.
-     * @return l'ensemble des informations qui permettent d'afficher l'annonce
-     *         correctement
+     * @return 0 si c'est OK
      */
     public static Integer suppressionAnnonce(DemandeAnnonceDTO demandeAnnonceDTO) {
 
@@ -156,6 +150,32 @@ public class AnnonceService {
 
         String objectInJSON = WsConnector.getInstance().sendRequest(WsPath.GESTION_ANNONCE_SERVICE_PATH,
                 WsPath.GESTION_ANNONCE_SERVICE_SUPRESS_ANNONCE, demandeAnnonceDTO);
+
+        Integer updateOK = Integer.valueOf(objectInJSON);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Fin appel service suppression annonce.....");
+        }
+
+        return updateOK;
+    }
+
+    /**
+     * Permet de selectionner un entreprise pour une annonce.
+     * 
+     * @param demandeAnnonce
+     *            le hashID avec le login du demandeur dans le but de vérifier
+     *            les droits ainsi que le siret de l'entreprise.
+     * @return 0 si c'est OK
+     */
+    public static Integer selectOneEnterprise(DemAnnonceSelectEntrepriseDTO demandeAnnonceDTO) {
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Début appel service suppression annonce.....");
+        }
+
+        String objectInJSON = WsConnector.getInstance().sendRequest(WsPath.GESTION_ANNONCE_SERVICE_PATH,
+                WsPath.GESTION_ANNONCE_SERVICE_SELECTION_UNE_ENTREPRISE, demandeAnnonceDTO);
 
         Integer updateOK = Integer.valueOf(objectInJSON);
 

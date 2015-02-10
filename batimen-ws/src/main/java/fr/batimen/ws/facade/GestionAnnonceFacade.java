@@ -34,13 +34,16 @@ import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
+import fr.batimen.dto.aggregate.DemAnnonceSelectEntrepriseDTO;
 import fr.batimen.dto.aggregate.NbConsultationDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 import fr.batimen.ws.dao.AnnonceDAO;
+import fr.batimen.ws.dao.ArtisanDAO;
 import fr.batimen.ws.entity.Annonce;
 import fr.batimen.ws.entity.Artisan;
+import fr.batimen.ws.entity.Entreprise;
 import fr.batimen.ws.helper.JsonHelper;
 import fr.batimen.ws.interceptor.BatimenInterceptor;
 import fr.batimen.ws.service.AnnonceService;
@@ -73,6 +76,12 @@ public class GestionAnnonceFacade {
 
     @Inject
     private AnnonceService annonceService;
+
+    @Inject
+    private ArtisanDAO artisanDAO;
+
+    @Inject
+    private GestionUtilisateurFacade utilisateurFacade;
 
     /**
      * Permet la creation d'une nouvelle annonce par le client ainsi que le
@@ -185,7 +194,8 @@ public class GestionAnnonceFacade {
     public AnnonceAffichageDTO getAnnonceByIdForAffichage(DemandeAnnonceDTO demandeAnnonce) {
         String loginDemandeur = demandeAnnonce.getLoginDemandeur();
         String hashID = demandeAnnonce.getHashID();
-        TypeCompte typeCompteDemandeur = demandeAnnonce.getTypeCompteDemandeur();
+
+        String rolesDemandeur = utilisateurFacade.getUtilisateurRoles(demandeAnnonce.getLoginDemandeur());
         // On crée l'objet qui contiendra les infos
         AnnonceAffichageDTO annonceAffichageDTO = new AnnonceAffichageDTO();
 
@@ -199,27 +209,27 @@ public class GestionAnnonceFacade {
             // Vérification des droits : soit l'artisan est inscrit soit il ne
             // l'est
             // pas
-            if (typeCompteDemandeur.getRole().contains(TypeCompte.ARTISAN.getRole())) {
+            if (rolesDemandeur.indexOf(TypeCompte.ARTISAN.getRole()) != -1) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("C'est un artisan qui fait la demande d'affichage d'annonce");
                 }
                 isArtisan = Boolean.TRUE;
-                // On charge le téléphone et le numéro de téléphone du client
-                annonceAffichageDTO.setTelephoneClient(annonce.getDemandeur().getNumeroTel());
-                annonceAffichageDTO.setEmailClient(annonce.getDemandeur().getEmail());
+
                 for (Artisan artisanInscrit : annonce.getArtisans()) {
                     // On regarde si il est inscrit...
                     if (artisanInscrit.getLogin().equals(loginDemandeur)) {
                         if (LOGGER.isDebugEnabled()) {
                             LOGGER.debug("Il est inscrit à l'annonce");
                         }
+                        // On charge le téléphone et le numéro de téléphone du
+                        // client
                         isArtisanInscrit = Boolean.TRUE;
                     }
                 }
                 // Vérification des droits : Si c'est un client, est ce que
                 // c'est
                 // bien le possesseur de l'annonce.
-            } else if (typeCompteDemandeur.getRole().contains(TypeCompte.CLIENT.getRole())) {
+            } else if (rolesDemandeur.indexOf(TypeCompte.CLIENT.getRole()) != -1) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("C'est un client");
                 }
@@ -278,11 +288,47 @@ public class GestionAnnonceFacade {
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public Integer suppressionAnnonce(DemandeAnnonceDTO demandeAnnonce) {
 
+        String rolesDemandeur = utilisateurFacade.getUtilisateurRoles(demandeAnnonce.getLoginDemandeur());
+
         Boolean retourDAO = Boolean.FALSE;
 
-        if (demandeAnnonce.getTypeCompteDemandeur().equals(TypeCompte.CLIENT)
-                || demandeAnnonce.getTypeCompteDemandeur().equals(TypeCompte.ADMINISTRATEUR)) {
+        if (rolesDemandeur.indexOf(TypeCompte.CLIENT.getRole()) != -1
+                || rolesDemandeur.indexOf(TypeCompte.ADMINISTRATEUR.getRole()) != -1) {
             retourDAO = annonceDAO.suppressionAnnonce(demandeAnnonce);
+        }
+
+        if (retourDAO) {
+            return Constant.CODE_SERVICE_RETOUR_OK;
+        } else {
+            return Constant.CODE_SERVICE_RETOUR_KO;
+        }
+    }
+
+    @POST
+    @Path(WsPath.GESTION_ANNONCE_SERVICE_SELECTION_UNE_ENTREPRISE)
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public Integer selectOneEnterprise(DemAnnonceSelectEntrepriseDTO demandeAnnonceDTO) {
+
+        String rolesDemandeur = utilisateurFacade.getUtilisateurRoles(demandeAnnonceDTO.getLoginDemandeur());
+
+        Artisan artisan = artisanDAO.getArtisanByLogin(demandeAnnonceDTO.getLoginArtisanChoisi());
+        Entreprise entrepriseChoisi = artisan.getEntreprise();
+
+        Boolean retourDAO = Boolean.FALSE;
+        if (rolesDemandeur.indexOf(TypeCompte.CLIENT.getRole()) != -1
+                || rolesDemandeur.indexOf(TypeCompte.ADMINISTRATEUR.getRole()) != -1 && entrepriseChoisi != null) {
+
+            Annonce annonceToUpdate = annonceDAO.getAnnonceByIDWithoutTransaction(demandeAnnonceDTO.getHashID());
+            if (demandeAnnonceDTO.getAjoutOuSupprimeArtisan() == DemAnnonceSelectEntrepriseDTO.AJOUT_ARTISAN) {
+                annonceToUpdate.setEntrepriseSelectionnee(entrepriseChoisi);
+            } else if (demandeAnnonceDTO.getAjoutOuSupprimeArtisan() == DemAnnonceSelectEntrepriseDTO.SUPPRESSION_ARTISAN) {
+                annonceToUpdate.setEntrepriseSelectionnee(null);
+            } else {
+                return Constant.CODE_SERVICE_RETOUR_KO;
+            }
+
+            annonceDAO.update(annonceToUpdate);
+            retourDAO = Boolean.TRUE;
         }
 
         if (retourDAO) {
