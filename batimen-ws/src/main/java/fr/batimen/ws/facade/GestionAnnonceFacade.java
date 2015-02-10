@@ -310,18 +310,49 @@ public class GestionAnnonceFacade {
     public Integer selectOneEnterprise(DemAnnonceSelectEntrepriseDTO demandeAnnonceDTO) {
 
         String rolesDemandeur = utilisateurFacade.getUtilisateurRoles(demandeAnnonceDTO.getLoginDemandeur());
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("On vérifie le / les role(s) du demandeur : " + rolesDemandeur);
+        }
 
         Artisan artisan = artisanDAO.getArtisanByLogin(demandeAnnonceDTO.getLoginArtisanChoisi());
         Entreprise entrepriseChoisi = artisan.getEntreprise();
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("On récupére l'artisan choisi : " + artisan.getLogin());
+        }
 
         Boolean retourDAO = Boolean.FALSE;
         if (rolesDemandeur.indexOf(TypeCompte.CLIENT.getRole()) != -1
                 || rolesDemandeur.indexOf(TypeCompte.ADMINISTRATEUR.getRole()) != -1 && entrepriseChoisi != null) {
 
-            Annonce annonceToUpdate = annonceDAO.getAnnonceByIDWithoutTransaction(demandeAnnonceDTO.getHashID());
+            Annonce annonceToUpdate = annonceDAO.getAnnonceByIDWithTransaction(demandeAnnonceDTO.getHashID());
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Le demandeur est donc soit un client soit un admin");
+                LOGGER.debug("On charge l'annonce : " + annonceToUpdate.getHashID());
+            }
+
+            if (rolesDemandeur.indexOf(TypeCompte.CLIENT.getRole()) != -1
+                    && !annonceToUpdate.getDemandeur().getLogin().equals(demandeAnnonceDTO.getLoginDemandeur())) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("Il ne possede par les droits d'affichage, on sort du service...");
+                }
+                return Constant.CODE_SERVICE_RETOUR_KO;
+            }
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Si c'est un client, il possede les droits necessaires");
+            }
+
             if (demandeAnnonceDTO.getAjoutOuSupprimeArtisan() == DemAnnonceSelectEntrepriseDTO.AJOUT_ARTISAN) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("C'est un ajout, on met à jour l'annonce avec l'entreprise choisi");
+                }
                 annonceToUpdate.setEntrepriseSelectionnee(entrepriseChoisi);
             } else if (demandeAnnonceDTO.getAjoutOuSupprimeArtisan() == DemAnnonceSelectEntrepriseDTO.SUPPRESSION_ARTISAN) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("C'est une suppression, on met à jour l'annonce avec l'entreprise choisi = null");
+                }
                 annonceToUpdate.setEntrepriseSelectionnee(null);
             } else {
                 return Constant.CODE_SERVICE_RETOUR_KO;

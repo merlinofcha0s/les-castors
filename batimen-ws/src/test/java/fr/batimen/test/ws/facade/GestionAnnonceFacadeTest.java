@@ -269,13 +269,12 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     }
 
     /**
-     * Cas de test : Suppression d'une annonce par un admin, le test doit
-     * l'effacer correctement.
+     * Cas de test : Selection d'un artisan par un client dans son annonce
      * 
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
-    public void testChoixArtisanForAnnonceAjout() {
+    public void testAjoutChoixArtisanForAnnonce() {
         DemAnnonceSelectEntrepriseDTO demandeAnnonceDTO = new DemAnnonceSelectEntrepriseDTO();
         demandeAnnonceDTO.setHashID("lolmdrp");
         demandeAnnonceDTO.setLoginDemandeur("pebronne");
@@ -287,19 +286,19 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
         Assert.assertEquals(Constant.CODE_SERVICE_RETOUR_OK, updateOK);
 
-        assertEntrepriseForChoixArtisan();
+        assertEntrepriseForChoixArtisanWithTransaction(false);
     }
 
     /**
-     * Cas de test : Suppression d'une annonce par un admin, le test doit
-     * l'effacer correctement.
+     * Cas de test : Suppression d'un artisan par un client dans son annonce
      * 
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
-    public void testChoixArtisanForAnnonceSuppression() {
+    public void testSuppressionChoixArtisanForAnnonce() {
         DemAnnonceSelectEntrepriseDTO demandeAnnonceDTO = new DemAnnonceSelectEntrepriseDTO();
-        demandeAnnonceDTO.setHashID("lolmdrp");
+        demandeAnnonceDTO
+                .setHashID("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
         demandeAnnonceDTO.setLoginDemandeur("pebronne");
         demandeAnnonceDTO.setTypeCompteDemandeur(TypeCompte.CLIENT);
         demandeAnnonceDTO.setLoginArtisanChoisi("pebronneChoisi");
@@ -309,17 +308,16 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
         Assert.assertEquals(Constant.CODE_SERVICE_RETOUR_OK, updateOK);
 
-        assertEntrepriseForChoixArtisan();
+        assertEntrepriseForChoixArtisanWithTransaction(true);
     }
 
     /**
-     * Cas de test : Suppression d'une annonce par un admin, le test doit
-     * l'effacer correctement.
+     * Cas de test : Selection d'un artisan par un admin pour une annonce.
      * 
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
-    public void testChoixArtisanByAdminForAnnonceAjout() {
+    public void testAjoutChoixArtisanByAdminForAnnonce() {
         DemAnnonceSelectEntrepriseDTO demandeAnnonceDTO = new DemAnnonceSelectEntrepriseDTO();
         demandeAnnonceDTO.setHashID("lolmdrp");
         demandeAnnonceDTO.setLoginDemandeur("admin");
@@ -331,19 +329,20 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
         Assert.assertEquals(Constant.CODE_SERVICE_RETOUR_OK, updateOK);
 
-        assertEntrepriseForChoixArtisan();
+        assertEntrepriseForChoixArtisanWithTransaction(false);
     }
 
     /**
-     * Cas de test : Suppression d'une annonce par un admin, le test doit
-     * l'effacer correctement.
+     * Cas de test : Suppression d'une entreprise qui avait été selectionnée. <br/>
+     * Suppression faite par un administrateur
      * 
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
-    public void testChoixArtisanByAdminForAnnonceSuppression() {
+    public void testSuppressionChoixArtisanByAdmin() {
         DemAnnonceSelectEntrepriseDTO demandeAnnonceDTO = new DemAnnonceSelectEntrepriseDTO();
-        demandeAnnonceDTO.setHashID("lolmdrp");
+        demandeAnnonceDTO
+                .setHashID("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
         demandeAnnonceDTO.setLoginDemandeur("admin");
         demandeAnnonceDTO.setTypeCompteDemandeur(TypeCompte.ADMINISTRATEUR);
         demandeAnnonceDTO.setLoginArtisanChoisi("pebronneChoisi");
@@ -353,16 +352,42 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
         Assert.assertEquals(Constant.CODE_SERVICE_RETOUR_OK, updateOK);
 
-        assertEntrepriseForChoixArtisan();
+        assertEntrepriseForChoixArtisanWithTransaction(true);
+    }
+
+    /**
+     * Cas de test : Suppression d'une entreprise qui avait été selectionnée. <br/>
+     * Suppression faite par un administrateur
+     * 
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonces_by_id.yml")
+    public void testAjoutChoixArtisanByNotOwnerNorAdmin() {
+        DemAnnonceSelectEntrepriseDTO demandeAnnonceDTO = new DemAnnonceSelectEntrepriseDTO();
+        demandeAnnonceDTO
+                .setHashID("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
+        demandeAnnonceDTO.setLoginDemandeur("doe");
+        demandeAnnonceDTO.setTypeCompteDemandeur(TypeCompte.CLIENT);
+        demandeAnnonceDTO.setLoginArtisanChoisi("pebronneChoisi");
+        demandeAnnonceDTO.setAjoutOuSupprimeArtisan(DemAnnonceSelectEntrepriseDTO.AJOUT_ARTISAN);
+
+        Integer updateKO = AnnonceService.selectOneEnterprise(demandeAnnonceDTO);
+
+        Assert.assertEquals(Constant.CODE_SERVICE_RETOUR_KO, updateKO);
+
+        assertEntrepriseForChoixArtisanWithTransaction(true);
     }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    private void assertEntrepriseForChoixArtisan() {
+    private void assertEntrepriseForChoixArtisanWithTransaction(boolean isSuppression) {
         Annonce annonce = annonceDAO.getAnnonceByIDWithTransaction("lolmdrp");
         Assert.assertNotNull(annonce);
-        Assert.assertNotNull(annonce.getEntrepriseSelectionnee());
-
-        Assert.assertEquals("Pebronne enterprise choisi", annonce.getEntrepriseSelectionnee().getNomComplet());
+        if (isSuppression) {
+            Assert.assertNull(annonce.getEntrepriseSelectionnee());
+        } else {
+            Assert.assertNotNull(annonce.getEntrepriseSelectionnee());
+            Assert.assertEquals("Pebronne enterprise choisi", annonce.getEntrepriseSelectionnee().getNomComplet());
+        }
     }
 
     private DemandeAnnonceDTO createDemandeAnnonceDTO(String hashID, String login, TypeCompte typeCompte) {

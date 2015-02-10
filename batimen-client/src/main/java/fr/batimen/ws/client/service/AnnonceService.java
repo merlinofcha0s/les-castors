@@ -171,7 +171,7 @@ public class AnnonceService {
     public static Integer selectOneEnterprise(DemAnnonceSelectEntrepriseDTO demandeAnnonceDTO) {
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Début appel service suppression annonce.....");
+            LOGGER.debug("Début appel service selection d'une annonce.....");
         }
 
         String objectInJSON = WsConnector.getInstance().sendRequest(WsPath.GESTION_ANNONCE_SERVICE_PATH,
@@ -180,7 +180,7 @@ public class AnnonceService {
         Integer updateOK = Integer.valueOf(objectInJSON);
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Fin appel service suppression annonce.....");
+            LOGGER.debug("Fin appel service selection d'une annonce.....");
         }
 
         return updateOK;
