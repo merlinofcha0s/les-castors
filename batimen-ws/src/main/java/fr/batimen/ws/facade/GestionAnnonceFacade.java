@@ -283,17 +283,39 @@ public class GestionAnnonceFacade {
         }
     }
 
+    /**
+     * Service de suppression d'une annonce <br/>
+     * Si c'est un client, il doit posseder l'annonce, sinon le demandeur doit
+     * etre admin.
+     * 
+     * @param demandeAnnonce
+     * @return {@link Constant}
+     */
     @POST
     @Path(WsPath.GESTION_ANNONCE_SERVICE_SUPRESS_ANNONCE)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public Integer suppressionAnnonce(DemandeAnnonceDTO demandeAnnonce) {
 
         String rolesDemandeur = utilisateurFacade.getUtilisateurRoles(demandeAnnonce.getLoginDemandeur());
+        Annonce annonceToUpdate = annonceDAO.getAnnonceByIDWithTransaction(demandeAnnonce.getHashID());
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Suppression à la demande de : " + demandeAnnonce.getLoginDemandeur());
+            LOGGER.debug("Récupération du role du demandeur : " + rolesDemandeur);
+            LOGGER.debug("Récupération de l'annonce : " + demandeAnnonce.getHashID());
+        }
 
         Boolean retourDAO = Boolean.FALSE;
 
         if (rolesDemandeur.indexOf(TypeCompte.CLIENT.getRole()) != -1
                 || rolesDemandeur.indexOf(TypeCompte.ADMINISTRATEUR.getRole()) != -1) {
+            if (rolesDemandeur.indexOf(TypeCompte.CLIENT.getRole()) != -1
+                    && !annonceToUpdate.getDemandeur().getLogin().equals(demandeAnnonce.getLoginDemandeur())) {
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("Il ne possede par les droits de suppression, on sort du service...");
+                }
+                return Constant.CODE_SERVICE_RETOUR_KO;
+            }
             retourDAO = annonceDAO.suppressionAnnonce(demandeAnnonce);
         }
 
@@ -304,6 +326,15 @@ public class GestionAnnonceFacade {
         }
     }
 
+    /**
+     * Selection d'une entreprise par un particulier ou un admin <br/>
+     * 
+     * Si c'est un client, il doit posseder l'annonce, sinon le demandeur doit
+     * etre admin.
+     * 
+     * @param demandeAnnonceDTO
+     * @return
+     */
     @POST
     @Path(WsPath.GESTION_ANNONCE_SERVICE_SELECTION_UNE_ENTREPRISE)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
@@ -335,7 +366,7 @@ public class GestionAnnonceFacade {
             if (rolesDemandeur.indexOf(TypeCompte.CLIENT.getRole()) != -1
                     && !annonceToUpdate.getDemandeur().getLogin().equals(demandeAnnonceDTO.getLoginDemandeur())) {
                 if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("Il ne possede par les droits d'affichage, on sort du service...");
+                    LOGGER.debug("Il ne possede par les droits d'ajout, on sort du service...");
                 }
                 return Constant.CODE_SERVICE_RETOUR_KO;
             }
@@ -355,6 +386,9 @@ public class GestionAnnonceFacade {
                 }
                 annonceToUpdate.setEntrepriseSelectionnee(null);
             } else {
+                if (LOGGER.isErrorEnabled()) {
+                    LOGGER.error("Ni ajout ni suppression dans la selection artisan, cas impossible");
+                }
                 return Constant.CODE_SERVICE_RETOUR_KO;
             }
 
