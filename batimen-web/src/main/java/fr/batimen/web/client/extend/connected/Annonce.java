@@ -17,11 +17,13 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.batimen.core.constant.Constant;
 import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.EntrepriseDTO;
 import fr.batimen.dto.PermissionDTO;
 import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
+import fr.batimen.dto.aggregate.DemAnnonceSelectEntrepriseDTO;
 import fr.batimen.dto.aggregate.NbConsultationDTO;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.helper.CategorieLoader;
@@ -79,6 +81,7 @@ public class Annonce extends MasterPage {
         affichageEntreprisesInscrites();
         affichageContactAnnonce();
         initPopupSuppression();
+        affichageEntrepriseSelectionnee();
     }
 
     private void loadAnnonceInfos(String idAnnonce) {
@@ -248,7 +251,8 @@ public class Annonce extends MasterPage {
              */
             @Override
             public boolean isVisible() {
-                return roleUtils.checkRoles(TypeCompte.CLIENT) || roleUtils.checkRoles(TypeCompte.ADMINISTRATEUR);
+                return (roleUtils.checkRoles(TypeCompte.CLIENT) || roleUtils.checkRoles(TypeCompte.ADMINISTRATEUR))
+                        && annonceAffichageDTO.getEntrepriseSelectionnee() == null;
             }
 
         };
@@ -284,8 +288,24 @@ public class Annonce extends MasterPage {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        // TODO Appeler le service de selection d'une entreprise
-                        // pour un devis
+                        DemAnnonceSelectEntrepriseDTO demandeAnnonceSelectionEntreprise = new DemAnnonceSelectEntrepriseDTO();
+                        demandeAnnonceSelectionEntreprise
+                                .setAjoutOuSupprimeArtisan(DemAnnonceSelectEntrepriseDTO.AJOUT_ARTISAN);
+                        demandeAnnonceSelectionEntreprise.setHashID(idAnnonce);
+                        demandeAnnonceSelectionEntreprise.setLoginArtisanChoisi(entreprise.getArtisan().getLogin());
+                        demandeAnnonceSelectionEntreprise.setLoginDemandeur(annonceAffichageDTO.getAnnonce()
+                                .getLoginOwner());
+                        Integer codeRetour = AnnonceService.selectOneEnterprise(demandeAnnonceSelectionEntreprise);
+
+                        if (codeRetour.equals(Constant.CODE_SERVICE_RETOUR_OK)) {
+                            StringBuilder messageFeedback = new StringBuilder("L'entreprise ");
+                            messageFeedback.append(entreprise.getNomComplet());
+                            messageFeedback.append(" a été selectionnée avec succés");
+                            feedBackPanelGeneral.success(messageFeedback.toString());
+                        } else {
+                            feedBackPanelGeneral.error("Problème lors de la selection d'une entreprise");
+                        }
+                        target.add(feedBackPanelGeneral);
                     }
 
                 };
@@ -323,6 +343,26 @@ public class Annonce extends MasterPage {
 
         containerEnteprisesInscrites.add(listViewEntrepriseInscrite, aucuneEntreprise);
         add(containerEnteprisesInscrites);
+    }
+
+    private void affichageEntrepriseSelectionnee() {
+        WebMarkupContainer containerEntrepriseSelectionnee = new WebMarkupContainer("containerEntrepriseSelectionnee") {
+
+            private static final long serialVersionUID = 1L;
+
+            /*
+             * (non-Javadoc)
+             * 
+             * @see org.apache.wicket.Component#isVisible()
+             */
+            @Override
+            public boolean isVisible() {
+                return (roleUtils.checkRoles(TypeCompte.CLIENT) || roleUtils.checkRoles(TypeCompte.ADMINISTRATEUR))
+                        && annonceAffichageDTO.getEntrepriseSelectionnee() != null;
+            }
+        };
+
+        add(containerEntrepriseSelectionnee);
     }
 
     private void affichageContactAnnonce() {

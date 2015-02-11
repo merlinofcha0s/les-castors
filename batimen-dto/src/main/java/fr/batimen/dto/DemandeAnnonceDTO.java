@@ -26,7 +26,6 @@ public class DemandeAnnonceDTO extends AbstractDTO {
     @NotNull
     @Size(min = CLIENT_LOGIN_RANGE_MIN, max = CLIENT_LOGIN_RANGE_MAX)
     private String loginDemandeur;
-    @NotNull
     private TypeCompte typeCompteDemandeur;
 
     /**

@@ -387,7 +387,7 @@ public class GestionAnnonceFacade {
                 annonceToUpdate.setEntrepriseSelectionnee(null);
             } else {
                 if (LOGGER.isErrorEnabled()) {
-                    LOGGER.error("Ni ajout ni suppression dans la selection artisan, cas impossible");
+                    LOGGER.error("Ni ajout, ni suppression dans la selection artisan, cas impossible");
                 }
                 return Constant.CODE_SERVICE_RETOUR_KO;
             }
