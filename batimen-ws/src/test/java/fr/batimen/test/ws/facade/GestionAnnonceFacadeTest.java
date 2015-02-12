@@ -15,19 +15,22 @@ import org.junit.Test;
 import fr.batimen.core.constant.Constant;
 import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.DemandeAnnonceDTO;
+import fr.batimen.dto.NotificationDTO;
 import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.aggregate.DemAnnonceSelectEntrepriseDTO;
 import fr.batimen.dto.aggregate.NbConsultationDTO;
+import fr.batimen.dto.enums.StatutNotification;
 import fr.batimen.dto.enums.TypeCompte;
+import fr.batimen.dto.enums.TypeNotification;
 import fr.batimen.test.ws.AbstractBatimenWsTest;
 import fr.batimen.test.ws.helper.DataHelper;
 import fr.batimen.ws.client.service.AnnonceService;
 import fr.batimen.ws.dao.AnnonceDAO;
-import fr.batimen.ws.dao.ArtisanDAO;
 import fr.batimen.ws.dao.ClientDAO;
 import fr.batimen.ws.entity.Annonce;
 import fr.batimen.ws.entity.Client;
+import fr.batimen.ws.service.NotificationService;
 
 /**
  * 
@@ -45,7 +48,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     private AnnonceDAO annonceDAO;
 
     @Inject
-    private ArtisanDAO artisanDAO;
+    private NotificationService notificationService;
 
     @Before
     public void init() {
@@ -387,6 +390,15 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         } else {
             Assert.assertNotNull(annonce.getEntrepriseSelectionnee());
             Assert.assertEquals("Pebronne enterprise choisi", annonce.getEntrepriseSelectionnee().getNomComplet());
+            List<NotificationDTO> notificationsDTO = notificationService.getNotificationByLogin(annonce
+                    .getEntrepriseSelectionnee().getArtisan().getLogin(), TypeCompte.ARTISAN);
+
+            for (NotificationDTO notification : notificationsDTO) {
+                Assert.assertEquals(TypeNotification.A_CHOISI_ENTREPRISE, notification.getTypeNotification());
+                Assert.assertEquals(StatutNotification.PAS_VUE, notification.getStatutNotification());
+            }
+            // notificationDAO.getNotificationForArtisan(annonce.getEntrepriseSelectionnee().getArtisan().getLogin());
+            // Assert.assertNotNull(object);
         }
     }
 

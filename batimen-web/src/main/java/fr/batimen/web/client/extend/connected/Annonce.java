@@ -58,6 +58,9 @@ public class Annonce extends MasterPage {
     private AjaxLink<Void> supprimerAnnonce;
     private AjaxLink<Void> inscrireAnnonce;
     private Link<Void> envoyerDevis;
+    private WebMarkupContainer containerEnteprisesInscrites;
+    private WebMarkupContainer containerEntrepriseSelectionnee;
+    private WebMarkupContainer containerEntreprisesGlobales;
 
     private AnnonceAffichageDTO annonceAffichageDTO;
 
@@ -240,7 +243,7 @@ public class Annonce extends MasterPage {
     }
 
     private void affichageEntreprisesInscrites() {
-        WebMarkupContainer containerEnteprisesInscrites = new WebMarkupContainer("containerEnteprisesInscrites") {
+        containerEnteprisesInscrites = new WebMarkupContainer("containerEnteprisesInscrites") {
 
             private static final long serialVersionUID = 1L;
 
@@ -256,6 +259,12 @@ public class Annonce extends MasterPage {
             }
 
         };
+
+        containerEnteprisesInscrites.setOutputMarkupId(true);
+
+        containerEntreprisesGlobales = new WebMarkupContainer("containerEntreprisesGlobales");
+        containerEntreprisesGlobales.setOutputMarkupId(true);
+        containerEntreprisesGlobales.add(containerEnteprisesInscrites);
 
         ListView<EntrepriseDTO> listViewEntrepriseInscrite = new ListView<EntrepriseDTO>("entreprises",
                 annonceAffichageDTO.getEntreprises()) {
@@ -298,6 +307,8 @@ public class Annonce extends MasterPage {
                         Integer codeRetour = AnnonceService.selectOneEnterprise(demandeAnnonceSelectionEntreprise);
 
                         if (codeRetour.equals(Constant.CODE_SERVICE_RETOUR_OK)) {
+                            annonceAffichageDTO.setEntrepriseSelectionnee(entreprise);
+
                             StringBuilder messageFeedback = new StringBuilder("L'entreprise ");
                             messageFeedback.append(entreprise.getNomComplet());
                             messageFeedback.append(" a été selectionnée avec succés");
@@ -305,7 +316,7 @@ public class Annonce extends MasterPage {
                         } else {
                             feedBackPanelGeneral.error("Problème lors de la selection d'une entreprise");
                         }
-                        target.add(feedBackPanelGeneral);
+                        target.add(feedBackPanelGeneral, containerEntreprisesGlobales);
                     }
 
                 };
@@ -342,11 +353,11 @@ public class Annonce extends MasterPage {
         };
 
         containerEnteprisesInscrites.add(listViewEntrepriseInscrite, aucuneEntreprise);
-        add(containerEnteprisesInscrites);
+        add(containerEntreprisesGlobales);
     }
 
     private void affichageEntrepriseSelectionnee() {
-        WebMarkupContainer containerEntrepriseSelectionnee = new WebMarkupContainer("containerEntrepriseSelectionnee") {
+        containerEntrepriseSelectionnee = new WebMarkupContainer("containerEntrepriseSelectionnee") {
 
             private static final long serialVersionUID = 1L;
 
@@ -362,7 +373,9 @@ public class Annonce extends MasterPage {
             }
         };
 
-        add(containerEntrepriseSelectionnee);
+        containerEntrepriseSelectionnee.setOutputMarkupId(true);
+
+        containerEntreprisesGlobales.add(containerEntrepriseSelectionnee);
     }
 
     private void affichageContactAnnonce() {

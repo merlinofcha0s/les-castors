@@ -41,6 +41,7 @@ import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 import fr.batimen.ws.dao.AnnonceDAO;
 import fr.batimen.ws.dao.ArtisanDAO;
+import fr.batimen.ws.dao.NotificationDAO;
 import fr.batimen.ws.entity.Annonce;
 import fr.batimen.ws.entity.Artisan;
 import fr.batimen.ws.entity.Entreprise;
@@ -82,6 +83,9 @@ public class GestionAnnonceFacade {
 
     @Inject
     private GestionUtilisateurFacade utilisateurFacade;
+
+    @Inject
+    private NotificationDAO notificationDAO;
 
     /**
      * Permet la creation d'une nouvelle annonce par le client ainsi que le
@@ -380,6 +384,8 @@ public class GestionAnnonceFacade {
                     LOGGER.debug("C'est un ajout, on met à jour l'annonce avec l'entreprise choisi");
                 }
                 annonceToUpdate.setEntrepriseSelectionnee(entrepriseChoisi);
+                notificationDAO.createNotificationEntrepriseChoisiParClient(annonceToUpdate);
+                // TODO Envoi de mail
             } else if (demandeAnnonceDTO.getAjoutOuSupprimeArtisan() == DemAnnonceSelectEntrepriseDTO.SUPPRESSION_ARTISAN) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("C'est une suppression, on met à jour l'annonce avec l'entreprise choisi = null");
