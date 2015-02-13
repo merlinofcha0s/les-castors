@@ -13,7 +13,7 @@ public class AnnonceDataset {
                     "notationannonce_id")
             .values(200010, "2014-01-10", "2014-01-10", "0",
                     "Construction compliqué qui necessite des connaissance en geologie", "1", 0,
-                    "Installation électrique", 0, 0, "toto", "tata", 0, 200005, 100001, 200009, 200012)
+                    "Installation électrique", 0, 0, "toto", "tata", 0, 200005, 100001, null, null)
             .values(200011, "2014-01-10", "2014-01-10", "0",
                     "Construction compliqué qui necessite des connaissance en geologie", "1", 0,
                     "Installation électrique", 0, 0, "lolmdr", "tata", 0, 200014, 100001, 200009, 200013).build();
@@ -48,4 +48,7 @@ public class AnnonceDataset {
     public static final Operation INSERT_ARTISAN_PERMISSION = insertInto("permission")
             .columns("typecompte", "artisan_fk").values(3, 200008).build();
 
+    public static final Operation INSERT_ANNONCE_ARTISAN = insertInto("annonce_artisan")
+            .columns("annonce_id", "artisans_id", "artisan_id", "annonces_id").values(200010, 200008, 200008, 200010)
+            .build();
 }

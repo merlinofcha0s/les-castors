@@ -133,7 +133,7 @@ public class Annonce extends MasterPage {
 
             @Override
             public void onClick() {
-                // TODO Pluger la modification de l'annonce une fois page faite
+                // TODO Plugger la modification de l'annonce une fois page faite
             }
 
         };
@@ -261,6 +261,7 @@ public class Annonce extends MasterPage {
         };
 
         containerEnteprisesInscrites.setOutputMarkupId(true);
+        containerEnteprisesInscrites.setMarkupId("containerEnteprisesInscrites");
 
         containerEntreprisesGlobales = new WebMarkupContainer("containerEntreprisesGlobales");
         containerEntreprisesGlobales.setOutputMarkupId(true);
@@ -321,6 +322,8 @@ public class Annonce extends MasterPage {
 
                 };
 
+                linkAcceptDevis.setMarkupId("linkAcceptDevis");
+
                 AjaxLink<Void> linkRefusDevis = new AjaxLink<Void>("linkRefusDevis") {
 
                     private static final long serialVersionUID = 1L;
@@ -374,6 +377,7 @@ public class Annonce extends MasterPage {
         };
 
         containerEntrepriseSelectionnee.setOutputMarkupId(true);
+        containerEntrepriseSelectionnee.setMarkupId("containerEntrepriseSelectionnee");
 
         containerEntreprisesGlobales.add(containerEntrepriseSelectionnee);
     }

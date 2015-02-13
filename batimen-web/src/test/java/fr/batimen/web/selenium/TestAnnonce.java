@@ -34,7 +34,7 @@ public class TestAnnonce extends AbstractITTest {
                 AnnonceDataset.INSERT_ADRESSE_DATA, AnnonceDataset.INSERT_ENTREPRISE_DATA,
                 AnnonceDataset.INSERT_ARTISAN_DATA, AnnonceDataset.INSERT_ARTISAN_PERMISSION,
                 AnnonceDataset.INSERT_NOTATION_DATA, AnnonceDataset.INSERT_ANNONCE_DATA,
-                AnnonceDataset.INSERT_NOTIFICATION_DATA);
+                AnnonceDataset.INSERT_NOTIFICATION_DATA, AnnonceDataset.INSERT_ANNONCE_ARTISAN);
         DbSetup dbSetup = new DbSetup(getDriverManagerDestination(), operation);
         dbSetup.launch();
     }
@@ -49,8 +49,11 @@ public class TestAnnonce extends AbstractITTest {
         connectAndGoToAnnonce(TypeCompte.CLIENT, "toto");
         assertCoreInformationOfAnnonce();
 
-        assertEquals("ENTREPRISES QUI VOUS PROPOSENT DES DEVIS", driver
-                .findElement(By.xpath("//div[4]/div/div/div/h2")).getText());
+        assertEquals(
+                "ENTREPRISES QUI SOUHAITENT VOUS CONTACTER",
+                driver.findElement(
+                        By.cssSelector("#containerEnteprisesInscrites > div.row-fluid > div.span12 > div.bg_title > h2.headInModule"))
+                        .getText());
         assertEquals("Modifier votre annonce", driver.findElement(By.linkText("Modifier votre annonce")).getText());
         assertEquals("Supprimer l'annonce", driver.findElement(By.id("supprimerAnnonce")).getText());
     }
@@ -72,7 +75,10 @@ public class TestAnnonce extends AbstractITTest {
                 .getText());
 
         // Les entreprises qui vous proposent des devis
-        Assert.assertFalse(driver.findElement(By.xpath("//div[4]/div/div/div/h2")).isDisplayed());
+        Assert.assertFalse(driver
+                .findElement(
+                        By.cssSelector("#containerEnteprisesInscrites > div.row-fluid > div.span12 > div.bg_title > h2.headInModule"))
+                .isDisplayed());
     }
 
     /**
@@ -130,6 +136,24 @@ public class TestAnnonce extends AbstractITTest {
         driver.findElement(By.id("yes")).click();
         // TODO Verifier que l'on a bien redirigé l'admin sur la bonne page
         // quand la page d'accueil admin sera faites
+    }
+
+    /**
+     * Cas de test : L'utilisateur choisi un entreprise qui s'est inscrit a son
+     * annonce.
+     */
+    @Test
+    public void testChoixEntrepriseAnnonceByClient() {
+        connectAndGoToAnnonce(TypeCompte.CLIENT, "toto");
+        assertCoreInformationOfAnnonce();
+        driver.findElement(By.id("linkAcceptDevis")).click();
+        assertEquals("L'entreprise Entreprise de toto a été selectionnée avec succés",
+                driver.findElement(By.cssSelector("span.box_type4")).getText());
+        assertEquals(
+                "ENTREPRISE QUE VOUS AVEZ CHOISI",
+                driver.findElement(
+                        By.cssSelector("#containerEntrepriseSelectionnee > div.row-fluid > div.span12 > div.bg_title > h2.headInModule"))
+                        .getText());
     }
 
     public void connectAndGoToAnnonce(TypeCompte typeCompteWanted, String idAnnonce) {
