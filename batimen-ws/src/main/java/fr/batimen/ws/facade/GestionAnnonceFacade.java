@@ -301,7 +301,6 @@ public class GestionAnnonceFacade {
     public Integer suppressionAnnonce(DemandeAnnonceDTO demandeAnnonce) {
 
         String rolesDemandeur = utilisateurFacade.getUtilisateurRoles(demandeAnnonce.getLoginDemandeur());
-        Annonce annonceToUpdate = annonceDAO.getAnnonceByIDWithTransaction(demandeAnnonce.getHashID());
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Suppression à la demande de : " + demandeAnnonce.getLoginDemandeur());
@@ -311,10 +310,20 @@ public class GestionAnnonceFacade {
 
         Boolean retourDAO = Boolean.FALSE;
 
-        if (rolesDemandeur.indexOf(TypeCompte.CLIENT.getRole()) != -1
-                || rolesDemandeur.indexOf(TypeCompte.ADMINISTRATEUR.getRole()) != -1) {
-            if (rolesDemandeur.indexOf(TypeCompte.CLIENT.getRole()) != -1
-                    && !annonceToUpdate.getDemandeur().getLogin().equals(demandeAnnonce.getLoginDemandeur())) {
+        Boolean isClient = rolesDemandeur.indexOf(TypeCompte.CLIENT.getRole()) != -1;
+        Boolean isAdmin = rolesDemandeur.indexOf(TypeCompte.ADMINISTRATEUR.getRole()) != -1;
+
+        if (isClient || isAdmin) {
+
+            Annonce annonceToUpdate = null;
+            if (isAdmin) {
+                annonceToUpdate = annonceDAO.getAnnonceByIDWithTransaction(demandeAnnonce.getHashID(), true);
+            } else if (isClient) {
+                annonceToUpdate = annonceDAO.getAnnonceByIDWithTransaction(demandeAnnonce.getHashID(), false);
+            }
+
+            if (isClient && !annonceToUpdate.getDemandeur().getLogin().equals(demandeAnnonce.getLoginDemandeur())) {
+
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("Il ne possede par les droits de suppression, on sort du service...");
                 }
@@ -356,11 +365,18 @@ public class GestionAnnonceFacade {
             LOGGER.debug("On récupére l'artisan choisi : " + artisan.getLogin());
         }
 
-        Boolean retourDAO = Boolean.FALSE;
-        if (rolesDemandeur.indexOf(TypeCompte.CLIENT.getRole()) != -1
-                || rolesDemandeur.indexOf(TypeCompte.ADMINISTRATEUR.getRole()) != -1 && entrepriseChoisi != null) {
+        Boolean isClient = rolesDemandeur.indexOf(TypeCompte.CLIENT.getRole()) != -1;
+        Boolean isAdmin = rolesDemandeur.indexOf(TypeCompte.ADMINISTRATEUR.getRole()) != -1;
 
-            Annonce annonceToUpdate = annonceDAO.getAnnonceByIDWithTransaction(demandeAnnonceDTO.getHashID());
+        Boolean retourDAO = Boolean.FALSE;
+        if (isClient || isAdmin && entrepriseChoisi != null) {
+
+            Annonce annonceToUpdate = null;
+            if (isAdmin) {
+                annonceToUpdate = annonceDAO.getAnnonceByIDWithTransaction(demandeAnnonceDTO.getHashID(), true);
+            } else if (isClient) {
+                annonceToUpdate = annonceDAO.getAnnonceByIDWithTransaction(demandeAnnonceDTO.getHashID(), false);
+            }
 
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Le demandeur est donc soit un client soit un admin");
@@ -391,6 +407,7 @@ public class GestionAnnonceFacade {
                     LOGGER.debug("C'est une suppression, on met à jour l'annonce avec l'entreprise choisi = null");
                 }
                 annonceToUpdate.setEntrepriseSelectionnee(null);
+                // TODO En suspens pour le moment
             } else {
                 if (LOGGER.isErrorEnabled()) {
                     LOGGER.error("Ni ajout, ni suppression dans la selection artisan, cas impossible");

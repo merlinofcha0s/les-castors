@@ -331,7 +331,8 @@ public class Annonce extends MasterPage {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
                         // TODO Appeler le service pour la deselection d'un
-                        // entreprise concernant une annonce
+                        // entreprise concernant une annonce, En suspens pour le
+                        // moment.
                     }
 
                 };

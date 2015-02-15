@@ -20,6 +20,7 @@ import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.aggregate.DemAnnonceSelectEntrepriseDTO;
 import fr.batimen.dto.aggregate.NbConsultationDTO;
+import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.StatutNotification;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.enums.TypeNotification;
@@ -198,13 +199,15 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         Assert.assertEquals(Constant.CODE_SERVICE_RETOUR_OK, updateOK);
 
         Annonce annonce = annonceDAO
-                .getAnnonceByIDWithoutTransaction("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
+                .getAnnonceByIDWithoutTransaction(
+                        "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
+                        true);
         Assert.assertEquals(annonce.getNbConsultation(), Integer.valueOf("2"));
     }
 
     /**
      * Cas de test : Suppression d'une annonce par un client, le test doit
-     * l'effacer correctement.
+     * mettre l'annonce en statut supprimer correctement.
      * 
      */
     @Test
@@ -221,13 +224,18 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         Assert.assertEquals(Constant.CODE_SERVICE_RETOUR_OK, updateOK);
 
         Annonce annonce = annonceDAO
-                .getAnnonceByIDWithoutTransaction("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
-        Assert.assertNull(annonce);
+                .getAnnonceByIDWithoutTransaction(
+                        "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
+                        true);
+        Assert.assertNotNull(annonce);
+        Assert.assertEquals(EtatAnnonce.SUPPRIMER, annonce.getEtatAnnonce());
+
     }
 
     /**
      * Cas de test : Un client essai d'effacer d'une annonce qui n'est pas a
-     * lui, le webservice refuse.
+     * lui, le webservice refuse. Aucune demande de devis ne s'efface, on la
+     * passe juste en mode supprimé
      * 
      */
     @Test
@@ -244,13 +252,16 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         Assert.assertEquals(Constant.CODE_SERVICE_RETOUR_KO, updateKO);
 
         Annonce annonce = annonceDAO
-                .getAnnonceByIDWithoutTransaction("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
+                .getAnnonceByIDWithoutTransaction(
+                        "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
+                        true);
         Assert.assertNotNull(annonce);
+        Assert.assertEquals(EtatAnnonce.ACTIVE, annonce.getEtatAnnonce());
     }
 
     /**
-     * Cas de test : Suppression d'une annonce par un admin, le test doit
-     * l'effacer correctement.
+     * Cas de test : Suppression d'une annonce par un admin, le test doit mettre
+     * l'annonce en statut supprimer correctement.
      * 
      */
     @Test
@@ -267,8 +278,11 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         Assert.assertEquals(Constant.CODE_SERVICE_RETOUR_OK, updateOK);
 
         Annonce annonce = annonceDAO
-                .getAnnonceByIDWithoutTransaction("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
-        Assert.assertNull(annonce);
+                .getAnnonceByIDWithoutTransaction(
+                        "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
+                        true);
+        Assert.assertNotNull(annonce);
+        Assert.assertEquals(EtatAnnonce.SUPPRIMER, annonce.getEtatAnnonce());
     }
 
     /**
@@ -383,7 +397,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     private void assertEntrepriseForChoixArtisanWithTransaction(boolean isSuppression) {
-        Annonce annonce = annonceDAO.getAnnonceByIDWithTransaction("lolmdrp");
+        Annonce annonce = annonceDAO.getAnnonceByIDWithTransaction("lolmdrp", true);
         Assert.assertNotNull(annonce);
         if (isSuppression) {
             Assert.assertNull(annonce.getEntrepriseSelectionnee());
@@ -397,8 +411,6 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
                 Assert.assertEquals(TypeNotification.A_CHOISI_ENTREPRISE, notification.getTypeNotification());
                 Assert.assertEquals(StatutNotification.PAS_VUE, notification.getStatutNotification());
             }
-            // notificationDAO.getNotificationForArtisan(annonce.getEntrepriseSelectionnee().getArtisan().getLogin());
-            // Assert.assertNotNull(object);
         }
     }
 

@@ -156,6 +156,24 @@ public class TestAnnonce extends AbstractITTest {
                         .getText());
     }
 
+    /**
+     * Cas de test : L'utilisateur choisi un entreprise qui s'est inscrit a son
+     * annonce.
+     */
+    @Test
+    public void testChoixEntrepriseAnnonceByAdmin() {
+        connectAndGoToAnnonce(TypeCompte.ADMINISTRATEUR, "toto");
+        assertCoreInformationOfAnnonce();
+        driver.findElement(By.id("linkAcceptDevis")).click();
+        assertEquals("L'entreprise Entreprise de toto a été selectionnée avec succés",
+                driver.findElement(By.cssSelector("span.box_type4")).getText());
+        assertEquals(
+                "ENTREPRISE QUE VOUS AVEZ CHOISI",
+                driver.findElement(
+                        By.cssSelector("#containerEntrepriseSelectionnee > div.row-fluid > div.span12 > div.bg_title > h2.headInModule"))
+                        .getText());
+    }
+
     public void connectAndGoToAnnonce(TypeCompte typeCompteWanted, String idAnnonce) {
         driver.get(appUrl);
         // On s'authentifie à l'application

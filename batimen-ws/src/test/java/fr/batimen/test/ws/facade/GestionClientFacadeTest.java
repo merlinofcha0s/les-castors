@@ -64,6 +64,7 @@ public class GestionClientFacadeTest extends AbstractBatimenWsTest {
         }
 
         Assert.assertTrue(rightDescription);
+        Assert.assertEquals(1, annonces.size());
     }
 
     /**

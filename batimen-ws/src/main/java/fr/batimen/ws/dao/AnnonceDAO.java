@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 import fr.batimen.core.constant.QueryJPQL;
 import fr.batimen.core.exception.DuplicateEntityException;
 import fr.batimen.dto.DemandeAnnonceDTO;
+import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.ws.entity.Annonce;
 
@@ -248,8 +249,8 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
      * @return Le nb d'annonce
      */
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Annonce getAnnonceByIDWithoutTransaction(String id) {
-        return getAnnonceByID(id);
+    public Annonce getAnnonceByIDWithoutTransaction(String id, boolean isAdmin) {
+        return getAnnonceByID(id, isAdmin);
     }
 
     /**
@@ -260,17 +261,23 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
      * @return Le nb d'annonce
      */
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public Annonce getAnnonceByIDWithTransaction(String id) {
-        return getAnnonceByID(id);
+    public Annonce getAnnonceByIDWithTransaction(String id, boolean isAdmin) {
+        return getAnnonceByID(id, isAdmin);
     }
 
-    private Annonce getAnnonceByID(String id) {
+    private Annonce getAnnonceByID(String id, boolean isAdmin) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Debut de la récuperation de l'annonce par l'id");
         }
 
+        TypedQuery<Annonce> query = null;
         try {
-            TypedQuery<Annonce> query = entityManager.createNamedQuery(QueryJPQL.ANNONCE_BY_ID, Annonce.class);
+            if (isAdmin) {
+                query = entityManager.createNamedQuery(QueryJPQL.ANNONCE_BY_ID_ADMIN, Annonce.class);
+            } else {
+                query = entityManager.createNamedQuery(QueryJPQL.ANNONCE_BY_ID, Annonce.class);
+            }
+
             query.setParameter(QueryJPQL.PARAM_ANNONCE_ID, id);
 
             if (LOGGER.isDebugEnabled()) {
@@ -351,6 +358,7 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
             }
 
             query.setParameter(QueryJPQL.PARAM_ANNONCE_ID, demandeAnnonceDTO.getHashID());
+            query.setParameter(QueryJPQL.PARAM_ANNONCE_ETAT, EtatAnnonce.SUPPRIMER);
 
             Integer nbUpdated = query.executeUpdate();
 

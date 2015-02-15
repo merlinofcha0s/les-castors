@@ -351,7 +351,6 @@ public class NouveauDevis extends MasterPage {
             throw new FrontEndException("Aucune étape du nouveau devis chargées, Situation Impossible");
         }
 
-        navigationWizard.setStep(numeroEtape);
     }
 
     private void remplissageCreationAnnonceSiLogin() {
@@ -496,6 +495,17 @@ public class NouveauDevis extends MasterPage {
             }
             LOGGER.error("+-------------------------------- Fin annonce ------------------------------------------+");
         }
-
     }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.wicket.Page#onInitialize()
+     */
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
+        navigationWizard.setStep(etapeEncours.ordinal() + 1);
+    }
+
 }
