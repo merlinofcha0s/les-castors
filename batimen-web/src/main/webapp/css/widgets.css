@@ -74,9 +74,8 @@ html.loading {
 	overflow: hidden;
 }
 
-/* SUPPRESSION MODAL */
-#suppressionModal{
-    width: 390px;   
+/* MODAL CASTOR GENERIQUE */
+.modalCastor{
     z-index: 90001;
 }
 

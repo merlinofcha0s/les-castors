@@ -1,34 +1,43 @@
 package fr.batimen.web.client.component;
 
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 
 public class ModalCastor extends Panel {
 
     private static final long serialVersionUID = -1420068924107876280L;
 
-    private final WebMarkupContainer modalCastor;
+    private final TransparentWebMarkupContainer modalCastor;
+    private final Label title;
     private final String id;
     private final StringBuilder fctJsNameOpen;
     private final StringBuilder fctJsNameClose;
 
-    public ModalCastor(String id) {
+    public ModalCastor(String id, String title, String size) {
         super(id);
         this.id = id;
-        modalCastor = new WebMarkupContainer("modalCastor");
+        StringBuilder sizeModalCSS = new StringBuilder("width: ");
+        sizeModalCSS.append(size).append("px");
+        // MASTER CONTAINER
+        modalCastor = new TransparentWebMarkupContainer("modalCastor");
         modalCastor.setOutputMarkupId(true);
         modalCastor.setMarkupId(id);
-        add(modalCastor);
+        modalCastor.add(new AttributeModifier("style", sizeModalCSS.toString()));
 
+        this.title = new Label("title", title);
+
+        add(modalCastor, this.title);
+        // NOM DES FCT JAVASCRIPT POUR L OUVERTURE / FERMETURE DE LA MODAL
         fctJsNameOpen = new StringBuilder("showModal");
         fctJsNameOpen.append(id).append("Open()");
 
         fctJsNameClose = new StringBuilder("showModal");
         fctJsNameClose.append(id).append("Close()");
-
     }
 
     private String getJSForOpenCloseModal(boolean open) {
@@ -41,12 +50,12 @@ public class ModalCastor extends Panel {
             openCloseModalJSBody.append("Close");
         }
 
-        openCloseModalJSBody.append("(){ $('#showModal").append(id).append("').modal('");
+        openCloseModalJSBody.append("(){ $('#").append(id).append("').modal('");
 
         if (open) {
-            openCloseModalJSBody.append(" show');");
+            openCloseModalJSBody.append("show');}");
         } else {
-            openCloseModalJSBody.append(" hide');");
+            openCloseModalJSBody.append("hide');}");
         }
 
         return openCloseModalJSBody.toString();
@@ -67,7 +76,7 @@ public class ModalCastor extends Panel {
         StringBuilder idCloseScript = new StringBuilder(id);
         idCloseScript.append("closeJS");
         response.render(JavaScriptHeaderItem.forScript(getJSForOpenCloseModal(true), idOpenScript.toString()));
-        response.render(JavaScriptHeaderItem.forScript(getJSForOpenCloseModal(false), idOpenScript.toString()));
+        response.render(JavaScriptHeaderItem.forScript(getJSForOpenCloseModal(false), idCloseScript.toString()));
     }
 
     /**

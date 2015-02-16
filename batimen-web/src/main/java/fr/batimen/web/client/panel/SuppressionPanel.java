@@ -39,13 +39,12 @@ public class SuppressionPanel extends ModalCastor {
 
     private final String hashID;
 
-    public SuppressionPanel(String id, String hashID) {
-        super(id);
+    public SuppressionPanel(String id, String hashID, String title, String size) {
+        super(id, title, size);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Initialisation de la popup de suppression");
         }
         this.hashID = hashID;
-
         rolesUtils = new RolesUtils();
         initLinkPopup();
     }

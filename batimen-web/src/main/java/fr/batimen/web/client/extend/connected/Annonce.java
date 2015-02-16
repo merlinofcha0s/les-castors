@@ -460,7 +460,8 @@ public class Annonce extends MasterPage {
     }
 
     private void initPopupSuppression() {
-        SuppressionPanel suppressionPanel = new SuppressionPanel("suppressionPanel", idAnnonce);
+        SuppressionPanel suppressionPanel = new SuppressionPanel("suppressionPanel", idAnnonce,
+                "Suppression de mon annonce", "390");
         add(suppressionPanel);
     }
 }
