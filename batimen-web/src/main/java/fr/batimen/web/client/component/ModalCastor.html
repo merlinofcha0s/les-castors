@@ -1,0 +1,27 @@
+<wicket:head>
+	<link
+		rel="stylesheet"
+		type="text/css"
+		href="css/components/bootstrap-modal/bootstrap-modal.css">
+</wicket:head>
+<wicket:panel>
+	<div
+		id="modal"
+		class="modal hide fade"
+		tabindex="-1"
+		role="dialog"
+		wicket:id="modalCastor">
+		<div class="modal-header">
+			<button
+				type="button"
+				class="close"
+				data-dismiss="modal"
+				aria-hidden="true">×</button>
+			<span id="myModalLabel">Suppression de mon annonce</span>
+		</div>
+		<div
+			class="modal-body">
+			<wicket:child />
+		</div>
+	</div>
+</wicket:panel>

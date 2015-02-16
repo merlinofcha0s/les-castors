@@ -90,8 +90,11 @@ public class TestAnnonce extends AbstractITTest {
     public void testAnnonceAffichageWithAdmin() {
         connectAndGoToAnnonce(TypeCompte.ADMINISTRATEUR, "toto");
         assertCoreInformationOfAnnonce();
-        assertEquals("ENTREPRISES QUI VOUS PROPOSENT DES DEVIS", driver
-                .findElement(By.xpath("//div[4]/div/div/div/h2")).getText());
+        assertEquals(
+                "ENTREPRISES QUI SOUHAITENT VOUS CONTACTER",
+                driver.findElement(
+                        By.cssSelector("#containerEnteprisesInscrites > div.row-fluid > div.span12 > div.bg_title > h2.headInModule"))
+                        .getText());
         assertEquals("Modifier votre annonce", driver.findElement(By.linkText("Modifier votre annonce")).getText());
         assertEquals("Supprimer l'annonce", driver.findElement(By.id("supprimerAnnonce")).getText());
     }
