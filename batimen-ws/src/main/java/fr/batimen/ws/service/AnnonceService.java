@@ -14,18 +14,22 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.exception.BackendException;
 import fr.batimen.core.exception.DuplicateEntityException;
 import fr.batimen.core.security.HashHelper;
 import fr.batimen.dto.AdresseDTO;
 import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.ClientDTO;
+import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.EntrepriseDTO;
 import fr.batimen.dto.PermissionDTO;
 import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.ws.dao.AdresseDAO;
+import fr.batimen.ws.dao.AnnonceDAO;
+import fr.batimen.ws.dao.ArtisanDAO;
 import fr.batimen.ws.dao.ClientDAO;
 import fr.batimen.ws.dao.PermissionDAO;
 import fr.batimen.ws.entity.Adresse;
@@ -55,6 +59,12 @@ public class AnnonceService {
 
     @Inject
     private PermissionDAO permissionDAO;
+
+    @Inject
+    private AnnonceDAO annonceDAO;
+
+    @Inject
+    private ArtisanDAO artisanDAO;
 
     private final ModelMapper mapper = new ModelMapper();
 
@@ -261,6 +271,20 @@ public class AnnonceService {
         }
 
         return annonceAffichageDTO;
+    }
+
+    public Integer inscrireArtisan(DemandeAnnonceDTO demandeAnnonceDTO, Annonce annonce, Artisan artisan) {
+
+        for (Artisan artisanInscrit : annonce.getArtisans()) {
+            if (artisanInscrit.getLogin().equals(artisan.getLogin())) {
+                return CodeRetourService.ANNONCE_RETOUR_ARTISAN_DEJA_INSCRIT;
+            }
+        }
+
+        annonce.getArtisans().add(artisan);
+        artisan.getAnnonces().add(annonce);
+
+        return CodeRetourService.RETOUR_OK;
     }
 
 }

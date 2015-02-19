@@ -410,19 +410,32 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
                 "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
                 loginArtisan, TypeCompte.ARTISAN);
 
-        AnnonceService.inscriptionUnArtisan(demandeAnnonceDTO);
+        Integer codeRetour = AnnonceService.inscriptionUnArtisan(demandeAnnonceDTO);
 
+        Assert.assertEquals(CodeRetourService.RETOUR_OK, codeRetour);
+
+        // VERIFICATION DE L'ENREGISTREMENT DE L'INSCRIPTION
         Annonce annonce = annonceDAO
-                .getAnnonceByIDWithoutTransaction(
+                .getAnnonceByIDWithTransaction(
                         "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
                         true);
+
+        // VERIFICATION COTE ARTISAN
         Artisan artisan = artisanDAO.getArtisanByLogin(loginArtisan);
-        List<NotificationDTO> notifications = notificationService.getNotificationByLogin(annonce.getDemandeur()
-                .getLogin(), TypeCompte.CLIENT);
         Assert.assertNotNull(artisan);
         Assert.assertEquals(1, artisan.getAnnonces().size());
-        Assert.assertEquals(1, notifications.size());
+        boolean artisanIsPresent = false;
+        for (Artisan artisanToCheck : annonce.getArtisans()) {
+            if (artisanToCheck.getLogin().equals(artisan.getLogin())) {
+                artisanIsPresent = true;
+            }
+        }
+        Assert.assertTrue(artisanIsPresent);
 
+        // VERIFICATION DE L'ENREGISTREMENT DE LA NOTIFICATION
+        List<NotificationDTO> notifications = notificationService.getNotificationByLogin(artisan.getLogin(),
+                TypeCompte.ARTISAN);
+        Assert.assertEquals(1, notifications.size());
         boolean isNotificationCorrecte = false;
 
         for (NotificationDTO notificationDTO : notifications) {
@@ -436,7 +449,25 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
     }
 
-    // TODO test pour le nombre max d'annonce, => tester le changement de statut
+    @Test
+    @UsingDataSet("datasets/in/annonces_by_id.yml")
+    public void testInscriptionArtisanInscriptionDeuxFois() {
+
+        String loginArtisan = "pebronneChoisi";
+
+        DemandeAnnonceDTO demandeAnnonceDTO = initAndGetDemandeAnnonceDTO(
+                "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
+                loginArtisan, TypeCompte.ARTISAN);
+
+        Integer codeRetourOK = AnnonceService.inscriptionUnArtisan(demandeAnnonceDTO);
+        Assert.assertEquals(CodeRetourService.RETOUR_OK, codeRetourOK);
+
+        Integer codeRetourDejaInscrit = AnnonceService.inscriptionUnArtisan(demandeAnnonceDTO);
+        Assert.assertEquals(CodeRetourService.ANNONCE_RETOUR_ARTISAN_DEJA_INSCRIT, codeRetourDejaInscrit);
+    }
+
+    // TODO test pour le nombre max d'annonce, => changement de statut (Quotas
+    // devis max atteint), code retour
     // TODO Test avec un id d'annonce inexistant
 
     private DemandeAnnonceDTO initAndGetDemandeAnnonceDTO(String hash, String loginDemandeur, TypeCompte typeCompte) {

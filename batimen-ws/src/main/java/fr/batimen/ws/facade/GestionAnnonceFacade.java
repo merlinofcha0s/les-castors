@@ -50,6 +50,7 @@ import fr.batimen.ws.helper.JsonHelper;
 import fr.batimen.ws.interceptor.BatimenInterceptor;
 import fr.batimen.ws.service.AnnonceService;
 import fr.batimen.ws.service.EmailService;
+import fr.batimen.ws.service.NotificationService;
 
 /**
  * Facade REST de gestion des annonces.
@@ -87,6 +88,9 @@ public class GestionAnnonceFacade {
 
     @Inject
     private NotificationDAO notificationDAO;
+
+    @Inject
+    private NotificationService notificationService;
 
     /**
      * Permet la creation d'une nouvelle annonce par le client ainsi que le
@@ -440,6 +444,7 @@ public class GestionAnnonceFacade {
     @Path(WsPath.GESTION_ANNONCE_SERVICE_INSCRIPTION_UN_ARTISAN)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public Integer inscriptionUnArtisan(DemandeAnnonceDTO demandeAnnonceDTO) {
+
         Annonce annonce = annonceDAO.getAnnonceByIDWithTransaction(demandeAnnonceDTO.getHashID(), false);
 
         if (annonce == null) {
@@ -457,10 +462,13 @@ public class GestionAnnonceFacade {
             return CodeRetourService.RETOUR_KO;
         }
 
-        annonce.getArtisans().add(artisan);
-        artisan.getAnnonces().add(annonce);
+        Integer codeRetourInscription = annonceService.inscrireArtisan(demandeAnnonceDTO, annonce, artisan);
 
-        // annonceDAO.update(annonce);
+        if (!codeRetourInscription.equals(CodeRetourService.RETOUR_OK)) {
+            return codeRetourInscription;
+        }
+
+        notificationService.generationNotificationInscriptionArtisan(demandeAnnonceDTO, annonce, artisan);
 
         return CodeRetourService.RETOUR_OK;
     }

@@ -20,7 +20,6 @@ public class WsPath {
     public static final String GESTION_UTILISATEUR_SERVICE_ACTIVATION = "activation";
     public static final String GESTION_UTILISATEUR_SERVICE_HASH = "byHash";
     public static final String GESTION_UTILISATEUR_SERVICE_ROLES = "getRoles";
-    public static final String GESTION_UTILISATEUR_SERVICE_NOTIFICATION = "notificationByLogin";
     public static final String GESTION_UTILISATEUR_SERVICE_UPDATE_INFO = "update";
 
     // public static final String GESTION_CLIENT_SERVICE_PATH = "gestionClient";

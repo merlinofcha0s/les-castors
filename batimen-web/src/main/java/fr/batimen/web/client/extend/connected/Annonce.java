@@ -45,6 +45,8 @@ import fr.batimen.ws.client.service.AnnonceService;
 /**
  * TODO : Mettre en place les quatres actions, modifier , supprimer(OK),
  * s'inscrire, envoyer devis <br/>
+ * TODO : Rajouter un check si l'artisan est deja inscrit ne pas afficher
+ * "s'inscrire a l'annonce"
  * 
  * @author Casaucau Cyril
  * 

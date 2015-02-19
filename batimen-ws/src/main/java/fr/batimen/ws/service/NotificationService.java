@@ -2,6 +2,7 @@ package fr.batimen.ws.service;
 
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.LocalBean;
@@ -11,19 +12,20 @@ import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.batimen.core.constant.WsPath;
+import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.NotificationDTO;
 import fr.batimen.dto.enums.StatutNotification;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.enums.TypeNotification;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 import fr.batimen.ws.dao.NotificationDAO;
+import fr.batimen.ws.entity.Annonce;
+import fr.batimen.ws.entity.Artisan;
+import fr.batimen.ws.entity.Notification;
 
 /**
  * Classe de gestion des notifications
@@ -47,8 +49,6 @@ public class NotificationService {
      * @param login
      * @return La liste de notification de l'utilisateur.
      */
-    @POST
-    @Path(WsPath.GESTION_UTILISATEUR_SERVICE_NOTIFICATION)
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public List<NotificationDTO> getNotificationByLogin(String login, TypeCompte typeCompte) {
         List<NotificationDTO> notificationsDTO = new ArrayList<NotificationDTO>();
@@ -95,5 +95,21 @@ public class NotificationService {
             }
         }
         return notificationsDTO;
+    }
+
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public void generationNotificationInscriptionArtisan(DemandeAnnonceDTO demandeAnnonceDTO, Annonce annonce,
+            Artisan artisan) {
+
+        Notification notification = new Notification();
+        notification.setAnnonce(annonce);
+        notification.setArtisanNotifier(artisan);
+        notification.setClientNotifier(annonce.getDemandeur());
+        notification.setDateNotification(new Date());
+        notification.setPourQuiNotification(TypeCompte.ARTISAN);
+        notification.setStatutNotification(StatutNotification.PAS_VUE);
+        notification.setTypeNotification(TypeNotification.INSCRIT_A_ANNONCE);
+
+        notificationDAO.create(notification);
     }
 }

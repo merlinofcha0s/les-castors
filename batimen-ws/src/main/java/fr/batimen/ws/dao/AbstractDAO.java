@@ -27,6 +27,23 @@ public class AbstractDAO<T> {
     public AbstractDAO() {
     }
 
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public T create(T t) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Création de : " + t.getClass().getSimpleName());
+        }
+        entityManager.persist(t);
+        try {
+            entityManager.flush();
+        } catch (PersistenceException pe) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Problème de flush pendant la creation de : " + t.getClass().getSimpleName(), pe);
+            }
+            return null;
+        }
+        return t;
+    }
+
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public T update(T t) {
         if (LOGGER.isDebugEnabled()) {
