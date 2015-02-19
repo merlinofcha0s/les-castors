@@ -1,4 +1,4 @@
-package fr.batimen.web.client.panel;
+package fr.batimen.web.client.modal;
 
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -9,7 +9,6 @@ import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
 import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.validator.StringValidator;
 import org.slf4j.Logger;
@@ -17,6 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.web.app.security.Authentication;
+import fr.batimen.web.client.component.ModalCastor;
 import fr.batimen.web.client.event.LoginEvent;
 
 /**
@@ -26,26 +26,19 @@ import fr.batimen.web.client.event.LoginEvent;
  * @author Casaucau Cyril
  * 
  */
-public class AuthentificationPanel extends Panel {
+public class AuthentificationModal extends ModalCastor {
 
-    /**
-     * JAVASCRIPT FUNCTIONS
-     */
-    private static final String SHOW_AUTHENTICATION_MODAL = "showAuthenticationModal()";
-    private static final String HIDE_AUTHENTICATION_MODAL = "hideAuthenticationModal()";
-    public static final String REGISTER_AUTHENTICATION_MODAL = "registerClickAuthenticationModal()";
-    public static final String UNREGISTER_AUTHENTICATION_MODAL = "unregisterClickAuthenticationModal";
     private static final long serialVersionUID = -1634093925835447825L;
-    private static final Logger LOGGER = LoggerFactory.getLogger(AuthentificationPanel.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthentificationModal.class);
 
-    private StatelessForm<AuthentificationPanel> loginForm;
+    private StatelessForm<AuthentificationModal> loginForm;
     private TextField<String> login;
     private PasswordTextField password;
 
     private Label errorLogin;
 
-    public AuthentificationPanel(String id) {
-        super(id);
+    public AuthentificationModal(String id) {
+        super(id, "Connexion à l'espace client / artisan", "620");
         initForm();
     }
 
@@ -55,7 +48,7 @@ public class AuthentificationPanel extends Panel {
             LOGGER.debug("Initialisation du form d'authentification");
         }
 
-        loginForm = new StatelessForm<AuthentificationPanel>("loginForm", new Model<AuthentificationPanel>());
+        loginForm = new StatelessForm<AuthentificationModal>("loginForm", new Model<AuthentificationModal>());
 
         login = new TextField<String>("login", new Model<String>());
         login.setMarkupId("loginModal");
@@ -91,13 +84,13 @@ public class AuthentificationPanel extends Panel {
                     // le redirige vers celle ci
                     continueToOriginalDestination();
                 } else {
-                    AuthentificationPanel.this.onError(target);
+                    AuthentificationModal.this.onError(target);
                 }
             }
 
             @Override
             protected void onError(AjaxRequestTarget target, Form<?> form) {
-                AuthentificationPanel.this.onError(target);
+                AuthentificationModal.this.onError(target);
             }
 
         };
@@ -130,23 +123,4 @@ public class AuthentificationPanel extends Panel {
         errorLogin.add(new AttributeModifier("class", "errorLoginActivated"));
         target.add(errorLogin);
     }
-
-    /**
-     * Ouvre la fenetre modal de login
-     * 
-     * @param target
-     */
-    public void open(AjaxRequestTarget target) {
-        target.appendJavaScript(SHOW_AUTHENTICATION_MODAL);
-    }
-
-    /**
-     * Ferme la fenetre modal de login
-     * 
-     * @param target
-     */
-    public void close(AjaxRequestTarget target) {
-        target.appendJavaScript(HIDE_AUTHENTICATION_MODAL);
-    }
-
 }

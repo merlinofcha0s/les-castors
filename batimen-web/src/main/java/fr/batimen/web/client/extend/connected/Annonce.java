@@ -6,6 +6,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.event.Broadcast;
+import org.apache.wicket.event.IEvent;
 import org.apache.wicket.extensions.markup.html.basic.SmartLinkLabel;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -17,13 +18,13 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.batimen.core.constant.Constant;
+import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.EntrepriseDTO;
 import fr.batimen.dto.PermissionDTO;
 import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
-import fr.batimen.dto.aggregate.DemAnnonceSelectEntrepriseDTO;
+import fr.batimen.dto.aggregate.AnnonceSelectEntrepriseDTO;
 import fr.batimen.dto.aggregate.NbConsultationDTO;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.helper.CategorieLoader;
@@ -33,16 +34,17 @@ import fr.batimen.web.client.component.Commentaire;
 import fr.batimen.web.client.component.ContactezNous;
 import fr.batimen.web.client.component.LinkLabel;
 import fr.batimen.web.client.component.Profil;
+import fr.batimen.web.client.event.InscriptionArtisanEvent;
 import fr.batimen.web.client.event.SuppressionOpenEvent;
 import fr.batimen.web.client.extend.member.client.MesAnnonces;
 import fr.batimen.web.client.master.MasterPage;
-import fr.batimen.web.client.panel.SuppressionPanel;
+import fr.batimen.web.client.modal.InscriptionModal;
+import fr.batimen.web.client.modal.SuppressionModal;
 import fr.batimen.ws.client.service.AnnonceService;
 
 /**
- * TODO : Mettre en place les quatres actions, modifier, supprimer, s'inscrire,
- * envoyer devis <br/>
- * TODO : Mettre en face de chaque entreprise, choisir l'entreprise<br/>
+ * TODO : Mettre en place les quatres actions, modifier , supprimer(OK),
+ * s'inscrire, envoyer devis <br/>
  * 
  * @author Casaucau Cyril
  * 
@@ -62,6 +64,8 @@ public class Annonce extends MasterPage {
     private WebMarkupContainer containerEntrepriseSelectionnee;
     private WebMarkupContainer containerEntreprisesGlobales;
 
+    private InscriptionModal inscriptionModal;
+
     private AnnonceAffichageDTO annonceAffichageDTO;
 
     private ClientDTO userConnected;
@@ -79,6 +83,7 @@ public class Annonce extends MasterPage {
         loadAnnonceInfos(idAnnonce);
         updateNbConsultation();
         initComposants();
+        initPopupInscription();
         initAction();
         affichageDonneesAnnonce();
         affichageEntreprisesInscrites();
@@ -182,7 +187,7 @@ public class Annonce extends MasterPage {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                // TODO Auto-generated method stub
+                inscriptionModal.open(target);
             }
         };
 
@@ -298,16 +303,16 @@ public class Annonce extends MasterPage {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        DemAnnonceSelectEntrepriseDTO demandeAnnonceSelectionEntreprise = new DemAnnonceSelectEntrepriseDTO();
+                        AnnonceSelectEntrepriseDTO demandeAnnonceSelectionEntreprise = new AnnonceSelectEntrepriseDTO();
                         demandeAnnonceSelectionEntreprise
-                                .setAjoutOuSupprimeArtisan(DemAnnonceSelectEntrepriseDTO.AJOUT_ARTISAN);
+                                .setAjoutOuSupprimeArtisan(AnnonceSelectEntrepriseDTO.AJOUT_ARTISAN);
                         demandeAnnonceSelectionEntreprise.setHashID(idAnnonce);
                         demandeAnnonceSelectionEntreprise.setLoginArtisanChoisi(entreprise.getArtisan().getLogin());
                         demandeAnnonceSelectionEntreprise.setLoginDemandeur(annonceAffichageDTO.getAnnonce()
                                 .getLoginOwner());
                         Integer codeRetour = AnnonceService.selectOneEnterprise(demandeAnnonceSelectionEntreprise);
 
-                        if (codeRetour.equals(Constant.CODE_SERVICE_RETOUR_OK)) {
+                        if (codeRetour.equals(CodeRetourService.RETOUR_OK)) {
                             annonceAffichageDTO.setEntrepriseSelectionnee(entreprise);
 
                             StringBuilder messageFeedback = new StringBuilder("L'entreprise ");
@@ -460,8 +465,30 @@ public class Annonce extends MasterPage {
     }
 
     private void initPopupSuppression() {
-        SuppressionPanel suppressionPanel = new SuppressionPanel("suppressionPanel", idAnnonce,
+        SuppressionModal suppressionModal = new SuppressionModal("suppressionModal", idAnnonce,
                 "Suppression de mon annonce", "390");
-        add(suppressionPanel);
+        add(suppressionModal);
     }
+
+    private void initPopupInscription() {
+        inscriptionModal = new InscriptionModal("inscriptionModal");
+        add(inscriptionModal);
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * fr.batimen.web.client.master.MasterPage#onEvent(org.apache.wicket.event
+     * .IEvent)
+     */
+    @Override
+    public void onEvent(IEvent<?> event) {
+        super.onEvent(event);
+
+        if (event.getPayload() instanceof InscriptionArtisanEvent) {
+            // TODO Appel du service d'inscription de l'artisan
+        }
+    }
+
 }

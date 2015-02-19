@@ -11,7 +11,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 
-import fr.batimen.core.constant.Constant;
+import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.dto.ContactMailDTO;
 import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.web.app.constants.WebConstants;
@@ -28,106 +28,106 @@ import fr.batimen.ws.client.service.ContactUsService;
  */
 public class Contact extends MasterPage {
 
-	private static final long serialVersionUID = -2549295715502248172L;
+    private static final long serialVersionUID = -2549295715502248172L;
 
-	/**
-	 * View Components
-	 */
-	private AjaxLink<String> resetButton;
-	private AjaxSubmitLink submitButton;
-	private TextField<String> nameField;
-	private TextField<String> emailField;
-	private TextField<String> subjectField;
-	private TextArea<String> messageField;
-	private Form<ContactMailDTO> form;
+    /**
+     * View Components
+     */
+    private AjaxLink<String> resetButton;
+    private AjaxSubmitLink submitButton;
+    private TextField<String> nameField;
+    private TextField<String> emailField;
+    private TextField<String> subjectField;
+    private TextArea<String> messageField;
+    private Form<ContactMailDTO> form;
 
-	public Contact() {
-		super("Contact de castors.fr", "", "Nous contacter", true, "img/bg_title1.jpg");
-		initComponents();
-	}
+    public Contact() {
+        super("Contact de castors.fr", "", "Nous contacter", true, "img/bg_title1.jpg");
+        initComponents();
+    }
 
-	/**
-	 * Component initialization method
-	 */
-	private void initComponents() {
-		ContactMailDTO contactMailDTO = new ContactMailDTO();
-		form = new Form<ContactMailDTO>("contactForm", new CompoundPropertyModel<ContactMailDTO>(
-				contactMailDTO));
-		form.setOutputMarkupId(true);
+    /**
+     * Component initialization method
+     */
+    private void initComponents() {
+        ContactMailDTO contactMailDTO = new ContactMailDTO();
+        form = new Form<ContactMailDTO>("contactForm", new CompoundPropertyModel<ContactMailDTO>(contactMailDTO));
+        form.setOutputMarkupId(true);
 
-		nameField = new TextField<String>("name");
-		nameField.setRequired(true);
-		nameField.add(new ErrorHighlightBehavior());
-		nameField.add(StringValidator.lengthBetween(ValidatorConstant.CLIENT_NOM_MIN,
-				ValidatorConstant.CLIENT_NOM_MAX));
-		emailField = new TextField<String>("email");
-		emailField.setRequired(true);
-		emailField.add(EmailAddressValidator.getInstance());
-		emailField.add(new ErrorHighlightBehavior());
+        nameField = new TextField<String>("name");
+        nameField.setRequired(true);
+        nameField.add(new ErrorHighlightBehavior());
+        nameField
+                .add(StringValidator.lengthBetween(ValidatorConstant.CLIENT_NOM_MIN, ValidatorConstant.CLIENT_NOM_MAX));
+        emailField = new TextField<String>("email");
+        emailField.setRequired(true);
+        emailField.add(EmailAddressValidator.getInstance());
+        emailField.add(new ErrorHighlightBehavior());
 
-		subjectField = new TextField<String>("subject");
-		subjectField.setRequired(true);
-		subjectField.add(new ErrorHighlightBehavior());
+        subjectField = new TextField<String>("subject");
+        subjectField.setRequired(true);
+        subjectField.add(new ErrorHighlightBehavior());
 
-		messageField = new TextArea<String>("message");
-		messageField.setRequired(true);
-		messageField.add(new ErrorHighlightBehavior());
+        messageField = new TextArea<String>("message");
+        messageField.setRequired(true);
+        messageField.add(new ErrorHighlightBehavior());
 
-		// Init du submit button
-		submitButton = new AjaxSubmitLink("submitButton") {
-			private static final long serialVersionUID = 5400416625335864317L;
+        // Init du submit button
+        submitButton = new AjaxSubmitLink("submitButton") {
+            private static final long serialVersionUID = 5400416625335864317L;
 
-			@Override
-			protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-				// send shit to server
-				int response = ContactUsService.pushContactMail((ContactMailDTO) getForm()
-						.getModelObject());
-				// finalize
-				if(response==Constant.CODE_SERVICE_RETOUR_OK){
-					feedBackPanelGeneral.success("Votre message a été transmis correctement.\nVous obtiendrez une réponse sur votre email de contact indiqué.");
-					nameField.setDefaultModelObject("");
-					emailField.setDefaultModelObject("");
-					subjectField.setDefaultModelObject("");
-					messageField.setDefaultModelObject("");
-				}else{
-					feedBackPanelGeneral.error("Une erreur est survenue lors de l'envoi du message.\nNous vous prions de nous excuser et de renouveller votre envoi ulterieurement");
-				}
-				target.add(feedBackPanelGeneral);
-				target.add(getForm());
-				target.appendJavaScript(WebConstants.JS_WINDOW_RESIZE_EVENT);
-			}
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                // send shit to server
+                int response = ContactUsService.pushContactMail((ContactMailDTO) getForm().getModelObject());
+                // finalize
+                if (response == CodeRetourService.RETOUR_OK) {
+                    feedBackPanelGeneral
+                            .success("Votre message a été transmis correctement.\nVous obtiendrez une réponse sur votre email de contact indiqué.");
+                    nameField.setDefaultModelObject("");
+                    emailField.setDefaultModelObject("");
+                    subjectField.setDefaultModelObject("");
+                    messageField.setDefaultModelObject("");
+                } else {
+                    feedBackPanelGeneral
+                            .error("Une erreur est survenue lors de l'envoi du message.\nNous vous prions de nous excuser et de renouveller votre envoi ulterieurement");
+                }
+                target.add(feedBackPanelGeneral);
+                target.add(getForm());
+                target.appendJavaScript(WebConstants.JS_WINDOW_RESIZE_EVENT);
+            }
 
-			@Override
-			protected void onError(AjaxRequestTarget target, Form<?> form) {
-				target.add(getForm());
-				target.appendJavaScript(WebConstants.JS_WINDOW_RESIZE_EVENT);
-				this.send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target));
-			}
+            @Override
+            protected void onError(AjaxRequestTarget target, Form<?> form) {
+                target.add(getForm());
+                target.appendJavaScript(WebConstants.JS_WINDOW_RESIZE_EVENT);
+                this.send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target));
+            }
 
-		};
+        };
 
-		resetButton = new AjaxLink<String>("resetButton") {
-			private static final long serialVersionUID = -8327260512161698549L;
+        resetButton = new AjaxLink<String>("resetButton") {
+            private static final long serialVersionUID = -8327260512161698549L;
 
-			@Override
-			public void onClick(AjaxRequestTarget target) {
-				nameField.setDefaultModelObject("");
-				emailField.setDefaultModelObject("");
-				subjectField.setDefaultModelObject("");
-				messageField.setDefaultModelObject("");
-				target.add(form);
-				target.appendJavaScript(WebConstants.JS_WINDOW_RESIZE_EVENT);
-			}
-		};
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                nameField.setDefaultModelObject("");
+                emailField.setDefaultModelObject("");
+                subjectField.setDefaultModelObject("");
+                messageField.setDefaultModelObject("");
+                target.add(form);
+                target.appendJavaScript(WebConstants.JS_WINDOW_RESIZE_EVENT);
+            }
+        };
 
-		// add components to view
-		form.add(nameField);
-		form.add(emailField);
-		form.add(subjectField);
-		form.add(messageField);
-		form.add(resetButton);
-		form.add(submitButton);
+        // add components to view
+        form.add(nameField);
+        form.add(emailField);
+        form.add(subjectField);
+        form.add(messageField);
+        form.add(resetButton);
+        form.add(submitButton);
 
-		this.add(form);
-	}
+        this.add(form);
+    }
 }

@@ -1,4 +1,4 @@
-package fr.batimen.web.client.panel;
+package fr.batimen.web.client.modal;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
@@ -6,7 +6,7 @@ import org.apache.wicket.event.IEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.batimen.core.constant.Constant;
+import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.enums.TypeCompte;
@@ -26,11 +26,11 @@ import fr.batimen.ws.client.service.AnnonceService;
  * @author Casaucau Cyril
  * 
  */
-public class SuppressionPanel extends ModalCastor {
+public class SuppressionModal extends ModalCastor {
 
     private static final long serialVersionUID = -2013052713793815773L;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SuppressionPanel.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SuppressionModal.class);
 
     private AjaxFallbackLink<Void> yes;
     private AjaxFallbackLink<Void> no;
@@ -39,7 +39,7 @@ public class SuppressionPanel extends ModalCastor {
 
     private final String hashID;
 
-    public SuppressionPanel(String id, String hashID, String title, String size) {
+    public SuppressionModal(String id, String hashID, String title, String size) {
         super(id, title, size);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Initialisation de la popup de suppression");
@@ -76,7 +76,7 @@ public class SuppressionPanel extends ModalCastor {
                 // Suivant le role de l'utilisateur on ne redirige pas au meme
                 // endroit
                 if (rolesUtils.checkRoles(TypeCompte.CLIENT)) {
-                    if (codeRetour.equals(Constant.CODE_SERVICE_RETOUR_OK)) {
+                    if (codeRetour.equals(CodeRetourService.RETOUR_OK)) {
                         mesAnnonces = new MesAnnonces("Votre annonce a bien été supprimée",
                                 FeedbackMessageLevel.SUCCESS);
                         this.setResponsePage(mesAnnonces);
@@ -84,7 +84,6 @@ public class SuppressionPanel extends ModalCastor {
                         mesAnnonces = new MesAnnonces(
                                 "Problème technique, impossible de supprimer votre annonce :( Veuillez reessayer plus tard",
                                 FeedbackMessageLevel.ERROR);
-
                     }
                 } else if (rolesUtils.checkRoles(TypeCompte.ADMINISTRATEUR)) {
                     // TODO Faire la meme chose que pour les clients mais

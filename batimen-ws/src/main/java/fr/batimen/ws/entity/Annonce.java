@@ -109,8 +109,10 @@ public class Annonce extends AbstractEntity implements Serializable {
     @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @LazyToOne(LazyToOneOption.NO_PROXY)
     private Adresse adresseChantier;
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "annonce_artisan")
+    @ManyToMany(fetch = FetchType.LAZY, targetEntity = Artisan.class)
+    @JoinTable(name = "annonce_artisan",
+            joinColumns = @JoinColumn(name = "annonce_id"),
+            inverseJoinColumns = @JoinColumn(name = "artisans_id"))
     private List<Artisan> artisans = new ArrayList<Artisan>();
     @OneToMany(mappedBy = "annonce",
             targetEntity = Notification.class,

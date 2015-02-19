@@ -12,7 +12,7 @@ import com.google.gson.reflect.TypeToken;
 import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 
-public class DemAnnonceSelectEntrepriseDTO extends DemandeAnnonceDTO {
+public class AnnonceSelectEntrepriseDTO extends DemandeAnnonceDTO {
 
     private static final long serialVersionUID = -558189502163875839L;
 
@@ -77,21 +77,21 @@ public class DemAnnonceSelectEntrepriseDTO extends DemandeAnnonceDTO {
             return true;
         }
 
-        if (object instanceof DemAnnonceSelectEntrepriseDTO) {
-            DemAnnonceSelectEntrepriseDTO other = (DemAnnonceSelectEntrepriseDTO) object;
+        if (object instanceof AnnonceSelectEntrepriseDTO) {
+            AnnonceSelectEntrepriseDTO other = (AnnonceSelectEntrepriseDTO) object;
             return Objects.equals(this.getLoginArtisanChoisi(), other.getLoginArtisanChoisi());
         }
         return false;
     }
 
-    public static DemAnnonceSelectEntrepriseDTO deserializeDemAnnonceSelectEntrepriseDTO(String json) {
+    public static AnnonceSelectEntrepriseDTO deserializeDemAnnonceSelectEntrepriseDTO(String json) {
         Gson gson = DeserializeJsonHelper.createGsonObject();
-        return gson.fromJson(json, DemAnnonceSelectEntrepriseDTO.class);
+        return gson.fromJson(json, AnnonceSelectEntrepriseDTO.class);
     }
 
-    public static List<DemAnnonceSelectEntrepriseDTO> deserializeDemAnnonceSelectEntrepriseDTOList(String json) {
+    public static List<AnnonceSelectEntrepriseDTO> deserializeDemAnnonceSelectEntrepriseDTOList(String json) {
         Gson gson = DeserializeJsonHelper.createGsonObject();
-        Type collectionType = new TypeToken<List<DemAnnonceSelectEntrepriseDTO>>() {
+        Type collectionType = new TypeToken<List<AnnonceSelectEntrepriseDTO>>() {
         }.getType();
         return gson.fromJson(json, collectionType);
     }

@@ -16,7 +16,7 @@ import com.microtripit.mandrillapp.lutung.model.MandrillApiError;
 import com.microtripit.mandrillapp.lutung.view.MandrillMessage;
 import com.microtripit.mandrillapp.lutung.view.MandrillMessage.MergeVar;
 
-import fr.batimen.core.constant.Constant;
+import fr.batimen.core.constant.EmailConstant;
 import fr.batimen.core.exception.EmailException;
 import fr.batimen.dto.ContactMailDTO;
 import fr.batimen.dto.helper.CategorieLoader;
@@ -36,7 +36,6 @@ public class EmailService {
 
     @Inject
     private EmailDAO emailDAO;
-
 
     /**
      * Preparation et envoi d'un mail de confirmation, dans le but d'informer
@@ -67,19 +66,20 @@ public class EmailService {
 
         // On charge le contenu
         Map<String, String> templateContent = new HashMap<String, String>();
-        templateContent.put(Constant.TAG_EMAIL_USERNAME, nouvelleAnnonce.getDemandeur().getLogin());
-        templateContent.put(Constant.TAG_EMAIL_METIER,
+        templateContent.put(EmailConstant.TAG_EMAIL_USERNAME, nouvelleAnnonce.getDemandeur().getLogin());
+        templateContent.put(EmailConstant.TAG_EMAIL_METIER,
                 CategorieLoader.getCategorieByCode(nouvelleAnnonce.getCategorieMetier()).getName());
-        templateContent.put(Constant.TAG_EMAIL_SOUS_CATEGORIE_METIER, nouvelleAnnonce.getSousCategorieMetier());
-        templateContent.put(Constant.TAG_EMAIL_DELAI_INTERVENTION, nouvelleAnnonce.getDelaiIntervention().getType());
-        templateContent.put(Constant.TAG_EMAIL_TYPE_CONTACT, nouvelleAnnonce.getTypeContact().getAffichage());
+        templateContent.put(EmailConstant.TAG_EMAIL_SOUS_CATEGORIE_METIER, nouvelleAnnonce.getSousCategorieMetier());
+        templateContent.put(EmailConstant.TAG_EMAIL_DELAI_INTERVENTION, nouvelleAnnonce.getDelaiIntervention()
+                .getType());
+        templateContent.put(EmailConstant.TAG_EMAIL_TYPE_CONTACT, nouvelleAnnonce.getTypeContact().getAffichage());
 
         // On charge les recepteurs
         emailDAO.prepareRecipient(confirmationAnnonceMessage, recipients, true);
 
         // On envoi le mail
         boolean noError = emailDAO.sendEmailTemplate(confirmationAnnonceMessage,
-                Constant.TEMPLATE_CONFIRMATION_ANNONCE, templateContent);
+                EmailConstant.TEMPLATE_CONFIRMATION_ANNONCE, templateContent);
 
         return noError;
     }
@@ -117,19 +117,19 @@ public class EmailService {
 
         // On charge le contenu
         Map<String, String> templateContent = new HashMap<String, String>();
-        templateContent.put(Constant.TAG_EMAIL_USERNAME, login);
+        templateContent.put(EmailConstant.TAG_EMAIL_USERNAME, login);
 
         StringBuilder lienActivation = new StringBuilder(url);
         lienActivation.append(cleActivation);
 
         // On charge les variables dynamique à remplacer
         List<MergeVar> mergevars = new LinkedList<MergeVar>();
-        MergeVar mergeVar = new MergeVar(Constant.TAG_EMAIL_ACTIVATION_LINK, lienActivation.toString());
+        MergeVar mergeVar = new MergeVar(EmailConstant.TAG_EMAIL_ACTIVATION_LINK, lienActivation.toString());
         mergevars.add(mergeVar);
         activationCompteMessage.setGlobalMergeVars(mergevars);
 
         // On envoi le mail
-        boolean noError = emailDAO.sendEmailTemplate(activationCompteMessage, Constant.TEMPLATE_ACTIVATION_COMPTE,
+        boolean noError = emailDAO.sendEmailTemplate(activationCompteMessage, EmailConstant.TEMPLATE_ACTIVATION_COMPTE,
                 templateContent);
 
         return noError;
@@ -147,24 +147,25 @@ public class EmailService {
         // On prepare l'entete, on ne mets pas de titre (il est géré par
         // mandrillApp).
         MandrillMessage contactMessage = emailDAO.prepareEmail(null);
-        
+
         // On construit les recepteurs
         Map<String, String> recipients = new HashMap<String, String>();
 
-        recipients.put(Constant.EMAIL_FROM_NAME, Constant.EMAIL_CASTOR_CONTACT);
+        recipients.put(EmailConstant.EMAIL_FROM_NAME, EmailConstant.EMAIL_CASTOR_CONTACT);
 
         // On charge les recepteurs
         emailDAO.prepareRecipient(contactMessage, recipients, true);
 
         // On charge le contenu
         Map<String, String> templateContent = new HashMap<String, String>();
-        templateContent.put(Constant.TAG_EMAIL_CONTACT_NAME, mail.getName());
-        templateContent.put(Constant.TAG_EMAIL_CONTACT_SUBJECT, mail.getSubject());
-        templateContent.put(Constant.TAG_EMAIL_CONTACT_EMAIL, mail.getEmail());
-        templateContent.put(Constant.TAG_EMAIL_CONTACT_MESSAGE, mail.getMessage());
+        templateContent.put(EmailConstant.TAG_EMAIL_CONTACT_NAME, mail.getName());
+        templateContent.put(EmailConstant.TAG_EMAIL_CONTACT_SUBJECT, mail.getSubject());
+        templateContent.put(EmailConstant.TAG_EMAIL_CONTACT_EMAIL, mail.getEmail());
+        templateContent.put(EmailConstant.TAG_EMAIL_CONTACT_MESSAGE, mail.getMessage());
 
         // On envoi le mail
-        boolean noError = emailDAO.sendEmailTemplate(contactMessage, Constant.TEMPLATE_EMAIL_CONTACT, templateContent);
+        boolean noError = emailDAO.sendEmailTemplate(contactMessage, EmailConstant.TEMPLATE_EMAIL_CONTACT,
+                templateContent);
 
         return noError;
     }
@@ -190,13 +191,14 @@ public class EmailService {
         emailDAO.prepareRecipient(accuseReception, recipients, true);
 
         // On envoi le mail
-        boolean noError = emailDAO.sendEmailTemplate(accuseReception, Constant.TEMPLATE_ACCUSE_RECEPTION, null);
+        boolean noError = emailDAO.sendEmailTemplate(accuseReception, EmailConstant.TEMPLATE_ACCUSE_RECEPTION, null);
 
         return noError;
     }
 
     /**
      * Util method to generate destinatary name
+     * 
      * @param nom
      * @param prenom
      * @param login

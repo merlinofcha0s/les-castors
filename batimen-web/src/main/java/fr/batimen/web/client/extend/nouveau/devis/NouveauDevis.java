@@ -18,7 +18,7 @@ import org.apache.wicket.request.resource.ContextRelativeResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.batimen.core.constant.Constant;
+import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.exception.FrontEndException;
 import fr.batimen.core.security.HashHelper;
 import fr.batimen.dto.ClientDTO;
@@ -245,7 +245,7 @@ public class NouveauDevis extends MasterPage {
                 LOGGER.error("Probleme frontend", e);
             }
         }
-        chooseConfirmationMessage(false, Constant.CODE_SERVICE_RETOUR_OK);
+        chooseConfirmationMessage(false, CodeRetourService.RETOUR_OK);
     }
 
     public NouveauDevis(CreationAnnonceDTO creationAnnonce) {
@@ -271,22 +271,22 @@ public class NouveauDevis extends MasterPage {
         // Dernier cas : cas par defaut, on est pas dans l'etape 4 (mais il faut
         // quand meme instantié l'objet)
         if (nouvelleAnnonce.getIsSignedUp() != null && nouvelleAnnonce.getIsSignedUp() && isEtape4
-                && codeRetour.equals(Constant.CODE_SERVICE_RETOUR_OK)) {
+                && codeRetour.equals(CodeRetourService.RETOUR_OK)) {
             confirmation1
                     .setDefaultModelObject("Votre devis a été mis en ligne, nous vous avons envoyé un mail récapitulatif");
             confirmation2.setDefaultModelObject("");
             imageConfirmation = new Image("imageConfirmation", new ContextRelativeResource("img/ok.png"));
             imageConfirmation.add(new AttributeModifier("alt", "ok"));
         } else if (nouvelleAnnonce.getIsSignedUp() != null && !nouvelleAnnonce.getIsSignedUp() && isEtape4
-                && codeRetour.equals(Constant.CODE_SERVICE_RETOUR_OK)) {
+                && codeRetour.equals(CodeRetourService.RETOUR_OK)) {
             imageConfirmation = new Image("imageConfirmation", new ContextRelativeResource("img/ok.png"));
             imageConfirmation.add(new AttributeModifier("alt", "ok"));
             confirmation1
                     .setDefaultModelObject("Votre compte a bien été créé, un e-mail vous a été envoyé, Cliquez sur le lien présent dans celui-ci pour l'activer");
             confirmation2
                     .setDefaultModelObject("Votre devis a bien été enregistré. Celui-ci sera mis en ligne une fois votre compte activé.");
-        } else if (codeRetour.equals(Constant.CODE_SERVICE_RETOUR_KO)
-                || codeRetour.equals(Constant.CODE_SERVICE_ANNONCE_RETOUR_DUPLICATE)) {
+        } else if (codeRetour.equals(CodeRetourService.RETOUR_KO)
+                || codeRetour.equals(CodeRetourService.ANNONCE_RETOUR_DUPLICATE)) {
             if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("Erreur pendant le chargement de l'annonce");
                 loggerAnnonce(nouvelleAnnonce);

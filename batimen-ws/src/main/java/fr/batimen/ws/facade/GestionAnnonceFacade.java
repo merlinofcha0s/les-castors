@@ -24,6 +24,7 @@ import org.slf4j.LoggerFactory;
 
 import com.microtripit.mandrillapp.lutung.model.MandrillApiError;
 
+import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.WsPath;
 import fr.batimen.core.exception.BackendException;
@@ -33,8 +34,8 @@ import fr.batimen.core.utils.PropertiesUtils;
 import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
+import fr.batimen.dto.aggregate.AnnonceSelectEntrepriseDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
-import fr.batimen.dto.aggregate.DemAnnonceSelectEntrepriseDTO;
 import fr.batimen.dto.aggregate.NbConsultationDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.TypeCompte;
@@ -117,10 +118,10 @@ public class GestionAnnonceFacade {
             }
             // L'annonce est deja présente dans le BDD
             if (e instanceof DuplicateEntityException) {
-                return Constant.CODE_SERVICE_ANNONCE_RETOUR_DUPLICATE;
+                return CodeRetourService.ANNONCE_RETOUR_DUPLICATE;
             }
             // Erreur pendant la creation du service de l'annonce.
-            return Constant.CODE_SERVICE_RETOUR_KO;
+            return CodeRetourService.RETOUR_KO;
         }
 
         try {
@@ -142,7 +143,7 @@ public class GestionAnnonceFacade {
             }
         }
 
-        return Constant.CODE_SERVICE_RETOUR_OK;
+        return CodeRetourService.RETOUR_OK;
     }
 
     /**
@@ -277,13 +278,13 @@ public class GestionAnnonceFacade {
                 LOGGER.debug("Mise à jour du nb de consultation ok pour cette annonce: "
                         + nbConsultationDTO.getHashID());
             }
-            return Constant.CODE_SERVICE_RETOUR_OK;
+            return CodeRetourService.RETOUR_OK;
         } else {
             if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("Probleme de mise à jour du nb de consultation pour l'annonce: "
                         + nbConsultationDTO.getHashID());
             }
-            return Constant.CODE_SERVICE_RETOUR_KO;
+            return CodeRetourService.RETOUR_KO;
         }
     }
 
@@ -327,15 +328,15 @@ public class GestionAnnonceFacade {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("Il ne possede par les droits de suppression, on sort du service...");
                 }
-                return Constant.CODE_SERVICE_RETOUR_KO;
+                return CodeRetourService.RETOUR_KO;
             }
             retourDAO = annonceDAO.suppressionAnnonce(demandeAnnonce);
         }
 
         if (retourDAO) {
-            return Constant.CODE_SERVICE_RETOUR_OK;
+            return CodeRetourService.RETOUR_OK;
         } else {
-            return Constant.CODE_SERVICE_RETOUR_KO;
+            return CodeRetourService.RETOUR_KO;
         }
     }
 
@@ -351,7 +352,7 @@ public class GestionAnnonceFacade {
     @POST
     @Path(WsPath.GESTION_ANNONCE_SERVICE_SELECTION_UNE_ENTREPRISE)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public Integer selectOneEnterprise(DemAnnonceSelectEntrepriseDTO demandeAnnonceDTO) {
+    public Integer selectOneEnterprise(AnnonceSelectEntrepriseDTO demandeAnnonceDTO) {
 
         String rolesDemandeur = utilisateurFacade.getUtilisateurRoles(demandeAnnonceDTO.getLoginDemandeur());
         if (LOGGER.isDebugEnabled()) {
@@ -388,21 +389,21 @@ public class GestionAnnonceFacade {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("Il ne possede par les droits d'ajout, on sort du service...");
                 }
-                return Constant.CODE_SERVICE_RETOUR_KO;
+                return CodeRetourService.RETOUR_KO;
             }
 
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Si c'est un client, il possede les droits necessaires");
             }
 
-            if (demandeAnnonceDTO.getAjoutOuSupprimeArtisan() == DemAnnonceSelectEntrepriseDTO.AJOUT_ARTISAN) {
+            if (demandeAnnonceDTO.getAjoutOuSupprimeArtisan() == AnnonceSelectEntrepriseDTO.AJOUT_ARTISAN) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("C'est un ajout, on met à jour l'annonce avec l'entreprise choisi");
                 }
                 annonceToUpdate.setEntrepriseSelectionnee(entrepriseChoisi);
                 notificationDAO.createNotificationEntrepriseChoisiParClient(annonceToUpdate);
                 // TODO Envoi de mail
-            } else if (demandeAnnonceDTO.getAjoutOuSupprimeArtisan() == DemAnnonceSelectEntrepriseDTO.SUPPRESSION_ARTISAN) {
+            } else if (demandeAnnonceDTO.getAjoutOuSupprimeArtisan() == AnnonceSelectEntrepriseDTO.SUPPRESSION_ARTISAN) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("C'est une suppression, on met à jour l'annonce avec l'entreprise choisi = null");
                 }
@@ -412,7 +413,7 @@ public class GestionAnnonceFacade {
                 if (LOGGER.isErrorEnabled()) {
                     LOGGER.error("Ni ajout, ni suppression dans la selection artisan, cas impossible");
                 }
-                return Constant.CODE_SERVICE_RETOUR_KO;
+                return CodeRetourService.RETOUR_KO;
             }
 
             annonceDAO.update(annonceToUpdate);
@@ -420,9 +421,47 @@ public class GestionAnnonceFacade {
         }
 
         if (retourDAO) {
-            return Constant.CODE_SERVICE_RETOUR_OK;
+            return CodeRetourService.RETOUR_OK;
         } else {
-            return Constant.CODE_SERVICE_RETOUR_KO;
+            return CodeRetourService.RETOUR_KO;
         }
+    }
+
+    /**
+     * Selection d'une entreprise par un particulier ou un admin <br/>
+     * 
+     * Si c'est un client, il doit posseder l'annonce, sinon le demandeur doit
+     * etre admin.
+     * 
+     * @param demandeAnnonceDTO
+     * @return
+     */
+    @POST
+    @Path(WsPath.GESTION_ANNONCE_SERVICE_INSCRIPTION_UN_ARTISAN)
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public Integer inscriptionUnArtisan(DemandeAnnonceDTO demandeAnnonceDTO) {
+        Annonce annonce = annonceDAO.getAnnonceByIDWithTransaction(demandeAnnonceDTO.getHashID(), false);
+
+        if (annonce == null) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Impossible de trouver l'annonce avec l'id: " + demandeAnnonceDTO.getHashID());
+            }
+            return CodeRetourService.RETOUR_KO;
+        }
+        Artisan artisan = artisanDAO.getArtisanByLogin(demandeAnnonceDTO.getLoginDemandeur());
+
+        if (artisan == null) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Impossible de trouver l'artisan avec le login: " + demandeAnnonceDTO.getLoginDemandeur());
+            }
+            return CodeRetourService.RETOUR_KO;
+        }
+
+        annonce.getArtisans().add(artisan);
+        artisan.getAnnonces().add(annonce);
+
+        // annonceDAO.update(annonce);
+
+        return CodeRetourService.RETOUR_OK;
     }
 }

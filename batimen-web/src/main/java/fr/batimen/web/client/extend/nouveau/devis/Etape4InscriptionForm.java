@@ -18,7 +18,7 @@ import org.apache.wicket.validation.validator.StringValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.batimen.core.constant.Constant;
+import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.security.HashHelper;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.constant.ValidatorConstant;
@@ -299,7 +299,7 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
             // Call ws service pour la mise a jour des données.
             Integer codeRetour = UtilisateurService.updateUtilisateurInfos(nouvelleAnnonce.getClient());
 
-            if (codeRetour.equals(Constant.CODE_SERVICE_RETOUR_OK)) {
+            if (codeRetour.equals(CodeRetourService.RETOUR_OK)) {
                 // Si tout est ok setter les infos du client dto
                 // dans la session
                 if (LOGGER.isDebugEnabled()) {

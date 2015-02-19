@@ -9,7 +9,7 @@ import javax.inject.Inject;
 import org.junit.Assert;
 import org.junit.Test;
 
-import fr.batimen.core.constant.Constant;
+import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.security.HashHelper;
 import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.PermissionDTO;
@@ -80,7 +80,7 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
         Integer retourService = ArtisanService.creationNouveauPartenaire(nouveauPartenaire);
 
         Assert.assertNotNull(retourService);
-        Assert.assertEquals(Constant.CODE_SERVICE_RETOUR_OK, retourService);
+        Assert.assertEquals(CodeRetourService.RETOUR_OK, retourService);
 
         Artisan artisanEnregistre = artisanDAO.getArtisanByEmail(nouveauPartenaire.getArtisan().getEmail());
         Assert.assertNotNull(artisanEnregistre);

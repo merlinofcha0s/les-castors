@@ -12,7 +12,6 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -71,8 +70,7 @@ public class Artisan extends AbstractUser implements Serializable {
             cascade = CascadeType.REMOVE,
             fetch = FetchType.LAZY)
     private final List<Notification> notifications = new ArrayList<Notification>();
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "annonce_artisan")
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "artisans", targetEntity = Annonce.class)
     private final List<Annonce> annonces = new ArrayList<Annonce>();
 
     /**

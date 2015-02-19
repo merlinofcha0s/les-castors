@@ -8,6 +8,12 @@ import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 
+/**
+ * Fenetre modal boostrap
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class ModalCastor extends Panel {
 
     private static final long serialVersionUID = -1420068924107876280L;
@@ -40,6 +46,12 @@ public class ModalCastor extends Panel {
         fctJsNameClose.append(id).append("Close()");
     }
 
+    /**
+     * Génére la fonction js qui permet d'ouvrir / fermer la popup
+     * 
+     * @param open
+     * @return
+     */
     private String getJSForOpenCloseModal(boolean open) {
         StringBuilder openCloseModalJSBody = new StringBuilder("function showModal");
         openCloseModalJSBody.append(id);

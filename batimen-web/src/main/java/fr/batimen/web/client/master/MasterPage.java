@@ -39,7 +39,7 @@ import fr.batimen.web.client.extend.Accueil;
 import fr.batimen.web.client.extend.member.client.MesAnnonces;
 import fr.batimen.web.client.extend.nouveau.artisan.NouveauArtisan;
 import fr.batimen.web.client.extend.nouveau.devis.NouveauDevis;
-import fr.batimen.web.client.panel.AuthentificationPanel;
+import fr.batimen.web.client.modal.AuthentificationModal;
 
 /**
  * Page principal de l'application dans laquelle tous les autres panels seront
@@ -62,7 +62,7 @@ public abstract class MasterPage extends WebPage {
     // Feedback panel général
     protected BatimenFeedbackPanel feedBackPanelGeneral;
 
-    private AuthentificationPanel authentificationPanel;
+    private AuthentificationModal authentificationPanel;
 
     private Label connexionlbl;
 
@@ -431,9 +431,9 @@ public abstract class MasterPage extends WebPage {
         return attribute.toString();
     }
 
-    protected AuthentificationPanel getLoginDialog() {
+    protected AuthentificationModal getLoginDialog() {
         if (authentificationPanel == null) {
-            authentificationPanel = new AuthentificationPanel("authentificationPanel");
+            authentificationPanel = new AuthentificationModal("authenticationModal");
         }
         return authentificationPanel;
     }

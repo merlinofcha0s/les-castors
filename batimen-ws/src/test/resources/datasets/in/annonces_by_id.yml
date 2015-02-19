@@ -130,8 +130,6 @@ annonce:
 annonce_artisan:
    - annonce_id: 1020
      artisans_id: 1003
-     artisan_id: 1003
-     annonces_id: 1020
 notification:
    - id: 1002
      typenotification: 0

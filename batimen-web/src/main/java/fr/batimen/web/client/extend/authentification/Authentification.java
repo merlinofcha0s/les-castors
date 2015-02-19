@@ -5,7 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.batimen.web.client.master.MasterPage;
-import fr.batimen.web.client.panel.AuthentificationPanel;
+import fr.batimen.web.client.modal.AuthentificationModal;
 
 /**
  * Panel Wicket servant à authentifier l'utilisateur
@@ -20,7 +20,7 @@ public final class Authentification extends MasterPage {
 
 	public Authentification() {
 		super("Connexion à batimen", "lol", "Connexion à batimen.fr", true, "img/bg_title1.jpg");
-		AuthentificationPanel authentificationPanel = new AuthentificationPanel("authentificationPanel");
+		AuthentificationModal authentificationPanel = new AuthentificationModal("authentificationPanel");
 		this.add(authentificationPanel);
 	}
 

@@ -16,7 +16,7 @@ import org.slf4j.LoggerFactory;
 
 import com.microtripit.mandrillapp.lutung.model.MandrillApiError;
 
-import fr.batimen.core.constant.Constant;
+import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.exception.BackendException;
 import fr.batimen.core.exception.EmailException;
 import fr.batimen.dto.enums.EtatAnnonce;
@@ -91,16 +91,16 @@ public class ClientService {
                     if (LOGGER.isErrorEnabled()) {
                         LOGGER.error("Impossible de mettre à jour le client apres activation de son compte", e);
                     }
-                    return Constant.CODE_SERVICE_RETOUR_KO;
+                    return CodeRetourService.RETOUR_KO;
                 }
             } else {
-                return Constant.CODE_SERVICE_ANNONCE_RETOUR_DEJA_ACTIF;
+                return CodeRetourService.ANNONCE_RETOUR_DEJA_ACTIF;
             }
 
         } else {
-            return Constant.CODE_SERVICE_ANNONCE_RETOUR_COMPTE_INEXISTANT;
+            return CodeRetourService.ANNONCE_RETOUR_COMPTE_INEXISTANT;
         }
 
-        return Constant.CODE_SERVICE_RETOUR_OK;
+        return CodeRetourService.RETOUR_OK;
     }
 }

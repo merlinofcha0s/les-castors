@@ -16,7 +16,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import com.ninja_squad.dbsetup.DbSetup;
 import com.ninja_squad.dbsetup.operation.Operation;
 
-import fr.batimen.core.constant.Constant;
+import fr.batimen.core.constant.UrlPage;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.web.selenium.dataset.AnnonceDataset;
 
@@ -106,7 +106,7 @@ public class TestAnnonce extends AbstractITTest {
     @Test
     public void testAnnonceAffichageRefuseAccessCauseNotConnected() {
         StringBuilder appUrlAnnonce = new StringBuilder(appUrl);
-        appUrlAnnonce.append(Constant.ANNONCE).append("?idAnnonce=").append("toto");
+        appUrlAnnonce.append(UrlPage.ANNONCE).append("?idAnnonce=").append("toto");
         driver.get(appUrlAnnonce.toString());
         assertEquals("OOPS! VOUS N'AVEZ PAS LE DROIT D'ETRE ICI :(",
                 driver.findElement(By.cssSelector("h1.titleAccessDenied")).getText());
@@ -191,7 +191,7 @@ public class TestAnnonce extends AbstractITTest {
 
         // On calcul l'url d'accées direct à l'annonce.
         StringBuilder appUrlAnnonce = new StringBuilder(appUrl);
-        appUrlAnnonce.append(Constant.ANNONCE).append("?idAnnonce=").append(idAnnonce);
+        appUrlAnnonce.append(UrlPage.ANNONCE).append("?idAnnonce=").append(idAnnonce);
         driver.get(appUrlAnnonce.toString());
     }
 

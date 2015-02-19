@@ -14,7 +14,7 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.batimen.core.constant.Constant;
+import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.security.HashHelper;
 import fr.batimen.dto.ClientDTO;
 import fr.batimen.ws.dao.ArtisanDAO;
@@ -50,7 +50,7 @@ public class ArtisanService {
     public Integer activateAccount(Artisan artisanByKey) {
         artisanByKey.setIsActive(Boolean.TRUE);
         artisanDAO.update(artisanByKey);
-        return Constant.CODE_SERVICE_RETOUR_OK;
+        return CodeRetourService.RETOUR_OK;
     }
 
     /**

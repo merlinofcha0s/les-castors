@@ -20,6 +20,7 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.WsPath;
 import fr.batimen.dto.ClientDTO;
@@ -242,7 +243,7 @@ public class GestionUtilisateurFacade {
             return artisanService.activateAccount(artisanByKey);
         }
 
-        return Constant.CODE_SERVICE_ANNONCE_RETOUR_COMPTE_INEXISTANT;
+        return CodeRetourService.ANNONCE_RETOUR_COMPTE_INEXISTANT;
     }
 
     /**
@@ -272,14 +273,14 @@ public class GestionUtilisateurFacade {
         }
         if (clientDAO.update(clientInDB) != null) {
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Code retour du service : " + Constant.CODE_SERVICE_RETOUR_OK);
+                LOGGER.debug("Code retour du service : " + CodeRetourService.RETOUR_OK);
             }
-            return Constant.CODE_SERVICE_RETOUR_OK;
+            return CodeRetourService.RETOUR_OK;
         } else {
             if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Code retour du service : " + Constant.CODE_SERVICE_RETOUR_KO);
+                LOGGER.debug("Code retour du service : " + CodeRetourService.RETOUR_KO);
             }
-            return Constant.CODE_SERVICE_RETOUR_KO;
+            return CodeRetourService.RETOUR_KO;
         }
 
     }

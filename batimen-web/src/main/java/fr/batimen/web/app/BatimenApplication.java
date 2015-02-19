@@ -16,7 +16,7 @@ import org.odlabs.wiquery.ui.themes.WiQueryCoreThemeResourceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.batimen.core.constant.Constant;
+import fr.batimen.core.constant.UrlPage;
 import fr.batimen.core.utils.PropertiesUtils;
 import fr.batimen.web.client.extend.Accueil;
 import fr.batimen.web.client.extend.CGU;
@@ -91,18 +91,18 @@ public class BatimenApplication extends AuthenticatedWebApplication {
                 "smoothness"));
 
         // Cfg urls des pages principales
-        mountPage(Constant.ACCUEIL_URL, Accueil.class);
-        mountPage(Constant.AUTHENTIFICATION_URL, Authentification.class);
-        mountPage(Constant.MES_ANNONCES_URL, MesAnnonces.class);
-        mountPage(Constant.QUI_SOMMES_NOUS_URL, QuiSommeNous.class);
-        mountPage(Constant.CONTACT_URL, Contact.class);
-        mountPage(Constant.CGU_URL, CGU.class);
-        mountPage(Constant.ACTIVATION_URL, Activation.class);
-        mountPage(Constant.PARTENAIRE_URL, NouveauArtisan.class);
-        mountPage(Constant.NOUVEAU_DEVIS_URL, NouveauDevis.class);
-        mountPage(Constant.MODIFIER_MON_PROFIL, ModifierMonProfil.class);
-        mount(new MountedMapper(Constant.MON_PROFIL_URL, MonProfil.class, new UrlPathPageParametersEncoder()));
-        mountPage(Constant.ANNONCE, Annonce.class);
+        mountPage(UrlPage.ACCUEIL_URL, Accueil.class);
+        mountPage(UrlPage.AUTHENTIFICATION_URL, Authentification.class);
+        mountPage(UrlPage.MES_ANNONCES_URL, MesAnnonces.class);
+        mountPage(UrlPage.QUI_SOMMES_NOUS_URL, QuiSommeNous.class);
+        mountPage(UrlPage.CONTACT_URL, Contact.class);
+        mountPage(UrlPage.CGU_URL, CGU.class);
+        mountPage(UrlPage.ACTIVATION_URL, Activation.class);
+        mountPage(UrlPage.PARTENAIRE_URL, NouveauArtisan.class);
+        mountPage(UrlPage.NOUVEAU_DEVIS_URL, NouveauDevis.class);
+        mountPage(UrlPage.MODIFIER_MON_PROFIL, ModifierMonProfil.class);
+        mount(new MountedMapper(UrlPage.MON_PROFIL_URL, MonProfil.class, new UrlPathPageParametersEncoder()));
+        mountPage(UrlPage.ANNONCE, Annonce.class);
         // Page d'erreur
         mountPage("/interdit", AccesInterdit.class);
         mountPage("/expiree", Expiree.class);

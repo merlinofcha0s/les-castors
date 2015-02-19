@@ -109,9 +109,7 @@ create table Annonce (
     
     create table annonce_artisan (
         Annonce_id int8 not null,
-        artisans_id int8 not null,
-        Artisan_id int8 not null,
-        annonces_id int8 not null
+        artisans_id int8 not null
     );
     
     create table Notification (
@@ -195,16 +193,6 @@ create table Annonce (
         add constraint artisan_annonce 
         foreign key (Annonce_id) 
         references Annonce;
-        
-    alter table annonce_artisan 
-        add constraint annonce_artisan2 
-        foreign key (annonces_id) 
-        references Annonce;
-        
-    alter table annonce_artisan 
-        add constraint artisan_annonce2
-        foreign key (Artisan_id) 
-        references Artisan;
         
     alter table Notification 
         add constraint notification_artisan2

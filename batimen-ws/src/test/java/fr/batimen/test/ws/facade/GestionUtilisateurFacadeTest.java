@@ -15,7 +15,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.batimen.core.constant.Constant;
+import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.exception.BackendException;
 import fr.batimen.core.exception.DuplicateEntityException;
 import fr.batimen.dto.ClientDTO;
@@ -191,7 +191,7 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
 
         Assert.assertFalse(client.getCleActivation().isEmpty());
         Assert.assertTrue(client.getIsActive().equals(Boolean.TRUE));
-        Assert.assertTrue(codeRetour == Constant.CODE_SERVICE_RETOUR_OK);
+        Assert.assertTrue(codeRetour == CodeRetourService.RETOUR_OK);
 
         List<Annonce> annonces = annonceDAO.getAnnoncesByLogin(client.getLogin());
         Annonce annonce = annonces.get(0);
@@ -214,7 +214,7 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
 
         Assert.assertFalse(client.getCleActivation().isEmpty());
         Assert.assertTrue(client.getIsActive().equals(Boolean.TRUE));
-        Assert.assertTrue(codeRetour == Constant.CODE_SERVICE_RETOUR_OK);
+        Assert.assertTrue(codeRetour == CodeRetourService.RETOUR_OK);
     }
 
     /**
@@ -312,7 +312,7 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
 
         // On appel le ws
         Integer codeRetour = UtilisateurService.updateUtilisateurInfos(client);
-        Assert.assertEquals(Constant.CODE_SERVICE_RETOUR_OK, codeRetour);
+        Assert.assertEquals(CodeRetourService.RETOUR_OK, codeRetour);
     }
 
 }

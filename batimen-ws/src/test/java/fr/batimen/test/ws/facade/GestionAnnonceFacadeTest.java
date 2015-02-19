@@ -12,13 +12,13 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import fr.batimen.core.constant.Constant;
+import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.NotificationDTO;
 import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
+import fr.batimen.dto.aggregate.AnnonceSelectEntrepriseDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
-import fr.batimen.dto.aggregate.DemAnnonceSelectEntrepriseDTO;
 import fr.batimen.dto.aggregate.NbConsultationDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.StatutNotification;
@@ -28,8 +28,10 @@ import fr.batimen.test.ws.AbstractBatimenWsTest;
 import fr.batimen.test.ws.helper.DataHelper;
 import fr.batimen.ws.client.service.AnnonceService;
 import fr.batimen.ws.dao.AnnonceDAO;
+import fr.batimen.ws.dao.ArtisanDAO;
 import fr.batimen.ws.dao.ClientDAO;
 import fr.batimen.ws.entity.Annonce;
+import fr.batimen.ws.entity.Artisan;
 import fr.batimen.ws.entity.Client;
 import fr.batimen.ws.service.NotificationService;
 
@@ -50,6 +52,9 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
     @Inject
     private NotificationService notificationService;
+
+    @Inject
+    private ArtisanDAO artisanDAO;
 
     @Before
     public void init() {
@@ -97,7 +102,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         creationVerificationAnnonce();
         Integer isCreationOK = AnnonceService.creationAnnonce(creationAnnonceDTO);
         // Le service doit remonter une erreur
-        Assert.assertTrue(isCreationOK == Constant.CODE_SERVICE_ANNONCE_RETOUR_DUPLICATE);
+        Assert.assertTrue(isCreationOK == CodeRetourService.ANNONCE_RETOUR_DUPLICATE);
     }
 
     /**
@@ -196,7 +201,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
         Integer updateOK = AnnonceService.updateNbConsultationAnnonce(nbConsultationDTO);
 
-        Assert.assertEquals(Constant.CODE_SERVICE_RETOUR_OK, updateOK);
+        Assert.assertEquals(CodeRetourService.RETOUR_OK, updateOK);
 
         Annonce annonce = annonceDAO
                 .getAnnonceByIDWithoutTransaction(
@@ -221,7 +226,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
         Integer updateOK = AnnonceService.suppressionAnnonce(demandeAnnonceDTO);
 
-        Assert.assertEquals(Constant.CODE_SERVICE_RETOUR_OK, updateOK);
+        Assert.assertEquals(CodeRetourService.RETOUR_OK, updateOK);
 
         Annonce annonce = annonceDAO
                 .getAnnonceByIDWithoutTransaction(
@@ -249,7 +254,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
         Integer updateKO = AnnonceService.suppressionAnnonce(demandeAnnonceDTO);
 
-        Assert.assertEquals(Constant.CODE_SERVICE_RETOUR_KO, updateKO);
+        Assert.assertEquals(CodeRetourService.RETOUR_KO, updateKO);
 
         Annonce annonce = annonceDAO
                 .getAnnonceByIDWithoutTransaction(
@@ -275,7 +280,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
         Integer updateOK = AnnonceService.suppressionAnnonce(demandeAnnonceDTO);
 
-        Assert.assertEquals(Constant.CODE_SERVICE_RETOUR_OK, updateOK);
+        Assert.assertEquals(CodeRetourService.RETOUR_OK, updateOK);
 
         Annonce annonce = annonceDAO
                 .getAnnonceByIDWithoutTransaction(
@@ -292,16 +297,16 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
     public void testAjoutChoixArtisanForAnnonce() {
-        DemAnnonceSelectEntrepriseDTO demandeAnnonceDTO = new DemAnnonceSelectEntrepriseDTO();
+        AnnonceSelectEntrepriseDTO demandeAnnonceDTO = new AnnonceSelectEntrepriseDTO();
         demandeAnnonceDTO.setHashID("lolmdrp");
         demandeAnnonceDTO.setLoginDemandeur("pebronne");
         demandeAnnonceDTO.setTypeCompteDemandeur(TypeCompte.CLIENT);
         demandeAnnonceDTO.setLoginArtisanChoisi("pebronneChoisi");
-        demandeAnnonceDTO.setAjoutOuSupprimeArtisan(DemAnnonceSelectEntrepriseDTO.AJOUT_ARTISAN);
+        demandeAnnonceDTO.setAjoutOuSupprimeArtisan(AnnonceSelectEntrepriseDTO.AJOUT_ARTISAN);
 
         Integer updateOK = AnnonceService.selectOneEnterprise(demandeAnnonceDTO);
 
-        Assert.assertEquals(Constant.CODE_SERVICE_RETOUR_OK, updateOK);
+        Assert.assertEquals(CodeRetourService.RETOUR_OK, updateOK);
 
         assertEntrepriseForChoixArtisanWithTransaction(false);
     }
@@ -313,17 +318,17 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
     public void testSuppressionChoixArtisanForAnnonce() {
-        DemAnnonceSelectEntrepriseDTO demandeAnnonceDTO = new DemAnnonceSelectEntrepriseDTO();
+        AnnonceSelectEntrepriseDTO demandeAnnonceDTO = new AnnonceSelectEntrepriseDTO();
         demandeAnnonceDTO
                 .setHashID("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
         demandeAnnonceDTO.setLoginDemandeur("pebronne");
         demandeAnnonceDTO.setTypeCompteDemandeur(TypeCompte.CLIENT);
         demandeAnnonceDTO.setLoginArtisanChoisi("pebronneChoisi");
-        demandeAnnonceDTO.setAjoutOuSupprimeArtisan(DemAnnonceSelectEntrepriseDTO.SUPPRESSION_ARTISAN);
+        demandeAnnonceDTO.setAjoutOuSupprimeArtisan(AnnonceSelectEntrepriseDTO.SUPPRESSION_ARTISAN);
 
         Integer updateOK = AnnonceService.selectOneEnterprise(demandeAnnonceDTO);
 
-        Assert.assertEquals(Constant.CODE_SERVICE_RETOUR_OK, updateOK);
+        Assert.assertEquals(CodeRetourService.RETOUR_OK, updateOK);
 
         assertEntrepriseForChoixArtisanWithTransaction(true);
     }
@@ -335,16 +340,16 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
     public void testAjoutChoixArtisanByAdminForAnnonce() {
-        DemAnnonceSelectEntrepriseDTO demandeAnnonceDTO = new DemAnnonceSelectEntrepriseDTO();
+        AnnonceSelectEntrepriseDTO demandeAnnonceDTO = new AnnonceSelectEntrepriseDTO();
         demandeAnnonceDTO.setHashID("lolmdrp");
         demandeAnnonceDTO.setLoginDemandeur("admin");
         demandeAnnonceDTO.setTypeCompteDemandeur(TypeCompte.ADMINISTRATEUR);
         demandeAnnonceDTO.setLoginArtisanChoisi("pebronneChoisi");
-        demandeAnnonceDTO.setAjoutOuSupprimeArtisan(DemAnnonceSelectEntrepriseDTO.AJOUT_ARTISAN);
+        demandeAnnonceDTO.setAjoutOuSupprimeArtisan(AnnonceSelectEntrepriseDTO.AJOUT_ARTISAN);
 
         Integer updateOK = AnnonceService.selectOneEnterprise(demandeAnnonceDTO);
 
-        Assert.assertEquals(Constant.CODE_SERVICE_RETOUR_OK, updateOK);
+        Assert.assertEquals(CodeRetourService.RETOUR_OK, updateOK);
 
         assertEntrepriseForChoixArtisanWithTransaction(false);
     }
@@ -357,17 +362,17 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
     public void testSuppressionChoixArtisanByAdmin() {
-        DemAnnonceSelectEntrepriseDTO demandeAnnonceDTO = new DemAnnonceSelectEntrepriseDTO();
+        AnnonceSelectEntrepriseDTO demandeAnnonceDTO = new AnnonceSelectEntrepriseDTO();
         demandeAnnonceDTO
                 .setHashID("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
         demandeAnnonceDTO.setLoginDemandeur("admin");
         demandeAnnonceDTO.setTypeCompteDemandeur(TypeCompte.ADMINISTRATEUR);
         demandeAnnonceDTO.setLoginArtisanChoisi("pebronneChoisi");
-        demandeAnnonceDTO.setAjoutOuSupprimeArtisan(DemAnnonceSelectEntrepriseDTO.SUPPRESSION_ARTISAN);
+        demandeAnnonceDTO.setAjoutOuSupprimeArtisan(AnnonceSelectEntrepriseDTO.SUPPRESSION_ARTISAN);
 
         Integer updateOK = AnnonceService.selectOneEnterprise(demandeAnnonceDTO);
 
-        Assert.assertEquals(Constant.CODE_SERVICE_RETOUR_OK, updateOK);
+        Assert.assertEquals(CodeRetourService.RETOUR_OK, updateOK);
 
         assertEntrepriseForChoixArtisanWithTransaction(true);
     }
@@ -380,19 +385,66 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
     public void testAjoutChoixArtisanByNotOwnerNorAdmin() {
-        DemAnnonceSelectEntrepriseDTO demandeAnnonceDTO = new DemAnnonceSelectEntrepriseDTO();
+        AnnonceSelectEntrepriseDTO demandeAnnonceDTO = new AnnonceSelectEntrepriseDTO();
         demandeAnnonceDTO
                 .setHashID("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
         demandeAnnonceDTO.setLoginDemandeur("doe");
         demandeAnnonceDTO.setTypeCompteDemandeur(TypeCompte.CLIENT);
         demandeAnnonceDTO.setLoginArtisanChoisi("pebronneChoisi");
-        demandeAnnonceDTO.setAjoutOuSupprimeArtisan(DemAnnonceSelectEntrepriseDTO.AJOUT_ARTISAN);
+        demandeAnnonceDTO.setAjoutOuSupprimeArtisan(AnnonceSelectEntrepriseDTO.AJOUT_ARTISAN);
 
         Integer updateKO = AnnonceService.selectOneEnterprise(demandeAnnonceDTO);
 
-        Assert.assertEquals(Constant.CODE_SERVICE_RETOUR_KO, updateKO);
+        Assert.assertEquals(CodeRetourService.RETOUR_KO, updateKO);
 
         assertEntrepriseForChoixArtisanWithTransaction(true);
+    }
+
+    @Test
+    @UsingDataSet("datasets/in/annonces_by_id.yml")
+    public void testInscriptionArtisanNominal() {
+
+        String loginArtisan = "pebronneChoisi";
+
+        DemandeAnnonceDTO demandeAnnonceDTO = initAndGetDemandeAnnonceDTO(
+                "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
+                loginArtisan, TypeCompte.ARTISAN);
+
+        AnnonceService.inscriptionUnArtisan(demandeAnnonceDTO);
+
+        Annonce annonce = annonceDAO
+                .getAnnonceByIDWithoutTransaction(
+                        "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
+                        true);
+        Artisan artisan = artisanDAO.getArtisanByLogin(loginArtisan);
+        List<NotificationDTO> notifications = notificationService.getNotificationByLogin(annonce.getDemandeur()
+                .getLogin(), TypeCompte.CLIENT);
+        Assert.assertNotNull(artisan);
+        Assert.assertEquals(1, artisan.getAnnonces().size());
+        Assert.assertEquals(1, notifications.size());
+
+        boolean isNotificationCorrecte = false;
+
+        for (NotificationDTO notificationDTO : notifications) {
+            if (notificationDTO.getTypeNotification().equals(TypeNotification.INSCRIT_A_ANNONCE)
+                    && notificationDTO.getNomEntreprise().equals(artisan.getEntreprise().getNomComplet())) {
+                isNotificationCorrecte = true;
+            }
+        }
+
+        Assert.assertTrue(isNotificationCorrecte);
+
+    }
+
+    // TODO test pour le nombre max d'annonce, => tester le changement de statut
+    // TODO Test avec un id d'annonce inexistant
+
+    private DemandeAnnonceDTO initAndGetDemandeAnnonceDTO(String hash, String loginDemandeur, TypeCompte typeCompte) {
+        DemandeAnnonceDTO demandeAnnonceDTO = new DemandeAnnonceDTO();
+        demandeAnnonceDTO.setHashID(hash);
+        demandeAnnonceDTO.setLoginDemandeur(loginDemandeur);
+        demandeAnnonceDTO.setTypeCompteDemandeur(typeCompte);
+        return demandeAnnonceDTO;
     }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
@@ -431,7 +483,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         List<Annonce> annoncesDeJohnny = annonceDAO.getAnnoncesByLogin(loginDeJohnny);
 
         // On test que la creation de l'annonce et du client en bdd est ok
-        Assert.assertTrue(isCreationOK == Constant.CODE_SERVICE_RETOUR_OK);
+        Assert.assertTrue(isCreationOK == CodeRetourService.RETOUR_OK);
         // On check que le client est présent dans la BDD
         Assert.assertNotNull(johnny);
         // On regarde que ce soit le bon login
