@@ -97,7 +97,7 @@ public class NotificationService {
         return notificationsDTO;
     }
 
-    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void generationNotificationInscriptionArtisan(DemandeAnnonceDTO demandeAnnonceDTO, Annonce annonce,
             Artisan artisan) {
 

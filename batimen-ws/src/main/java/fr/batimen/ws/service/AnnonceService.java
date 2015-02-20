@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.batimen.core.constant.CodeRetourService;
+import fr.batimen.core.constant.Constant;
 import fr.batimen.core.exception.BackendException;
 import fr.batimen.core.exception.DuplicateEntityException;
 import fr.batimen.core.security.HashHelper;
@@ -275,6 +276,18 @@ public class AnnonceService {
 
     public Integer inscrireArtisan(DemandeAnnonceDTO demandeAnnonceDTO, Annonce annonce, Artisan artisan) {
 
+        // Si le quotas max est atteint => on sort du service
+        if (annonce.getEtatAnnonce() == EtatAnnonce.QUOTA_MAX_ATTEINT) {
+            return CodeRetourService.ANNONCE_RETOUR_QUOTA_DEVIS_ATTEINT;
+        }
+
+        // Si c'est le dernier artisan avant qu'on atteigne le quotas ont change
+        // l'etat de l'annonce.
+        if (annonce.getArtisans().size() == Constant.NB_MAX_ARTISAN_PAR_ANNONCE - 1) {
+            annonce.setEtatAnnonce(EtatAnnonce.QUOTA_MAX_ATTEINT);
+            // annonce = annonceDAO.update(annonce);
+        }
+
         for (Artisan artisanInscrit : annonce.getArtisans()) {
             if (artisanInscrit.getLogin().equals(artisan.getLogin())) {
                 return CodeRetourService.ANNONCE_RETOUR_ARTISAN_DEJA_INSCRIT;
@@ -286,5 +299,4 @@ public class AnnonceService {
 
         return CodeRetourService.RETOUR_OK;
     }
-
 }

@@ -13,6 +13,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import fr.batimen.core.constant.CodeRetourService;
+import fr.batimen.core.constant.Constant;
 import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.NotificationDTO;
@@ -400,6 +401,11 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         assertEntrepriseForChoixArtisanWithTransaction(true);
     }
 
+    /**
+     * Cas de test : l'artisan s'inscrit à l'annonce, il recoit une
+     * notification, le tout doit etre correctement enregistré dans la BDD
+     * 
+     */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
     public void testInscriptionArtisanNominal() {
@@ -449,6 +455,12 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
     }
 
+    /**
+     * Cas de test: L'artisan essaye de s'inscrire deux fois, la premiere fois
+     * se passe bien, la deuxieme fois on renvoi un code retour indiquant qu'il
+     * est deja inscrit.
+     * 
+     */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
     public void testInscriptionArtisanInscriptionDeuxFois() {
@@ -466,9 +478,40 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         Assert.assertEquals(CodeRetourService.ANNONCE_RETOUR_ARTISAN_DEJA_INSCRIT, codeRetourDejaInscrit);
     }
 
-    // TODO test pour le nombre max d'annonce, => changement de statut (Quotas
-    // devis max atteint), code retour
+    /**
+     * Cas de test : Un artisan essaye de s'inscrire alors que le quotas est
+     * atteint.<br/>
+     * Le webservice doit renvoyer un code retour qui indique quer le quotas est
+     * atteint
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonces_by_id.yml")
+    public void testInscriptionArtisanQuotasAtteint() {
+
+        String loginArtisan = "pebronneChoisi";
+
+        DemandeAnnonceDTO demandeAnnonceDTO = initAndGetDemandeAnnonceDTO(
+                "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
+                loginArtisan, TypeCompte.ARTISAN);
+
+        Constant.setNB_MAX_ARTISAN_PAR_ANNONCE(2);
+
+        Integer codeRetourOK = AnnonceService.inscriptionUnArtisan(demandeAnnonceDTO);
+
+        Assert.assertEquals(CodeRetourService.RETOUR_OK, codeRetourOK);
+
+        // VERIFICATION DE L'ENREGISTREMENT DE L'INSCRIPTION
+        Annonce annonce = annonceDAO
+                .getAnnonceByIDWithTransaction(
+                        "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
+                        true);
+
+        Assert.assertEquals(EtatAnnonce.QUOTA_MAX_ATTEINT, annonce.getEtatAnnonce());
+
+    }
+
     // TODO Test avec un id d'annonce inexistant
+    // TODO Faire l'envoi de mail suite à l'envoi d'une notification.
 
     private DemandeAnnonceDTO initAndGetDemandeAnnonceDTO(String hash, String loginDemandeur, TypeCompte typeCompte) {
         DemandeAnnonceDTO demandeAnnonceDTO = new DemandeAnnonceDTO();

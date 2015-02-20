@@ -26,6 +26,8 @@ permission:
     artisan_fk: 1003
   - typecompte: 3
     artisan_fk: 1004
+  - typecompte: 3
+    artisan_fk: 1005
 artisan:
   - id: 1003
     numerotel: "0615125645"
@@ -49,8 +51,20 @@ artisan:
     prenom: PebronChoisi
     nom: De la Pebronne
     isActive: true
-    cleactivation: "NTNkN2RmYzVkNWU2MDZkZjZlYTVjZGQ2ZGE0ZjljY2JhNGJjZWY5MmIxNmNiOWJmMjk2ZDVhNDY3OTEzMTIyZA=0"
+    cleactivation: "NTNkN2RmYzVkNWU2MDZkZjZlYTVjZGQ2ZGE0ZjljY2JhNGJjZWY5MmIxNmNiOWJmMjk2ZDVhNDY3OTEzMTIyZA=1"
     entreprise_id: 1004
+  - id: 1005
+    numerotel: "0615125646"
+    password: $s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=
+    login: artisan1
+    email: artisan1@lol.com
+    dateinscription: "2014-03-10 10:00:00"
+    civilite: 0
+    prenom: Robert
+    nom: De la Pebronne
+    isActive: true
+    cleactivation: "NTNkN2RmYzVkNWU2MDZkZjZlYTVjZGQ2ZGE0ZjljY2JhNGJjZWY5MmIxNmNiOWJmMjk2ZDVhNDY3OTEzMTIyZA=2"
+    entreprise_id: 1005
 entreprise:
   - id: 1003
     nomComplet: Pebronne enterprise
@@ -68,6 +82,14 @@ entreprise:
     specialite: brique
     nbemployees: 20
     adresse_id: 104
+  - id: 1005
+    nomComplet: Entreprise de Robert
+    statutJuridique: 0
+    datecreation: 2014-03-24 21:00:00.0
+    siret: 43394298400025
+    specialite: brique
+    nbemployees: 20
+    adresse_id: 105
 adresse:
   - adresse: 106 chemin de lentreprise
     id: 101
@@ -91,6 +113,12 @@ adresse:
     id: 104
     codepostal: "06700"
     complementadresse: Residence de l'artisan choisi
+    ville: Nice pébron
+    departement: 6
+  - adresse: 2020 chemin de robert
+    id: 105
+    codepostal: "06200"
+    complementadresse: Residence de robert
     ville: Nice pébron
     departement: 6
 annonce:
