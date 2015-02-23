@@ -507,11 +507,24 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
                         true);
 
         Assert.assertEquals(EtatAnnonce.QUOTA_MAX_ATTEINT, annonce.getEtatAnnonce());
-
     }
 
-    // TODO Test avec un id d'annonce inexistant
-    // TODO Faire l'envoi de mail suite à l'envoi d'une notification.
+    /**
+     * Cas de test : Un artisan essaye de s'inscrire a une annonce qui n'existe
+     * pas
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonces_by_id.yml")
+    public void testInscriptionArtisanAvecIDInvalid() {
+
+        String loginArtisan = "pebronneChoisi";
+
+        DemandeAnnonceDTO demandeAnnonceDTO = initAndGetDemandeAnnonceDTO("toto", loginArtisan, TypeCompte.ARTISAN);
+
+        Integer codeRetourKO = AnnonceService.inscriptionUnArtisan(demandeAnnonceDTO);
+
+        Assert.assertEquals(CodeRetourService.RETOUR_KO, codeRetourKO);
+    }
 
     private DemandeAnnonceDTO initAndGetDemandeAnnonceDTO(String hash, String loginDemandeur, TypeCompte typeCompte) {
         DemandeAnnonceDTO demandeAnnonceDTO = new DemandeAnnonceDTO();

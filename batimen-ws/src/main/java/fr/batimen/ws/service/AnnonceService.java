@@ -285,7 +285,6 @@ public class AnnonceService {
         // l'etat de l'annonce.
         if (annonce.getArtisans().size() == Constant.NB_MAX_ARTISAN_PAR_ANNONCE - 1) {
             annonce.setEtatAnnonce(EtatAnnonce.QUOTA_MAX_ATTEINT);
-            // annonce = annonceDAO.update(annonce);
         }
 
         for (Artisan artisanInscrit : annonce.getArtisans()) {

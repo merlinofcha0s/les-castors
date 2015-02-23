@@ -1,5 +1,6 @@
 package fr.batimen.ws.service;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,6 +17,9 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.microtripit.mandrillapp.lutung.model.MandrillApiError;
+
+import fr.batimen.core.exception.EmailException;
 import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.NotificationDTO;
 import fr.batimen.dto.enums.StatutNotification;
@@ -42,6 +46,9 @@ public class NotificationService {
 
     @Inject
     private NotificationDAO notificationDAO;
+
+    @Inject
+    private EmailService emailService;
 
     /**
      * Methode de récuperation des notifications d'un utilisateur
@@ -111,5 +118,17 @@ public class NotificationService {
         notification.setTypeNotification(TypeNotification.INSCRIT_A_ANNONCE);
 
         notificationDAO.create(notification);
+
+        try {
+            emailService.envoiEmailNotification(notification);
+        } catch (EmailException | MandrillApiError | IOException e) {
+            if (LOGGER.isErrorEnabled()) {
+                StringBuilder logError = new StringBuilder("Erreur lors de l'envoi du mail pour la notification : ");
+                logError.append(" ").append(notification.getId()).append(" ")
+                        .append(notification.getDateNotification());
+                LOGGER.error(logError.toString(), e);
+            }
+        }
+
     }
 }

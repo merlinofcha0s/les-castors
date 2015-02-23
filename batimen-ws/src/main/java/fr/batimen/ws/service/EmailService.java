@@ -19,9 +19,11 @@ import com.microtripit.mandrillapp.lutung.view.MandrillMessage.MergeVar;
 import fr.batimen.core.constant.EmailConstant;
 import fr.batimen.core.exception.EmailException;
 import fr.batimen.dto.ContactMailDTO;
+import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.ws.dao.EmailDAO;
 import fr.batimen.ws.entity.Annonce;
+import fr.batimen.ws.entity.Notification;
 
 /**
  * Classe de gestion d'envoi de mail.
@@ -192,6 +194,38 @@ public class EmailService {
 
         // On envoi le mail
         boolean noError = emailDAO.sendEmailTemplate(accuseReception, EmailConstant.TEMPLATE_ACCUSE_RECEPTION, null);
+
+        return noError;
+    }
+
+    /**
+     * Envoi un email d'accusé de reception du message de contact
+     * 
+     * @param mail
+     *            DTO contenant l'information du mail de contact saisie par le
+     *            client
+     * @return état d'envoi du mail
+     */
+    public boolean envoiEmailNotification(Notification notification) throws EmailException, MandrillApiError,
+            IOException {
+        // On prepare l'entete, on ne mets pas de titre (il est géré par
+        // mandrillApp).
+        MandrillMessage notificationMail = emailDAO.prepareEmail(null);
+
+        // On construit les recepteurs
+        Map<String, String> recipients = new HashMap<String, String>();
+
+        if (notification.getPourQuiNotification().equals(TypeCompte.CLIENT)) {
+            recipients.put(notification.getClientNotifier().getEmail(), notification.getClientNotifier().getEmail());
+        } else {
+            recipients.put(notification.getArtisanNotifier().getEmail(), notification.getArtisanNotifier().getEmail());
+        }
+
+        // On charge les recepteurs
+        emailDAO.prepareRecipient(notificationMail, recipients, true);
+
+        // On envoi le mail
+        boolean noError = emailDAO.sendEmailTemplate(notificationMail, EmailConstant.TEMPLATE_NOTIFICATION, null);
 
         return noError;
     }

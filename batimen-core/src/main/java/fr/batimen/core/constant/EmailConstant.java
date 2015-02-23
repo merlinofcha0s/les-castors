@@ -20,6 +20,7 @@ public class EmailConstant {
     public static final String TEMPLATE_ACTIVATION_COMPTE = "activation_compte";
     public static final String TEMPLATE_EMAIL_CONTACT = "contact_email";
     public static final String TEMPLATE_ACCUSE_RECEPTION = "accuse_reception_contact";
+    public static final String TEMPLATE_NOTIFICATION = "notification";
 
     // Creation annonce tags Email
     public static final String TAG_EMAIL_USERNAME = "username";
