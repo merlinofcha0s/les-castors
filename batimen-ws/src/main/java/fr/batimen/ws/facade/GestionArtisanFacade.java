@@ -29,7 +29,6 @@ import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.WsPath;
 import fr.batimen.core.exception.BackendException;
 import fr.batimen.core.exception.EmailException;
-import fr.batimen.core.utils.PropertiesUtils;
 import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
 import fr.batimen.dto.enums.TypeCompte;
@@ -43,6 +42,7 @@ import fr.batimen.ws.entity.Artisan;
 import fr.batimen.ws.entity.CategorieMetier;
 import fr.batimen.ws.entity.Entreprise;
 import fr.batimen.ws.entity.Permission;
+import fr.batimen.ws.enums.PropertiesFileWS;
 import fr.batimen.ws.helper.JsonHelper;
 import fr.batimen.ws.interceptor.BatimenInterceptor;
 import fr.batimen.ws.service.ArtisanService;
@@ -156,7 +156,7 @@ public class GestionArtisanFacade {
         }
 
         // On recupere l'url du frontend
-        Properties urlProperties = PropertiesUtils.loadPropertiesFile("url.properties");
+        Properties urlProperties = PropertiesFileWS.URL.getProperties();
         String urlFrontend = urlProperties.getProperty("url.frontend.web");
         try {
             emailService.envoiMailActivationCompte(nouveauPartenaireDTO.getArtisan().getNom(), nouveauPartenaireDTO

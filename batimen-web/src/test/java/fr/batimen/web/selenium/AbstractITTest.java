@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 import com.ninja_squad.dbsetup.destination.DriverManagerDestination;
 import com.ninja_squad.dbsetup.operation.Operation;
 
-import fr.batimen.core.utils.PropertiesUtils;
+import fr.batimen.web.utils.PropertiesUtils;
 
 /**
  * 

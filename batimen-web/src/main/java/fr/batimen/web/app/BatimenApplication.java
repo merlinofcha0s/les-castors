@@ -17,7 +17,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.batimen.core.constant.UrlPage;
-import fr.batimen.core.utils.PropertiesUtils;
 import fr.batimen.web.client.extend.Accueil;
 import fr.batimen.web.client.extend.CGU;
 import fr.batimen.web.client.extend.Contact;
@@ -35,6 +34,7 @@ import fr.batimen.web.client.extend.member.client.MonProfil;
 import fr.batimen.web.client.extend.nouveau.artisan.NouveauArtisan;
 import fr.batimen.web.client.extend.nouveau.devis.NouveauDevis;
 import fr.batimen.web.client.session.BatimenSession;
+import fr.batimen.web.enums.PropertiesFileWeb;
 
 /**
  * Classe principale de l'application
@@ -147,8 +147,7 @@ public class BatimenApplication extends AuthenticatedWebApplication {
             LOGGER.debug("Récuperation des properties....");
         }
 
-        Properties appProperties = PropertiesUtils.loadPropertiesFile("app.properties");
+        Properties appProperties = PropertiesFileWeb.APP.getProperties();
         setStripWicketTags = Boolean.valueOf(appProperties.getProperty("app.setStripWicketTags"));
     }
-
 }

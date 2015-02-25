@@ -10,7 +10,7 @@ import javax.net.ssl.X509TrustManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.batimen.core.utils.PropertiesUtils;
+import fr.batimen.ws.client.enums.PropertiesFileWsClient;
 
 public class TrustManagerSingleton {
 
@@ -25,7 +25,7 @@ public class TrustManagerSingleton {
             LOGGER.debug("Constructeur singleton trust manager....");
         }
 
-        Properties wsProperties = PropertiesUtils.loadPropertiesFile("ws.properties");
+        Properties wsProperties = PropertiesFileWsClient.WS.getProperties();
         isProd = Boolean.valueOf(wsProperties.getProperty("ws.isprod"));
 
     }

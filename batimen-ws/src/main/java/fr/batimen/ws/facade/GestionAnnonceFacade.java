@@ -30,7 +30,6 @@ import fr.batimen.core.constant.WsPath;
 import fr.batimen.core.exception.BackendException;
 import fr.batimen.core.exception.DuplicateEntityException;
 import fr.batimen.core.exception.EmailException;
-import fr.batimen.core.utils.PropertiesUtils;
 import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
@@ -46,6 +45,7 @@ import fr.batimen.ws.dao.NotificationDAO;
 import fr.batimen.ws.entity.Annonce;
 import fr.batimen.ws.entity.Artisan;
 import fr.batimen.ws.entity.Entreprise;
+import fr.batimen.ws.enums.PropertiesFileWS;
 import fr.batimen.ws.helper.JsonHelper;
 import fr.batimen.ws.interceptor.BatimenInterceptor;
 import fr.batimen.ws.service.AnnonceService;
@@ -134,7 +134,9 @@ public class GestionAnnonceFacade {
                     emailService.envoiMailConfirmationCreationAnnonce(nouvelleAnnonce);
                 } else {
                     // On recupere l'url du frontend
-                    Properties urlProperties = PropertiesUtils.loadPropertiesFile("url.properties");
+                    Properties urlProperties = PropertiesFileWS.URL.getProperties();
+                    // Properties urlProperties =
+                    // PropertiesUtils.loadPropertiesFile("url.properties");
                     String urlFrontend = urlProperties.getProperty("url.frontend.web");
                     emailService.envoiMailActivationCompte(nouvelleAnnonceDTO.getClient().getNom(), nouvelleAnnonceDTO
                             .getClient().getPrenom(), nouvelleAnnonceDTO.getClient().getLogin(), nouvelleAnnonceDTO

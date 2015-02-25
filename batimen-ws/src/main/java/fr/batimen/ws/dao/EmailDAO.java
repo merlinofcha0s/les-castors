@@ -20,7 +20,7 @@ import com.microtripit.mandrillapp.lutung.view.MandrillMessageStatus;
 
 import fr.batimen.core.constant.EmailConstant;
 import fr.batimen.core.exception.EmailException;
-import fr.batimen.core.utils.PropertiesUtils;
+import fr.batimen.ws.enums.PropertiesFileWS;
 
 /**
  * Classe de formatage et d'envoi d'email, l'envoi de mail est realisé par
@@ -175,7 +175,7 @@ public class EmailDAO {
      * Charge les parametres pour communiquer avec mandrillapp
      */
     private void getMessageProperties() {
-        final Properties appProperties = PropertiesUtils.loadPropertiesFile("email.properties");
+        final Properties appProperties = PropertiesFileWS.EMAIL.getProperties();
         apiKey = appProperties.getProperty("mandrill.api.key");
         emailActive = Boolean.valueOf(appProperties.getProperty("email.active"));
     }

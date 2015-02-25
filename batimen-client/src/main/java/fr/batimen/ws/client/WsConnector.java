@@ -31,7 +31,7 @@ import com.sun.jersey.client.urlconnection.HTTPSProperties;
 import com.sun.jersey.multipart.impl.MultiPartWriter;
 
 import fr.batimen.core.constant.Constant;
-import fr.batimen.core.utils.PropertiesUtils;
+import fr.batimen.ws.client.enums.PropertiesFileWsClient;
 import fr.batimen.ws.client.ssl.TrustManagerSingleton;
 
 /**
@@ -165,7 +165,7 @@ public class WsConnector {
             LOGGER.debug("Récuperation des properties....");
         }
 
-        Properties wsProperties = PropertiesUtils.loadPropertiesFile("ws.properties");
+        Properties wsProperties = PropertiesFileWsClient.WS.getProperties();
         ipServeur = wsProperties.getProperty("ws.ip");
         portServeur = wsProperties.getProperty("ws.port");
         nomWs = wsProperties.getProperty("ws.name");

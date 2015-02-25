@@ -1,4 +1,4 @@
-package fr.batimen.core.utils;
+package fr.batimen.web.utils;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -9,6 +9,8 @@ import org.slf4j.LoggerFactory;
 public class PropertiesUtils {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PropertiesUtils.class);
+
+    public static Properties urlProperties;
 
     private PropertiesUtils() {
 
