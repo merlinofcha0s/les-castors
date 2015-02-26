@@ -13,7 +13,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import fr.batimen.core.constant.CodeRetourService;
-import fr.batimen.core.constant.Constant;
 import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.NotificationDTO;
@@ -493,8 +492,6 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         DemandeAnnonceDTO demandeAnnonceDTO = initAndGetDemandeAnnonceDTO(
                 "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
                 loginArtisan, TypeCompte.ARTISAN);
-
-        Constant.setNB_MAX_ARTISAN_PAR_ANNONCE(2);
 
         Integer codeRetourOK = AnnonceService.inscriptionUnArtisan(demandeAnnonceDTO);
 

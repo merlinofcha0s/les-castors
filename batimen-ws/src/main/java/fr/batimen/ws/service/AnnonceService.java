@@ -3,6 +3,7 @@ package fr.batimen.ws.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Properties;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -15,7 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.batimen.core.constant.CodeRetourService;
-import fr.batimen.core.constant.Constant;
 import fr.batimen.core.exception.BackendException;
 import fr.batimen.core.exception.DuplicateEntityException;
 import fr.batimen.core.security.HashHelper;
@@ -38,6 +38,7 @@ import fr.batimen.ws.entity.Annonce;
 import fr.batimen.ws.entity.Artisan;
 import fr.batimen.ws.entity.Client;
 import fr.batimen.ws.entity.Permission;
+import fr.batimen.ws.enums.PropertiesFileWS;
 
 /**
  * Classe de gestion des annonces
@@ -283,7 +284,10 @@ public class AnnonceService {
 
         // Si c'est le dernier artisan avant qu'on atteigne le quotas ont change
         // l'etat de l'annonce.
-        if (annonce.getArtisans().size() == Constant.NB_MAX_ARTISAN_PAR_ANNONCE - 1) {
+        Properties propertiesCastor = PropertiesFileWS.CASTOR.getProperties();
+        int nbMaxArtisanParAnnonce = Integer.valueOf(propertiesCastor.getProperty("prop.nb.max.artisan.annonce"));
+
+        if (annonce.getArtisans().size() == nbMaxArtisanParAnnonce - 1) {
             annonce.setEtatAnnonce(EtatAnnonce.QUOTA_MAX_ATTEINT);
         }
 

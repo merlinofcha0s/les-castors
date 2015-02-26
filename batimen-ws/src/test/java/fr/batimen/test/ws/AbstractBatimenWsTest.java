@@ -45,7 +45,9 @@ public abstract class AbstractBatimenWsTest {
                 .addAsWebInfResource("glassfish-web.xml", "glassfish-web.xml").setWebXML("web.xml")
                 .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
                 .addAsResource("email-test.properties", "email.properties")
-                .addAsResource("url.properties", "url.properties");
+                .addAsResource("url.properties", "url.properties")
+                .addAsResource("castor.properties", "castor.properties").addAsResource("jobs.xml", "jobs.xml")
+                .addAsResource("quartz.properties", "quartz.properties");
 
         return batimenWsTest;
     }
