@@ -1,6 +1,7 @@
 package fr.batimen.ws.dao;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.LocalBean;
@@ -376,6 +377,29 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
                 LOGGER.warn("Aucune correspondance trouvées dans la BDD", nre);
             }
             return null;
+        }
+    }
+
+    public void desactiveAnnoncePerime(Date todayMinusXDays, Long nbMaxArtisan) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Debut de mise a jour des annonces périmées");
+        }
+
+        try {
+            Query query = entityManager.createNamedQuery(QueryJPQL.ANNONCE_DESACTIVE_PERIMEE);
+            query.setParameter(QueryJPQL.PARAM_ANNONCE_TODAY_MINUS_X_DAYS, todayMinusXDays);
+            query.setParameter(QueryJPQL.PARAM_ANNONCE_NB_ARTISAN_MAX, nbMaxArtisan);
+            Integer nbUpdated = query.executeUpdate();
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("nb de row updated: " + nbUpdated);
+                LOGGER.debug("Fin de mise a jour des annonces périmées");
+            }
+
+        } catch (NoResultException nre) {
+            if (LOGGER.isWarnEnabled()) {
+                LOGGER.warn("Aucune correspondance trouvées dans la BDD", nre);
+            }
         }
     }
 }

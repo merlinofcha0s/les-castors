@@ -1,8 +1,10 @@
 package fr.batimen.ws.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
 
 import javax.ejb.LocalBean;
@@ -299,6 +301,20 @@ public class AnnonceService {
 
         annonce.getArtisans().add(artisan);
         artisan.getAnnonces().add(annonce);
+
+        return CodeRetourService.RETOUR_OK;
+    }
+
+    public Integer desactivateAnnoncePerime() {
+        // Récuperation des properties
+        Properties castorProperties = PropertiesFileWS.CASTOR.getProperties();
+        int nbJourAvantPeremption = Integer.valueOf(castorProperties.getProperty("prop.temps.peremption.annonce"));
+        Long nbMaxArtisanParAnnonce = Long.valueOf(castorProperties.getProperty("prop.nb.max.artisan.annonce"));
+
+        Calendar calJourPeremptionAnnonce = Calendar.getInstance(Locale.FRANCE);
+        calJourPeremptionAnnonce.add(Calendar.DAY_OF_MONTH, -nbJourAvantPeremption);
+
+        annonceDAO.desactiveAnnoncePerime(calJourPeremptionAnnonce.getTime(), nbMaxArtisanParAnnonce);
 
         return CodeRetourService.RETOUR_OK;
     }
