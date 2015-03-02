@@ -1,5 +1,7 @@
 package fr.batimen.ws.quartz;
 
+import java.util.Properties;
+
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.ejb.Singleton;
@@ -21,6 +23,7 @@ import org.quartz.spi.JobFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.batimen.ws.enums.PropertiesFileWS;
 import fr.batimen.ws.quartz.jobs.AnnonceGarbageCollector;
 
 @Startup
@@ -46,13 +49,17 @@ public class SchedulerBean {
             JobDetail annonceGarbageCollectorJob = JobBuilder.newJob(AnnonceGarbageCollector.class)
                     .withIdentity(annonceGarbageCollectorJobKey).build();
 
+            Properties jobsProperties = PropertiesFileWS.JOBS.getProperties();
+
             TriggerKey annonceGarbageCollectorJobTriggerKey = TriggerKey.triggerKey(
                     "annonceGarbageCollectorJobTriggerKey", "annonceGarbageCollectorJob-Group");
-            Trigger annonceGarbageCollectorJobTrigger = TriggerBuilder.newTrigger()
-                    .withIdentity(annonceGarbageCollectorJobTriggerKey).startNow()
-                    .withSchedule(CronScheduleBuilder.cronSchedule("0 */1 * * * ?")).build();
-            // .withSchedule(CronScheduleBuilder.dailyAtHourAndMinute(03,
-            // 00)).build();
+            Trigger annonceGarbageCollectorJobTrigger = TriggerBuilder
+                    .newTrigger()
+                    .withIdentity(annonceGarbageCollectorJobTriggerKey)
+                    .startNow()
+                    .withSchedule(
+                            CronScheduleBuilder.cronSchedule(jobsProperties
+                                    .getProperty("annonceGarbageCollectorJobTrigger.cron"))).build();
 
             scheduler.start(); // start before scheduling jobs
             scheduler.scheduleJob(annonceGarbageCollectorJob, annonceGarbageCollectorJobTrigger);

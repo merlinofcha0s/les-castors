@@ -46,7 +46,8 @@ public abstract class AbstractBatimenWsTest {
                 .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
                 .addAsResource("email-test.properties", "email.properties")
                 .addAsResource("url.properties", "url.properties")
-                .addAsResource("castor.properties", "castor.properties").addAsResource("jobs.xml", "jobs.xml")
+                .addAsResource("castor.properties", "castor.properties")
+                .addAsResource("jobs.properties", "jobs.properties")
                 .addAsResource("quartz.properties", "quartz.properties");
 
         return batimenWsTest;

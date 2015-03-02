@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 
 public enum PropertiesFileWS {
 
-    URL("url.properties"), EMAIL("email.properties"), CASTOR("castor.properties");
+    URL("url.properties"), EMAIL("email.properties"), CASTOR("castor.properties"), JOBS("jobs.properties");
 
     private final Logger LOGGER = LoggerFactory.getLogger(PropertiesFileWS.class);
 
