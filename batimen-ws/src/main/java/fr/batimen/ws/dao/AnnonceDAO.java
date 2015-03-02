@@ -380,7 +380,8 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
         }
     }
 
-    public void desactiveAnnoncePerime(Date todayMinusXDays, Long nbMaxArtisan) {
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public void desactiveAnnoncePerime(Date todayMinusXDays, Integer nbMaxArtisan) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Debut de mise a jour des annonces périmées");
         }

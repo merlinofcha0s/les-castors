@@ -309,7 +309,7 @@ public class AnnonceService {
         // Récuperation des properties
         Properties castorProperties = PropertiesFileWS.CASTOR.getProperties();
         int nbJourAvantPeremption = Integer.valueOf(castorProperties.getProperty("prop.temps.peremption.annonce"));
-        Long nbMaxArtisanParAnnonce = Long.valueOf(castorProperties.getProperty("prop.nb.max.artisan.annonce"));
+        Integer nbMaxArtisanParAnnonce = Integer.valueOf(castorProperties.getProperty("prop.nb.max.artisan.annonce"));
 
         Calendar calJourPeremptionAnnonce = Calendar.getInstance(Locale.FRANCE);
         calJourPeremptionAnnonce.add(Calendar.DAY_OF_MONTH, -nbJourAvantPeremption);

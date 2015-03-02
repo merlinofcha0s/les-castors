@@ -160,6 +160,10 @@ annonce_artisan:
      artisans_id: 1003
    - annonce_id: 1020
      artisans_id: 1004
+   - annonce_id: 1021
+     artisans_id: 1003
+   - annonce_id: 1021
+     artisans_id: 1004
 notification:
    - id: 1002
      typenotification: 0
