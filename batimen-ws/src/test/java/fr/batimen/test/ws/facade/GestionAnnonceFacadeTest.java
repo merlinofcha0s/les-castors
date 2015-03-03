@@ -466,9 +466,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
         String loginArtisan = "pebronneChoisi";
 
-        DemandeAnnonceDTO demandeAnnonceDTO = initAndGetDemandeAnnonceDTO(
-                "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
-                loginArtisan, TypeCompte.ARTISAN);
+        DemandeAnnonceDTO demandeAnnonceDTO = initAndGetDemandeAnnonceDTO("lolmdrp", loginArtisan, TypeCompte.ARTISAN);
 
         Integer codeRetourOK = AnnonceService.inscriptionUnArtisan(demandeAnnonceDTO);
         Assert.assertEquals(CodeRetourService.RETOUR_OK, codeRetourOK);

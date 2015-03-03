@@ -15,7 +15,7 @@ annonce:
   - datecreation: 2014-03-23 22:00:00.0
     delaiintervention: 0
     description: Peinture d'un mur
-    etatannonce: 1
+    etatannonce: 0
     categoriemetier: 0
     souscategoriemetier: Installation électrique
     nbconsultation: 0
@@ -26,7 +26,7 @@ annonce:
   - datecreation: 2014-04-23 21:00:00.0
     delaiintervention: 0
     description: Plomberie remise à neuf
-    etatannonce: 1
+    etatannonce: 0
     categoriemetier: 1
     souscategoriemetier: Plomberie
     nbconsultation: 0
