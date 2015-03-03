@@ -65,6 +65,7 @@ public class Annonce extends MasterPage {
     private WebMarkupContainer containerEnteprisesInscrites;
     private WebMarkupContainer containerEntrepriseSelectionnee;
     private WebMarkupContainer containerEntreprisesGlobales;
+    private WebMarkupContainer containerContact;
 
     private InscriptionModal inscriptionModal;
 
@@ -392,7 +393,7 @@ public class Annonce extends MasterPage {
 
     private void affichageContactAnnonce() {
 
-        WebMarkupContainer containerContact = new WebMarkupContainer("containerContact") {
+        containerContact = new WebMarkupContainer("containerContact") {
 
             private static final long serialVersionUID = 1L;
 
@@ -421,6 +422,9 @@ public class Annonce extends MasterPage {
             }
 
         };
+
+        containerContact.setOutputMarkupId(true);
+        containerContact.setMarkupId("containerContact");
 
         String complementAdresse = annonceAffichageDTO.getAdresse().getComplementAdresse();
 
@@ -489,12 +493,27 @@ public class Annonce extends MasterPage {
         super.onEvent(event);
 
         if (event.getPayload() instanceof InscriptionArtisanEvent) {
+            InscriptionArtisanEvent inscriptionArtisanEvent = (InscriptionArtisanEvent) event.getPayload();
+
             DemandeAnnonceDTO demandeAnnonceDTO = new DemandeAnnonceDTO();
             demandeAnnonceDTO.setHashID(idAnnonce);
             demandeAnnonceDTO.setLoginDemandeur(userConnected.getLogin());
-            AnnonceService.inscriptionUnArtisan(demandeAnnonceDTO);
-            // TODO Ecrire la logique pour afficher les infos de contacts si
-            // l'inscription s'est correctement déroulée.
+            Integer codeRetourInscription = AnnonceService.inscriptionUnArtisan(demandeAnnonceDTO);
+            if (codeRetourInscription.equals(CodeRetourService.RETOUR_OK)) {
+                feedBackPanelGeneral.success("Inscription pris en compte, merci");
+            } else if (codeRetourInscription.equals(CodeRetourService.RETOUR_KO)) {
+                feedBackPanelGeneral
+                        .error("Problème d'enregistrement avec votre inscription, veuillez réessayer, si le problème persiste");
+            } else if (codeRetourInscription.equals(CodeRetourService.ANNONCE_RETOUR_ARTISAN_DEJA_INSCRIT)) {
+                feedBackPanelGeneral.error("Vous êtes dèjaé inscrit, vous ne pouvez pas vous inscrire deux fois");
+            } else if (codeRetourInscription.equals(CodeRetourService.ANNONCE_RETOUR_QUOTA_DEVIS_ATTEINT)) {
+                feedBackPanelGeneral.error("Quotas d'inscription atteint pour cette annonce");
+            }
+
+            loadAnnonceInfos(idAnnonce);
+
+            inscriptionArtisanEvent.getTarget().add(feedBackPanelGeneral);
+            inscriptionArtisanEvent.getTarget().add(containerContact);
         }
     }
 }

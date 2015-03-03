@@ -3,6 +3,8 @@ package fr.batimen.web.client.modal;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.event.Broadcast;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import fr.batimen.web.client.component.ModalCastor;
 import fr.batimen.web.client.event.InscriptionArtisanEvent;
@@ -10,6 +12,8 @@ import fr.batimen.web.client.event.InscriptionArtisanEvent;
 public class InscriptionModal extends ModalCastor {
 
     private static final long serialVersionUID = 1615403190862019400L;
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(InscriptionModal.class);
 
     public InscriptionModal(String id) {
         super(id, "Inscription à une annonce", "400");
@@ -19,7 +23,7 @@ public class InscriptionModal extends ModalCastor {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                this.send(target.getPage(), Broadcast.BREADTH, new InscriptionArtisanEvent(target));
+                this.send(getPage(), Broadcast.BREADTH, new InscriptionArtisanEvent(target));
             }
 
         };
@@ -34,6 +38,5 @@ public class InscriptionModal extends ModalCastor {
         };
 
         add(yes, no);
-
     }
 }
