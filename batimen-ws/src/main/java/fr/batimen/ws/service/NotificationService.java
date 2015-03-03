@@ -104,6 +104,16 @@ public class NotificationService {
         return notificationsDTO;
     }
 
+    /**
+     * Génération d'une notification pour l'inscription d'un artisan
+     * 
+     * @param demandeAnnonceDTO
+     *            Objet contenant la demande d'inscription initial
+     * @param annonce
+     *            l'annonce a laquelle l'artisan veut s'inscrire
+     * @param artisan
+     *            l'artisan qui veut s'inscrire
+     */
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void generationNotificationInscriptionArtisan(DemandeAnnonceDTO demandeAnnonceDTO, Annonce annonce,
             Artisan artisan) {

@@ -1,5 +1,11 @@
 package fr.batimen.core.constant;
 
+/**
+ * Classe de constante pour les codes retour du webservice
+ * 
+ * @author Casaucau
+ * 
+ */
 public class CodeRetourService {
 
     private CodeRetourService() {

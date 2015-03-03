@@ -199,11 +199,11 @@ public class EmailService {
     }
 
     /**
-     * Envoi un email d'accusé de reception du message de contact
+     * Envoi un email de notification
      * 
-     * @param mail
-     *            DTO contenant l'information du mail de contact saisie par le
-     *            client
+     * @param notification
+     *            contient toutes les infos (le type, le destinataire, etc) de
+     *            la notification
      * @return état d'envoi du mail
      */
     public boolean envoiEmailNotification(Notification notification) throws EmailException, MandrillApiError,

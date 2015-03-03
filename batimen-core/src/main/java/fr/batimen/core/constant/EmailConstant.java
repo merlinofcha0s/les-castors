@@ -1,5 +1,11 @@
 package fr.batimen.core.constant;
 
+/**
+ * Classe de constante pour les emails
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class EmailConstant {
 
     private EmailConstant() {

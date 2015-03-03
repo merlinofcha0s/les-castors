@@ -1,5 +1,11 @@
 package fr.batimen.core.constant;
 
+/**
+ * Classe de constante contenant les urls
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class UrlPage {
 
     private UrlPage() {

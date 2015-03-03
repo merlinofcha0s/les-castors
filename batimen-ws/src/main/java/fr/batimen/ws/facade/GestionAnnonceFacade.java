@@ -300,7 +300,7 @@ public class GestionAnnonceFacade {
      * etre admin.
      * 
      * @param demandeAnnonce
-     * @return {@link Constant}
+     * @return {@link CodeRetourService}
      */
     @POST
     @Path(WsPath.GESTION_ANNONCE_SERVICE_SUPRESS_ANNONCE)
@@ -353,7 +353,7 @@ public class GestionAnnonceFacade {
      * etre admin.
      * 
      * @param demandeAnnonceDTO
-     * @return
+     * @return {@link CodeRetourService}
      */
     @POST
     @Path(WsPath.GESTION_ANNONCE_SERVICE_SELECTION_UNE_ENTREPRISE)
@@ -414,7 +414,8 @@ public class GestionAnnonceFacade {
                     LOGGER.debug("C'est une suppression, on met à jour l'annonce avec l'entreprise choisi = null");
                 }
                 annonceToUpdate.setEntrepriseSelectionnee(null);
-                // TODO En suspens pour le moment
+                // Ne doit pas être appelé pour le moment, on le laisse au cas
+                // ou.
             } else {
                 if (LOGGER.isErrorEnabled()) {
                     LOGGER.error("Ni ajout, ni suppression dans la selection artisan, cas impossible");
@@ -434,13 +435,12 @@ public class GestionAnnonceFacade {
     }
 
     /**
-     * Selection d'une entreprise par un particulier ou un admin <br/>
-     * 
-     * Si c'est un client, il doit posseder l'annonce, sinon le demandeur doit
-     * etre admin.
+     * Service qui permet à un artisan de s'inscrire à une annonce, pas besoin
+     * du type de compte dans l'objet demande anonnce DTO
      * 
      * @param demandeAnnonceDTO
-     * @return
+     *            Objet permettant de faire la demande
+     * @return {@link CodeRetourService}
      */
     @POST
     @Path(WsPath.GESTION_ANNONCE_SERVICE_INSCRIPTION_UN_ARTISAN)

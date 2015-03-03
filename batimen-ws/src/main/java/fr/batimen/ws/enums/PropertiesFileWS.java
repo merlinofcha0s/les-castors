@@ -6,6 +6,12 @@ import java.util.Properties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Enum qui permet de gérer / charger les fichiers properties
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public enum PropertiesFileWS {
 
     URL("url.properties"), EMAIL("email.properties"), CASTOR("castor.properties"), JOBS("jobs.properties");

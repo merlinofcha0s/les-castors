@@ -489,8 +489,12 @@ public class Annonce extends MasterPage {
         super.onEvent(event);
 
         if (event.getPayload() instanceof InscriptionArtisanEvent) {
-            // TODO Appel du service d'inscription de l'artisan
+            DemandeAnnonceDTO demandeAnnonceDTO = new DemandeAnnonceDTO();
+            demandeAnnonceDTO.setHashID(idAnnonce);
+            demandeAnnonceDTO.setLoginDemandeur(userConnected.getLogin());
+            AnnonceService.inscriptionUnArtisan(demandeAnnonceDTO);
+            // TODO Ecrire la logique pour afficher les infos de contacts si
+            // l'inscription s'est correctement déroulée.
         }
     }
-
 }

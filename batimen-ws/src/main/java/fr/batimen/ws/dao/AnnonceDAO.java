@@ -243,7 +243,7 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
     }
 
     /**
-     * Calcul le nb d'annonce qu'un client a postés
+     * Charge une annonce grace à son hash ID, ne crée pas de transaction
      * 
      * @param login
      *            le login du client
@@ -255,7 +255,7 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
     }
 
     /**
-     * Calcul le nb d'annonce qu'un client a postés
+     * Charge une annonce grace à son hash ID, crée une transaction
      * 
      * @param login
      *            le login du client
@@ -334,7 +334,9 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
     }
 
     /**
-     * Supprime une annonce présente en base de données.
+     * Supprime une annonce présente en base de données : <br/>
+     * Attention ce n'est pas vraiment une supression, on ne fait que desactiver
+     * l'annonce en base de données.
      * 
      * @param demandeAnnonceDTO
      *            Objet qui possede les infos pour verifier que l'utilisateur a
@@ -380,6 +382,18 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
         }
     }
 
+    /**
+     * Cherche en base de données et desactive toutes les annonces qui sont plus
+     * petite que la date passée en paramètre et qui ont un nombre d'artisan
+     * inscrit égale a la properties du nb max d'artisan <br/>
+     * 
+     * @param todayMinusXDays
+     *            : la date du jour - le nb de jour present dans le fichier de
+     *            properties
+     * @param nbMaxArtisan
+     *            : Nombre max d'artisan pouvant s'inscrire a une annonce (voir
+     *            fichier de properties)
+     */
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void desactiveAnnoncePerime(Date todayMinusXDays, Integer nbMaxArtisan) {
         if (LOGGER.isDebugEnabled()) {
