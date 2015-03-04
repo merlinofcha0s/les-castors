@@ -26,6 +26,7 @@ import fr.batimen.dto.PermissionDTO;
 import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
 import fr.batimen.dto.aggregate.AnnonceSelectEntrepriseDTO;
 import fr.batimen.dto.aggregate.NbConsultationDTO;
+import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.web.app.security.Authentication;
@@ -65,7 +66,8 @@ public class Annonce extends MasterPage {
     private WebMarkupContainer containerEnteprisesInscrites;
     private WebMarkupContainer containerEntrepriseSelectionnee;
     private WebMarkupContainer containerEntreprisesGlobales;
-    private WebMarkupContainer containerContact;
+    private WebMarkupContainer containerContactMaster;
+    private WebMarkupContainer inscrireAnnonceContainer;
 
     private InscriptionModal inscriptionModal;
 
@@ -172,7 +174,7 @@ public class Annonce extends MasterPage {
         supprimerAnnonce.setOutputMarkupId(true);
         supprimerAnnonce.setMarkupId("supprimerAnnonce");
 
-        WebMarkupContainer inscrireAnnonceContainer = new WebMarkupContainer("inscrireAnnonceContainer") {
+        inscrireAnnonceContainer = new WebMarkupContainer("inscrireAnnonceContainer") {
             /**
              * 
              */
@@ -180,9 +182,12 @@ public class Annonce extends MasterPage {
 
             @Override
             public boolean isVisible() {
-                return roleUtils.checkRoles(TypeCompte.ARTISAN);
+                return afficherInscrireAnnonce();
             }
         };
+
+        inscrireAnnonceContainer.setOutputMarkupId(true);
+        inscrireAnnonceContainer.setMarkupId("inscrireAnnonceContainer");
 
         inscrireAnnonce = new AjaxLink<Void>("inscrireAnnonce") {
 
@@ -192,6 +197,7 @@ public class Annonce extends MasterPage {
             public void onClick(AjaxRequestTarget target) {
                 inscriptionModal.open(target);
             }
+
         };
 
         WebMarkupContainer envoyerDevisContainer = new WebMarkupContainer("envoyerDevisContainer") {
@@ -393,7 +399,14 @@ public class Annonce extends MasterPage {
 
     private void affichageContactAnnonce() {
 
-        containerContact = new WebMarkupContainer("containerContact") {
+        // Container créé uniquement dans le but de pouvoir rafraichir avec un
+        // appel ajax. En effet, le container fils n'est pas visible donc pas
+        // possible de la rafraichir
+        containerContactMaster = new WebMarkupContainer("containerContactMaster");
+        containerContactMaster.setOutputMarkupId(true);
+        containerContactMaster.setMarkupId("containerContactMaster");
+
+        WebMarkupContainer containerContact = new WebMarkupContainer("containerContact") {
 
             private static final long serialVersionUID = 1L;
 
@@ -407,18 +420,13 @@ public class Annonce extends MasterPage {
                 if (roleUtils.checkRoles(TypeCompte.CLIENT)
                         && annonceAffichageDTO.getAnnonce().getLoginOwner().equals(userConnected.getLogin())) {
                     return true;
-                } else if (roleUtils.checkRoles(TypeCompte.ARTISAN)) {
-                    for (EntrepriseDTO entreprise : annonceAffichageDTO.getEntreprises()) {
-                        if (userConnected.getLogin().equals(entreprise.getArtisan().getLogin())) {
-                            return true;
-                        }
-                    }
+                } else if (roleUtils.checkRoles(TypeCompte.ARTISAN) && annonceAffichageDTO.getIsArtisanInscrit()) {
+                    return true;
                 } else if (roleUtils.checkRoles(TypeCompte.ADMINISTRATEUR_MANAGER)) {
                     return true;
                 } else {
                     return false;
                 }
-                return false;
             }
 
         };
@@ -457,7 +465,8 @@ public class Annonce extends MasterPage {
         SmartLinkLabel email = new SmartLinkLabel("email", emailValue);
 
         containerContact.add(adresse, telephone, email);
-        add(containerContact);
+        containerContactMaster.add(containerContact);
+        add(containerContactMaster);
     }
 
     private void updateNbConsultation() {
@@ -505,7 +514,7 @@ public class Annonce extends MasterPage {
                 feedBackPanelGeneral
                         .error("Problème d'enregistrement avec votre inscription, veuillez réessayer, si le problème persiste");
             } else if (codeRetourInscription.equals(CodeRetourService.ANNONCE_RETOUR_ARTISAN_DEJA_INSCRIT)) {
-                feedBackPanelGeneral.error("Vous êtes dèjaé inscrit, vous ne pouvez pas vous inscrire deux fois");
+                feedBackPanelGeneral.error("Vous êtes dèja inscrit, vous ne pouvez pas vous inscrire deux fois");
             } else if (codeRetourInscription.equals(CodeRetourService.ANNONCE_RETOUR_QUOTA_DEVIS_ATTEINT)) {
                 feedBackPanelGeneral.error("Quotas d'inscription atteint pour cette annonce");
             }
@@ -513,7 +522,36 @@ public class Annonce extends MasterPage {
             loadAnnonceInfos(idAnnonce);
 
             inscriptionArtisanEvent.getTarget().add(feedBackPanelGeneral);
-            inscriptionArtisanEvent.getTarget().add(containerContact);
+            inscriptionArtisanEvent.getTarget().add(containerContactMaster);
+            inscriptionArtisanEvent.getTarget().add(inscrireAnnonceContainer);
+
+        }
+    }
+
+    /**
+     * Check pour savoir si on affiche le lien d'inscription a l'annonce
+     * 
+     * @return true si le lien doit etre affiché
+     */
+    private boolean afficherInscrireAnnonce() {
+
+        boolean hasRolesOK = false;
+        boolean isActive = false;
+
+        if (!roleUtils.checkRoles(TypeCompte.ARTISAN)) {
+            return false;
+        }
+
+        hasRolesOK = true;
+
+        if (annonceAffichageDTO.getAnnonce().getEtatAnnonce().equals(EtatAnnonce.ACTIVE)) {
+            isActive = true;
+        }
+
+        if (hasRolesOK && !annonceAffichageDTO.getIsArtisanInscrit() && isActive) {
+            return true;
+        } else {
+            return false;
         }
     }
 }

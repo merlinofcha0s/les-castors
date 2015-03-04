@@ -24,6 +24,7 @@ public class InscriptionModal extends ModalCastor {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 this.send(getPage(), Broadcast.BREADTH, new InscriptionArtisanEvent(target));
+                close(target);
             }
 
         };

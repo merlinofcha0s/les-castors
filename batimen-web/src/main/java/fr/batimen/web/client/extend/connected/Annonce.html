@@ -147,62 +147,69 @@
 				<!-- .module_cont -->
 			</div>
 			<div wicket:id="containerEntreprisesGlobales">
-			<!-- .row-fluid ENTREPRISE A SELECTIONNER -->
-			<div wicket:id="containerEnteprisesInscrites">
-				<div class="row-fluid">
-					<div class="span12">
-						<div class="bg_title">
-							<h2 class="headInModule">Entreprises qui souhaitent vous contacter</h2>
-						</div>
-						<div
-							class="containerEnptrepriseSelectionnee row-fluid"
-							wicket:id="entreprises">
-							<div class="span4">
-								<div class="containerGlyph">
-									<img class="imgEntreprise"
-										src="img/store.png" />
+				<!-- .row-fluid ENTREPRISE A SELECTIONNER -->
+				<div wicket:id="containerEnteprisesInscrites">
+					<div class="row-fluid">
+						<div class="span12">
+							<div class="bg_title">
+								<h2 class="headInModule">Entreprises qui souhaitent vous contacter</h2>
+							</div>
+							<div
+								class="containerEnptrepriseSelectionnee row-fluid"
+								wicket:id="entreprises">
+								<div class="span4">
+									<div class="containerGlyph">
+										<img
+											class="imgEntreprise"
+											src="img/store.png" />
+									</div>
+									<a
+										class="linkEntreprise"
+										href="#"
+										wicket:id="linkEntreprise">Ké buenos enterprise</a>
 								</div>
-								<a
-									class="linkEntreprise"
-									href="#"
-									wicket:id="linkEntreprise">Ké buenos enterprise</a>
+								<div class="span8 containerAcceptDevis">
+									<span class="icon-like glyphAnnonce"></span> <a
+										class="linkAcceptDevis"
+										href="#"
+										wicket:id="linkAcceptDevis">Accepter ce devis</a> <span class="icon-Cross glyphAnnonce containerLinkRefuser"></span>
+									<a
+										href="#"
+										class="linkAcceptDevis"
+										wicket:id="linkRefusDevis">Refuser ce devis</a>
+								</div>
 							</div>
-							<div class="span8 containerAcceptDevis">
-								<span class="icon-like glyphAnnonce"></span> <a class="linkAcceptDevis" href="#" wicket:id="linkAcceptDevis">Accepter ce devis</a>
-								 <span class="icon-Cross glyphAnnonce containerLinkRefuser"></span> <a href="#" class="linkAcceptDevis" wicket:id="linkRefusDevis">Refuser ce devis</a>
+							<div wicket:id="aucuneEntreprise"></div>
+						</div>
+					</div>
+					<!-- .module_cont -->
+				</div>
+				<!-- .row-fluid ENTREPRISE A SELECTIONNER -->
+				<!-- .row-fluid ENTREPRISE SELECTIONNER PAR LE CLIENT -->
+				<div wicket:id="containerEntrepriseSelectionnee">
+					<div class="row-fluid">
+						<div class="span12">
+							<div class="bg_title">
+								<h2 class="headInModule">Entreprise que vous avez choisi</h2>
+							</div>
+							<div class="containerEnptrepriseSelectionnee row-fluid">
+								<div class="span4">
+									<div class="containerGlyph">
+										<img
+											class="imgEntreprise"
+											src="img/store.png" />
+									</div>
+									<a
+										class="linkEntreprise"
+										href="#">Ké buenos enterprise</a>
+								</div>
 							</div>
 						</div>
-						<div wicket:id="aucuneEntreprise"></div>
 					</div>
+					<!-- .module_cont -->
 				</div>
-				<!-- .module_cont -->
+				<!-- .row-fluid ENTREPRISE A SELECTIONNER -->
 			</div>
-			<!-- .row-fluid ENTREPRISE A SELECTIONNER -->
-			<!-- .row-fluid ENTREPRISE SELECTIONNER PAR LE CLIENT -->
-			<div wicket:id="containerEntrepriseSelectionnee">
-                <div class="row-fluid">
-                    <div class="span12">
-                        <div class="bg_title">
-                            <h2 class="headInModule">Entreprise que vous avez choisi</h2>
-                        </div>
-                        <div
-                            class="containerEnptrepriseSelectionnee row-fluid">
-                            <div class="span4">
-                                <div class="containerGlyph">
-                                    <img class="imgEntreprise"
-                                        src="img/store.png" />
-                                </div>
-                                <a
-                                    class="linkEntreprise"
-                                    href="#">Ké buenos enterprise</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- .module_cont -->
-            </div>
-            <!-- .row-fluid ENTREPRISE A SELECTIONNER -->
-            </div>
 		</div>
 		<div class="span3">
 			<div class="containerActions">
@@ -252,30 +259,34 @@
 					</div>
 				</div>
 			</div>
-			<div id="containerContact" wicket:id="containerContact">
-				<h2 class="headInModule">Contact</h2>
-				<div>
-					<div class="containerGlyph">
-						<span class="icon-MapPin1 glyphAnnonce"></span>
+			<div wicket:id="containerContactMaster">
+				<div
+					id="containerContact"
+					wicket:id="containerContact">
+					<h2 class="headInModule">Contact</h2>
+					<div>
+						<div class="containerGlyph">
+							<span class="icon-MapPin1 glyphAnnonce"></span>
+						</div>
+						<div
+							class="contactInfo"
+							wicket:id="adresse">210 chemin du devis, 06600 Castors cedex</div>
 					</div>
-					<div
-						class="contactInfo"
-						wicket:id="adresse">210 chemin du devis, 06600 Castors cedex</div>
-				</div>
-				<div class="containerInfo">
-					<div class="containerGlyph">
-						<span class="icon-Handset glyphAnnonce"></span>
+					<div class="containerInfo">
+						<div class="containerGlyph">
+							<span class="icon-Handset glyphAnnonce"></span>
+						</div>
+						<div
+							class="sidebarRightWithPaddingTop"
+							wicket:id="telephone">0493524585</div>
 					</div>
-					<div
-						class="sidebarRightWithPaddingTop"
-						wicket:id="telephone">0493524585</div>
-				</div>
-				<div class="containerInfo">
-					<div class="containerGlyph">
-						<span class="icon-Envelope1 glyphAnnonce"></span>
-					</div>
-					<div class="sidebarRightWithPaddingTop">
-						<a wicket:id="email">client@castors.fr</a>
+					<div class="containerInfo">
+						<div class="containerGlyph">
+							<span class="icon-Envelope1 glyphAnnonce"></span>
+						</div>
+						<div class="sidebarRightWithPaddingTop">
+							<a wicket:id="email">client@castors.fr</a>
+						</div>
 					</div>
 				</div>
 			</div>
