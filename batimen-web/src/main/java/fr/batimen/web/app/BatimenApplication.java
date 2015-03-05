@@ -85,7 +85,7 @@ public class BatimenApplication extends AuthenticatedWebApplication {
         // Pas de http pour éviter le content mix blocking dans le browser
         // (appel d'une url http dans une page https)
         getJavaScriptLibrarySettings().setJQueryReference(
-                new UrlResourceReference(Url.parse("//code.jquery.com/jquery-1.9.1.min.js")));
+                new UrlResourceReference(Url.parse("//code.jquery.com/jquery-1.11.2.min.js")));
         // Chargement de Jquery-ui avec le theme Smoothness
         addResourceReplacement(WiQueryCoreThemeResourceReference.get(), new WiQueryCoreThemeResourceReference(
                 "smoothness"));

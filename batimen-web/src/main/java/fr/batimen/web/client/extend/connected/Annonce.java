@@ -59,15 +59,13 @@ public class Annonce extends MasterPage {
     private static final Logger LOGGER = LoggerFactory.getLogger(MesAnnonces.class);
 
     private String idAnnonce;
-    private Link<Void> modifierAnnonce;
-    private AjaxLink<Void> supprimerAnnonce;
-    private AjaxLink<Void> inscrireAnnonce;
-    private Link<Void> envoyerDevis;
     private WebMarkupContainer containerEnteprisesInscrites;
     private WebMarkupContainer containerEntrepriseSelectionnee;
     private WebMarkupContainer containerEntreprisesGlobales;
     private WebMarkupContainer containerContactMaster;
-    private WebMarkupContainer inscrireAnnonceContainer;
+    private WebMarkupContainer containerActions;
+
+    private WebMarkupContainer envoyerDevisContainer;
 
     private InscriptionModal inscriptionModal;
 
@@ -76,6 +74,12 @@ public class Annonce extends MasterPage {
     private ClientDTO userConnected;
 
     private RolesUtils roleUtils;
+
+    private Label telephone;
+    private SmartLinkLabel email;
+
+    private Model<String> telephoneValue;
+    private Model<String> emailValue;
 
     public Annonce() {
         super("", "", "Annonce particulier", true, "img/bg_title1.jpg");
@@ -125,6 +129,10 @@ public class Annonce extends MasterPage {
 
     private void initAction() {
 
+        containerActions = new WebMarkupContainer("containerActions");
+        containerActions.setOutputMarkupId(true);
+        containerActions.setMarkupId("containerActions");
+
         WebMarkupContainer modifierAnnonceContainer = new WebMarkupContainer("modifierAnnonceContainer") {
             /**
              * 
@@ -137,7 +145,7 @@ public class Annonce extends MasterPage {
             }
         };
 
-        modifierAnnonce = new Link<Void>("modifierAnnonce") {
+        Link<Void> modifierAnnonce = new Link<Void>("modifierAnnonce") {
 
             private static final long serialVersionUID = 1L;
 
@@ -160,7 +168,7 @@ public class Annonce extends MasterPage {
             }
         };
 
-        supprimerAnnonce = new AjaxLink<Void>("supprimerAnnonce") {
+        AjaxLink<Void> supprimerAnnonce = new AjaxLink<Void>("supprimerAnnonce") {
 
             private static final long serialVersionUID = 1L;
 
@@ -174,7 +182,7 @@ public class Annonce extends MasterPage {
         supprimerAnnonce.setOutputMarkupId(true);
         supprimerAnnonce.setMarkupId("supprimerAnnonce");
 
-        inscrireAnnonceContainer = new WebMarkupContainer("inscrireAnnonceContainer") {
+        WebMarkupContainer inscrireAnnonceContainer = new WebMarkupContainer("inscrireAnnonceContainer") {
             /**
              * 
              */
@@ -186,10 +194,9 @@ public class Annonce extends MasterPage {
             }
         };
 
-        inscrireAnnonceContainer.setOutputMarkupId(true);
         inscrireAnnonceContainer.setMarkupId("inscrireAnnonceContainer");
 
-        inscrireAnnonce = new AjaxLink<Void>("inscrireAnnonce") {
+        AjaxLink<Void> inscrireAnnonce = new AjaxLink<Void>("inscrireAnnonce") {
 
             private static final long serialVersionUID = 1L;
 
@@ -200,7 +207,9 @@ public class Annonce extends MasterPage {
 
         };
 
-        WebMarkupContainer envoyerDevisContainer = new WebMarkupContainer("envoyerDevisContainer") {
+        inscrireAnnonce.setMarkupId("inscrireAnnonce");
+
+        envoyerDevisContainer = new WebMarkupContainer("envoyerDevisContainer") {
             /**
              * 
              */
@@ -208,11 +217,18 @@ public class Annonce extends MasterPage {
 
             @Override
             public boolean isVisible() {
-                return roleUtils.checkRoles(TypeCompte.ARTISAN);
+                return !afficherInscrireAnnonce();
             }
         };
 
-        envoyerDevis = new Link<Void>("envoyerDevis") {
+        envoyerDevisContainer.setMarkupId("envoyerDevisContainer");
+        if (!inscrireAnnonce.isVisible()) {
+            envoyerDevisContainer.add(new AttributeModifier("class", "containerAction"));
+        } else {
+            envoyerDevisContainer.add(new AttributeModifier("class", ""));
+        }
+
+        Link<Void> envoyerDevis = new Link<Void>("envoyerDevis") {
 
             private static final long serialVersionUID = 1L;
 
@@ -228,7 +244,10 @@ public class Annonce extends MasterPage {
         inscrireAnnonceContainer.add(inscrireAnnonce);
         envoyerDevisContainer.add(envoyerDevis);
 
-        add(modifierAnnonceContainer, supprimerAnnonceContainer, inscrireAnnonceContainer, envoyerDevisContainer);
+        containerActions.add(modifierAnnonceContainer, supprimerAnnonceContainer, inscrireAnnonceContainer,
+                envoyerDevisContainer);
+
+        add(containerActions);
     }
 
     private void affichageDonneesAnnonce() {
@@ -448,8 +467,18 @@ public class Annonce extends MasterPage {
                 .append(annonceAffichageDTO.getAdresse().getDepartement());
 
         Label adresse = new Label("adresse", adresseComplete.toString());
-        Model<String> telephoneValue = null;
-        Model<String> emailValue = null;
+
+        telephone = new Label("telephone");
+        email = new SmartLinkLabel("email");
+
+        initModelPhoneAndEmailContact();
+
+        containerContact.add(adresse, telephone, email);
+        containerContactMaster.add(containerContact);
+        add(containerContactMaster);
+    }
+
+    private void initModelPhoneAndEmailContact() {
         // Tout dépends si c'est un artisan qui envoi les données => le
         // webservice renvoi le téléphone et l'adresse mail.
         // Sinon c'est que c'est le client
@@ -461,12 +490,8 @@ public class Annonce extends MasterPage {
             emailValue = new Model<String>(userConnected.getEmail());
         }
 
-        Label telephone = new Label("telephone", telephoneValue);
-        SmartLinkLabel email = new SmartLinkLabel("email", emailValue);
-
-        containerContact.add(adresse, telephone, email);
-        containerContactMaster.add(containerContact);
-        add(containerContactMaster);
+        telephone.setDefaultModel(telephoneValue);
+        email.setDefaultModel(emailValue);
     }
 
     private void updateNbConsultation() {
@@ -509,7 +534,7 @@ public class Annonce extends MasterPage {
             demandeAnnonceDTO.setLoginDemandeur(userConnected.getLogin());
             Integer codeRetourInscription = AnnonceService.inscriptionUnArtisan(demandeAnnonceDTO);
             if (codeRetourInscription.equals(CodeRetourService.RETOUR_OK)) {
-                feedBackPanelGeneral.success("Inscription pris en compte, merci");
+                feedBackPanelGeneral.success("Inscription prise en compte");
             } else if (codeRetourInscription.equals(CodeRetourService.RETOUR_KO)) {
                 feedBackPanelGeneral
                         .error("Problème d'enregistrement avec votre inscription, veuillez réessayer, si le problème persiste");
@@ -520,11 +545,13 @@ public class Annonce extends MasterPage {
             }
 
             loadAnnonceInfos(idAnnonce);
+            initModelPhoneAndEmailContact();
+
+            envoyerDevisContainer.add(new AttributeModifier("class", ""));
 
             inscriptionArtisanEvent.getTarget().add(feedBackPanelGeneral);
+            inscriptionArtisanEvent.getTarget().add(containerActions);
             inscriptionArtisanEvent.getTarget().add(containerContactMaster);
-            inscriptionArtisanEvent.getTarget().add(inscrireAnnonceContainer);
-
         }
     }
 
