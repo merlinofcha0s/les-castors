@@ -2,6 +2,7 @@ package fr.batimen.web.selenium;
 
 import static com.ninja_squad.dbsetup.Operations.sequenceOf;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import java.util.concurrent.TimeUnit;
@@ -10,6 +11,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -113,6 +115,21 @@ public class TestAnnonce extends AbstractITTest {
     }
 
     /**
+     * Cas de test : L'utilisateur essaye d'acceder à l'annonce mais n'y arrive
+     * pas car il n'est pas connecté.
+     */
+    @Test
+    public void testAnnonceAffichageRefuseAccessCauseNotOwner() {
+        driver.get(appUrl);
+        connexionApplication("xavier", AbstractITTest.BON_MOT_DE_PASSE, Boolean.TRUE);
+        StringBuilder appUrlAnnonce = new StringBuilder(appUrl);
+        appUrlAnnonce.append(UrlPage.ANNONCE).append("?idAnnonce=").append("toto");
+        driver.get(appUrlAnnonce.toString());
+        assertEquals("OOPS! VOUS N'AVEZ PAS LE DROIT D'ETRE ICI :(",
+                driver.findElement(By.cssSelector("h1.titleAccessDenied")).getText());
+    }
+
+    /**
      * Cas de test : L'utilisateur se rend sur son annonce puis la supprime : la
      * suppression doit se passer correctement
      */
@@ -177,6 +194,36 @@ public class TestAnnonce extends AbstractITTest {
                         .getText());
     }
 
+    /**
+     * Cas de test : L'utilisateur choisi un entreprise qui s'est inscrit a son
+     * annonce.
+     */
+    @Test
+    public void testInscriptionArtisanAnnonce() {
+        connectAndGoToAnnonce(TypeCompte.ARTISAN, "lolmdr");
+        assertCoreInformationOfAnnonce();
+        driver.findElement(By.id("inscrireAnnonce")).click();
+
+        WebElement checkConditionAnnoncePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.presenceOfElementLocated(By
+                        .cssSelector("#inscriptionModal > div.modal-header > #myModalLabel")));
+        assertNotNull(checkConditionAnnoncePresent);
+
+        driver.findElement(
+                By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[6]/div/div[2]/a[1]"))
+                .click();
+
+        Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("span.box_type4"),
+                        "Votre inscription a été prise en compte avec succés"));
+        assertTrue(checkCondition);
+
+        WebElement checkElementEnvoyerDevisPresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.presenceOfElementLocated(By.linkText("Envoyer votre devis")));
+        assertNotNull(checkElementEnvoyerDevisPresent);
+
+    }
+
     public void connectAndGoToAnnonce(TypeCompte typeCompteWanted, String idAnnonce) {
         driver.get(appUrl);
         // On s'authentifie à l'application
@@ -212,8 +259,8 @@ public class TestAnnonce extends AbstractITTest {
                 driver.findElement(By.xpath("//div[@id='containerInformationsAnnonce']/div[4]/div[3]")).getText());
         assertEquals("Email", driver.findElement(By.xpath("//div[@id='containerInformationsAnnonce']/div[5]/div[3]"))
                 .getText());
-        assertEquals("Désactive",
-                driver.findElement(By.xpath("//div[@id='containerInformationsAnnonce']/div[6]/div[3]")).getText());
+        assertEquals("Active", driver.findElement(By.xpath("//div[@id='containerInformationsAnnonce']/div[6]/div[3]"))
+                .getText());
         assertEquals("10/01/2014",
                 driver.findElement(By.xpath("//div[@id='containerInformationsAnnonce']/div[7]/div[3]")).getText());
     }

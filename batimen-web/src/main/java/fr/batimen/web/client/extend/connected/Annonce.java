@@ -3,6 +3,7 @@ package fr.batimen.web.client.extend.connected;
 import java.text.SimpleDateFormat;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.event.Broadcast;
@@ -37,6 +38,7 @@ import fr.batimen.web.client.component.LinkLabel;
 import fr.batimen.web.client.component.Profil;
 import fr.batimen.web.client.event.InscriptionArtisanEvent;
 import fr.batimen.web.client.event.SuppressionOpenEvent;
+import fr.batimen.web.client.extend.error.AccesInterdit;
 import fr.batimen.web.client.extend.member.client.MesAnnonces;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.web.client.modal.InscriptionModal;
@@ -44,10 +46,7 @@ import fr.batimen.web.client.modal.SuppressionModal;
 import fr.batimen.ws.client.service.AnnonceService;
 
 /**
- * TODO : Mettre en place les quatres actions, modifier , supprimer(OK),
- * s'inscrire, envoyer devis <br/>
- * TODO : Rajouter un check si l'artisan est deja inscrit ne pas afficher
- * "s'inscrire a l'annonce"
+ * TODO : Action qui reste : Modifier , Envoyer devis <br/>
  * 
  * @author Casaucau Cyril
  * 
@@ -113,6 +112,10 @@ public class Annonce extends MasterPage {
         }
 
         annonceAffichageDTO = AnnonceService.getAnnonceByIDForAffichage(demandeAnnonceDTO);
+
+        if (annonceAffichageDTO.getAnnonce() == null) {
+            throw new RestartResponseAtInterceptPageException(AccesInterdit.class);
+        }
 
     }
 
@@ -207,6 +210,7 @@ public class Annonce extends MasterPage {
 
         };
 
+        inscrireAnnonce.setOutputMarkupId(true);
         inscrireAnnonce.setMarkupId("inscrireAnnonce");
 
         envoyerDevisContainer = new WebMarkupContainer("envoyerDevisContainer") {
@@ -217,7 +221,7 @@ public class Annonce extends MasterPage {
 
             @Override
             public boolean isVisible() {
-                return !afficherInscrireAnnonce();
+                return afficherEnvoyerDevisAnnonce();
             }
         };
 
@@ -238,6 +242,9 @@ public class Annonce extends MasterPage {
             }
 
         };
+
+        envoyerDevis.setOutputMarkupId(true);
+        envoyerDevis.setMarkupId("envoyerDevis");
 
         modifierAnnonceContainer.add(modifierAnnonce);
         supprimerAnnonceContainer.add(supprimerAnnonce);
@@ -534,7 +541,7 @@ public class Annonce extends MasterPage {
             demandeAnnonceDTO.setLoginDemandeur(userConnected.getLogin());
             Integer codeRetourInscription = AnnonceService.inscriptionUnArtisan(demandeAnnonceDTO);
             if (codeRetourInscription.equals(CodeRetourService.RETOUR_OK)) {
-                feedBackPanelGeneral.success("Inscription prise en compte");
+                feedBackPanelGeneral.success("Votre inscription a été prise en compte avec succés");
             } else if (codeRetourInscription.equals(CodeRetourService.RETOUR_KO)) {
                 feedBackPanelGeneral
                         .error("Problème d'enregistrement avec votre inscription, veuillez réessayer, si le problème persiste");
@@ -556,26 +563,42 @@ public class Annonce extends MasterPage {
     }
 
     /**
+     * Principalement utilisé pour l'affichage des liens dans le menu action
+     * 
+     * Check si l'artisan a le bon role et que l'annonce est active
+     * 
+     * @return true si les verifications sont OK !!
+     */
+    private boolean basicCheckForArtisanLink() {
+        if (!roleUtils.checkRoles(TypeCompte.ARTISAN)) {
+            return false;
+        }
+        if (annonceAffichageDTO.getAnnonce().getEtatAnnonce().equals(EtatAnnonce.ACTIVE)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Check pour savoir si on affiche le lien d'inscription a l'annonce
      * 
      * @return true si le lien doit etre affiché
      */
     private boolean afficherInscrireAnnonce() {
-
-        boolean hasRolesOK = false;
-        boolean isActive = false;
-
-        if (!roleUtils.checkRoles(TypeCompte.ARTISAN)) {
+        if (basicCheckForArtisanLink() && !annonceAffichageDTO.getIsArtisanInscrit()) {
+            return true;
+        } else {
             return false;
         }
+    }
 
-        hasRolesOK = true;
-
-        if (annonceAffichageDTO.getAnnonce().getEtatAnnonce().equals(EtatAnnonce.ACTIVE)) {
-            isActive = true;
-        }
-
-        if (hasRolesOK && !annonceAffichageDTO.getIsArtisanInscrit() && isActive) {
+    /**
+     * Check pour savoir si on affiche le lien d'envoi du devis
+     * 
+     * @return true si le lien doit etre affiché
+     */
+    private boolean afficherEnvoyerDevisAnnonce() {
+        if (basicCheckForArtisanLink() && annonceAffichageDTO.getIsArtisanInscrit()) {
             return true;
         } else {
             return false;

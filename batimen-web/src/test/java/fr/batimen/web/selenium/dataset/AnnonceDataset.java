@@ -12,10 +12,10 @@ public class AnnonceDataset {
                     "typeTravaux", "adressechantier_id", "demandeur_fk", "entreprise_selectionnee_fk",
                     "notationannonce_id")
             .values(200010, "2014-01-10", "2014-01-10", "0",
-                    "Construction compliqué qui necessite des connaissance en geologie", "1", 0,
+                    "Construction compliqué qui necessite des connaissance en geologie", "0", 0,
                     "Installation électrique", 0, 0, "toto", "tata", 0, 200005, 100001, null, null)
             .values(200011, "2014-01-10", "2014-01-10", "0",
-                    "Construction compliqué qui necessite des connaissance en geologie", "1", 0,
+                    "Construction compliqué qui necessite des connaissance en geologie", "0", 0,
                     "Installation électrique", 0, 0, "lolmdr", "tata", 0, 200014, 100001, 200009, 200013).build();
 
     public static final Operation INSERT_ARTISAN_DATA = insertInto("artisan")
@@ -49,6 +49,5 @@ public class AnnonceDataset {
             .columns("typecompte", "artisan_fk").values(3, 200008).build();
 
     public static final Operation INSERT_ANNONCE_ARTISAN = insertInto("annonce_artisan")
-            .columns("annonce_id", "artisans_id", "artisan_id", "annonces_id").values(200010, 200008, 200008, 200010)
-            .build();
+            .columns("annonce_id", "artisans_id").values(200010, 200008).build();
 }

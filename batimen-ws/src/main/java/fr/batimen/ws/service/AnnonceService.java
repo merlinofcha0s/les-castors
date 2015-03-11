@@ -284,7 +284,7 @@ public class AnnonceService {
             return CodeRetourService.ANNONCE_RETOUR_QUOTA_DEVIS_ATTEINT;
         }
 
-        // Si c'est le dernier artisan avant qu'on atteigne le quotas ont change
+        // Si c'est le dernier artisan avant qu'on atteigne le quota, on change
         // l'etat de l'annonce.
         Properties propertiesCastor = PropertiesFileWS.CASTOR.getProperties();
         int nbMaxArtisanParAnnonce = Integer.valueOf(propertiesCastor.getProperty("prop.nb.max.artisan.annonce"));
