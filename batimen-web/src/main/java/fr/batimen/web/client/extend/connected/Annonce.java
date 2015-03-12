@@ -78,11 +78,13 @@ public class Annonce extends MasterPage {
     private RolesUtils roleUtils;
 
     private Label telephone;
+    private Label etatAnnonce;
     private SmartLinkLabel email;
 
     private Model<String> telephoneValue;
     private Model<String> emailValue;
     private Model<String> nomEntrepriseSelectionnee;
+    private Model<String> etatAnnonceValue;
 
     public Annonce() {
         super("", "", "Annonce particulier", true, "img/bg_title1.jpg");
@@ -283,7 +285,11 @@ public class Annonce extends MasterPage {
         SimpleDateFormat sdf = new SimpleDateFormat("DD/MM/yyyy");
         Label dateCreation = new Label("dateCreation", sdf.format(annonceAffichageDTO.getAnnonce().getDateCreation()));
         Label nbConsultation = new Label("nbConsultation", annonceAffichageDTO.getAnnonce().getNbConsultation());
-        Label etatAnnonce = new Label("etatAnnonce", annonceAffichageDTO.getAnnonce().getEtatAnnonce().getType());
+
+        etatAnnonceValue = new Model<String>(annonceAffichageDTO.getAnnonce().getEtatAnnonce().getType());
+
+        etatAnnonce = new Label("etatAnnonce", etatAnnonceValue);
+        etatAnnonce.setMarkupId("etatAnnonce");
         Label typeContact = new Label("typeContact", annonceAffichageDTO.getAnnonce().getTypeContact().getAffichage());
 
         add(description, iconCategorie, categorie, sousCategorie, typeTravaux, delaiIntervention, dateCreation,
@@ -589,6 +595,10 @@ public class Annonce extends MasterPage {
 
             if (codeRetour.equals(CodeRetourService.RETOUR_OK)) {
                 annonceAffichageDTO.setEntrepriseSelectionnee(entreprise);
+                nomEntrepriseSelectionnee.setObject(entreprise.getNomComplet());
+
+                annonceAffichageDTO.getAnnonce().setEtatAnnonce(EtatAnnonce.A_NOTER);
+                etatAnnonceValue.setObject(annonceAffichageDTO.getAnnonce().getEtatAnnonce().getType());
 
                 StringBuilder messageFeedback = new StringBuilder("L'entreprise ");
                 messageFeedback.append(entreprise.getNomComplet());
@@ -600,9 +610,8 @@ public class Annonce extends MasterPage {
 
             // On set le model pour que le nom de l'entreprise soit
             // rafraichi par la requette ajax
-            nomEntrepriseSelectionnee.setObject(entreprise.getNomComplet());
 
-            selectionEntrepriseEvent.getTarget().add(feedBackPanelGeneral, containerEntreprisesGlobales);
+            selectionEntrepriseEvent.getTarget().add(feedBackPanelGeneral, containerEntreprisesGlobales, etatAnnonce);
         }
     }
 
