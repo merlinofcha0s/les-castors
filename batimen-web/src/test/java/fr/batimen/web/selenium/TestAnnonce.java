@@ -164,16 +164,7 @@ public class TestAnnonce extends AbstractITTest {
      */
     @Test
     public void testChoixEntrepriseAnnonceByClient() {
-        connectAndGoToAnnonce(TypeCompte.CLIENT, "toto");
-        assertCoreInformationOfAnnonce();
-        driver.findElement(By.id("linkAcceptDevis")).click();
-        assertEquals("L'entreprise Entreprise de toto a été selectionnée avec succés",
-                driver.findElement(By.cssSelector("span.box_type4")).getText());
-        assertEquals(
-                "ENTREPRISE QUE VOUS AVEZ CHOISI",
-                driver.findElement(
-                        By.cssSelector("#containerEntrepriseSelectionnee > div.row-fluid > div.span12 > div.bg_title > h2.headInModule"))
-                        .getText());
+        testSelectionEntreprise(TypeCompte.CLIENT);
     }
 
     /**
@@ -182,16 +173,7 @@ public class TestAnnonce extends AbstractITTest {
      */
     @Test
     public void testChoixEntrepriseAnnonceByAdmin() {
-        connectAndGoToAnnonce(TypeCompte.ADMINISTRATEUR, "toto");
-        assertCoreInformationOfAnnonce();
-        driver.findElement(By.id("linkAcceptDevis")).click();
-        assertEquals("L'entreprise Entreprise de toto a été selectionnée avec succés",
-                driver.findElement(By.cssSelector("span.box_type4")).getText());
-        assertEquals(
-                "ENTREPRISE QUE VOUS AVEZ CHOISI",
-                driver.findElement(
-                        By.cssSelector("#containerEntrepriseSelectionnee > div.row-fluid > div.span12 > div.bg_title > h2.headInModule"))
-                        .getText());
+        testSelectionEntreprise(TypeCompte.ADMINISTRATEUR);
     }
 
     /**
@@ -263,6 +245,36 @@ public class TestAnnonce extends AbstractITTest {
                 .getText());
         assertEquals("10/01/2014",
                 driver.findElement(By.xpath("//div[@id='containerInformationsAnnonce']/div[7]/div[3]")).getText());
+    }
+
+    private void testSelectionEntreprise(TypeCompte typeCompte) {
+        connectAndGoToAnnonce(typeCompte, "toto");
+        assertCoreInformationOfAnnonce();
+        // Le lien de selection de la premiere entreprise
+        driver.findElement(
+                By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[4]/div/div/div/div[2]/div[2]/a[1]"))
+                .click();
+
+        WebElement checkConditionAnnoncePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.presenceOfElementLocated(By
+                        .cssSelector("#selectionEntrepriseModal > div.modal-header > #myModalLabel")));
+        assertNotNull(checkConditionAnnoncePresent);
+
+        // Le bouton oui de la modal
+        driver.findElement(
+                By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[7]/div/div[2]/a[1]"))
+                .click();
+
+        Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("span.box_type4"),
+                        "L'entreprise Entreprise de toto a été selectionnée avec succés"));
+
+        assertTrue(checkCondition);
+        assertEquals(
+                "ENTREPRISE QUE VOUS AVEZ CHOISI",
+                driver.findElement(
+                        By.cssSelector("#containerEntrepriseSelectionnee > div.row-fluid > div.span12 > div.bg_title > h2.headInModule"))
+                        .getText());
     }
 
 }

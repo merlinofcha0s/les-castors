@@ -37,11 +37,13 @@ import fr.batimen.web.client.component.ContactezNous;
 import fr.batimen.web.client.component.LinkLabel;
 import fr.batimen.web.client.component.Profil;
 import fr.batimen.web.client.event.InscriptionArtisanEvent;
+import fr.batimen.web.client.event.SelectionEntrepriseEvent;
 import fr.batimen.web.client.event.SuppressionOpenEvent;
 import fr.batimen.web.client.extend.error.AccesInterdit;
 import fr.batimen.web.client.extend.member.client.MesAnnonces;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.web.client.modal.InscriptionModal;
+import fr.batimen.web.client.modal.SelectionEntrepriseModal;
 import fr.batimen.web.client.modal.SuppressionModal;
 import fr.batimen.ws.client.service.AnnonceService;
 
@@ -67,6 +69,7 @@ public class Annonce extends MasterPage {
     private WebMarkupContainer envoyerDevisContainer;
 
     private InscriptionModal inscriptionModal;
+    private SelectionEntrepriseModal selectionEntrepriseModal;
 
     private AnnonceAffichageDTO annonceAffichageDTO;
 
@@ -79,6 +82,7 @@ public class Annonce extends MasterPage {
 
     private Model<String> telephoneValue;
     private Model<String> emailValue;
+    private Model<String> nomEntrepriseSelectionnee;
 
     public Annonce() {
         super("", "", "Annonce particulier", true, "img/bg_title1.jpg");
@@ -92,6 +96,7 @@ public class Annonce extends MasterPage {
         updateNbConsultation();
         initComposants();
         initPopupInscription();
+        initPopupSelectionEntreprise();
         initAction();
         affichageDonneesAnnonce();
         affichageEntreprisesInscrites();
@@ -338,31 +343,12 @@ public class Annonce extends MasterPage {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        AnnonceSelectEntrepriseDTO demandeAnnonceSelectionEntreprise = new AnnonceSelectEntrepriseDTO();
-                        demandeAnnonceSelectionEntreprise
-                                .setAjoutOuSupprimeArtisan(AnnonceSelectEntrepriseDTO.AJOUT_ARTISAN);
-                        demandeAnnonceSelectionEntreprise.setHashID(idAnnonce);
-                        demandeAnnonceSelectionEntreprise.setLoginArtisanChoisi(entreprise.getArtisan().getLogin());
-                        demandeAnnonceSelectionEntreprise.setLoginDemandeur(annonceAffichageDTO.getAnnonce()
-                                .getLoginOwner());
-                        Integer codeRetour = AnnonceService.selectOneEnterprise(demandeAnnonceSelectionEntreprise);
-
-                        if (codeRetour.equals(CodeRetourService.RETOUR_OK)) {
-                            annonceAffichageDTO.setEntrepriseSelectionnee(entreprise);
-
-                            StringBuilder messageFeedback = new StringBuilder("L'entreprise ");
-                            messageFeedback.append(entreprise.getNomComplet());
-                            messageFeedback.append(" a été selectionnée avec succés");
-                            feedBackPanelGeneral.success(messageFeedback.toString());
-                        } else {
-                            feedBackPanelGeneral.error("Problème lors de la selection d'une entreprise");
-                        }
-                        target.add(feedBackPanelGeneral, containerEntreprisesGlobales);
+                        selectionEntrepriseModal.open(target, entreprise);
                     }
 
                 };
 
-                linkAcceptDevis.setMarkupId("linkAcceptDevis");
+                linkAcceptDevis.setOutputMarkupId(true);
 
                 AjaxLink<Void> linkRefusDevis = new AjaxLink<Void>("linkRefusDevis") {
 
@@ -420,6 +406,26 @@ public class Annonce extends MasterPage {
         containerEntrepriseSelectionnee.setOutputMarkupId(true);
         containerEntrepriseSelectionnee.setMarkupId("containerEntrepriseSelectionnee");
 
+        if (annonceAffichageDTO.getEntrepriseSelectionnee() != null) {
+            nomEntrepriseSelectionnee = new Model<String>(annonceAffichageDTO.getEntrepriseSelectionnee()
+                    .getNomComplet());
+        } else {
+            nomEntrepriseSelectionnee = new Model<String>("");
+        }
+
+        LinkLabel entrepriseSelectionnee = new LinkLabel("entrepriseSelectionnee", nomEntrepriseSelectionnee) {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onClick() {
+                // TODO : Faire la redirection quand la page d'entreprise sera
+                // prête
+            }
+
+        };
+
+        containerEntrepriseSelectionnee.add(entrepriseSelectionnee);
         containerEntreprisesGlobales.add(containerEntrepriseSelectionnee);
     }
 
@@ -522,6 +528,11 @@ public class Annonce extends MasterPage {
         add(inscriptionModal);
     }
 
+    private void initPopupSelectionEntreprise() {
+        selectionEntrepriseModal = new SelectionEntrepriseModal("selectionEntrepriseModal");
+        add(selectionEntrepriseModal);
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -559,6 +570,36 @@ public class Annonce extends MasterPage {
             inscriptionArtisanEvent.getTarget().add(feedBackPanelGeneral);
             inscriptionArtisanEvent.getTarget().add(containerActions);
             inscriptionArtisanEvent.getTarget().add(containerContactMaster);
+        }
+
+        if (event.getPayload() instanceof SelectionEntrepriseEvent) {
+            SelectionEntrepriseEvent selectionEntrepriseEvent = (SelectionEntrepriseEvent) event.getPayload();
+
+            EntrepriseDTO entreprise = selectionEntrepriseEvent.getEntreprise();
+
+            AnnonceSelectEntrepriseDTO demandeAnnonceSelectionEntreprise = new AnnonceSelectEntrepriseDTO();
+            demandeAnnonceSelectionEntreprise.setAjoutOuSupprimeArtisan(AnnonceSelectEntrepriseDTO.AJOUT_ARTISAN);
+            demandeAnnonceSelectionEntreprise.setHashID(idAnnonce);
+            demandeAnnonceSelectionEntreprise.setLoginArtisanChoisi(entreprise.getArtisan().getLogin());
+            demandeAnnonceSelectionEntreprise.setLoginDemandeur(annonceAffichageDTO.getAnnonce().getLoginOwner());
+            Integer codeRetour = AnnonceService.selectOneEnterprise(demandeAnnonceSelectionEntreprise);
+
+            if (codeRetour.equals(CodeRetourService.RETOUR_OK)) {
+                annonceAffichageDTO.setEntrepriseSelectionnee(entreprise);
+
+                StringBuilder messageFeedback = new StringBuilder("L'entreprise ");
+                messageFeedback.append(entreprise.getNomComplet());
+                messageFeedback.append(" a été selectionnée avec succés");
+                feedBackPanelGeneral.success(messageFeedback.toString());
+            } else {
+                feedBackPanelGeneral.error("Problème lors de la selection d'une entreprise");
+            }
+
+            // On set le model pour que le nom de l'entreprise soit
+            // rafraichi par la requette ajax
+            nomEntrepriseSelectionnee.setObject(entreprise.getNomComplet());
+
+            selectionEntrepriseEvent.getTarget().add(feedBackPanelGeneral, containerEntreprisesGlobales);
         }
     }
 
