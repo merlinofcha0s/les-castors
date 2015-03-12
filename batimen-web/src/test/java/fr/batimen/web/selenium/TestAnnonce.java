@@ -145,7 +145,7 @@ public class TestAnnonce extends AbstractITTest {
     }
 
     /**
-     * Cas de test : L'utilisateur se rend sur son annonce puis la supprime : la
+     * Cas de test : L'admin se rend sur l'annonce puis la supprime : la
      * suppression doit se passer correctement
      */
     @Test
@@ -177,8 +177,7 @@ public class TestAnnonce extends AbstractITTest {
     }
 
     /**
-     * Cas de test : L'utilisateur choisi un entreprise qui s'est inscrit a son
-     * annonce.
+     * Cas de test : Un artisan s'inscrit à l'annonce, tout se passe comme prévu
      */
     @Test
     public void testInscriptionArtisanAnnonce() {

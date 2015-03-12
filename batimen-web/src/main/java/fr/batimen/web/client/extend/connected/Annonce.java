@@ -40,7 +40,7 @@ import fr.batimen.web.client.event.InscriptionArtisanEvent;
 import fr.batimen.web.client.event.SelectionEntrepriseEvent;
 import fr.batimen.web.client.event.SuppressionOpenEvent;
 import fr.batimen.web.client.extend.error.AccesInterdit;
-import fr.batimen.web.client.extend.member.client.MesAnnonces;
+import fr.batimen.web.client.extend.error.NonTrouvee;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.web.client.modal.InscriptionModal;
 import fr.batimen.web.client.modal.SelectionEntrepriseModal;
@@ -57,7 +57,7 @@ public class Annonce extends MasterPage {
 
     private static final long serialVersionUID = -3604005728078066454L;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(MesAnnonces.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Annonce.class);
 
     private String idAnnonce;
     private WebMarkupContainer containerEnteprisesInscrites;
@@ -122,6 +122,9 @@ public class Annonce extends MasterPage {
             throw new RestartResponseAtInterceptPageException(AccesInterdit.class);
         }
 
+        if (annonceAffichageDTO.getAnnonce().getEtatAnnonce().equals(EtatAnnonce.SUPPRIMER)) {
+            throw new RestartResponseAtInterceptPageException(NonTrouvee.class);
+        }
     }
 
     private void initComposants() {
@@ -621,7 +624,7 @@ public class Annonce extends MasterPage {
     }
 
     /**
-     * Check pour savoir si on affiche le lien d'inscription a l'annonce
+     * Check pour savoir si on affiche le lien d'inscription à l'annonce
      * 
      * @return true si le lien doit etre affiché
      */

@@ -6,7 +6,6 @@
   font-family: "font_icons8";
   src: url("./font_icons8.eot");
   src: url("./font_icons8.eot?#iefix") format("embedded-opentype"),
-       url("./font_icons8.woff") format("woff"),
        url("fonts/font_icons8.ttf") format("truetype"),
        url("./font_icons8.svg#font_icons8") format("svg");
   font-weight: normal;

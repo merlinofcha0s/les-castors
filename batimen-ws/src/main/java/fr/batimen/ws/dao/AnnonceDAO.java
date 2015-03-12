@@ -10,6 +10,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.inject.Inject;
 import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -21,8 +22,8 @@ import fr.batimen.core.constant.QueryJPQL;
 import fr.batimen.core.exception.DuplicateEntityException;
 import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
-import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.ws.entity.Annonce;
+import fr.batimen.ws.utils.RolesUtils;
 
 /**
  * Classe d'accés aux données pour les annonces
@@ -35,6 +36,9 @@ import fr.batimen.ws.entity.Annonce;
 public class AnnonceDAO extends AbstractDAO<Annonce> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AnnonceDAO.class);
+
+    @Inject
+    private RolesUtils rolesUtils;
 
     /**
      * Récupère les annonces par login de leurs utilsateurs
@@ -353,10 +357,10 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
         }
         Query query = null;
         try {
-            if (demandeAnnonceDTO.getTypeCompteDemandeur().equals(TypeCompte.CLIENT)) {
+            if (rolesUtils.checkIfClient(demandeAnnonceDTO.getTypeCompteDemandeur())) {
                 query = entityManager.createNamedQuery(QueryJPQL.ANNONCE_SUPRESS_ANNONCE_FOR_CLIENT);
                 query.setParameter(QueryJPQL.PARAM_CLIENT_LOGIN, demandeAnnonceDTO.getLoginDemandeur());
-            } else if (demandeAnnonceDTO.getTypeCompteDemandeur().equals(TypeCompte.ADMINISTRATEUR)) {
+            } else if (rolesUtils.checkIfAdmin(demandeAnnonceDTO.getTypeCompteDemandeur())) {
                 query = entityManager.createNamedQuery(QueryJPQL.ANNONCE_SUPRESS_ANNONCE_FOR_ADMIN);
             }
 

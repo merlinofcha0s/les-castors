@@ -16,6 +16,7 @@ import fr.batimen.web.app.security.RolesUtils;
 import fr.batimen.web.client.component.ModalCastor;
 import fr.batimen.web.client.event.SuppressionCloseEvent;
 import fr.batimen.web.client.event.SuppressionOpenEvent;
+import fr.batimen.web.client.extend.Accueil;
 import fr.batimen.web.client.extend.member.client.MesAnnonces;
 import fr.batimen.ws.client.service.AnnonceService;
 
@@ -88,10 +89,8 @@ public class SuppressionModal extends ModalCastor {
                 } else if (rolesUtils.checkRoles(TypeCompte.ADMINISTRATEUR)) {
                     // TODO Faire la meme chose que pour les clients mais
                     // redirigé vers la page principal admin
+                    this.setResponsePage(Accueil.class);
                 }
-
-                this.setResponsePage(mesAnnonces);
-
                 close(target);
             }
         };

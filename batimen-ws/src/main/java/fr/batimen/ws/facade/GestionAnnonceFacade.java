@@ -404,18 +404,12 @@ public class GestionAnnonceFacade {
 
             if (demandeAnnonceDTO.getAjoutOuSupprimeArtisan() == AnnonceSelectEntrepriseDTO.AJOUT_ARTISAN) {
                 if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("C'est un ajout, on met à jour l'annonce avec l'entreprise choisi");
+                    LOGGER.debug("C'est un ajout, on met à jour l'annonce avec l'entreprise choisi et on change l'état de l'annonce");
                 }
                 annonceToUpdate.setEntrepriseSelectionnee(entrepriseChoisi);
+                annonceToUpdate.setEtatAnnonce(EtatAnnonce.A_NOTER);
                 notificationDAO.createNotificationEntrepriseChoisiParClient(annonceToUpdate);
-                // TODO Envoi de mail
-            } else if (demandeAnnonceDTO.getAjoutOuSupprimeArtisan() == AnnonceSelectEntrepriseDTO.SUPPRESSION_ARTISAN) {
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("C'est une suppression, on met à jour l'annonce avec l'entreprise choisi = null");
-                }
-                annonceToUpdate.setEntrepriseSelectionnee(null);
-                // Ne doit pas être appelé pour le moment, on le laisse au cas
-                // ou.
+                // TODO Envoi de mail de notification
             } else {
                 if (LOGGER.isErrorEnabled()) {
                     LOGGER.error("Ni ajout, ni suppression dans la selection artisan, cas impossible");
