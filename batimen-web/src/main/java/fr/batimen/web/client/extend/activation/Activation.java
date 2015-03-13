@@ -1,5 +1,7 @@
 package fr.batimen.web.client.extend.activation;
 
+import javax.inject.Inject;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -8,7 +10,7 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.web.client.master.MasterPage;
-import fr.batimen.ws.client.service.UtilisateurService;
+import fr.batimen.ws.client.service.UtilisateurServiceREST;
 
 /**
  * Page de l'application qui sert à activer et à informer le client à propos de
@@ -20,6 +22,9 @@ import fr.batimen.ws.client.service.UtilisateurService;
 public class Activation extends MasterPage {
 
     private static final long serialVersionUID = 99813244363266423L;
+
+    @Inject
+    private UtilisateurServiceREST utilisateurServiceREST;
 
     private String cleActivation;
     private final Label messageActivationCompte;
@@ -43,7 +48,7 @@ public class Activation extends MasterPage {
         cleActivation = params.get("key").toString();
         if (!cleActivation.isEmpty()) {
 
-            Integer codeRetourService = UtilisateurService.activateAccount(cleActivation);
+            Integer codeRetourService = utilisateurServiceREST.activateAccount(cleActivation);
 
             if (codeRetourService.equals(CodeRetourService.RETOUR_OK)) {
                 messageActivationCompte.setDefaultModelObject("Votre compte est activé !!");

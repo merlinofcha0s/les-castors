@@ -84,7 +84,7 @@ public class TestActivationCompte extends AbstractITTest {
      */
     @Test
     public void testActivationOK() {
-        driver.get(appUrl + "/activation?key=lolmdr06");
+        driver.get(appUrl + "/activation?key=lolmdr201");
 
         WebElement checkConditionActivationImageOK = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("div.confirmationactivationok")));

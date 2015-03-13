@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -21,7 +23,7 @@ import fr.batimen.web.client.component.NavigationWizard;
 import fr.batimen.web.client.event.MapFranceEvent;
 import fr.batimen.web.client.extend.nouveau.artisan.event.ChangementEtapeEventArtisan;
 import fr.batimen.web.client.master.MasterPage;
-import fr.batimen.ws.client.service.ArtisanService;
+import fr.batimen.ws.client.service.ArtisanServiceREST;
 
 /**
  * Page permettant d'enregistré un nouveau partenaire (artisan)
@@ -33,6 +35,9 @@ public class NouveauArtisan extends MasterPage {
 
     private static final long serialVersionUID = 7796768527786855832L;
     private static final Logger LOGGER = LoggerFactory.getLogger(NouveauArtisan.class);
+
+    @Inject
+    private ArtisanServiceREST artisanServiceREST;
 
     // DTO
     private CreationPartenaireDTO nouveauPartenaire = new CreationPartenaireDTO();
@@ -231,7 +236,7 @@ public class NouveauArtisan extends MasterPage {
     }
 
     private Integer creationPartenaire(CreationPartenaireDTO nouveauPartenaire) {
-        return ArtisanService.creationNouveauPartenaire(nouveauPartenaire);
+        return artisanServiceREST.creationNouveauPartenaire(nouveauPartenaire);
     }
 
     /*

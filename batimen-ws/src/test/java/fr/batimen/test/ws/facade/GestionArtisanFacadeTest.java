@@ -19,8 +19,7 @@ import fr.batimen.dto.enums.StatutJuridique;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.test.ws.AbstractBatimenWsTest;
-import fr.batimen.ws.client.service.ArtisanService;
-import fr.batimen.ws.dao.AdresseDAO;
+import fr.batimen.ws.client.service.ArtisanServiceREST;
 import fr.batimen.ws.dao.ArtisanDAO;
 import fr.batimen.ws.dao.EntrepriseDAO;
 import fr.batimen.ws.entity.Adresse;
@@ -37,7 +36,7 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
     private EntrepriseDAO entrepriseDAO;
 
     @Inject
-    private AdresseDAO adresseDAO;
+    private ArtisanServiceREST artisanServiceREST;
 
     @Test
     public void nouveauPartenaireTestNominal() {
@@ -77,7 +76,7 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
 
         nouveauPartenaire.getEntreprise().setStatutJuridique(StatutJuridique.SARL);
 
-        Integer retourService = ArtisanService.creationNouveauPartenaire(nouveauPartenaire);
+        Integer retourService = artisanServiceREST.creationNouveauPartenaire(nouveauPartenaire);
 
         Assert.assertNotNull(retourService);
         Assert.assertEquals(CodeRetourService.RETOUR_OK, retourService);

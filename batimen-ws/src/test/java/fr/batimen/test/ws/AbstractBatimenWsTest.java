@@ -33,11 +33,24 @@ public abstract class AbstractBatimenWsTest {
         WebArchive batimenWsTest = ShrinkWrap.create(WebArchive.class, "batimen-ws-test.war");
 
         // Ajout des dépendences
-        batimenWsTest.addPackages(true, "fr/batimen/ws").addPackages(true, "fr/batimen/test/ws")
-                .addAsLibraries(resolver.loadPomFromFile("pom.xml").importCompileAndRuntimeDependencies()
-                // Seul dependence a specifier car elle ne fait pas partie du
-                // pom ws
-                        .resolve("fr.batimen.app:batimen-client").withTransitivity().asFile());
+        batimenWsTest
+                .addPackages(true, "fr/batimen/ws/dao")
+                .addPackages(true, "fr/batimen/ws/entity")
+                .addPackages(true, "fr/batimen/ws/enums")
+                .addPackages(true, "fr/batimen/ws/facade")
+                .addPackages(true, "fr/batimen/ws/helper")
+                .addPackages(true, "fr/batimen/ws/interceptor")
+                .addPackages(true, "fr/batimen/ws/quartz")
+                .addPackages(true, "fr/batimen/ws/service")
+                .addPackages(true, "fr/batimen/ws/utils")
+                .addPackages(true, "fr/batimen/ws/quartz")
+                .addPackages(true, "fr/batimen/test/ws")
+                .addAsLibraries(
+                        resolver.loadPomFromFile("pom.xml").importCompileAndRuntimeDependencies()
+                                .resolve("fr.batimen.app:batimen-client").withTransitivity().asFile());
+        // Seul dependence a specifier car elle ne fait pas partie du
+        // pom ws
+        //
 
         // Ajout des ressources
         batimenWsTest.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")

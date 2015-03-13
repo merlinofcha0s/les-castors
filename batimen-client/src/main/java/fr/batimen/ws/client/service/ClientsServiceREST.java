@@ -1,5 +1,9 @@
 package fr.batimen.ws.client.service;
 
+import java.io.Serializable;
+
+import javax.inject.Named;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,15 +18,14 @@ import fr.batimen.ws.client.WsConnector;
  * @author Casaucau Cyril
  * 
  */
-public class ClientsService {
+@Named("clientsServiceREST")
+public class ClientsServiceREST implements Serializable {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ClientsService.class);
+    private static final long serialVersionUID = -8930750826494454672L;
 
-    private ClientsService() {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ClientsServiceREST.class);
 
-    }
-
-    public static MesAnnoncesDTO getMesInfosAnnonce(String login) {
+    public MesAnnoncesDTO getMesInfosAnnonce(String login) {
         MesAnnoncesDTO mesDevis = null;
 
         if (LOGGER.isDebugEnabled()) {
@@ -41,7 +44,7 @@ public class ClientsService {
         return mesDevis;
     }
 
-    public static MonProfilDTO getMesInfosForMonProfil(String login) {
+    public MonProfilDTO getMesInfosForMonProfil(String login) {
         MonProfilDTO monProfilDTO = null;
 
         if (LOGGER.isDebugEnabled()) {

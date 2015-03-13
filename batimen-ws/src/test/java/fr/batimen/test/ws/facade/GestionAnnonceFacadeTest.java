@@ -26,7 +26,7 @@ import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.enums.TypeNotification;
 import fr.batimen.test.ws.AbstractBatimenWsTest;
 import fr.batimen.test.ws.helper.DataHelper;
-import fr.batimen.ws.client.service.AnnonceService;
+import fr.batimen.ws.client.service.AnnonceServiceREST;
 import fr.batimen.ws.dao.AnnonceDAO;
 import fr.batimen.ws.dao.ArtisanDAO;
 import fr.batimen.ws.dao.ClientDAO;
@@ -55,6 +55,9 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
     @Inject
     private ArtisanDAO artisanDAO;
+
+    @Inject
+    private AnnonceServiceREST annonceServiceREST;
 
     @Before
     public void init() {
@@ -100,7 +103,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @Test
     public void testCreationAnnonceDuplicata() {
         creationVerificationAnnonce();
-        Integer isCreationOK = AnnonceService.creationAnnonce(creationAnnonceDTO);
+        Integer isCreationOK = annonceServiceREST.creationAnnonce(creationAnnonceDTO);
         // Le service doit remonter une erreur
         Assert.assertTrue(isCreationOK == CodeRetourService.ANNONCE_RETOUR_DUPLICATE);
     }
@@ -113,7 +116,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @Test
     @UsingDataSet("datasets/in/annonces.yml")
     public void testGetAnnonceByLogin() {
-        List<AnnonceDTO> annonces = AnnonceService.getAnnonceByLoginForClient("pebronne");
+        List<AnnonceDTO> annonces = annonceServiceREST.getAnnonceByLoginForClient("pebronne");
         Assert.assertEquals(2, annonces.size());
 
     }
@@ -129,7 +132,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
                 "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
                 "pebronne", TypeCompte.CLIENT);
 
-        AnnonceAffichageDTO annonceAffichage = AnnonceService.getAnnonceByIDForAffichage(demandeAnnonceDTO);
+        AnnonceAffichageDTO annonceAffichage = annonceServiceREST.getAnnonceByIDForAffichage(demandeAnnonceDTO);
         Assert.assertNotNull(annonceAffichage);
         Assert.assertNotNull(annonceAffichage.getAnnonce().getDescription());
         Assert.assertNotNull(annonceAffichage.getAnnonce().getDateCreation());
@@ -154,7 +157,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
                 "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
                 "pebronArtisanPasInsc", TypeCompte.ARTISAN);
 
-        AnnonceAffichageDTO annonceAffichage = AnnonceService.getAnnonceByIDForAffichage(demandeAnnonceDTO);
+        AnnonceAffichageDTO annonceAffichage = annonceServiceREST.getAnnonceByIDForAffichage(demandeAnnonceDTO);
         Assert.assertNotNull(annonceAffichage);
         Assert.assertFalse(annonceAffichage.getIsArtisanInscrit());
         Assert.assertNotNull(annonceAffichage.getAnnonce().getDescription());
@@ -176,7 +179,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
                 "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
                 "pebronneArtisanne", TypeCompte.ARTISAN);
 
-        AnnonceAffichageDTO annonceAffichage = AnnonceService.getAnnonceByIDForAffichage(demandeAnnonceDTO);
+        AnnonceAffichageDTO annonceAffichage = annonceServiceREST.getAnnonceByIDForAffichage(demandeAnnonceDTO);
         Assert.assertNotNull(annonceAffichage);
         Assert.assertTrue(annonceAffichage.getIsArtisanInscrit());
         Assert.assertNotNull(annonceAffichage.getAnnonce().getDescription());
@@ -199,7 +202,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
                 .setHashID("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
         nbConsultationDTO.setNbConsultation(1);
 
-        Integer updateOK = AnnonceService.updateNbConsultationAnnonce(nbConsultationDTO);
+        Integer updateOK = annonceServiceREST.updateNbConsultationAnnonce(nbConsultationDTO);
 
         Assert.assertEquals(CodeRetourService.RETOUR_OK, updateOK);
 
@@ -224,7 +227,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         demandeAnnonceDTO.setLoginDemandeur("pebronne");
         demandeAnnonceDTO.setTypeCompteDemandeur(TypeCompte.CLIENT);
 
-        Integer updateOK = AnnonceService.suppressionAnnonce(demandeAnnonceDTO);
+        Integer updateOK = annonceServiceREST.suppressionAnnonce(demandeAnnonceDTO);
 
         Assert.assertEquals(CodeRetourService.RETOUR_OK, updateOK);
 
@@ -252,7 +255,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         demandeAnnonceDTO.setLoginDemandeur("pebronnelol");
         demandeAnnonceDTO.setTypeCompteDemandeur(TypeCompte.CLIENT);
 
-        Integer updateKO = AnnonceService.suppressionAnnonce(demandeAnnonceDTO);
+        Integer updateKO = annonceServiceREST.suppressionAnnonce(demandeAnnonceDTO);
 
         Assert.assertEquals(CodeRetourService.RETOUR_KO, updateKO);
 
@@ -278,7 +281,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         demandeAnnonceDTO.setLoginDemandeur("admin");
         demandeAnnonceDTO.setTypeCompteDemandeur(TypeCompte.ADMINISTRATEUR);
 
-        Integer updateOK = AnnonceService.suppressionAnnonce(demandeAnnonceDTO);
+        Integer updateOK = annonceServiceREST.suppressionAnnonce(demandeAnnonceDTO);
 
         Assert.assertEquals(CodeRetourService.RETOUR_OK, updateOK);
 
@@ -304,7 +307,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         demandeAnnonceDTO.setLoginArtisanChoisi("pebronneChoisi");
         demandeAnnonceDTO.setAjoutOuSupprimeArtisan(AnnonceSelectEntrepriseDTO.AJOUT_ARTISAN);
 
-        Integer updateOK = AnnonceService.selectOneEnterprise(demandeAnnonceDTO);
+        Integer updateOK = annonceServiceREST.selectOneEnterprise(demandeAnnonceDTO);
 
         Assert.assertEquals(CodeRetourService.RETOUR_OK, updateOK);
 
@@ -325,7 +328,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         demandeAnnonceDTO.setLoginArtisanChoisi("pebronneChoisi");
         demandeAnnonceDTO.setAjoutOuSupprimeArtisan(AnnonceSelectEntrepriseDTO.AJOUT_ARTISAN);
 
-        Integer updateOK = AnnonceService.selectOneEnterprise(demandeAnnonceDTO);
+        Integer updateOK = annonceServiceREST.selectOneEnterprise(demandeAnnonceDTO);
 
         Assert.assertEquals(CodeRetourService.RETOUR_OK, updateOK);
 
@@ -348,7 +351,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         demandeAnnonceDTO.setLoginArtisanChoisi("pebronneChoisi");
         demandeAnnonceDTO.setAjoutOuSupprimeArtisan(AnnonceSelectEntrepriseDTO.AJOUT_ARTISAN);
 
-        Integer updateKO = AnnonceService.selectOneEnterprise(demandeAnnonceDTO);
+        Integer updateKO = annonceServiceREST.selectOneEnterprise(demandeAnnonceDTO);
 
         Assert.assertEquals(CodeRetourService.RETOUR_KO, updateKO);
 
@@ -370,7 +373,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
                 "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
                 loginArtisan, TypeCompte.ARTISAN);
 
-        Integer codeRetour = AnnonceService.inscriptionUnArtisan(demandeAnnonceDTO);
+        Integer codeRetour = annonceServiceREST.inscriptionUnArtisan(demandeAnnonceDTO);
 
         Assert.assertEquals(CodeRetourService.RETOUR_OK, codeRetour);
 
@@ -423,10 +426,10 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
         DemandeAnnonceDTO demandeAnnonceDTO = initAndGetDemandeAnnonceDTO("lolmdrp", loginArtisan, TypeCompte.ARTISAN);
 
-        Integer codeRetourOK = AnnonceService.inscriptionUnArtisan(demandeAnnonceDTO);
+        Integer codeRetourOK = annonceServiceREST.inscriptionUnArtisan(demandeAnnonceDTO);
         Assert.assertEquals(CodeRetourService.RETOUR_OK, codeRetourOK);
 
-        Integer codeRetourDejaInscrit = AnnonceService.inscriptionUnArtisan(demandeAnnonceDTO);
+        Integer codeRetourDejaInscrit = annonceServiceREST.inscriptionUnArtisan(demandeAnnonceDTO);
         Assert.assertEquals(CodeRetourService.ANNONCE_RETOUR_ARTISAN_DEJA_INSCRIT, codeRetourDejaInscrit);
     }
 
@@ -446,7 +449,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
                 "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
                 loginArtisan, TypeCompte.ARTISAN);
 
-        Integer codeRetourOK = AnnonceService.inscriptionUnArtisan(demandeAnnonceDTO);
+        Integer codeRetourOK = annonceServiceREST.inscriptionUnArtisan(demandeAnnonceDTO);
 
         Assert.assertEquals(CodeRetourService.RETOUR_OK, codeRetourOK);
 
@@ -471,7 +474,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
         DemandeAnnonceDTO demandeAnnonceDTO = initAndGetDemandeAnnonceDTO("toto", loginArtisan, TypeCompte.ARTISAN);
 
-        Integer codeRetourKO = AnnonceService.inscriptionUnArtisan(demandeAnnonceDTO);
+        Integer codeRetourKO = annonceServiceREST.inscriptionUnArtisan(demandeAnnonceDTO);
 
         Assert.assertEquals(CodeRetourService.RETOUR_KO, codeRetourKO);
     }
@@ -514,7 +517,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
     private void creationVerificationAnnonce() {
         String loginDeJohnny = "johnny06";
-        Integer isCreationOK = AnnonceService.creationAnnonce(creationAnnonceDTO);
+        Integer isCreationOK = annonceServiceREST.creationAnnonce(creationAnnonceDTO);
 
         // On utilise le DAO de l'annonce et de l'user pour vérifier le tout
         Client johnny = clientDAO.getClientByLoginName(loginDeJohnny);

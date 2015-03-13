@@ -1,5 +1,9 @@
 package fr.batimen.ws.client.service;
 
+import java.io.Serializable;
+
+import javax.inject.Named;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -16,13 +20,12 @@ import fr.batimen.ws.client.WsConnector;
  * @author Casaucau Cyril
  * 
  */
-public class UtilisateurService {
+@Named("utilisateurServiceREST")
+public class UtilisateurServiceREST implements Serializable {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UtilisateurService.class);
+    private static final long serialVersionUID = 8722133810649462157L;
 
-    private UtilisateurService() {
-
-    }
+    private static final Logger LOGGER = LoggerFactory.getLogger(UtilisateurServiceREST.class);
 
     /**
      * Verification nom utilisateur / mdp
@@ -31,7 +34,7 @@ public class UtilisateurService {
      *            l'objet d'échange pour verifier les données.
      * @return true si le couple login / mdp correspond.
      */
-    public static ClientDTO login(LoginDTO loginDTO) {
+    public ClientDTO login(LoginDTO loginDTO) {
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Début appel service login + deserialization");
@@ -56,7 +59,7 @@ public class UtilisateurService {
      *            L'email du client
      * @return Les informations du client, vide si il n'existe pas.
      */
-    public static ClientDTO getUtilisateurByEmail(String email) {
+    public ClientDTO getUtilisateurByEmail(String email) {
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Début appel service de recuperation client par email + deserialization");
@@ -74,7 +77,7 @@ public class UtilisateurService {
         return clientDTO;
     }
 
-    public static int activateAccount(String cleActivation) {
+    public int activateAccount(String cleActivation) {
 
         int resultatService;
 
@@ -94,7 +97,7 @@ public class UtilisateurService {
         return resultatService;
     }
 
-    public static String getHashByLogin(String login) {
+    public String getHashByLogin(String login) {
 
         String hash = "";
 
@@ -121,7 +124,7 @@ public class UtilisateurService {
      *            DTO contenant les informations
      * @return code retour @see {@link Constant}
      */
-    public static Integer updateUtilisateurInfos(ClientDTO utilisateurToUpdate) {
+    public Integer updateUtilisateurInfos(ClientDTO utilisateurToUpdate) {
         Integer codeRetour;
 
         if (LOGGER.isDebugEnabled()) {
@@ -140,7 +143,7 @@ public class UtilisateurService {
         return codeRetour;
     }
 
-    public static String getRolesByLogin(String login) {
+    public String getRolesByLogin(String login) {
         String roles = "";
 
         if (LOGGER.isDebugEnabled()) {

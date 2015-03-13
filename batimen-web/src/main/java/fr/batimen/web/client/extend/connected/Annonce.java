@@ -2,6 +2,8 @@ package fr.batimen.web.client.extend.connected;
 
 import java.text.SimpleDateFormat;
 
+import javax.inject.Inject;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -45,7 +47,7 @@ import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.web.client.modal.InscriptionModal;
 import fr.batimen.web.client.modal.SelectionEntrepriseModal;
 import fr.batimen.web.client.modal.SuppressionModal;
-import fr.batimen.ws.client.service.AnnonceService;
+import fr.batimen.ws.client.service.AnnonceServiceREST;
 
 /**
  * TODO : Action qui reste : Modifier , Envoyer devis <br/>
@@ -58,6 +60,12 @@ public class Annonce extends MasterPage {
     private static final long serialVersionUID = -3604005728078066454L;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Annonce.class);
+
+    @Inject
+    private AnnonceServiceREST annonceServiceREST;
+
+    @Inject
+    private Authentication authentication;
 
     private String idAnnonce;
     private WebMarkupContainer containerEnteprisesInscrites;
@@ -108,7 +116,6 @@ public class Annonce extends MasterPage {
     }
 
     private void loadAnnonceInfos(String idAnnonce) {
-        Authentication authentication = new Authentication();
         userConnected = authentication.getCurrentUserInfo();
         DemandeAnnonceDTO demandeAnnonceDTO = new DemandeAnnonceDTO();
         demandeAnnonceDTO.setHashID(idAnnonce.toString());
@@ -118,7 +125,7 @@ public class Annonce extends MasterPage {
             demandeAnnonceDTO.setTypeCompteDemandeur(permissionDTO.getTypeCompte());
         }
 
-        annonceAffichageDTO = AnnonceService.getAnnonceByIDForAffichage(demandeAnnonceDTO);
+        annonceAffichageDTO = annonceServiceREST.getAnnonceByIDForAffichage(demandeAnnonceDTO);
 
         if (annonceAffichageDTO.getAnnonce() == null) {
             throw new RestartResponseAtInterceptPageException(AccesInterdit.class);
@@ -521,7 +528,7 @@ public class Annonce extends MasterPage {
             NbConsultationDTO nbConsultationDTO = new NbConsultationDTO();
             nbConsultationDTO.setHashID(idAnnonce);
             nbConsultationDTO.setNbConsultation(annonceAffichageDTO.getAnnonce().getNbConsultation());
-            AnnonceService.updateNbConsultationAnnonce(nbConsultationDTO);
+            annonceServiceREST.updateNbConsultationAnnonce(nbConsultationDTO);
             annonceAffichageDTO.getAnnonce().setNbConsultation(nbConsultationDTO.getNbConsultation() + 1);
         }
     }
@@ -559,7 +566,7 @@ public class Annonce extends MasterPage {
             DemandeAnnonceDTO demandeAnnonceDTO = new DemandeAnnonceDTO();
             demandeAnnonceDTO.setHashID(idAnnonce);
             demandeAnnonceDTO.setLoginDemandeur(userConnected.getLogin());
-            Integer codeRetourInscription = AnnonceService.inscriptionUnArtisan(demandeAnnonceDTO);
+            Integer codeRetourInscription = annonceServiceREST.inscriptionUnArtisan(demandeAnnonceDTO);
             if (codeRetourInscription.equals(CodeRetourService.RETOUR_OK)) {
                 feedBackPanelGeneral.success("Votre inscription a été prise en compte avec succés");
             } else if (codeRetourInscription.equals(CodeRetourService.RETOUR_KO)) {
@@ -591,7 +598,7 @@ public class Annonce extends MasterPage {
             demandeAnnonceSelectionEntreprise.setHashID(idAnnonce);
             demandeAnnonceSelectionEntreprise.setLoginArtisanChoisi(entreprise.getArtisan().getLogin());
             demandeAnnonceSelectionEntreprise.setLoginDemandeur(annonceAffichageDTO.getAnnonce().getLoginOwner());
-            Integer codeRetour = AnnonceService.selectOneEnterprise(demandeAnnonceSelectionEntreprise);
+            Integer codeRetour = annonceServiceREST.selectOneEnterprise(demandeAnnonceSelectionEntreprise);
 
             if (codeRetour.equals(CodeRetourService.RETOUR_OK)) {
                 annonceAffichageDTO.setEntrepriseSelectionnee(entreprise);

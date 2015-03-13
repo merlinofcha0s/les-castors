@@ -1,5 +1,9 @@
 package fr.batimen.ws.client.service;
 
+import java.io.Serializable;
+
+import javax.inject.Named;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,13 +18,12 @@ import fr.batimen.ws.client.WsConnector;
  * @author Casaucau Cyril
  * 
  */
-public class ArtisanService {
+@Named("artisanServiceREST")
+public class ArtisanServiceREST implements Serializable {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ArtisanService.class);
+    private static final long serialVersionUID = -1941230690072232687L;
 
-    private ArtisanService() {
-
-    }
+    private static final Logger LOGGER = LoggerFactory.getLogger(ArtisanServiceREST.class);
 
     /**
      * Crée un nouvel artisan / partenaire, son entreprise, etc
@@ -31,7 +34,7 @@ public class ArtisanService {
      * @return Voir la classe {@link Constant} pour les retours possibles du
      *         service
      */
-    public static Integer creationNouveauPartenaire(CreationPartenaireDTO nouveauPartenaire) {
+    public Integer creationNouveauPartenaire(CreationPartenaireDTO nouveauPartenaire) {
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Début appel service nouveau partenaire + deserialization");

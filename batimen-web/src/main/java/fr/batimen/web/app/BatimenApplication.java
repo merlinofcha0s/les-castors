@@ -2,9 +2,15 @@ package fr.batimen.web.app;
 
 import java.util.Properties;
 
+import javax.enterprise.inject.spi.BeanManager;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
 import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
+import org.apache.wicket.cdi.CdiConfiguration;
+import org.apache.wicket.cdi.ConversationPropagation;
 import org.apache.wicket.core.request.mapper.MountedMapper;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.Request;
@@ -112,6 +118,21 @@ public class BatimenApplication extends AuthenticatedWebApplication {
         getApplicationSettings().setInternalErrorPage(ErreurInterne.class);
         getApplicationSettings().setAccessDeniedPage(AccesInterdit.class);
         getApplicationSettings().setPageExpiredErrorPage(Expiree.class);
+
+        // Init de CDI (Wicket)
+        BeanManager manager = null;
+        try {
+            // Recuperation du context via le serveur d'application
+            manager = (BeanManager) new InitialContext().lookup("java:comp/BeanManager");
+        } catch (NamingException e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error(
+                        "Impossible de récuperer le context bean manager : java:comp/BeanManager pour l'init de CDI", e);
+            }
+        }
+
+        // Configuration de CDI en enlevant le mode conversation
+        new CdiConfiguration(manager).setPropagation(ConversationPropagation.NONE).configure(this);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Init de la Web app.....OK");

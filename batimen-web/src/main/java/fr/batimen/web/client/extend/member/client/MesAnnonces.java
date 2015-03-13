@@ -3,6 +3,8 @@ package fr.batimen.web.client.extend.member.client;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -26,7 +28,7 @@ import fr.batimen.web.client.component.LinkLabel;
 import fr.batimen.web.client.component.Profil;
 import fr.batimen.web.client.extend.connected.Annonce;
 import fr.batimen.web.client.master.MasterPage;
-import fr.batimen.ws.client.service.ClientsService;
+import fr.batimen.ws.client.service.ClientsServiceREST;
 
 /**
  * Page ou l'utilisateur pourra consulter son compte ainsi que l'avancement de
@@ -41,6 +43,12 @@ public final class MesAnnonces extends MasterPage {
     private static final long serialVersionUID = 1902734649854998120L;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MesAnnonces.class);
+
+    @Inject
+    private ClientsServiceREST clientsServiceREST;
+
+    @Inject
+    private Authentication authentication;
 
     private List<AnnonceDTO> annonces;
     private List<NotificationDTO> notifications;
@@ -210,10 +218,7 @@ public final class MesAnnonces extends MasterPage {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Appel webservice pour la récupération des données a afficher");
         }
-
-        Authentication authentication = new Authentication();
-
-        MesAnnoncesDTO mesInfos = ClientsService.getMesInfosAnnonce(authentication.getCurrentUserInfo().getLogin());
+        MesAnnoncesDTO mesInfos = clientsServiceREST.getMesInfosAnnonce(authentication.getCurrentUserInfo().getLogin());
 
         annonces = mesInfos.getAnnonces();
         notifications = mesInfos.getNotifications();

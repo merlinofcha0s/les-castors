@@ -1,5 +1,7 @@
 package fr.batimen.web.client.extend.nouveau.devis;
 
+import javax.inject.Inject;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.event.Broadcast;
@@ -23,6 +25,7 @@ import fr.batimen.core.security.HashHelper;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.web.app.security.Authentication;
+import fr.batimen.web.app.utils.ProgrammaticBeanLookup;
 import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.batimen.web.client.component.BatimenToolTip;
@@ -34,7 +37,7 @@ import fr.batimen.web.client.validator.ChangePasswordValidator;
 import fr.batimen.web.client.validator.CheckBoxTrueValidator;
 import fr.batimen.web.client.validator.EmailUniquenessValidator;
 import fr.batimen.web.client.validator.LoginUniquenessValidator;
-import fr.batimen.ws.client.service.UtilisateurService;
+import fr.batimen.ws.client.service.UtilisateurServiceREST;
 
 /**
  * Form de l'etape 4 de création d'annonce.
@@ -45,6 +48,12 @@ import fr.batimen.ws.client.service.UtilisateurService;
 public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
 
     private static final long serialVersionUID = 2500892594731116597L;
+
+    @Inject
+    private UtilisateurServiceREST utilisateurServiceREST;
+
+    @Inject
+    private Authentication authentication;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ModifierMonProfil.class);
 
@@ -92,7 +101,11 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
         emailField.add(new RequiredBorderBehaviour());
         emailField.add(new ErrorHighlightBehavior());
         emailField.add(EmailAddressValidator.getInstance());
-        emailField.add(new EmailUniquenessValidator());
+
+        EmailUniquenessValidator emailUniquenessValidator = (EmailUniquenessValidator) ProgrammaticBeanLookup
+                .lookup("emailUniquenessValidator");
+
+        emailField.add(emailUniquenessValidator);
 
         loginField = new TextField<String>("client.login");
         loginField.setMarkupId("login");
@@ -101,7 +114,11 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
         loginField.add(new ErrorHighlightBehavior());
         loginField.add(StringValidator.lengthBetween(ValidatorConstant.CLIENT_LOGIN_RANGE_MIN,
                 ValidatorConstant.CLIENT_LOGIN_RANGE_MAX));
-        loginField.add(new LoginUniquenessValidator());
+
+        LoginUniquenessValidator loginUniquenessValidator = (LoginUniquenessValidator) ProgrammaticBeanLookup
+                .lookup("loginUniquenessValidator");
+
+        loginField.add(loginUniquenessValidator);
 
         passwordField = new PasswordTextField("client.password");
         passwordField.add(StringValidator.lengthBetween(ValidatorConstant.PASSWORD_RANGE_MIN,
@@ -248,7 +265,6 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
         // Si l'utilisateur veut modifier son mot de passe (pas
         // besoin de reverifier tout les champs, le validateur l'a
         // deja fait)
-        Authentication authentication = new Authentication();
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Modification des données de l'utilisateur : "
                     + authentication.getCurrentUserInfo().getLogin());
@@ -297,7 +313,7 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
                 LOGGER.debug("Les données et le champs requis sont valides, on appel le webservice pour enregistrer les données");
             }
             // Call ws service pour la mise a jour des données.
-            Integer codeRetour = UtilisateurService.updateUtilisateurInfos(nouvelleAnnonce.getClient());
+            Integer codeRetour = utilisateurServiceREST.updateUtilisateurInfos(nouvelleAnnonce.getClient());
 
             if (codeRetour.equals(CodeRetourService.RETOUR_OK)) {
                 // Si tout est ok setter les infos du client dto

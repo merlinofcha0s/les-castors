@@ -22,6 +22,7 @@ import fr.batimen.dto.aggregate.CreationPartenaireDTO;
 import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.dto.enums.Civilite;
 import fr.batimen.dto.enums.TypeCompte;
+import fr.batimen.web.app.utils.ProgrammaticBeanLookup;
 import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
@@ -79,7 +80,11 @@ public class Etape2PartenaireForm extends Form<CreationPartenaireDTO> {
         email.setRequired(true);
         email.setMarkupId("emailField");
         email.add(EmailAddressValidator.getInstance());
-        email.add(new EmailUniquenessValidator());
+
+        EmailUniquenessValidator emailUniquenessValidator = (EmailUniquenessValidator) ProgrammaticBeanLookup
+                .lookup("emailUniquenessValidator");
+
+        email.add(emailUniquenessValidator);
         email.add(new ErrorHighlightBehavior());
         email.add(new RequiredBorderBehaviour());
 
@@ -90,7 +95,11 @@ public class Etape2PartenaireForm extends Form<CreationPartenaireDTO> {
                 ValidatorConstant.CLIENT_LOGIN_RANGE_MAX));
         identifiant.add(new ErrorHighlightBehavior());
         identifiant.add(new RequiredBorderBehaviour());
-        identifiant.add(new LoginUniquenessValidator());
+
+        LoginUniquenessValidator loginUniquenessValidator = (LoginUniquenessValidator) ProgrammaticBeanLookup
+                .lookup("loginUniquenessValidator");
+
+        identifiant.add(loginUniquenessValidator);
 
         PasswordTextField passwordField = new PasswordTextField("artisan.password");
         passwordField.setMarkupId("password");

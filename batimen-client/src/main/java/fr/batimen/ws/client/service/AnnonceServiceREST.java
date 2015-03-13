@@ -1,6 +1,9 @@
 package fr.batimen.ws.client.service;
 
+import java.io.Serializable;
 import java.util.List;
+
+import javax.inject.Named;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,13 +23,12 @@ import fr.batimen.ws.client.WsConnector;
  * @author Casaucau Cyril
  * 
  */
-public class AnnonceService {
+@Named("annonceServiceREST")
+public class AnnonceServiceREST implements Serializable {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(AnnonceService.class);
+    private static final long serialVersionUID = -7223646076633068466L;
 
-    private AnnonceService() {
-
-    }
+    private static final Logger LOGGER = LoggerFactory.getLogger(AnnonceServiceREST.class);
 
     /**
      * Appel le webservice pour creer l'annonce.
@@ -37,7 +39,7 @@ public class AnnonceService {
      * @return Constant.CODE_SERVICE_RETOUR_OK ou
      *         Constant.CODE_SERVICE_RETOUR_KO
      */
-    public static Integer creationAnnonce(CreationAnnonceDTO nouvelleAnnonce) {
+    public Integer creationAnnonce(CreationAnnonceDTO nouvelleAnnonce) {
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Début appel service creation annonce.....");
@@ -62,7 +64,7 @@ public class AnnonceService {
      *            L'identifiant du client
      * @return
      */
-    public static List<AnnonceDTO> getAnnonceByLoginForClient(String login) {
+    public List<AnnonceDTO> getAnnonceByLoginForClient(String login) {
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Début appel service creation annonce.....");
@@ -91,7 +93,7 @@ public class AnnonceService {
      * @return l'ensemble des informations qui permettent d'afficher l'annonce
      *         correctement
      */
-    public static AnnonceAffichageDTO getAnnonceByIDForAffichage(DemandeAnnonceDTO demandeAnnonceDTO) {
+    public AnnonceAffichageDTO getAnnonceByIDForAffichage(DemandeAnnonceDTO demandeAnnonceDTO) {
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Début appel service creation annonce.....");
@@ -116,7 +118,7 @@ public class AnnonceService {
      *            le hashID avec le nb de consultation
      * @return 0 si c'est OK
      */
-    public static Integer updateNbConsultationAnnonce(NbConsultationDTO nbConsultationDTO) {
+    public Integer updateNbConsultationAnnonce(NbConsultationDTO nbConsultationDTO) {
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Début appel service update nb consultation.....");
@@ -142,7 +144,7 @@ public class AnnonceService {
      *            les droits.
      * @return 0 si c'est OK
      */
-    public static Integer suppressionAnnonce(DemandeAnnonceDTO demandeAnnonceDTO) {
+    public Integer suppressionAnnonce(DemandeAnnonceDTO demandeAnnonceDTO) {
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Début appel service suppression annonce.....");
@@ -168,7 +170,7 @@ public class AnnonceService {
      *            les droits ainsi que le siret de l'entreprise.
      * @return 0 si c'est OK
      */
-    public static Integer selectOneEnterprise(AnnonceSelectEntrepriseDTO demandeAnnonceDTO) {
+    public Integer selectOneEnterprise(AnnonceSelectEntrepriseDTO demandeAnnonceDTO) {
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Début appel service selection d'une annonce.....");
@@ -194,7 +196,7 @@ public class AnnonceService {
      *            les droits ainsi que le siret de l'entreprise.
      * @return 0 si c'est OK
      */
-    public static Integer inscriptionUnArtisan(DemandeAnnonceDTO demandeAnnonceDTO) {
+    public Integer inscriptionUnArtisan(DemandeAnnonceDTO demandeAnnonceDTO) {
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Début appel service selection d'une annonce.....");

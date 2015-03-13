@@ -4,10 +4,10 @@
 
 	<display-name>batimen-web</display-name>
 
-	<listener>
-		<listener-class>org.apache.shiro.web.env.EnvironmentLoaderListener</listener-class>
-	</listener>
 
+	<listener>
+		<listener-class>fr.batimen.web.app.security.ShiroCastorListener</listener-class>
+	</listener>
 	<filter>
 		<filter-name>ShiroFilter</filter-name>
 		<filter-class>org.apache.shiro.web.servlet.ShiroFilter</filter-class>
@@ -71,7 +71,6 @@
 		<location>/404</location>
 	</error-page>
 
-	<!--  <listener>
-		<listener-class>fr.batimen.web.app.context.LogBackContextListener</listener-class>
-	</listener> -->
+	<!-- <listener> <listener-class>fr.batimen.web.app.context.LogBackContextListener</listener-class> 
+		</listener> -->
 </web-app>

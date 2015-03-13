@@ -1,5 +1,10 @@
 package fr.batimen.web.app.security;
 
+import java.io.Serializable;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
@@ -7,7 +12,6 @@ import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.LockedAccountException;
 import org.apache.shiro.authc.UnknownAccountException;
 import org.apache.shiro.authc.UsernamePasswordToken;
-import org.apache.shiro.subject.Subject;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,13 +19,17 @@ import org.slf4j.LoggerFactory;
 import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.LoginDTO;
 import fr.batimen.dto.enums.TypeCompte;
-import fr.batimen.ws.client.service.UtilisateurService;
+import fr.batimen.ws.client.service.UtilisateurServiceREST;
 
-public class Authentication {
+@Named
+public class Authentication implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Authentication.class);
 
-    private final Subject currentUser = SecurityUtils.getSubject();
+    @Inject
+    private UtilisateurServiceREST utilisateurServiceREST;
 
     private static final String CLIENT_KEY = "client";
 
@@ -32,7 +40,7 @@ public class Authentication {
         token.setRememberMe(true);
 
         try {
-            currentUser.login(token);
+            SecurityUtils.getSubject().login(token);
             isOk = Boolean.TRUE;
         } catch (UnknownAccountException uae) {
             if (LOGGER.isErrorEnabled()) {
@@ -65,18 +73,18 @@ public class Authentication {
             LoginDTO loginDTO = new LoginDTO();
             loginDTO.setLogin(username);
             AuthenticatedWebSession.get().authenticate(username, "");
-            ClientDTO client = UtilisateurService.login(loginDTO);
-            currentUser.getSession(true).setAttribute(CLIENT_KEY, client);
+            ClientDTO client = utilisateurServiceREST.login(loginDTO);
+            SecurityUtils.getSubject().getSession(true).setAttribute(CLIENT_KEY, client);
         }
         return isOk;
     }
 
     public ClientDTO getCurrentUserInfo() {
-        return (ClientDTO) currentUser.getSession().getAttribute(CLIENT_KEY);
+        return (ClientDTO) SecurityUtils.getSubject().getSession().getAttribute(CLIENT_KEY);
     }
 
     public void setCurrentUserInfo(ClientDTO clientDTO) {
-        currentUser.getSession().setAttribute(CLIENT_KEY, clientDTO);
+        SecurityUtils.getSubject().getSession().setAttribute(CLIENT_KEY, clientDTO);
     }
 
     public TypeCompte getCurrentUserRolePrincipal() {

@@ -1,5 +1,7 @@
 package fr.batimen.web.client.extend;
 
+import javax.inject.Inject;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
@@ -18,7 +20,7 @@ import fr.batimen.web.app.constants.WebConstants;
 import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.web.client.master.MasterPage;
-import fr.batimen.ws.client.service.ContactUsService;
+import fr.batimen.ws.client.service.ContactUsServiceREST;
 
 /**
  * Page de contact qui permettra aux utilisateur de contacter l'équipe
@@ -29,6 +31,9 @@ import fr.batimen.ws.client.service.ContactUsService;
 public class Contact extends MasterPage {
 
     private static final long serialVersionUID = -2549295715502248172L;
+
+    @Inject
+    private ContactUsServiceREST contactUsServiceREST;
 
     /**
      * View Components
@@ -79,7 +84,7 @@ public class Contact extends MasterPage {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 // send shit to server
-                int response = ContactUsService.pushContactMail((ContactMailDTO) getForm().getModelObject());
+                int response = contactUsServiceREST.pushContactMail((ContactMailDTO) getForm().getModelObject());
                 // finalize
                 if (response == CodeRetourService.RETOUR_OK) {
                     feedBackPanelGeneral

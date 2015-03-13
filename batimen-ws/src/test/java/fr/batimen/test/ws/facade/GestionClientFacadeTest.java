@@ -2,6 +2,8 @@ package fr.batimen.test.ws.facade;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.jboss.arquillian.persistence.UsingDataSet;
 import org.junit.Assert;
 import org.junit.Test;
@@ -15,9 +17,12 @@ import fr.batimen.dto.enums.StatutNotification;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.enums.TypeNotification;
 import fr.batimen.test.ws.AbstractBatimenWsTest;
-import fr.batimen.ws.client.service.ClientsService;
+import fr.batimen.ws.client.service.ClientsServiceREST;
 
 public class GestionClientFacadeTest extends AbstractBatimenWsTest {
+
+    @Inject
+    private ClientsServiceREST clientsServiceREST;
 
     /**
      * Cas de test : Le client se rend sur la page "mes annonces" <br/>
@@ -27,7 +32,7 @@ public class GestionClientFacadeTest extends AbstractBatimenWsTest {
     @Test
     @UsingDataSet("datasets/in/client_notification_annonce.yml")
     public void testGetInfoForMesAnnonces() {
-        MesAnnoncesDTO mesAnnonces = ClientsService.getMesInfosAnnonce("pebronne");
+        MesAnnoncesDTO mesAnnonces = clientsServiceREST.getMesInfosAnnonce("pebronne");
 
         List<NotificationDTO> notifications = mesAnnonces.getNotifications();
         List<AnnonceDTO> annonces = mesAnnonces.getAnnonces();
@@ -75,7 +80,7 @@ public class GestionClientFacadeTest extends AbstractBatimenWsTest {
     @Test
     @UsingDataSet("datasets/in/mon_profil.yml")
     public void testGetInfoForMonProfil() {
-        MonProfilDTO monProfilDTO = ClientsService.getMesInfosForMonProfil("pebronne");
+        MonProfilDTO monProfilDTO = clientsServiceREST.getMesInfosForMonProfil("pebronne");
 
         Assert.assertEquals(Long.valueOf("2"), monProfilDTO.getNbAnnonce());
 

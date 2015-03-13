@@ -3,6 +3,8 @@ package fr.batimen.web.client.extend.nouveau.devis;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -36,7 +38,7 @@ import fr.batimen.web.client.extend.Contact;
 import fr.batimen.web.client.extend.nouveau.devis.event.CategorieEvent;
 import fr.batimen.web.client.extend.nouveau.devis.event.ChangementEtapeClientEvent;
 import fr.batimen.web.client.master.MasterPage;
-import fr.batimen.ws.client.service.AnnonceService;
+import fr.batimen.ws.client.service.AnnonceServiceREST;
 
 /**
  * Permet la création de nouveau devis par un client.
@@ -49,6 +51,12 @@ public class NouveauDevis extends MasterPage {
     private static final long serialVersionUID = -7595966450246951918L;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NouveauDevis.class);
+
+    @Inject
+    private AnnonceServiceREST annonceService;
+
+    @Inject
+    private Authentication authentication;
 
     // Composants Généraux
     private NavigationWizard navigationWizard;
@@ -354,7 +362,6 @@ public class NouveauDevis extends MasterPage {
     }
 
     private void remplissageCreationAnnonceSiLogin() {
-        Authentication authentication = new Authentication();
         ClientDTO client = authentication.getCurrentUserInfo();
         nouvelleAnnonce.setIsSignedUp(true);
         nouvelleAnnonce.getClient().setLogin(client.getLogin());
@@ -461,7 +468,7 @@ public class NouveauDevis extends MasterPage {
     }
 
     private Integer creationAnnonce() {
-        return AnnonceService.creationAnnonce(nouvelleAnnonce);
+        return annonceService.creationAnnonce(nouvelleAnnonce);
     }
 
     private void loggerAnnonce(CreationAnnonceDTO nouvelleAnnonce) {
@@ -484,7 +491,6 @@ public class NouveauDevis extends MasterPage {
                 LOGGER.error("Adresse mail : " + nouvelleAnnonce.getClient().getEmail());
                 LOGGER.error("Identifiant: " + nouvelleAnnonce.getClient().getLogin());
             } else {
-                Authentication authentication = new Authentication();
                 ClientDTO client = authentication.getCurrentUserInfo();
                 LOGGER.error("Ce client est deja enregistrer dans la BDD");
                 LOGGER.error("Nom  : " + client.getNom());

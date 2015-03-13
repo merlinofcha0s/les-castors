@@ -1,5 +1,7 @@
 package fr.batimen.web.client.modal;
 
+import javax.inject.Inject;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
@@ -30,6 +32,9 @@ public class AuthentificationModal extends ModalCastor {
 
     private static final long serialVersionUID = -1634093925835447825L;
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthentificationModal.class);
+
+    @Inject
+    private Authentication authentication;
 
     private StatelessForm<AuthentificationModal> loginForm;
     private TextField<String> login;
@@ -68,8 +73,6 @@ public class AuthentificationModal extends ModalCastor {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-
-                Authentication authentication = new Authentication();
 
                 boolean authResult = authentication.authenticate(login.getInput(), password.getConvertedInput());
 

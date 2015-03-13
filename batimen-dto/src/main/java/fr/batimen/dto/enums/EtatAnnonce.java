@@ -2,7 +2,7 @@ package fr.batimen.dto.enums;
 
 public enum EtatAnnonce {
 
-    ACTIVE("Active"), DESACTIVE("Désactivée"), A_NOTER("A Notée"), EN_ATTENTE("En attente"), SUPPRIMER("Supprimée"), QUOTA_MAX_ATTEINT(
+    ACTIVE("Active"), DESACTIVE("Désactivée"), A_NOTER("A notée"), EN_ATTENTE("En attente"), SUPPRIMER("Supprimée"), QUOTA_MAX_ATTEINT(
             "Quota devis atteint");
 
     private EtatAnnonce(String affichage) {

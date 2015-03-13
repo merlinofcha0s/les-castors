@@ -19,10 +19,10 @@ public class MesAnnoncesDataset {
                     "typeTravaux", "adressechantier_id", "demandeur_fk", "entreprise_selectionnee_fk",
                     "notationannonce_id")
             .values(200010, "2014-01-10", "2014-01-10", "0",
-                    "Construction compliqué qui necessite des connaissance en geologie", "1", 0,
+                    "Construction compliqué qui necessite des connaissance en geologie", "0", 0,
                     "Installation électrique", 0, 0, "toto", "tata", 0, 200005, 100001, 200009, 200012)
             .values(200011, "2014-01-10", "2014-01-10", "0",
-                    "Construction compliqué qui necessite des connaissance en geologie", "1", 0,
+                    "Construction compliqué qui necessite des connaissance en geologie", "0", 0,
                     "Installation électrique", 0, 0, "toto", "tata", 0, 200014, 100001, 200009, 200013).build();
 
     public static final Operation INSERT_ARTISAN_DATA = insertInto("artisan")

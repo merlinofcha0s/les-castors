@@ -1,5 +1,7 @@
 package fr.batimen.web.client.modal;
 
+import javax.inject.Inject;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxFallbackLink;
 import org.apache.wicket.event.IEvent;
@@ -18,7 +20,7 @@ import fr.batimen.web.client.event.SuppressionCloseEvent;
 import fr.batimen.web.client.event.SuppressionOpenEvent;
 import fr.batimen.web.client.extend.Accueil;
 import fr.batimen.web.client.extend.member.client.MesAnnonces;
-import fr.batimen.ws.client.service.AnnonceService;
+import fr.batimen.ws.client.service.AnnonceServiceREST;
 
 /**
  * Panel qui sert a demander une confirmation à l'utilisateur lorsque celui ci
@@ -32,6 +34,12 @@ public class SuppressionModal extends ModalCastor {
     private static final long serialVersionUID = -2013052713793815773L;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SuppressionModal.class);
+
+    @Inject
+    private AnnonceServiceREST annonceService;
+
+    @Inject
+    private Authentication authentication;
 
     private AjaxFallbackLink<Void> yes;
     private AjaxFallbackLink<Void> no;
@@ -62,7 +70,6 @@ public class SuppressionModal extends ModalCastor {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                Authentication authentication = new Authentication();
 
                 MesAnnonces mesAnnonces = null;
                 ClientDTO clientConnected = authentication.getCurrentUserInfo();
@@ -72,7 +79,7 @@ public class SuppressionModal extends ModalCastor {
                 demandeAnnonceDTO.setLoginDemandeur(clientConnected.getLogin());
                 demandeAnnonceDTO.setTypeCompteDemandeur(authentication.getCurrentUserRolePrincipal());
 
-                Integer codeRetour = AnnonceService.suppressionAnnonce(demandeAnnonceDTO);
+                Integer codeRetour = annonceService.suppressionAnnonce(demandeAnnonceDTO);
 
                 // Suivant le role de l'utilisateur on ne redirige pas au meme
                 // endroit
