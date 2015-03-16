@@ -39,6 +39,7 @@ public class QueryJPQL {
     public static final String ANNONCE_SELECTION_ENTREPRISE_FOR_ADMIN = "annonceSelectionEntrepriseForAdmin";
     public static final String ANNONCE_BY_ID_ADMIN = "annonceByIDAdmin";
     public static final String ANNONCE_DESACTIVE_PERIMEE = "annonceDesactivationPerime";
+    public static final String ANNONCE_BY_HASHID_AND_DEMANDEUR = "annonceByIDAndDemandeur";
 
     // Parametre Query Entity annonce
     public static final String PARAM_ANNONCE_TITRE = "titre";
@@ -48,6 +49,7 @@ public class QueryJPQL {
     public static final String PARAM_ANNONCE_ETAT = "etatAnnonce";
     public static final String PARAM_ANNONCE_TODAY_MINUS_X_DAYS = "todayMinusXDays";
     public static final String PARAM_ANNONCE_NB_ARTISAN_MAX = "nbArtisanMax";
+    public static final String PARAM_ANNONCE_DEMANDEUR_LOGIN = "loginDemandeur";
 
     // Entity artisan
     public static final String ARTISAN_BY_EMAIL = "artisanByEmail";

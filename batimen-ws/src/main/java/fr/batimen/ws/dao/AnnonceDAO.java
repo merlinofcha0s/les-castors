@@ -421,4 +421,39 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
             }
         }
     }
+
+    /**
+     * Recherche une annonce par son id et le login du demandeur <br/>
+     * 
+     * @param hashID
+     *            L'id unique de l'annonce
+     * @param loginDemandeur
+     *            Le login du demandeur (celui qui a poster l'annonce)
+     */
+    @TransactionAttribute(TransactionAttributeType.MANDATORY)
+    public Annonce getAnnonceByIdByLogin(String hashID, String loginDemandeur) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Debut de requete selection annonce par hash et demandeur");
+        }
+
+        TypedQuery<Annonce> query = null;
+        try {
+
+            query = entityManager.createNamedQuery(QueryJPQL.ANNONCE_BY_HASHID_AND_DEMANDEUR, Annonce.class);
+
+            query.setParameter(QueryJPQL.PARAM_ANNONCE_ID, hashID);
+            query.setParameter(QueryJPQL.PARAM_ANNONCE_DEMANDEUR_LOGIN, loginDemandeur);
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Fin de requete selection annonce par hash et demandeur");
+            }
+
+            return query.getSingleResult();
+        } catch (NoResultException nre) {
+            if (LOGGER.isWarnEnabled()) {
+                LOGGER.warn("Aucune correspondance trouvées dans la BDD", nre);
+            }
+            return null;
+        }
+    }
 }

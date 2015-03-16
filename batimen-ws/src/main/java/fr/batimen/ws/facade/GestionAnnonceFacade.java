@@ -35,6 +35,7 @@ import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
 import fr.batimen.dto.aggregate.AnnonceSelectEntrepriseDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
+import fr.batimen.dto.aggregate.DesinscriptionAnnonceDTO;
 import fr.batimen.dto.aggregate.NbConsultationDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.TypeCompte;
@@ -51,6 +52,7 @@ import fr.batimen.ws.interceptor.BatimenInterceptor;
 import fr.batimen.ws.service.AnnonceService;
 import fr.batimen.ws.service.EmailService;
 import fr.batimen.ws.service.NotificationService;
+import fr.batimen.ws.utils.RolesUtils;
 
 /**
  * Facade REST de gestion des annonces.
@@ -91,6 +93,9 @@ public class GestionAnnonceFacade {
 
     @Inject
     private NotificationService notificationService;
+
+    @Inject
+    private RolesUtils rolesUtils;
 
     /**
      * Permet la creation d'une nouvelle annonce par le client ainsi que le
@@ -467,5 +472,94 @@ public class GestionAnnonceFacade {
         notificationService.generationNotificationInscriptionArtisan(demandeAnnonceDTO, annonce, artisan);
 
         return CodeRetourService.RETOUR_OK;
+    }
+
+    /**
+     * Service qui permet à un client de ne pas accepter un artisan à son
+     * annonce
+     * 
+     * @param desinscriptionAnnonceDTO
+     *            Objet permettant de faire la demande de desinscription
+     * @return {@link CodeRetourService}
+     */
+    @POST
+    @Path(WsPath.GESTION_ANNONCE_SERVICE_DESINSCRIPTION_UN_ARTISAN)
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public Integer desinscriptionUnArtisan(DesinscriptionAnnonceDTO desinscriptionAnnonceDTO) {
+        Annonce annonce = null;
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("+------------------------------------------------------------------------------+");
+            LOGGER.debug("| Hash ID : " + desinscriptionAnnonceDTO.getHashID());
+            LOGGER.debug("| Login demandeur : " + desinscriptionAnnonceDTO.getLoginDemandeur());
+            LOGGER.debug("| Artisan à desinscrire : " + desinscriptionAnnonceDTO.getLoginArtisan());
+            LOGGER.debug("+------------------------------------------------------------------------------+");
+        }
+
+        String rolesClientDemandeur = utilisateurFacade.getUtilisateurRoles(desinscriptionAnnonceDTO
+                .getLoginDemandeur());
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Role du client récupéré: " + rolesClientDemandeur);
+        }
+
+        if (rolesUtils.checkIfAdminWithString(rolesClientDemandeur)) {
+            annonce = annonceDAO.getAnnonceByIDWithTransaction(desinscriptionAnnonceDTO.getHashID(), true);
+        } else if (rolesUtils.checkIfClientWithString(rolesClientDemandeur)) {
+            annonce = annonceDAO.getAnnonceByIdByLogin(desinscriptionAnnonceDTO.getHashID(),
+                    desinscriptionAnnonceDTO.getLoginDemandeur());
+        } else {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("N'a pas les bons droits pour accéder à ce service !!!");
+            }
+            return CodeRetourService.RETOUR_KO;
+        }
+
+        boolean atLeastOneRemoved = false;
+
+        if (annonce != null) {
+
+            List<Artisan> artisans = annonce.getArtisans();
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Début itération recherche de l'artisan a supprimer de l'annonce");
+
+            }
+
+            for (int i = 0; i < artisans.size(); i++) {
+
+                Artisan artisanADesinscrire = artisans.get(i);
+
+                if (LOGGER.isDebugEnabled()) {
+                    LOGGER.debug("+-------------------------------------------------------------+");
+                    LOGGER.debug("| Login : " + artisanADesinscrire.getLogin());
+                    LOGGER.debug("| Email : " + artisanADesinscrire.getEmail());
+                    LOGGER.debug("+-------------------------------------------------------------+");
+                }
+
+                if (artisanADesinscrire.getLogin().equals(desinscriptionAnnonceDTO.getLoginArtisan())) {
+                    artisans.remove(i);
+                    if (LOGGER.isDebugEnabled()) {
+                        LOGGER.debug("Artisan trouvée");
+                    }
+                    atLeastOneRemoved = true;
+                }
+            }
+        } else {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Annonce inexistante");
+            }
+            return CodeRetourService.RETOUR_KO;
+        }
+
+        if (atLeastOneRemoved) {
+            return CodeRetourService.RETOUR_OK;
+        } else {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Artisan introuvable dans l'annonce");
+            }
+            return CodeRetourService.ANNONCE_RETOUR_ARTISAN_INTROUVABLE;
+        }
+
     }
 }

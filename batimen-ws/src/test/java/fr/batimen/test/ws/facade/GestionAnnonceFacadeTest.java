@@ -19,6 +19,7 @@ import fr.batimen.dto.NotificationDTO;
 import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
 import fr.batimen.dto.aggregate.AnnonceSelectEntrepriseDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
+import fr.batimen.dto.aggregate.DesinscriptionAnnonceDTO;
 import fr.batimen.dto.aggregate.NbConsultationDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.StatutNotification;
@@ -477,6 +478,45 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         Integer codeRetourKO = annonceServiceREST.inscriptionUnArtisan(demandeAnnonceDTO);
 
         Assert.assertEquals(CodeRetourService.RETOUR_KO, codeRetourKO);
+    }
+
+    /**
+     * Cas de test : Un client ne veut pas d'un artisan et le desinscrit de
+     * l'annonce
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonces_by_id.yml")
+    public void testDesinscriptionArtisanAvecIDValid() {
+        testDesinscriptionArtisan("pebronne");
+    }
+
+    /**
+     * Cas de test : Un administrateur ne veut pas d'un artisan et le desinscrit
+     * d'une annonce
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonces_by_id.yml")
+    public void testDesinscriptionArtisanAvecIDValidByAdmin() {
+        testDesinscriptionArtisan("admin");
+    }
+
+    private void testDesinscriptionArtisan(String loginDemandeur) {
+        DesinscriptionAnnonceDTO desinscriptionAnnonceDTO = new DesinscriptionAnnonceDTO();
+        desinscriptionAnnonceDTO
+                .setHashID("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
+        desinscriptionAnnonceDTO.setLoginDemandeur(loginDemandeur);
+        desinscriptionAnnonceDTO.setLoginArtisan("pebronneArtisanne");
+
+        Integer codeRetourOK = annonceServiceREST.desinscriptionArtisan(desinscriptionAnnonceDTO);
+
+        Assert.assertEquals(CodeRetourService.RETOUR_OK, codeRetourOK);
+
+        Annonce annonce = annonceDAO
+                .getAnnonceByIDWithTransaction(
+                        "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
+                        false);
+
+        Assert.assertEquals(1, annonce.getArtisans().size());
     }
 
     private DemandeAnnonceDTO initAndGetDemandeAnnonceDTO(String hash, String loginDemandeur, TypeCompte typeCompte) {

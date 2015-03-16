@@ -3,6 +3,7 @@ package fr.batimen.ws.client.service;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.slf4j.Logger;
@@ -14,6 +15,7 @@ import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
 import fr.batimen.dto.aggregate.AnnonceSelectEntrepriseDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
+import fr.batimen.dto.aggregate.DesinscriptionAnnonceDTO;
 import fr.batimen.dto.aggregate.NbConsultationDTO;
 import fr.batimen.ws.client.WsConnector;
 
@@ -30,6 +32,9 @@ public class AnnonceServiceREST implements Serializable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AnnonceServiceREST.class);
 
+    @Inject
+    private transient WsConnector wsConnector;
+
     /**
      * Appel le webservice pour creer l'annonce.
      * 
@@ -45,7 +50,7 @@ public class AnnonceServiceREST implements Serializable {
             LOGGER.debug("Début appel service creation annonce.....");
         }
 
-        String objectInJSON = WsConnector.getInstance().sendRequest(WsPath.GESTION_ANNONCE_SERVICE_PATH,
+        String objectInJSON = wsConnector.sendRequest(WsPath.GESTION_ANNONCE_SERVICE_PATH,
                 WsPath.GESTION_ANNONCE_SERVICE_CREATION_ANNONCE, nouvelleAnnonce);
 
         Integer codeRetour = Integer.valueOf(objectInJSON);
@@ -70,7 +75,7 @@ public class AnnonceServiceREST implements Serializable {
             LOGGER.debug("Début appel service creation annonce.....");
         }
 
-        String objectInJSON = WsConnector.getInstance().sendRequest(WsPath.GESTION_ANNONCE_SERVICE_PATH,
+        String objectInJSON = wsConnector.sendRequest(WsPath.GESTION_ANNONCE_SERVICE_PATH,
                 WsPath.GESTION_ANNONCE_SERVICE_GET_ANNONCES_BY_LOGIN, login);
 
         List<AnnonceDTO> annonces = AnnonceDTO.deserializeAnnonceDTOList(objectInJSON);
@@ -99,7 +104,7 @@ public class AnnonceServiceREST implements Serializable {
             LOGGER.debug("Début appel service creation annonce.....");
         }
 
-        String objectInJSON = WsConnector.getInstance().sendRequest(WsPath.GESTION_ANNONCE_SERVICE_PATH,
+        String objectInJSON = wsConnector.sendRequest(WsPath.GESTION_ANNONCE_SERVICE_PATH,
                 WsPath.GESTION_ANNONCE_SERVICE_GET_ANNONCES_BY_ID, demandeAnnonceDTO);
 
         AnnonceAffichageDTO annonce = AnnonceAffichageDTO.deserializeAnnonceAffichageDTO(objectInJSON);
@@ -124,7 +129,7 @@ public class AnnonceServiceREST implements Serializable {
             LOGGER.debug("Début appel service update nb consultation.....");
         }
 
-        String objectInJSON = WsConnector.getInstance().sendRequest(WsPath.GESTION_ANNONCE_SERVICE_PATH,
+        String objectInJSON = wsConnector.sendRequest(WsPath.GESTION_ANNONCE_SERVICE_PATH,
                 WsPath.GESTION_ANNONCE_SERVICE_UPDATE_NB_CONSULTATION, nbConsultationDTO);
 
         Integer updateOK = Integer.valueOf(objectInJSON);
@@ -150,7 +155,7 @@ public class AnnonceServiceREST implements Serializable {
             LOGGER.debug("Début appel service suppression annonce.....");
         }
 
-        String objectInJSON = WsConnector.getInstance().sendRequest(WsPath.GESTION_ANNONCE_SERVICE_PATH,
+        String objectInJSON = wsConnector.sendRequest(WsPath.GESTION_ANNONCE_SERVICE_PATH,
                 WsPath.GESTION_ANNONCE_SERVICE_SUPRESS_ANNONCE, demandeAnnonceDTO);
 
         Integer updateOK = Integer.valueOf(objectInJSON);
@@ -176,7 +181,7 @@ public class AnnonceServiceREST implements Serializable {
             LOGGER.debug("Début appel service selection d'une annonce.....");
         }
 
-        String objectInJSON = WsConnector.getInstance().sendRequest(WsPath.GESTION_ANNONCE_SERVICE_PATH,
+        String objectInJSON = wsConnector.sendRequest(WsPath.GESTION_ANNONCE_SERVICE_PATH,
                 WsPath.GESTION_ANNONCE_SERVICE_SELECTION_UNE_ENTREPRISE, demandeAnnonceDTO);
 
         Integer updateOK = Integer.valueOf(objectInJSON);
@@ -202,13 +207,39 @@ public class AnnonceServiceREST implements Serializable {
             LOGGER.debug("Début appel service selection d'une annonce.....");
         }
 
-        String objectInJSON = WsConnector.getInstance().sendRequest(WsPath.GESTION_ANNONCE_SERVICE_PATH,
+        String objectInJSON = wsConnector.sendRequest(WsPath.GESTION_ANNONCE_SERVICE_PATH,
                 WsPath.GESTION_ANNONCE_SERVICE_INSCRIPTION_UN_ARTISAN, demandeAnnonceDTO);
 
         Integer updateOK = Integer.valueOf(objectInJSON);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Fin appel service selection d'une annonce.....");
+        }
+
+        return updateOK;
+    }
+
+    /**
+     * Permet de selectionner un entreprise pour une annonce.
+     * 
+     * @param demandeAnnonce
+     *            le hashID avec le login du demandeur dans le but de vérifier
+     *            les droits ainsi que le siret de l'entreprise.
+     * @return 0 si c'est OK
+     */
+    public Integer desinscriptionArtisan(DesinscriptionAnnonceDTO desinscriptionAnnonceDTO) {
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Début appel service de desinscription d'un artisan.....");
+        }
+
+        String objectInJSON = wsConnector.sendRequest(WsPath.GESTION_ANNONCE_SERVICE_PATH,
+                WsPath.GESTION_ANNONCE_SERVICE_DESINSCRIPTION_UN_ARTISAN, desinscriptionAnnonceDTO);
+
+        Integer updateOK = Integer.valueOf(objectInJSON);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Fin appel service de desinscription d'un artisan.");
         }
 
         return updateOK;

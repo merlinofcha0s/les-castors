@@ -24,4 +24,12 @@ public class RolesUtils implements Serializable {
         return typeCompteToCheck.getRole().indexOf(TypeCompte.CLIENT.getRole()) != -1;
     }
 
+    public Boolean checkIfAdminWithString(String roles) {
+        return roles.indexOf(TypeCompte.ADMINISTRATEUR.getRole()) != -1;
+    }
+
+    public Boolean checkIfClientWithString(String roles) {
+        return roles.indexOf(TypeCompte.CLIENT.getRole()) != -1;
+    }
+
 }

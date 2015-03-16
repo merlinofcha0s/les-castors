@@ -33,6 +33,7 @@ public class WsPath {
     public static final String GESTION_ANNONCE_SERVICE_SUPRESS_ANNONCE = "suppressionAnnonce";
     public static final String GESTION_ANNONCE_SERVICE_SELECTION_UNE_ENTREPRISE = "selectionUneEntreprise";
     public static final String GESTION_ANNONCE_SERVICE_INSCRIPTION_UN_ARTISAN = "inscriptionUnArtisan";
+    public static final String GESTION_ANNONCE_SERVICE_DESINSCRIPTION_UN_ARTISAN = "desinscriptionUnArtisan";
 
     // Path Gestion Partenaire
     public static final String GESTION_PARTENAIRE_SERVICE_PATH = "gestionPartenaire";

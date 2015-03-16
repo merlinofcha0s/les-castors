@@ -1,5 +1,7 @@
 package fr.batimen.test.ws;
 
+import javax.inject.Inject;
+
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.persistence.ApplyScriptBefore;
@@ -23,6 +25,9 @@ import fr.batimen.ws.client.WsConnector;
 public abstract class AbstractBatimenWsTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractBatimenWsTest.class);
+
+    @Inject
+    private WsConnector wsConnector;
 
     @Deployment
     public static WebArchive createTestArchive() {
@@ -71,7 +76,7 @@ public abstract class AbstractBatimenWsTest {
         @Override
         protected void starting(Description description) {
             LOGGER.info("Début Test : " + description.getDisplayName());
-            WsConnector.getInstance().setTest(true);
+            wsConnector.setTest(true);
         }
 
         @Override

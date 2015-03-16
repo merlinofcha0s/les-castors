@@ -22,6 +22,7 @@ public class CodeRetourService {
     // Inscription Annonce artisan
     public static final Integer ANNONCE_RETOUR_ARTISAN_DEJA_INSCRIT = 11;
     public static final Integer ANNONCE_RETOUR_QUOTA_DEVIS_ATTEINT = 12;
+    public static final Integer ANNONCE_RETOUR_ARTISAN_INTROUVABLE = 13;
 
     // Code Retour service propres aux client
     public static final Integer ANNONCE_RETOUR_DEJA_ACTIF = 10;

@@ -65,7 +65,9 @@ import fr.batimen.dto.enums.TypeTravaux;
         @NamedQuery(name = QueryJPQL.ANNONCE_SELECTION_ENTREPRISE_FOR_CLIENT,
                 query = "UPDATE Annonce a SET a.entrepriseSelectionnee = (SELECT ent FROM Entreprise AS ent WHERE ent.artisan.login = :artisanLoginChoisi), a.dateMAJ = CURRENT_DATE WHERE a.hashID = :hashID AND a.demandeur.login = :login"),
         @NamedQuery(name = QueryJPQL.ANNONCE_DESACTIVE_PERIMEE,
-                query = "UPDATE Annonce a SET a.etatAnnonce = 1, a.dateMAJ = CURRENT_DATE WHERE a.dateCreation < :todayMinusXDays AND a.artisans.size = :nbArtisanMax") })
+                query = "UPDATE Annonce a SET a.etatAnnonce = 1, a.dateMAJ = CURRENT_DATE WHERE a.dateCreation < :todayMinusXDays AND a.artisans.size = :nbArtisanMax"),
+        @NamedQuery(name = QueryJPQL.ANNONCE_BY_HASHID_AND_DEMANDEUR,
+                query = "SELECT a FROM Annonce AS a WHERE a.hashID = :hashID AND a.demandeur.login = :loginDemandeur") })
 public class Annonce extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = 3160372354800747789L;

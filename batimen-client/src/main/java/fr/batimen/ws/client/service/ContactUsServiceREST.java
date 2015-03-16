@@ -2,6 +2,7 @@ package fr.batimen.ws.client.service;
 
 import java.io.Serializable;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.slf4j.Logger;
@@ -24,6 +25,9 @@ public class ContactUsServiceREST implements Serializable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ContactUsServiceREST.class);
 
+    @Inject
+    private WsConnector wsConnector;
+
     /**
      * Webservice Client, in charge of pushing a contact email to the mail WS
      * 
@@ -35,8 +39,8 @@ public class ContactUsServiceREST implements Serializable {
             LOGGER.debug("Début appel service push contact mail");
         }
 
-        String jsonResponse = WsConnector.getInstance().sendRequest(WsPath.MAIL_SERVICE_PATH,
-                WsPath.MAIL_SERVICE_SEND_CONTACT_MAIL, contactMail);
+        String jsonResponse = wsConnector.sendRequest(WsPath.MAIL_SERVICE_PATH, WsPath.MAIL_SERVICE_SEND_CONTACT_MAIL,
+                contactMail);
 
         int serverResponse = Integer.valueOf(jsonResponse);
         if (LOGGER.isDebugEnabled()) {

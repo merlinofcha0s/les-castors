@@ -2,6 +2,7 @@ package fr.batimen.ws.client.service;
 
 import java.io.Serializable;
 
+import javax.inject.Inject;
 import javax.inject.Named;
 
 import org.slf4j.Logger;
@@ -25,6 +26,9 @@ public class ArtisanServiceREST implements Serializable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ArtisanServiceREST.class);
 
+    @Inject
+    private WsConnector wsConnector;
+
     /**
      * Crée un nouvel artisan / partenaire, son entreprise, etc
      * 
@@ -40,7 +44,7 @@ public class ArtisanServiceREST implements Serializable {
             LOGGER.debug("Début appel service nouveau partenaire + deserialization");
         }
 
-        String objectInJSON = WsConnector.getInstance().sendRequest(WsPath.GESTION_PARTENAIRE_SERVICE_PATH,
+        String objectInJSON = wsConnector.sendRequest(WsPath.GESTION_PARTENAIRE_SERVICE_PATH,
                 WsPath.GESTION_PARTENAIRE_SERVICE_CREATION_PARTENAIRE, nouveauPartenaire);
 
         Integer codeRetour = Integer.valueOf(objectInJSON);
