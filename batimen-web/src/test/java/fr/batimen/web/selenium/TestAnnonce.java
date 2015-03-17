@@ -56,8 +56,12 @@ public class TestAnnonce extends AbstractITTest {
                 driver.findElement(
                         By.cssSelector("#containerEnteprisesInscrites > div.row-fluid > div.span12 > div.bg_title > h2.headInModule"))
                         .getText());
+        WebElement checkConditionAnnoncePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.presenceOfElementLocated(By.id("containerContactMaster")));
+        assertNotNull(checkConditionAnnoncePresent);
         assertEquals("Modifier votre annonce", driver.findElement(By.linkText("Modifier votre annonce")).getText());
         assertEquals("Supprimer l'annonce", driver.findElement(By.id("supprimerAnnonce")).getText());
+
     }
 
     /**
@@ -99,6 +103,15 @@ public class TestAnnonce extends AbstractITTest {
                         .getText());
         assertEquals("Modifier votre annonce", driver.findElement(By.linkText("Modifier votre annonce")).getText());
         assertEquals("Supprimer l'annonce", driver.findElement(By.id("supprimerAnnonce")).getText());
+
+        WebElement checkConditionAnnoncePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.presenceOfElementLocated(By.id("containerContactMaster")));
+        assertNotNull(checkConditionAnnoncePresent);
+        assertEquals(
+                "ENTREPRISES QUI SOUHAITENT VOUS CONTACTER",
+                driver.findElement(
+                        By.cssSelector("#containerEnteprisesInscrites > div.row-fluid > div.span12 > div.bg_title > h2.headInModule"))
+                        .getText());
     }
 
     /**

@@ -72,7 +72,7 @@ public class TestAuthentification extends AbstractITTest {
     @Test
     public void testAuthentificationFailedBecauseNotActivated() throws Exception {
         driver.get(appUrl);
-        connexionApplication("xavier", AbstractITTest.BON_MOT_DE_PASSE, Boolean.FALSE);
+        connexionApplication("xdlol", AbstractITTest.BON_MOT_DE_PASSE, Boolean.FALSE);
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
