@@ -225,9 +225,9 @@ public class AnnonceService {
     }
 
     public AnnonceAffichageDTO doMappingAnnonceAffichageDTO(Annonce annonce, AnnonceAffichageDTO annonceAffichageDTO,
-            Boolean isArtisan, Boolean isArtisanInscrit) {
+            Boolean isArtisan, Boolean isArtisanInscrit, Boolean isAdmin) {
 
-        if (isArtisanInscrit) {
+        if (isArtisanInscrit || isAdmin) {
             annonceAffichageDTO.setTelephoneClient(annonce.getDemandeur().getNumeroTel());
             annonceAffichageDTO.setEmailClient(annonce.getDemandeur().getEmail());
         }

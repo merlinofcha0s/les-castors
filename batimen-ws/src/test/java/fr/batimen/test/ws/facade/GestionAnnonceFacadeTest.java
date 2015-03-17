@@ -191,6 +191,28 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     }
 
     /**
+     * Cas de test : Récuperation d'une annonce par son id a partir d'un artisan
+     * qui est inscrit à cette derniere.
+     * 
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonces_by_id.yml")
+    public void testGetAnnonceByIDWithAdmin() {
+        DemandeAnnonceDTO demandeAnnonceDTO = createDemandeAnnonceDTO(
+                "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
+                "admin", TypeCompte.ADMINISTRATEUR);
+
+        AnnonceAffichageDTO annonceAffichage = annonceServiceREST.getAnnonceByIDForAffichage(demandeAnnonceDTO);
+        Assert.assertNotNull(annonceAffichage);
+        Assert.assertFalse(annonceAffichage.getIsArtisanInscrit());
+        Assert.assertNotNull(annonceAffichage.getAnnonce().getDescription());
+        Assert.assertNotNull(annonceAffichage.getAnnonce().getDateCreation());
+        Assert.assertNotNull(annonceAffichage.getAnnonce().getDateMAJ());
+        Assert.assertEquals("0615125645", annonceAffichage.getTelephoneClient());
+        Assert.assertEquals("lol@lol.com", annonceAffichage.getEmailClient());
+    }
+
+    /**
      * Cas de test : Incrémentation du nb de consultation quand un artisan
      * accede à la page d'annonce.
      * 

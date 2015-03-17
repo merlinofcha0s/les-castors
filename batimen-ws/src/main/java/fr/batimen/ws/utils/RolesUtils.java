@@ -20,6 +20,10 @@ public class RolesUtils implements Serializable {
         return typeCompteToCheck.getRole().indexOf(TypeCompte.ADMINISTRATEUR.getRole()) != -1;
     }
 
+    public Boolean checkIfArtisan(TypeCompte typeCompteToCheck) {
+        return typeCompteToCheck.getRole().indexOf(TypeCompte.ARTISAN.getRole()) != -1;
+    }
+
     public Boolean checkIfClient(TypeCompte typeCompteToCheck) {
         return typeCompteToCheck.getRole().indexOf(TypeCompte.CLIENT.getRole()) != -1;
     }
@@ -30,6 +34,10 @@ public class RolesUtils implements Serializable {
 
     public Boolean checkIfClientWithString(String roles) {
         return roles.indexOf(TypeCompte.CLIENT.getRole()) != -1;
+    }
+
+    public Boolean checkIfArtisanWithString(String roles) {
+        return roles.indexOf(TypeCompte.ARTISAN.getRole()) != -1;
     }
 
 }

@@ -475,7 +475,7 @@ public class Annonce extends MasterPage {
                     return true;
                 } else if (roleUtils.checkRoles(TypeCompte.ARTISAN) && annonceAffichageDTO.getIsArtisanInscrit()) {
                     return true;
-                } else if (roleUtils.checkRoles(TypeCompte.ADMINISTRATEUR_MANAGER)) {
+                } else if (roleUtils.checkRoles(TypeCompte.ADMINISTRATEUR)) {
                     return true;
                 } else {
                     return false;
@@ -516,7 +516,7 @@ public class Annonce extends MasterPage {
         // Tout dépends si c'est un artisan qui envoi les données => le
         // webservice renvoi le téléphone et l'adresse mail.
         // Sinon c'est que c'est le client
-        if (roleUtils.checkRoles(TypeCompte.ARTISAN) || roleUtils.checkRoles(TypeCompte.ADMINISTRATEUR_MANAGER)) {
+        if (roleUtils.checkRoles(TypeCompte.ARTISAN) || roleUtils.checkRoles(TypeCompte.ADMINISTRATEUR)) {
             telephoneValue = new Model<String>(annonceAffichageDTO.getTelephoneClient());
             emailValue = new Model<String>(annonceAffichageDTO.getEmailClient());
         } else {

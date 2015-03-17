@@ -221,11 +221,12 @@ public class GestionAnnonceFacade {
 
             Boolean isArtisan = Boolean.FALSE;
             Boolean isArtisanInscrit = Boolean.FALSE;
+            Boolean isAdmin = Boolean.FALSE;
 
             // Vérification des droits : soit l'artisan est inscrit soit il ne
             // l'est
             // pas
-            if (rolesDemandeur.indexOf(TypeCompte.ARTISAN.getRole()) != -1) {
+            if (rolesUtils.checkIfArtisanWithString(rolesDemandeur)) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("C'est un artisan qui fait la demande d'affichage d'annonce");
                 }
@@ -245,7 +246,7 @@ public class GestionAnnonceFacade {
                 // Vérification des droits : Si c'est un client, est ce que
                 // c'est
                 // bien le possesseur de l'annonce.
-            } else if (rolesDemandeur.indexOf(TypeCompte.CLIENT.getRole()) != -1) {
+            } else if (rolesUtils.checkIfClientWithString(rolesDemandeur)) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("C'est un client");
                 }
@@ -255,6 +256,8 @@ public class GestionAnnonceFacade {
                     }
                     return new AnnonceAffichageDTO();
                 }
+            } else if (rolesUtils.checkIfAdminWithString(rolesDemandeur)) {
+                isAdmin = true;
             }
 
             // Si on arrive jusque la c'est que l'utilisateur a les droits, donc
@@ -262,7 +265,8 @@ public class GestionAnnonceFacade {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Mapping des entités vers les DTOs");
             }
-            annonceService.doMappingAnnonceAffichageDTO(annonce, annonceAffichageDTO, isArtisan, isArtisanInscrit);
+            annonceService.doMappingAnnonceAffichageDTO(annonce, annonceAffichageDTO, isArtisan, isArtisanInscrit,
+                    isAdmin);
         }
         return annonceAffichageDTO;
     }
