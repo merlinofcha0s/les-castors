@@ -205,6 +205,25 @@ public class TestAnnonce extends AbstractITTest {
 
     }
 
+    /**
+     * Cas de test : Un client se connecte sur le site, va sur son annonce et
+     * décide de supprimer une entreprise, tout se passe comme prévu
+     */
+    @Test
+    public void testDesInscriptionArtisanByClientAnnonce() {
+        testDesinscriptionEntreprise(TypeCompte.CLIENT);
+    }
+
+    /**
+     * Cas de test : Un admin se connecte sur le site, va sur une annonce et
+     * décide de supprimer une entreprise de cette dernière, tout se passe comme
+     * prévu
+     */
+    @Test
+    public void testDesInscriptionArtisanByAdminAnnonce() {
+        testDesinscriptionEntreprise(TypeCompte.ADMINISTRATEUR);
+    }
+
     public void connectAndGoToAnnonce(TypeCompte typeCompteWanted, String idAnnonce) {
         driver.get(appUrl);
         // On s'authentifie à l'application
@@ -244,6 +263,31 @@ public class TestAnnonce extends AbstractITTest {
                 .getText());
         assertEquals("10/01/2014",
                 driver.findElement(By.xpath("//div[@id='containerInformationsAnnonce']/div[7]/div[3]")).getText());
+    }
+
+    private void testDesinscriptionEntreprise(TypeCompte typeCompte) {
+        connectAndGoToAnnonce(typeCompte, "toto");
+        assertCoreInformationOfAnnonce();
+        // Le lien de selection de la premiere entreprise
+        driver.findElement(
+                By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[4]/div/div/div/div[2]/div[2]/a[2]"))
+                .click();
+
+        WebElement checkConditionAnnoncePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.presenceOfElementLocated(By
+                        .cssSelector("#desincriptionArtisanModal > div.modal-header > #myModalLabel")));
+        assertNotNull(checkConditionAnnoncePresent);
+
+        // Le bouton oui de la modal
+        driver.findElement(
+                By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[8]/div/div[2]/a[1]"))
+                .click();
+
+        Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("span.box_type4"),
+                        "L'entreprise a été desinscrite avec succés"));
+
+        assertTrue(checkCondition);
     }
 
     private void testSelectionEntreprise(TypeCompte typeCompte) {

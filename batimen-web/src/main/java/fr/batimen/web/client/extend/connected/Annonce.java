@@ -28,6 +28,7 @@ import fr.batimen.dto.EntrepriseDTO;
 import fr.batimen.dto.PermissionDTO;
 import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
 import fr.batimen.dto.aggregate.AnnonceSelectEntrepriseDTO;
+import fr.batimen.dto.aggregate.DesinscriptionAnnonceDTO;
 import fr.batimen.dto.aggregate.NbConsultationDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.TypeCompte;
@@ -38,12 +39,14 @@ import fr.batimen.web.client.component.Commentaire;
 import fr.batimen.web.client.component.ContactezNous;
 import fr.batimen.web.client.component.LinkLabel;
 import fr.batimen.web.client.component.Profil;
+import fr.batimen.web.client.event.DesinscriptionArtisanAnnonceEvent;
 import fr.batimen.web.client.event.InscriptionArtisanEvent;
 import fr.batimen.web.client.event.SelectionEntrepriseEvent;
 import fr.batimen.web.client.event.SuppressionOpenEvent;
 import fr.batimen.web.client.extend.error.AccesInterdit;
 import fr.batimen.web.client.extend.error.NonTrouvee;
 import fr.batimen.web.client.master.MasterPage;
+import fr.batimen.web.client.modal.DesincriptionArtisanModal;
 import fr.batimen.web.client.modal.InscriptionModal;
 import fr.batimen.web.client.modal.SelectionEntrepriseModal;
 import fr.batimen.web.client.modal.SuppressionModal;
@@ -78,6 +81,7 @@ public class Annonce extends MasterPage {
 
     private InscriptionModal inscriptionModal;
     private SelectionEntrepriseModal selectionEntrepriseModal;
+    private DesincriptionArtisanModal desincriptionArtisanModal;
 
     private AnnonceAffichageDTO annonceAffichageDTO;
 
@@ -94,6 +98,8 @@ public class Annonce extends MasterPage {
     private Model<String> nomEntrepriseSelectionnee;
     private Model<String> etatAnnonceValue;
 
+    private ListView<EntrepriseDTO> listViewEntrepriseInscrite;
+
     public Annonce() {
         super("", "", "Annonce particulier", true, "img/bg_title1.jpg");
     }
@@ -107,11 +113,13 @@ public class Annonce extends MasterPage {
         initComposants();
         initPopupInscription();
         initPopupSelectionEntreprise();
+        initPopupSuppression();
+        initPopupDesinscriptionEntreprise();
         initAction();
         affichageDonneesAnnonce();
         affichageEntreprisesInscrites();
         affichageContactAnnonce();
-        initPopupSuppression();
+
         affichageEntrepriseSelectionnee();
     }
 
@@ -328,8 +336,7 @@ public class Annonce extends MasterPage {
         containerEntreprisesGlobales.setOutputMarkupId(true);
         containerEntreprisesGlobales.add(containerEnteprisesInscrites);
 
-        ListView<EntrepriseDTO> listViewEntrepriseInscrite = new ListView<EntrepriseDTO>("entreprises",
-                annonceAffichageDTO.getEntreprises()) {
+        listViewEntrepriseInscrite = new ListView<EntrepriseDTO>("entreprises", annonceAffichageDTO.getEntreprises()) {
             /**
                      * 
                      */
@@ -372,9 +379,7 @@ public class Annonce extends MasterPage {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        // TODO Appeler le service pour la deselection d'un
-                        // entreprise concernant une annonce, En suspens pour le
-                        // moment.
+                        desincriptionArtisanModal.open(target, entreprise.getArtisan());
                     }
 
                 };
@@ -549,6 +554,11 @@ public class Annonce extends MasterPage {
         add(selectionEntrepriseModal);
     }
 
+    private void initPopupDesinscriptionEntreprise() {
+        desincriptionArtisanModal = new DesincriptionArtisanModal("desincriptionArtisanModal");
+        add(desincriptionArtisanModal);
+    }
+
     /*
      * (non-Javadoc)
      * 
@@ -619,6 +629,42 @@ public class Annonce extends MasterPage {
             // rafraichi par la requette ajax
 
             selectionEntrepriseEvent.getTarget().add(feedBackPanelGeneral, containerEntreprisesGlobales, etatAnnonce);
+        }
+
+        if (event.getPayload() instanceof DesinscriptionArtisanAnnonceEvent) {
+            DesinscriptionArtisanAnnonceEvent desinscriptionArtisanAnnonceEvent = (DesinscriptionArtisanAnnonceEvent) event
+                    .getPayload();
+
+            ClientDTO artisanToSuppress = desinscriptionArtisanAnnonceEvent.getArtisan();
+
+            DesinscriptionAnnonceDTO desinscriptionAnnonceDTO = new DesinscriptionAnnonceDTO();
+            desinscriptionAnnonceDTO.setHashID(idAnnonce);
+            desinscriptionAnnonceDTO.setLoginDemandeur(userConnected.getLogin());
+            desinscriptionAnnonceDTO.setLoginArtisan(artisanToSuppress.getLogin());
+
+            Integer codeRetourDesInscription = annonceServiceREST.desinscriptionArtisan(desinscriptionAnnonceDTO);
+
+            if (codeRetourDesInscription.equals(CodeRetourService.RETOUR_OK)) {
+                // On met a jour le model du coté du frontend sans refaire
+                // d'appel au webservice pour recharger entierement l'annonce
+                for (int i = 0; i < annonceAffichageDTO.getEntreprises().size(); i++) {
+                    ClientDTO artisanToSuppressListView = annonceAffichageDTO.getEntreprises().get(i).getArtisan();
+                    if (artisanToSuppressListView.equals(artisanToSuppress)) {
+                        annonceAffichageDTO.getEntreprises().remove(i);
+                    }
+                }
+
+                listViewEntrepriseInscrite.setList(annonceAffichageDTO.getEntreprises());
+                feedBackPanelGeneral.success("L'entreprise a été desinscrite avec succés");
+            } else {
+                feedBackPanelGeneral
+                        .error("Problème lors de la suppression d'une entreprise, veuillez réessayer ultérieurement");
+            }
+
+            // On set le model pour que le nom de l'entreprise soit
+            // rafraichi par la requette ajax
+
+            desinscriptionArtisanAnnonceEvent.getTarget().add(feedBackPanelGeneral, containerEntreprisesGlobales);
         }
     }
 
