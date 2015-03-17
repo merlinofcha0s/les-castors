@@ -18,9 +18,9 @@ import com.microtripit.mandrillapp.lutung.view.MandrillMessage;
 import com.microtripit.mandrillapp.lutung.view.MandrillMessage.Recipient;
 import com.microtripit.mandrillapp.lutung.view.MandrillMessageStatus;
 
-import fr.batimen.core.constant.Constant;
+import fr.batimen.core.constant.EmailConstant;
 import fr.batimen.core.exception.EmailException;
-import fr.batimen.core.utils.PropertiesUtils;
+import fr.batimen.ws.enums.PropertiesFileWS;
 
 /**
  * Classe de formatage et d'envoi d'email, l'envoi de mail est realisé par
@@ -55,8 +55,8 @@ public class EmailDAO {
         MandrillMessage message = new MandrillMessage();
         message.setSubject(subject);
         message.setAutoText(true);
-        message.setFromEmail(Constant.EMAIL_CASTOR_NOTIF);
-        message.setFromName(Constant.EMAIL_FROM_NAME);
+        message.setFromEmail(EmailConstant.EMAIL_CASTOR_NOTIF);
+        message.setFromName(EmailConstant.EMAIL_FROM_NAME);
 
         return message;
     }
@@ -161,7 +161,7 @@ public class EmailDAO {
         boolean noError = true;
         // On verifie que tout s'est bien passé.
         for (int i = 0; i < messagesStatus.length; i++) {
-            if (!Constant.EMAIL_SENT.equals(messagesStatus[i].getStatus())) {
+            if (!EmailConstant.EMAIL_SENT.equals(messagesStatus[i].getStatus())) {
                 noError = false;
                 throw new EmailException("Certain mails n'ont pas été distribués correctement",
                         messagesStatus[i].getEmail(), messagesStatus[i].getStatus());
@@ -175,7 +175,7 @@ public class EmailDAO {
      * Charge les parametres pour communiquer avec mandrillapp
      */
     private void getMessageProperties() {
-        final Properties appProperties = PropertiesUtils.loadPropertiesFile("email.properties");
+        final Properties appProperties = PropertiesFileWS.EMAIL.getProperties();
         apiKey = appProperties.getProperty("mandrill.api.key");
         emailActive = Boolean.valueOf(appProperties.getProperty("email.active"));
     }

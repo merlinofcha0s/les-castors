@@ -34,6 +34,7 @@ import fr.batimen.ws.dao.NotationDAO;
 import fr.batimen.ws.entity.Notation;
 import fr.batimen.ws.helper.JsonHelper;
 import fr.batimen.ws.interceptor.BatimenInterceptor;
+import fr.batimen.ws.service.NotificationService;
 
 /**
  * Facade REST de gestion des clients
@@ -57,13 +58,13 @@ public class GestionClientFacade {
     private GestionAnnonceFacade gestionAnnonceFacade;
 
     @Inject
-    private GestionUtilisateurFacade gestionUtilisateurFacade;
-
-    @Inject
     private AnnonceDAO annonceDAO;
 
     @Inject
     private NotationDAO notationDAO;
+
+    @Inject
+    private NotificationService notificationService;
 
     /**
      * Methode de récuperation des informations de la page de mes annonces
@@ -88,14 +89,14 @@ public class GestionClientFacade {
             LOGGER.debug("Récuperation notification.........");
         }
 
-        List<NotificationDTO> notificationsDTO = gestionUtilisateurFacade.getNotificationByLogin(loginEscaped,
+        List<NotificationDTO> notificationsDTO = notificationService.getNotificationByLogin(loginEscaped,
                 TypeCompte.CLIENT);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Récuperation annonce.........");
         }
 
-        List<AnnonceDTO> annoncesDTO = gestionAnnonceFacade.getAnnonceByClientLogin(loginEscaped);
+        List<AnnonceDTO> annoncesDTO = gestionAnnonceFacade.getAnnoncesByClientLoginForMesAnnonces(loginEscaped);
 
         mesAnnoncesDTO.setNotifications(notificationsDTO);
         mesAnnoncesDTO.setAnnonces(annoncesDTO);

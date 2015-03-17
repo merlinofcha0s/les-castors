@@ -44,13 +44,30 @@ import fr.batimen.dto.enums.TypeTravaux;
 @Table(name = "Annonce")
 @NamedQueries(value = {
         @NamedQuery(name = QueryJPQL.ANNONCE_BY_LOGIN,
-                query = "SELECT a FROM Annonce AS a WHERE a.demandeur.login = :login"),
+                query = "SELECT a FROM Annonce AS a WHERE a.demandeur.login = :login AND a.etatAnnonce != 4"),
         @NamedQuery(name = QueryJPQL.ANNONCE_BY_LOGIN_FETCH_ARTISAN,
-                query = "SELECT a.categorieMetier, a.description, a.etatAnnonce, count(art) FROM Annonce AS a LEFT OUTER JOIN a.artisans AS art WHERE a.demandeur.login = :login GROUP BY a ORDER BY dateCreation ASC"),
+                query = "SELECT a.categorieMetier, a.description, a.etatAnnonce, count(art) FROM Annonce AS a LEFT OUTER JOIN a.artisans AS art WHERE a.demandeur.login = :login AND a.etatAnnonce != 4 AND a.etatAnnonce != 1 GROUP BY a ORDER BY dateCreation ASC"),
         @NamedQuery(name = QueryJPQL.ANNONCE_BY_TITLE_AND_DESCRIPTION,
-                query = "SELECT a FROM Annonce AS a WHERE a.description = :description AND a.demandeur.login = :login"),
+                query = "SELECT a FROM Annonce AS a WHERE a.description = :description AND a.demandeur.login = :login AND a.etatAnnonce != 4 AND a.etatAnnonce != 1"),
         @NamedQuery(name = QueryJPQL.NB_ANNONCE_BY_LOGIN,
-                query = "SELECT count(a) FROM Annonce AS a WHERE a.demandeur.login = :login") })
+                query = "SELECT count(a) FROM Annonce AS a WHERE a.demandeur.login = :login AND a.etatAnnonce != 4 AND a.etatAnnonce != 1"),
+        @NamedQuery(name = QueryJPQL.ANNONCE_BY_ID_FETCH_ARTISAN_ENTREPRISE_CLIENT_ADRESSE,
+                query = "SELECT a FROM Annonce AS a LEFT OUTER JOIN FETCH a.artisans AS art LEFT OUTER JOIN FETCH art.entreprise AS ent LEFT OUTER JOIN FETCH a.adresseChantier AS adr LEFT OUTER JOIN FETCH a.demandeur AS dem WHERE a.hashID = :hashID"),
+        @NamedQuery(name = QueryJPQL.ANNONCE_BY_ID,
+                query = "SELECT a FROM Annonce AS a WHERE a.hashID = :hashID AND a.etatAnnonce != 4 AND a.etatAnnonce != 1"),
+        @NamedQuery(name = QueryJPQL.ANNONCE_BY_ID_ADMIN, query = "SELECT a FROM Annonce AS a WHERE a.hashID = :hashID"),
+        @NamedQuery(name = QueryJPQL.ANNONCE_UPDATE_NB_CONSULTATION,
+                query = "UPDATE Annonce AS a set a.nbConsultation = :nbConsultation, a.dateMAJ = CURRENT_DATE WHERE a.hashID = :hashID"),
+        @NamedQuery(name = QueryJPQL.ANNONCE_SUPRESS_ANNONCE_FOR_CLIENT,
+                query = "UPDATE Annonce a SET a.etatAnnonce = :etatAnnonce, a.dateMAJ = CURRENT_DATE WHERE a IN (SELECT a FROM Annonce AS a WHERE a.demandeur.login  = :login AND a.hashID = :hashID)"),
+        @NamedQuery(name = QueryJPQL.ANNONCE_SUPRESS_ANNONCE_FOR_ADMIN,
+                query = "UPDATE Annonce a SET a.etatAnnonce = :etatAnnonce, a.dateMAJ = CURRENT_DATE WHERE a IN (SELECT a FROM Annonce AS a WHERE a.hashID = :hashID)"),
+        @NamedQuery(name = QueryJPQL.ANNONCE_SELECTION_ENTREPRISE_FOR_CLIENT,
+                query = "UPDATE Annonce a SET a.entrepriseSelectionnee = (SELECT ent FROM Entreprise AS ent WHERE ent.artisan.login = :artisanLoginChoisi), a.dateMAJ = CURRENT_DATE WHERE a.hashID = :hashID AND a.demandeur.login = :login"),
+        @NamedQuery(name = QueryJPQL.ANNONCE_DESACTIVE_PERIMEE,
+                query = "UPDATE Annonce a SET a.etatAnnonce = 1, a.dateMAJ = CURRENT_DATE WHERE a.dateCreation < :todayMinusXDays AND a.artisans.size = :nbArtisanMax"),
+        @NamedQuery(name = QueryJPQL.ANNONCE_BY_HASHID_AND_DEMANDEUR,
+                query = "SELECT a FROM Annonce AS a WHERE a.hashID = :hashID AND a.demandeur.login = :loginDemandeur") })
 public class Annonce extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = 3160372354800747789L;
@@ -96,8 +113,10 @@ public class Annonce extends AbstractEntity implements Serializable {
     @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @LazyToOne(LazyToOneOption.NO_PROXY)
     private Adresse adresseChantier;
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name = "annonce_artisan")
+    @ManyToMany(fetch = FetchType.LAZY, targetEntity = Artisan.class)
+    @JoinTable(name = "annonce_artisan",
+            joinColumns = @JoinColumn(name = "annonce_id"),
+            inverseJoinColumns = @JoinColumn(name = "artisans_id"))
     private List<Artisan> artisans = new ArrayList<Artisan>();
     @OneToMany(mappedBy = "annonce",
             targetEntity = Notification.class,

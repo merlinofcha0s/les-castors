@@ -1,5 +1,7 @@
 package fr.batimen.web.client.extend.member.client;
 
+import javax.inject.Inject;
+
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -14,7 +16,7 @@ import fr.batimen.web.client.component.ContactezNous;
 import fr.batimen.web.client.component.Profil;
 import fr.batimen.web.client.component.RaterCastor;
 import fr.batimen.web.client.master.MasterPage;
-import fr.batimen.ws.client.service.ClientsService;
+import fr.batimen.ws.client.service.ClientsServiceREST;
 
 /**
  * Page où les utilisateurs pourront voir un resumé de leurs activités sur le
@@ -26,6 +28,12 @@ import fr.batimen.ws.client.service.ClientsService;
 public class MonProfil extends MasterPage {
 
     private static final long serialVersionUID = -7816716629862060521L;
+
+    @Inject
+    private ClientsServiceREST clientsServiceREST;
+
+    @Inject
+    private Authentication authentication;
 
     private MonProfilDTO monProfilDTO;
     private ClientDTO client;
@@ -54,9 +62,8 @@ public class MonProfil extends MasterPage {
     }
 
     private void getDataMonProfil() {
-        Authentication authentication = new Authentication();
         client = authentication.getCurrentUserInfo();
-        monProfilDTO = ClientsService.getMesInfosForMonProfil(client.getLogin());
+        monProfilDTO = clientsServiceREST.getMesInfosForMonProfil(client.getLogin());
     }
 
     private void initLabel() {

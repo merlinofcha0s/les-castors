@@ -28,7 +28,8 @@ import fr.batimen.core.constant.QueryJPQL;
 @Entity
 @Table(name = "Client")
 @NamedQueries(value = {
-        @NamedQuery(name = QueryJPQL.CLIENT_LOGIN, query = "SELECT c FROM Client AS c WHERE c.login = :login"),
+        @NamedQuery(name = QueryJPQL.CLIENT_LOGIN,
+                query = "SELECT c FROM Client AS c LEFT OUTER JOIN FETCH c.permissions AS perm WHERE c.login = :login"),
         @NamedQuery(name = QueryJPQL.CLIENT_BY_EMAIL, query = "SELECT c FROM Client AS c WHERE c.email = :email"),
         @NamedQuery(name = QueryJPQL.CLIENT_BY_ACTIVATION_KEY,
                 query = "SELECT c FROM Client AS c WHERE c.cleActivation = :cleActivation"),

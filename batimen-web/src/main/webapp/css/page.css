@@ -560,3 +560,104 @@ table tr td .error {
 #generalContainerAvis{
 	margin-top: 20px;
 }
+
+/* Espace client - annonce */
+#containerInformationsAnnonce{
+	padding-top: 25px;
+}
+
+.containerGlyph{
+	float: left;
+}
+
+.glyphAnnonce{
+	font-size: 26px;
+}
+
+.labelAnnonce{
+	padding-left: 20px; 
+	float: left; 
+	padding-right: 5px; 
+	padding-top: 7px;
+}
+
+#categorieLabelSpace{
+	float: left;
+	padding-top: 7px;
+}
+
+#sousCategorieLabel{
+	padding-top: 7px;
+}
+
+.containerInformationAnnonce{
+	padding-top: 10px;
+}
+
+.containerEnptrepriseSelectionnee{
+	padding-top: 10px;
+	clear: both;
+}
+
+.informationAnnonce{
+	padding-left: 20px; 
+	padding-top: 7px;
+}
+
+#containerPhoto{
+	padding-top: 40px;
+}
+
+.containerInfo{
+	padding-top: 10px;
+}
+
+.contactInfo{
+	padding-left: 33px; 
+	padding-right: 5px;
+}
+
+.sidebarRightWithPaddingTop{
+	padding-left: 33px; 
+	padding-right: 5px;
+	padding-top: 7px;
+}
+
+.containerActions{
+	padding-bottom: 20px;
+}
+
+.containerAction{
+	padding-top: 10px;
+}
+
+.actionUser{
+	padding-left: 33px; 
+	padding-right: 5px;
+	padding-top: 7px;
+}
+
+.imgEntreprise{
+	width: 50px;
+}
+
+.linkEntreprise{
+	padding-top: 15px; 
+	padding-left: 10px;
+	display: inline-block;
+}
+
+.containerAcceptDevis{
+	padding-top: 6px;
+}
+
+.linkAcceptDevis{
+	padding-left: 13px; 
+	display: inline-block;
+	vertical-align: text-top;
+	padding-top: 6px;
+}
+
+.containerLinkRefuser{
+	padding-left: 10px;
+}

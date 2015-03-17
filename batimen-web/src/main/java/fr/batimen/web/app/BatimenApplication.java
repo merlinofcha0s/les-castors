@@ -2,9 +2,15 @@ package fr.batimen.web.app;
 
 import java.util.Properties;
 
+import javax.enterprise.inject.spi.BeanManager;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
 import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
+import org.apache.wicket.cdi.CdiConfiguration;
+import org.apache.wicket.cdi.ConversationPropagation;
 import org.apache.wicket.core.request.mapper.MountedMapper;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.Request;
@@ -16,14 +22,14 @@ import org.odlabs.wiquery.ui.themes.WiQueryCoreThemeResourceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.batimen.core.constant.Constant;
-import fr.batimen.core.utils.PropertiesUtils;
+import fr.batimen.core.constant.UrlPage;
 import fr.batimen.web.client.extend.Accueil;
 import fr.batimen.web.client.extend.CGU;
 import fr.batimen.web.client.extend.Contact;
 import fr.batimen.web.client.extend.QuiSommeNous;
 import fr.batimen.web.client.extend.activation.Activation;
 import fr.batimen.web.client.extend.authentification.Authentification;
+import fr.batimen.web.client.extend.connected.Annonce;
 import fr.batimen.web.client.extend.error.AccesInterdit;
 import fr.batimen.web.client.extend.error.ErreurInterne;
 import fr.batimen.web.client.extend.error.Expiree;
@@ -34,6 +40,7 @@ import fr.batimen.web.client.extend.member.client.MonProfil;
 import fr.batimen.web.client.extend.nouveau.artisan.NouveauArtisan;
 import fr.batimen.web.client.extend.nouveau.devis.NouveauDevis;
 import fr.batimen.web.client.session.BatimenSession;
+import fr.batimen.web.enums.PropertiesFileWeb;
 
 /**
  * Classe principale de l'application
@@ -84,23 +91,24 @@ public class BatimenApplication extends AuthenticatedWebApplication {
         // Pas de http pour éviter le content mix blocking dans le browser
         // (appel d'une url http dans une page https)
         getJavaScriptLibrarySettings().setJQueryReference(
-                new UrlResourceReference(Url.parse("//code.jquery.com/jquery-1.9.1.min.js")));
+                new UrlResourceReference(Url.parse("//code.jquery.com/jquery-1.11.2.min.js")));
         // Chargement de Jquery-ui avec le theme Smoothness
         addResourceReplacement(WiQueryCoreThemeResourceReference.get(), new WiQueryCoreThemeResourceReference(
                 "smoothness"));
 
         // Cfg urls des pages principales
-        mountPage(Constant.ACCUEIL_URL, Accueil.class);
-        mountPage(Constant.AUTHENTIFICATION_URL, Authentification.class);
-        mountPage(Constant.MES_ANNONCES_URL, MesAnnonces.class);
-        mountPage(Constant.QUI_SOMMES_NOUS_URL, QuiSommeNous.class);
-        mountPage(Constant.CONTACT_URL, Contact.class);
-        mountPage(Constant.CGU_URL, CGU.class);
-        mountPage(Constant.ACTIVATION_URL, Activation.class);
-        mountPage(Constant.PARTENAIRE_URL, NouveauArtisan.class);
-        mountPage(Constant.NOUVEAU_DEVIS_URL, NouveauDevis.class);
-        mountPage(Constant.MODIFIER_MON_PROFIL, ModifierMonProfil.class);
-        mount(new MountedMapper(Constant.MON_PROFIL_URL, MonProfil.class, new UrlPathPageParametersEncoder()));
+        mountPage(UrlPage.ACCUEIL_URL, Accueil.class);
+        mountPage(UrlPage.AUTHENTIFICATION_URL, Authentification.class);
+        mountPage(UrlPage.MES_ANNONCES_URL, MesAnnonces.class);
+        mountPage(UrlPage.QUI_SOMMES_NOUS_URL, QuiSommeNous.class);
+        mountPage(UrlPage.CONTACT_URL, Contact.class);
+        mountPage(UrlPage.CGU_URL, CGU.class);
+        mountPage(UrlPage.ACTIVATION_URL, Activation.class);
+        mountPage(UrlPage.PARTENAIRE_URL, NouveauArtisan.class);
+        mountPage(UrlPage.NOUVEAU_DEVIS_URL, NouveauDevis.class);
+        mountPage(UrlPage.MODIFIER_MON_PROFIL, ModifierMonProfil.class);
+        mount(new MountedMapper(UrlPage.MON_PROFIL_URL, MonProfil.class, new UrlPathPageParametersEncoder()));
+        mountPage(UrlPage.ANNONCE, Annonce.class);
         // Page d'erreur
         mountPage("/interdit", AccesInterdit.class);
         mountPage("/expiree", Expiree.class);
@@ -110,6 +118,21 @@ public class BatimenApplication extends AuthenticatedWebApplication {
         getApplicationSettings().setInternalErrorPage(ErreurInterne.class);
         getApplicationSettings().setAccessDeniedPage(AccesInterdit.class);
         getApplicationSettings().setPageExpiredErrorPage(Expiree.class);
+
+        // Init de CDI (Wicket)
+        BeanManager manager = null;
+        try {
+            // Recuperation du context via le serveur d'application
+            manager = (BeanManager) new InitialContext().lookup("java:comp/BeanManager");
+        } catch (NamingException e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error(
+                        "Impossible de récuperer le context bean manager : java:comp/BeanManager pour l'init de CDI", e);
+            }
+        }
+
+        // Configuration de CDI en enlevant le mode conversation
+        new CdiConfiguration(manager).setPropagation(ConversationPropagation.NONE).configure(this);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Init de la Web app.....OK");
@@ -145,8 +168,7 @@ public class BatimenApplication extends AuthenticatedWebApplication {
             LOGGER.debug("Récuperation des properties....");
         }
 
-        Properties appProperties = PropertiesUtils.loadPropertiesFile("app.properties");
+        Properties appProperties = PropertiesFileWeb.APP.getProperties();
         setStripWicketTags = Boolean.valueOf(appProperties.getProperty("app.setStripWicketTags"));
     }
-
 }

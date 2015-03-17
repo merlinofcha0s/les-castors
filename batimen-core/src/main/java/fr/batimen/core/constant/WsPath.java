@@ -20,7 +20,6 @@ public class WsPath {
     public static final String GESTION_UTILISATEUR_SERVICE_ACTIVATION = "activation";
     public static final String GESTION_UTILISATEUR_SERVICE_HASH = "byHash";
     public static final String GESTION_UTILISATEUR_SERVICE_ROLES = "getRoles";
-    public static final String GESTION_UTILISATEUR_SERVICE_NOTIFICATION = "notificationByLogin";
     public static final String GESTION_UTILISATEUR_SERVICE_UPDATE_INFO = "update";
 
     // public static final String GESTION_CLIENT_SERVICE_PATH = "gestionClient";
@@ -28,7 +27,13 @@ public class WsPath {
     // Path Gestion Annonce
     public static final String GESTION_ANNONCE_SERVICE_PATH = "gestionAnnonce";
     public static final String GESTION_ANNONCE_SERVICE_CREATION_ANNONCE = "creationAnnonce";
-    public static final String GESTION_ANNONCE_SERVICE_GET_ANNONCE_BY_LOGIN = "getAnnonceByLogin";
+    public static final String GESTION_ANNONCE_SERVICE_GET_ANNONCES_BY_LOGIN = "getAnnonceByLogin";
+    public static final String GESTION_ANNONCE_SERVICE_GET_ANNONCES_BY_ID = "getAnnonceByID";
+    public static final String GESTION_ANNONCE_SERVICE_UPDATE_NB_CONSULTATION = "updateNbConsultation";
+    public static final String GESTION_ANNONCE_SERVICE_SUPRESS_ANNONCE = "suppressionAnnonce";
+    public static final String GESTION_ANNONCE_SERVICE_SELECTION_UNE_ENTREPRISE = "selectionUneEntreprise";
+    public static final String GESTION_ANNONCE_SERVICE_INSCRIPTION_UN_ARTISAN = "inscriptionUnArtisan";
+    public static final String GESTION_ANNONCE_SERVICE_DESINSCRIPTION_UN_ARTISAN = "desinscriptionUnArtisan";
 
     // Path Gestion Partenaire
     public static final String GESTION_PARTENAIRE_SERVICE_PATH = "gestionPartenaire";

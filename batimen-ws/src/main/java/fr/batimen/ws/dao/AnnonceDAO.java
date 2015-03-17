@@ -1,6 +1,7 @@
 package fr.batimen.ws.dao;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.LocalBean;
@@ -9,7 +10,9 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.inject.Inject;
 import javax.persistence.NoResultException;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 
 import org.slf4j.Logger;
@@ -17,7 +20,10 @@ import org.slf4j.LoggerFactory;
 
 import fr.batimen.core.constant.QueryJPQL;
 import fr.batimen.core.exception.DuplicateEntityException;
+import fr.batimen.dto.DemandeAnnonceDTO;
+import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.ws.entity.Annonce;
+import fr.batimen.ws.utils.RolesUtils;
 
 /**
  * Classe d'accés aux données pour les annonces
@@ -30,6 +36,9 @@ import fr.batimen.ws.entity.Annonce;
 public class AnnonceDAO extends AbstractDAO<Annonce> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AnnonceDAO.class);
+
+    @Inject
+    private RolesUtils rolesUtils;
 
     /**
      * Récupère les annonces par login de leurs utilsateurs
@@ -204,5 +213,247 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
         }
 
         return query.getSingleResult();
+    }
+
+    /**
+     * Récupère les informations d'une annonce dans le but de les afficher.
+     * 
+     * @param login
+     *            le login du client
+     * @return Le nb d'annonce
+     */
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Annonce getAnnonceByIDForAffichage(String id) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Debut de la récuperation de l'annonce par l'id");
+        }
+
+        try {
+            TypedQuery<Annonce> query = entityManager.createNamedQuery(
+                    QueryJPQL.ANNONCE_BY_ID_FETCH_ARTISAN_ENTREPRISE_CLIENT_ADRESSE, Annonce.class);
+            query.setParameter(QueryJPQL.PARAM_ANNONCE_ID, id);
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Fin de la récuperation de l'annonce par l'id");
+            }
+
+            return query.getSingleResult();
+        } catch (NoResultException nre) {
+            if (LOGGER.isWarnEnabled()) {
+                LOGGER.warn("Aucune correspondance trouvées dans la BDD", nre);
+            }
+            return null;
+        }
+    }
+
+    /**
+     * Charge une annonce grace à son hash ID, ne crée pas de transaction
+     * 
+     * @param login
+     *            le login du client
+     * @return Le nb d'annonce
+     */
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Annonce getAnnonceByIDWithoutTransaction(String id, boolean isAdmin) {
+        return getAnnonceByID(id, isAdmin);
+    }
+
+    /**
+     * Charge une annonce grace à son hash ID, crée une transaction
+     * 
+     * @param login
+     *            le login du client
+     * @return Le nb d'annonce
+     */
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public Annonce getAnnonceByIDWithTransaction(String id, boolean isAdmin) {
+        return getAnnonceByID(id, isAdmin);
+    }
+
+    private Annonce getAnnonceByID(String id, boolean isAdmin) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Debut de la récuperation de l'annonce par l'id");
+        }
+
+        TypedQuery<Annonce> query = null;
+        try {
+            if (isAdmin) {
+                query = entityManager.createNamedQuery(QueryJPQL.ANNONCE_BY_ID_ADMIN, Annonce.class);
+            } else {
+                query = entityManager.createNamedQuery(QueryJPQL.ANNONCE_BY_ID, Annonce.class);
+            }
+
+            query.setParameter(QueryJPQL.PARAM_ANNONCE_ID, id);
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Fin de la récuperation de l'annonce par l'id");
+            }
+
+            return query.getSingleResult();
+        } catch (NoResultException nre) {
+            if (LOGGER.isWarnEnabled()) {
+                LOGGER.warn("Aucune correspondance trouvées dans la BDD", nre);
+            }
+            return null;
+        }
+    }
+
+    /**
+     * Mets a jour le nb de consultation d'une annonce dans la BDD
+     * 
+     * @param nbConsultation
+     *            le nb de consultation deja incrémenté
+     * @param hashID
+     *            L'identifiant unique de l'annonce.
+     * @return True si la mise a jour s'est bien passé .
+     */
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public Boolean updateAnnonceNbConsultationByHashId(Integer nbConsultation, String hashID) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Debut de mise a jour du nb de consultation d'une annonce");
+        }
+
+        try {
+            Query query = entityManager.createNamedQuery(QueryJPQL.ANNONCE_UPDATE_NB_CONSULTATION);
+            query.setParameter(QueryJPQL.PARAM_ANNONCE_ID, hashID);
+            query.setParameter(QueryJPQL.PARAM_ANNONCE_NB_CONSULTATION, nbConsultation);
+            Integer nbUpdated = query.executeUpdate();
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("nb de row updated: " + nbUpdated);
+                LOGGER.debug("Fin de la mise a jour du nb de consultation d'une annonce");
+            }
+
+            if (nbUpdated == 0 || nbUpdated != 1) {
+                return Boolean.FALSE;
+            }
+
+            return Boolean.TRUE;
+        } catch (NoResultException nre) {
+            if (LOGGER.isWarnEnabled()) {
+                LOGGER.warn("Aucune correspondance trouvées dans la BDD", nre);
+            }
+            return null;
+        }
+    }
+
+    /**
+     * Supprime une annonce présente en base de données : <br/>
+     * Attention ce n'est pas vraiment une supression, on ne fait que desactiver
+     * l'annonce en base de données.
+     * 
+     * @param demandeAnnonceDTO
+     *            Objet qui possede les infos pour verifier que l'utilisateur a
+     *            les droits et pour supprimer l'annonce.
+     * @return True si la suppression s'est bien passée.
+     */
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
+    public Boolean suppressionAnnonce(DemandeAnnonceDTO demandeAnnonceDTO) {
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Debut de la suppression de l'annonce : " + demandeAnnonceDTO.getHashID());
+            LOGGER.debug("A la demande de : " + demandeAnnonceDTO.getLoginDemandeur());
+            LOGGER.debug("Et qui possede le role : " + demandeAnnonceDTO.getTypeCompteDemandeur());
+        }
+        Query query = null;
+        try {
+            if (rolesUtils.checkIfClient(demandeAnnonceDTO.getTypeCompteDemandeur())) {
+                query = entityManager.createNamedQuery(QueryJPQL.ANNONCE_SUPRESS_ANNONCE_FOR_CLIENT);
+                query.setParameter(QueryJPQL.PARAM_CLIENT_LOGIN, demandeAnnonceDTO.getLoginDemandeur());
+            } else if (rolesUtils.checkIfAdmin(demandeAnnonceDTO.getTypeCompteDemandeur())) {
+                query = entityManager.createNamedQuery(QueryJPQL.ANNONCE_SUPRESS_ANNONCE_FOR_ADMIN);
+            }
+
+            query.setParameter(QueryJPQL.PARAM_ANNONCE_ID, demandeAnnonceDTO.getHashID());
+            query.setParameter(QueryJPQL.PARAM_ANNONCE_ETAT, EtatAnnonce.SUPPRIMER);
+
+            Integer nbUpdated = query.executeUpdate();
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Fin de la suppression de l'annonce");
+            }
+
+            if (nbUpdated == 0 || nbUpdated != 1) {
+                return Boolean.FALSE;
+            }
+
+            return Boolean.TRUE;
+        } catch (NoResultException nre) {
+            if (LOGGER.isWarnEnabled()) {
+                LOGGER.warn("Aucune correspondance trouvées dans la BDD", nre);
+            }
+            return null;
+        }
+    }
+
+    /**
+     * Cherche en base de données et desactive toutes les annonces qui sont plus
+     * petite que la date passée en paramètre et qui ont un nombre d'artisan
+     * inscrit égale a la properties du nb max d'artisan <br/>
+     * 
+     * @param todayMinusXDays
+     *            : la date du jour - le nb de jour present dans le fichier de
+     *            properties
+     * @param nbMaxArtisan
+     *            : Nombre max d'artisan pouvant s'inscrire a une annonce (voir
+     *            fichier de properties)
+     */
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public void desactiveAnnoncePerime(Date todayMinusXDays, Integer nbMaxArtisan) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Debut de mise a jour des annonces périmées");
+        }
+
+        try {
+            Query query = entityManager.createNamedQuery(QueryJPQL.ANNONCE_DESACTIVE_PERIMEE);
+            query.setParameter(QueryJPQL.PARAM_ANNONCE_TODAY_MINUS_X_DAYS, todayMinusXDays);
+            query.setParameter(QueryJPQL.PARAM_ANNONCE_NB_ARTISAN_MAX, nbMaxArtisan);
+            Integer nbUpdated = query.executeUpdate();
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("nb de row updated: " + nbUpdated);
+                LOGGER.debug("Fin de mise a jour des annonces périmées");
+            }
+
+        } catch (NoResultException nre) {
+            if (LOGGER.isWarnEnabled()) {
+                LOGGER.warn("Aucune correspondance trouvées dans la BDD", nre);
+            }
+        }
+    }
+
+    /**
+     * Recherche une annonce par son id et le login du demandeur <br/>
+     * 
+     * @param hashID
+     *            L'id unique de l'annonce
+     * @param loginDemandeur
+     *            Le login du demandeur (celui qui a poster l'annonce)
+     */
+    @TransactionAttribute(TransactionAttributeType.MANDATORY)
+    public Annonce getAnnonceByIdByLogin(String hashID, String loginDemandeur) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Debut de requete selection annonce par hash et demandeur");
+        }
+
+        TypedQuery<Annonce> query = null;
+        try {
+
+            query = entityManager.createNamedQuery(QueryJPQL.ANNONCE_BY_HASHID_AND_DEMANDEUR, Annonce.class);
+
+            query.setParameter(QueryJPQL.PARAM_ANNONCE_ID, hashID);
+            query.setParameter(QueryJPQL.PARAM_ANNONCE_DEMANDEUR_LOGIN, loginDemandeur);
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Fin de requete selection annonce par hash et demandeur");
+            }
+
+            return query.getSingleResult();
+        } catch (NoResultException nre) {
+            if (LOGGER.isWarnEnabled()) {
+                LOGGER.warn("Aucune correspondance trouvées dans la BDD", nre);
+            }
+            return null;
+        }
     }
 }

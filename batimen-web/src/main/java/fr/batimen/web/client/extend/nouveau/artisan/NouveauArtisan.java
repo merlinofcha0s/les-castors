@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -14,13 +16,14 @@ import org.slf4j.LoggerFactory;
 
 import fr.batimen.core.exception.FrontEndException;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
+import fr.batimen.web.app.constants.Etape;
 import fr.batimen.web.client.component.ContactezNous;
 import fr.batimen.web.client.component.MapFrance;
 import fr.batimen.web.client.component.NavigationWizard;
 import fr.batimen.web.client.event.MapFranceEvent;
 import fr.batimen.web.client.extend.nouveau.artisan.event.ChangementEtapeEventArtisan;
 import fr.batimen.web.client.master.MasterPage;
-import fr.batimen.ws.client.service.ArtisanService;
+import fr.batimen.ws.client.service.ArtisanServiceREST;
 
 /**
  * Page permettant d'enregistré un nouveau partenaire (artisan)
@@ -32,6 +35,9 @@ public class NouveauArtisan extends MasterPage {
 
     private static final long serialVersionUID = 7796768527786855832L;
     private static final Logger LOGGER = LoggerFactory.getLogger(NouveauArtisan.class);
+
+    @Inject
+    private ArtisanServiceREST artisanServiceREST;
 
     // DTO
     private CreationPartenaireDTO nouveauPartenaire = new CreationPartenaireDTO();
@@ -54,9 +60,13 @@ public class NouveauArtisan extends MasterPage {
     // Composant étape 4
     private final Etape4Confirmation etape4Confirmation;
 
+    private Etape etapeEncours;
+
     public NouveauArtisan() {
         super("Inscription d'un nouveau partenaire qui effectuera les travaux chez un particulier",
                 "Artisan Rénovation Inscription", "Nouveau partenaire", true, "img/bg_title1.jpg");
+
+        etapeEncours = Etape.ETAPE_1;
 
         masterContainer = new WebMarkupContainer("masterContainer");
         masterContainer.setMarkupId("masterContainer");
@@ -65,31 +75,100 @@ public class NouveauArtisan extends MasterPage {
         initNavigationWizard();
 
         // Etape 1 : selection du departement avec la carte de la france
-        carteFrance = new MapFrance("mapFrance");
+        carteFrance = new MapFrance("mapFrance") {
+
+            private static final long serialVersionUID = 1L;
+
+            /*
+             * (non-Javadoc)
+             * 
+             * @see org.apache.wicket.Component#isVisible()
+             */
+            @Override
+            public boolean isVisible() {
+                if (etapeEncours.equals(Etape.ETAPE_1)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+        };
 
         // Etape 2 : Informations du dirigeant
         etape2PartenaireForm = new Etape2PartenaireForm("etape2PartenaireForm",
                 new CompoundPropertyModel<CreationPartenaireDTO>(nouveauPartenaire));
-        containerEtape2 = new WebMarkupContainer("containerEtape2");
+
+        containerEtape2 = new WebMarkupContainer("containerEtape2") {
+
+            private static final long serialVersionUID = 1L;
+
+            /*
+             * (non-Javadoc)
+             * 
+             * @see org.apache.wicket.Component#isVisible()
+             */
+            @Override
+            public boolean isVisible() {
+                if (etapeEncours.equals(Etape.ETAPE_2)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+        };
         containerEtape2.add(etape2PartenaireForm);
         containerEtape2.setVisible(false);
 
         // Etape 3 : Information de l'entreprise
         etape3Entreprise = new Etape3Entreprise("etape3InformationsEntreprise", new Model<Serializable>(),
-                nouveauPartenaire);
+                nouveauPartenaire) {
+
+            private static final long serialVersionUID = 1L;
+
+            /*
+             * (non-Javadoc)
+             * 
+             * @see org.apache.wicket.Component#isVisible()
+             */
+            @Override
+            public boolean isVisible() {
+                if (etapeEncours.equals(Etape.ETAPE_3)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+        };
         etape3Entreprise.setVisible(false);
 
         // Etape 4 : confirmation inscription
-        etape4Confirmation = new Etape4Confirmation("etape4Confirmation");
+        etape4Confirmation = new Etape4Confirmation("etape4Confirmation") {
+
+            private static final long serialVersionUID = 1L;
+
+            /*
+             * (non-Javadoc)
+             * 
+             * @see org.apache.wicket.Component#isVisible()
+             */
+            @Override
+            public boolean isVisible() {
+                if (etapeEncours.equals(Etape.ETAPE_4)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+        };
         etape4Confirmation.setVisible(false);
 
         ContactezNous contactezNous = new ContactezNous("contactezNous");
 
-        masterContainer.add(carteFrance);
-        masterContainer.add(containerEtape2);
-        masterContainer.add(etape3Entreprise);
-        masterContainer.add(etape4Confirmation);
-        masterContainer.add(contactezNous);
+        masterContainer.add(carteFrance, containerEtape2, etape3Entreprise, etape4Confirmation, contactezNous);
 
         this.add(masterContainer);
 
@@ -119,66 +198,35 @@ public class NouveauArtisan extends MasterPage {
         masterContainer.add(navigationWizard);
     }
 
-    private void etape1Departement() {
-        carteFrance.setVisible(true);
-        containerEtape2.setVisible(false);
-        etape3Entreprise.setVisible(false);
-        etape4Confirmation.setVisible(false);
-    }
-
-    private void etape2InformationsDirigeant() {
-        carteFrance.setVisible(false);
-        containerEtape2.setVisible(true);
-        etape3Entreprise.setVisible(false);
-        etape4Confirmation.setVisible(false);
-    }
-
-    private void etape3InformationsEntreprise() {
-        carteFrance.setVisible(false);
-        containerEtape2.setVisible(false);
-        etape3Entreprise.setVisible(true);
-        etape4Confirmation.setVisible(false);
-    }
-
-    private void etape4Confirmation() {
-        carteFrance.setVisible(false);
-        containerEtape2.setVisible(false);
-        etape3Entreprise.setVisible(false);
-        etape4Confirmation.setVisible(true);
-        // Appel du service d'enregistrement du nouveau partenaire
-        Integer retourService = creationPartenaire(nouveauPartenaire);
-        if (retourService == 0) {
-            etape4Confirmation.succesInscription();
-        } else {
-            etape4Confirmation.failureInscription();
-        }
-
-    }
-
     private void changementEtape(Integer numeroEtape) throws FrontEndException {
         // On charge l'etape demandé grace au numero d'etape passé en parametre
         switch (numeroEtape) {
         case 1:
             loggerChangementEtape("Passage dans l'étape 1");
-            etape1Departement();
+            etapeEncours = Etape.ETAPE_1;
             break;
         case 2:
             loggerChangementEtape("Passage dans l'étape 2");
-            etape2InformationsDirigeant();
+            etapeEncours = Etape.ETAPE_2;
             break;
         case 3:
             loggerChangementEtape("Passage dans l'étape 3");
-            etape3InformationsEntreprise();
+            etapeEncours = Etape.ETAPE_3;
             break;
         case 4:
             loggerChangementEtape("Passage dans l'étape 4");
-            etape4Confirmation();
+            etapeEncours = Etape.ETAPE_4;
+            // Appel du service d'enregistrement du nouveau partenaire
+            Integer retourService = creationPartenaire(nouveauPartenaire);
+            if (retourService == 0) {
+                etape4Confirmation.succesInscription();
+            } else {
+                etape4Confirmation.failureInscription();
+            }
             break;
         default:
             throw new FrontEndException("Aucune étape du nouveau devis chargées, Situation Impossible");
         }
-
-        navigationWizard.setStep(numeroEtape);
     }
 
     private void loggerChangementEtape(String message) {
@@ -188,7 +236,7 @@ public class NouveauArtisan extends MasterPage {
     }
 
     private Integer creationPartenaire(CreationPartenaireDTO nouveauPartenaire) {
-        return ArtisanService.creationNouveauPartenaire(nouveauPartenaire);
+        return artisanServiceREST.creationNouveauPartenaire(nouveauPartenaire);
     }
 
     /*
@@ -243,4 +291,16 @@ public class NouveauArtisan extends MasterPage {
             targetChangementEtape.add(this);
         }
     }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.wicket.Page#onInitialize()
+     */
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
+        navigationWizard.setStep(etapeEncours.ordinal() + 1);
+    }
+
 }

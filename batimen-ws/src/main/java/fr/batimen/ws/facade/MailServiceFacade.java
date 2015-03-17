@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 
 import com.microtripit.mandrillapp.lutung.model.MandrillApiError;
 
+import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.WsPath;
 import fr.batimen.core.exception.EmailException;
@@ -45,40 +46,40 @@ import fr.batimen.ws.service.EmailService;
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class MailServiceFacade {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(MailServiceFacade.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(MailServiceFacade.class);
 
-	@Inject
-	private EmailService emailService;
+    @Inject
+    private EmailService emailService;
 
-	/**
-	 * Sends a contact mail to the team, and an acknowledgement mail to the customer
-	 * @param mail object created by customer
-	 * @return if success : 0
-	 * 			else : 1
-	 */
-	@POST
-	@Path(WsPath.MAIL_SERVICE_SEND_CONTACT_MAIL)
-	@TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-	public int sendContactMail(ContactMailDTO mail) {
-		boolean success = false;
-		try {
-			success = emailService.envoiEmailContact(mail);
-			
-			// si operation accomplie avec succes
-			// envoi email accuse de reception
-			if (success) {
-				emailService.envoiEmailAccuseReception(mail);
-			} else {
-				return Constant.CODE_SERVICE_RETOUR_KO;
-			}
-		} catch (EmailException | IOException | MandrillApiError e) {
-			LOGGER.error(
-					"Error while sending contact or aknowledgement email, contact mail sent? :"
-							+ success, e);
-		}
-		if (success){
-			return Constant.CODE_SERVICE_RETOUR_OK;
-		}
-		return Constant.CODE_SERVICE_RETOUR_KO;
-	}
+    /**
+     * Sends a contact mail to the team, and an acknowledgement mail to the
+     * customer
+     * 
+     * @param mail
+     *            object created by customer
+     * @return if success : 0 else : 1
+     */
+    @POST
+    @Path(WsPath.MAIL_SERVICE_SEND_CONTACT_MAIL)
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public int sendContactMail(ContactMailDTO mail) {
+        boolean success = false;
+        try {
+            success = emailService.envoiEmailContact(mail);
+
+            // si operation accomplie avec succes
+            // envoi email accuse de reception
+            if (success) {
+                emailService.envoiEmailAccuseReception(mail);
+            } else {
+                return CodeRetourService.RETOUR_KO;
+            }
+        } catch (EmailException | IOException | MandrillApiError e) {
+            LOGGER.error("Error while sending contact or aknowledgement email, contact mail sent? :" + success, e);
+        }
+        if (success) {
+            return CodeRetourService.RETOUR_OK;
+        }
+        return CodeRetourService.RETOUR_KO;
+    }
 }

@@ -15,7 +15,7 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.batimen.core.constant.Constant;
+import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.exception.BackendException;
 import fr.batimen.core.exception.DuplicateEntityException;
 import fr.batimen.dto.ClientDTO;
@@ -23,7 +23,7 @@ import fr.batimen.dto.LoginDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.test.ws.AbstractBatimenWsTest;
-import fr.batimen.ws.client.service.UtilisateurService;
+import fr.batimen.ws.client.service.UtilisateurServiceREST;
 import fr.batimen.ws.dao.AnnonceDAO;
 import fr.batimen.ws.dao.ClientDAO;
 import fr.batimen.ws.entity.Annonce;
@@ -45,6 +45,9 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
     @Inject
     private AnnonceDAO annonceDAO;
 
+    @Inject
+    private UtilisateurServiceREST utilisateurServiceREST;
+
     @Test
     @UsingDataSet("datasets/in/clients.yml")
     public void testGetClientForLogin() {
@@ -56,7 +59,7 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
         toLogin.setPassword("$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=");
 
         // Appel du service qui check le login
-        ClientDTO user = UtilisateurService.login(toLogin);
+        ClientDTO user = utilisateurServiceREST.login(toLogin);
 
         // Verification des infos
         assertTrue(user.getLogin().equals("pebronne"));
@@ -66,6 +69,7 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
         assertTrue(user.getNumeroTel().equals("0615125645"));
         assertTrue(user.getPrenom().equals("Pebron"));
         assertTrue(user.getNom().equals("De la Pebronne"));
+        Assert.assertEquals(user.getPermissions().get(0).getTypeCompte(), TypeCompte.CLIENT);
     }
 
     @Test
@@ -79,7 +83,7 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
         toLogin.setPassword("$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=");
 
         // Appel du service qui check le login
-        ClientDTO user = UtilisateurService.login(toLogin);
+        ClientDTO user = utilisateurServiceREST.login(toLogin);
 
         // Verification des infos
         assertTrue(user.getLogin().equals("pebronneArtisanne"));
@@ -102,7 +106,7 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
         toLogin.setPassword("$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=");
 
         // Appel du service qui check le login
-        ClientDTO user = UtilisateurService.login(toLogin);
+        ClientDTO user = utilisateurServiceREST.login(toLogin);
 
         // Verification que rien n'est renvoyer ce qui veut dire que la
         // combinaison login / mdp n'est pas bonne ou que l'utilisateur n'existe
@@ -120,7 +124,7 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
     @UsingDataSet("datasets/in/clients.yml")
     public void testGetClientByEmail() {
 
-        ClientDTO client = UtilisateurService.getUtilisateurByEmail("lol@lol.com");
+        ClientDTO client = utilisateurServiceREST.getUtilisateurByEmail("lol@lol.com");
 
         // On vérifie les differentes infos du client
         assertTrue(client.getLogin().equals("pebronne"));
@@ -136,7 +140,7 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
     @Test
     @UsingDataSet("datasets/in/clients.yml")
     public void testGetArtisanByEmail() {
-        ClientDTO artisan = UtilisateurService.getUtilisateurByEmail("lolPebronne@lol.com");
+        ClientDTO artisan = utilisateurServiceREST.getUtilisateurByEmail("lolPebronne@lol.com");
 
         // On vérifie les differentes infos du client
         assertTrue(artisan.getLogin().equals("pebronneArtisanne"));
@@ -182,15 +186,15 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
     @Test
     @UsingDataSet("datasets/in/clients.yml")
     public void testActivationClient() throws BackendException {
-        int codeRetour = UtilisateurService
+        int codeRetour = utilisateurServiceREST
                 .activateAccount("NTNkN2RmYzVkNWU2MDZkZjZlYTVjZGQ2ZGE0ZjljY2JhNGJjZWY5MmIxNmNiOWJmMjk2ZDVhNDY3OTEzMTIyZA==");
 
         // On charge le client pour vérifié les infos d'activation.
-        ClientDTO client = UtilisateurService.getUtilisateurByEmail("mdr@lol.com");
+        ClientDTO client = utilisateurServiceREST.getUtilisateurByEmail("mdr@lol.com");
 
         Assert.assertFalse(client.getCleActivation().isEmpty());
         Assert.assertTrue(client.getIsActive().equals(Boolean.TRUE));
-        Assert.assertTrue(codeRetour == Constant.CODE_SERVICE_RETOUR_OK);
+        Assert.assertTrue(codeRetour == CodeRetourService.RETOUR_OK);
 
         List<Annonce> annonces = annonceDAO.getAnnoncesByLogin(client.getLogin());
         Annonce annonce = annonces.get(0);
@@ -205,15 +209,15 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
     @Test
     @UsingDataSet("datasets/in/clients.yml")
     public void testActivationArtisan() throws BackendException {
-        int codeRetour = UtilisateurService
+        int codeRetour = utilisateurServiceREST
                 .activateAccount("NTNkN2RmYzVkNWU2MDZkZjZlYTVjZGQ2ZGE0ZjljY2JhNGJjZWY5MmIxNmNiOWJmMjk2ZDVhNDY3OTEzMTIyZA=0");
 
         // On charge le client pour vérifié les infos d'activation.
-        ClientDTO client = UtilisateurService.getUtilisateurByEmail("lolPebronne@lol.com");
+        ClientDTO client = utilisateurServiceREST.getUtilisateurByEmail("lolPebronne@lol.com");
 
         Assert.assertFalse(client.getCleActivation().isEmpty());
         Assert.assertTrue(client.getIsActive().equals(Boolean.TRUE));
-        Assert.assertTrue(codeRetour == Constant.CODE_SERVICE_RETOUR_OK);
+        Assert.assertTrue(codeRetour == CodeRetourService.RETOUR_OK);
     }
 
     /**
@@ -224,7 +228,7 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
     @Test
     @UsingDataSet("datasets/in/clients.yml")
     public void testGetHashClientActivated() throws BackendException {
-        String hash = UtilisateurService.getHashByLogin("pebronne");
+        String hash = utilisateurServiceREST.getHashByLogin("pebronne");
         Assert.assertTrue(!hash.isEmpty());
         Assert.assertEquals("$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=", hash);
     }
@@ -237,7 +241,7 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
     @Test
     @UsingDataSet("datasets/in/clients.yml")
     public void testGetHashClientNotActivated() throws BackendException {
-        String hash = UtilisateurService.getHashByLogin("xavier");
+        String hash = utilisateurServiceREST.getHashByLogin("xavier");
         Assert.assertTrue(hash.isEmpty());
     }
 
@@ -249,7 +253,7 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
     @Test
     @UsingDataSet("datasets/in/clients.yml")
     public void testGetHashArtisanActivated() throws BackendException {
-        String hash = UtilisateurService.getHashByLogin("moiArtisanne");
+        String hash = utilisateurServiceREST.getHashByLogin("moiArtisanne");
         Assert.assertTrue(!hash.isEmpty());
         Assert.assertEquals("$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=", hash);
     }
@@ -262,7 +266,7 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
     @Test
     @UsingDataSet("datasets/in/clients.yml")
     public void testGetHashArtisanNotActivated() throws BackendException {
-        String hash = UtilisateurService.getHashByLogin("pebronneArtisanne");
+        String hash = utilisateurServiceREST.getHashByLogin("pebronneArtisanne");
         Assert.assertTrue(hash.isEmpty());
     }
 
@@ -274,7 +278,7 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
     @Test
     @UsingDataSet("datasets/in/clients.yml")
     public void testGetRolesClient() throws BackendException {
-        String roles = UtilisateurService.getRolesByLogin("pebronne");
+        String roles = utilisateurServiceREST.getRolesByLogin("pebronne");
         Assert.assertTrue(!roles.isEmpty());
         Assert.assertEquals(TypeCompte.CLIENT.getRole(), roles);
     }
@@ -287,7 +291,7 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
     @Test
     @UsingDataSet("datasets/in/clients.yml")
     public void testGetRolesArtisan() throws BackendException {
-        String roles = UtilisateurService.getRolesByLogin("pebronneArtisanne");
+        String roles = utilisateurServiceREST.getRolesByLogin("pebronneArtisanne");
         Assert.assertTrue(!roles.isEmpty());
         Assert.assertEquals(TypeCompte.ARTISAN.getRole(), roles);
     }
@@ -302,7 +306,7 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
     @ShouldMatchDataSet(value = "datasets/out/update_utilisateur.yml", excludeColumns = { "id", "datemaj" })
     public void testUpdateUtilisateurInfos() throws BackendException {
         // On charge le client de la bdd
-        ClientDTO client = UtilisateurService.getUtilisateurByEmail("lol@lol.com");
+        ClientDTO client = utilisateurServiceREST.getUtilisateurByEmail("lol@lol.com");
         Assert.assertNotNull(client);
 
         // On change quelques données
@@ -310,8 +314,8 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
         client.setNumeroTel("0512458596");
 
         // On appel le ws
-        Integer codeRetour = UtilisateurService.updateUtilisateurInfos(client);
-        Assert.assertEquals(Constant.CODE_SERVICE_RETOUR_OK, codeRetour);
+        Integer codeRetour = utilisateurServiceREST.updateUtilisateurInfos(client);
+        Assert.assertEquals(CodeRetourService.RETOUR_OK, codeRetour);
     }
 
 }

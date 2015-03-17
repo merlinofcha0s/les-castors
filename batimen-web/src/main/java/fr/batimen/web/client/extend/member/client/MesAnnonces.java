@@ -3,6 +3,8 @@ package fr.batimen.web.client.extend.member.client;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -10,6 +12,7 @@ import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,13 +20,15 @@ import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.NotificationDTO;
 import fr.batimen.dto.aggregate.MesAnnoncesDTO;
 import fr.batimen.dto.helper.CategorieLoader;
+import fr.batimen.web.app.constants.FeedbackMessageLevel;
 import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.client.component.Commentaire;
 import fr.batimen.web.client.component.ContactezNous;
 import fr.batimen.web.client.component.LinkLabel;
 import fr.batimen.web.client.component.Profil;
+import fr.batimen.web.client.extend.connected.Annonce;
 import fr.batimen.web.client.master.MasterPage;
-import fr.batimen.ws.client.service.ClientsService;
+import fr.batimen.ws.client.service.ClientsServiceREST;
 
 /**
  * Page ou l'utilisateur pourra consulter son compte ainsi que l'avancement de
@@ -38,6 +43,12 @@ public final class MesAnnonces extends MasterPage {
     private static final long serialVersionUID = 1902734649854998120L;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MesAnnonces.class);
+
+    @Inject
+    private ClientsServiceREST clientsServiceREST;
+
+    @Inject
+    private Authentication authentication;
 
     private List<AnnonceDTO> annonces;
     private List<NotificationDTO> notifications;
@@ -54,6 +65,11 @@ public final class MesAnnonces extends MasterPage {
         initRepeaterNotifications();
         initRepeaterAnnonces();
         this.setOutputMarkupId(true);
+    }
+
+    public MesAnnonces(String messageToFeedBack, FeedbackMessageLevel messageLevel) {
+        this();
+        this.feedBackPanelGeneral.sendMessage(messageToFeedBack, messageLevel);
     }
 
     private void initStaticComposant() {
@@ -85,7 +101,7 @@ public final class MesAnnonces extends MasterPage {
 
             @Override
             protected void populateItem(ListItem<NotificationDTO> item) {
-                NotificationDTO notification = item.getModelObject();
+                final NotificationDTO notification = item.getModelObject();
 
                 final Model<String> nomEntrepriseModelForLbl = new Model<String>(notification.getNomEntreprise());
 
@@ -112,8 +128,9 @@ public final class MesAnnonces extends MasterPage {
 
                     @Override
                     public void onClick() {
-                        // TODO A Completer quand la page consultation annonce
-                        // sera prete
+                        PageParameters params = new PageParameters();
+                        params.add("idAnnonce", notification.getHashIDAnnonce());
+                        this.setResponsePage(Annonce.class, params);
                     }
 
                 };
@@ -147,7 +164,7 @@ public final class MesAnnonces extends MasterPage {
 
             @Override
             protected void populateItem(ListItem<AnnonceDTO> item) {
-                AnnonceDTO annonce = item.getModelObject();
+                final AnnonceDTO annonce = item.getModelObject();
 
                 StringBuilder descriptionCutting = new StringBuilder();
                 if (annonce.getDescription().length() > 30) {
@@ -175,7 +192,10 @@ public final class MesAnnonces extends MasterPage {
 
                     @Override
                     public void onClick() {
-                        // TODO Mettre en place quand la page annonce sera prete
+                        // TODO : Rajouter les hash id dans l'annonce DTO
+                        PageParameters params = new PageParameters();
+                        // params.add("idAnnonce", annonce.getHashIDAnnonce());
+                        this.setResponsePage(Annonce.class, params);
                     }
 
                 };
@@ -198,10 +218,7 @@ public final class MesAnnonces extends MasterPage {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Appel webservice pour la récupération des données a afficher");
         }
-
-        Authentication authentication = new Authentication();
-
-        MesAnnoncesDTO mesInfos = ClientsService.getMesInfosAnnonce(authentication.getCurrentUserInfo().getLogin());
+        MesAnnoncesDTO mesInfos = clientsServiceREST.getMesInfosAnnonce(authentication.getCurrentUserInfo().getLogin());
 
         annonces = mesInfos.getAnnonces();
         notifications = mesInfos.getNotifications();

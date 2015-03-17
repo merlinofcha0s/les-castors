@@ -30,6 +30,14 @@ notification:
     id_client: 1001
     id_artisan: 1003
     id_annonce: 1006
+  - id: 1003
+    typenotification: 0
+    datenotification: "2014-01-10 15:02:00"
+    statutNotification: 0
+    pourQuiNotification: 4
+    id_client: 1001
+    id_artisan: 1003
+    id_annonce: 1007
 permission:
   - typecompte: 4
     client_fk: 1001
@@ -38,7 +46,7 @@ annonce:
     datecreation: 2014-03-23 22:00:00.0
     delaiintervention: 0
     description: Peinture d'un mur
-    etatannonce: 1
+    etatannonce: 0
     categoriemetier: 0
     souscategoriemetier: Installation électrique
     nbconsultation: 0
@@ -48,6 +56,20 @@ annonce:
     adressechantier_id: 100
     hashID: 88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21
     selHashID: 5Whe5wlRCzzUhgFfRHFkIbtxRMyGrS1eaUntnp9SxEY=
+  - id: 1007
+    datecreation: 2014-03-24 22:00:00.0
+    delaiintervention: 0
+    description: Peinture d'un mur
+    etatannonce: 4
+    categoriemetier: 0
+    souscategoriemetier: Installation électrique
+    nbconsultation: 0
+    typecontact: 0
+    typeTravaux: 0
+    demandeur_fk: 1001
+    adressechantier_id: 102
+    hashID: 88263225a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21
+    selHashID: 5Whe6wlRCzzUhgFfRHFkIbtxRMyGrS1eaUntnp9SxEY=
 adresse:
   - adresse: 106 chemin du pébron
     id: 100
@@ -61,6 +83,12 @@ adresse:
     complementadresse: Res de l'artisan
     ville: Nice
     departement: 6 
+  - adresse: 106 chemin de lentreprise
+    id: 102
+    codepostal: "06100"
+    complementadresse: Res de l'artisan
+    ville: Nice
+    departement: 6
 entreprise:
   - id: 1003
     nomComplet: Pebronne enterprise

@@ -24,11 +24,11 @@ import org.slf4j.LoggerFactory;
 
 import com.microtripit.mandrillapp.lutung.model.MandrillApiError;
 
+import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.WsPath;
 import fr.batimen.core.exception.BackendException;
 import fr.batimen.core.exception.EmailException;
-import fr.batimen.core.utils.PropertiesUtils;
 import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
 import fr.batimen.dto.enums.TypeCompte;
@@ -42,6 +42,7 @@ import fr.batimen.ws.entity.Artisan;
 import fr.batimen.ws.entity.CategorieMetier;
 import fr.batimen.ws.entity.Entreprise;
 import fr.batimen.ws.entity.Permission;
+import fr.batimen.ws.enums.PropertiesFileWS;
 import fr.batimen.ws.helper.JsonHelper;
 import fr.batimen.ws.interceptor.BatimenInterceptor;
 import fr.batimen.ws.service.ArtisanService;
@@ -102,7 +103,7 @@ public class GestionArtisanFacade {
         Artisan artisanExiste = artisanService.checkArtisanExiste(nouveauPartenaireDTO.getArtisan().getEmail());
 
         if (artisanExiste != null) {
-            return Constant.CODE_SERVICE_RETOUR_KO;
+            return CodeRetourService.RETOUR_KO;
         }
 
         Artisan nouveauArtisan = artisanService.constructionNouveauArtisan(nouveauPartenaireDTO.getArtisan(), mapper);
@@ -111,7 +112,7 @@ public class GestionArtisanFacade {
                 .getSiret());
 
         if (entrepriseExiste != null) {
-            return Constant.CODE_SERVICE_RETOUR_KO;
+            return CodeRetourService.RETOUR_KO;
         }
 
         // On init l'entité et on la rempli avec les champs de la DTO
@@ -135,7 +136,7 @@ public class GestionArtisanFacade {
             if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("L'adresse existe déjà dans la BDD ", e);
             }
-            return Constant.CODE_SERVICE_RETOUR_KO;
+            return CodeRetourService.RETOUR_KO;
         }
 
         nouvelleEntreprise.setAdresse(nouvelleAdresse);
@@ -155,7 +156,7 @@ public class GestionArtisanFacade {
         }
 
         // On recupere l'url du frontend
-        Properties urlProperties = PropertiesUtils.loadPropertiesFile("url.properties");
+        Properties urlProperties = PropertiesFileWS.URL.getProperties();
         String urlFrontend = urlProperties.getProperty("url.frontend.web");
         try {
             emailService.envoiMailActivationCompte(nouveauPartenaireDTO.getArtisan().getNom(), nouveauPartenaireDTO
@@ -167,7 +168,7 @@ public class GestionArtisanFacade {
             }
         }
 
-        return Constant.CODE_SERVICE_RETOUR_OK;
+        return CodeRetourService.RETOUR_OK;
     }
 
 }

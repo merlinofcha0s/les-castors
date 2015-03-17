@@ -39,7 +39,6 @@ public class AdresseDAO extends AbstractDAO<Adresse> {
      */
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void saveAdresse(Adresse nouvelleAdresse) throws BackendException {
-
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Debut persistence d'une nouvelle adresse......");
         }

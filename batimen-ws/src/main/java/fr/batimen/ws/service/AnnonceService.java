@@ -1,8 +1,11 @@
 package fr.batimen.ws.service;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Properties;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -14,19 +17,30 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.exception.BackendException;
 import fr.batimen.core.exception.DuplicateEntityException;
 import fr.batimen.core.security.HashHelper;
+import fr.batimen.dto.AdresseDTO;
+import fr.batimen.dto.AnnonceDTO;
+import fr.batimen.dto.ClientDTO;
+import fr.batimen.dto.DemandeAnnonceDTO;
+import fr.batimen.dto.EntrepriseDTO;
 import fr.batimen.dto.PermissionDTO;
+import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.ws.dao.AdresseDAO;
+import fr.batimen.ws.dao.AnnonceDAO;
+import fr.batimen.ws.dao.ArtisanDAO;
 import fr.batimen.ws.dao.ClientDAO;
 import fr.batimen.ws.dao.PermissionDAO;
 import fr.batimen.ws.entity.Adresse;
 import fr.batimen.ws.entity.Annonce;
+import fr.batimen.ws.entity.Artisan;
 import fr.batimen.ws.entity.Client;
 import fr.batimen.ws.entity.Permission;
+import fr.batimen.ws.enums.PropertiesFileWS;
 
 /**
  * Classe de gestion des annonces
@@ -49,6 +63,12 @@ public class AnnonceService {
 
     @Inject
     private PermissionDAO permissionDAO;
+
+    @Inject
+    private AnnonceDAO annonceDAO;
+
+    @Inject
+    private ArtisanDAO artisanDAO;
 
     private final ModelMapper mapper = new ModelMapper();
 
@@ -204,4 +224,98 @@ public class AnnonceService {
         nouvelleAnnonce.setHashID(HashHelper.hashID(nouvelleAnnonce.getId(), salt));
     }
 
+    public AnnonceAffichageDTO doMappingAnnonceAffichageDTO(Annonce annonce, AnnonceAffichageDTO annonceAffichageDTO,
+            Boolean isArtisan, Boolean isArtisanInscrit, Boolean isAdmin) {
+
+        if (isArtisanInscrit || isAdmin) {
+            annonceAffichageDTO.setTelephoneClient(annonce.getDemandeur().getNumeroTel());
+            annonceAffichageDTO.setEmailClient(annonce.getDemandeur().getEmail());
+        }
+        ModelMapper mapper = new ModelMapper();
+        AnnonceDTO annonceDTO = new AnnonceDTO();
+        AdresseDTO adresseDTO = new AdresseDTO();
+
+        annonceAffichageDTO.setAnnonce(annonceDTO);
+        annonceAffichageDTO.setAdresse(adresseDTO);
+        annonceAffichageDTO.setIsArtisanInscrit(isArtisanInscrit);
+        // Remplissage données de l'annonce
+        mapper.map(annonce, annonceDTO);
+        annonceAffichageDTO.getAnnonce().setLoginOwner(annonce.getDemandeur().getLogin());
+        mapper.map(annonce.getAdresseChantier(), adresseDTO);
+
+        if (isArtisan) {
+            return annonceAffichageDTO;
+        }
+
+        // Informations sur les artisans inscrits à l'annonce.
+        // N'est envoyé vers le backend que si et seulement
+        // c'est un client qui a fait la demande.
+        for (Artisan artisan : annonce.getArtisans()) {
+            // Creation des objets de transferts
+            ClientDTO artisanDTO = new ClientDTO();
+            EntrepriseDTO entrepriseDTO = new EntrepriseDTO();
+            // Transfert des données des entités vers les DTOs
+            mapper.map(artisan, artisanDTO);
+            mapper.map(artisan.getEntreprise(), entrepriseDTO);
+            // On met en place les liens
+            entrepriseDTO.setArtisan(artisanDTO);
+            annonceAffichageDTO.getEntreprises().add(entrepriseDTO);
+        }
+
+        if (annonce.getEntrepriseSelectionnee() != null) {
+            // Si il y a une entreprise selectionnée
+            // Creation des objets de transferts
+            ClientDTO artisanSelectionneDTO = new ClientDTO();
+            EntrepriseDTO entrepriseSelectionneDTO = new EntrepriseDTO();
+            // Transfert des données des entités vers les DTOs
+            mapper.map(annonce.getEntrepriseSelectionnee(), entrepriseSelectionneDTO);
+            mapper.map(annonce.getEntrepriseSelectionnee().getArtisan(), artisanSelectionneDTO);
+            entrepriseSelectionneDTO.setArtisan(artisanSelectionneDTO);
+            annonceAffichageDTO.setEntrepriseSelectionnee(entrepriseSelectionneDTO);
+        }
+
+        return annonceAffichageDTO;
+    }
+
+    public Integer inscrireArtisan(DemandeAnnonceDTO demandeAnnonceDTO, Annonce annonce, Artisan artisan) {
+
+        // Si le quotas max est atteint => on sort du service
+        if (annonce.getEtatAnnonce() == EtatAnnonce.QUOTA_MAX_ATTEINT) {
+            return CodeRetourService.ANNONCE_RETOUR_QUOTA_DEVIS_ATTEINT;
+        }
+
+        // Si c'est le dernier artisan avant qu'on atteigne le quota, on change
+        // l'etat de l'annonce.
+        Properties propertiesCastor = PropertiesFileWS.CASTOR.getProperties();
+        int nbMaxArtisanParAnnonce = Integer.valueOf(propertiesCastor.getProperty("prop.nb.max.artisan.annonce"));
+
+        if (annonce.getArtisans().size() == nbMaxArtisanParAnnonce - 1) {
+            annonce.setEtatAnnonce(EtatAnnonce.QUOTA_MAX_ATTEINT);
+        }
+
+        for (Artisan artisanInscrit : annonce.getArtisans()) {
+            if (artisanInscrit.getLogin().equals(artisan.getLogin())) {
+                return CodeRetourService.ANNONCE_RETOUR_ARTISAN_DEJA_INSCRIT;
+            }
+        }
+
+        annonce.getArtisans().add(artisan);
+        artisan.getAnnonces().add(annonce);
+
+        return CodeRetourService.RETOUR_OK;
+    }
+
+    public Integer desactivateAnnoncePerime() {
+        // Récuperation des properties
+        Properties castorProperties = PropertiesFileWS.CASTOR.getProperties();
+        int nbJourAvantPeremption = Integer.valueOf(castorProperties.getProperty("prop.temps.peremption.annonce"));
+        Integer nbMaxArtisanParAnnonce = Integer.valueOf(castorProperties.getProperty("prop.nb.max.artisan.annonce"));
+
+        Calendar calJourPeremptionAnnonce = Calendar.getInstance(Locale.FRANCE);
+        calJourPeremptionAnnonce.add(Calendar.DAY_OF_MONTH, -nbJourAvantPeremption);
+
+        annonceDAO.desactiveAnnoncePerime(calJourPeremptionAnnonce.getTime(), nbMaxArtisanParAnnonce);
+
+        return CodeRetourService.RETOUR_OK;
+    }
 }

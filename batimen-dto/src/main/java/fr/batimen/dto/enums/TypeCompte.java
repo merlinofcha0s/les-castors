@@ -2,9 +2,9 @@ package fr.batimen.dto.enums;
 
 public enum TypeCompte {
 
-    ADMINISTRATEUR_MANAGER("Administrateur", "admin:manager"), ADMINISTRATEUR_COMMERCIAL("Administrateur",
-            "admin:commercial"), ARTISAN_PREMIUM("Artisan premium", "partenaire:premium"), ARTISAN("Artisan",
-            "partenaire"), CLIENT("Client", "particulier");
+    ADMINISTRATEUR_MANAGER("Administrateur", "admin, manager"), ADMINISTRATEUR_COMMERCIAL("Administrateur",
+            "admin, commercial"), ARTISAN_PREMIUM("Artisan premium", "partenaire:premium"), ARTISAN("Artisan",
+            "partenaire"), CLIENT("Client", "particulier"), ADMINISTRATEUR("Administrateur", "admin");
 
     private TypeCompte(String nomCompte, String roles) {
         this.nomCompte = nomCompte;
@@ -30,5 +30,4 @@ public enum TypeCompte {
     public String toString() {
         return nomCompte;
     }
-
 }

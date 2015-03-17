@@ -109,9 +109,7 @@ create table Annonce (
     
     create table annonce_artisan (
         Annonce_id int8 not null,
-        artisans_id int8 not null,
-        Artisan_id int8 not null,
-        annonces_id int8 not null
+        artisans_id int8 not null
     );
     
     create table Notification (
@@ -129,7 +127,7 @@ create table Annonce (
     alter table Annonce 
         add constraint annonce_adresse
         foreign key (adresseChantier_id) 
-        references Adresse;
+        references Adresse ON DELETE CASCADE;
 
     alter table Annonce 
         add constraint annonce_client 
@@ -139,7 +137,7 @@ create table Annonce (
     alter table Annonce 
         add constraint annonce_notation 
         foreign key (notationAnnonce_id) 
-        references Notation;
+        references Notation ON DELETE CASCADE;
         
     alter table Annonce 
         add constraint annonce_entreprise
@@ -149,7 +147,7 @@ create table Annonce (
     alter table Artisan 
         add constraint artisan_entreprise 
         foreign key (entreprise_id) 
-        references Entreprise;
+        references Entreprise ON DELETE CASCADE;
 
     alter table CategorieMetier 
         add constraint categorie_metier_entreprise 
@@ -159,12 +157,12 @@ create table Annonce (
     alter table Entreprise 
         add constraint entreprise_adresse
         foreign key (adresse_id) 
-        references Adresse;
+        references Adresse ON DELETE CASCADE;
 
     alter table Entreprise 
         add constraint entreprise_paiement 
         foreign key (paiement_id) 
-        references Paiement;
+        references Paiement ON DELETE CASCADE;
 
     alter table Notation 
         add constraint notation_artisan
@@ -174,7 +172,7 @@ create table Annonce (
     alter table Paiement 
         add constraint paiement_adresse 
         foreign key (adresseFacturation_id) 
-        references Adresse;
+        references Adresse ON DELETE CASCADE;
         
     alter table Permission
         add constraint artisan_permission 
@@ -196,16 +194,6 @@ create table Annonce (
         foreign key (Annonce_id) 
         references Annonce;
         
-    alter table annonce_artisan 
-        add constraint annonce_artisan2 
-        foreign key (annonces_id) 
-        references Annonce;
-        
-    alter table annonce_artisan 
-        add constraint artisan_annonce2
-        foreign key (Artisan_id) 
-        references Artisan;
-        
     alter table Notification 
         add constraint notification_artisan2
         foreign key (id_artisan) 
@@ -219,4 +207,4 @@ create table Annonce (
     alter table Notification 
         add constraint notification_annonce
         foreign key (id_annonce) 
-        references Annonce;
+        references Annonce ON DELETE CASCADE;

@@ -1,7 +1,12 @@
 package fr.batimen.dto.helper;
 
 import java.lang.reflect.Type;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -17,41 +22,53 @@ import com.google.gson.JsonElement;
  */
 public class DeserializeJsonHelper {
 
-	private DeserializeJsonHelper() {
+    private static final Logger LOGGER = LoggerFactory.getLogger(DeserializeJsonHelper.class);
 
-	}
+    private DeserializeJsonHelper() {
 
-	public static Gson createGsonObject() {
+    }
 
-		GsonBuilder builder = new GsonBuilder().serializeNulls();
+    public static Gson createGsonObject() {
 
-		builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
+        GsonBuilder builder = new GsonBuilder().serializeNulls();
 
-			public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
-				return new Date(json.getAsJsonPrimitive().getAsLong());
-			}
-		});
+        builder.registerTypeAdapter(Date.class, new JsonDeserializer<Date>() {
 
-		return builder.create();
-	}
+            @Override
+            public Date deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) {
+                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-DD");
+                try {
+                    return sdf.parse(json.getAsString());
+                } catch (ParseException e) {
+                    if (LOGGER.isWarnEnabled()) {
+                        LOGGER.warn("Erreur lors du parsing d'un date en JSON : " + json.getAsString(), e);
+                        LOGGER.warn("Essai de parsing de la date : " + json.getAsString() + " en long!");
+                    }
+                    return new Date(json.getAsLong());
+                }
+            }
+        });
 
-	public static int[] parseIntArray(String intArray) {
+        return builder.create();
+    }
 
-		Gson gson = createGsonObject();
+    public static int[] parseIntArray(String intArray) {
 
-		return gson.fromJson(intArray, int[].class);
-	}
+        Gson gson = createGsonObject();
 
-	public static Long parseLongNumber(String longNumber) {
+        return gson.fromJson(intArray, int[].class);
+    }
 
-		Gson gson = createGsonObject();
+    public static Long parseLongNumber(String longNumber) {
 
-		return gson.fromJson(longNumber, Long.class);
-	}
+        Gson gson = createGsonObject();
 
-	public static String parseString(String string) {
-		Gson gson = createGsonObject();
-		return gson.fromJson(string, String.class);
-	}
+        return gson.fromJson(longNumber, Long.class);
+    }
+
+    public static String parseString(String string) {
+        Gson gson = createGsonObject();
+        return gson.fromJson(string, String.class);
+    }
 
 }

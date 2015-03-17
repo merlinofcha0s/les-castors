@@ -1,5 +1,6 @@
 package fr.batimen.ws.client;
 
+import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
@@ -7,6 +8,7 @@ import java.text.DateFormat;
 import java.util.Date;
 import java.util.Properties;
 
+import javax.inject.Singleton;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
@@ -31,7 +33,7 @@ import com.sun.jersey.client.urlconnection.HTTPSProperties;
 import com.sun.jersey.multipart.impl.MultiPartWriter;
 
 import fr.batimen.core.constant.Constant;
-import fr.batimen.core.utils.PropertiesUtils;
+import fr.batimen.ws.client.enums.PropertiesFileWsClient;
 import fr.batimen.ws.client.ssl.TrustManagerSingleton;
 
 /**
@@ -41,10 +43,12 @@ import fr.batimen.ws.client.ssl.TrustManagerSingleton;
  * @author Casaucau Cyril
  * 
  */
-public class WsConnector {
+@Singleton
+public class WsConnector implements Serializable {
 
-    private static WsConnector wsConnector;
-    private static Client client;
+    private static final long serialVersionUID = 4898933306261359715L;
+
+    private final transient Client client;
     private String ipServeur;
     private String portServeur;
     private String nomWs;
@@ -55,33 +59,17 @@ public class WsConnector {
 
     private WsConnector() {
         getWsProperties();
-    }
-
-    /**
-     * Instancie une seule fois le Wsconnector et le configure dans le but
-     * d'appeler le webservice de batimen
-     * 
-     * @return le WsConnector correctement configuré
-     */
-    public static WsConnector getInstance() {
-        if (wsConnector == null) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Initialisation du singleton....");
-            }
-            wsConnector = new WsConnector();
-            // Consomme bcp de ressource pour creer le client, il est thread
-            // safe. Voir si ca ne pose pas de probleme de perf de l'avoir mis
-            // en singleton
-            ClientConfig clientConfig = configSSL();
-            // Fix pour le serv d'integration
-            clientConfig.getClasses().add(MultiPartWriter.class);
-            client = Client.create(clientConfig);
-            client.setFollowRedirects(true);
-            // Authentification du client
-            client.addFilter(new HTTPBasicAuthFilter(Constant.BATIMEN_USERS_WS, Constant.BATIMEN_PWD_WS));
-            client.setConnectTimeout(Constant.CONNECT_TIMEOUT);
-        }
-        return wsConnector;
+        // Consomme bcp de ressource pour creer le client, il est thread
+        // safe. Voir si ca ne pose pas de probleme de perf de l'avoir mis
+        // en singleton
+        ClientConfig clientConfig = configSSL();
+        // Fix pour le serv d'integration
+        clientConfig.getClasses().add(MultiPartWriter.class);
+        client = Client.create(clientConfig);
+        client.setFollowRedirects(true);
+        // Authentification du client
+        client.addFilter(new HTTPBasicAuthFilter(Constant.BATIMEN_USERS_WS, Constant.BATIMEN_PWD_WS));
+        client.setConnectTimeout(Constant.CONNECT_TIMEOUT);
     }
 
     /**
@@ -165,7 +153,7 @@ public class WsConnector {
             LOGGER.debug("Récuperation des properties....");
         }
 
-        Properties wsProperties = PropertiesUtils.loadPropertiesFile("ws.properties");
+        Properties wsProperties = PropertiesFileWsClient.WS.getProperties();
         ipServeur = wsProperties.getProperty("ws.ip");
         portServeur = wsProperties.getProperty("ws.port");
         nomWs = wsProperties.getProperty("ws.name");
@@ -178,7 +166,7 @@ public class WsConnector {
      * 
      * @return Le ClientConfig avec le SSL correctement configurer
      */
-    private static ClientConfig configSSL() {
+    private ClientConfig configSSL() {
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Début de la configuration du SSL (init du context).....");

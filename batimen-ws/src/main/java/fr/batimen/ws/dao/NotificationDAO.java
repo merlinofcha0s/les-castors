@@ -1,6 +1,7 @@
 package fr.batimen.ws.dao;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.LocalBean;
@@ -16,7 +17,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.batimen.core.constant.QueryJPQL;
+import fr.batimen.dto.enums.StatutNotification;
 import fr.batimen.dto.enums.TypeCompte;
+import fr.batimen.dto.enums.TypeNotification;
+import fr.batimen.ws.entity.Annonce;
 import fr.batimen.ws.entity.Notification;
 
 /**
@@ -81,5 +85,18 @@ public class NotificationDAO extends AbstractDAO<Notification> {
             }
             return new ArrayList<Object[]>();
         }
+    }
+
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public void createNotificationEntrepriseChoisiParClient(Annonce annonce) {
+        Notification notification = new Notification();
+        notification.setAnnonce(annonce);
+        notification.setArtisanNotifier(annonce.getEntrepriseSelectionnee().getArtisan());
+        notification.setClientNotifier(annonce.getDemandeur());
+        notification.setDateNotification(new Date());
+        notification.setPourQuiNotification(TypeCompte.ARTISAN);
+        notification.setStatutNotification(StatutNotification.PAS_VUE);
+        notification.setTypeNotification(TypeNotification.A_CHOISI_ENTREPRISE);
+        entityManager.persist(notification);
     }
 }

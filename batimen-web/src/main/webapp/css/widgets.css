@@ -73,3 +73,18 @@ top: 25%;
 html.loading {
 	overflow: hidden;
 }
+
+/* MODAL CASTOR GENERIQUE */
+.modalCastor{
+    z-index: 90001;
+}
+
+#textSuppressionAnnonce{
+	padding-bottom: 15px;
+}
+
+.yes{
+	margin-right: 20px; 
+	margin-left: 113px;
+}
+

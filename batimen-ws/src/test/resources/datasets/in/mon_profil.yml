@@ -29,7 +29,7 @@ annonce:
     datecreation: 2014-03-23 22:00:00.0
     delaiintervention: 0
     description: Peinture d'un mur
-    etatannonce: 1
+    etatannonce: 0
     categoriemetier: 0
     souscategoriemetier: Installation électrique
     nbconsultation: 0
@@ -45,7 +45,7 @@ annonce:
     datecreation: 2014-03-23 22:00:00.0
     delaiintervention: 0
     description: Peinture d'un mur
-    etatannonce: 1
+    etatannonce: 0
     categoriemetier: 0
     souscategoriemetier: Installation électrique
     nbconsultation: 0
@@ -53,8 +53,24 @@ annonce:
     typeTravaux: 0
     demandeur_fk: 1001
     adressechantier_id: 100
-    hashID: 88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21
+    hashID: 88263229a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21
     selHashID: 5Whe5wlRCzzUhgFfRHFkIbtxRMyGrS1eaUntnp9SxEY=
+    notationannonce_id: 1023
+    entreprise_selectionnee_fk: 1003
+  - id: 1022
+    datecreation: 2014-03-23 22:00:00.0
+    delaiintervention: 0
+    description: Peinture d'un mur
+    etatannonce: 4
+    categoriemetier: 0
+    souscategoriemetier: Installation électrique
+    nbconsultation: 0
+    typecontact: 0
+    typeTravaux: 0
+    demandeur_fk: 1001
+    adressechantier_id: 102
+    hashID: 88263127a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21
+    selHashID: 5Whe6wlRCzzUhgFfRHFkIbtxRMyGrS1eaUntnp9SxEY=
     notationannonce_id: 1021
     entreprise_selectionnee_fk: 1003
 adresse:
@@ -92,6 +108,11 @@ notation:
     dateNotation: 2014-03-23 22:00:00.0
     artisan_fk: 1003
   - id: 1021
+    score: 5
+    commentaire: Excellent
+    dateNotation: 2014-03-23 21:00:00.0
+    artisan_fk: 1003
+  - id: 1023
     score: 5
     commentaire: Excellent
     dateNotation: 2014-03-23 21:00:00.0

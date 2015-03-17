@@ -77,7 +77,7 @@ public class ArtisanDAO extends AbstractDAO<Artisan> {
      * @param login
      * @return
      */
-    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public Artisan getArtisanByLogin(String login) {
 
         Artisan artisanTrouve = null;

@@ -1,11 +1,14 @@
 package fr.batimen.web.client.validator;
 
+import javax.inject.Inject;
+import javax.inject.Named;
+
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 
 import fr.batimen.dto.ClientDTO;
 import fr.batimen.web.app.security.Authentication;
-import fr.batimen.ws.client.service.UtilisateurService;
+import fr.batimen.ws.client.service.UtilisateurServiceREST;
 
 /**
  * Verifie que l'email en cours d'inscription n'est pas deja présent en BDD
@@ -13,16 +16,22 @@ import fr.batimen.ws.client.service.UtilisateurService;
  * @author Casaucau Cyril
  * 
  */
+@Named
 public class EmailUniquenessValidator extends AbstractUniquenessValidator implements IValidator<String> {
 
     private static final long serialVersionUID = 2423564239255893289L;
 
+    @Inject
+    private UtilisateurServiceREST utilisateurServiceREST;
+
+    @Inject
+    private Authentication authentication;
+
     @Override
     public void validate(IValidatable<String> email) {
-        ClientDTO checkedClientEmail = UtilisateurService.getUtilisateurByEmail(email.getValue());
+        ClientDTO checkedClientEmail = utilisateurServiceREST.getUtilisateurByEmail(email.getValue());
 
         if (!checkedClientEmail.getEmail().isEmpty()) {
-            Authentication authentication = new Authentication();
             ClientDTO infosClient = authentication.getCurrentUserInfo();
             super.validateField(this, email, infosClient.getEmail());
         }

@@ -3,6 +3,8 @@ package fr.batimen.web.client.extend.nouveau.devis;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import org.apache.shiro.SecurityUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -18,11 +20,12 @@ import org.apache.wicket.request.resource.ContextRelativeResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.batimen.core.constant.Constant;
+import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.exception.FrontEndException;
 import fr.batimen.core.security.HashHelper;
 import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
+import fr.batimen.web.app.constants.Etape;
 import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.client.component.ContactezNous;
 import fr.batimen.web.client.component.MapFrance;
@@ -35,7 +38,7 @@ import fr.batimen.web.client.extend.Contact;
 import fr.batimen.web.client.extend.nouveau.devis.event.CategorieEvent;
 import fr.batimen.web.client.extend.nouveau.devis.event.ChangementEtapeClientEvent;
 import fr.batimen.web.client.master.MasterPage;
-import fr.batimen.ws.client.service.AnnonceService;
+import fr.batimen.ws.client.service.AnnonceServiceREST;
 
 /**
  * Permet la création de nouveau devis par un client.
@@ -48,6 +51,12 @@ public class NouveauDevis extends MasterPage {
     private static final long serialVersionUID = -7595966450246951918L;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NouveauDevis.class);
+
+    @Inject
+    private AnnonceServiceREST annonceService;
+
+    @Inject
+    private Authentication authentication;
 
     // Composants Généraux
     private NavigationWizard navigationWizard;
@@ -78,27 +87,84 @@ public class NouveauDevis extends MasterPage {
     private Image imageConfirmation;
     private final Link<String> contactezNous;
 
+    private Etape etapeEncours;
+
     public NouveauDevis() {
         super("Nouveau devis", "devis batiment renovation", "Nouveau devis", true, "img/bg_title1.jpg");
 
         // Etape 1 : selection du departement avec la carte de la france
-        carteFrance = new MapFrance("mapFrance");
+        carteFrance = new MapFrance("mapFrance") {
+
+            private static final long serialVersionUID = -7657021021902246878L;
+
+            @Override
+            public boolean isVisible() {
+                if (etapeEncours.equals(Etape.ETAPE_1)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+        };
 
         // Etape 2 : Selection de la catégorie principale des travaux
-        etape2Categorie = new Etape2Categorie("etape2Categorie");
-        etape2Categorie.setVisible(false);
+        etape2Categorie = new Etape2Categorie("etape2Categorie") {
+
+            private static final long serialVersionUID = -3369100260215727230L;
+
+            @Override
+            public boolean isVisible() {
+                if (etapeEncours.equals(Etape.ETAPE_2)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+
+        };
 
         // Etape 3 : Qualification du devis.
-        containerQualification = new WebMarkupContainer("containerQualification");
-        containerQualification.setVisible(false);
+        containerQualification = new WebMarkupContainer("containerQualification") {
+
+            private static final long serialVersionUID = -656007360631664917L;
+
+            /*
+             * (non-Javadoc)
+             * 
+             * @see org.apache.wicket.Component#isVisible()
+             */
+            @Override
+            public boolean isVisible() {
+                if (etapeEncours.equals(Etape.ETAPE_3)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        };
 
         etape3AnnonceForm = new Etape3AnnonceForm("formQualification", propertyModelNouvelleAnnonce);
 
         containerQualification.add(etape3AnnonceForm);
 
         // Etape 4 : Enregistrement des informations du client
-        containerInscription = new WebMarkupContainer("containerInscription");
-        containerInscription.setVisible(false);
+        containerInscription = new WebMarkupContainer("containerInscription") {
+
+            /**
+             * 
+             */
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public boolean isVisible() {
+                if (etapeEncours.equals(Etape.ETAPE_4)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        };
 
         etape4InscriptionForm = new Etape4InscriptionForm("formInscription", propertyModelNouvelleAnnonce,
                 Boolean.FALSE);
@@ -109,17 +175,28 @@ public class NouveauDevis extends MasterPage {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-            	getLoginDialog().open(target);
+                getLoginDialog().open(target);
             }
 
         };
 
-        containerInscription.add(etape4InscriptionForm);
-        containerInscription.add(connexionLink);
+        containerInscription.add(etape4InscriptionForm, connexionLink);
 
         // Etape 5 : Confirmation
-        containerConfirmation = new WebMarkupContainer("containerConfirmation");
-        containerConfirmation.setVisible(false);
+        containerConfirmation = new WebMarkupContainer("containerConfirmation") {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public boolean isVisible() {
+                if (etapeEncours.equals(Etape.ETAPE_5)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        };
+        // containerConfirmation.setVisible(false);
         confirmation1 = new Label("confirmation1", new Model<String>());
         confirmation2 = new Label("confirmation2", new Model<String>());
         contactezNous = new Link<String>("contactezNous") {
@@ -147,10 +224,7 @@ public class NouveauDevis extends MasterPage {
         retourAccueil.setOutputMarkupId(true);
         retourAccueil.setMarkupId("retourAccueil");
 
-        containerConfirmation.add(confirmation1);
-        containerConfirmation.add(confirmation2);
-        containerConfirmation.add(contactezNous);
-        containerConfirmation.add(retourAccueil);
+        containerConfirmation.add(confirmation1, confirmation2, contactezNous, retourAccueil);
 
         List<String> etapes = new ArrayList<String>();
         etapes.add("Sélectionner un departement");
@@ -169,13 +243,8 @@ public class NouveauDevis extends MasterPage {
 
         ContactezNous contactezNousComposant = new ContactezNous("contactezNous");
 
-        this.add(carteFrance);
-        this.add(etape2Categorie);
-        this.add(containerQualification);
-        this.add(containerInscription);
-        this.add(containerConfirmation);
-        this.add(navigationWizard);
-        this.add(contactezNousComposant);
+        this.add(carteFrance, etape2Categorie, containerQualification, containerInscription, containerConfirmation,
+                navigationWizard, contactezNousComposant);
 
         try {
             changementEtape(nouvelleAnnonce.getNumeroEtape());
@@ -184,7 +253,7 @@ public class NouveauDevis extends MasterPage {
                 LOGGER.error("Probleme frontend", e);
             }
         }
-        chooseConfirmationMessage(false, Constant.CODE_SERVICE_RETOUR_OK);
+        chooseConfirmationMessage(false, CodeRetourService.RETOUR_OK);
     }
 
     public NouveauDevis(CreationAnnonceDTO creationAnnonce) {
@@ -210,22 +279,22 @@ public class NouveauDevis extends MasterPage {
         // Dernier cas : cas par defaut, on est pas dans l'etape 4 (mais il faut
         // quand meme instantié l'objet)
         if (nouvelleAnnonce.getIsSignedUp() != null && nouvelleAnnonce.getIsSignedUp() && isEtape4
-                && codeRetour.equals(Constant.CODE_SERVICE_RETOUR_OK)) {
+                && codeRetour.equals(CodeRetourService.RETOUR_OK)) {
             confirmation1
                     .setDefaultModelObject("Votre devis a été mis en ligne, nous vous avons envoyé un mail récapitulatif");
             confirmation2.setDefaultModelObject("");
             imageConfirmation = new Image("imageConfirmation", new ContextRelativeResource("img/ok.png"));
             imageConfirmation.add(new AttributeModifier("alt", "ok"));
         } else if (nouvelleAnnonce.getIsSignedUp() != null && !nouvelleAnnonce.getIsSignedUp() && isEtape4
-                && codeRetour.equals(Constant.CODE_SERVICE_RETOUR_OK)) {
+                && codeRetour.equals(CodeRetourService.RETOUR_OK)) {
             imageConfirmation = new Image("imageConfirmation", new ContextRelativeResource("img/ok.png"));
             imageConfirmation.add(new AttributeModifier("alt", "ok"));
             confirmation1
                     .setDefaultModelObject("Votre compte a bien été créé, un e-mail vous a été envoyé, Cliquez sur le lien présent dans celui-ci pour l'activer");
             confirmation2
                     .setDefaultModelObject("Votre devis a bien été enregistré. Celui-ci sera mis en ligne une fois votre compte activé.");
-        } else if (codeRetour.equals(Constant.CODE_SERVICE_RETOUR_KO)
-                || codeRetour.equals(Constant.CODE_SERVICE_ANNONCE_RETOUR_DUPLICATE)) {
+        } else if (codeRetour.equals(CodeRetourService.RETOUR_KO)
+                || codeRetour.equals(CodeRetourService.ANNONCE_RETOUR_DUPLICATE)) {
             if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("Erreur pendant le chargement de l'annonce");
                 loggerAnnonce(nouvelleAnnonce);
@@ -249,51 +318,20 @@ public class NouveauDevis extends MasterPage {
         containerConfirmation.addOrReplace(imageConfirmation);
     }
 
-    private void etape2Categorie() {
-        carteFrance.setVisible(false);
-        etape2Categorie.setVisible(true);
-        containerQualification.setVisible(false);
-        containerInscription.setVisible(false);
-        containerConfirmation.setVisible(false);
-    }
-
-    private void etape3Qualification() {
-        carteFrance.setVisible(false);
-        etape2Categorie.setVisible(false);
-        containerQualification.setVisible(true);
-        containerInscription.setVisible(false);
-        containerConfirmation.setVisible(false);
-    }
-
-    private void etape4Inscription() {
-        carteFrance.setVisible(false);
-        etape2Categorie.setVisible(false);
-        containerQualification.setVisible(false);
-        containerInscription.setVisible(true);
-        containerConfirmation.setVisible(false);
-    }
-
-    private void etape5Confirmation() {
-        carteFrance.setVisible(false);
-        etape2Categorie.setVisible(false);
-        containerQualification.setVisible(false);
-        containerInscription.setVisible(false);
-        containerConfirmation.setVisible(true);
-    }
-
     private void changementEtape(Integer numeroEtape) throws FrontEndException {
         // On charge l'etape demandé grace au numero d'etape passé en parametre
         switch (numeroEtape) {
         case 1:
             loggerChangementEtape("Passage dans l'étape 1");
+            etapeEncours = Etape.ETAPE_1;
             break;
         case 2:
             loggerChangementEtape("Passage dans l'étape 2");
-            etape2Categorie();
+            etapeEncours = Etape.ETAPE_2;
             break;
         case 3:
             loggerChangementEtape("Passage dans l'étape 3");
-            etape3Qualification();
+            etapeEncours = Etape.ETAPE_3;
             break;
         case 4:
             loggerChangementEtape("Passage dans l'étape 4");
@@ -303,7 +341,7 @@ public class NouveauDevis extends MasterPage {
                 loggerChangementEtape("L'utilisateur s'est connecté, on passe l'etape 5");
                 changementEtape(5);
             } else {
-                etape4Inscription();
+                etapeEncours = Etape.ETAPE_4;
             }
             break;
         case 5:
@@ -315,17 +353,15 @@ public class NouveauDevis extends MasterPage {
             }
             Integer codeRetour = creationAnnonce();
             chooseConfirmationMessage(true, codeRetour);
-            etape5Confirmation();
+            etapeEncours = Etape.ETAPE_5;
             break;
         default:
             throw new FrontEndException("Aucune étape du nouveau devis chargées, Situation Impossible");
         }
 
-        navigationWizard.setStep(numeroEtape);
     }
 
     private void remplissageCreationAnnonceSiLogin() {
-        Authentication authentication = new Authentication();
         ClientDTO client = authentication.getCurrentUserInfo();
         nouvelleAnnonce.setIsSignedUp(true);
         nouvelleAnnonce.getClient().setLogin(client.getLogin());
@@ -432,7 +468,7 @@ public class NouveauDevis extends MasterPage {
     }
 
     private Integer creationAnnonce() {
-        return AnnonceService.creationAnnonce(nouvelleAnnonce);
+        return annonceService.creationAnnonce(nouvelleAnnonce);
     }
 
     private void loggerAnnonce(CreationAnnonceDTO nouvelleAnnonce) {
@@ -455,7 +491,6 @@ public class NouveauDevis extends MasterPage {
                 LOGGER.error("Adresse mail : " + nouvelleAnnonce.getClient().getEmail());
                 LOGGER.error("Identifiant: " + nouvelleAnnonce.getClient().getLogin());
             } else {
-                Authentication authentication = new Authentication();
                 ClientDTO client = authentication.getCurrentUserInfo();
                 LOGGER.error("Ce client est deja enregistrer dans la BDD");
                 LOGGER.error("Nom  : " + client.getNom());
@@ -466,6 +501,17 @@ public class NouveauDevis extends MasterPage {
             }
             LOGGER.error("+-------------------------------- Fin annonce ------------------------------------------+");
         }
-
     }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.wicket.Page#onInitialize()
+     */
+    @Override
+    protected void onInitialize() {
+        super.onInitialize();
+        navigationWizard.setStep(etapeEncours.ordinal() + 1);
+    }
+
 }

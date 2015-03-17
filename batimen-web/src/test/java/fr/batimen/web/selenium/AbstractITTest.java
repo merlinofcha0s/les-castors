@@ -25,7 +25,7 @@ import org.slf4j.LoggerFactory;
 import com.ninja_squad.dbsetup.destination.DriverManagerDestination;
 import com.ninja_squad.dbsetup.operation.Operation;
 
-import fr.batimen.core.utils.PropertiesUtils;
+import fr.batimen.web.utils.PropertiesUtils;
 
 /**
  * 
@@ -57,8 +57,8 @@ public abstract class AbstractITTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractITTest.class);
 
     // DBSetup
-    public static final Operation DELETE_ALL = deleteAllFrom("notification", "annonce", "permission", "notation",
-            "artisan", "categoriemetier", "entreprise", "adresse", "client");
+    public static final Operation DELETE_ALL = deleteAllFrom("notification", "annonce_artisan", "annonce",
+            "permission", "notation", "artisan", "categoriemetier", "entreprise", "adresse", "client");
     public static final Operation INSERT_USER_DATA = insertInto("client")
             .columns("id", "email", "nom", "prenom", "login", "password", "numeroTel", "dateInscription", "isActive",
                     "cleactivation")
@@ -67,9 +67,15 @@ public abstract class AbstractITTest {
                     "2014-01-08", true, "lolmdr")
             .values(100002, "xaviern@batimen.fr", "Dupont", "Xavier", "xavier",
                     "$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=", "0614125696",
-                    "2014-01-08", false, "lolmdr06").build();
+                    "2014-01-08", true, "lolmdr06")
+            .values(100003, "admin@lescastors.fr", "Casaucau", "Cyril", "admin",
+                    "$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=", "0614125696",
+                    "2014-01-08", true, "lolmdr101")
+            .values(100004, "xd@lescastors.fr", "lolxd", "ptdr", "xdlol",
+                    "$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=", "0614125696",
+                    "2014-01-08", false, "lolmdr201").build();
     public static final Operation INSERT_USER_PERMISSION = insertInto("permission").columns("typecompte", "client_fk")
-            .values(4, 100001).values(4, 100002).build();
+            .values(4, 100001).values(4, 100002).values(0, 100003).values(4, 100004).build();
 
     @Before
     public void setUpITTest() throws Exception {

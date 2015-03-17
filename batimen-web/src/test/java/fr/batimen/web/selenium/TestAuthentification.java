@@ -38,7 +38,6 @@ public class TestAuthentification extends AbstractITTest {
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         Boolean checkConditionMonCompte = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
@@ -63,7 +62,6 @@ public class TestAuthentification extends AbstractITTest {
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
@@ -74,11 +72,10 @@ public class TestAuthentification extends AbstractITTest {
     @Test
     public void testAuthentificationFailedBecauseNotActivated() throws Exception {
         driver.get(appUrl);
-        connexionApplication("xavier", AbstractITTest.BON_MOT_DE_PASSE, Boolean.FALSE);
+        connexionApplication("xdlol", AbstractITTest.BON_MOT_DE_PASSE, Boolean.FALSE);
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))

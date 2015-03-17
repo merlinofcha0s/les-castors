@@ -30,10 +30,26 @@ public class QueryJPQL {
     public static final String ANNONCE_BY_TITLE_AND_DESCRIPTION = "annonceByTitleAndDescription";
     public static final String ANNONCE_BY_LOGIN_FETCH_ARTISAN = "annonceByLoginFetchArtisan";
     public static final String NB_ANNONCE_BY_LOGIN = "nbAnnonceByLogin";
+    public static final String ANNONCE_BY_ID_FETCH_ARTISAN_ENTREPRISE_CLIENT_ADRESSE = "annonceByIDFetchArtisanEntrepriseClientAdresse";
+    public static final String ANNONCE_BY_ID = "annonceByID";
+    public static final String ANNONCE_UPDATE_NB_CONSULTATION = "annonceUpdateNbConsultation";
+    public static final String ANNONCE_SUPRESS_ANNONCE_FOR_CLIENT = "annonceSuppressionByClient";
+    public static final String ANNONCE_SUPRESS_ANNONCE_FOR_ADMIN = "annonceSuppressionByAdmin";
+    public static final String ANNONCE_SELECTION_ENTREPRISE_FOR_CLIENT = "annonceSelectionEntrepriseForClient";
+    public static final String ANNONCE_SELECTION_ENTREPRISE_FOR_ADMIN = "annonceSelectionEntrepriseForAdmin";
+    public static final String ANNONCE_BY_ID_ADMIN = "annonceByIDAdmin";
+    public static final String ANNONCE_DESACTIVE_PERIMEE = "annonceDesactivationPerime";
+    public static final String ANNONCE_BY_HASHID_AND_DEMANDEUR = "annonceByIDAndDemandeur";
 
     // Parametre Query Entity annonce
     public static final String PARAM_ANNONCE_TITRE = "titre";
     public static final String PARAM_ANNONCE_DESCRIPTION = "description";
+    public static final String PARAM_ANNONCE_ID = "hashID";
+    public static final String PARAM_ANNONCE_NB_CONSULTATION = "nbConsultation";
+    public static final String PARAM_ANNONCE_ETAT = "etatAnnonce";
+    public static final String PARAM_ANNONCE_TODAY_MINUS_X_DAYS = "todayMinusXDays";
+    public static final String PARAM_ANNONCE_NB_ARTISAN_MAX = "nbArtisanMax";
+    public static final String PARAM_ANNONCE_DEMANDEUR_LOGIN = "loginDemandeur";
 
     // Entity artisan
     public static final String ARTISAN_BY_EMAIL = "artisanByEmail";
@@ -44,6 +60,7 @@ public class QueryJPQL {
 
     // Parametre Query Entity artisan
     public static final String PARAM_ARTISAN_EMAIL = "email";
+    public static final String PARAM_ARTISAN_LOGIN_CHOISI = "artisanLoginChoisi";
 
     // Entity entreprise
     public static final String ENTREPRISE_BY_SIRET = "entrepriseBySiret";
@@ -52,6 +69,7 @@ public class QueryJPQL {
     // Parametre Query Entity entreprise
     public static final String PARAM_ENTEPRISE_SIRET = "siret";
     public static final String PARAM_ENTREPRISE_NOM_COMPLET = "entrepriseNomComplet";
+    public static final String PARAM_ENTREPRISE_ENTITY = "entrepriseEntity";
 
     // Entity permission
     public static final String PERMISSION_CLIENT_BY_LOGIN = "permissionClientByLogin";

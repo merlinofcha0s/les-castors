@@ -8,7 +8,6 @@ public class ContactezNous extends Panel {
 
     public ContactezNous(String id) {
         super(id);
-        // TODO Auto-generated constructor stub
     }
 
 }
