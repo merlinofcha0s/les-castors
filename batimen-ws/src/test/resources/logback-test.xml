@@ -3,8 +3,8 @@
 
 	<logger name="org.dbunit" level="WARN" />
 	
-	<property name="LOGS_FOLDER" value="${logs.address}" />
-	<property name="LOGS_TO_COLLECT_FOLDER" value="${logs.archives}" />
+	<property name="LOGS_FOLDER" value="${logs.test.address}" />
+	<property name="LOGS_TO_COLLECT_FOLDER" value="${logs.test.archives}" />
 
 	<!-- Permet d'avoir les logs dans la console d'eclipse et glassfish (a degager 
 		en prod) -->
@@ -20,7 +20,7 @@
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>${LOGS_FOLDER}/batimen_ws.log</file>
 		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-			<level>${logs.lvl}</level>
+			<level>${logs.test.lvl}</level>
 		</filter>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<fileNamePattern>${LOGS_TO_COLLECT_FOLDER}/batimen_ws.%d{yyyyMMdd}.log
@@ -32,7 +32,7 @@
 		</encoder>
 	</appender>
 
-	<root level="${logs.lvl}">
+	<root level="$logs.test.lvl}">
 		<appender-ref ref="stdout" />
 		<appender-ref ref="log-file" />
 	</root>
