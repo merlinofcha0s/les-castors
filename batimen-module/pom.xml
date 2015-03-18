@@ -23,7 +23,7 @@
 		<redmine.address>https://lescastors.fr/redmine/projects/batimen</redmine.address>
 		<redmine.depot.address>https://lescastors.fr/redmine/projects/batimen/repository</redmine.depot.address>
 		<jenkins.address>http://lescastors.fr:9090/</jenkins.address>
-		<git.repository>scm:git:https://raiden@lescastors.fr:8181/git/batimen.git </git.repository>
+		<git.repository>scm:git:https://raiden@lescastors.fr:8181/git/batimen.git</git.repository>
 		<app.version>0.3.0-SNAPSHOT</app.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -143,11 +143,6 @@
 						<downloadJavadocs>true</downloadJavadocs>
 					</configuration>
 				</plugin>
-				<plugin>
-					<groupId>org.codehaus.mojo</groupId>
-					<artifactId>sonar-maven-plugin</artifactId>
-					<version>2.3</version>
-				</plugin>
 			</plugins>
 		</pluginManagement>
 		<plugins>
@@ -231,5 +226,4 @@
 			</snapshots>
 		</repository>
 	</repositories>
-
 </project>
