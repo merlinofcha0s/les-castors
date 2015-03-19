@@ -86,11 +86,7 @@ public class NouveauArtisan extends MasterPage {
              */
             @Override
             public boolean isVisible() {
-                if (etapeEncours.equals(Etape.ETAPE_1)) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return etapeEncours.equals(Etape.ETAPE_1);
             }
 
         };
@@ -110,11 +106,7 @@ public class NouveauArtisan extends MasterPage {
              */
             @Override
             public boolean isVisible() {
-                if (etapeEncours.equals(Etape.ETAPE_2)) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return etapeEncours.equals(Etape.ETAPE_2);
             }
 
         };
@@ -134,11 +126,7 @@ public class NouveauArtisan extends MasterPage {
              */
             @Override
             public boolean isVisible() {
-                if (etapeEncours.equals(Etape.ETAPE_3)) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return etapeEncours.equals(Etape.ETAPE_3);
             }
 
         };
@@ -156,11 +144,7 @@ public class NouveauArtisan extends MasterPage {
              */
             @Override
             public boolean isVisible() {
-                if (etapeEncours.equals(Etape.ETAPE_4)) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return etapeEncours.equals(Etape.ETAPE_4);
             }
 
         };

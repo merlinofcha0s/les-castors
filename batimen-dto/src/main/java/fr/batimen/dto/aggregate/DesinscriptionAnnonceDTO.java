@@ -3,6 +3,8 @@ package fr.batimen.dto.aggregate;
 import static fr.batimen.dto.constant.ValidatorConstant.CLIENT_LOGIN_RANGE_MAX;
 import static fr.batimen.dto.constant.ValidatorConstant.CLIENT_LOGIN_RANGE_MIN;
 
+import java.util.Objects;
+
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -31,4 +33,29 @@ public class DesinscriptionAnnonceDTO extends DemandeAnnonceDTO {
         this.loginArtisan = loginArtisan;
     }
 
+    /*
+     * (non-Javadoc)
+     * 
+     * @see fr.batimen.dto.DemandeAnnonceDTO#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(Objects.hash(this.getHashID(), this.getLoginDemandeur(), this.getTypeCompteDemandeur(),
+                this.getLoginArtisan()));
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see fr.batimen.dto.DemandeAnnonceDTO#equals(java.lang.Object)
+     */
+    @Override
+    public boolean equals(Object object) {
+        if (super.equals(object)) {
+            DesinscriptionAnnonceDTO other = (DesinscriptionAnnonceDTO) object;
+            return Objects.equals(this.getLoginArtisan(), other.getLoginArtisan());
+        } else {
+            return false;
+        }
+    }
 }

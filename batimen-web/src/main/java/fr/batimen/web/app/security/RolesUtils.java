@@ -21,8 +21,9 @@ public class RolesUtils implements Serializable {
             return Boolean.TRUE;
         } catch (AuthorizationException ae) {
             if (LOGGER.isWarnEnabled()) {
-                LOGGER.warn(SecurityUtils.getSubject().getPrincipal() + " ne possede pas le role : "
-                        + typeCompte.getRole());
+                LOGGER.warn(
+                        SecurityUtils.getSubject().getPrincipal() + " ne possede pas le role : " + typeCompte.getRole(),
+                        ae);
             }
             return Boolean.FALSE;
         }

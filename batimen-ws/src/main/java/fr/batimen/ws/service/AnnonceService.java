@@ -231,7 +231,7 @@ public class AnnonceService {
             annonceAffichageDTO.setTelephoneClient(annonce.getDemandeur().getNumeroTel());
             annonceAffichageDTO.setEmailClient(annonce.getDemandeur().getEmail());
         }
-        ModelMapper mapper = new ModelMapper();
+
         AnnonceDTO annonceDTO = new AnnonceDTO();
         AdresseDTO adresseDTO = new AdresseDTO();
 

@@ -126,7 +126,7 @@ public class Annonce extends MasterPage {
     private void loadAnnonceInfos(String idAnnonce) {
         userConnected = authentication.getCurrentUserInfo();
         DemandeAnnonceDTO demandeAnnonceDTO = new DemandeAnnonceDTO();
-        demandeAnnonceDTO.setHashID(idAnnonce.toString());
+        demandeAnnonceDTO.setHashID(idAnnonce);
         demandeAnnonceDTO.setLoginDemandeur(userConnected.getLogin());
 
         for (PermissionDTO permissionDTO : userConnected.getPermissions()) {
@@ -470,16 +470,10 @@ public class Annonce extends MasterPage {
              */
             @Override
             public boolean isVisible() {
-                if (roleUtils.checkRoles(TypeCompte.CLIENT)
-                        && annonceAffichageDTO.getAnnonce().getLoginOwner().equals(userConnected.getLogin())) {
-                    return true;
-                } else if (roleUtils.checkRoles(TypeCompte.ARTISAN) && annonceAffichageDTO.getIsArtisanInscrit()) {
-                    return true;
-                } else if (roleUtils.checkRoles(TypeCompte.ADMINISTRATEUR)) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return ((roleUtils.checkRoles(TypeCompte.CLIENT) && annonceAffichageDTO.getAnnonce().getLoginOwner()
+                        .equals(userConnected.getLogin()))
+                        || (roleUtils.checkRoles(TypeCompte.ARTISAN) && annonceAffichageDTO.getIsArtisanInscrit()) || (roleUtils
+                        .checkRoles(TypeCompte.ADMINISTRATEUR)));
             }
 
         };
@@ -691,11 +685,7 @@ public class Annonce extends MasterPage {
      * @return true si le lien doit etre affiché
      */
     private boolean afficherInscrireAnnonce() {
-        if (basicCheckForArtisanLink() && !annonceAffichageDTO.getIsArtisanInscrit()) {
-            return true;
-        } else {
-            return false;
-        }
+        return (basicCheckForArtisanLink() && !annonceAffichageDTO.getIsArtisanInscrit());
     }
 
     /**

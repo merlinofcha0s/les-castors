@@ -140,8 +140,6 @@ public class GestionAnnonceFacade {
                 } else {
                     // On recupere l'url du frontend
                     Properties urlProperties = PropertiesFileWS.URL.getProperties();
-                    // Properties urlProperties =
-                    // PropertiesUtils.loadPropertiesFile("url.properties");
                     String urlFrontend = urlProperties.getProperty("url.frontend.web");
                     emailService.envoiMailActivationCompte(nouvelleAnnonceDTO.getClient().getNom(), nouvelleAnnonceDTO
                             .getClient().getPrenom(), nouvelleAnnonceDTO.getClient().getLogin(), nouvelleAnnonceDTO
@@ -288,7 +286,7 @@ public class GestionAnnonceFacade {
         Boolean updatedSuccess = annonceDAO.updateAnnonceNbConsultationByHashId(++nbConsultation,
                 nbConsultationDTO.getHashID());
 
-        if (updatedSuccess == Boolean.TRUE) {
+        if (updatedSuccess.equals(Boolean.TRUE)) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Mise à jour du nb de consultation ok pour cette annonce: "
                         + nbConsultationDTO.getHashID());
