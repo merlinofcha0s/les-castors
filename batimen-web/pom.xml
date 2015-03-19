@@ -180,7 +180,7 @@
 						<include>**/selenium/**/*.java</include>
 					</includes>
 					<argLine>${failsafeArgLine}</argLine>
-					<rerunFailingTestsCount>3</rerunFailingTestsCount>
+					<failsafe.rerunFailingTestsCount>3</failsafe.rerunFailingTestsCount>
 				</configuration>
 				<executions>
 					<execution>
