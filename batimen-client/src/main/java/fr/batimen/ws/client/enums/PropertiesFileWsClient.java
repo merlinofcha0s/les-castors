@@ -10,7 +10,7 @@ public enum PropertiesFileWsClient {
 
     WS("ws.properties");
 
-    private final Logger LOGGER = LoggerFactory.getLogger(PropertiesFileWsClient.class);
+    private final Logger logger = LoggerFactory.getLogger(PropertiesFileWsClient.class);
 
     private PropertiesFileWsClient(String propertiesFileName) {
 
@@ -18,8 +18,8 @@ public enum PropertiesFileWsClient {
         try {
             properties.load(PropertiesFileWsClient.class.getClassLoader().getResourceAsStream(propertiesFileName));
         } catch (IOException e) {
-            if (LOGGER.isErrorEnabled()) {
-                LOGGER.error("Erreur de récupération des properties dans le fichier " + propertiesFileName, e);
+            if (logger.isErrorEnabled()) {
+                logger.error("Erreur de récupération des properties dans le fichier " + propertiesFileName, e);
             }
         }
     }

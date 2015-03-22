@@ -115,11 +115,7 @@ public class NouveauDevis extends MasterPage {
 
             @Override
             public boolean isVisible() {
-                if (etapeEncours.equals(Etape.ETAPE_2)) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return etapeEncours.equals(Etape.ETAPE_2);
             }
 
         };
@@ -136,11 +132,7 @@ public class NouveauDevis extends MasterPage {
              */
             @Override
             public boolean isVisible() {
-                if (etapeEncours.equals(Etape.ETAPE_3)) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return etapeEncours.equals(Etape.ETAPE_3);
             }
         };
 
@@ -158,11 +150,7 @@ public class NouveauDevis extends MasterPage {
 
             @Override
             public boolean isVisible() {
-                if (etapeEncours.equals(Etape.ETAPE_4)) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return etapeEncours.equals(Etape.ETAPE_4);
             }
         };
 
@@ -189,14 +177,10 @@ public class NouveauDevis extends MasterPage {
 
             @Override
             public boolean isVisible() {
-                if (etapeEncours.equals(Etape.ETAPE_5)) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return etapeEncours.equals(Etape.ETAPE_5);
+
             }
         };
-        // containerConfirmation.setVisible(false);
         confirmation1 = new Label("confirmation1", new Model<String>());
         confirmation2 = new Label("confirmation2", new Model<String>());
         contactezNous = new Link<String>("contactezNous") {

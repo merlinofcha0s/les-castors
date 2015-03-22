@@ -21,12 +21,21 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Utility class for performing programmatic bean lookups.
  * 
- * @author Daniel Meyer
+ * @author Daniel Meyer, Cyril Casaucau
  */
 public class ProgrammaticBeanLookup {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProgrammaticBeanLookup.class);
+
+    private ProgrammaticBeanLookup() {
+
+    }
 
     @SuppressWarnings("unchecked")
     public static <T> T lookup(Class<T> clazz, BeanManager bm) {
@@ -37,8 +46,7 @@ public class ProgrammaticBeanLookup {
         }
         Bean<T> bean = (Bean<T>) iter.next();
         CreationalContext<T> ctx = bm.createCreationalContext(bean);
-        T dao = (T) bm.getReference(bean, clazz, ctx);
-        return dao;
+        return (T) bm.getReference(bean, clazz, ctx);
     }
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -60,10 +68,16 @@ public class ProgrammaticBeanLookup {
         try {
             bm = (BeanManager) new InitialContext().lookup("java:comp/BeanManager");
         } catch (NamingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Impossible de récuperer le context bean manager : java:comp/BeanManager ", e);
+            }
         }
-        return lookup(clazz, bm);
+        if (bm != null) {
+            return lookup(clazz, bm);
+        } else {
+            return null;
+        }
+
     }
 
     public static Object lookup(String name) {
@@ -71,9 +85,14 @@ public class ProgrammaticBeanLookup {
         try {
             bm = (BeanManager) new InitialContext().lookup("java:comp/BeanManager");
         } catch (NamingException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Impossible de récuperer le context bean manager : java:comp/BeanManager ", e);
+            }
         }
-        return lookup(name, bm);
+        if (bm != null) {
+            return lookup(name, bm);
+        } else {
+            return null;
+        }
     }
 }

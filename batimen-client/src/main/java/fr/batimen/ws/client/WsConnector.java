@@ -57,7 +57,7 @@ public class WsConnector implements Serializable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(WsConnector.class);
 
-    private WsConnector() {
+    public WsConnector() {
         getWsProperties();
         // Consomme bcp de ressource pour creer le client, il est thread
         // safe. Voir si ca ne pose pas de probleme de perf de l'avoir mis

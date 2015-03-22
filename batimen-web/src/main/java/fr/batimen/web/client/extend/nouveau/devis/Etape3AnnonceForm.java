@@ -13,7 +13,6 @@ import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.form.upload.MultiFileUploadField;
-import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.validator.PatternValidator;
@@ -53,7 +52,6 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
         this.setMarkupId("formEtape3");
 
         nouvelleAnnonce = model.getObject();
-        CompoundPropertyModel<CreationAnnonceDTO> modelCompound = (CompoundPropertyModel<CreationAnnonceDTO>) model;
 
         DropDownChoice<SousCategorieMetierDTO> sousCategorieSelect = new DropDownChoice<SousCategorieMetierDTO>(
                 "sousCategorie") {

@@ -12,9 +12,9 @@ public class ChangePasswordValidator extends AbstractFormValidator {
     /** form components to be checked. */
     private final FormComponent<?>[] components;
 
-    private final static String confirmePasswordKey = "ChangePasswordValidator.confirmeNewPassword";
-    private final static String oldPasswordKey = "ChangePasswordValidator.oldPassword";
-    private final static String newPasswordKey = "ChangePasswordValidator.newPassword";
+    private final static String CONFIRME_PASSWORD_KEY = "ChangePasswordValidator.confirmeNewPassword";
+    private final static String OLD_PASSWORD_KEY = "ChangePasswordValidator.oldPassword";
+    private final static String NEW_PASSWORD_KEY = "ChangePasswordValidator.newPassword";
 
     public ChangePasswordValidator(FormComponent<?> oldPassword, FormComponent<?> newPassword,
             FormComponent<?> confirmeNewPassword) {
@@ -40,27 +40,25 @@ public class ChangePasswordValidator extends AbstractFormValidator {
         if (!oldPassword.getInput().isEmpty()
                 && (newPassword.getInput().isEmpty() || confirmeNewPassword.getInput().isEmpty())) {
             if (newPassword.getInput().isEmpty()) {
-                error(newPassword, newPasswordKey);
+                error(newPassword, NEW_PASSWORD_KEY);
             } else {
-                error(confirmeNewPassword, confirmePasswordKey);
+                error(confirmeNewPassword, CONFIRME_PASSWORD_KEY);
             }
 
         } else if (!newPassword.getInput().isEmpty()
                 && (oldPassword.getInput().isEmpty() || confirmeNewPassword.getInput().isEmpty())) {
             if (oldPassword.getInput().isEmpty()) {
-                error(oldPassword, oldPasswordKey);
+                error(oldPassword, OLD_PASSWORD_KEY);
             } else {
-                error(confirmeNewPassword, confirmePasswordKey);
+                error(confirmeNewPassword, CONFIRME_PASSWORD_KEY);
             }
-            // error(newPassword, newPasswordKey);
         } else if (!confirmeNewPassword.getInput().isEmpty()
                 && (newPassword.getInput().isEmpty() || oldPassword.getInput().isEmpty())) {
             if (newPassword.getInput().isEmpty()) {
-                error(newPassword, newPasswordKey);
+                error(newPassword, NEW_PASSWORD_KEY);
             } else {
-                error(oldPassword, oldPasswordKey);
+                error(oldPassword, OLD_PASSWORD_KEY);
             }
-            // error(confirmeNewPassword, confirmePasswordKey);
         }
     }
 }

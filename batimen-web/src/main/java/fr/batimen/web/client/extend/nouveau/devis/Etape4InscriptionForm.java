@@ -68,7 +68,7 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
     private final TextField<String> emailField;
     private final TextField<String> loginField;
     private AjaxSubmitLink validateInscription;
-    private final String idValidateInscription = "validateInscription";
+    private static final String ID_VALIDATE_INSCRIPTION = "validateInscription";
     private WebMarkupContainer cguContainer;
     private CheckBox cguConfirm;
 
@@ -181,7 +181,7 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
 
         initChooser(forModification);
 
-        validateInscription = new AjaxSubmitLink(idValidateInscription) {
+        validateInscription = new AjaxSubmitLink(ID_VALIDATE_INSCRIPTION) {
 
             private static final long serialVersionUID = 6200004097590331163L;
 
@@ -223,7 +223,7 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
             }
 
         };
-        validateInscription.setMarkupId(idValidateInscription);
+        validateInscription.setMarkupId(ID_VALIDATE_INSCRIPTION);
 
         this.add(nomField);
         this.add(prenomField);
@@ -386,7 +386,7 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
      * @return the idValidateInscription
      */
     public String getIdValidateInscription() {
-        return idValidateInscription;
+        return ID_VALIDATE_INSCRIPTION;
     }
 
 }

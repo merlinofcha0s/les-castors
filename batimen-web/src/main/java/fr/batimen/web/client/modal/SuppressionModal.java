@@ -58,7 +58,7 @@ public class SuppressionModal extends ModalCastor {
         initLinkPopup();
     }
 
-    public void initLinkPopup() {
+    public final void initLinkPopup() {
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Initialisation des liens de la popup de suppression");

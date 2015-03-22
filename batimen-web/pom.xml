@@ -73,6 +73,9 @@
 				<includes>
 					<include>**</include>
 				</includes>
+				<excludes>
+					<exclude>web.xml</exclude>
+				</excludes>
 			</resource>
 			<resource>
 				<filtering>false</filtering>
@@ -114,10 +117,10 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
-				<version>2.4</version>
+				<version>2.6</version>
 				<configuration>
 					<warName>batimen-web</warName>
-					<failOnMissingWebXml>false</failOnMissingWebXml>
+					<failOnMissingWebXml>true</failOnMissingWebXml>
 					<webResources>
 						<resource>
 							<directory>${basedir}/src/main/webapp/WEB-INF</directory>
@@ -157,7 +160,7 @@
 			<!-- Executions des tests unitaires (Junit) -->
 			<plugin>
 				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.17</version>
+				<version>2.18.1</version>
 				<configuration>
 					<append>true</append>
 					<skipTests>false</skipTests>
@@ -173,7 +176,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-failsafe-plugin</artifactId>
-				<version>2.17</version>
+				<version>2.18.1</version>
 				<configuration>
 					<reportsDirectory>${basedir}/target/surefire-reports</reportsDirectory>
 					<includes>
@@ -386,11 +389,14 @@
 			<build>
 				<resources>
 					<resource>
-						<directory>src/main/resources/prod</directory>
+						<directory>src/main/resources/integration</directory>
 						<filtering>true</filtering>
 						<includes>
 							<include>**</include>
 						</includes>
+						<excludes>
+							<exclude>web.xml</exclude>
+						</excludes>
 					</resource>
 				</resources>
 				<testResources>

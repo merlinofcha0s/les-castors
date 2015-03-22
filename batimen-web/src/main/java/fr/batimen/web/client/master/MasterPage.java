@@ -138,8 +138,7 @@ public abstract class MasterPage extends WebPage {
     }
 
     private String getJSForClickListenerOnConnexion(CharSequence callbackString) {
-        String script = "$('.connexionLink').on('click',function(){" + callbackString + "});";
-        return script;
+        return "$('.connexionLink').on('click',function(){" + callbackString + "});";
     }
 
     /**
@@ -431,7 +430,7 @@ public abstract class MasterPage extends WebPage {
         return attribute.toString();
     }
 
-    protected AuthentificationModal getLoginDialog() {
+    protected final AuthentificationModal getLoginDialog() {
         if (authentificationPanel == null) {
             authentificationPanel = new AuthentificationModal("authenticationModal");
         }
