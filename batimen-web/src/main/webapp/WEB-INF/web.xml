@@ -70,7 +70,5 @@
 		<error-code>404</error-code>
 		<location>/404</location>
 	</error-page>
-
-	<!-- <listener> <listener-class>fr.batimen.web.app.context.LogBackContextListener</listener-class> 
-		</listener> -->
+	
 </web-app>
