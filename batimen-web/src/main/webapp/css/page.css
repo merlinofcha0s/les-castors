@@ -155,6 +155,10 @@
 	padding-right: 52px;
 }
 
+.categorie{
+	cursor: pointer;
+}
+
 /* Activation compte */
 .confirmationactivationok {
 	background: url('../img/thumbsup.png');

@@ -77,10 +77,10 @@ public class TestMesAnnonces extends AbstractITTest {
                 By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[1]/table/tbody/tr[1]/td[2]/a[2]"))
                 .click();
 
-        Boolean checkConditionAccessToAnnonceViaNotif = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+        Boolean checkConditionAccessToANnonceViaNotif = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("h1.title"),
                         "ANNONCE PARTICULIER"));
-        assertTrue(checkConditionAccessToAnnonceViaNotif);
+        assertTrue(checkConditionAccessToANnonceViaNotif);
 
     }
 
