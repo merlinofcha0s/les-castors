@@ -61,14 +61,21 @@ public class GestionClientFacadeTest extends AbstractBatimenWsTest {
 
         // Check de l'annonce.
         Boolean rightDescription = Boolean.FALSE;
+        Boolean rightHashID = Boolean.FALSE;
 
         for (AnnonceDTO annonce : annonces) {
             if (annonce.getDescription().equals("Peinture d'un mur")) {
                 rightDescription = Boolean.TRUE;
             }
+            if (annonce
+                    .getHashID()
+                    .equals("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21")) {
+                rightHashID = Boolean.TRUE;
+            }
         }
 
         Assert.assertTrue(rightDescription);
+        Assert.assertTrue(rightHashID);
         Assert.assertEquals(1, annonces.size());
     }
 

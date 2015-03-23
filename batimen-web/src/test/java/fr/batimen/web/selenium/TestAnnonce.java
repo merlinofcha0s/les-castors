@@ -203,6 +203,7 @@ public class TestAnnonce extends AbstractITTest {
                         .cssSelector("#inscriptionModal > div.modal-header > #myModalLabel")));
         assertNotNull(checkConditionAnnoncePresent);
 
+        // Lien inscription artisan sur la page de l'annonce.
         driver.findElement(
                 By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[6]/div/div[2]/a[1]"))
                 .click();

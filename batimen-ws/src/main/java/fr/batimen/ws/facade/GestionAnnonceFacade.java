@@ -183,6 +183,7 @@ public class GestionAnnonceFacade {
             annonceDTO.setEtatAnnonce((EtatAnnonce) annonce[2]);
             Long nbDevis = (Long) annonce[3];
             annonceDTO.setNbDevis(nbDevis);
+            annonceDTO.setHashID(String.valueOf(annonce[4]));
 
             // On ajoute à la liste
             annoncesDTO.add(annonceDTO);

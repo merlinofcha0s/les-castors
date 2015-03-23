@@ -134,6 +134,9 @@ public final class MesAnnonces extends MasterPage {
                     }
 
                 };
+
+                linkAnnonce.setOutputMarkupId(true);
+
                 SimpleDateFormat dateNotificationFormatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                 Label dateNotification = new Label("dateNotification", dateNotificationFormatter.format(notification
                         .getDateNotification()));
@@ -192,13 +195,14 @@ public final class MesAnnonces extends MasterPage {
 
                     @Override
                     public void onClick() {
-                        // TODO : Rajouter les hash id dans l'annonce DTO
                         PageParameters params = new PageParameters();
-                        // params.add("idAnnonce", annonce.getHashIDAnnonce());
+                        params.add("idAnnonce", annonce.getHashID());
                         this.setResponsePage(Annonce.class, params);
                     }
 
                 };
+
+                voirAnnonce.setOutputMarkupId(true);
 
                 item.add(iconCategorie);
                 item.add(categorie);
