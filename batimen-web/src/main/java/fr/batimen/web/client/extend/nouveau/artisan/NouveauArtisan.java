@@ -282,8 +282,8 @@ public class NouveauArtisan extends MasterPage {
      * @see org.apache.wicket.Page#onInitialize()
      */
     @Override
-    protected void onInitialize() {
-        super.onInitialize();
+    protected void onConfigure() {
+        super.onConfigure();
         navigationWizard.setStep(etapeEncours.ordinal() + 1);
     }
 
