@@ -7,16 +7,24 @@
 		rel="stylesheet"
 		type="text/css"
 		href="css/accueil.css">
+	<link
+		rel="stylesheet"
+		type="text/css"
+		href="css/rs-settings.css">
+	<link
+		rel="stylesheet"
+		type="text/css"
+		href="css/rs-settings-override.css">
+	<script
+		type="text/javascript"
+		src="js/jquery.themepunch.plugins.min.js"></script>
+	<script
+		type="text/javascript"
+		src="js/jquery.themepunch.revolution.min.js"></script>
 </wicket:head>
 <wicket:extend>
 	<div class="row-fluid">
 		<div class="span12 module_cont module_revolution_slider first-module">
-			<script
-				type="text/javascript"
-				src="js/jquery.themepunch.plugins.min.js"></script>
-			<script
-				type="text/javascript"
-				src="js/jquery.themepunch.revolution.min.js"></script>
 			<div class="rs-fullscreen">
 				<div class="fullwidthbanner-container">
 					<div class="fullwidthbanner">
@@ -25,13 +33,13 @@
 							<li
 								data-masterspeed="100"
 								data-slotamount="7"
-								data-transition="papercut"><img
+								data-transition="slotfade-horizontal"><img
 								src="img/slider/devis.jpg"
 								alt=""> <!-- THE CAPTIONS OF THE FIRST SLIDE -->
 								<div
-									class="caption large_text lfl stl tp-caption start"
+									class="caption large_text lfl ltl tp-caption start"
 									data-x="50"
-									data-y="250"
+									data-y="260"
 									data-endeasing="easeInOutBack"
 									data-endspeed="1000"
 									data-end="6500"
@@ -41,34 +49,32 @@
 									Recevoir des devis d'artisans qualifiés <br /> près de chez soi
 								</div>
 								<div
-									class="caption button large blue lfb ltl"
-									data-x="50"
-									data-y="350"
+									class="caption lfb ltl"
+									data-x="52"
+									data-y="340"
 									data-endeasing="easeInOutBack"
 									data-endspeed="1000"
 									data-end="6500"
 									data-easing="easeInOutBack"
 									data-start="1000"
 									data-speed="1000">
-									<a style="color: white; font-weight: bold; vertical-align: baseline; font-size: 20px;">Faire un devis</a>
+									<a class="button blue big">Faire un devis</a>
 								</div>
 								<div
 									class="caption bold_blue_text lfb ltl tp-caption start"
-									data-x="70"
+									data-x="71"
 									data-y="395"
 									data-endeasing="easeInOutBack"
 									data-endspeed="1000"
 									data-end="6500"
 									data-easing="easeInOutBack"
 									data-start="1000"
-									data-speed="1000">
-									(C'est gratuit)
-								</div></li>
+									data-speed="1000">(C'est gratuit)</div></li>
 							<!-- THE SECOND SLIDE -->
 							<li
 								data-masterspeed="100"
 								data-slotamount="7"
-								data-transition="papercut"><img
+								data-transition="slotfade-horizontal"><img
 								src="img/slider/concurrence.jpg"
 								alt="">
 								<div
@@ -81,13 +87,35 @@
 									data-easing="easeInOutBack"
 									data-start="500"
 									data-speed="1000">
-									Nous faisons marcher la concurrence, <br /> pour vous assurer le meilleur prix
-								</div></li>
+									Comparer les devis pour <br /> le meilleur rapport qualité/prix
+								</div>
+								<div
+									class="caption lfb ltl"
+									data-x="367"
+									data-y="115"
+									data-endeasing="easeInOutBack"
+									data-endspeed="1000"
+									data-end="6500"
+									data-easing="easeInOutBack"
+									data-start="1000"
+									data-speed="1000">
+									<a class="button blue big">Faire un devis</a>
+								</div>
+								<div
+									class="caption bold_blue_text lfb ltl tp-caption start"
+									data-x="386"
+									data-y="170"
+									data-endeasing="easeInOutBack"
+									data-endspeed="1000"
+									data-end="6500"
+									data-easing="easeInOutBack"
+									data-start="1000"
+									data-speed="1000">(C'est gratuit)</div></li>
 							<!-- THE THIRD SLIDE -->
 							<li
 								data-masterspeed="400"
 								data-slotamount="7"
-								data-transition="papercut"><img
+								data-transition="slotfade-horizontal"><img
 								src="img/slider/chantier_temoin.jpg"
 								alt="">
 								<div
@@ -99,9 +127,29 @@
 									data-end="6500"
 									data-easing="easeInOutBack"
 									data-start="500"
+									data-speed="1000">Bénéficier d’un réseau de professionnels vérifiés</div>
+								<div
+									class="caption lfb ltl"
+									data-x="251"
+									data-y="340"
+									data-endeasing="easeInOutBack"
+									data-endspeed="1000"
+									data-end="6500"
+									data-easing="easeInOutBack"
+									data-start="1000"
 									data-speed="1000">
-									Nous vous présentons des informations <br /> ainsi que des chantiers témoins issue de nos partenaires
-								</div></li>
+									<a class="button blue big">Faire un devis</a>
+								</div>
+								<div
+									class="caption bold_blue_text lfb ltl tp-caption start"
+									data-x="270"
+									data-y="395"
+									data-endeasing="easeInOutBack"
+									data-endspeed="1000"
+									data-end="6500"
+									data-easing="easeInOutBack"
+									data-start="1000"
+									data-speed="1000">(C'est gratuit)</div></li>
 						</ul>
 						<div class="tp-bannertimer tp-bottom"></div>
 					</div>
