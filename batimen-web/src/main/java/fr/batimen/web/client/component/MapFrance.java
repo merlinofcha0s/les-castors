@@ -617,7 +617,7 @@ public class MapFrance extends Panel {
 
     }
 
-    private String createJSCarteFrance() {
+    public String createJSCarteFrance() {
 
         String attr = ".attr(attr);";
 

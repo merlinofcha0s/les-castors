@@ -79,11 +79,38 @@ public class Accueil extends MasterPage {
             }
         };
 
-        this.add(nouveauDevis);
-        this.add(nouveauDevis1);
-        this.add(nouveauDevis2);
-        this.add(rejoignezNousLink);
-        this.add(contactLink);
+        Link<String> faireUnDevisSlide1 = new Link<String>("faireUnDevisSlide1") {
+
+            private static final long serialVersionUID = 9089145391867475874L;
+
+            @Override
+            public void onClick() {
+                this.setResponsePage(NouveauDevis.class);
+            }
+        };
+
+        Link<String> faireUnDevisSlide2 = new Link<String>("faireUnDevisSlide2") {
+
+            private static final long serialVersionUID = 9089145391867475874L;
+
+            @Override
+            public void onClick() {
+                this.setResponsePage(NouveauDevis.class);
+            }
+        };
+
+        Link<String> faireUnDevisSlide3 = new Link<String>("faireUnDevisSlide3") {
+
+            private static final long serialVersionUID = 9089145391867475874L;
+
+            @Override
+            public void onClick() {
+                this.setResponsePage(NouveauDevis.class);
+            }
+        };
+
+        this.add(nouveauDevis, nouveauDevis1, nouveauDevis2, rejoignezNousLink, contactLink, faireUnDevisSlide1,
+                faireUnDevisSlide2, faireUnDevisSlide3);
     }
 
 }
