@@ -3,6 +3,10 @@ package fr.batimen.web.client.component;
 import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.head.CssContentHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -107,7 +111,14 @@ public class NavigationWizard extends Panel {
         jsCastorWizardContainer.setEscapeModelStrings(false);
 
         this.add(wizard, jsCastorWizardContainer);
+    }
 
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.render(JavaScriptHeaderItem.forUrl("//www.fuelcdn.com/fuelux/2.6.1/loader.min.js"));
+        response.render(CssContentHeaderItem.forUrl("//www.fuelcdn.com/fuelux/2.6.1/css/fuelux.min.css"));
+        response.render(CssContentHeaderItem.forUrl("//www.fuelcdn.com/fuelux/2.6.1/css/fuelux-responsive.css"));
     }
 
     /*
@@ -117,13 +128,26 @@ public class NavigationWizard extends Panel {
      */
     @Override
     protected void onBeforeRender() {
+        // Création du callback qui va renvoyer le numero de l'etape lorsque
+        // l'utilisateur clique sur une étape du wizard.
         callbackURL = ajaxCastorWizardBehaviour.getCallbackScript().toString();
         jsCastorWizard = new StringBuilder("$('#");
         jsCastorWizard.append(wizard.getMarkupId()).append("').on('stepclick', function (e, data) { ")
                 .append("var stepNumber = data.step;").append(callbackURL).append("});");
         jsCastorWizardModel.setObject(jsCastorWizard.toString());
-
         super.onBeforeRender();
+    }
+
+    public void next(AjaxRequestTarget target) {
+        StringBuilder jsNextStep = new StringBuilder("$('#");
+        jsNextStep.append(wizard.getMarkupId()).append("').wizard('next');");
+        target.appendJavaScript(jsNextStep.toString());
+    }
+
+    public void previous(AjaxRequestTarget target) {
+        StringBuilder jsPreviousStep = new StringBuilder("$('#");
+        jsPreviousStep.append(wizard.getMarkupId()).append("').wizard('previous');");
+        target.appendJavaScript(jsPreviousStep.toString());
     }
 
     public NavigationWizard(String id, List<String> etapes) throws FrontEndException {

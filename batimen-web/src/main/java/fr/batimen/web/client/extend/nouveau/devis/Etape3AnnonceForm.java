@@ -6,6 +6,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.event.IEvent;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.Radio;
@@ -189,4 +190,18 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
         this.add(validateQualification);
         this.add(typeTravaux);
     }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see
+     * org.apache.wicket.markup.html.form.Form#renderHead(org.apache.wicket.
+     * markup.head.IHeaderResponse)
+     */
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        // response.render(OnDomReadyHeaderItem.forScript("$('#radioTypeTravauxNeuf').radio();"));
+    }
+
 }

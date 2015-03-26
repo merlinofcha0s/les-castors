@@ -111,7 +111,6 @@ public class NouveauDevis extends MasterPage {
                     return false;
                 }
             }
-
         };
 
         // Etape 2 : Selection de la catégorie principale des travaux
@@ -474,10 +473,6 @@ public class NouveauDevis extends MasterPage {
                 }
             }
             navigationWizard.setStep(nouvelleAnnonce.getNumeroEtape());
-
-            if (nouvelleAnnonce.getNumeroEtape().equals(Etape.ETAPE_1.ordinal())) {
-                castorWizardEvent.getTarget().appendJavaScript(carteFrance.createJSCarteFrance());
-            }
             // On dit a wicket de rafraichir ce panel avec la requete ajax
             castorWizardEvent.getTarget().add(containerGeneral);
         }
