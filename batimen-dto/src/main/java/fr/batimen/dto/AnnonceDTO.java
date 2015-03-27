@@ -46,6 +46,7 @@ public class AnnonceDTO extends AbstractDTO {
     private Long nbDevis;
     @NotNull
     private TypeTravaux typeTravaux;
+    private String hashID;
 
     // Rempli que pour l'affichage
     private String loginOwner;
@@ -55,6 +56,21 @@ public class AnnonceDTO extends AbstractDTO {
      */
     public String getDescription() {
         return description;
+    }
+
+    /**
+     * @return the hashID
+     */
+    public String getHashID() {
+        return hashID;
+    }
+
+    /**
+     * @param hashID
+     *            the hashID to set
+     */
+    public void setHashID(String hashID) {
+        this.hashID = hashID;
     }
 
     /**
@@ -252,7 +268,7 @@ public class AnnonceDTO extends AbstractDTO {
      */
     @Override
     public int hashCode() {
-        return Objects.hashCode(Objects.hash(this.typeContact, this.delaiIntervention, this.dateCreation,
+        return Objects.hashCode(Objects.hash(this.typeContact, this.delaiIntervention, this.dateCreation, this.hashID,
                 this.description));
     }
 
@@ -269,7 +285,7 @@ public class AnnonceDTO extends AbstractDTO {
 
         if (object instanceof AnnonceDTO) {
             AnnonceDTO other = (AnnonceDTO) object;
-            return Objects.equals(this.typeContact, other.typeContact)
+            return Objects.equals(this.typeContact, other.typeContact) && Objects.equals(this.hashID, other.hashID)
                     && Objects.equals(this.delaiIntervention, other.delaiIntervention)
                     && Objects.equals(this.dateCreation, other.dateCreation)
                     && Objects.equals(this.description, other.description);

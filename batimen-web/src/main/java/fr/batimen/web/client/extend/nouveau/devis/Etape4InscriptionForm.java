@@ -3,6 +3,7 @@ package fr.batimen.web.client.extend.nouveau.devis;
 import javax.inject.Inject;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -24,11 +25,11 @@ import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.security.HashHelper;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.constant.ValidatorConstant;
+import fr.batimen.web.app.constants.Etape;
 import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.app.utils.ProgrammaticBeanLookup;
 import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
-import fr.batimen.web.client.component.BatimenToolTip;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.web.client.extend.CGU;
 import fr.batimen.web.client.extend.member.client.ModifierMonProfil;
@@ -90,8 +91,6 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
 
         numeroTelField = new TextField<String>("client.numeroTel");
         numeroTelField.setMarkupId("numeroTel");
-        numeroTelField.setRequired(true);
-        numeroTelField.add(new RequiredBorderBehaviour());
         numeroTelField.add(new ErrorHighlightBehavior());
         numeroTelField.add(new PatternValidator(ValidatorConstant.TELEPHONE_REGEX));
 
@@ -181,6 +180,30 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
 
         initChooser(forModification);
 
+        AjaxLink<Void> etapePrecedente4 = new AjaxLink<Void>("etapePrecedente4") {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                NouveauUtils.sendEventForPreviousStep(target, Etape.ETAPE_4.ordinal() + 1);
+            }
+
+            /*
+             * (non-Javadoc)
+             * 
+             * @see org.apache.wicket.Component#isVisible()
+             */
+            @Override
+            public boolean isVisible() {
+                return !forModification;
+            }
+
+        };
+
+        etapePrecedente4.setOutputMarkupId(true);
+        etapePrecedente4.setMarkupId("etapePrecedente4");
+
         validateInscription = new AjaxSubmitLink(ID_VALIDATE_INSCRIPTION) {
 
             private static final long serialVersionUID = 6200004097590331163L;
@@ -225,17 +248,8 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
         };
         validateInscription.setMarkupId(ID_VALIDATE_INSCRIPTION);
 
-        this.add(nomField);
-        this.add(prenomField);
-        this.add(numeroTelField);
-        this.add(emailField);
-        this.add(loginField);
-        this.add(passwordField);
-        this.add(confirmPassword);
-        this.add(oldPasswordContainer);
-        this.add(cguContainer);
-        this.add(validateInscription);
-        this.add(BatimenToolTip.getTooltipBehaviour());
+        this.add(nomField, prenomField, numeroTelField, emailField, loginField, passwordField, confirmPassword,
+                oldPasswordContainer, cguContainer, validateInscription, etapePrecedente4);
     }
 
     public void initChooser(final Boolean forModification) {

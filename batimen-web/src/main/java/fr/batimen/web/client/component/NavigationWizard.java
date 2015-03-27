@@ -3,15 +3,19 @@ package fr.batimen.web.client.component;
 import java.util.List;
 
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.head.CssContentHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.batimen.core.exception.FrontEndException;
+import fr.batimen.web.client.behaviour.AjaxCastorWizardBehaviour;
 import fr.batimen.web.client.master.MasterPage;
 
 /**
@@ -45,6 +49,11 @@ public class NavigationWizard extends Panel {
     private final WebMarkupContainer etape3Li;
     private final WebMarkupContainer etape4Li;
     private final WebMarkupContainer etape5Li;
+
+    private final AjaxCastorWizardBehaviour ajaxCastorWizardBehaviour;
+    private String callbackURL;
+    private StringBuilder jsCastorWizard;
+    private final Model<String> jsCastorWizardModel;
 
     public NavigationWizard(String id) {
         super(id);
@@ -84,36 +93,61 @@ public class NavigationWizard extends Panel {
         etape4Li.add(badgeEtape4);
         etape5Li.add(badgeEtape5);
 
-        wizard = new WebMarkupContainer("wizard") {
+        wizard = new WebMarkupContainer("wizard");
+        wizard.setMarkupId("batimenWizard");
 
-            private static final long serialVersionUID = -8397930891418180306L;
+        ajaxCastorWizardBehaviour = new AjaxCastorWizardBehaviour();
 
-            /*
-             * (non-Javadoc)
-             * 
-             * @see
-             * org.apache.wicket.Component#renderHead(org.apache.wicket.markup
-             * .head.IHeaderResponse)
-             */
-            @Override
-            public void renderHead(IHeaderResponse response) {
-                super.renderHead(response);
-                StringBuilder jsAvoidStepClick = new StringBuilder();
-                jsAvoidStepClick.append("$('#batimenWizard').on('stepclick', function (e, data) {");
-                jsAvoidStepClick.append(" return e.preventDefault();");
-                jsAvoidStepClick.append(" });");
-                response.render(JavaScriptHeaderItem.forScript(jsAvoidStepClick, "batimenWizard"));
-            }
+        wizard.add(etape1Li, etape2Li, etape3Li, etape4Li, etape5Li);
+        wizard.add(ajaxCastorWizardBehaviour);
 
-        };
+        // Pour le moment, pas de javascript : il est calculé dans le
+        // onBeforeRender car il faut attendre que tout le reste de la page soit
+        // chargé sinon erreur sur le get call back script
+        jsCastorWizard = new StringBuilder("");
+        jsCastorWizardModel = new Model<String>(jsCastorWizard.toString());
 
-        wizard.add(etape1Li);
-        wizard.add(etape2Li);
-        wizard.add(etape3Li);
-        wizard.add(etape4Li);
-        wizard.add(etape5Li);
+        Label jsCastorWizardContainer = new Label("jsCastorWizard", jsCastorWizardModel);
+        jsCastorWizardContainer.setEscapeModelStrings(false);
 
-        this.add(wizard);
+        this.add(wizard, jsCastorWizardContainer);
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.render(JavaScriptHeaderItem.forUrl("//www.fuelcdn.com/fuelux/2.6.1/loader.min.js"));
+        response.render(CssContentHeaderItem.forUrl("//www.fuelcdn.com/fuelux/2.6.1/css/fuelux.min.css"));
+        response.render(CssContentHeaderItem.forUrl("//www.fuelcdn.com/fuelux/2.6.1/css/fuelux-responsive.css"));
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see org.apache.wicket.Component#onBeforeRender()
+     */
+    @Override
+    protected void onBeforeRender() {
+        // Création du callback qui va renvoyer le numero de l'etape lorsque
+        // l'utilisateur clique sur une étape du wizard.
+        callbackURL = ajaxCastorWizardBehaviour.getCallbackScript().toString();
+        jsCastorWizard = new StringBuilder("$('#");
+        jsCastorWizard.append(wizard.getMarkupId()).append("').on('stepclick', function (e, data) { ")
+                .append("var stepNumber = data.step;").append(callbackURL).append("});");
+        jsCastorWizardModel.setObject(jsCastorWizard.toString());
+        super.onBeforeRender();
+    }
+
+    public void next(AjaxRequestTarget target) {
+        StringBuilder jsNextStep = new StringBuilder("$('#");
+        jsNextStep.append(wizard.getMarkupId()).append("').wizard('next');");
+        target.appendJavaScript(jsNextStep.toString());
+    }
+
+    public void previous(AjaxRequestTarget target) {
+        StringBuilder jsPreviousStep = new StringBuilder("$('#");
+        jsPreviousStep.append(wizard.getMarkupId()).append("').wizard('previous');");
+        target.appendJavaScript(jsPreviousStep.toString());
     }
 
     public NavigationWizard(String id, List<String> etapes) throws FrontEndException {

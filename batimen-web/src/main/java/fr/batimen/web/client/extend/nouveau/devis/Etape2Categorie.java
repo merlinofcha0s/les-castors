@@ -7,6 +7,7 @@ import org.apache.wicket.markup.html.panel.Panel;
 
 import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.helper.CategorieLoader;
+import fr.batimen.web.app.constants.Etape;
 import fr.batimen.web.client.extend.nouveau.devis.event.CategorieEvent;
 
 /**
@@ -85,13 +86,23 @@ public class Etape2Categorie extends Panel {
 
         };
 
+        AjaxLink<Void> etapePrecedente2 = new AjaxLink<Void>("etapePrecedente2") {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                NouveauUtils.sendEventForPreviousStep(target, Etape.ETAPE_2.ordinal() + 1);
+            }
+        };
+
+        etapePrecedente2.setOutputMarkupId(true);
+        etapePrecedente2.setMarkupId("etapePrecedente2");
+
         decorationMaconnerieLink.setOutputMarkupId(true);
         decorationMaconnerieLink.setMarkupId("decorationMaconnerie");
 
-        add(electriciteLink);
-        add(plomberieLink);
-        add(espacesVertLink);
-        add(decorationMaconnerieLink);
+        add(electriciteLink, plomberieLink, espacesVertLink, decorationMaconnerieLink, etapePrecedente2);
     }
 
     private void createAndTriggerEvent(AjaxRequestTarget target, CategorieMetierDTO categorieMetier) {

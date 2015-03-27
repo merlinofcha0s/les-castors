@@ -286,6 +286,7 @@ public class Annonce extends MasterPage {
         Label description = new Label("description", annonceAffichageDTO.getAnnonce().getDescription());
 
         WebMarkupContainer iconCategorie = new WebMarkupContainer("iconCategorie");
+
         StringBuilder classCssIcon = new StringBuilder("glyphAnnonce");
         classCssIcon.append(" ").append(
                 CategorieLoader.getIconForCategorie(annonceAffichageDTO.getAnnonce().getCategorieMetier()));
@@ -293,11 +294,17 @@ public class Annonce extends MasterPage {
 
         Label categorie = new Label("categorie", CategorieLoader.getCategorieByCode(annonceAffichageDTO.getAnnonce()
                 .getCategorieMetier()));
+
+        if (annonceAffichageDTO.getAnnonce().getCategorieMetier().equals(CategorieLoader.PLOMBERIE_CODE)
+                || annonceAffichageDTO.getAnnonce().getCategorieMetier().equals(CategorieLoader.ESPACE_VERT_CODE)) {
+            categorie.add(new AttributeModifier("class", "labelAnnonce-icon8"));
+        }
+
         Label sousCategorie = new Label("sousCategorie", annonceAffichageDTO.getAnnonce().getSousCategorieMetier());
         Label typeTravaux = new Label("typeTravaux", annonceAffichageDTO.getAnnonce().getTypeTravaux().getType());
         Label delaiIntervention = new Label("delaiIntervention", annonceAffichageDTO.getAnnonce()
                 .getDelaiIntervention().getType());
-        SimpleDateFormat sdf = new SimpleDateFormat("DD/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Label dateCreation = new Label("dateCreation", sdf.format(annonceAffichageDTO.getAnnonce().getDateCreation()));
         Label nbConsultation = new Label("nbConsultation", annonceAffichageDTO.getAnnonce().getNbConsultation());
 
@@ -481,6 +488,26 @@ public class Annonce extends MasterPage {
         containerContact.setOutputMarkupId(true);
         containerContact.setMarkupId("containerContact");
 
+        WebMarkupContainer containerTelContact = new WebMarkupContainer("containerTelContact") {
+
+            private static final long serialVersionUID = 1L;
+
+            /*
+             * (non-Javadoc)
+             * 
+             * @see org.apache.wicket.Component#isVisible()
+             */
+            @Override
+            public boolean isVisible() {
+                if (roleUtils.checkRoles(TypeCompte.ARTISAN) || roleUtils.checkRoles(TypeCompte.ADMINISTRATEUR)) {
+                    return annonceAffichageDTO.getTelephoneClient() != null;
+                } else {
+                    return userConnected.getNumeroTel() != null;
+                }
+            }
+
+        };
+
         String complementAdresse = annonceAffichageDTO.getAdresse().getComplementAdresse();
 
         StringBuilder adresseComplete = new StringBuilder(annonceAffichageDTO.getAdresse().getAdresse());
@@ -497,11 +524,13 @@ public class Annonce extends MasterPage {
         Label adresse = new Label("adresse", adresseComplete.toString());
 
         telephone = new Label("telephone");
+        containerTelContact.add(telephone);
+
         email = new SmartLinkLabel("email");
 
         initModelPhoneAndEmailContact();
 
-        containerContact.add(adresse, telephone, email);
+        containerContact.add(adresse, email, containerTelContact);
         containerContactMaster.add(containerContact);
         add(containerContactMaster);
     }

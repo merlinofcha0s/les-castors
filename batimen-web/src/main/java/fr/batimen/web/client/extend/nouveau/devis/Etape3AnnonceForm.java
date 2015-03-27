@@ -3,6 +3,7 @@ package fr.batimen.web.client.extend.nouveau.devis;
 import java.util.Arrays;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.event.IEvent;
@@ -26,6 +27,7 @@ import fr.batimen.dto.enums.DelaiIntervention;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.enums.TypeContact;
 import fr.batimen.dto.enums.TypeTravaux;
+import fr.batimen.web.app.constants.Etape;
 import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
@@ -177,16 +179,21 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
         };
         validateQualification.setMarkupId("validateQualification");
 
-        this.add(sousCategorieSelect);
-        this.add(descriptionDevisField);
-        this.add(typeContactField);
-        this.add(delaiInterventionField);
-        this.add(photoField);
-        this.add(adresseField);
-        this.add(adresseComplementField);
-        this.add(codePostalField);
-        this.add(villeField);
-        this.add(validateQualification);
-        this.add(typeTravaux);
+        AjaxLink<Void> etapePrecedente3 = new AjaxLink<Void>("etapePrecedente3") {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                NouveauUtils.sendEventForPreviousStep(target, Etape.ETAPE_3.ordinal() + 1);
+            }
+        };
+
+        etapePrecedente3.setOutputMarkupId(true);
+        etapePrecedente3.setMarkupId("etapePrecedente3");
+
+        this.add(sousCategorieSelect, descriptionDevisField, typeContactField, delaiInterventionField, photoField,
+                adresseField, adresseComplementField, codePostalField, villeField, validateQualification, typeTravaux,
+                etapePrecedente3);
     }
 }

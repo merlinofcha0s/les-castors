@@ -1,0 +1,37 @@
+@CHARSET "UTF-8";
+
+.button.blue,.button:hover.blue,.purchase.blue,.purchase:hover.blue {
+    background-color: #0489b1;
+    -webkit-box-shadow: 0px 3px 0px 0px #0f74a6;
+    -moz-box-shadow: 0px 3px 0px 0px #0f74a6;
+    box-shadow: 0px 3px 0px 0px #0f74a6;
+}
+
+.tp-caption.bold_blue_text {
+    position: absolute;
+    color: #0489b1;
+    text-shadow: none;
+    font-weight: 800;
+    font-size: 17px;
+    line-height: 20px;
+    font-family: 'Open Sans', sans;
+    margin: 0px;
+    border-width: 0px;
+    border-style: none;
+    white-space: nowrap;
+}
+
+.tp-caption.large_text_blue {
+    position: absolute;
+    color: #0489b1;
+    text-shadow: none;
+    font-weight: 800;
+    font-size: 36px;
+    line-height: 36px;
+    font-family: 'Open Sans', sans;
+    margin: 0px;
+    border-width: 0px;
+    border-style: none;
+    white-space: nowrap;
+    text-shadow: 0px 2px 5px rgba(0, 0, 0, 0.5);
+}

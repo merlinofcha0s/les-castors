@@ -241,8 +241,8 @@
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-cdi</artifactId>
 			<version>${wicket.version}</version>
+			<scope>compile</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.apache.wicket</groupId>
 			<artifactId>wicket-auth-roles</artifactId>
@@ -467,14 +467,4 @@
 			</build>
 		</profile>
 	</profiles>
-	<repositories>
-		<repository>
-			<id>sonatype-snapshots</id>
-			<name>Sonatype Snapshots Repository</name>
-			<url>https://oss.sonatype.org/content/repositories/snapshots/</url>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
 </project>

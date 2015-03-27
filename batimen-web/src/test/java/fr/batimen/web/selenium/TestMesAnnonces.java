@@ -36,7 +36,8 @@ public class TestMesAnnonces extends AbstractITTest {
     /**
      * Cas de test : l'utilisateur se rend sur le site, se connecte et va dans
      * la rubrique mon compte. La, il tombe sur ses notifications ainsi que sur
-     * ces annonces postées.
+     * ces annonces postées. Enfin il essaye d'accéder à une de ces annonces via
+     * cette page
      * 
      */
     @Test
@@ -60,6 +61,27 @@ public class TestMesAnnonces extends AbstractITTest {
         WebElement checkConditionAnnoncePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("h4.headInModule")));
         assertNotNull(checkConditionAnnoncePresent);
+
+        driver.findElement(
+                By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[2]/table/tbody/tr[1]/td[5]/a"))
+                .click();
+
+        Boolean checkConditionAccessToAnnonceViaList = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("h1.title"),
+                        "ANNONCE PARTICULIER"));
+        assertTrue(checkConditionAccessToAnnonceViaList);
+
+        driver.findElement(By.id("connexionlbl")).click();
+
+        driver.findElement(
+                By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[1]/table/tbody/tr[1]/td[2]/a[2]"))
+                .click();
+
+        Boolean checkConditionAccessToANnonceViaNotif = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("h1.title"),
+                        "ANNONCE PARTICULIER"));
+        assertTrue(checkConditionAccessToANnonceViaNotif);
+
     }
 
 }

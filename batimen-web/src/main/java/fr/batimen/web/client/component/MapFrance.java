@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 
@@ -617,14 +617,16 @@ public class MapFrance extends Panel {
 
     }
 
-    private String createJSCarteFrance() {
+    public String createJSCarteFrance() {
 
         String attr = ".attr(attr);";
 
         jsMapFrance = new StringBuilder();
 
         // Corps de la fonction JS Raphael
-        jsMapFrance.append("window.onload = function() {");
+
+        jsMapFrance.append("function initMapFrance() {");
+
         jsMapFrance.append("var paper = new Raphael(document.getElementById('");
         jsMapFrance.append(CONTAINER_MAP_FRANCE);
         jsMapFrance.append("'), 600, 600);");
@@ -681,6 +683,8 @@ public class MapFrance extends Panel {
 
         jsMapFrance.append("}");
 
+        jsMapFrance.append("initMapFrance();");
+
         return jsMapFrance.toString();
     }
 
@@ -688,7 +692,7 @@ public class MapFrance extends Panel {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         populateMap();
-        response.render(JavaScriptHeaderItem.forScript(createJSCarteFrance(), "carteFranceJS"));
+        response.render(OnDomReadyHeaderItem.forScript(createJSCarteFrance()));
     }
 
     /**
@@ -697,4 +701,5 @@ public class MapFrance extends Panel {
     public AjaxMapFranceBehaviour getAjaxMapFranceBehaviour() {
         return ajaxMapFranceBehaviour;
     }
+
 }

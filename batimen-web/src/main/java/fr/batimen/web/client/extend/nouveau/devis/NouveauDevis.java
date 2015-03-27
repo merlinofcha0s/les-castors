@@ -30,6 +30,7 @@ import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.client.component.ContactezNous;
 import fr.batimen.web.client.component.MapFrance;
 import fr.batimen.web.client.component.NavigationWizard;
+import fr.batimen.web.client.event.CastorWizardEvent;
 import fr.batimen.web.client.event.Event;
 import fr.batimen.web.client.event.LoginEvent;
 import fr.batimen.web.client.event.MapFranceEvent;
@@ -66,6 +67,8 @@ public class NouveauDevis extends MasterPage {
     private final CompoundPropertyModel<CreationAnnonceDTO> propertyModelNouvelleAnnonce = new CompoundPropertyModel<CreationAnnonceDTO>(
             nouvelleAnnonce);
 
+    private final WebMarkupContainer containerGeneral;
+
     // Composants étape 1
     private final MapFrance carteFrance;
 
@@ -92,6 +95,9 @@ public class NouveauDevis extends MasterPage {
     public NouveauDevis() {
         super("Nouveau devis", "devis batiment renovation", "Nouveau devis", true, "img/bg_title1.jpg");
 
+        containerGeneral = new WebMarkupContainer("containerGeneral");
+        containerGeneral.setOutputMarkupId(true);
+
         // Etape 1 : selection du departement avec la carte de la france
         carteFrance = new MapFrance("mapFrance") {
 
@@ -105,7 +111,6 @@ public class NouveauDevis extends MasterPage {
                     return false;
                 }
             }
-
         };
 
         // Etape 2 : Selection de la catégorie principale des travaux
@@ -213,7 +218,7 @@ public class NouveauDevis extends MasterPage {
         List<String> etapes = new ArrayList<String>();
         etapes.add("Sélectionner un departement");
         etapes.add("Sélectionner la catégorie");
-        etapes.add("Renseigner les caracteristiques du Devis");
+        etapes.add("Renseigner les caracteristiques de l'annonce");
         etapes.add("Inscription / Connexion");
         etapes.add("Confirmation");
 
@@ -227,8 +232,10 @@ public class NouveauDevis extends MasterPage {
 
         ContactezNous contactezNousComposant = new ContactezNous("contactezNous");
 
-        this.add(carteFrance, etape2Categorie, containerQualification, containerInscription, containerConfirmation,
-                navigationWizard, contactezNousComposant);
+        containerGeneral.add(carteFrance, etape2Categorie, containerQualification, containerInscription,
+                containerConfirmation, navigationWizard);
+
+        add(containerGeneral, contactezNousComposant);
 
         try {
             changementEtape(nouvelleAnnonce.getNumeroEtape());
@@ -376,7 +383,7 @@ public class NouveauDevis extends MasterPage {
                         LOGGER.error("Probleme frontend", e);
                     }
                 }
-                update.getTarget().add(this);
+                update.getTarget().add(containerGeneral);
             }
         }
 
@@ -401,12 +408,20 @@ public class NouveauDevis extends MasterPage {
                         LOGGER.error("Probleme frontend avec l'etape 2", e);
                     }
                 }
+
+                navigationWizard.setStep(etapeEncours.ordinal() + 1);
                 // Cas ou il y aurait un snake qui essaye de modifier la requete
                 // ajax pour injecter des données erronées
             } else {
                 feedBackPanelGeneral.error("Numéro de département incorrecte, veuillez recommencer");
             }
-            eventMapFrance.getTarget().add(this);
+
+            if (feedBackPanelGeneral.hasFeedbackMessage()) {
+                feedBackPanelGeneral.getFeedbackMessages().clear();
+            }
+
+            eventMapFrance.getTarget().add(containerGeneral);
+            eventMapFrance.getTarget().add(feedBackPanelGeneral);
         }
 
         if (event.getPayload() instanceof CategorieEvent) {
@@ -423,8 +438,13 @@ public class NouveauDevis extends MasterPage {
                     LOGGER.error("Probleme frontend avec l'etape 3", e);
                 }
             }
+            navigationWizard.setStep(etapeEncours.ordinal() + 1);
+
+            if (feedBackPanelGeneral.hasFeedbackMessage()) {
+                feedBackPanelGeneral.getFeedbackMessages().clear();
+            }
             // On dit a wicket de rafraichir ce panel avec la requete ajax
-            eventCategorie.getTarget().add(this);
+            eventCategorie.getTarget().add(containerGeneral);
         }
 
         if (event.getPayload() instanceof ChangementEtapeClientEvent) {
@@ -445,8 +465,34 @@ public class NouveauDevis extends MasterPage {
                 }
             }
 
+            if (feedBackPanelGeneral.hasFeedbackMessage()) {
+                feedBackPanelGeneral.getFeedbackMessages().clear();
+            }
+
+            navigationWizard.setStep(etapeEncours.ordinal() + 1);
             // On dit a wicket de rafraichir ce panel avec la requete ajax
-            eventChangementEtapeClient.getTarget().add(this);
+            eventChangementEtapeClient.getTarget().add(containerGeneral);
+        }
+
+        if (event.getPayload() instanceof CastorWizardEvent) {
+            CastorWizardEvent castorWizardEvent = (CastorWizardEvent) event.getPayload();
+            nouvelleAnnonce.setNumeroEtape(Integer.valueOf(castorWizardEvent.getStepNumber()));
+
+            try {
+                changementEtape(nouvelleAnnonce.getNumeroEtape());
+            } catch (FrontEndException e) {
+                if (LOGGER.isErrorEnabled()) {
+                    LOGGER.error("Probleme frontend avec l'etape " + nouvelleAnnonce.getNumeroEtape(), e);
+                }
+            }
+
+            if (feedBackPanelGeneral.hasFeedbackMessage()) {
+                feedBackPanelGeneral.getFeedbackMessages().clear();
+            }
+
+            navigationWizard.setStep(nouvelleAnnonce.getNumeroEtape());
+            // On dit a wicket de rafraichir ce panel avec la requete ajax
+            castorWizardEvent.getTarget().add(containerGeneral);
         }
 
     }
@@ -486,16 +532,4 @@ public class NouveauDevis extends MasterPage {
             LOGGER.error("+-------------------------------- Fin annonce ------------------------------------------+");
         }
     }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.apache.wicket.Page#onInitialize()
-     */
-    @Override
-    protected void onInitialize() {
-        super.onInitialize();
-        navigationWizard.setStep(etapeEncours.ordinal() + 1);
-    }
-
 }

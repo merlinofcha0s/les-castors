@@ -1,4 +1,4 @@
-@CHARSET "ISO-8859-1";
+@CHARSET "UTF-8";
 
 #connexion {
 	float: left;
@@ -44,8 +44,7 @@
 }
 
 #formEtape3 {
-	margin-left: 300px;
-	margin-top: 45px;
+	margin-top: 18px;
 }
 
 #formEtape4 {
@@ -90,7 +89,7 @@
 
 #validateInscription {
 	float: none;
-	margin-left: 339px;
+	margin-left: 177px;
 }
 
 .imgHelp {
@@ -103,7 +102,7 @@
 
 #champsObligatoire {
 	float: left;
-	margin-left: 16px;
+	margin-left: 315px;
 }
 
 #confirmation {
@@ -153,6 +152,40 @@
 #radioTypeTravauxRenovation {
 	float: left;
 	padding-right: 52px;
+}
+
+.categorie{
+	cursor: pointer;
+}
+
+#etapePrecedenteCat2{
+	margin-bottom: 30px;
+	float: right;
+}
+
+#terminerAnnonce{
+    margin-bottom: 30px;
+    margin-left: 19px;
+    margin-top: 25px;
+}
+
+#etapePrecedenteCat3{
+	margin-top: 7px;
+}
+
+#champsObligatoireNouveauPartenaire {
+    margin-left: 16px;
+}
+
+#descriptionDevisField{
+	width: 509px; 
+	height: 130px; 
+	margin-left: 322px;
+	margin-bottom: 20px;
+}
+
+.nouveauDevisTable{
+	margin-left: 300px;
 }
 
 /* Activation compte */
@@ -229,10 +262,22 @@
 
 #terminerInscriptionPartenaire {
 	padding-left: 311px;
+	padding-top: 20px;
+	margin-bottom: 30px;
 }
 
 .font-glyph-entreprise {
 	font-size: 25px;
+}
+
+#etapePrecedenteNouveauArtisan2{
+	margin-top: 12px;
+}
+
+#etapePrecedenteNouveauArtisan3{
+	float: left;
+	margin-left: 20px;
+	margin-top: 20px;
 }
 
 /* Composant Wicket */
@@ -259,7 +304,7 @@ div.upload input[type="file"] {
 }
 
 #sliderUp {
-	padding-bottom: 60px;
+	padding-bottom: 30px;
 	padding-top: 15px;
 }
 
@@ -579,6 +624,13 @@ table tr td .error {
 	float: left; 
 	padding-right: 5px; 
 	padding-top: 7px;
+}
+
+.labelAnnonce-icon8{
+    padding-left: 9px; 
+    float: left; 
+    padding-right: 5px; 
+    padding-top: 7px;
 }
 
 #categorieLabelSpace{

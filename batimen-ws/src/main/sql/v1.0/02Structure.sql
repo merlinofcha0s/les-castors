@@ -91,7 +91,7 @@ create table Annonce (
         email varchar(128) not null,
         login varchar(25) not null,
         nom varchar(20),
-        numeroTel varchar(10) not null,
+        numeroTel varchar(10),
         password varchar(80) not null,
         prenom varchar(20),
         isActive boolean not null,
