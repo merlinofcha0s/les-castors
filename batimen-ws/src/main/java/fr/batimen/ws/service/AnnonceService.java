@@ -32,7 +32,6 @@ import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.ws.dao.AdresseDAO;
 import fr.batimen.ws.dao.AnnonceDAO;
-import fr.batimen.ws.dao.ArtisanDAO;
 import fr.batimen.ws.dao.ClientDAO;
 import fr.batimen.ws.dao.PermissionDAO;
 import fr.batimen.ws.entity.Adresse;
@@ -66,9 +65,6 @@ public class AnnonceService {
 
     @Inject
     private AnnonceDAO annonceDAO;
-
-    @Inject
-    private ArtisanDAO artisanDAO;
 
     private final ModelMapper mapper = new ModelMapper();
 

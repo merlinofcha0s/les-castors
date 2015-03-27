@@ -488,6 +488,26 @@ public class Annonce extends MasterPage {
         containerContact.setOutputMarkupId(true);
         containerContact.setMarkupId("containerContact");
 
+        WebMarkupContainer containerTelContact = new WebMarkupContainer("containerTelContact") {
+
+            private static final long serialVersionUID = 1L;
+
+            /*
+             * (non-Javadoc)
+             * 
+             * @see org.apache.wicket.Component#isVisible()
+             */
+            @Override
+            public boolean isVisible() {
+                if (roleUtils.checkRoles(TypeCompte.ARTISAN) || roleUtils.checkRoles(TypeCompte.ADMINISTRATEUR)) {
+                    return annonceAffichageDTO.getTelephoneClient() != null;
+                } else {
+                    return userConnected.getNumeroTel() != null;
+                }
+            }
+
+        };
+
         String complementAdresse = annonceAffichageDTO.getAdresse().getComplementAdresse();
 
         StringBuilder adresseComplete = new StringBuilder(annonceAffichageDTO.getAdresse().getAdresse());
@@ -504,11 +524,13 @@ public class Annonce extends MasterPage {
         Label adresse = new Label("adresse", adresseComplete.toString());
 
         telephone = new Label("telephone");
+        containerTelContact.add(telephone);
+
         email = new SmartLinkLabel("email");
 
         initModelPhoneAndEmailContact();
 
-        containerContact.add(adresse, telephone, email);
+        containerContact.add(adresse, email, containerTelContact);
         containerContactMaster.add(containerContact);
         add(containerContactMaster);
     }

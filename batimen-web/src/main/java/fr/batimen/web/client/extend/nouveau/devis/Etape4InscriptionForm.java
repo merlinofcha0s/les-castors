@@ -92,8 +92,6 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
 
         numeroTelField = new TextField<String>("client.numeroTel");
         numeroTelField.setMarkupId("numeroTel");
-        numeroTelField.setRequired(true);
-        numeroTelField.add(new RequiredBorderBehaviour());
         numeroTelField.add(new ErrorHighlightBehavior());
         numeroTelField.add(new PatternValidator(ValidatorConstant.TELEPHONE_REGEX));
 
