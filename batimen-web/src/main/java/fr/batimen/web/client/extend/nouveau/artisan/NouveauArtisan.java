@@ -20,6 +20,7 @@ import fr.batimen.web.app.constants.Etape;
 import fr.batimen.web.client.component.ContactezNous;
 import fr.batimen.web.client.component.MapFrance;
 import fr.batimen.web.client.component.NavigationWizard;
+import fr.batimen.web.client.event.CastorWizardEvent;
 import fr.batimen.web.client.event.MapFranceEvent;
 import fr.batimen.web.client.extend.nouveau.artisan.event.ChangementEtapeEventArtisan;
 import fr.batimen.web.client.master.MasterPage;
@@ -111,7 +112,6 @@ public class NouveauArtisan extends MasterPage {
 
         };
         containerEtape2.add(etape2PartenaireForm);
-        containerEtape2.setVisible(false);
 
         // Etape 3 : Information de l'entreprise
         etape3Entreprise = new Etape3Entreprise("etape3InformationsEntreprise", new Model<Serializable>(),
@@ -130,7 +130,6 @@ public class NouveauArtisan extends MasterPage {
             }
 
         };
-        etape3Entreprise.setVisible(false);
 
         // Etape 4 : confirmation inscription
         etape4Confirmation = new Etape4Confirmation("etape4Confirmation") {
@@ -148,7 +147,6 @@ public class NouveauArtisan extends MasterPage {
             }
 
         };
-        etape4Confirmation.setVisible(false);
 
         ContactezNous contactezNous = new ContactezNous("contactezNous");
 
@@ -253,7 +251,15 @@ public class NouveauArtisan extends MasterPage {
             } else {
                 feedBackPanelGeneral.error("Numéro de département incorrecte, veuillez recommencer");
             }
-            eventMapFrance.getTarget().add(this);
+
+            navigationWizard.setStep(nouveauPartenaire.getNumeroEtape() + 1);
+
+            if (feedBackPanelGeneral.hasFeedbackMessage()) {
+                feedBackPanelGeneral.getFeedbackMessages().clear();
+            }
+
+            eventMapFrance.getTarget().add(masterContainer);
+            eventMapFrance.getTarget().add(feedBackPanelGeneral);
         }
 
         // Catch de l'event de changement d'etape
@@ -270,21 +276,35 @@ public class NouveauArtisan extends MasterPage {
                 }
             }
 
+            navigationWizard.setStep(nouveauPartenaire.getNumeroEtape() + 1);
+
+            if (feedBackPanelGeneral.hasFeedbackMessage()) {
+                feedBackPanelGeneral.getFeedbackMessages().clear();
+            }
+
             AjaxRequestTarget targetChangementEtape = changementEtapeEvent.getTarget();
             targetChangementEtape.add(feedBackPanelGeneral);
-            targetChangementEtape.add(this);
+            targetChangementEtape.add(masterContainer);
+        }
+
+        if (event.getPayload() instanceof CastorWizardEvent) {
+            CastorWizardEvent castorWizardEvent = (CastorWizardEvent) event.getPayload();
+            nouveauPartenaire.setNumeroEtape(Integer.valueOf(castorWizardEvent.getStepNumber()));
+
+            try {
+                changementEtape(nouveauPartenaire.getNumeroEtape());
+            } catch (FrontEndException e) {
+                if (LOGGER.isErrorEnabled()) {
+                    LOGGER.error("Probleme frontend avec l'etape " + nouveauPartenaire.getNumeroEtape(), e);
+                }
+            }
+
+            if (feedBackPanelGeneral.hasFeedbackMessage()) {
+                feedBackPanelGeneral.getFeedbackMessages().clear();
+            }
+            navigationWizard.setStep(nouveauPartenaire.getNumeroEtape());
+            // On dit a wicket de rafraichir ce panel avec la requete ajax
+            castorWizardEvent.getTarget().add(masterContainer);
         }
     }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see org.apache.wicket.Page#onInitialize()
-     */
-    @Override
-    protected void onConfigure() {
-        super.onConfigure();
-        navigationWizard.setStep(etapeEncours.ordinal() + 1);
-    }
-
 }

@@ -189,7 +189,7 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                NouveauDevisUtils.sendEventForPreviousStep(target, Etape.ETAPE_4.ordinal() + 1);
+                NouveauUtils.sendEventForPreviousStep(target, Etape.ETAPE_4.ordinal() + 1);
             }
 
             /*

@@ -3,6 +3,7 @@ package fr.batimen.web.client.extend.nouveau.artisan;
 import java.util.Arrays;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -22,11 +23,13 @@ import fr.batimen.dto.aggregate.CreationPartenaireDTO;
 import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.dto.enums.Civilite;
 import fr.batimen.dto.enums.TypeCompte;
+import fr.batimen.web.app.constants.Etape;
 import fr.batimen.web.app.utils.ProgrammaticBeanLookup;
 import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.web.client.extend.nouveau.artisan.event.ChangementEtapeEventArtisan;
+import fr.batimen.web.client.extend.nouveau.devis.NouveauUtils;
 import fr.batimen.web.client.validator.EmailUniquenessValidator;
 import fr.batimen.web.client.validator.LoginUniquenessValidator;
 
@@ -119,6 +122,19 @@ public class Etape2PartenaireForm extends Form<CreationPartenaireDTO> {
 
         this.add(new EqualPasswordInputValidator(passwordField, confirmPassword));
 
+        AjaxLink<Void> etapePrecedenteNouveauArtisan2 = new AjaxLink<Void>("etapePrecedenteNouveauArtisan2") {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                NouveauUtils.sendEventForPreviousStep(target, Etape.ETAPE_2.ordinal() + 1);
+            }
+        };
+
+        etapePrecedenteNouveauArtisan2.setOutputMarkupId(true);
+        etapePrecedenteNouveauArtisan2.setMarkupId("etapePrecedenteNouveauArtisan2");
+
         AjaxSubmitLink validateEtape2Partenaire = new AjaxSubmitLink("validateEtape2Partenaire") {
             private static final long serialVersionUID = -171673358382084307L;
 
@@ -161,15 +177,8 @@ public class Etape2PartenaireForm extends Form<CreationPartenaireDTO> {
         };
         validateEtape2Partenaire.setMarkupId("validateEtape2Partenaire");
 
-        this.add(civilite);
-        this.add(nom);
-        this.add(prenom);
-        this.add(numeroTel);
-        this.add(email);
-        this.add(identifiant);
-        this.add(passwordField);
-        this.add(confirmPassword);
-        this.add(validateEtape2Partenaire);
+        this.add(civilite, nom, prenom, numeroTel, email, identifiant, passwordField, confirmPassword,
+                validateEtape2Partenaire, etapePrecedenteNouveauArtisan2);
 
     }
 }

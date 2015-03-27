@@ -92,7 +92,7 @@ public class Etape2Categorie extends Panel {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                NouveauDevisUtils.sendEventForPreviousStep(target, Etape.ETAPE_2.ordinal() + 1);
+                NouveauUtils.sendEventForPreviousStep(target, Etape.ETAPE_2.ordinal() + 1);
             }
         };
 

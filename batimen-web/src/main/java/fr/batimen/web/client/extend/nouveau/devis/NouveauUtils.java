@@ -5,7 +5,7 @@ import org.apache.wicket.event.Broadcast;
 
 import fr.batimen.web.client.event.CastorWizardEvent;
 
-public class NouveauDevisUtils {
+public class NouveauUtils {
 
     public static void sendEventForPreviousStep(AjaxRequestTarget target, Integer etapeEnCours) {
         CastorWizardEvent castorWizardEvent = new CastorWizardEvent(target);

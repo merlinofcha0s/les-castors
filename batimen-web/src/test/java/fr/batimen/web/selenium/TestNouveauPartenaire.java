@@ -43,7 +43,36 @@ public class TestNouveauPartenaire extends AbstractITTest {
 
         // On selectionne un departement
         UtilsSelenium.selectionDepartement(driver);
+        etape2();
+        etape3();
+        etape4();
+    }
 
+    /**
+     * Cas de test : L'utilisateur (artisan) crée son compte, mais il n'est pas
+     * sur des informations donc il revient sur les etapes précédentes,
+     * l'operation doit être un succés
+     * 
+     * @throws InterruptedException
+     */
+    @Test
+    public void testInscriptionNouveauPartenaireEtapePrecedente() throws InterruptedException {
+        driver.get(appUrl + nouveauPartenaireURL);
+
+        // On selectionne un departement
+        UtilsSelenium.selectionDepartement(driver);
+        etape2();
+        driver.findElement(By.id("etapePrecedenteNouveauArtisan3")).click();
+        etape2();
+        Thread.sleep(1000);
+        driver.findElement(By.xpath("//div[@id='batimenWizard']/ul/li[2]/span")).click();
+        etape2();
+        etape3();
+
+        etape4();
+    }
+
+    private void etape2() {
         // Etape 2
         new Select(driver.findElement(By.id("civilite"))).selectByVisibleText("Monsieur");
         driver.findElement(By.id("nom")).clear();
@@ -61,7 +90,9 @@ public class TestNouveauPartenaire extends AbstractITTest {
         driver.findElement(By.id("confirmPassword")).clear();
         driver.findElement(By.id("confirmPassword")).sendKeys("lolmdr06");
         driver.findElement(By.id("validateEtape2Partenaire")).click();
+    }
 
+    private void etape3() throws InterruptedException {
         // Etape 3
         driver.findElement(By.xpath("//label[@id='containerElectricite']/span")).click();
         Thread.sleep(1000);
@@ -87,7 +118,9 @@ public class TestNouveauPartenaire extends AbstractITTest {
         driver.findElement(By.id("villeField")).sendKeys("Xavier City");
 
         driver.findElement(By.id("validateEtape3Partenaire")).click();
+    }
 
+    private void etape4() {
         // Etape 4 confirmation
         Boolean checkConditionConfirmation1 = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//div[@id='confirmation']/h5[1]"),
@@ -100,4 +133,5 @@ public class TestNouveauPartenaire extends AbstractITTest {
         assertTrue(checkConditionConfirmation1);
         assertTrue(checkConditionConfirmation2);
     }
+
 }

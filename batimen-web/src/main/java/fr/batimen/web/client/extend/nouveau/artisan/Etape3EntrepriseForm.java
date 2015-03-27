@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.form.DropDownChoice;
@@ -22,11 +23,13 @@ import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
 import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.dto.enums.StatutJuridique;
+import fr.batimen.web.app.constants.Etape;
 import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.batimen.web.client.component.CastorDatePicker;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.web.client.extend.nouveau.artisan.event.ChangementEtapeEventArtisan;
+import fr.batimen.web.client.extend.nouveau.devis.NouveauUtils;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.web.client.validator.SiretValidator;
 
@@ -117,6 +120,19 @@ public class Etape3EntrepriseForm extends Form<CreationPartenaireDTO> {
         villeField.add(new ErrorHighlightBehavior());
         villeField.add(new RequiredBorderBehaviour());
 
+        AjaxLink<Void> etapePrecedenteNouveauArtisan3 = new AjaxLink<Void>("etapePrecedenteNouveauArtisan3") {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                NouveauUtils.sendEventForPreviousStep(target, Etape.ETAPE_3.ordinal() + 1);
+            }
+        };
+
+        etapePrecedenteNouveauArtisan3.setOutputMarkupId(true);
+        etapePrecedenteNouveauArtisan3.setMarkupId("etapePrecedenteNouveauArtisan3");
+
         AjaxSubmitLink validateEtape3Partenaire = new AjaxSubmitLink("validateEtape3Partenaire") {
 
             private static final long serialVersionUID = 4945314422581299777L;
@@ -160,16 +176,7 @@ public class Etape3EntrepriseForm extends Form<CreationPartenaireDTO> {
 
         validateEtape3Partenaire.setMarkupId("validateEtape3Partenaire");
 
-        this.add(nomComplet);
-        this.add(statutJuridique);
-        this.add(nbEmployes);
-        this.add(dateCreation);
-        this.add(siret);
-        this.add(logo);
-        this.add(adresse);
-        this.add(complementAdresse);
-        this.add(codePostalField);
-        this.add(villeField);
-        this.add(validateEtape3Partenaire);
+        this.add(nomComplet, statutJuridique, nbEmployes, dateCreation, siret, logo, adresse, complementAdresse,
+                codePostalField, villeField, validateEtape3Partenaire, etapePrecedenteNouveauArtisan3);
     }
 }

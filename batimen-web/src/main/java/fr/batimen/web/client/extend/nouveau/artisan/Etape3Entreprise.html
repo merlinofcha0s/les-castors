@@ -13,49 +13,54 @@
 				class="fuelux">
 				<label
 					class="checkbox-custom checkbox inline"
-					title="Electricité" wicket:id="containerElectricite"> <input
+					title="Electricité"
+					wicket:id="containerElectricite"> <input
 					class="sr-only"
 					wicket:id="electricite"
 					type="checkbox"
-					value="option1"><i class="checkbox" wicket:id="iElectricite"></i><span
-					class="checkbox-label icon-Lightning font-glyph-entreprise"
-					></span>
+					value="option1"><i
+					class="checkbox"
+					wicket:id="iElectricite"></i><span class="checkbox-label icon-Lightning font-glyph-entreprise"></span>
 				</label> <label
 					class="checkbox-custom checkbox inline"
-					title="Plomberie" wicket:id="containerPlomberie"> <input
+					title="Plomberie"
+					wicket:id="containerPlomberie"> <input
 					class="sr-only"
 					wicket:id="plomberie"
 					type="checkbox"
-					value="option2"><i class="checkbox" wicket:id="iPlomberie"></i><span
-					class="checkbox-label icons8-plumbing font-glyph-entreprise"
-					></span>
+					value="option2"><i
+					class="checkbox"
+					wicket:id="iPlomberie"></i><span class="checkbox-label icons8-plumbing font-glyph-entreprise"></span>
 				</label> <label
 					class="checkbox-custom checkbox inline"
-					title="Espaces verts" wicket:id="containerEspaceVert"> <input
+					title="Espaces verts"
+					wicket:id="containerEspaceVert"> <input
 					class="sr-only"
 					wicket:id="espaceVert"
 					type="checkbox"
-					value="option3"><i class="checkbox" wicket:id="iEspaceVert"></i><span
-					class="checkbox-label icons8-garden-shears font-glyph-entreprise"
-					></span>
+					value="option3"><i
+					class="checkbox"
+					wicket:id="iEspaceVert"></i><span class="checkbox-label icons8-garden-shears font-glyph-entreprise"></span>
 				</label> <label
 					class="checkbox-custom checkbox inline"
-					title="Décoration / Maçonnerie" wicket:id="containerDecorationMaconnerie"> <input
+					title="Décoration / Maçonnerie"
+					wicket:id="containerDecorationMaconnerie"> <input
 					class="sr-only"
 					wicket:id="decorationMaconnerie"
 					type="checkbox"
-					value="option4"><i class="checkbox" wicket:id="iDecorationMaconnerie"></i><span
-					class="checkbox-label icon-Tool font-glyph-entreprise" 
-					></span>
-				</label> 
-				<label
+					value="option4"><i
+					class="checkbox"
+					wicket:id="iDecorationMaconnerie"></i><span class="checkbox-label icon-Tool font-glyph-entreprise"></span>
+				</label> <label
 					class="checkbox-custom checkbox inline"
-					title="Toutes les activités" wicket:id="containerToutesLesActivites"> <input
+					title="Toutes les activités"
+					wicket:id="containerToutesLesActivites"> <input
 					class="sr-only"
 					wicket:id="touteslesActivites"
 					type="checkbox"
-					value="option7"><i class="checkbox" wicket:id="iToutesLesActivites"></i><span
-					class="checkbox-label icon-CheckMark font-glyph-entreprise"></span>
+					value="option7"><i
+					class="checkbox"
+					wicket:id="iToutesLesActivites"></i><span class="checkbox-label icon-CheckMark font-glyph-entreprise"></span>
 				</label>
 			</div>
 			<div class="bg_title">
@@ -154,16 +159,19 @@
 							value="" /></td>
 					</tr>
 				</table>
-				<div id="champsObligatoire">
-					<span class='required'>*</span> : champs obligatoires
-				</div>
+				<a
+					class="btn btn-info"
+					wicket:id="etapePrecedenteNouveauArtisan3"
+					id="etapePrecedenteNouveauArtisan3">Etape précédente</a>
 				<div id="terminerInscriptionPartenaire">
 					<a
 						class="btn btn-info"
 						wicket:id="validateEtape3Partenaire">Terminer</a>
 				</div>
+				<div id="champsObligatoireNouveauPartenaire">
+                    <span class='required'>*</span> : champs obligatoires
+                </div>
 			</form>
-			
 		</div>
 	</div>
 </wicket:panel>

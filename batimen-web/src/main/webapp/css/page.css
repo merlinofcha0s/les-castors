@@ -170,6 +170,14 @@
     margin-top: 25px;
 }
 
+#etapePrecedenteCat3{
+	margin-top: 12px;
+}
+
+#champsObligatoireNouveauPartenaire {
+    margin-left: 16px;
+}
+
 /* Activation compte */
 .confirmationactivationok {
 	background: url('../img/thumbsup.png');
@@ -244,10 +252,22 @@
 
 #terminerInscriptionPartenaire {
 	padding-left: 311px;
+	padding-top: 20px;
+	margin-bottom: 30px;
 }
 
 .font-glyph-entreprise {
 	font-size: 25px;
+}
+
+#etapePrecedenteNouveauArtisan2{
+	margin-top: 12px;
+}
+
+#etapePrecedenteNouveauArtisan3{
+	float: left;
+	margin-left: 20px;
+	margin-top: 20px;
 }
 
 /* Composant Wicket */

@@ -180,6 +180,13 @@ public class TestNouveauDevis extends AbstractITTest {
                 driver.findElement(By.cssSelector("h5")).getText());
     }
 
+    /**
+     * Cas de test : L'utilisateur crée un devis mais veut modifier les
+     * informations de l'etape précédente, il clique soit sur le bouton etape
+     * précédente ou soit sur le wizard, l'operation doit etre un succés
+     * 
+     * @throws InterruptedException
+     */
     @Test
     public void testEtapePrecedente() {
         driver.get(appUrl + nouveauDevisDepartementURL);

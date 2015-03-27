@@ -416,6 +416,10 @@ public class NouveauDevis extends MasterPage {
                 feedBackPanelGeneral.error("Numéro de département incorrecte, veuillez recommencer");
             }
 
+            if (feedBackPanelGeneral.hasFeedbackMessage()) {
+                feedBackPanelGeneral.getFeedbackMessages().clear();
+            }
+
             eventMapFrance.getTarget().add(containerGeneral);
             eventMapFrance.getTarget().add(feedBackPanelGeneral);
         }
@@ -435,6 +439,10 @@ public class NouveauDevis extends MasterPage {
                 }
             }
             navigationWizard.setStep(etapeEncours.ordinal() + 1);
+
+            if (feedBackPanelGeneral.hasFeedbackMessage()) {
+                feedBackPanelGeneral.getFeedbackMessages().clear();
+            }
             // On dit a wicket de rafraichir ce panel avec la requete ajax
             eventCategorie.getTarget().add(containerGeneral);
         }
@@ -456,6 +464,11 @@ public class NouveauDevis extends MasterPage {
                     LOGGER.error("Probleme frontend avec l'etape " + nouvelleAnnonce.getNumeroEtape(), e);
                 }
             }
+
+            if (feedBackPanelGeneral.hasFeedbackMessage()) {
+                feedBackPanelGeneral.getFeedbackMessages().clear();
+            }
+
             navigationWizard.setStep(etapeEncours.ordinal() + 1);
             // On dit a wicket de rafraichir ce panel avec la requete ajax
             eventChangementEtapeClient.getTarget().add(containerGeneral);
@@ -472,6 +485,11 @@ public class NouveauDevis extends MasterPage {
                     LOGGER.error("Probleme frontend avec l'etape " + nouvelleAnnonce.getNumeroEtape(), e);
                 }
             }
+
+            if (feedBackPanelGeneral.hasFeedbackMessage()) {
+                feedBackPanelGeneral.getFeedbackMessages().clear();
+            }
+
             navigationWizard.setStep(nouvelleAnnonce.getNumeroEtape());
             // On dit a wicket de rafraichir ce panel avec la requete ajax
             castorWizardEvent.getTarget().add(containerGeneral);
