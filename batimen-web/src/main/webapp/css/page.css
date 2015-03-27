@@ -44,8 +44,7 @@
 }
 
 #formEtape3 {
-	margin-left: 300px;
-	margin-top: 45px;
+	margin-top: 18px;
 }
 
 #formEtape4 {
@@ -103,7 +102,7 @@
 
 #champsObligatoire {
 	float: left;
-	margin-left: 16px;
+	margin-left: 315px;
 }
 
 #confirmation {
@@ -171,11 +170,22 @@
 }
 
 #etapePrecedenteCat3{
-	margin-top: 12px;
+	margin-top: 7px;
 }
 
 #champsObligatoireNouveauPartenaire {
     margin-left: 16px;
+}
+
+#descriptionDevisField{
+	width: 509px; 
+	height: 130px; 
+	margin-left: 322px;
+	margin-bottom: 20px;
+}
+
+.nouveauDevisTable{
+	margin-left: 300px;
 }
 
 /* Activation compte */

@@ -155,13 +155,7 @@ public class TestNouveauDevis extends AbstractITTest {
         UtilsSelenium.selectionDepartement(driver);
         // On remplit l'étape 2
         etape2();
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            if (LOGGER.isErrorEnabled()) {
-                LOGGER.error("Fail to wait authentication", e);
-            }
-        }
+        Thread.sleep(1000);
         // On passe à l'étape 3
         etape3(false);
 
@@ -175,7 +169,7 @@ public class TestNouveauDevis extends AbstractITTest {
         UtilsSelenium.selectionDepartement(driver);
         etape2();
         etape3(true);
-
+        Thread.sleep(1000);
         assertEquals("Problème pendant l'enregistrement de l'annonce, veuillez nous excuser pour la gène occasionnée.",
                 driver.findElement(By.cssSelector("h5")).getText());
     }

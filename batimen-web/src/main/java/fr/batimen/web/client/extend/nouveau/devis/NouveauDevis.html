@@ -13,27 +13,32 @@
 			<div class="row-fluid">
 				<div class="span12 module_cont module_text_area module_small_padding">
 					<div class="bg_title">
-						<h4 class="headInModule">Renseignez les caracteristiques du Devis</h4>
+						<h4 class="headInModule">Renseignez les caracteristiques de l'annonce</h4>
+					</div>
+					<div class="bg_title">
+						<h5 class="headInModule">Description de votre annonce</h5>
 					</div>
 					<form wicket:id="formQualification">
-						<table class="tableBatimen">
+						<div>
+							<textarea
+								wicket:id="description"
+								rows="6"
+								cols="500"
+								type="text"
+								name="descriptionDevisField"
+								id="descriptionDevisField"
+								value=""> </textarea>
+						</div>
+						<div class="bg_title">
+							<h5 class="headInModule">Informations de votre annonce</h5>
+						</div>
+						<table class="tableBatimen nouveauDevisTable">
 							<tr>
 								<th>Quelle sous catégorie métier recherchez vous ?</th>
 								<td><select
 									wicket:id="sousCategorie"
 									name="sousCategorieSelect"
 									id="sousCategorieSelect"></select></td>
-							</tr>
-							<tr>
-								<th>Quelle est la description du chantier ?</th>
-								<td><textarea
-										wicket:id="description"
-										rows="6"
-										cols="110"
-										type="text"
-										name="descriptionDevisField"
-										id="descriptionDevisField"
-										value="" /></td>
 							</tr>
 							<tr>
 								<th>Comment souhaitez-vous être contacté ?</th>
