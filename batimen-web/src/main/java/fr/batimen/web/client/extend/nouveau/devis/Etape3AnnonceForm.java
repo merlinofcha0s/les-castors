@@ -179,7 +179,7 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
         };
         validateQualification.setMarkupId("validateQualification");
 
-        AjaxLink<Void> etapePrecedenteCat3 = new AjaxLink<Void>("etapePrecedenteCat3") {
+        AjaxLink<Void> etapePrecedente3 = new AjaxLink<Void>("etapePrecedente3") {
 
             private static final long serialVersionUID = 1L;
 
@@ -189,11 +189,11 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
             }
         };
 
-        etapePrecedenteCat3.setOutputMarkupId(true);
-        etapePrecedenteCat3.setMarkupId("etapePrecedenteCat3");
+        etapePrecedente3.setOutputMarkupId(true);
+        etapePrecedente3.setMarkupId("etapePrecedente3");
 
         this.add(sousCategorieSelect, descriptionDevisField, typeContactField, delaiInterventionField, photoField,
                 adresseField, adresseComplementField, codePostalField, villeField, validateQualification, typeTravaux,
-                etapePrecedenteCat3);
+                etapePrecedente3);
     }
 }

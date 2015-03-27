@@ -30,7 +30,6 @@ import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.app.utils.ProgrammaticBeanLookup;
 import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
-import fr.batimen.web.client.component.BatimenToolTip;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.web.client.extend.CGU;
 import fr.batimen.web.client.extend.member.client.ModifierMonProfil;
@@ -181,7 +180,7 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
 
         initChooser(forModification);
 
-        AjaxLink<Void> etapePrecedenteCat4 = new AjaxLink<Void>("etapePrecedenteCat4") {
+        AjaxLink<Void> etapePrecedente4 = new AjaxLink<Void>("etapePrecedente4") {
 
             private static final long serialVersionUID = 1L;
 
@@ -202,8 +201,8 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
 
         };
 
-        etapePrecedenteCat4.setOutputMarkupId(true);
-        etapePrecedenteCat4.setMarkupId("etapePrecedenteCat4");
+        etapePrecedente4.setOutputMarkupId(true);
+        etapePrecedente4.setMarkupId("etapePrecedente4");
 
         validateInscription = new AjaxSubmitLink(ID_VALIDATE_INSCRIPTION) {
 
@@ -250,9 +249,7 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
         validateInscription.setMarkupId(ID_VALIDATE_INSCRIPTION);
 
         this.add(nomField, prenomField, numeroTelField, emailField, loginField, passwordField, confirmPassword,
-                oldPasswordContainer, cguContainer, validateInscription, etapePrecedenteCat4);
-        this.add(BatimenToolTip.getTooltipBehaviour());
-
+                oldPasswordContainer, cguContainer, validateInscription, etapePrecedente4);
     }
 
     public void initChooser(final Boolean forModification) {

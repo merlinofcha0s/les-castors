@@ -86,7 +86,7 @@ public class Etape2Categorie extends Panel {
 
         };
 
-        AjaxLink<Void> etapePrecedenteCat2 = new AjaxLink<Void>("etapePrecedenteCat2") {
+        AjaxLink<Void> etapePrecedente2 = new AjaxLink<Void>("etapePrecedente2") {
 
             private static final long serialVersionUID = 1L;
 
@@ -96,13 +96,13 @@ public class Etape2Categorie extends Panel {
             }
         };
 
-        etapePrecedenteCat2.setOutputMarkupId(true);
-        etapePrecedenteCat2.setMarkupId("etapePrecedenteCat2");
+        etapePrecedente2.setOutputMarkupId(true);
+        etapePrecedente2.setMarkupId("etapePrecedente2");
 
         decorationMaconnerieLink.setOutputMarkupId(true);
         decorationMaconnerieLink.setMarkupId("decorationMaconnerie");
 
-        add(electriciteLink, plomberieLink, espacesVertLink, decorationMaconnerieLink, etapePrecedenteCat2);
+        add(electriciteLink, plomberieLink, espacesVertLink, decorationMaconnerieLink, etapePrecedente2);
     }
 
     private void createAndTriggerEvent(AjaxRequestTarget target, CategorieMetierDTO categorieMetier) {

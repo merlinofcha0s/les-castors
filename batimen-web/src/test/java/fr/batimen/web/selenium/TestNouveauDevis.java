@@ -198,7 +198,7 @@ public class TestNouveauDevis extends AbstractITTest {
         // On remplit l'étape 3
         etape3(false);
 
-        driver.findElement(By.id("etapePrecedenteCat4")).click();
+        driver.findElement(By.id("etapePrecedente4")).click();
 
         try {
             Thread.sleep(1000);
@@ -207,7 +207,7 @@ public class TestNouveauDevis extends AbstractITTest {
                 LOGGER.error("Fail to wait authentication", e);
             }
         }
-        driver.findElement(By.id("etapePrecedenteCat3")).click();
+        driver.findElement(By.id("etapePrecedente3")).click();
 
         try {
             Thread.sleep(1000);
@@ -216,7 +216,7 @@ public class TestNouveauDevis extends AbstractITTest {
                 LOGGER.error("Fail to wait authentication", e);
             }
         }
-        driver.findElement(By.id("etapePrecedenteCat2")).click();
+        driver.findElement(By.id("etapePrecedente2")).click();
 
         try {
             Thread.sleep(1000);
