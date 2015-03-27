@@ -3,10 +3,10 @@ package fr.batimen.web.client.extend.nouveau.devis;
 import java.util.Arrays;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.event.IEvent;
-import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.Radio;
@@ -27,6 +27,7 @@ import fr.batimen.dto.enums.DelaiIntervention;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.enums.TypeContact;
 import fr.batimen.dto.enums.TypeTravaux;
+import fr.batimen.web.app.constants.Etape;
 import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
@@ -178,30 +179,21 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
         };
         validateQualification.setMarkupId("validateQualification");
 
-        this.add(sousCategorieSelect);
-        this.add(descriptionDevisField);
-        this.add(typeContactField);
-        this.add(delaiInterventionField);
-        this.add(photoField);
-        this.add(adresseField);
-        this.add(adresseComplementField);
-        this.add(codePostalField);
-        this.add(villeField);
-        this.add(validateQualification);
-        this.add(typeTravaux);
-    }
+        AjaxLink<Void> etapePrecedenteCat3 = new AjaxLink<Void>("etapePrecedenteCat3") {
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.apache.wicket.markup.html.form.Form#renderHead(org.apache.wicket.
-     * markup.head.IHeaderResponse)
-     */
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
-        // response.render(OnDomReadyHeaderItem.forScript("$('#radioTypeTravauxNeuf').radio();"));
-    }
+            private static final long serialVersionUID = 1L;
 
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                NouveauDevisUtils.sendEventForPreviousStep(target, Etape.ETAPE_3.ordinal() + 1);
+            }
+        };
+
+        etapePrecedenteCat3.setOutputMarkupId(true);
+        etapePrecedenteCat3.setMarkupId("etapePrecedenteCat3");
+
+        this.add(sousCategorieSelect, descriptionDevisField, typeContactField, delaiInterventionField, photoField,
+                adresseField, adresseComplementField, codePostalField, villeField, validateQualification, typeTravaux,
+                etapePrecedenteCat3);
+    }
 }

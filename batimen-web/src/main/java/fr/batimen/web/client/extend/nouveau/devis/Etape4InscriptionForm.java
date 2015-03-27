@@ -3,6 +3,7 @@ package fr.batimen.web.client.extend.nouveau.devis;
 import javax.inject.Inject;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -24,6 +25,7 @@ import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.security.HashHelper;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.constant.ValidatorConstant;
+import fr.batimen.web.app.constants.Etape;
 import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.app.utils.ProgrammaticBeanLookup;
 import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
@@ -181,6 +183,30 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
 
         initChooser(forModification);
 
+        AjaxLink<Void> etapePrecedenteCat4 = new AjaxLink<Void>("etapePrecedenteCat4") {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                NouveauDevisUtils.sendEventForPreviousStep(target, Etape.ETAPE_4.ordinal() + 1);
+            }
+
+            /*
+             * (non-Javadoc)
+             * 
+             * @see org.apache.wicket.Component#isVisible()
+             */
+            @Override
+            public boolean isVisible() {
+                return !forModification;
+            }
+
+        };
+
+        etapePrecedenteCat4.setOutputMarkupId(true);
+        etapePrecedenteCat4.setMarkupId("etapePrecedenteCat4");
+
         validateInscription = new AjaxSubmitLink(ID_VALIDATE_INSCRIPTION) {
 
             private static final long serialVersionUID = 6200004097590331163L;
@@ -225,17 +251,10 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
         };
         validateInscription.setMarkupId(ID_VALIDATE_INSCRIPTION);
 
-        this.add(nomField);
-        this.add(prenomField);
-        this.add(numeroTelField);
-        this.add(emailField);
-        this.add(loginField);
-        this.add(passwordField);
-        this.add(confirmPassword);
-        this.add(oldPasswordContainer);
-        this.add(cguContainer);
-        this.add(validateInscription);
+        this.add(nomField, prenomField, numeroTelField, emailField, loginField, passwordField, confirmPassword,
+                oldPasswordContainer, cguContainer, validateInscription, etapePrecedenteCat4);
         this.add(BatimenToolTip.getTooltipBehaviour());
+
     }
 
     public void initChooser(final Boolean forModification) {

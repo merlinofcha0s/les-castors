@@ -239,7 +239,7 @@ public class EmailService {
      * @param nomDestinataire
      */
     private void getNomDestinataire(String nom, String prenom, String login, StringBuilder nomDestinataire) {
-        if (!nom.isEmpty() && !prenom.isEmpty()) {
+        if (nom != null && prenom != null && !nom.isEmpty() && !prenom.isEmpty()) {
             nomDestinataire.append(nom);
             nomDestinataire.append(" ");
             nomDestinataire.append(prenom);

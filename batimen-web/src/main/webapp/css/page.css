@@ -90,7 +90,7 @@
 
 #validateInscription {
 	float: none;
-	margin-left: 339px;
+	margin-left: 177px;
 }
 
 .imgHelp {
@@ -157,6 +157,17 @@
 
 .categorie{
 	cursor: pointer;
+}
+
+#etapePrecedenteCat2{
+	margin-bottom: 30px;
+	float: right;
+}
+
+#terminerAnnonce{
+    margin-bottom: 30px;
+    margin-left: 19px;
+    margin-top: 25px;
 }
 
 /* Activation compte */
@@ -263,7 +274,7 @@ div.upload input[type="file"] {
 }
 
 #sliderUp {
-	padding-bottom: 60px;
+	padding-bottom: 30px;
 	padding-top: 15px;
 }
 
@@ -583,6 +594,13 @@ table tr td .error {
 	float: left; 
 	padding-right: 5px; 
 	padding-top: 7px;
+}
+
+.labelAnnonce-icon8{
+    padding-left: 9px; 
+    float: left; 
+    padding-right: 5px; 
+    padding-top: 7px;
 }
 
 #categorieLabelSpace{

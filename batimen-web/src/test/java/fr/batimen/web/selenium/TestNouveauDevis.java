@@ -2,12 +2,10 @@ package fr.batimen.web.selenium;
 
 import static com.ninja_squad.dbsetup.Operations.sequenceOf;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -109,17 +107,6 @@ public class TestNouveauDevis extends AbstractITTest {
                 .until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("h5"),
                         "Votre compte a bien été créé, un e-mail vous a été envoyé, Cliquez sur le lien présent dans celui-ci pour l'activer"));
         assertTrue(checkCondition);
-
-        driver.get(appUrl + "/activation?key=lolmdr06");
-
-        WebElement checkConditionActivationlabel1 = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
-                .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@id='activation']/h3[1]")));
-        assertNotNull(checkConditionActivationlabel1);
-
-        WebElement checkConditionActivationlabel2 = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
-                .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@id='activation']/h3[2]")));
-        assertNotNull(checkConditionActivationlabel2);
-
     }
 
     /**
@@ -191,6 +178,79 @@ public class TestNouveauDevis extends AbstractITTest {
 
         assertEquals("Problème pendant l'enregistrement de l'annonce, veuillez nous excuser pour la gène occasionnée.",
                 driver.findElement(By.cssSelector("h5")).getText());
+    }
+
+    @Test
+    public void testEtapePrecedente() {
+        driver.get(appUrl + nouveauDevisDepartementURL);
+        // On selectionne le bon département
+        UtilsSelenium.selectionDepartement(driver);
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Fail to wait authentication", e);
+            }
+        }
+        // On remplit l'étape 2
+        etape2();
+        // On remplit l'étape 3
+        etape3(false);
+
+        driver.findElement(By.id("etapePrecedenteCat4")).click();
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Fail to wait authentication", e);
+            }
+        }
+        driver.findElement(By.id("etapePrecedenteCat3")).click();
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Fail to wait authentication", e);
+            }
+        }
+        driver.findElement(By.id("etapePrecedenteCat2")).click();
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Fail to wait authentication", e);
+            }
+        }
+
+        // On selectionne le bon département
+        UtilsSelenium.selectionDepartement(driver);
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Fail to wait authentication", e);
+            }
+        }
+        // On remplit l'étape 2
+        etape2();
+        // On remplit l'étape 3
+        etape3(false);
+
+        driver.findElement(By.xpath("//div[@id='batimenWizard']/ul/li[2]")).click();
+
+        // On remplit l'étape 2
+        etape2();
+        // On remplit l'étape 3
+        etape3(false);
+
+        connexionApplication("raiden", BON_MOT_DE_PASSE, Boolean.TRUE);
+
+        assertEquals("Votre devis a été mis en ligne, nous vous avons envoyé un mail récapitulatif", driver
+                .findElement(By.cssSelector("h5")).getText());
 
     }
 
