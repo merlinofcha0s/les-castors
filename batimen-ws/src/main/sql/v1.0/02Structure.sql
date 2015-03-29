@@ -57,7 +57,7 @@ create table Annonce (
         id  bigserial not null,
         logo varchar(255),
         nbEmployees int4,
-        nomComplet varchar(40) not null,
+        nomComplet varchar(26) not null,
         specialite varchar(50),
         statutJuridique int4 not null,
         siret varchar(14) not null,

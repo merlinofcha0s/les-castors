@@ -646,7 +646,7 @@ table tr td .error {
 	padding-top: 10px;
 }
 
-.containerEnptrepriseSelectionnee{
+.containerEntrepriseSelectionnee{
 	padding-top: 10px;
 	clear: both;
 }
@@ -690,10 +690,11 @@ table tr td .error {
 }
 
 .imgEntreprise{
-	width: 50px;
+	width: 40px;
+	padding-top: 4px;
 }
 
-.linkEntreprise{
+.labelEntreprise{
 	padding-top: 15px; 
 	padding-left: 10px;
 	display: inline-block;
@@ -703,13 +704,50 @@ table tr td .error {
 	padding-top: 6px;
 }
 
-.linkAcceptDevis{
-	padding-left: 13px; 
+.linkAcceptDevis{ 
 	display: inline-block;
-	vertical-align: text-top;
-	padding-top: 6px;
+	vertical-align: text-bottom;
+	padding-top: 10px;
 }
 
 .containerLinkRefuser{
 	padding-left: 10px;
+}
+
+.menuEntrepriseInscrite{
+	float: left;
+}
+
+.lienMenuEntrepriseInscrite{
+	padding-left: 13px; 
+	vertical-align: middle; 
+	padding-top: 10px; 
+	display: inline-block;
+}
+
+.containerLienDevisEntreprise{
+	padding-left: 8px; 
+	padding-right: 7px;
+}
+
+#iconStarMenuEntrepriseSelection{
+	float: left; 
+	padding-top: 5px;
+}
+
+#labelEntrepriseChoisi{
+	padding-top: 10px; 
+	float: left; 
+	padding-left:15px; 
+	padding-top: 10px;
+}
+
+#lienOuiSelectionEntreprise{
+	padding-left: 5px;
+}
+
+.menuEntrepriseSelectionnee{
+	float: left;
+	padding-top: 5px;
+	
 }

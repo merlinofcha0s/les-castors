@@ -46,7 +46,7 @@ public class Entreprise extends AbstractEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(length = 40, nullable = false)
+    @Column(length = 26, nullable = false)
     private String nomComplet;
     @Column(nullable = false)
     private StatutJuridique statutJuridique;

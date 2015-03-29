@@ -355,7 +355,9 @@ public class Annonce extends MasterPage {
 
                 final Model<String> nomEntrepriseModelForLbl = new Model<String>(entreprise.getNomComplet());
 
-                LinkLabel linkEntreprise = new LinkLabel("linkEntreprise", nomEntrepriseModelForLbl) {
+                Label labelEntreprise = new Label("labelEntreprise", nomEntrepriseModelForLbl);
+
+                LinkLabel voirProfilEntreprise = new LinkLabel("voirProfilEntreprise", new Model<String>("Voir profil")) {
 
                     private static final long serialVersionUID = 1L;
 
@@ -366,6 +368,22 @@ public class Annonce extends MasterPage {
                         // TODO A Completer quand la page entreprise sera prete
                     }
                 };
+
+                voirProfilEntreprise.setOutputMarkupId(true);
+
+                LinkLabel downloadDevis = new LinkLabel("downloadDevis", new Model<String>("Devis indisponible")) {
+
+                    private static final long serialVersionUID = 1L;
+
+                    @Override
+                    public void onClick() {
+                        // URLEncoder.encode(notification.getArtisanNotifier().getEntreprise().getNomComplet(),
+                        // "UTF-8")
+                        // TODO A Completer quand la page entreprise sera prete
+                    }
+                };
+
+                downloadDevis.setOutputMarkupId(true);
 
                 AjaxLink<Void> linkAcceptDevis = new AjaxLink<Void>("linkAcceptDevis") {
 
@@ -391,7 +409,8 @@ public class Annonce extends MasterPage {
 
                 };
 
-                itemEntreprise.add(linkEntreprise, linkAcceptDevis, linkRefusDevis);
+                itemEntreprise.add(labelEntreprise, linkAcceptDevis, linkRefusDevis, voirProfilEntreprise,
+                        downloadDevis);
             }
         };
 
@@ -441,19 +460,40 @@ public class Annonce extends MasterPage {
             nomEntrepriseSelectionnee = new Model<String>("");
         }
 
-        LinkLabel entrepriseSelectionnee = new LinkLabel("entrepriseSelectionnee", nomEntrepriseSelectionnee) {
+        Label entrepriseSelectionnee = new Label("entrepriseSelectionnee", nomEntrepriseSelectionnee);
+
+        LinkLabel voirProfilEntrepriseEntrepriseSelectionnee = new LinkLabel("voirProfilEntrepriseSelectionnee",
+                new Model<String>("Voir profil")) {
 
             private static final long serialVersionUID = 1L;
 
             @Override
             public void onClick() {
-                // TODO : Faire la redirection quand la page d'entreprise sera
-                // prête
+                // URLEncoder.encode(notification.getArtisanNotifier().getEntreprise().getNomComplet(),
+                // "UTF-8")
+                // TODO A Completer quand la page entreprise sera prete
             }
-
         };
 
-        containerEntrepriseSelectionnee.add(entrepriseSelectionnee);
+        voirProfilEntrepriseEntrepriseSelectionnee.setOutputMarkupId(true);
+
+        LinkLabel downloadDevisEntrepriseSelectionnee = new LinkLabel("downloadDevisEntrepriseSelectionnee",
+                new Model<String>("Devis indisponible")) {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onClick() {
+                // URLEncoder.encode(notification.getArtisanNotifier().getEntreprise().getNomComplet(),
+                // "UTF-8")
+                // TODO A Completer quand la page entreprise sera prete
+            }
+        };
+
+        downloadDevisEntrepriseSelectionnee.setOutputMarkupId(true);
+
+        containerEntrepriseSelectionnee.add(entrepriseSelectionnee, voirProfilEntrepriseEntrepriseSelectionnee,
+                downloadDevisEntrepriseSelectionnee);
         containerEntreprisesGlobales.add(containerEntrepriseSelectionnee);
     }
 

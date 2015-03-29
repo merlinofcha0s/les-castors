@@ -20,6 +20,7 @@ import com.ninja_squad.dbsetup.operation.Operation;
 
 import fr.batimen.core.constant.UrlPage;
 import fr.batimen.dto.enums.TypeCompte;
+import fr.batimen.web.selenium.common.AbstractITTest;
 import fr.batimen.web.selenium.dataset.AnnonceDataset;
 
 /**
@@ -284,7 +285,7 @@ public class TestAnnonce extends AbstractITTest {
         assertCoreInformationOfAnnonce();
         // Le lien de selection de la premiere entreprise
         driver.findElement(
-                By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[4]/div/div/div/div[2]/div[2]/a[2]"))
+                By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[4]/div/div/div/div[2]/div[2]/div[3]/a[2]"))
                 .click();
 
         WebElement checkConditionAnnoncePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
@@ -309,7 +310,7 @@ public class TestAnnonce extends AbstractITTest {
         assertCoreInformationOfAnnonce();
         // Le lien de selection de la premiere entreprise
         driver.findElement(
-                By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[4]/div/div/div/div[2]/div[2]/a[1]"))
+                By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[4]/div/div/div/div[2]/div[2]/div[3]/a[1]"))
                 .click();
 
         WebElement checkConditionAnnoncePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))

@@ -1,4 +1,4 @@
-package fr.batimen.web.selenium;
+package fr.batimen.web.selenium.artisan;
 
 import static com.ninja_squad.dbsetup.Operations.sequenceOf;
 import static org.junit.Assert.assertTrue;
@@ -12,6 +12,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import com.ninja_squad.dbsetup.DbSetup;
 import com.ninja_squad.dbsetup.operation.Operation;
 
+import fr.batimen.web.selenium.common.AbstractITTest;
 import fr.batimen.web.utils.UtilsSelenium;
 
 /**
