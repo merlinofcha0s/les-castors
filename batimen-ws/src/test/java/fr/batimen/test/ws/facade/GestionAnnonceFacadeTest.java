@@ -509,7 +509,8 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
     public void testDesinscriptionArtisanAvecIDValid() {
-        testDesinscriptionArtisan("pebronne");
+        Annonce annonce = testDesinscriptionArtisan("pebronne");
+        Assert.assertEquals(1, annonce.getArtisans().size());
     }
 
     /**
@@ -519,10 +520,23 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
     public void testDesinscriptionArtisanAvecIDValidByAdmin() {
-        testDesinscriptionArtisan("admin");
+        Annonce annonce = testDesinscriptionArtisan("admin");
+        Assert.assertEquals(1, annonce.getArtisans().size());
     }
 
-    private void testDesinscriptionArtisan(String loginDemandeur) {
+    /**
+     * Cas de test : Un administrateur ne veut pas d'un artisan et le desinscrit
+     * d'une annonce
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonce_5_artisans.yml")
+    public void testDesinscriptionArtisanAvecIDValidReactivationAnnonce() {
+        Annonce annonce = testDesinscriptionArtisan("pebronne");
+        Assert.assertEquals(4, annonce.getArtisans().size());
+        Assert.assertEquals(EtatAnnonce.ACTIVE, annonce.getEtatAnnonce());
+    }
+
+    private Annonce testDesinscriptionArtisan(String loginDemandeur) {
         DesinscriptionAnnonceDTO desinscriptionAnnonceDTO = new DesinscriptionAnnonceDTO();
         desinscriptionAnnonceDTO
                 .setHashID("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
@@ -538,7 +552,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
                         "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
                         false);
 
-        Assert.assertEquals(1, annonce.getArtisans().size());
+        return annonce;
     }
 
     private DemandeAnnonceDTO initAndGetDemandeAnnonceDTO(String hash, String loginDemandeur, TypeCompte typeCompte) {

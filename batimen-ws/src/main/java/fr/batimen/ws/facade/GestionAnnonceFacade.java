@@ -479,7 +479,9 @@ public class GestionAnnonceFacade {
 
     /**
      * Service qui permet à un client de ne pas accepter un artisan à son
-     * annonce
+     * annonce <br/>
+     * 
+     * Réactive l'annonce si elle etait en quotas max atteint.
      * 
      * @param desinscriptionAnnonceDTO
      *            Objet permettant de faire la demande de desinscription
@@ -546,6 +548,10 @@ public class GestionAnnonceFacade {
                         LOGGER.debug("Artisan trouvée");
                     }
                     atLeastOneRemoved = true;
+
+                    if (annonce.getEtatAnnonce().equals(EtatAnnonce.QUOTA_MAX_ATTEINT)) {
+                        annonce.setEtatAnnonce(EtatAnnonce.ACTIVE);
+                    }
                 }
             }
         } else {
