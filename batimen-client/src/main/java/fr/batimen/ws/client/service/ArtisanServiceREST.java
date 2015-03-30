@@ -44,7 +44,7 @@ public class ArtisanServiceREST implements Serializable {
             LOGGER.debug("Début appel service nouveau partenaire + deserialization");
         }
 
-        String objectInJSON = wsConnector.sendRequest(WsPath.GESTION_PARTENAIRE_SERVICE_PATH,
+        String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_PARTENAIRE_SERVICE_PATH,
                 WsPath.GESTION_PARTENAIRE_SERVICE_CREATION_PARTENAIRE, nouveauPartenaire);
 
         Integer codeRetour = Integer.valueOf(objectInJSON);

@@ -18,11 +18,13 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.microtripit.mandrillapp.lutung.model.MandrillApiError;
+import com.sun.jersey.multipart.FormDataMultiPart;
 
 import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.constant.Constant;
@@ -151,6 +153,29 @@ public class GestionAnnonceFacade {
                 LOGGER.error("Erreur d'envoi de mail", e);
             }
         }
+
+        return CodeRetourService.RETOUR_OK;
+    }
+
+    /**
+     * Permet la creation d'une nouvelle annonce par le client ainsi que le
+     * compte de ce dernier
+     * 
+     * @see Constant
+     * 
+     * @param nouvelleAnnonceDTO
+     *            L'objet provenant du frontend qui permet la creation de
+     *            l'annonce.
+     * @return CODE_SERVICE_RETOUR_KO ou CODE_SERVICE_RETOUR_OK voir la classe
+     *         Constant
+     */
+    @POST
+    @Path(WsPath.GESTION_ANNONCE_SERVICE_CREATION_ANNONCE_AVEC_IMAGES)
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public Integer creationAnnonceAvecImage(FormDataMultiPart formParams) {
+
+        LOGGER.debug("Nom de l'image : " + formParams.getFields().entrySet().iterator().next().getKey());
 
         return CodeRetourService.RETOUR_OK;
     }
