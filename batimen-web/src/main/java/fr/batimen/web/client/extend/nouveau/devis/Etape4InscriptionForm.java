@@ -32,7 +32,6 @@ import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.web.client.extend.CGU;
-import fr.batimen.web.client.extend.member.client.ModifierMonProfil;
 import fr.batimen.web.client.extend.nouveau.devis.event.ChangementEtapeClientEvent;
 import fr.batimen.web.client.validator.ChangePasswordValidator;
 import fr.batimen.web.client.validator.CheckBoxTrueValidator;
@@ -56,7 +55,7 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
     @Inject
     private Authentication authentication;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ModifierMonProfil.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Etape4InscriptionForm.class);
 
     private final CreationAnnonceDTO nouvelleAnnonce;
 

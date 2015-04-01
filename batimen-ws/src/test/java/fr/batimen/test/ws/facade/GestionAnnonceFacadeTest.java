@@ -1,5 +1,6 @@
 package fr.batimen.test.ws.facade;
 
+import java.io.File;
 import java.util.List;
 
 import javax.ejb.TransactionAttribute;
@@ -94,6 +95,37 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     public void testCreationAnnonceIsSignedIn() {
         creationAnnonceDTO.setIsSignedUp(true);
         creationVerificationAnnonce();
+    }
+
+    /**
+     * Cas de test : le client est inscrit sur le site. Il faut donc creer
+     * l'annonce mais ne pas enregistrer son compte, juste lier le compte de
+     * l'utilisateur avec l'annonce.<br/>
+     * De plus dans ce cas, il enregistre des photos avec son annonce
+     * 
+     * On ignore volontairement date inscription et datemaj car elles sont
+     * généréés dynamiquement lors de la creation de l'annonce.
+     */
+    @Test
+    @UsingDataSet("datasets/in/client_creation_annonce.yml")
+    @ShouldMatchDataSet(value = "datasets/out/creation_annonce_is_signed_in.yml", excludeColumns = { "id", "datemaj",
+            "datecreation" })
+    public void testCreationAnnonceIsSignedInWithImage() {
+        creationAnnonceDTO.setIsSignedUp(true);
+
+        // On recupére la photo dans les ressources de la webapp de test
+        ClassLoader classLoader = getClass().getClassLoader();
+        File file = new File(classLoader.getResource("img/castor.jpg").getFile());
+        creationAnnonceDTO.getPhotos().add(file);
+
+        Integer codeRetour = annonceServiceREST.creationAnnonceAvecImage(creationAnnonceDTO);
+        Assert.assertEquals(CodeRetourService.RETOUR_OK, codeRetour);
+
+        List<Annonce> annonces = annonceDAO.getAnnoncesByLogin("johnny06");
+
+        for (Annonce annonce : annonces) {
+            Assert.assertFalse(annonce.getImages().isEmpty());
+        }
     }
 
     /**

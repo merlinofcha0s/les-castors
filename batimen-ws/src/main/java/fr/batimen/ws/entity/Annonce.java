@@ -34,7 +34,7 @@ import fr.batimen.dto.enums.TypeContact;
 import fr.batimen.dto.enums.TypeTravaux;
 
 /**
- * Entité Annonce, est utilisée pour symbolisé l'annonce d'un particulier en
+ * Entité Annonce, est utilisée pour symboliser l'annonce d'un particulier en
  * base de données.
  * 
  * @author Casaucau Cyril
@@ -87,8 +87,6 @@ public class Annonce extends AbstractEntity implements Serializable {
     private Date dateMAJ;
     @Column(nullable = false)
     private Integer nbConsultation;
-    @Column(length = 255, nullable = true)
-    private String photo;
     @Column(nullable = false)
     private Short categorieMetier;
     @Column(nullable = false)
@@ -123,6 +121,8 @@ public class Annonce extends AbstractEntity implements Serializable {
             cascade = CascadeType.REMOVE,
             fetch = FetchType.LAZY)
     private List<Notification> notifications = new ArrayList<Notification>();
+    @OneToMany(mappedBy = "annonce", targetEntity = Image.class, cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<Image> images = new ArrayList<Image>();
 
     /**
      * @return the id
@@ -227,21 +227,6 @@ public class Annonce extends AbstractEntity implements Serializable {
      */
     public void setNbConsultation(Integer nbConsultation) {
         this.nbConsultation = nbConsultation;
-    }
-
-    /**
-     * @return the photo
-     */
-    public String getPhoto() {
-        return photo;
-    }
-
-    /**
-     * @param photo
-     *            the photo to set
-     */
-    public void setPhoto(String photo) {
-        this.photo = photo;
     }
 
     /**
@@ -422,6 +407,21 @@ public class Annonce extends AbstractEntity implements Serializable {
      */
     public void setEntrepriseSelectionnee(Entreprise entrepriseSelectionnee) {
         this.entrepriseSelectionnee = entrepriseSelectionnee;
+    }
+
+    /**
+     * @return the images
+     */
+    public List<Image> getImages() {
+        return images;
+    }
+
+    /**
+     * @param images
+     *            the images to set
+     */
+    public void setImages(List<Image> images) {
+        this.images = images;
     }
 
     /*

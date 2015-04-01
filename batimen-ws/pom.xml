@@ -59,11 +59,13 @@
 
 		<!-- URL du frontend -->
 		<url.frontend.web>https://127.0.0.1:8181/batimen-web/</url.frontend.web>
-		
-		<!--  Cloudinary MGT -->
+
+		<!-- Cloudinary MGT -->
+		<prop.temp.img.dir>D:/dev/temp/</prop.temp.img.dir>
 		<prop.image.cloudinary.cloud_name>lescastors</prop.image.cloudinary.cloud_name>
 		<prop.image.cloudinary.api_key>445898463279963</prop.image.cloudinary.api_key>
 		<prop.image.cloudinary.api_secret>av_FudaoLvP0Oz5VPqspL8_WPpA</prop.image.cloudinary.api_secret>
+		<prop.image.is.test>true</prop.image.is.test>
 	</properties>
 
 	<issueManagement>
@@ -277,6 +279,12 @@
 			<version>${jersey.version}</version>
 			<scope>compile</scope>
 		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+			<scope>compile</scope>
+		</dependency>
 		<!-- Scope Compile car sinon glassfish ne voit pas les providers -->
 		<dependency>
 			<groupId>com.sun.jersey</groupId>
@@ -316,6 +324,13 @@
 			<artifactId>lutung</artifactId>
 			<version>0.0.5</version>
 			<scope>compile</scope>
+		</dependency>
+
+		<!-- Photo cloud service -->
+		<dependency>
+			<groupId>com.cloudinary</groupId>
+			<artifactId>cloudinary-http42</artifactId>
+			<version>1.1.3</version>
 		</dependency>
 
 		<!-- Security -->
@@ -377,13 +392,6 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>batimen-core</artifactId>
 			<version>${project.version}</version>
-		</dependency>
-
-		<!-- Gestion Image -->
-		<dependency>
-			<groupId>com.cloudinary</groupId>
-			<artifactId>cloudinary-http42</artifactId>
-			<version>1.1.3</version>
 		</dependency>
 
 		<!-- Test Arquillian -->
@@ -507,6 +515,10 @@
 
 				<!-- URL du frontend -->
 				<url.frontend.web>https://127.0.0.1:6161/batimen-web/</url.frontend.web>
+
+				<!-- Gestion des images -->
+				<prop.temp.img.dir>/usr/share/castor-temp/img/</prop.temp.img.dir>
+				<prop.image.is.test>false</prop.image.is.test>
 			</properties>
 			<build>
 				<resources>

@@ -14,7 +14,8 @@ import org.slf4j.LoggerFactory;
  */
 public enum PropertiesFileWS {
 
-    URL("url.properties"), EMAIL("email.properties"), CASTOR("castor.properties"), JOBS("jobs.properties");
+    URL("url.properties"), EMAIL("email.properties"), CASTOR("castor.properties"), JOBS("jobs.properties"), IMAGE(
+            "image.properties");
 
     private final Logger logger = LoggerFactory.getLogger(PropertiesFileWS.class);
 

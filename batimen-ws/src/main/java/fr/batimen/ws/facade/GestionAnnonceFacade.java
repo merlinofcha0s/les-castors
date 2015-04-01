@@ -1,6 +1,8 @@
 package fr.batimen.ws.facade;
 
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -24,7 +26,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.microtripit.mandrillapp.lutung.model.MandrillApiError;
-import com.sun.jersey.multipart.FormDataMultiPart;
+import com.sun.jersey.core.header.FormDataContentDisposition;
+import com.sun.jersey.multipart.FormDataBodyPart;
+import com.sun.jersey.multipart.FormDataParam;
 
 import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.constant.Constant;
@@ -44,16 +48,20 @@ import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 import fr.batimen.ws.dao.AnnonceDAO;
 import fr.batimen.ws.dao.ArtisanDAO;
+import fr.batimen.ws.dao.ImageDAO;
 import fr.batimen.ws.dao.NotificationDAO;
 import fr.batimen.ws.entity.Annonce;
 import fr.batimen.ws.entity.Artisan;
 import fr.batimen.ws.entity.Entreprise;
+import fr.batimen.ws.entity.Image;
 import fr.batimen.ws.enums.PropertiesFileWS;
 import fr.batimen.ws.helper.JsonHelper;
 import fr.batimen.ws.interceptor.BatimenInterceptor;
 import fr.batimen.ws.service.AnnonceService;
 import fr.batimen.ws.service.EmailService;
 import fr.batimen.ws.service.NotificationService;
+import fr.batimen.ws.service.PhotoService;
+import fr.batimen.ws.utils.FluxUtils;
 import fr.batimen.ws.utils.RolesUtils;
 
 /**
@@ -98,6 +106,12 @@ public class GestionAnnonceFacade {
 
     @Inject
     private RolesUtils rolesUtils;
+
+    @Inject
+    private PhotoService photoService;
+
+    @Inject
+    private ImageDAO imageDAO;
 
     /**
      * Permet la creation d'une nouvelle annonce par le client ainsi que le
@@ -154,6 +168,17 @@ public class GestionAnnonceFacade {
             }
         }
 
+        if (!nouvelleAnnonceDTO.getPhotos().isEmpty()) {
+            List<String> imageUrls = photoService.sendPhotoToCloud(nouvelleAnnonceDTO.getPhotos());
+
+            for (String url : imageUrls) {
+                Image nouvelleImage = new Image();
+                nouvelleImage.setUrl(url);
+                nouvelleAnnonce.getImages().add(nouvelleImage);
+                imageDAO.create(nouvelleImage);
+            }
+        }
+
         return CodeRetourService.RETOUR_OK;
     }
 
@@ -173,9 +198,24 @@ public class GestionAnnonceFacade {
     @Path(WsPath.GESTION_ANNONCE_SERVICE_CREATION_ANNONCE_AVEC_IMAGES)
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public Integer creationAnnonceAvecImage(FormDataMultiPart formParams) {
+    public Integer creationAnnonceAvecImage(@FormDataParam("content") final InputStream content,
+            @FormDataParam("files") final List<FormDataBodyPart> files,
+            @FormDataParam("files") final List<FormDataContentDisposition> filesDetail) {
 
-        LOGGER.debug("Nom de l'image : " + formParams.getFields().entrySet().iterator().next().getKey());
+        CreationAnnonceDTO nouvelleAnnonceDTO = CreationAnnonceDTO.deserializeCreationAnnonceDTO(FluxUtils
+                .getJsonByInputStream(content));
+
+        if (LOGGER.isDebugEnabled()) {
+            for (FormDataContentDisposition fileDetail : filesDetail) {
+                LOGGER.debug("Details fichier : " + fileDetail);
+            }
+        }
+
+        List<File> photos = FluxUtils.transformFormDataBodyPartsToFiles(files);
+
+        nouvelleAnnonceDTO.getPhotos().addAll(photos);
+
+        creationAnnonce(nouvelleAnnonceDTO);
 
         return CodeRetourService.RETOUR_OK;
     }

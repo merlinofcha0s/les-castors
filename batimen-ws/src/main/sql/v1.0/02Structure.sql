@@ -19,7 +19,6 @@ create table Annonce (
         categorieMetier int2 not null,
         sousCategorieMetier varchar(40) not null,
         nbConsultation int4 not null,
-        photo varchar(255),
         typeContact int4 not null,
         hashID varchar(255),
         selHashID varchar(255),
@@ -124,6 +123,13 @@ create table Annonce (
         primary key (id)
     );
     
+    create table Image (
+        id  bigserial not null,
+        url varchar(255) not null,
+        id_annonce int8,
+        primary key (id)
+    );
+    
     alter table Annonce 
         add constraint annonce_adresse
         foreign key (adresseChantier_id) 
@@ -207,4 +213,9 @@ create table Annonce (
     alter table Notification 
         add constraint notification_annonce
         foreign key (id_annonce) 
+        references Annonce ON DELETE CASCADE;
+        
+    alter table Image
+        add constraint image_annonce
+        foreign key (id_annonce)
         references Annonce ON DELETE CASCADE;

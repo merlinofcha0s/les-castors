@@ -113,17 +113,16 @@ public class WsConnector implements Serializable {
 
         FormDataMultiPart form = new FormDataMultiPart();
 
-        FormDataBodyPart jsonContent = new FormDataBodyPart("content", json, MediaType.APPLICATION_OCTET_STREAM_TYPE);
+        FormDataBodyPart jsonContent = new FormDataBodyPart("content", json, MediaType.APPLICATION_JSON_TYPE);
         form.bodyPart(jsonContent);
 
         for (File file : files) {
-            FileDataBodyPart fileBodyPart = new FileDataBodyPart(file.getName(), file,
-                    MediaType.APPLICATION_OCTET_STREAM_TYPE);
+            FileDataBodyPart fileBodyPart = new FileDataBodyPart("files", file, MediaType.APPLICATION_OCTET_STREAM_TYPE);
             form.bodyPart(fileBodyPart);
         }
 
-        String reponse = call.type(MediaType.MULTIPART_FORM_DATA).accept(MediaType.APPLICATION_JSON)
-                .accept(MediaType.MULTIPART_FORM_DATA).post(String.class, form);
+        String reponse = call.type(MediaType.MULTIPART_FORM_DATA).accept(MediaType.APPLICATION_OCTET_STREAM_TYPE)
+                .accept(MediaType.APPLICATION_JSON_TYPE).post(String.class, form);
 
         return reponse;
     }
