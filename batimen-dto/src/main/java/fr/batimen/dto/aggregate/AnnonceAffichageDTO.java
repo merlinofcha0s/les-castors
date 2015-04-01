@@ -18,6 +18,7 @@ import fr.batimen.dto.AbstractDTO;
 import fr.batimen.dto.AdresseDTO;
 import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.EntrepriseDTO;
+import fr.batimen.dto.ImageDTO;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 
 public class AnnonceAffichageDTO extends AbstractDTO {
@@ -44,6 +45,8 @@ public class AnnonceAffichageDTO extends AbstractDTO {
     private String telephoneClient;
     @Email
     private String emailClient;
+    @Valid
+    private final List<ImageDTO> images = new ArrayList<ImageDTO>();
 
     /**
      * @return the annonce
@@ -140,6 +143,13 @@ public class AnnonceAffichageDTO extends AbstractDTO {
      */
     public void setEmailClient(String emailClient) {
         this.emailClient = emailClient;
+    }
+
+    /**
+     * @return the images
+     */
+    public List<ImageDTO> getImages() {
+        return images;
     }
 
     /*

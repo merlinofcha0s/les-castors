@@ -160,7 +160,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
-    public void testGetAnnonceByID() {
+    public void testGetAnnonceByIDForAffichage() {
         DemandeAnnonceDTO demandeAnnonceDTO = createDemandeAnnonceDTO(
                 "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
                 "pebronne", TypeCompte.CLIENT);
@@ -176,6 +176,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
         Assert.assertNotNull(annonceAffichage.getAdresse());
         Assert.assertNotNull(annonceAffichage.getEntrepriseSelectionnee());
+        Assert.assertFalse(annonceAffichage.getImages().isEmpty());
     }
 
     /**

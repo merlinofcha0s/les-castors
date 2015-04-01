@@ -1,11 +1,11 @@
 package fr.batimen.ws.service;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -26,6 +26,7 @@ import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.EntrepriseDTO;
+import fr.batimen.dto.ImageDTO;
 import fr.batimen.dto.PermissionDTO;
 import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
@@ -38,6 +39,7 @@ import fr.batimen.ws.entity.Adresse;
 import fr.batimen.ws.entity.Annonce;
 import fr.batimen.ws.entity.Artisan;
 import fr.batimen.ws.entity.Client;
+import fr.batimen.ws.entity.Image;
 import fr.batimen.ws.entity.Permission;
 import fr.batimen.ws.enums.PropertiesFileWS;
 
@@ -196,7 +198,7 @@ public class AnnonceService {
         nouveauClient.setDateInscription(new Date());
 
         // On crée la liste des annonces.
-        List<Annonce> annoncesNouveauClient = new ArrayList<Annonce>();
+        Set<Annonce> annoncesNouveauClient = new HashSet<Annonce>();
         annoncesNouveauClient.add(nouvelleAnnonce);
 
         // On bind le client à son annonce.
@@ -238,6 +240,12 @@ public class AnnonceService {
         mapper.map(annonce, annonceDTO);
         annonceAffichageDTO.getAnnonce().setLoginOwner(annonce.getDemandeur().getLogin());
         mapper.map(annonce.getAdresseChantier(), adresseDTO);
+
+        for (Image image : annonce.getImages()) {
+            ImageDTO imageDTO = new ImageDTO();
+            mapper.map(image, imageDTO);
+            annonceAffichageDTO.getImages().add(imageDTO);
+        }
 
         if (isArtisan) {
             return annonceAffichageDTO;

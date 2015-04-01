@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
+import java.util.Set;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.LocalBean;
@@ -174,8 +176,9 @@ public class GestionAnnonceFacade {
             for (String url : imageUrls) {
                 Image nouvelleImage = new Image();
                 nouvelleImage.setUrl(url);
+                nouvelleImage.setAnnonce(nouvelleAnnonce);
                 nouvelleAnnonce.getImages().add(nouvelleImage);
-                imageDAO.create(nouvelleImage);
+                imageDAO.createMandatory(nouvelleImage);
             }
         }
 
@@ -589,16 +592,16 @@ public class GestionAnnonceFacade {
 
         if (annonce != null) {
 
-            List<Artisan> artisans = annonce.getArtisans();
+            Set<Artisan> artisans = annonce.getArtisans();
 
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Début itération recherche de l'artisan a supprimer de l'annonce");
 
             }
 
-            for (int i = 0; i < artisans.size(); i++) {
+            for (Iterator<Artisan> itArtisan = artisans.iterator(); itArtisan.hasNext();) {
 
-                Artisan artisanADesinscrire = artisans.get(i);
+                Artisan artisanADesinscrire = itArtisan.next();
 
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("+-------------------------------------------------------------+");
@@ -608,7 +611,7 @@ public class GestionAnnonceFacade {
                 }
 
                 if (artisanADesinscrire.getLogin().equals(desinscriptionAnnonceDTO.getLoginArtisan())) {
-                    artisans.remove(i);
+                    artisans.remove(artisanADesinscrire);
                     if (LOGGER.isDebugEnabled()) {
                         LOGGER.debug("Artisan trouvée");
                     }

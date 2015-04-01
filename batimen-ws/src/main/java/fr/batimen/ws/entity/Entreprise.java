@@ -1,10 +1,10 @@
 package fr.batimen.ws.entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -73,12 +73,12 @@ public class Entreprise extends AbstractEntity implements Serializable {
             targetEntity = Annonce.class,
             cascade = CascadeType.REMOVE,
             fetch = FetchType.LAZY)
-    private List<Annonce> annonceEntrepriseSelecionnee;
+    private Set<Annonce> annonceEntrepriseSelecionnee = new HashSet<Annonce>();
     @OneToMany(mappedBy = "entreprise",
             targetEntity = CategorieMetier.class,
             cascade = CascadeType.REMOVE,
             fetch = FetchType.LAZY)
-    private List<CategorieMetier> categoriesMetier = new ArrayList<CategorieMetier>();
+    private Set<CategorieMetier> categoriesMetier = new HashSet<CategorieMetier>();
 
     /**
      * @return the id
@@ -218,7 +218,7 @@ public class Entreprise extends AbstractEntity implements Serializable {
     /**
      * @return the categoriesMetier
      */
-    public List<CategorieMetier> getCategoriesMetier() {
+    public Set<CategorieMetier> getCategoriesMetier() {
         return categoriesMetier;
     }
 
@@ -226,7 +226,7 @@ public class Entreprise extends AbstractEntity implements Serializable {
      * @param categoriesMetier
      *            the categoriesMetier to set
      */
-    public void setCategoriesMetier(List<CategorieMetier> categoriesMetier) {
+    public void setCategoriesMetier(Set<CategorieMetier> categoriesMetier) {
         this.categoriesMetier = categoriesMetier;
     }
 
@@ -263,7 +263,7 @@ public class Entreprise extends AbstractEntity implements Serializable {
     /**
      * @return the annonceEntrepriseSelecionnee
      */
-    public List<Annonce> getAnnonceEntrepriseSelecionnee() {
+    public Set<Annonce> getAnnonceEntrepriseSelecionnee() {
         return annonceEntrepriseSelecionnee;
     }
 
@@ -271,7 +271,7 @@ public class Entreprise extends AbstractEntity implements Serializable {
      * @param annonceEntrepriseSelecionnee
      *            the annonceEntrepriseSelecionnee to set
      */
-    public void setAnnonceEntrepriseSelecionnee(List<Annonce> annonceEntrepriseSelecionnee) {
+    public void setAnnonceEntrepriseSelecionnee(Set<Annonce> annonceEntrepriseSelecionnee) {
         this.annonceEntrepriseSelecionnee = annonceEntrepriseSelecionnee;
     }
 

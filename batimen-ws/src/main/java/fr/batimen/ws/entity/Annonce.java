@@ -1,10 +1,10 @@
 package fr.batimen.ws.entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -24,6 +24,8 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.LazyToOne;
 import org.hibernate.annotations.LazyToOneOption;
 
@@ -52,7 +54,7 @@ import fr.batimen.dto.enums.TypeTravaux;
         @NamedQuery(name = QueryJPQL.NB_ANNONCE_BY_LOGIN,
                 query = "SELECT count(a) FROM Annonce AS a WHERE a.demandeur.login = :login AND a.etatAnnonce != 4 AND a.etatAnnonce != 1"),
         @NamedQuery(name = QueryJPQL.ANNONCE_BY_ID_FETCH_ARTISAN_ENTREPRISE_CLIENT_ADRESSE,
-                query = "SELECT a FROM Annonce AS a LEFT OUTER JOIN FETCH a.artisans AS art LEFT OUTER JOIN FETCH art.entreprise AS ent LEFT OUTER JOIN FETCH a.adresseChantier AS adr LEFT OUTER JOIN FETCH a.demandeur AS dem WHERE a.hashID = :hashID"),
+                query = "SELECT a FROM Annonce AS a LEFT OUTER JOIN FETCH a.artisans AS art LEFT OUTER JOIN FETCH art.entreprise AS ent LEFT OUTER JOIN FETCH a.adresseChantier AS adr LEFT OUTER JOIN FETCH a.demandeur AS dem LEFT OUTER JOIN FETCH a.images AS im WHERE a.hashID = :hashID"),
         @NamedQuery(name = QueryJPQL.ANNONCE_BY_ID,
                 query = "SELECT a FROM Annonce AS a WHERE a.hashID = :hashID AND a.etatAnnonce != 4 AND a.etatAnnonce != 1"),
         @NamedQuery(name = QueryJPQL.ANNONCE_BY_ID_ADMIN, query = "SELECT a FROM Annonce AS a WHERE a.hashID = :hashID"),
@@ -111,18 +113,20 @@ public class Annonce extends AbstractEntity implements Serializable {
     @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @LazyToOne(LazyToOneOption.NO_PROXY)
     private Adresse adresseChantier;
+    @Fetch(FetchMode.SELECT)
     @ManyToMany(fetch = FetchType.LAZY, targetEntity = Artisan.class)
     @JoinTable(name = "annonce_artisan",
             joinColumns = @JoinColumn(name = "annonce_id"),
             inverseJoinColumns = @JoinColumn(name = "artisans_id"))
-    private List<Artisan> artisans = new ArrayList<Artisan>();
+    private Set<Artisan> artisans = new HashSet<Artisan>();
     @OneToMany(mappedBy = "annonce",
             targetEntity = Notification.class,
             cascade = CascadeType.REMOVE,
             fetch = FetchType.LAZY)
-    private List<Notification> notifications = new ArrayList<Notification>();
+    private Set<Notification> notifications = new HashSet<Notification>();
+    @Fetch(FetchMode.SELECT)
     @OneToMany(mappedBy = "annonce", targetEntity = Image.class, cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    private List<Image> images = new ArrayList<Image>();
+    private Set<Image> images = new HashSet<Image>();
 
     /**
      * @return the id
@@ -322,7 +326,7 @@ public class Annonce extends AbstractEntity implements Serializable {
     /**
      * @return the artisans
      */
-    public List<Artisan> getArtisans() {
+    public Set<Artisan> getArtisans() {
         return artisans;
     }
 
@@ -330,14 +334,14 @@ public class Annonce extends AbstractEntity implements Serializable {
      * @param artisans
      *            the artisans to set
      */
-    public void setArtisans(List<Artisan> artisans) {
+    public void setArtisans(Set<Artisan> artisans) {
         this.artisans = artisans;
     }
 
     /**
      * @return the notifications
      */
-    public List<Notification> getNotifications() {
+    public Set<Notification> getNotifications() {
         return notifications;
     }
 
@@ -345,7 +349,7 @@ public class Annonce extends AbstractEntity implements Serializable {
      * @param notifications
      *            the notifications to set
      */
-    public void setNotifications(List<Notification> notifications) {
+    public void setNotifications(Set<Notification> notifications) {
         this.notifications = notifications;
     }
 
@@ -412,7 +416,7 @@ public class Annonce extends AbstractEntity implements Serializable {
     /**
      * @return the images
      */
-    public List<Image> getImages() {
+    public Set<Image> getImages() {
         return images;
     }
 
@@ -420,7 +424,7 @@ public class Annonce extends AbstractEntity implements Serializable {
      * @param images
      *            the images to set
      */
-    public void setImages(List<Image> images) {
+    public void setImages(Set<Image> images) {
         this.images = images;
     }
 

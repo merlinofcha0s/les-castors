@@ -35,7 +35,6 @@ public class AnnonceDTO extends AbstractDTO {
     @NotNull
     private Date dateMAJ;
     private Integer nbConsultation;
-    private String photo;
     @NotNull
     private Short categorieMetier;
     @NotNull
@@ -109,13 +108,6 @@ public class AnnonceDTO extends AbstractDTO {
     }
 
     /**
-     * @return the photo
-     */
-    public String getPhoto() {
-        return photo;
-    }
-
-    /**
      * @return the categorieMetier
      */
     public Short getCategorieMetier() {
@@ -182,14 +174,6 @@ public class AnnonceDTO extends AbstractDTO {
      */
     public void setNbConsultation(Integer nbConsultation) {
         this.nbConsultation = nbConsultation;
-    }
-
-    /**
-     * @param photo
-     *            the photo to set
-     */
-    public void setPhoto(String photo) {
-        this.photo = photo;
     }
 
     /**
