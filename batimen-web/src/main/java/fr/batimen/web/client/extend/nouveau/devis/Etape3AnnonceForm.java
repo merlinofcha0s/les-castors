@@ -21,6 +21,7 @@ import org.apache.wicket.markup.html.form.upload.MultiFileUploadField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 import org.slf4j.Logger;
@@ -40,6 +41,7 @@ import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.web.client.extend.nouveau.devis.event.CategorieEvent;
 import fr.batimen.web.client.extend.nouveau.devis.event.ChangementEtapeClientEvent;
+import fr.batimen.web.client.validator.FileUploadValidator;
 
 /**
  * Form de l'etape 3 de création d'annonce.
@@ -61,8 +63,10 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
         super(id, model);
 
         // Mode Multipart pour l'upload de fichier.
-        this.setMultiPart(true);
-        this.setMarkupId("formEtape3");
+        setMultiPart(true);
+        setFileMaxSize(Bytes.megabytes(10));
+
+        setMarkupId("formEtape3");
 
         nouvelleAnnonce = model.getObject();
 
@@ -123,6 +127,7 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
         MultiFileUploadField photoField = new MultiFileUploadField("photos", new PropertyModel<Collection<FileUpload>>(
                 this, "photos"), 5, true);
         photoField.setMarkupId("photoField");
+        photoField.add(new FileUploadValidator());
 
         TextField<String> adresseField = new TextField<String>("adresse");
         adresseField.setRequired(true);
