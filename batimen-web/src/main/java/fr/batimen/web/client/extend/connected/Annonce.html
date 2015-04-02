@@ -90,20 +90,28 @@ s
 			</div>
 			<div id="containerPhoto">
 				<div class="row-fluid">
-					<div class="span12 module_cont module_gallery">
+					<div
+						class="span12 module_cont module_gallery"
+						wicket:id="photosContainer">
 						<div class="bg_title">
 							<h2 class="headInModule">Photos du chantier</h2>
 						</div>
-						<div class="list-of-images">
-							<div class="gallery_item view view-tenth">
+						<div
+							class="list-of-images"
+							id="galleriePhotoAnnonce">
+							<div
+								class="gallery_item view view-tenth"
+								wicket:id="imagesView">
 								<a
-									href="img/pictures/gallery1.jpg"
-									class="prettyPhoto"> <img
+									href=""
+									class="prettyPhoto"
+									wicket:id="thumbnails"> <img
 									class="gallery-stand-img"
-									src="img/pictures/gallery1.jpg"
+									src=""
 									alt=""
 									width="200"
-									height="210">
+									height="210"
+									wicket:id="photo">
 									<div class="mask">
 										<div class="gallery_descr">
 											<h2 class="post_type_image">Lorem ipsum</h2>
@@ -112,43 +120,18 @@ s
 									</div>
 								</a>
 							</div>
-							<div class="gallery_item view view-tenth">
-								<a
-									href="img/pictures/gallery2.jpg"
-									class="prettyPhoto"> <img
-									class="gallery-stand-img"
-									src="img/pictures/gallery2.jpg"
-									alt=""
-									width="200"
-									height="210">
-									<div class="mask">
-										<div class="gallery_descr">
-											<h2 class="post_type_image">Pellentesque</h2>
-											<p>Pellentesque consequat viverra lorem a gestas placerat ligula.</p>
-										</div>
-									</div>
-								</a>
-							</div>
-							<div class="gallery_item view view-tenth">
-								<a
-									href="http://vimeo.com/47989207"
-									class="prettyPhoto"> <img
-									class="gallery-stand-img"
-									src="img/pictures/gallery3.jpg"
-									alt=""
-									width="200"
-									height="210">
-									<div class="mask">
-										<div class="gallery_descr">
-											<h2 class="post_type_video">gestas placerat</h2>
-											<p>Pellentesque consequat viverra lorem a gestas placerat ligula.</p>
-										</div>
-									</div>
-								</a>
-							</div>
 							<div class="clear"></div>
 							<a id="anchor6"></a>
 						</div>
+					</div>
+					<div
+						class="span12"
+						wicket:id="aucunePhotoContainer">
+						<div class="bg_title">
+							<h2 class="headInModule">Photos du chantier</h2>
+						</div>
+						<div wicket:id="aucunePhoto" id="aucunePhoto"></div>
+						<div class="clear"></div>
 					</div>
 				</div>
 				<!-- .module_cont -->
@@ -182,8 +165,7 @@ s
 											wicket:id="voirProfilEntreprise"
 											class="lienMenuEntrepriseInscrite"></a>
 									</div>
-									<div
-										class="menuEntrepriseInscrite containerLienDevisEntreprise">
+									<div class="menuEntrepriseInscrite containerLienDevisEntreprise">
 										<span class="icon-Letter glyphAnnonce"></span> <a
 											href="#"
 											wicket:id="downloadDevis"
@@ -239,8 +221,7 @@ s
 											wicket:id="voirProfilEntrepriseSelectionnee"
 											class="lienMenuEntrepriseInscrite"></a>
 									</div>
-									<div
-										class="menuEntrepriseSelectionnee containerLienDevisEntreprise">
+									<div class="menuEntrepriseSelectionnee containerLienDevisEntreprise">
 										<span class="icon-Letter glyphAnnonce"></span> <a
 											href="#"
 											wicket:id="downloadDevisEntrepriseSelectionnee"
