@@ -4,7 +4,6 @@
 		type="text/css"
 		href="css/font_icons8.css" />
 </wicket:head>
-s
 <wicket:extend>
 	<div class="row-fluid">
 		<div wicket:id="profil"></div>
@@ -130,7 +129,9 @@ s
 						<div class="bg_title">
 							<h2 class="headInModule">Photos du chantier</h2>
 						</div>
-						<div wicket:id="aucunePhoto" id="aucunePhoto"></div>
+						<div
+							wicket:id="aucunePhoto"
+							id="aucunePhoto"></div>
 						<div class="clear"></div>
 					</div>
 				</div>
@@ -215,17 +216,25 @@ s
 										href="#">Ké buenos enterprise</span>
 								</div>
 								<div class="span8">
-									<div class="menuEntrepriseSelectionnee">
-										<span class="icon-Eye glyphAnnonce"></span> <a
-											href="#"
-											wicket:id="voirProfilEntrepriseSelectionnee"
-											class="lienMenuEntrepriseInscrite"></a>
-									</div>
-									<div class="menuEntrepriseSelectionnee containerLienDevisEntreprise">
-										<span class="icon-Letter glyphAnnonce"></span> <a
-											href="#"
-											wicket:id="downloadDevisEntrepriseSelectionnee"
-											class="lienMenuEntrepriseInscrite"></a>
+									<div class="row-fluid">
+										<div class="menuEntrepriseSelectionnee span3">
+											<span class="icon-Eye glyphAnnonce"></span> <a
+												href="#"
+												wicket:id="voirProfilEntrepriseSelectionnee"
+												class="lienMenuEntrepriseInscrite"></a>
+										</div>
+										<div class="menuEntrepriseSelectionnee span4">
+											<span class="icon-Letter glyphAnnonce"></span> <a
+												href="#"
+												wicket:id="downloadDevisEntrepriseSelectionnee"
+												class="lienMenuEntrepriseInscrite"></a>
+										</div>
+										<div class="menuEntrepriseSelectionnee span4">
+											<span class="icon-Equaliser glyphAnnonce"></span> <a
+												href="#"
+												wicket:id="notationAnnonceParClient"
+												class="lienMenuEntrepriseInscrite">Notez l'artisan</a>
+										</div>
 									</div>
 								</div>
 							</div>
@@ -329,4 +338,5 @@ s
 	<div wicket:id="inscriptionModal"></div>
 	<div wicket:id="selectionEntrepriseModal"></div>
 	<div wicket:id="desincriptionArtisanModal"></div>
+	<div wicket:id="notationArtisanModal"></div>
 </wicket:extend>

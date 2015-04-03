@@ -8,6 +8,13 @@ import fr.batimen.dto.EntrepriseDTO;
 import fr.batimen.web.client.component.ModalCastor;
 import fr.batimen.web.client.event.SelectionEntrepriseEvent;
 
+/**
+ * Permet a un client de selection une entreprise parmis celle qui se sont
+ * inscrite a son annonce.
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class SelectionEntrepriseModal extends ModalCastor {
 
     private static final long serialVersionUID = 1L;

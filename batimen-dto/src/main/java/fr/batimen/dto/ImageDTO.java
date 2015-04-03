@@ -4,6 +4,12 @@ import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
 
+/**
+ * DTO pour le transfert des images
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class ImageDTO extends AbstractDTO {
 
     private static final long serialVersionUID = 9211085039373280654L;

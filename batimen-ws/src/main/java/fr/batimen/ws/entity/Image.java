@@ -103,7 +103,7 @@ public class Image extends AbstractEntity implements Serializable {
             return true;
         }
 
-        if (object instanceof Notification) {
+        if (object instanceof Image) {
             Image other = (Image) object;
             return Objects.equals(this.url, other.url);
         }

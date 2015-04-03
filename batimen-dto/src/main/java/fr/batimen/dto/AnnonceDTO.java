@@ -20,6 +20,12 @@ import fr.batimen.dto.enums.TypeContact;
 import fr.batimen.dto.enums.TypeTravaux;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 
+/**
+ * DTO de l'annonce
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class AnnonceDTO extends AbstractDTO {
 
     private static final long serialVersionUID = -647384595187488520L;

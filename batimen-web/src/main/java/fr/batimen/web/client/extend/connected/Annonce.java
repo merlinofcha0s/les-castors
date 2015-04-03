@@ -44,6 +44,7 @@ import fr.batimen.web.client.component.LinkLabel;
 import fr.batimen.web.client.component.Profil;
 import fr.batimen.web.client.event.DesinscriptionArtisanAnnonceEvent;
 import fr.batimen.web.client.event.InscriptionArtisanEvent;
+import fr.batimen.web.client.event.NoterArtisanEventOpen;
 import fr.batimen.web.client.event.SelectionEntrepriseEvent;
 import fr.batimen.web.client.event.SuppressionOpenEvent;
 import fr.batimen.web.client.extend.error.AccesInterdit;
@@ -51,6 +52,7 @@ import fr.batimen.web.client.extend.error.NonTrouvee;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.web.client.modal.DesincriptionArtisanModal;
 import fr.batimen.web.client.modal.InscriptionModal;
+import fr.batimen.web.client.modal.NotationArtisanModal;
 import fr.batimen.web.client.modal.SelectionEntrepriseModal;
 import fr.batimen.web.client.modal.SuppressionModal;
 import fr.batimen.ws.client.service.AnnonceServiceREST;
@@ -85,6 +87,7 @@ public class Annonce extends MasterPage {
     private InscriptionModal inscriptionModal;
     private SelectionEntrepriseModal selectionEntrepriseModal;
     private DesincriptionArtisanModal desincriptionArtisanModal;
+    private NotationArtisanModal notationArtisanModal;
 
     private AnnonceAffichageDTO annonceAffichageDTO;
 
@@ -118,6 +121,7 @@ public class Annonce extends MasterPage {
         initPopupSelectionEntreprise();
         initPopupSuppression();
         initPopupDesinscriptionEntreprise();
+        initPopupNotationArtisan();
         initAction();
         initContainerPhoto();
         affichageDonneesAnnonce();
@@ -496,8 +500,31 @@ public class Annonce extends MasterPage {
 
         downloadDevisEntrepriseSelectionnee.setOutputMarkupId(true);
 
+        AjaxLink<Void> notationAnnonceParClient = new AjaxLink<Void>("notationAnnonceParClient") {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                this.send(target.getPage(), Broadcast.BREADTH, new NoterArtisanEventOpen(target));
+            }
+
+            /*
+             * (non-Javadoc)
+             * 
+             * @see org.apache.wicket.Component#isVisible()
+             */
+            @Override
+            public boolean isVisible() {
+                return annonceAffichageDTO.getAnnonce().getEtatAnnonce().equals(EtatAnnonce.A_NOTER);
+            }
+
+        };
+
+        notationAnnonceParClient.setOutputMarkupId(true);
+
         containerEntrepriseSelectionnee.add(entrepriseSelectionnee, voirProfilEntrepriseEntrepriseSelectionnee,
-                downloadDevisEntrepriseSelectionnee);
+                downloadDevisEntrepriseSelectionnee, notationAnnonceParClient);
         containerEntreprisesGlobales.add(containerEntrepriseSelectionnee);
     }
 
@@ -624,6 +651,11 @@ public class Annonce extends MasterPage {
     private void initPopupDesinscriptionEntreprise() {
         desincriptionArtisanModal = new DesincriptionArtisanModal("desincriptionArtisanModal");
         add(desincriptionArtisanModal);
+    }
+
+    private void initPopupNotationArtisan() {
+        notationArtisanModal = new NotationArtisanModal("notationArtisanModal");
+        add(notationArtisanModal);
     }
 
     private void initContainerPhoto() {

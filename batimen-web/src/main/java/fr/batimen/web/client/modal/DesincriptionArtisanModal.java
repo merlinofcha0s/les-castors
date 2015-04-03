@@ -8,6 +8,12 @@ import fr.batimen.dto.ClientDTO;
 import fr.batimen.web.client.component.ModalCastor;
 import fr.batimen.web.client.event.DesinscriptionArtisanAnnonceEvent;
 
+/**
+ * Modal permettant à un artisan de se desinscrire d'une annonce.
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class DesincriptionArtisanModal extends ModalCastor {
 
     private static final long serialVersionUID = 1L;

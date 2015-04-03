@@ -63,7 +63,9 @@ public class AnnonceServiceREST implements Serializable {
     }
 
     /**
-     * Appel le webservice pour creer l'annonce.
+     * Appel le webservice pour creer l'annonce. <br/>
+     * 
+     * Contient des images, l'appel au web service est fait en mode multipart
      * 
      * @param nouvelleAnnonce
      *            l'objet a envoyé au webservice pour qu'il puisse créer

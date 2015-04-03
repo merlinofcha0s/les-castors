@@ -20,10 +20,22 @@ import com.sun.jersey.multipart.FormDataBodyPart;
 
 import fr.batimen.ws.enums.PropertiesFileWS;
 
+/**
+ * Utilitaire d'aide à la transformation de flux.
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class FluxUtils {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FluxUtils.class);
 
+    /**
+     * Tranforme un input stream en string JSON
+     * 
+     * @param content
+     * @return
+     */
     public static String getJsonByInputStream(InputStream content) {
 
         StringWriter writer = new StringWriter();
@@ -37,6 +49,13 @@ public class FluxUtils {
         return writer.toString();
     }
 
+    /**
+     * Transforme une liste de FormDataBodyPart en liste de File
+     * 
+     * @param formDataBodyParts
+     *            La liste à tranformer
+     * @return La liste de File correspondant
+     */
     public static List<File> transformFormDataBodyPartsToFiles(List<FormDataBodyPart> formDataBodyParts) {
 
         List<File> files = new LinkedList<File>();

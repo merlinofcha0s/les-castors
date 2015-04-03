@@ -34,6 +34,13 @@ public class PhotoService {
     @Inject
     private CloudinaryService cloudinaryService;
 
+    /**
+     * Envoi les photos vers le cloud de cloudinary
+     * 
+     * @param photos
+     *            Liste des photos sous forme de file
+     * @return Les adresses internet des photos une fois uploadées
+     */
     public List<String> sendPhotoToCloud(List<File> photos) {
 
         List<String> urlPhotosInCloud = new LinkedList<String>();
@@ -50,12 +57,12 @@ public class PhotoService {
             Map<String, String> uploadResults = null;
             try {
                 uploadResults = cloudinary.uploader().upload(photo, options);
+                urlPhotosInCloud.add(uploadResults.get(CloudinaryService.SECURE_URL_PARAM));
             } catch (IOException e) {
                 if (LOGGER.isErrorEnabled()) {
                     LOGGER.error("Probleme durant l'upload de la photo vers le cloud", e);
                 }
             }
-            urlPhotosInCloud.add(uploadResults.get(CloudinaryService.SECURE_URL_PARAM));
         }
 
         return urlPhotosInCloud;

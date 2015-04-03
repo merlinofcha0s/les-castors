@@ -187,7 +187,9 @@ public class GestionAnnonceFacade {
 
     /**
      * Permet la creation d'une nouvelle annonce par le client ainsi que le
-     * compte de ce dernier
+     * compte de ce dernier <br/>
+     * 
+     * Mode multipart, en plus de JSON la request contient des photos.
      * 
      * @see Constant
      * 
