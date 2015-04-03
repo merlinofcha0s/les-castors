@@ -207,8 +207,8 @@ public class GestionAnnonceFacade {
             @FormDataParam("files") final List<FormDataBodyPart> files,
             @FormDataParam("files") final List<FormDataContentDisposition> filesDetail) {
 
-        CreationAnnonceDTO nouvelleAnnonceDTO = CreationAnnonceDTO.deserializeCreationAnnonceDTO(FluxUtils
-                .getJsonByInputStream(content));
+        CreationAnnonceDTO nouvelleAnnonceDTO = DeserializeJsonHelper.deserializeDTO(
+                FluxUtils.getJsonByInputStream(content), CreationAnnonceDTO.class);
 
         if (LOGGER.isDebugEnabled()) {
             for (FormDataContentDisposition fileDetail : filesDetail) {

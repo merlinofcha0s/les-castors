@@ -71,5 +71,4 @@ public class SousCategorieMetierDTO implements Serializable {
     public String toString() {
         return name;
     }
-
 }

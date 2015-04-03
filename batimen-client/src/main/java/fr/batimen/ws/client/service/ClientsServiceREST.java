@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import fr.batimen.core.constant.WsPath;
 import fr.batimen.dto.aggregate.MesAnnoncesDTO;
 import fr.batimen.dto.aggregate.MonProfilDTO;
+import fr.batimen.dto.helper.DeserializeJsonHelper;
 import fr.batimen.ws.client.WsConnector;
 
 /**
@@ -39,7 +40,7 @@ public class ClientsServiceREST implements Serializable {
         String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_CLIENT_SERVICE_PATH,
                 WsPath.GESTION_CLIENT_SERVICE_INFOS_MES_ANNONCES, login);
 
-        mesDevis = MesAnnoncesDTO.deserializeMesDevisDTO(objectInJSON);
+        mesDevis = DeserializeJsonHelper.deserializeDTO(objectInJSON, MesAnnoncesDTO.class);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Fin appel service de recuperation des données de la page mes annonces + deserialization");
@@ -58,7 +59,7 @@ public class ClientsServiceREST implements Serializable {
         String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_CLIENT_SERVICE_PATH,
                 WsPath.GESTION_CLIENT_SERVICE_INFOS_MON_PROFIL, login);
 
-        monProfilDTO = MonProfilDTO.deserializeMonProfilDTO(objectInJSON);
+        monProfilDTO = DeserializeJsonHelper.deserializeDTO(objectInJSON, MonProfilDTO.class);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Fin appel service de recuperation des données de la page mon profil + deserialization");

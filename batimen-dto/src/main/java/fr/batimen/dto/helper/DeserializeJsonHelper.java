@@ -4,6 +4,7 @@ import java.lang.reflect.Type;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,6 +14,9 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonDeserializer;
 import com.google.gson.JsonElement;
+import com.google.gson.reflect.TypeToken;
+
+import fr.batimen.dto.AbstractDTO;
 
 /**
  * Aide à la deserialization des DTOs en JSON
@@ -69,6 +73,18 @@ public class DeserializeJsonHelper {
     public static String parseString(String string) {
         Gson gson = createGsonObject();
         return gson.fromJson(string, String.class);
+    }
+
+    public static <T extends AbstractDTO> T deserializeDTO(String json, Class<T> clazz) {
+        Gson gson = DeserializeJsonHelper.createGsonObject();
+        return gson.fromJson(json, clazz);
+    }
+
+    public static <T extends AbstractDTO> List<T> deserializeDTOList(String json) {
+        Gson gson = DeserializeJsonHelper.createGsonObject();
+        Type collectionType = new TypeToken<List<T>>() {
+        }.getType();
+        return gson.fromJson(json, collectionType);
     }
 
 }

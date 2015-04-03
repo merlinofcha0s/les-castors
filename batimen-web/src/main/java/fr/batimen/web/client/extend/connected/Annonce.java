@@ -44,6 +44,7 @@ import fr.batimen.web.client.component.LinkLabel;
 import fr.batimen.web.client.component.Profil;
 import fr.batimen.web.client.event.DesinscriptionArtisanAnnonceEvent;
 import fr.batimen.web.client.event.InscriptionArtisanEvent;
+import fr.batimen.web.client.event.NoterArtisanEventClose;
 import fr.batimen.web.client.event.NoterArtisanEventOpen;
 import fr.batimen.web.client.event.SelectionEntrepriseEvent;
 import fr.batimen.web.client.event.SuppressionOpenEvent;
@@ -809,6 +810,11 @@ public class Annonce extends MasterPage {
             // rafraichi par la requette ajax
 
             desinscriptionArtisanAnnonceEvent.getTarget().add(feedBackPanelGeneral, containerEntreprisesGlobales);
+        }
+
+        if (event.getPayload() instanceof DesinscriptionArtisanAnnonceEvent) {
+            NoterArtisanEventClose noterArtisanEventClose = (NoterArtisanEventClose) event.getPayload();
+
         }
     }
 

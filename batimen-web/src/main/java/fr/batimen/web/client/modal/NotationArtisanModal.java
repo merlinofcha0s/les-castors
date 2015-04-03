@@ -7,7 +7,9 @@ import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.validation.validator.StringValidator;
 
+import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.batimen.web.client.component.BatimenFeedbackPanel;
 import fr.batimen.web.client.component.ModalCastor;
@@ -44,6 +46,8 @@ public class NotationArtisanModal extends ModalCastor {
         textAreaCommentaire.setMarkupId("textAreaCommentaireNotation");
         textAreaCommentaire.setRequired(true);
         textAreaCommentaire.add(new RequiredBorderBehaviour());
+        textAreaCommentaire.add(StringValidator.lengthBetween(ValidatorConstant.NOTATION_MIN_COMMENTAIRE,
+                ValidatorConstant.NOTATION_MAX_COMMENTAIRE));
 
         Form<Void> formNotationCastor = new Form<Void>("formNotationCastor");
 

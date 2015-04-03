@@ -1,6 +1,5 @@
 package fr.batimen.dto.aggregate;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -11,15 +10,11 @@ import javax.validation.constraints.Size;
 
 import org.hibernate.validator.constraints.Email;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 import fr.batimen.dto.AbstractDTO;
 import fr.batimen.dto.AdresseDTO;
 import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.EntrepriseDTO;
 import fr.batimen.dto.ImageDTO;
-import fr.batimen.dto.helper.DeserializeJsonHelper;
 
 public class AnnonceAffichageDTO extends AbstractDTO {
 
@@ -183,17 +178,4 @@ public class AnnonceAffichageDTO extends AbstractDTO {
         }
         return false;
     }
-
-    public static AnnonceAffichageDTO deserializeAnnonceAffichageDTO(String json) {
-        Gson gson = DeserializeJsonHelper.createGsonObject();
-        return gson.fromJson(json, AnnonceAffichageDTO.class);
-    }
-
-    public static List<AnnonceAffichageDTO> deserializeAnnonceAffichageDTOList(String json) {
-        Gson gson = DeserializeJsonHelper.createGsonObject();
-        Type collectionType = new TypeToken<List<AnnonceAffichageDTO>>() {
-        }.getType();
-        return gson.fromJson(json, collectionType);
-    }
-
 }

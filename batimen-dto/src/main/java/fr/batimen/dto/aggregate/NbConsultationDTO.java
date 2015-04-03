@@ -1,16 +1,10 @@
 package fr.batimen.dto.aggregate;
 
-import java.lang.reflect.Type;
-import java.util.List;
 import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 import fr.batimen.dto.AbstractDTO;
-import fr.batimen.dto.helper.DeserializeJsonHelper;
 
 public class NbConsultationDTO extends AbstractDTO {
 
@@ -79,17 +73,4 @@ public class NbConsultationDTO extends AbstractDTO {
         }
         return false;
     }
-
-    public static NbConsultationDTO deserializeNbConsultationDTO(String json) {
-        Gson gson = DeserializeJsonHelper.createGsonObject();
-        return gson.fromJson(json, NbConsultationDTO.class);
-    }
-
-    public static List<NbConsultationDTO> deserializeNbConsultationDTOList(String json) {
-        Gson gson = DeserializeJsonHelper.createGsonObject();
-        Type collectionType = new TypeToken<List<NbConsultationDTO>>() {
-        }.getType();
-        return gson.fromJson(json, collectionType);
-    }
-
 }

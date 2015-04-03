@@ -17,6 +17,7 @@ import fr.batimen.dto.aggregate.AnnonceSelectEntrepriseDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.aggregate.DesinscriptionAnnonceDTO;
 import fr.batimen.dto.aggregate.NbConsultationDTO;
+import fr.batimen.dto.helper.DeserializeJsonHelper;
 import fr.batimen.ws.client.WsConnector;
 
 /**
@@ -108,7 +109,7 @@ public class AnnonceServiceREST implements Serializable {
         String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_ANNONCE_SERVICE_PATH,
                 WsPath.GESTION_ANNONCE_SERVICE_GET_ANNONCES_BY_LOGIN, login);
 
-        List<AnnonceDTO> annonces = AnnonceDTO.deserializeAnnonceDTOList(objectInJSON);
+        List<AnnonceDTO> annonces = DeserializeJsonHelper.deserializeDTOList(objectInJSON);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Fin appel service creation annonce.....");
@@ -137,7 +138,7 @@ public class AnnonceServiceREST implements Serializable {
         String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_ANNONCE_SERVICE_PATH,
                 WsPath.GESTION_ANNONCE_SERVICE_GET_ANNONCES_BY_ID, demandeAnnonceDTO);
 
-        AnnonceAffichageDTO annonce = AnnonceAffichageDTO.deserializeAnnonceAffichageDTO(objectInJSON);
+        AnnonceAffichageDTO annonce = DeserializeJsonHelper.deserializeDTO(objectInJSON, AnnonceAffichageDTO.class);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Fin appel service creation annonce.....");
