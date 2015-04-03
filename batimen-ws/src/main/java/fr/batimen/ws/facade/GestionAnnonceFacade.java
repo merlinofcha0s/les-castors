@@ -45,6 +45,7 @@ import fr.batimen.dto.aggregate.AnnonceSelectEntrepriseDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.aggregate.DesinscriptionAnnonceDTO;
 import fr.batimen.dto.aggregate.NbConsultationDTO;
+import fr.batimen.dto.aggregate.NoterArtisanDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
@@ -641,4 +642,21 @@ public class GestionAnnonceFacade {
         }
 
     }
+
+    /**
+     * Service qui permet à un client de noter un artisan<br/>
+     * 
+     * Fais passer l'annonce en mode terminer
+     * 
+     * @param noterArtisanDTO
+     *            Objet permettant de valider la note de l'artisan
+     * @return {@link CodeRetourService}
+     */
+    @POST
+    @Path(WsPath.GESTION_ANNONCE_SERVICE_NOTER_UN_ARTISAN)
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public Integer noterUnArtisan(NoterArtisanDTO noterArtisanDTO) {
+        return CodeRetourService.RETOUR_KO;
+    }
+
 }

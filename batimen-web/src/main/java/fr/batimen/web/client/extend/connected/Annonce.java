@@ -28,11 +28,13 @@ import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.EntrepriseDTO;
 import fr.batimen.dto.ImageDTO;
+import fr.batimen.dto.NotationDTO;
 import fr.batimen.dto.PermissionDTO;
 import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
 import fr.batimen.dto.aggregate.AnnonceSelectEntrepriseDTO;
 import fr.batimen.dto.aggregate.DesinscriptionAnnonceDTO;
 import fr.batimen.dto.aggregate.NbConsultationDTO;
+import fr.batimen.dto.aggregate.NoterArtisanDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.helper.CategorieLoader;
@@ -814,6 +816,17 @@ public class Annonce extends MasterPage {
 
         if (event.getPayload() instanceof DesinscriptionArtisanAnnonceEvent) {
             NoterArtisanEventClose noterArtisanEventClose = (NoterArtisanEventClose) event.getPayload();
+
+            NotationDTO notationDTO = new NotationDTO();
+            notationDTO.setNomEntreprise(annonceAffichageDTO.getEntrepriseSelectionnee().getNomComplet());
+            notationDTO.setCommentaire(noterArtisanEventClose.getCommentaireNotation());
+            notationDTO.setScore(noterArtisanEventClose.getNbEtoiles());
+
+            NoterArtisanDTO noterArtisanDTO = new NoterArtisanDTO();
+            noterArtisanDTO.setHashID(idAnnonce);
+            noterArtisanDTO.setLoginArtisan(annonceAffichageDTO.getEntrepriseSelectionnee().getArtisan().getLogin());
+            noterArtisanDTO.setLoginDemandeur(userConnected.getLogin());
+            noterArtisanDTO.setNotation(notationDTO);
 
         }
     }

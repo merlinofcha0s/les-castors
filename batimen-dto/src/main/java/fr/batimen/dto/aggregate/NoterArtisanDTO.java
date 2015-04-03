@@ -18,7 +18,6 @@ public class NoterArtisanDTO extends AbstractDTO {
 
     @Valid
     private NotationDTO notation;
-
     @NotNull
     private String hashID;
     @NotNull
