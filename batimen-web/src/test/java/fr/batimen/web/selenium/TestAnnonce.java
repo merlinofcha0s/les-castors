@@ -226,7 +226,7 @@ public class TestAnnonce extends AbstractITTest {
      */
     @Test
     public void testInscriptionArtisanAnnonce() {
-        connectAndGoToAnnonce(TypeCompte.ARTISAN, "lolmdr");
+        connectAndGoToAnnonce(TypeCompte.ARTISAN, "lolxd");
         assertCoreInformationOfAnnonce();
         driver.findElement(By.id("inscrireAnnonce")).click();
 

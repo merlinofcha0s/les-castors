@@ -16,7 +16,10 @@ public class AnnonceDataset {
                     "Installation électrique", 0, 0, "toto", "tata", 0, 200005, 100001, null, null)
             .values(200011, "2014-01-10", "2014-01-10", "0",
                     "Construction compliqué qui necessite des connaissance en geologie", "0", 0,
-                    "Installation électrique", 0, 0, "lolmdr", "tata", 0, 200014, 100001, 200009, 200013).build();
+                    "Installation électrique", 0, 0, "lolmdr", "tata", 0, 200014, 100001, 200009, 200013)
+            .values(200012, "2014-01-10", "2014-01-10", "0",
+                    "Construction compliqué qui necessite des connaissance en geologie", "0", 0,
+                    "Installation électrique", 0, 0, "lolxd", "titi", 0, 200015, 100001, null, null).build();
 
     public static final Operation INSERT_ARTISAN_DATA = insertInto("artisan")
             .columns("id", "civilite", "email", "nom", "prenom", "login", "password", "numeroTel", "dateInscription",
@@ -39,7 +42,8 @@ public class AnnonceDataset {
             .columns("id", "adresse", "codepostal", "complementadresse", "ville", "departement")
             .values(200005, "254 chemin du test", "06600", "Residence du test", "Test City", 06)
             .values(200006, "260 chemin des lol", "06500", "Residence des lol", "Test lol", 07)
-            .values(200014, "254 chemin du test", "06600", "Residence du test", "Test City", 06).build();
+            .values(200014, "254 chemin du test", "06600", "Residence du test", "Test City", 06)
+            .values(200015, "270 chemin du mdr", "08800", "Residence du mdr", "Test mdr", 8).build();
 
     public static final Operation INSERT_NOTATION_DATA = insertInto("notation")
             .columns("id", "commentaire", "dateNotation", "score", "artisan_fk")
