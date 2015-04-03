@@ -3,6 +3,7 @@ package fr.batimen.test.ws.facade;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import javax.inject.Inject;
 
@@ -93,8 +94,9 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
         Assert.assertNotNull(adresseEntreprise);
         Assert.assertEquals("250 chemin du plombier", adresseEntreprise.getAdresse());
 
-        List<Permission> permissions = artisanEnregistre.getPermission();
-        Assert.assertNotNull(permissions.get(0));
-        Assert.assertEquals(TypeCompte.ARTISAN, permissions.get(0).getTypeCompte());
+        Set<Permission> permissions = artisanEnregistre.getPermission();
+
+        Assert.assertNotNull(permissions.iterator().next());
+        Assert.assertEquals(TypeCompte.ARTISAN, permissions.iterator().next().getTypeCompte());
     }
 }

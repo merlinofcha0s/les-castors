@@ -2,8 +2,10 @@ package fr.batimen.ws.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -64,14 +66,14 @@ public class Artisan extends AbstractUser implements Serializable {
             targetEntity = Permission.class,
             cascade = CascadeType.REMOVE,
             fetch = FetchType.EAGER)
-    private List<Permission> permissions = new ArrayList<Permission>();
+    private Set<Permission> permissions = new HashSet<Permission>();
     @OneToMany(mappedBy = "artisanNotifier",
             targetEntity = Notification.class,
             cascade = CascadeType.REMOVE,
             fetch = FetchType.LAZY)
-    private final List<Notification> notifications = new ArrayList<Notification>();
+    private final Set<Notification> notifications = new HashSet<Notification>();
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "artisans", targetEntity = Annonce.class)
-    private final List<Annonce> annonces = new ArrayList<Annonce>();
+    private final Set<Annonce> annonces = new HashSet<Annonce>();
 
     /**
      * @return the id
@@ -136,7 +138,7 @@ public class Artisan extends AbstractUser implements Serializable {
     /**
      * @return the typeCompte
      */
-    public List<Permission> getPermission() {
+    public Set<Permission> getPermission() {
         return permissions;
     }
 
@@ -144,14 +146,14 @@ public class Artisan extends AbstractUser implements Serializable {
      * @param permission
      *            the typeCompte to set
      */
-    public void setTypeCompte(List<Permission> permission) {
+    public void setTypeCompte(Set<Permission> permission) {
         this.permissions = permission;
     }
 
     /**
      * @return the annonces
      */
-    public List<Annonce> getAnnonces() {
+    public Set<Annonce> getAnnonces() {
         return annonces;
     }
 
@@ -159,21 +161,21 @@ public class Artisan extends AbstractUser implements Serializable {
      * @param permission
      *            the permission to set
      */
-    public void setPermission(List<Permission> permission) {
+    public void setPermission(Set<Permission> permission) {
         this.permissions = permission;
     }
 
     /**
      * @return the permissions
      */
-    public List<Permission> getPermissions() {
+    public Set<Permission> getPermissions() {
         return permissions;
     }
 
     /**
      * @return the notifications
      */
-    public List<Notification> getNotifications() {
+    public Set<Notification> getNotifications() {
         return notifications;
     }
 
@@ -181,7 +183,7 @@ public class Artisan extends AbstractUser implements Serializable {
      * @param permissions
      *            the permissions to set
      */
-    public void setPermissions(List<Permission> permissions) {
+    public void setPermissions(Set<Permission> permissions) {
         this.permissions = permissions;
     }
 

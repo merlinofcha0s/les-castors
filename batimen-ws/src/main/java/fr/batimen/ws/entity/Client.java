@@ -1,9 +1,9 @@
 package fr.batimen.ws.entity;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -49,22 +49,22 @@ public class Client extends AbstractUser implements Serializable {
             targetEntity = Annonce.class,
             cascade = CascadeType.REMOVE,
             fetch = FetchType.LAZY)
-    private List<Annonce> devisDemandes = new ArrayList<Annonce>();
+    private Set<Annonce> devisDemandes = new HashSet<Annonce>();
     @OneToMany(mappedBy = "client",
             targetEntity = Permission.class,
             cascade = CascadeType.REMOVE,
             fetch = FetchType.LAZY)
-    protected List<Permission> permissions = new ArrayList<Permission>();
+    protected Set<Permission> permissions = new HashSet<Permission>();
     @OneToMany(mappedBy = "clientNotifier",
             targetEntity = Notification.class,
             cascade = CascadeType.REMOVE,
             fetch = FetchType.LAZY)
-    protected List<Notification> notifications = new ArrayList<Notification>();
+    protected Set<Notification> notifications = new HashSet<Notification>();
 
     /**
      * @return the devisDemandes
      */
-    public List<Annonce> getDevisDemandes() {
+    public Set<Annonce> getDevisDemandes() {
         return devisDemandes;
     }
 
@@ -72,14 +72,14 @@ public class Client extends AbstractUser implements Serializable {
      * @param devisDemandes
      *            the devisDemandes to set
      */
-    public void setDevisDemandes(List<Annonce> devisDemandes) {
+    public void setDevisDemandes(Set<Annonce> devisDemandes) {
         this.devisDemandes = devisDemandes;
     }
 
     /**
      * @return the typeCompte
      */
-    public List<Permission> getPermissions() {
+    public Set<Permission> getPermissions() {
         return permissions;
     }
 
@@ -101,7 +101,7 @@ public class Client extends AbstractUser implements Serializable {
     /**
      * @return the notifications
      */
-    public List<Notification> getNotifications() {
+    public Set<Notification> getNotifications() {
         return notifications;
     }
 
@@ -109,7 +109,7 @@ public class Client extends AbstractUser implements Serializable {
      * @param permissions
      *            the permissions to set
      */
-    public void setPermissions(List<Permission> permissions) {
+    public void setPermissions(Set<Permission> permissions) {
         this.permissions = permissions;
     }
 
@@ -117,7 +117,7 @@ public class Client extends AbstractUser implements Serializable {
      * @param notifications
      *            the notifications to set
      */
-    public void setNotifications(List<Notification> notifications) {
+    public void setNotifications(Set<Notification> notifications) {
         this.notifications = notifications;
     }
 

@@ -81,7 +81,8 @@ public class EmailServiceTest extends AbstractBatimenWsTest {
         Client johnny = clientDAO.getClientByLoginName("johnny06");
 
         Assert.assertTrue(johnny.getDevisDemandes().size() > 0);
-        boolean noError = emailService.envoiMailConfirmationCreationAnnonce(johnny.getDevisDemandes().get(0));
+        boolean noError = emailService
+                .envoiMailConfirmationCreationAnnonce(johnny.getDevisDemandes().iterator().next());
 
         Assert.assertNotNull(johnny);
         Assert.assertTrue(noError);

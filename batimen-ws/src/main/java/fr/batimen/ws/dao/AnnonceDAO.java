@@ -83,7 +83,7 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
      *            le login du client dont on veut recupérer les annonces.
      * @return Liste d'annonces appartenant à l'utilisateur.
      */
-    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public List<Annonce> getAnnoncesByLogin(String login) {
 
         List<Annonce> listAnnonceByLogin = null;

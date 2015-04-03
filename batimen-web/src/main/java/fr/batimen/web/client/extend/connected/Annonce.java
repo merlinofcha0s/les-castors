@@ -13,6 +13,8 @@ import org.apache.wicket.event.IEvent;
 import org.apache.wicket.extensions.markup.html.basic.SmartLinkLabel;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.image.Image;
+import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
@@ -25,6 +27,7 @@ import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.EntrepriseDTO;
+import fr.batimen.dto.ImageDTO;
 import fr.batimen.dto.PermissionDTO;
 import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
 import fr.batimen.dto.aggregate.AnnonceSelectEntrepriseDTO;
@@ -116,6 +119,7 @@ public class Annonce extends MasterPage {
         initPopupSuppression();
         initPopupDesinscriptionEntreprise();
         initAction();
+        initContainerPhoto();
         affichageDonneesAnnonce();
         affichageEntreprisesInscrites();
         affichageContactAnnonce();
@@ -355,7 +359,9 @@ public class Annonce extends MasterPage {
 
                 final Model<String> nomEntrepriseModelForLbl = new Model<String>(entreprise.getNomComplet());
 
-                LinkLabel linkEntreprise = new LinkLabel("linkEntreprise", nomEntrepriseModelForLbl) {
+                Label labelEntreprise = new Label("labelEntreprise", nomEntrepriseModelForLbl);
+
+                LinkLabel voirProfilEntreprise = new LinkLabel("voirProfilEntreprise", new Model<String>("Voir profil")) {
 
                     private static final long serialVersionUID = 1L;
 
@@ -366,6 +372,22 @@ public class Annonce extends MasterPage {
                         // TODO A Completer quand la page entreprise sera prete
                     }
                 };
+
+                voirProfilEntreprise.setOutputMarkupId(true);
+
+                LinkLabel downloadDevis = new LinkLabel("downloadDevis", new Model<String>("Devis indisponible")) {
+
+                    private static final long serialVersionUID = 1L;
+
+                    @Override
+                    public void onClick() {
+                        // URLEncoder.encode(notification.getArtisanNotifier().getEntreprise().getNomComplet(),
+                        // "UTF-8")
+                        // TODO A Completer quand la page entreprise sera prete
+                    }
+                };
+
+                downloadDevis.setOutputMarkupId(true);
 
                 AjaxLink<Void> linkAcceptDevis = new AjaxLink<Void>("linkAcceptDevis") {
 
@@ -391,7 +413,8 @@ public class Annonce extends MasterPage {
 
                 };
 
-                itemEntreprise.add(linkEntreprise, linkAcceptDevis, linkRefusDevis);
+                itemEntreprise.add(labelEntreprise, linkAcceptDevis, linkRefusDevis, voirProfilEntreprise,
+                        downloadDevis);
             }
         };
 
@@ -441,19 +464,40 @@ public class Annonce extends MasterPage {
             nomEntrepriseSelectionnee = new Model<String>("");
         }
 
-        LinkLabel entrepriseSelectionnee = new LinkLabel("entrepriseSelectionnee", nomEntrepriseSelectionnee) {
+        Label entrepriseSelectionnee = new Label("entrepriseSelectionnee", nomEntrepriseSelectionnee);
+
+        LinkLabel voirProfilEntrepriseEntrepriseSelectionnee = new LinkLabel("voirProfilEntrepriseSelectionnee",
+                new Model<String>("Voir profil")) {
 
             private static final long serialVersionUID = 1L;
 
             @Override
             public void onClick() {
-                // TODO : Faire la redirection quand la page d'entreprise sera
-                // prête
+                // URLEncoder.encode(notification.getArtisanNotifier().getEntreprise().getNomComplet(),
+                // "UTF-8")
+                // TODO A Completer quand la page entreprise sera prete
             }
-
         };
 
-        containerEntrepriseSelectionnee.add(entrepriseSelectionnee);
+        voirProfilEntrepriseEntrepriseSelectionnee.setOutputMarkupId(true);
+
+        LinkLabel downloadDevisEntrepriseSelectionnee = new LinkLabel("downloadDevisEntrepriseSelectionnee",
+                new Model<String>("Devis indisponible")) {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onClick() {
+                // URLEncoder.encode(notification.getArtisanNotifier().getEntreprise().getNomComplet(),
+                // "UTF-8")
+                // TODO A Completer quand la page entreprise sera prete
+            }
+        };
+
+        downloadDevisEntrepriseSelectionnee.setOutputMarkupId(true);
+
+        containerEntrepriseSelectionnee.add(entrepriseSelectionnee, voirProfilEntrepriseEntrepriseSelectionnee,
+                downloadDevisEntrepriseSelectionnee);
         containerEntreprisesGlobales.add(containerEntrepriseSelectionnee);
     }
 
@@ -580,6 +624,51 @@ public class Annonce extends MasterPage {
     private void initPopupDesinscriptionEntreprise() {
         desincriptionArtisanModal = new DesincriptionArtisanModal("desincriptionArtisanModal");
         add(desincriptionArtisanModal);
+    }
+
+    private void initContainerPhoto() {
+
+        WebMarkupContainer photosContainer = new WebMarkupContainer("photosContainer") {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public boolean isVisible() {
+                return !annonceAffichageDTO.getImages().isEmpty();
+            }
+        };
+
+        ListView<ImageDTO> imagesView = new ListView<ImageDTO>("imagesView", annonceAffichageDTO.getImages()) {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected void populateItem(ListItem<ImageDTO> item) {
+                final ImageDTO imageDTO = item.getModelObject();
+                ExternalLink linkOnPhoto = new ExternalLink("thumbnails", imageDTO.getUrl());
+                Image imageHtml = new Image("photo", new Model<String>(imageDTO.getUrl()));
+                imageHtml.add(new AttributeModifier("src", imageDTO.getUrl()));
+                linkOnPhoto.add(imageHtml);
+                item.add(linkOnPhoto);
+            }
+        };
+
+        photosContainer.add(imagesView);
+
+        WebMarkupContainer aucunePhotoContainer = new WebMarkupContainer("aucunePhotoContainer") {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public boolean isVisible() {
+                return annonceAffichageDTO.getImages().isEmpty();
+            }
+        };
+
+        Label aucunePhoto = new Label("aucunePhoto", "Aucune photo du chantier pour le moment :(");
+        aucunePhotoContainer.add(aucunePhoto);
+
+        add(photosContainer, aucunePhotoContainer);
     }
 
     /*

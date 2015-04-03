@@ -50,8 +50,36 @@ public class AnnonceServiceREST implements Serializable {
             LOGGER.debug("Début appel service creation annonce.....");
         }
 
-        String objectInJSON = wsConnector.sendRequest(WsPath.GESTION_ANNONCE_SERVICE_PATH,
+        String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_ANNONCE_SERVICE_PATH,
                 WsPath.GESTION_ANNONCE_SERVICE_CREATION_ANNONCE, nouvelleAnnonce);
+
+        Integer codeRetour = Integer.valueOf(objectInJSON);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Fin appel service creation annonce.....");
+        }
+
+        return codeRetour;
+    }
+
+    /**
+     * Appel le webservice pour creer l'annonce.
+     * 
+     * @param nouvelleAnnonce
+     *            l'objet a envoyé au webservice pour qu'il puisse créer
+     *            l'annonce.
+     * @return Constant.CODE_SERVICE_RETOUR_OK ou
+     *         Constant.CODE_SERVICE_RETOUR_KO
+     */
+    public Integer creationAnnonceAvecImage(CreationAnnonceDTO nouvelleAnnonce) {
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Début appel service creation annonce.....");
+        }
+
+        String objectInJSON = wsConnector.sendRequestWithFile(WsPath.GESTION_ANNONCE_SERVICE_PATH,
+                WsPath.GESTION_ANNONCE_SERVICE_CREATION_ANNONCE_AVEC_IMAGES, nouvelleAnnonce.getPhotos(),
+                nouvelleAnnonce);
 
         Integer codeRetour = Integer.valueOf(objectInJSON);
 
@@ -75,7 +103,7 @@ public class AnnonceServiceREST implements Serializable {
             LOGGER.debug("Début appel service creation annonce.....");
         }
 
-        String objectInJSON = wsConnector.sendRequest(WsPath.GESTION_ANNONCE_SERVICE_PATH,
+        String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_ANNONCE_SERVICE_PATH,
                 WsPath.GESTION_ANNONCE_SERVICE_GET_ANNONCES_BY_LOGIN, login);
 
         List<AnnonceDTO> annonces = AnnonceDTO.deserializeAnnonceDTOList(objectInJSON);
@@ -104,7 +132,7 @@ public class AnnonceServiceREST implements Serializable {
             LOGGER.debug("Début appel service creation annonce.....");
         }
 
-        String objectInJSON = wsConnector.sendRequest(WsPath.GESTION_ANNONCE_SERVICE_PATH,
+        String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_ANNONCE_SERVICE_PATH,
                 WsPath.GESTION_ANNONCE_SERVICE_GET_ANNONCES_BY_ID, demandeAnnonceDTO);
 
         AnnonceAffichageDTO annonce = AnnonceAffichageDTO.deserializeAnnonceAffichageDTO(objectInJSON);
@@ -129,7 +157,7 @@ public class AnnonceServiceREST implements Serializable {
             LOGGER.debug("Début appel service update nb consultation.....");
         }
 
-        String objectInJSON = wsConnector.sendRequest(WsPath.GESTION_ANNONCE_SERVICE_PATH,
+        String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_ANNONCE_SERVICE_PATH,
                 WsPath.GESTION_ANNONCE_SERVICE_UPDATE_NB_CONSULTATION, nbConsultationDTO);
 
         Integer updateOK = Integer.valueOf(objectInJSON);
@@ -155,7 +183,7 @@ public class AnnonceServiceREST implements Serializable {
             LOGGER.debug("Début appel service suppression annonce.....");
         }
 
-        String objectInJSON = wsConnector.sendRequest(WsPath.GESTION_ANNONCE_SERVICE_PATH,
+        String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_ANNONCE_SERVICE_PATH,
                 WsPath.GESTION_ANNONCE_SERVICE_SUPRESS_ANNONCE, demandeAnnonceDTO);
 
         Integer updateOK = Integer.valueOf(objectInJSON);
@@ -181,7 +209,7 @@ public class AnnonceServiceREST implements Serializable {
             LOGGER.debug("Début appel service selection d'une annonce.....");
         }
 
-        String objectInJSON = wsConnector.sendRequest(WsPath.GESTION_ANNONCE_SERVICE_PATH,
+        String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_ANNONCE_SERVICE_PATH,
                 WsPath.GESTION_ANNONCE_SERVICE_SELECTION_UNE_ENTREPRISE, demandeAnnonceDTO);
 
         Integer updateOK = Integer.valueOf(objectInJSON);
@@ -207,7 +235,7 @@ public class AnnonceServiceREST implements Serializable {
             LOGGER.debug("Début appel service selection d'une annonce.....");
         }
 
-        String objectInJSON = wsConnector.sendRequest(WsPath.GESTION_ANNONCE_SERVICE_PATH,
+        String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_ANNONCE_SERVICE_PATH,
                 WsPath.GESTION_ANNONCE_SERVICE_INSCRIPTION_UN_ARTISAN, demandeAnnonceDTO);
 
         Integer updateOK = Integer.valueOf(objectInJSON);
@@ -233,7 +261,7 @@ public class AnnonceServiceREST implements Serializable {
             LOGGER.debug("Début appel service de desinscription d'un artisan.....");
         }
 
-        String objectInJSON = wsConnector.sendRequest(WsPath.GESTION_ANNONCE_SERVICE_PATH,
+        String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_ANNONCE_SERVICE_PATH,
                 WsPath.GESTION_ANNONCE_SERVICE_DESINSCRIPTION_UN_ARTISAN, desinscriptionAnnonceDTO);
 
         Integer updateOK = Integer.valueOf(objectInJSON);

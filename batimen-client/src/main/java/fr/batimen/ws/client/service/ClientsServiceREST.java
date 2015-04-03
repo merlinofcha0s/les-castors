@@ -36,7 +36,7 @@ public class ClientsServiceREST implements Serializable {
             LOGGER.debug("Début appel service de recuperation des données de la page mes annonces");
         }
 
-        String objectInJSON = wsConnector.sendRequest(WsPath.GESTION_CLIENT_SERVICE_PATH,
+        String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_CLIENT_SERVICE_PATH,
                 WsPath.GESTION_CLIENT_SERVICE_INFOS_MES_ANNONCES, login);
 
         mesDevis = MesAnnoncesDTO.deserializeMesDevisDTO(objectInJSON);
@@ -55,7 +55,7 @@ public class ClientsServiceREST implements Serializable {
             LOGGER.debug("Début appel service de recuperation des données de la page mon profil");
         }
 
-        String objectInJSON = wsConnector.sendRequest(WsPath.GESTION_CLIENT_SERVICE_PATH,
+        String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_CLIENT_SERVICE_PATH,
                 WsPath.GESTION_CLIENT_SERVICE_INFOS_MON_PROFIL, login);
 
         monProfilDTO = MonProfilDTO.deserializeMonProfilDTO(objectInJSON);

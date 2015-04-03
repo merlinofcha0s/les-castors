@@ -13,6 +13,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import com.ninja_squad.dbsetup.DbSetup;
 import com.ninja_squad.dbsetup.operation.Operation;
 
+import fr.batimen.web.selenium.common.AbstractITTest;
+
 /**
  * Classe de test selenium pour la popup d'authentification client.
  * 

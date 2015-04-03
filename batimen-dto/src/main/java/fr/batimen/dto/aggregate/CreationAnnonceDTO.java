@@ -57,7 +57,7 @@ public class CreationAnnonceDTO extends AbstractDTO {
     private TypeContact typeContact;
     @NotNull
     private DelaiIntervention delaiIntervention;
-    private List<File> photos = new ArrayList<File>();
+    private transient List<File> photos = new ArrayList<File>();
     @NotNull
     @Size(min = ADRESSE_MIN, max = ADRESSE_MAX)
     private String adresse;

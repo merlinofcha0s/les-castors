@@ -498,7 +498,13 @@ public class NouveauDevis extends MasterPage {
     }
 
     private Integer creationAnnonce() {
-        return annonceService.creationAnnonce(nouvelleAnnonce);
+
+        if (nouvelleAnnonce.getPhotos().isEmpty()) {
+            return annonceService.creationAnnonce(nouvelleAnnonce);
+        } else {
+            return annonceService.creationAnnonceAvecImage(nouvelleAnnonce);
+        }
+
     }
 
     private void loggerAnnonce(CreationAnnonceDTO nouvelleAnnonce) {

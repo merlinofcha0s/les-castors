@@ -1,7 +1,7 @@
 package fr.batimen.ws.service;
 
 import java.io.IOException;
-import java.util.List;
+import java.util.Set;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -63,22 +63,23 @@ public class ClientService {
                 clientByKey.setIsActive(Boolean.TRUE);
 
                 // On active son annonce.
-                List<Annonce> annonces = clientByKey.getDevisDemandes();
+                Set<Annonce> annonces = clientByKey.getDevisDemandes();
                 if (!annonces.isEmpty()) {
 
-                    Annonce annonceToActivate = annonces.get(0);
-                    if (LOGGER.isDebugEnabled()) {
-                        LOGGER.debug("Activation de son annonce : " + annonceToActivate.getId());
-                    }
-                    annonceToActivate.setEtatAnnonce(EtatAnnonce.ACTIVE);
-                    try {
+                    for (Annonce annonceToActivate : annonces) {
                         if (LOGGER.isDebugEnabled()) {
-                            LOGGER.debug("Envoi du mail de confirmation de l'annonce: " + annonceToActivate.getId());
+                            LOGGER.debug("Activation de son annonce : " + annonceToActivate.getId());
                         }
-                        emailService.envoiMailConfirmationCreationAnnonce(annonceToActivate);
-                    } catch (EmailException | MandrillApiError | IOException e) {
-                        if (LOGGER.isErrorEnabled()) {
-                            LOGGER.error("Problème d'envoi d'email d'activation d'annonce", e);
+                        annonceToActivate.setEtatAnnonce(EtatAnnonce.ACTIVE);
+                        try {
+                            if (LOGGER.isDebugEnabled()) {
+                                LOGGER.debug("Envoi du mail de confirmation de l'annonce: " + annonceToActivate.getId());
+                            }
+                            emailService.envoiMailConfirmationCreationAnnonce(annonceToActivate);
+                        } catch (EmailException | MandrillApiError | IOException e) {
+                            if (LOGGER.isErrorEnabled()) {
+                                LOGGER.error("Problème d'envoi d'email d'activation d'annonce", e);
+                            }
                         }
                     }
                 }

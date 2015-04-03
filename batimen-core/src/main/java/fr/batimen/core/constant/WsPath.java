@@ -25,6 +25,7 @@ public class WsPath {
     // Path Gestion Annonce
     public static final String GESTION_ANNONCE_SERVICE_PATH = "gestionAnnonce";
     public static final String GESTION_ANNONCE_SERVICE_CREATION_ANNONCE = "creationAnnonce";
+    public static final String GESTION_ANNONCE_SERVICE_CREATION_ANNONCE_AVEC_IMAGES = "creationAnnonceAvecImages";
     public static final String GESTION_ANNONCE_SERVICE_GET_ANNONCES_BY_LOGIN = "getAnnonceByLogin";
     public static final String GESTION_ANNONCE_SERVICE_GET_ANNONCES_BY_ID = "getAnnonceByID";
     public static final String GESTION_ANNONCE_SERVICE_UPDATE_NB_CONSULTATION = "updateNbConsultation";

@@ -1,5 +1,6 @@
 package fr.batimen.test.ws.facade;
 
+import java.io.File;
 import java.util.List;
 
 import javax.ejb.TransactionAttribute;
@@ -97,6 +98,37 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     }
 
     /**
+     * Cas de test : le client est inscrit sur le site. Il faut donc creer
+     * l'annonce mais ne pas enregistrer son compte, juste lier le compte de
+     * l'utilisateur avec l'annonce.<br/>
+     * De plus dans ce cas, il enregistre des photos avec son annonce
+     * 
+     * On ignore volontairement date inscription et datemaj car elles sont
+     * généréés dynamiquement lors de la creation de l'annonce.
+     */
+    @Test
+    @UsingDataSet("datasets/in/client_creation_annonce.yml")
+    @ShouldMatchDataSet(value = "datasets/out/creation_annonce_is_signed_in.yml", excludeColumns = { "id", "datemaj",
+            "datecreation" })
+    public void testCreationAnnonceIsSignedInWithImage() {
+        creationAnnonceDTO.setIsSignedUp(true);
+
+        // On recupére la photo dans les ressources de la webapp de test
+        ClassLoader classLoader = getClass().getClassLoader();
+        File file = new File(classLoader.getResource("img/castor.jpg").getFile());
+        creationAnnonceDTO.getPhotos().add(file);
+
+        Integer codeRetour = annonceServiceREST.creationAnnonceAvecImage(creationAnnonceDTO);
+        Assert.assertEquals(CodeRetourService.RETOUR_OK, codeRetour);
+
+        List<Annonce> annonces = annonceDAO.getAnnoncesByLogin("johnny06");
+
+        for (Annonce annonce : annonces) {
+            Assert.assertFalse(annonce.getImages().isEmpty());
+        }
+    }
+
+    /**
      * Cas de test : Le client tente de creer une annonce qui existe déjà avec
      * le même titre.
      * 
@@ -128,7 +160,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
-    public void testGetAnnonceByID() {
+    public void testGetAnnonceByIDForAffichage() {
         DemandeAnnonceDTO demandeAnnonceDTO = createDemandeAnnonceDTO(
                 "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
                 "pebronne", TypeCompte.CLIENT);
@@ -144,6 +176,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
         Assert.assertNotNull(annonceAffichage.getAdresse());
         Assert.assertNotNull(annonceAffichage.getEntrepriseSelectionnee());
+        Assert.assertFalse(annonceAffichage.getImages().isEmpty());
     }
 
     /**
@@ -509,7 +542,8 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
     public void testDesinscriptionArtisanAvecIDValid() {
-        testDesinscriptionArtisan("pebronne");
+        Annonce annonce = testDesinscriptionArtisan("pebronne");
+        Assert.assertEquals(1, annonce.getArtisans().size());
     }
 
     /**
@@ -519,10 +553,23 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
     public void testDesinscriptionArtisanAvecIDValidByAdmin() {
-        testDesinscriptionArtisan("admin");
+        Annonce annonce = testDesinscriptionArtisan("admin");
+        Assert.assertEquals(1, annonce.getArtisans().size());
     }
 
-    private void testDesinscriptionArtisan(String loginDemandeur) {
+    /**
+     * Cas de test : Un administrateur ne veut pas d'un artisan et le desinscrit
+     * d'une annonce
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonce_5_artisans.yml")
+    public void testDesinscriptionArtisanAvecIDValidReactivationAnnonce() {
+        Annonce annonce = testDesinscriptionArtisan("pebronne");
+        Assert.assertEquals(4, annonce.getArtisans().size());
+        Assert.assertEquals(EtatAnnonce.ACTIVE, annonce.getEtatAnnonce());
+    }
+
+    private Annonce testDesinscriptionArtisan(String loginDemandeur) {
         DesinscriptionAnnonceDTO desinscriptionAnnonceDTO = new DesinscriptionAnnonceDTO();
         desinscriptionAnnonceDTO
                 .setHashID("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
@@ -538,7 +585,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
                         "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
                         false);
 
-        Assert.assertEquals(1, annonce.getArtisans().size());
+        return annonce;
     }
 
     private DemandeAnnonceDTO initAndGetDemandeAnnonceDTO(String hash, String loginDemandeur, TypeCompte typeCompte) {

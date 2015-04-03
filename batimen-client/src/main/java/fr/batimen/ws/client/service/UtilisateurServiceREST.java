@@ -44,7 +44,7 @@ public class UtilisateurServiceREST implements Serializable {
             LOGGER.debug("Début appel service login + deserialization");
         }
 
-        String objectInJSON = wsConnector.sendRequest(WsPath.GESTION_UTILISATEUR_SERVICE_PATH,
+        String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_UTILISATEUR_SERVICE_PATH,
                 WsPath.GESTION_UTILISATEUR_SERVICE_LOGIN, loginDTO);
 
         ClientDTO clientDTO = ClientDTO.deserializeUserDTO(objectInJSON);
@@ -69,7 +69,7 @@ public class UtilisateurServiceREST implements Serializable {
             LOGGER.debug("Début appel service de recuperation client par email + deserialization");
         }
 
-        String objectInJSON = wsConnector.sendRequest(WsPath.GESTION_UTILISATEUR_SERVICE_PATH,
+        String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_UTILISATEUR_SERVICE_PATH,
                 WsPath.GESTION_UTILISATEUR_SERVICE_BY_EMAIL, email);
 
         ClientDTO clientDTO = ClientDTO.deserializeUserDTO(objectInJSON);
@@ -89,7 +89,7 @@ public class UtilisateurServiceREST implements Serializable {
             LOGGER.debug("Début appel service de recuperation client par email + deserialization");
         }
 
-        String objectInJSON = wsConnector.sendRequest(WsPath.GESTION_UTILISATEUR_SERVICE_PATH,
+        String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_UTILISATEUR_SERVICE_PATH,
                 WsPath.GESTION_UTILISATEUR_SERVICE_ACTIVATION, cleActivation);
 
         resultatService = Integer.parseInt(objectInJSON);
@@ -109,7 +109,7 @@ public class UtilisateurServiceREST implements Serializable {
             LOGGER.debug("Début appel service de recuperation du hash par login + deserialization");
         }
 
-        String objectInJSON = wsConnector.sendRequest(WsPath.GESTION_UTILISATEUR_SERVICE_PATH,
+        String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_UTILISATEUR_SERVICE_PATH,
                 WsPath.GESTION_UTILISATEUR_SERVICE_HASH, login);
 
         hash = String.valueOf(objectInJSON);
@@ -135,7 +135,7 @@ public class UtilisateurServiceREST implements Serializable {
             LOGGER.debug("Début appel service de mise a jour des informations du client");
         }
 
-        String objectInJSON = wsConnector.sendRequest(WsPath.GESTION_UTILISATEUR_SERVICE_PATH,
+        String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_UTILISATEUR_SERVICE_PATH,
                 WsPath.GESTION_UTILISATEUR_SERVICE_UPDATE_INFO, utilisateurToUpdate);
 
         codeRetour = Integer.valueOf(objectInJSON);
@@ -154,7 +154,7 @@ public class UtilisateurServiceREST implements Serializable {
             LOGGER.debug("Début appel service de recuperation des roles par login + deserialization");
         }
 
-        String objectInJSON = wsConnector.sendRequest(WsPath.GESTION_UTILISATEUR_SERVICE_PATH,
+        String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_UTILISATEUR_SERVICE_PATH,
                 WsPath.GESTION_UTILISATEUR_SERVICE_ROLES, login);
 
         roles = String.valueOf(objectInJSON);

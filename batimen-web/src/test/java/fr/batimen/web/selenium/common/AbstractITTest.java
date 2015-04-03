@@ -1,4 +1,4 @@
-package fr.batimen.web.selenium;
+package fr.batimen.web.selenium.common;
 
 import static com.ninja_squad.dbsetup.Operations.deleteAllFrom;
 import static com.ninja_squad.dbsetup.Operations.insertInto;

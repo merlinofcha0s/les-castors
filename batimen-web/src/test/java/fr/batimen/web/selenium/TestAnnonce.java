@@ -1,6 +1,15 @@
 package fr.batimen.web.selenium;
 
 import static com.ninja_squad.dbsetup.Operations.sequenceOf;
+import static fr.batimen.web.selenium.dataset.AnnonceDataset.INSERT_ADRESSE_DATA;
+import static fr.batimen.web.selenium.dataset.AnnonceDataset.INSERT_ANNONCE_ARTISAN;
+import static fr.batimen.web.selenium.dataset.AnnonceDataset.INSERT_ANNONCE_DATA;
+import static fr.batimen.web.selenium.dataset.AnnonceDataset.INSERT_ANNONCE_IMAGE;
+import static fr.batimen.web.selenium.dataset.AnnonceDataset.INSERT_ARTISAN_DATA;
+import static fr.batimen.web.selenium.dataset.AnnonceDataset.INSERT_ARTISAN_PERMISSION;
+import static fr.batimen.web.selenium.dataset.AnnonceDataset.INSERT_ENTREPRISE_DATA;
+import static fr.batimen.web.selenium.dataset.AnnonceDataset.INSERT_NOTATION_DATA;
+import static fr.batimen.web.selenium.dataset.AnnonceDataset.INSERT_NOTIFICATION_DATA;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
@@ -20,7 +29,7 @@ import com.ninja_squad.dbsetup.operation.Operation;
 
 import fr.batimen.core.constant.UrlPage;
 import fr.batimen.dto.enums.TypeCompte;
-import fr.batimen.web.selenium.dataset.AnnonceDataset;
+import fr.batimen.web.selenium.common.AbstractITTest;
 
 /**
  * Test d'intégration pour la page d'affichage d'une annonce.
@@ -32,11 +41,9 @@ public class TestAnnonce extends AbstractITTest {
 
     @Override
     public void prepareDB() throws Exception {
-        Operation operation = sequenceOf(DELETE_ALL, INSERT_USER_DATA, INSERT_USER_PERMISSION,
-                AnnonceDataset.INSERT_ADRESSE_DATA, AnnonceDataset.INSERT_ENTREPRISE_DATA,
-                AnnonceDataset.INSERT_ARTISAN_DATA, AnnonceDataset.INSERT_ARTISAN_PERMISSION,
-                AnnonceDataset.INSERT_NOTATION_DATA, AnnonceDataset.INSERT_ANNONCE_DATA,
-                AnnonceDataset.INSERT_NOTIFICATION_DATA, AnnonceDataset.INSERT_ANNONCE_ARTISAN);
+        Operation operation = sequenceOf(DELETE_ALL, INSERT_USER_DATA, INSERT_USER_PERMISSION, INSERT_ADRESSE_DATA,
+                INSERT_ENTREPRISE_DATA, INSERT_ARTISAN_DATA, INSERT_ARTISAN_PERMISSION, INSERT_NOTATION_DATA,
+                INSERT_ANNONCE_DATA, INSERT_NOTIFICATION_DATA, INSERT_ANNONCE_ARTISAN, INSERT_ANNONCE_IMAGE);
         DbSetup dbSetup = new DbSetup(getDriverManagerDestination(), operation);
         dbSetup.launch();
     }
@@ -59,6 +66,29 @@ public class TestAnnonce extends AbstractITTest {
         WebElement checkConditionAnnoncePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.presenceOfElementLocated(By.id("containerContactMaster")));
         assertNotNull(checkConditionAnnoncePresent);
+        assertEquals("Modifier votre annonce", driver.findElement(By.linkText("Modifier votre annonce")).getText());
+        assertEquals("Supprimer l'annonce", driver.findElement(By.id("supprimerAnnonce")).getText());
+        assertEquals("Aucune photo du chantier pour le moment :(", driver.findElement(By.id("aucunePhoto")).getText());
+
+    }
+
+    /**
+     * Cas de test : Le client accede a son annonce en se connectant a les
+     * castors, il doit y arriver
+     * 
+     */
+    @Test
+    public void testAnnonceAffichageWithClientWithImage() {
+        connectAndGoToAnnonce(TypeCompte.CLIENT, "lolmdr");
+        assertCoreInformationOfAnnonce();
+
+        WebElement checkConditionAnnoncePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.presenceOfElementLocated(By.id("containerContactMaster")));
+        WebElement checkConditionImageAnnoncePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.presenceOfElementLocated(By
+                        .xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[3]/div/div/div[2]/div[1]/a")));
+        assertNotNull(checkConditionAnnoncePresent);
+        assertNotNull(checkConditionImageAnnoncePresent);
         assertEquals("Modifier votre annonce", driver.findElement(By.linkText("Modifier votre annonce")).getText());
         assertEquals("Supprimer l'annonce", driver.findElement(By.id("supprimerAnnonce")).getText());
 
@@ -85,6 +115,7 @@ public class TestAnnonce extends AbstractITTest {
                 .findElement(
                         By.cssSelector("#containerEnteprisesInscrites > div.row-fluid > div.span12 > div.bg_title > h2.headInModule"))
                 .isDisplayed());
+        assertEquals("Aucune photo du chantier pour le moment :(", driver.findElement(By.id("aucunePhoto")).getText());
     }
 
     /**
@@ -112,6 +143,7 @@ public class TestAnnonce extends AbstractITTest {
                 driver.findElement(
                         By.cssSelector("#containerEnteprisesInscrites > div.row-fluid > div.span12 > div.bg_title > h2.headInModule"))
                         .getText());
+        assertEquals("Aucune photo du chantier pour le moment :(", driver.findElement(By.id("aucunePhoto")).getText());
     }
 
     /**
@@ -194,7 +226,7 @@ public class TestAnnonce extends AbstractITTest {
      */
     @Test
     public void testInscriptionArtisanAnnonce() {
-        connectAndGoToAnnonce(TypeCompte.ARTISAN, "lolmdr");
+        connectAndGoToAnnonce(TypeCompte.ARTISAN, "lolxd");
         assertCoreInformationOfAnnonce();
         driver.findElement(By.id("inscrireAnnonce")).click();
 
@@ -284,7 +316,7 @@ public class TestAnnonce extends AbstractITTest {
         assertCoreInformationOfAnnonce();
         // Le lien de selection de la premiere entreprise
         driver.findElement(
-                By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[4]/div/div/div/div[2]/div[2]/a[2]"))
+                By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[4]/div/div/div/div[2]/div[2]/div[3]/a[2]"))
                 .click();
 
         WebElement checkConditionAnnoncePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
@@ -309,7 +341,7 @@ public class TestAnnonce extends AbstractITTest {
         assertCoreInformationOfAnnonce();
         // Le lien de selection de la premiere entreprise
         driver.findElement(
-                By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[4]/div/div/div/div[2]/div[2]/a[1]"))
+                By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[4]/div/div/div/div[2]/div[2]/div[3]/a[1]"))
                 .click();
 
         WebElement checkConditionAnnoncePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))

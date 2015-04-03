@@ -1,11 +1,13 @@
 package fr.batimen.ws.client;
 
+import java.io.File;
 import java.io.Serializable;
 import java.lang.reflect.Type;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 
 import javax.inject.Singleton;
@@ -30,6 +32,9 @@ import com.sun.jersey.api.client.config.ClientConfig;
 import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
 import com.sun.jersey.client.urlconnection.HTTPSProperties;
+import com.sun.jersey.multipart.FormDataBodyPart;
+import com.sun.jersey.multipart.FormDataMultiPart;
+import com.sun.jersey.multipart.file.FileDataBodyPart;
 import com.sun.jersey.multipart.impl.MultiPartWriter;
 
 import fr.batimen.core.constant.Constant;
@@ -83,12 +88,46 @@ public class WsConnector implements Serializable {
      *            l'objet que l'on veut transmettre au WS
      * @return Une chaine de caractere encodée JSON
      */
-    public String sendRequest(String controller, String method, Object object) {
+    public String sendRequestJSON(String controller, String method, Object object) {
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Construction de la requete ws....");
         }
 
+        WebResource call = generateWebResource(controller, method);
+
+        String json = serializeToJSON(object);
+
+        String reponse = call.accept(MediaType.APPLICATION_JSON_TYPE).header("ACCEPT-CHARSET", "UTF-8")
+                .entity(json, MediaType.APPLICATION_JSON_TYPE).post(String.class);
+
+        // Au cas ou : dans le cas d'une requete en get ne pas oublier de faire
+        // un response.readentity pour fermer la requete HTTP
+        return reponse;
+    }
+
+    public String sendRequestWithFile(String controller, String method, List<File> files, Object object) {
+        WebResource call = generateWebResource(controller, method);
+
+        String json = serializeToJSON(object);
+
+        FormDataMultiPart form = new FormDataMultiPart();
+
+        FormDataBodyPart jsonContent = new FormDataBodyPart("content", json, MediaType.APPLICATION_JSON_TYPE);
+        form.bodyPart(jsonContent);
+
+        for (File file : files) {
+            FileDataBodyPart fileBodyPart = new FileDataBodyPart("files", file, MediaType.APPLICATION_OCTET_STREAM_TYPE);
+            form.bodyPart(fileBodyPart);
+        }
+
+        String reponse = call.type(MediaType.MULTIPART_FORM_DATA).accept(MediaType.APPLICATION_OCTET_STREAM_TYPE)
+                .accept(MediaType.APPLICATION_JSON_TYPE).post(String.class, form);
+
+        return reponse;
+    }
+
+    private WebResource generateWebResource(String controller, String method) {
         StringBuilder adresseService = new StringBuilder("https://");
         adresseService.append(ipServeur);
         adresseService.append(":");
@@ -104,17 +143,7 @@ public class WsConnector implements Serializable {
         adresseService.append("/");
         adresseService.append(method);
 
-        WebResource call = client.resource(adresseService.toString());
-
-        String json = serializeToJSON(object);
-
-        String reponse = call.accept(MediaType.APPLICATION_JSON_TYPE).header("ACCEPT-CHARSET", "UTF-8")
-                .entity(json, MediaType.APPLICATION_JSON_TYPE).post(String.class);
-
-        // Au cas ou : dans le cas d'une requete en get ne pas oublier de faire
-        // un response.readentity pour fermer la requete HTTP
-        return reponse;
-
+        return client.resource(adresseService.toString());
     }
 
     private String serializeToJSON(Object object) {

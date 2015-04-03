@@ -16,18 +16,21 @@ public class AnnonceDataset {
                     "Installation électrique", 0, 0, "toto", "tata", 0, 200005, 100001, null, null)
             .values(200011, "2014-01-10", "2014-01-10", "0",
                     "Construction compliqué qui necessite des connaissance en geologie", "0", 0,
-                    "Installation électrique", 0, 0, "lolmdr", "tata", 0, 200014, 100001, 200009, 200013).build();
+                    "Installation électrique", 0, 0, "lolmdr", "tata", 0, 200014, 100001, 200009, 200013)
+            .values(200012, "2014-01-10", "2014-01-10", "0",
+                    "Construction compliqué qui necessite des connaissance en geologie", "0", 0,
+                    "Installation électrique", 0, 0, "lolxd", "titi", 0, 200015, 100001, null, null).build();
 
     public static final Operation INSERT_ARTISAN_DATA = insertInto("artisan")
-            .columns("civilite", "email", "nom", "prenom", "login", "password", "id", "numeroTel", "dateInscription",
+            .columns("id", "civilite", "email", "nom", "prenom", "login", "password", "numeroTel", "dateInscription",
                     "isActive", "cleActivation", "entreprise_id")
-            .values(0, "pebronArtisan@batimen.fr", "PebronArtisan", "Toto", "pebron",
-                    "$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=", 200008,
-                    "0614125698", "2014-01-10", true, "lolmdr07", 200009).build();
+            .values(200008, 0, "pebronArtisan@batimen.fr", "PebronArtisan", "Toto", "pebron",
+                    "$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=", "0614125698",
+                    "2014-01-10", true, "lolmdr07", 200009).build();
 
     public static final Operation INSERT_ENTREPRISE_DATA = insertInto("entreprise")
             .columns("id", "nomcomplet", "statutjuridique", "siret", "datecreation", "adresse_id")
-            .values(200009, "Entreprise de toto", 0, "43394298400017", "2014-03-23", 200005).build();
+            .values(200009, "Entreprise de toto", 0, "43394298400017", "2014-03-23", 200006).build();
 
     public static final Operation INSERT_NOTIFICATION_DATA = insertInto("notification")
             .columns("id", "dateNotification", "typeNotification", "pourquinotification", "statutnotification",
@@ -38,7 +41,9 @@ public class AnnonceDataset {
     public static final Operation INSERT_ADRESSE_DATA = insertInto("adresse")
             .columns("id", "adresse", "codepostal", "complementadresse", "ville", "departement")
             .values(200005, "254 chemin du test", "06600", "Residence du test", "Test City", 06)
-            .values(200014, "254 chemin du test", "06600", "Residence du test", "Test City", 06).build();
+            .values(200006, "260 chemin des lol", "06500", "Residence des lol", "Test lol", 07)
+            .values(200014, "254 chemin du test", "06600", "Residence du test", "Test City", 06)
+            .values(200015, "270 chemin du mdr", "08800", "Residence du mdr", "Test mdr", 8).build();
 
     public static final Operation INSERT_NOTATION_DATA = insertInto("notation")
             .columns("id", "commentaire", "dateNotation", "score", "artisan_fk")
@@ -49,5 +54,11 @@ public class AnnonceDataset {
             .columns("typecompte", "artisan_fk").values(3, 200008).build();
 
     public static final Operation INSERT_ANNONCE_ARTISAN = insertInto("annonce_artisan")
-            .columns("annonce_id", "artisans_id").values(200010, 200008).build();
+            .columns("annonce_id", "artisans_id").values(200010, 200008).values(200011, 200008).build();
+
+    public static final Operation INSERT_ANNONCE_IMAGE = insertInto("image")
+            .columns("id", "url", "id_annonce")
+            .values(10001,
+                    "http://res.cloudinary.com/lescastors/image/upload/v1427874120/test/zbeod6tici6yrphpco39.jpg",
+                    200011).build();
 }

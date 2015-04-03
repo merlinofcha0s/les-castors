@@ -7,6 +7,8 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import fr.batimen.web.selenium.common.AbstractITTest;
+
 public class TestContactPage extends AbstractITTest {
 
     @Override

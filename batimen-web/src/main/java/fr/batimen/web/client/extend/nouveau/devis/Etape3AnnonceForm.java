@@ -1,6 +1,9 @@
 package fr.batimen.web.client.extend.nouveau.devis;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -13,11 +16,16 @@ import org.apache.wicket.markup.html.form.Radio;
 import org.apache.wicket.markup.html.form.RadioGroup;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.MultiFileUploadField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.model.PropertyModel;
+import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.apache.wicket.validation.validator.StringValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import fr.batimen.dto.PermissionDTO;
 import fr.batimen.dto.SousCategorieMetierDTO;
@@ -33,6 +41,7 @@ import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.web.client.extend.nouveau.devis.event.CategorieEvent;
 import fr.batimen.web.client.extend.nouveau.devis.event.ChangementEtapeClientEvent;
+import fr.batimen.web.client.validator.FileUploadValidator;
 
 /**
  * Form de l'etape 3 de création d'annonce.
@@ -44,14 +53,20 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
 
     private static final long serialVersionUID = 6521295805432818556L;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(Etape3AnnonceForm.class);
+
     private final CreationAnnonceDTO nouvelleAnnonce;
+
+    private final Collection<FileUpload> photos = new ArrayList<FileUpload>();
 
     public Etape3AnnonceForm(String id, IModel<CreationAnnonceDTO> model) {
         super(id, model);
 
         // Mode Multipart pour l'upload de fichier.
-        this.setMultiPart(true);
-        this.setMarkupId("formEtape3");
+        setMultiPart(true);
+        setFileMaxSize(Bytes.megabytes(10));
+
+        setMarkupId("formEtape3");
 
         nouvelleAnnonce = model.getObject();
 
@@ -109,8 +124,10 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
         typeTravaux.add(new RequiredBorderBehaviour());
         typeTravaux.setMarkupId("typeTravaux");
 
-        MultiFileUploadField photoField = new MultiFileUploadField("photos", 5);
+        MultiFileUploadField photoField = new MultiFileUploadField("photos", new PropertyModel<Collection<FileUpload>>(
+                this, "photos"), 5, true);
         photoField.setMarkupId("photoField");
+        photoField.add(new FileUploadValidator());
 
         TextField<String> adresseField = new TextField<String>("adresse");
         adresseField.setRequired(true);
@@ -153,6 +170,17 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
              */
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                nouvelleAnnonce.getPhotos().clear();
+                for (FileUpload photo : photos) {
+                    try {
+                        nouvelleAnnonce.getPhotos().add(photo.writeToTempFile());
+                    } catch (IOException e) {
+                        if (LOGGER.isErrorEnabled()) {
+                            LOGGER.error("Problème durant l'ecriture de la photo sur le disque", e);
+                        }
+                    }
+                }
+
                 nouvelleAnnonce.setNumeroEtape(4);
                 ChangementEtapeClientEvent changementEtapeEventClient = new ChangementEtapeClientEvent(target,
                         nouvelleAnnonce);
@@ -196,4 +224,12 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
                 adresseField, adresseComplementField, codePostalField, villeField, validateQualification, typeTravaux,
                 etapePrecedente3);
     }
+
+    /**
+     * @return the photos
+     */
+    public Collection<FileUpload> getPhotos() {
+        return photos;
+    }
+
 }

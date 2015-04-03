@@ -1,9 +1,10 @@
 <wicket:head>
-    <link
-        rel="stylesheet"
-        type="text/css"
-        href="css/font_icons8.css" />
-</wicket:head>s
+	<link
+		rel="stylesheet"
+		type="text/css"
+		href="css/font_icons8.css" />
+</wicket:head>
+s
 <wicket:extend>
 	<div class="row-fluid">
 		<div wicket:id="profil"></div>
@@ -89,20 +90,28 @@
 			</div>
 			<div id="containerPhoto">
 				<div class="row-fluid">
-					<div class="span12 module_cont module_gallery">
+					<div
+						class="span12 module_cont module_gallery"
+						wicket:id="photosContainer">
 						<div class="bg_title">
 							<h2 class="headInModule">Photos du chantier</h2>
 						</div>
-						<div class="list-of-images">
-							<div class="gallery_item view view-tenth">
+						<div
+							class="list-of-images"
+							id="galleriePhotoAnnonce">
+							<div
+								class="gallery_item view view-tenth"
+								wicket:id="imagesView">
 								<a
-									href="img/pictures/gallery1.jpg"
-									class="prettyPhoto"> <img
+									href=""
+									class="prettyPhoto"
+									wicket:id="thumbnails"> <img
 									class="gallery-stand-img"
-									src="img/pictures/gallery1.jpg"
+									src=""
 									alt=""
 									width="200"
-									height="210">
+									height="210"
+									wicket:id="photo">
 									<div class="mask">
 										<div class="gallery_descr">
 											<h2 class="post_type_image">Lorem ipsum</h2>
@@ -111,43 +120,18 @@
 									</div>
 								</a>
 							</div>
-							<div class="gallery_item view view-tenth">
-								<a
-									href="img/pictures/gallery2.jpg"
-									class="prettyPhoto"> <img
-									class="gallery-stand-img"
-									src="img/pictures/gallery2.jpg"
-									alt=""
-									width="200"
-									height="210">
-									<div class="mask">
-										<div class="gallery_descr">
-											<h2 class="post_type_image">Pellentesque</h2>
-											<p>Pellentesque consequat viverra lorem a gestas placerat ligula.</p>
-										</div>
-									</div>
-								</a>
-							</div>
-							<div class="gallery_item view view-tenth">
-								<a
-									href="http://vimeo.com/47989207"
-									class="prettyPhoto"> <img
-									class="gallery-stand-img"
-									src="img/pictures/gallery3.jpg"
-									alt=""
-									width="200"
-									height="210">
-									<div class="mask">
-										<div class="gallery_descr">
-											<h2 class="post_type_video">gestas placerat</h2>
-											<p>Pellentesque consequat viverra lorem a gestas placerat ligula.</p>
-										</div>
-									</div>
-								</a>
-							</div>
 							<div class="clear"></div>
 							<a id="anchor6"></a>
 						</div>
+					</div>
+					<div
+						class="span12"
+						wicket:id="aucunePhotoContainer">
+						<div class="bg_title">
+							<h2 class="headInModule">Photos du chantier</h2>
+						</div>
+						<div wicket:id="aucunePhoto" id="aucunePhoto"></div>
+						<div class="clear"></div>
 					</div>
 				</div>
 				<!-- .module_cont -->
@@ -161,7 +145,7 @@
 								<h2 class="headInModule">Entreprises qui souhaitent vous contacter</h2>
 							</div>
 							<div
-								class="containerEnptrepriseSelectionnee row-fluid"
+								class="containerEntrepriseSelectionnee row-fluid"
 								wicket:id="entreprises">
 								<div class="span4">
 									<div class="containerGlyph">
@@ -169,20 +153,40 @@
 											class="imgEntreprise"
 											src="img/store.png" />
 									</div>
-									<a
-										class="linkEntreprise"
+									<span
+										class="labelEntreprise"
 										href="#"
-										wicket:id="linkEntreprise">Ké buenos enterprise</a>
+										wicket:id="labelEntreprise">Ké buenos enterprise</span>
 								</div>
 								<div class="span8 containerAcceptDevis">
-									<span class="icon-like glyphAnnonce"></span> <a
-										class="linkAcceptDevis"
-										href="#"
-										wicket:id="linkAcceptDevis">Accepter ce devis</a> <span class="icon-Cross glyphAnnonce containerLinkRefuser"></span>
-									<a
-										href="#"
-										class="linkAcceptDevis"
-										wicket:id="linkRefusDevis">Refuser ce devis</a>
+									<div class="menuEntrepriseInscrite">
+										<span class="icon-Eye glyphAnnonce"></span> <a
+											href="#"
+											wicket:id="voirProfilEntreprise"
+											class="lienMenuEntrepriseInscrite"></a>
+									</div>
+									<div class="menuEntrepriseInscrite containerLienDevisEntreprise">
+										<span class="icon-Letter glyphAnnonce"></span> <a
+											href="#"
+											wicket:id="downloadDevis"
+											class="lienMenuEntrepriseInscrite"></a>
+									</div>
+									<div class="menuEntrepriseInscrite">
+										<span
+											class="icon-Star glyphAnnonce"
+											id="iconStarMenuEntrepriseSelection"></span>
+										<div
+											id="labelEntrepriseChoisi"
+											style="">Entreprise choisi ?</div>
+										<a
+											class="linkAcceptDevis"
+											href="#"
+											wicket:id="linkAcceptDevis"
+											id="lienOuiSelectionEntreprise">Oui</a> / <a
+											href="#"
+											class="linkAcceptDevis"
+											wicket:id="linkRefusDevis">Non</a>
+									</div>
 								</div>
 							</div>
 							<div wicket:id="aucuneEntreprise"></div>
@@ -205,9 +209,24 @@
 											class="imgEntreprise"
 											src="img/store.png" />
 									</div>
-									<a wicket:id="entrepriseSelectionnee"
-										class="linkEntreprise"
-										href="#">Ké buenos enterprise</a>
+									<span
+										wicket:id="entrepriseSelectionnee"
+										class="labelEntreprise"
+										href="#">Ké buenos enterprise</span>
+								</div>
+								<div class="span8">
+									<div class="menuEntrepriseSelectionnee">
+										<span class="icon-Eye glyphAnnonce"></span> <a
+											href="#"
+											wicket:id="voirProfilEntrepriseSelectionnee"
+											class="lienMenuEntrepriseInscrite"></a>
+									</div>
+									<div class="menuEntrepriseSelectionnee containerLienDevisEntreprise">
+										<span class="icon-Letter glyphAnnonce"></span> <a
+											href="#"
+											wicket:id="downloadDevisEntrepriseSelectionnee"
+											class="lienMenuEntrepriseInscrite"></a>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -218,7 +237,9 @@
 			</div>
 		</div>
 		<div class="span3">
-			<div class="containerActions" wicket:id="containerActions">
+			<div
+				class="containerActions"
+				wicket:id="containerActions">
 				<h2 class="headInModule">Action</h2>
 				<div wicket:id="modifierAnnonceContainer">
 					<div class="containerGlyph">
@@ -244,12 +265,12 @@
 				</div>
 				<div wicket:id="inscrireAnnonceContainer">
 					<div class="containerGlyph">
-						<span class="icon-Plus glyphAnnonce"></span>
+						<span class="icon-PeopleTalk glyphAnnonce"></span>
 					</div>
 					<div class="sidebarRightWithPaddingTop">
 						<a
 							href="#"
-							wicket:id="inscrireAnnonce">S'inscrire à l'annonce</a>
+							wicket:id="inscrireAnnonce">Contacter l'annonceur</a>
 					</div>
 				</div>
 				<div
@@ -265,7 +286,9 @@
 					</div>
 				</div>
 			</div>
-			<div id="containerContactMaster" wicket:id="containerContactMaster">
+			<div
+				id="containerContactMaster"
+				wicket:id="containerContactMaster">
 				<div
 					id="containerContact"
 					wicket:id="containerContact">
@@ -278,7 +301,9 @@
 							class="contactInfo"
 							wicket:id="adresse">210 chemin du devis, 06600 Castors cedex</div>
 					</div>
-					<div class="containerInfo" wicket:id="containerTelContact">
+					<div
+						class="containerInfo"
+						wicket:id="containerTelContact">
 						<div class="containerGlyph">
 							<span class="icon-Handset glyphAnnonce"></span>
 						</div>

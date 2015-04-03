@@ -28,6 +28,10 @@ permission:
     artisan_fk: 1004
   - typecompte: 3
     artisan_fk: 1005
+  - typecompte: 3
+    artisan_fk: 1005
+  - typecompte: 3
+    artisan_fk: 1005
 artisan:
   - id: 1003
     numerotel: "0615125645"
@@ -65,6 +69,30 @@ artisan:
     isActive: true
     cleactivation: "NTNkN2RmYzVkNWU2MDZkZjZlYTVjZGQ2ZGE0ZjljY2JhNGJjZWY5MmIxNmNiOWJmMjk2ZDVhNDY3OTEzMTIyZA=2"
     entreprise_id: 1005
+  - id: 1006
+    numerotel: "0615125647"
+    password: $s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=
+    login: artisan2
+    email: artisan2@lol.com
+    dateinscription: "2014-03-10 10:00:00"
+    civilite: 0
+    prenom: Jean
+    nom: De la Pebronne
+    isActive: true
+    cleactivation: "NTNkN2RmYzVkNWU2MDZkZjZlYTVjZGQ2ZGE0ZjljY2JhNGJjZWY5MmIxNmNiOWJmMjk2ZDVkNDY3OTEzMTIyZA=2"
+    entreprise_id: 1006
+  - id: 1007
+    numerotel: "0615125650"
+    password: $s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=
+    login: artisan3
+    email: artisan3@lol.com
+    dateinscription: "2014-03-11 10:00:00"
+    civilite: 0
+    prenom: Nicolas
+    nom: De la Pebronne
+    isActive: true
+    cleactivation: "NTNkN2RmYzVkNWU2MDZkZjZlYTVjZGQ2ZGE0ZjljY2JhNGJjZWY5MmIxNmNiOWJmMjp2ZDVkNDY3OTEzMTIyZA=2"
+    entreprise_id: 1007
 entreprise:
   - id: 1003
     nomComplet: Pebronne enterprise
@@ -90,6 +118,22 @@ entreprise:
     specialite: brique
     nbemployees: 20
     adresse_id: 105
+  - id: 1006
+    nomComplet: Entreprise de Jean
+    statutJuridique: 0
+    datecreation: 2014-03-24 21:00:00.0
+    siret: 43394298400030
+    specialite: mdr
+    nbemployees: 25
+    adresse_id: 106
+  - id: 1007
+    nomComplet: Entreprise de Nicolas
+    statutJuridique: 0
+    datecreation: 2014-03-24 21:00:00.0
+    siret: 43394298400040
+    specialite: xD
+    nbemployees: 15
+    adresse_id: 107
 adresse:
   - adresse: 106 chemin de lentreprise
     id: 101
@@ -121,13 +165,25 @@ adresse:
     complementadresse: Residence de robert
     ville: Nice pébron
     departement: 6
+  - adresse: 3020 chemin de jean
+    id: 106
+    codepostal: "06800"
+    complementadresse: Residence de Jean
+    ville: St Jean
+    departement: 6
+  - adresse: 4020 chemin de nicolas
+    id: 107
+    codepostal: "07800"
+    complementadresse: Residence de Nicolas
+    ville: St Nicolas
+    departement: 6
 annonce:
   - id: 1020
     datecreation: 2014-03-30 22:00:00.0
     datemaj: 2014-04-24 22:00:00.0
     delaiintervention: 0
     description: Peinture d'un mur
-    etatannonce: 0
+    etatannonce: 5
     categoriemetier: 0
     souscategoriemetier: Installation électrique
     nbconsultation: 0
@@ -158,6 +214,12 @@ annonce_artisan:
      artisans_id: 1003
    - annonce_id: 1020
      artisans_id: 1005
+   - annonce_id: 1020
+     artisans_id: 1004
+   - annonce_id: 1020
+     artisans_id: 1006
+   - annonce_id: 1020
+     artisans_id: 1007
 notification:
    - id: 1002
      typenotification: 0
@@ -166,8 +228,4 @@ notification:
      pourQuiNotification: 4
      id_client: 1001
      id_artisan: 1003
-     id_annonce: 1020
-image:
-   - id: 1000
-     url: "https://res.cloudinary.com/lescastors/image/upload/v1427874120/test/zbeod6tici6yrphpco39.jpg"
      id_annonce: 1020
