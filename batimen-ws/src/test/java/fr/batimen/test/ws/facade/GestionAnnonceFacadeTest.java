@@ -577,6 +577,8 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
+    @ShouldMatchDataSet(value = "datasets/out/notation_artisan_nominale.yml", excludeColumns = { "id", "datemaj",
+            "datecreation", "datenotation", "datenotification" })
     public void testNotationArtisanParClient() {
         NotationDTO notationDTO = new NotationDTO();
         notationDTO.setScore((double) 4);

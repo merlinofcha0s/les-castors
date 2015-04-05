@@ -132,6 +132,21 @@ public class Notation extends AbstractEntity implements Serializable {
         this.artisan = artisan;
     }
 
+    /**
+     * @return the dateNotation
+     */
+    public Date getDateNotation() {
+        return dateNotation;
+    }
+
+    /**
+     * @param dateNotation
+     *            the dateNotation to set
+     */
+    public void setDateNotation(Date dateNotation) {
+        this.dateNotation = dateNotation;
+    }
+
     /*
      * (non-Javadoc)
      * 

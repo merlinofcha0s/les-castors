@@ -828,6 +828,7 @@ public class Annonce extends MasterPage {
             noterArtisanDTO.setLoginDemandeur(userConnected.getLogin());
             noterArtisanDTO.setNotation(notationDTO);
 
+            Integer codeService = annonceServiceREST.noterUnArtisan(noterArtisanDTO);
         }
     }
 

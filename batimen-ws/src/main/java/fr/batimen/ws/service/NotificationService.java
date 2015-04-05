@@ -20,7 +20,6 @@ import org.slf4j.LoggerFactory;
 import com.microtripit.mandrillapp.lutung.model.MandrillApiError;
 
 import fr.batimen.core.exception.EmailException;
-import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.NotificationDTO;
 import fr.batimen.dto.enums.StatutNotification;
 import fr.batimen.dto.enums.TypeCompte;
@@ -115,17 +114,17 @@ public class NotificationService {
      *            l'artisan qui veut s'inscrire
      */
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void generationNotificationInscriptionArtisan(DemandeAnnonceDTO demandeAnnonceDTO, Annonce annonce,
-            Artisan artisan) {
+    public void generationNotificationArtisan(Annonce annonce, Artisan artisan, TypeCompte typeCompte,
+            TypeNotification typeNotification) {
 
         Notification notification = new Notification();
         notification.setAnnonce(annonce);
         notification.setArtisanNotifier(artisan);
         notification.setClientNotifier(annonce.getDemandeur());
         notification.setDateNotification(new Date());
-        notification.setPourQuiNotification(TypeCompte.ARTISAN);
+        notification.setPourQuiNotification(typeCompte);
         notification.setStatutNotification(StatutNotification.PAS_VUE);
-        notification.setTypeNotification(TypeNotification.INSCRIT_A_ANNONCE);
+        notification.setTypeNotification(typeNotification);
 
         notificationDAO.create(notification);
 

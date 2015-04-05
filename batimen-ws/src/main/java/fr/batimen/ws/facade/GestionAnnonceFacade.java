@@ -48,6 +48,7 @@ import fr.batimen.dto.aggregate.NbConsultationDTO;
 import fr.batimen.dto.aggregate.NoterArtisanDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.TypeCompte;
+import fr.batimen.dto.enums.TypeNotification;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 import fr.batimen.ws.dao.AnnonceDAO;
 import fr.batimen.ws.dao.ArtisanDAO;
@@ -62,6 +63,7 @@ import fr.batimen.ws.helper.JsonHelper;
 import fr.batimen.ws.interceptor.BatimenInterceptor;
 import fr.batimen.ws.service.AnnonceService;
 import fr.batimen.ws.service.EmailService;
+import fr.batimen.ws.service.NotationService;
 import fr.batimen.ws.service.NotificationService;
 import fr.batimen.ws.service.PhotoService;
 import fr.batimen.ws.utils.FluxUtils;
@@ -115,6 +117,9 @@ public class GestionAnnonceFacade {
 
     @Inject
     private ImageDAO imageDAO;
+
+    @Inject
+    private NotationService notationService;
 
     /**
      * Permet la creation d'une nouvelle annonce par le client ainsi que le
@@ -439,6 +444,16 @@ public class GestionAnnonceFacade {
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public Integer selectOneEnterprise(AnnonceSelectEntrepriseDTO demandeAnnonceDTO) {
 
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("+------------------------------------------------------------------------------+");
+            LOGGER.debug("| Hash ID : " + demandeAnnonceDTO.getHashID());
+            LOGGER.debug("| Login demandeur : " + demandeAnnonceDTO.getLoginDemandeur());
+            LOGGER.debug("| Ajout / suppression : " + demandeAnnonceDTO.getAjoutOuSupprimeArtisan());
+            LOGGER.debug("| Type compte : " + demandeAnnonceDTO.getTypeCompteDemandeur().getNomCompte());
+            LOGGER.debug("| Artisan choisi : " + demandeAnnonceDTO.getLoginArtisanChoisi());
+            LOGGER.debug("+------------------------------------------------------------------------------+");
+        }
+
         String rolesDemandeur = utilisateurFacade.getUtilisateurRoles(demandeAnnonceDTO.getLoginDemandeur());
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("On vérifie le / les role(s) du demandeur : " + rolesDemandeur);
@@ -451,22 +466,16 @@ public class GestionAnnonceFacade {
             LOGGER.debug("On récupére l'artisan choisi : " + artisan.getLogin());
         }
 
-        Boolean isClient = rolesDemandeur.indexOf(TypeCompte.CLIENT.getRole()) != -1;
-        Boolean isAdmin = rolesDemandeur.indexOf(TypeCompte.ADMINISTRATEUR.getRole()) != -1;
-
         Boolean retourDAO = Boolean.FALSE;
-        if (isClient || isAdmin && entrepriseChoisi != null) {
 
-            Annonce annonceToUpdate = null;
-            if (isAdmin) {
-                annonceToUpdate = annonceDAO.getAnnonceByIDWithTransaction(demandeAnnonceDTO.getHashID(), true);
-            } else if (isClient) {
-                annonceToUpdate = annonceDAO.getAnnonceByIDWithTransaction(demandeAnnonceDTO.getHashID(), false);
-            }
+        Annonce annonceToUpdate = null;
+
+        annonceToUpdate = loadAnnonceAndCheckUserClientOrAdminRight(rolesDemandeur, demandeAnnonceDTO.getHashID());
+
+        if (annonceToUpdate != null) {
 
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Le demandeur est donc soit un client soit un admin");
-                LOGGER.debug("On charge l'annonce : " + annonceToUpdate.getHashID());
             }
 
             if (rolesDemandeur.indexOf(TypeCompte.CLIENT.getRole()) != -1
@@ -487,8 +496,8 @@ public class GestionAnnonceFacade {
                 }
                 annonceToUpdate.setEntrepriseSelectionnee(entrepriseChoisi);
                 annonceToUpdate.setEtatAnnonce(EtatAnnonce.A_NOTER);
-                notificationDAO.createNotificationEntrepriseChoisiParClient(annonceToUpdate);
-                // TODO Envoi de mail de notification
+                notificationService.generationNotificationArtisan(annonceToUpdate, artisan, TypeCompte.ARTISAN,
+                        TypeNotification.A_CHOISI_ENTREPRISE);
             } else {
                 if (LOGGER.isErrorEnabled()) {
                     LOGGER.error("Ni ajout, ni suppression dans la selection artisan, cas impossible");
@@ -498,6 +507,8 @@ public class GestionAnnonceFacade {
 
             annonceDAO.update(annonceToUpdate);
             retourDAO = Boolean.TRUE;
+        } else {
+            retourDAO = Boolean.FALSE;
         }
 
         if (retourDAO) {
@@ -519,6 +530,14 @@ public class GestionAnnonceFacade {
     @Path(WsPath.GESTION_ANNONCE_SERVICE_INSCRIPTION_UN_ARTISAN)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public Integer inscriptionUnArtisan(DemandeAnnonceDTO demandeAnnonceDTO) {
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("+------------------------------------------------------------------------------+");
+            LOGGER.debug("| Hash ID : " + demandeAnnonceDTO.getHashID());
+            LOGGER.debug("| Login demandeur : " + demandeAnnonceDTO.getLoginDemandeur());
+            LOGGER.debug("| Type compte : " + demandeAnnonceDTO.getTypeCompteDemandeur().getNomCompte());
+            LOGGER.debug("+------------------------------------------------------------------------------+");
+        }
 
         Annonce annonce = annonceDAO.getAnnonceByIDWithTransaction(demandeAnnonceDTO.getHashID(), false);
 
@@ -543,7 +562,8 @@ public class GestionAnnonceFacade {
             return codeRetourInscription;
         }
 
-        notificationService.generationNotificationInscriptionArtisan(demandeAnnonceDTO, annonce, artisan);
+        notificationService.generationNotificationArtisan(annonce, artisan, TypeCompte.CLIENT,
+                TypeNotification.INSCRIT_A_ANNONCE);
 
         return CodeRetourService.RETOUR_OK;
     }
@@ -579,17 +599,7 @@ public class GestionAnnonceFacade {
             LOGGER.debug("Role du client récupéré: " + rolesClientDemandeur);
         }
 
-        if (rolesUtils.checkIfAdminWithString(rolesClientDemandeur)) {
-            annonce = annonceDAO.getAnnonceByIDWithTransaction(desinscriptionAnnonceDTO.getHashID(), true);
-        } else if (rolesUtils.checkIfClientWithString(rolesClientDemandeur)) {
-            annonce = annonceDAO.getAnnonceByIdByLogin(desinscriptionAnnonceDTO.getHashID(),
-                    desinscriptionAnnonceDTO.getLoginDemandeur());
-        } else {
-            if (LOGGER.isErrorEnabled()) {
-                LOGGER.error("N'a pas les bons droits pour accéder à ce service !!!");
-            }
-            return CodeRetourService.RETOUR_KO;
-        }
+        annonce = loadAnnonceAndCheckUserClientOrAdminRight(rolesClientDemandeur, desinscriptionAnnonceDTO.getHashID());
 
         boolean atLeastOneRemoved = false;
 
@@ -656,7 +666,76 @@ public class GestionAnnonceFacade {
     @Path(WsPath.GESTION_ANNONCE_SERVICE_NOTER_UN_ARTISAN)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public Integer noterUnArtisan(NoterArtisanDTO noterArtisanDTO) {
-        return CodeRetourService.RETOUR_KO;
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("+-------------------------------------------------------------+");
+            LOGGER.debug("| Hash ID : " + noterArtisanDTO.getHashID());
+            LOGGER.debug("| Artisan : " + noterArtisanDTO.getLoginArtisan());
+            LOGGER.debug("| Demandeur : " + noterArtisanDTO.getLoginDemandeur());
+            LOGGER.debug("| Notation : " + noterArtisanDTO.getNotation().getScore());
+            LOGGER.debug("| Commentaire : " + noterArtisanDTO.getNotation().getCommentaire());
+            LOGGER.debug("| Nom Entreprise : " + noterArtisanDTO.getNotation().getNomEntreprise());
+            LOGGER.debug("+-------------------------------------------------------------+");
+        }
+
+        String rolesDemandeur = utilisateurFacade.getUtilisateurRoles(noterArtisanDTO.getLoginDemandeur());
+
+        Annonce annonceANoter = loadAnnonceAndCheckUserClientOrAdminRight(rolesDemandeur, noterArtisanDTO.getHashID());
+
+        if (annonceANoter == null) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Annonce introuvable, ou le demandeur ne possede pas cette annonce !!!");
+                LOGGER.error("+-------------------------------------------------------------+");
+                LOGGER.error("| Hash ID : " + noterArtisanDTO.getHashID());
+                LOGGER.error("| Artisan : " + noterArtisanDTO.getLoginArtisan());
+                LOGGER.error("| Demandeur : " + noterArtisanDTO.getLoginDemandeur());
+                LOGGER.error("| Notation : " + noterArtisanDTO.getNotation().getScore());
+                LOGGER.error("| Commentaire : " + noterArtisanDTO.getNotation().getCommentaire());
+                LOGGER.error("| Nom Entreprise : " + noterArtisanDTO.getNotation().getNomEntreprise());
+                LOGGER.error("+-------------------------------------------------------------+");
+            }
+            return CodeRetourService.RETOUR_KO;
+        }
+
+        Artisan artisan = artisanDAO.getArtisanByLogin(noterArtisanDTO.getLoginArtisan());
+
+        if (artisan == null) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Artisan introuvable : " + noterArtisanDTO.getLoginArtisan());
+            }
+            return CodeRetourService.RETOUR_KO;
+        }
+
+        notationService.noterArtisanService(annonceANoter, artisan, noterArtisanDTO.getNotation().getCommentaire(),
+                noterArtisanDTO.getNotation().getScore());
+
+        // Changement de l'etat de l'annonce
+        annonceANoter.setEtatAnnonce(EtatAnnonce.TERMINER);
+
+        notificationService.generationNotificationArtisan(annonceANoter, artisan, TypeCompte.ARTISAN,
+                TypeNotification.A_NOTER_ENTREPRISE);
+
+        return CodeRetourService.RETOUR_OK;
     }
 
+    private Annonce loadAnnonceAndCheckUserClientOrAdminRight(String rolesClientDemandeur, String hashID) {
+        if (rolesUtils.checkIfAdminWithString(rolesClientDemandeur)) {
+            return annonceDAO.getAnnonceByIDWithTransaction(hashID, true);
+        } else if (rolesUtils.checkIfClientWithString(rolesClientDemandeur)) {
+            return annonceDAO.getAnnonceByIDWithTransaction(hashID, false);
+        } else {
+            if (LOGGER.isErrorEnabled()) {
+                StringBuilder errorRoles = new StringBuilder();
+                errorRoles.append("Roles : ").append(rolesClientDemandeur);
+
+                StringBuilder errorHashID = new StringBuilder();
+                errorHashID.append("Hash ID : ").append(hashID);
+
+                LOGGER.error("N'a pas les bons droits pour accéder à ce service !!!");
+                LOGGER.error(errorRoles.toString());
+                LOGGER.error(errorHashID.toString());
+            }
+            return null;
+        }
+    }
 }

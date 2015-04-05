@@ -1,0 +1,180 @@
+client:
+  - id: 1001
+    dateinscription: "2014-01-10 00:00:00"
+    email: lol@lol.com
+    password: $s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=
+    login: pebronne
+    nom: De la Pebronne
+    numerotel: "0615125645"
+    prenom: Pebron
+    isActive: true
+  - id: 1011
+    dateinscription: "2014-01-10 00:00:00"
+    email: admin@lol.com
+    password: $s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=
+    login: admin
+    nom: De la Pebronne
+    numerotel: "0615125645"
+    prenom: Pebron
+    isActive: true
+permission:
+  - typecompte: 4
+    client_fk: 1001
+  - typecompte: 5
+    client_fk: 1011
+  - typecompte: 3
+    artisan_fk: 1003
+  - typecompte: 3
+    artisan_fk: 1004
+  - typecompte: 3
+    artisan_fk: 1005
+artisan:
+  - id: 1003
+    numerotel: "0615125645"
+    password: $s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=
+    login: pebronneArtisanne
+    email: lolPebronne@lol.com
+    dateinscription: "2014-01-10 10:00:00"
+    civilite: 0
+    prenom: Pebron
+    nom: De la Pebronne
+    isActive: false
+    cleactivation: "NTNkN2RmYzVkNWU2MDZkZjZlYTVjZGQ2ZGE0ZjljY2JhNGJjZWY5MmIxNmNiOWJmMjk2ZDVhNDY3OTEzMTIyZA=0"
+    entreprise_id: 1003
+  - id: 1004
+    numerotel: "0615125646"
+    password: $s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=
+    login: pebronneChoisi
+    email: pebronneChoisi@lol.com
+    dateinscription: "2014-02-10 10:00:00"
+    civilite: 0
+    prenom: PebronChoisi
+    nom: De la Pebronne
+    isActive: true
+    cleactivation: "NTNkN2RmYzVkNWU2MDZkZjZlYTVjZGQ2ZGE0ZjljY2JhNGJjZWY5MmIxNmNiOWJmMjk2ZDVhNDY3OTEzMTIyZA=1"
+    entreprise_id: 1004
+  - id: 1005
+    numerotel: "0615125646"
+    password: $s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=
+    login: artisan1
+    email: artisan1@lol.com
+    dateinscription: "2014-03-10 10:00:00"
+    civilite: 0
+    prenom: Robert
+    nom: De la Pebronne
+    isActive: true
+    cleactivation: "NTNkN2RmYzVkNWU2MDZkZjZlYTVjZGQ2ZGE0ZjljY2JhNGJjZWY5MmIxNmNiOWJmMjk2ZDVhNDY3OTEzMTIyZA=2"
+    entreprise_id: 1005
+entreprise:
+  - id: 1003
+    nomComplet: Pebronne enterprise
+    statutJuridique: 0
+    datecreation: 2014-03-23 22:00:00.0
+    siret: 43394298400017
+    specialite: brique
+    nbemployees: 10
+    adresse_id: 101
+  - id: 1004
+    nomComplet: Pebronne enterprise choisi
+    statutJuridique: 0
+    datecreation: 2014-03-24 21:00:00.0
+    siret: 43394298400020
+    specialite: brique
+    nbemployees: 20
+    adresse_id: 104
+  - id: 1005
+    nomComplet: Entreprise de Robert
+    statutJuridique: 0
+    datecreation: 2014-03-24 21:00:00.0
+    siret: 43394298400025
+    specialite: brique
+    nbemployees: 20
+    adresse_id: 105
+adresse:
+  - adresse: 106 chemin de lentreprise
+    id: 101
+    codepostal: "06700"
+    complementadresse: Res de l'artisan
+    ville: Nice
+    departement: 6
+  - adresse: 2010 chemin de lentreprise
+    id: 102
+    codepostal: "06800"
+    complementadresse: Residence de l'artisan
+    ville: Nice
+    departement: 6
+  - adresse: 2012 chemin de lentreprise
+    id: 103
+    codepostal: "06500"
+    complementadresse: Residence de l'artisan choisi
+    ville: Nice pébron
+    departement: 6
+  - adresse: 2020 chemin de lentreprise
+    id: 104
+    codepostal: "06700"
+    complementadresse: Residence de l'artisan choisi
+    ville: Nice pébron
+    departement: 6
+  - adresse: 2020 chemin de robert
+    id: 105
+    codepostal: "06200"
+    complementadresse: Residence de robert
+    ville: Nice pébron
+    departement: 6
+annonce:
+  - id: 1020
+    datecreation: 2014-03-30 22:00:00.0
+    datemaj: 2014-04-24 22:00:00.0
+    delaiintervention: 0
+    description: Peinture d'un mur
+    etatannonce: 6
+    categoriemetier: 0
+    souscategoriemetier: Installation électrique
+    nbconsultation: 0
+    typecontact: 0
+    typeTravaux: 0
+    hashID: 88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21
+    selHashID: 5Whe5wlRCzzUhgFfRHFkIbtxRMyGrS1eaUntnp9SxEY=
+    demandeur_fk: 1001
+    adressechantier_id: 102
+    entreprise_selectionnee_fk: 1003
+  - id: 1021
+    datecreation: 2014-03-30 22:00:00.0
+    datemaj: 2014-04-24 22:00:00.0
+    delaiintervention: 0
+    description: Peinture d'un mur
+    etatannonce: 0
+    categoriemetier: 0
+    souscategoriemetier: Installation électrique
+    nbconsultation: 0
+    typecontact: 0
+    typeTravaux: 0
+    hashID: lolmdrp
+    selHashID: 5Whe5wlRCzzUhgFfRHFkIbtxRMyGrS1eaUntnp9SxEY=
+    demandeur_fk: 1001
+    adressechantier_id: 103
+annonce_artisan:
+   - annonce_id: 1020
+     artisans_id: 1003
+   - annonce_id: 1020
+     artisans_id: 1005
+notification:
+   - typenotification: 3
+     statutNotification: 1
+     pourQuiNotification: 3
+     id_client: 1001
+     id_artisan: 1003
+     id_annonce: 1020
+   - typenotification: 0
+     statutNotification: 0
+     pourQuiNotification: 4
+     id_client: 1001
+     id_artisan: 1003
+     id_annonce: 1020
+image:
+   - url: "https://res.cloudinary.com/lescastors/image/upload/v1427874120/test/zbeod6tici6yrphpco39.jpg"
+     id_annonce: 1020
+notation:
+  -  commentaire: Bon travaux
+     score: 4.0
+     artisan_fk: 1003
