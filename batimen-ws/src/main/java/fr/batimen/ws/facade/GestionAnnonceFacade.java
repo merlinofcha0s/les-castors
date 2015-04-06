@@ -656,7 +656,9 @@ public class GestionAnnonceFacade {
     /**
      * Service qui permet à un client de noter un artisan<br/>
      * 
-     * Fais passer l'annonce en mode terminer
+     * Fait passer l'annonce en état terminer
+     * 
+     * Génére une notification à destination de l'artisan
      * 
      * @param noterArtisanDTO
      *            Objet permettant de valider la note de l'artisan
@@ -669,16 +671,20 @@ public class GestionAnnonceFacade {
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("+-------------------------------------------------------------+");
-            LOGGER.debug("| Hash ID : " + noterArtisanDTO.getHashID());
-            LOGGER.debug("| Artisan : " + noterArtisanDTO.getLoginArtisan());
-            LOGGER.debug("| Demandeur : " + noterArtisanDTO.getLoginDemandeur());
-            LOGGER.debug("| Notation : " + noterArtisanDTO.getNotation().getScore());
-            LOGGER.debug("| Commentaire : " + noterArtisanDTO.getNotation().getCommentaire());
-            LOGGER.debug("| Nom Entreprise : " + noterArtisanDTO.getNotation().getNomEntreprise());
+            LOGGER.debug("| Hash ID : {}", noterArtisanDTO.getHashID());
+            LOGGER.debug("| Artisan : {}", noterArtisanDTO.getLoginArtisan());
+            LOGGER.debug("| Demandeur : {}", noterArtisanDTO.getLoginDemandeur());
+            LOGGER.debug("| Notation : {}", noterArtisanDTO.getNotation().getScore());
+            LOGGER.debug("| Commentaire : {}", noterArtisanDTO.getNotation().getCommentaire());
+            LOGGER.debug("| Nom Entreprise : {}", noterArtisanDTO.getNotation().getNomEntreprise());
             LOGGER.debug("+-------------------------------------------------------------+");
         }
 
         String rolesDemandeur = utilisateurFacade.getUtilisateurRoles(noterArtisanDTO.getLoginDemandeur());
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Roles du demandeur : {}", rolesDemandeur);
+        }
 
         Annonce annonceANoter = loadAnnonceAndCheckUserClientOrAdminRight(rolesDemandeur, noterArtisanDTO.getHashID());
 
@@ -686,12 +692,12 @@ public class GestionAnnonceFacade {
             if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("Annonce introuvable, ou le demandeur ne possede pas cette annonce !!!");
                 LOGGER.error("+-------------------------------------------------------------+");
-                LOGGER.error("| Hash ID : " + noterArtisanDTO.getHashID());
-                LOGGER.error("| Artisan : " + noterArtisanDTO.getLoginArtisan());
-                LOGGER.error("| Demandeur : " + noterArtisanDTO.getLoginDemandeur());
-                LOGGER.error("| Notation : " + noterArtisanDTO.getNotation().getScore());
-                LOGGER.error("| Commentaire : " + noterArtisanDTO.getNotation().getCommentaire());
-                LOGGER.error("| Nom Entreprise : " + noterArtisanDTO.getNotation().getNomEntreprise());
+                LOGGER.error("| Hash ID : {}", noterArtisanDTO.getHashID());
+                LOGGER.error("| Artisan : {}", noterArtisanDTO.getLoginArtisan());
+                LOGGER.error("| Demandeur : {}", noterArtisanDTO.getLoginDemandeur());
+                LOGGER.error("| Notation : {}", noterArtisanDTO.getNotation().getScore());
+                LOGGER.error("| Commentaire : {}", noterArtisanDTO.getNotation().getCommentaire());
+                LOGGER.error("| Nom Entreprise : {}", noterArtisanDTO.getNotation().getNomEntreprise());
                 LOGGER.error("+-------------------------------------------------------------+");
             }
             return CodeRetourService.RETOUR_KO;
@@ -701,19 +707,35 @@ public class GestionAnnonceFacade {
 
         if (artisan == null) {
             if (LOGGER.isErrorEnabled()) {
-                LOGGER.error("Artisan introuvable : " + noterArtisanDTO.getLoginArtisan());
+                LOGGER.error("Artisan introuvable : {}", noterArtisanDTO.getLoginArtisan());
             }
             return CodeRetourService.RETOUR_KO;
+        }
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Enregistrement de la note de l'artisan");
         }
 
         notationService.noterArtisanService(annonceANoter, artisan, noterArtisanDTO.getNotation().getCommentaire(),
                 noterArtisanDTO.getNotation().getScore());
 
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Changement de l'etat de l'annonce");
+        }
+
         // Changement de l'etat de l'annonce
         annonceANoter.setEtatAnnonce(EtatAnnonce.TERMINER);
 
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Génération de la notification à destination de l'artisan");
+        }
+
         notificationService.generationNotificationArtisan(annonceANoter, artisan, TypeCompte.ARTISAN,
                 TypeNotification.A_NOTER_ENTREPRISE);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Fin du service de notation");
+        }
 
         return CodeRetourService.RETOUR_OK;
     }

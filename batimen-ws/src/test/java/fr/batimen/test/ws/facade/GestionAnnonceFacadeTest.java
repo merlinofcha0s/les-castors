@@ -577,9 +577,31 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
-    @ShouldMatchDataSet(value = "datasets/out/notation_artisan_nominale.yml", excludeColumns = { "id", "datemaj",
-            "datecreation", "datenotation", "datenotification" })
+    @ShouldMatchDataSet(value = "datasets/out/notation_artisan_par_client_et_admin.yml", excludeColumns = { "id",
+            "datemaj", "datecreation", "datenotation", "datenotification" })
     public void testNotationArtisanParClient() {
+        NoterArtisanDTO noterArtisanDTO = createNotationDTO("pebronne");
+
+        Integer codeRetour = annonceServiceREST.noterUnArtisan(noterArtisanDTO);
+        Assert.assertEquals(CodeRetourService.RETOUR_OK, codeRetour);
+    }
+
+    /**
+     * Cas de test : Un admin veut noter un artisan car les travaux sont
+     * terminés
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonces_by_id.yml")
+    @ShouldMatchDataSet(value = "datasets/out/notation_artisan_par_client_et_admin.yml", excludeColumns = { "id",
+            "datemaj", "datecreation", "datenotation", "datenotification" })
+    public void testNotationArtisanParAdmin() {
+        NoterArtisanDTO noterArtisanDTO = createNotationDTO("admin");
+
+        Integer codeRetour = annonceServiceREST.noterUnArtisan(noterArtisanDTO);
+        Assert.assertEquals(CodeRetourService.RETOUR_OK, codeRetour);
+    }
+
+    private NoterArtisanDTO createNotationDTO(String loginDemandeur) {
         NotationDTO notationDTO = new NotationDTO();
         notationDTO.setScore((double) 4);
         notationDTO.setCommentaire("Bon travaux");
@@ -590,10 +612,9 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         noterArtisanDTO
                 .setHashID("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
         noterArtisanDTO.setLoginArtisan("pebronneArtisanne");
-        noterArtisanDTO.setLoginDemandeur("pebronne");
+        noterArtisanDTO.setLoginDemandeur(loginDemandeur);
 
-        Integer codeRetour = annonceServiceREST.noterUnArtisan(noterArtisanDTO);
-        Assert.assertEquals(CodeRetourService.RETOUR_OK, codeRetour);
+        return noterArtisanDTO;
     }
 
     private Annonce testDesinscriptionArtisan(String loginDemandeur) {

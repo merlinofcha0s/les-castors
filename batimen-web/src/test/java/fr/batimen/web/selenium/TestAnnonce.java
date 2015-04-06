@@ -28,6 +28,7 @@ import com.ninja_squad.dbsetup.DbSetup;
 import com.ninja_squad.dbsetup.operation.Operation;
 
 import fr.batimen.core.constant.UrlPage;
+import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.web.selenium.common.AbstractITTest;
 
@@ -56,7 +57,7 @@ public class TestAnnonce extends AbstractITTest {
     @Test
     public void testAnnonceAffichageWithClient() {
         connectAndGoToAnnonce(TypeCompte.CLIENT, "toto");
-        assertCoreInformationOfAnnonce();
+        assertCoreInformationOfAnnonce(EtatAnnonce.ACTIVE);
 
         assertEquals(
                 "ENTREPRISES QUI SOUHAITENT VOUS CONTACTER",
@@ -80,7 +81,7 @@ public class TestAnnonce extends AbstractITTest {
     @Test
     public void testAnnonceAffichageWithClientWithImage() {
         connectAndGoToAnnonce(TypeCompte.CLIENT, "lolmdr");
-        assertCoreInformationOfAnnonce();
+        assertCoreInformationOfAnnonce(EtatAnnonce.ACTIVE);
 
         WebElement checkConditionAnnoncePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.presenceOfElementLocated(By.id("containerContactMaster")));
@@ -105,7 +106,7 @@ public class TestAnnonce extends AbstractITTest {
         driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         driver.manage().timeouts().pageLoadTimeout(5, TimeUnit.SECONDS);
         connectAndGoToAnnonce(TypeCompte.ARTISAN, "toto");
-        assertCoreInformationOfAnnonce();
+        assertCoreInformationOfAnnonce(EtatAnnonce.ACTIVE);
 
         assertEquals("1", driver.findElement(By.xpath("//div[@id='containerInformationsAnnonce']/div[8]/div[3]"))
                 .getText());
@@ -126,7 +127,7 @@ public class TestAnnonce extends AbstractITTest {
     @Test
     public void testAnnonceAffichageWithAdmin() {
         connectAndGoToAnnonce(TypeCompte.ADMINISTRATEUR, "toto");
-        assertCoreInformationOfAnnonce();
+        assertCoreInformationOfAnnonce(EtatAnnonce.ACTIVE);
         assertEquals(
                 "ENTREPRISES QUI SOUHAITENT VOUS CONTACTER",
                 driver.findElement(
@@ -181,7 +182,7 @@ public class TestAnnonce extends AbstractITTest {
     @Test
     public void testSuppressionAnnonceByClient() {
         connectAndGoToAnnonce(TypeCompte.CLIENT, "toto");
-        assertCoreInformationOfAnnonce();
+        assertCoreInformationOfAnnonce(EtatAnnonce.ACTIVE);
         driver.findElement(By.id("supprimerAnnonce")).click();
         driver.findElement(By.id("yes")).click();
         assertEquals("Votre annonce a bien été supprimée", driver.findElement(By.cssSelector("span.box_type4"))
@@ -196,7 +197,7 @@ public class TestAnnonce extends AbstractITTest {
     @Test
     public void testSuppressionAnnonceByAdmin() {
         connectAndGoToAnnonce(TypeCompte.ADMINISTRATEUR, "toto");
-        assertCoreInformationOfAnnonce();
+        assertCoreInformationOfAnnonce(EtatAnnonce.ACTIVE);
         driver.findElement(By.id("supprimerAnnonce")).click();
         driver.findElement(By.id("yes")).click();
         // TODO Verifier que l'on a bien redirigé l'admin sur la bonne page
@@ -227,7 +228,7 @@ public class TestAnnonce extends AbstractITTest {
     @Test
     public void testInscriptionArtisanAnnonce() {
         connectAndGoToAnnonce(TypeCompte.ARTISAN, "lolxd");
-        assertCoreInformationOfAnnonce();
+        assertCoreInformationOfAnnonce(EtatAnnonce.ACTIVE);
         driver.findElement(By.id("inscrireAnnonce")).click();
 
         WebElement checkConditionAnnoncePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
@@ -270,6 +271,54 @@ public class TestAnnonce extends AbstractITTest {
         testDesinscriptionEntreprise(TypeCompte.ADMINISTRATEUR);
     }
 
+    /**
+     * Cas de test : Un client se connecte sur le site, va sur une annonce et et
+     * note l'artisan qu'il a selectionné auparavant, tout se passe comme prévu
+     */
+    @Test
+    public void testNotationArtisanByClient() {
+        testNotation(TypeCompte.CLIENT);
+    }
+
+    /**
+     * Cas de test : Un administrateur se connecte sur le site, va sur une
+     * annonce et note l'artisan qui a été selectionné auparavant par le client,
+     * tout se passe comme prévu
+     */
+    @Test
+    public void testNotationArtisanByAdmin() {
+        testNotation(TypeCompte.ADMINISTRATEUR);
+    }
+
+    private void testNotation(TypeCompte typeCompte) {
+        connectAndGoToAnnonce(typeCompte, "lolmdrxD");
+        assertCoreInformationOfAnnonce(EtatAnnonce.A_NOTER);
+
+        // Lien "notez artisan"
+        driver.findElement(
+                By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[4]/div/div/div/div[2]/div[2]/div/div[3]/a"))
+                .click();
+
+        // Clique sur la troisieme etoile
+        driver.findElement(
+                By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[9]/div/div[2]/form/div[2]/div[2]/div/div/span[1]/div[3]/div[2]/span"))
+                .click();
+
+        driver.findElement(By.id("textAreaCommentaireNotation")).clear();
+        driver.findElement(By.id("textAreaCommentaireNotation")).sendKeys("moyen moyen le pébron !!");
+
+        // Envoyer la notation
+        driver.findElement(
+                By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[9]/div/div[2]/form/div[4]/div/a"))
+                .click();
+
+        WebElement checkFeedbackPanelNotationOK = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("span.box_type4")));
+        assertNotNull(checkFeedbackPanelNotationOK);
+
+        assertEquals(EtatAnnonce.TERMINER.getType(), driver.findElement(By.id("etatAnnonce")).getText());
+    }
+
     public void connectAndGoToAnnonce(TypeCompte typeCompteWanted, String idAnnonce) {
         driver.get(appUrl);
         // On s'authentifie à l'application
@@ -291,7 +340,7 @@ public class TestAnnonce extends AbstractITTest {
     /**
      * Vérifie les informations principales de l'annonce
      */
-    public void assertCoreInformationOfAnnonce() {
+    public void assertCoreInformationOfAnnonce(EtatAnnonce etatAnnonce) {
         Boolean checkSousCategoriePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.textToBePresentInElementLocated(By.id("sousCategorieLabel"),
                         "Installation électrique"));
@@ -305,15 +354,15 @@ public class TestAnnonce extends AbstractITTest {
                 driver.findElement(By.xpath("//div[@id='containerInformationsAnnonce']/div[4]/div[3]")).getText());
         assertEquals("Email", driver.findElement(By.xpath("//div[@id='containerInformationsAnnonce']/div[5]/div[3]"))
                 .getText());
-        assertEquals("Active", driver.findElement(By.xpath("//div[@id='containerInformationsAnnonce']/div[6]/div[3]"))
-                .getText());
+        assertEquals(etatAnnonce.getType(),
+                driver.findElement(By.xpath("//div[@id='containerInformationsAnnonce']/div[6]/div[3]")).getText());
         assertEquals("10/01/2014",
                 driver.findElement(By.xpath("//div[@id='containerInformationsAnnonce']/div[7]/div[3]")).getText());
     }
 
     private void testDesinscriptionEntreprise(TypeCompte typeCompte) {
         connectAndGoToAnnonce(typeCompte, "toto");
-        assertCoreInformationOfAnnonce();
+        assertCoreInformationOfAnnonce(EtatAnnonce.ACTIVE);
         // Le lien de selection de la premiere entreprise
         driver.findElement(
                 By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[4]/div/div/div/div[2]/div[2]/div[3]/a[2]"))
@@ -338,7 +387,7 @@ public class TestAnnonce extends AbstractITTest {
 
     private void testSelectionEntreprise(TypeCompte typeCompte) {
         connectAndGoToAnnonce(typeCompte, "toto");
-        assertCoreInformationOfAnnonce();
+        assertCoreInformationOfAnnonce(EtatAnnonce.ACTIVE);
         // Le lien de selection de la premiere entreprise
         driver.findElement(
                 By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[4]/div/div/div/div[2]/div[2]/div[3]/a[1]"))

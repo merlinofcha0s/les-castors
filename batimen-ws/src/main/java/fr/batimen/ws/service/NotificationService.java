@@ -106,12 +106,15 @@ public class NotificationService {
     /**
      * Génération d'une notification pour l'inscription d'un artisan
      * 
-     * @param demandeAnnonceDTO
-     *            Objet contenant la demande d'inscription initial
      * @param annonce
-     *            l'annonce a laquelle l'artisan veut s'inscrire
+     *            l'annonce liée à la notif
      * @param artisan
-     *            l'artisan qui veut s'inscrire
+     *            l'artisan qui sera notifié
+     * @param typeCompte
+     *            A qui est destinée la notification
+     * @param typeNotification
+     *            Le type de notification que l'on veut signaler
+     * 
      */
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void generationNotificationArtisan(Annonce annonce, Artisan artisan, TypeCompte typeCompte,

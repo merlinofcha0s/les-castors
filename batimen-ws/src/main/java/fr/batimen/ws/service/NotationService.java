@@ -35,6 +35,19 @@ public class NotationService {
     @Inject
     private NotationDAO notationDAO;
 
+    /**
+     * Crée une entité Notation et la persiste dans la BDD
+     * 
+     * @param annonce
+     *            L'annonce noté
+     * @param artisan
+     *            L'artisan qui va être noté
+     * @param commentaire
+     *            Le commentaire de la note
+     * @param score
+     *            La note
+     * @return {@link CodeRetourService}
+     */
     @TransactionAttribute(TransactionAttributeType.MANDATORY)
     public int noterArtisanService(Annonce annonce, Artisan artisan, String commentaire, Double score) {
 

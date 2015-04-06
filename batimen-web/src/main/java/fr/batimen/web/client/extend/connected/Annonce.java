@@ -84,6 +84,7 @@ public class Annonce extends MasterPage {
     private WebMarkupContainer containerEntreprisesGlobales;
     private WebMarkupContainer containerContactMaster;
     private WebMarkupContainer containerActions;
+    private WebMarkupContainer notationAnnonceParClientContainer;
 
     private WebMarkupContainer envoyerDevisContainer;
 
@@ -512,6 +513,12 @@ public class Annonce extends MasterPage {
                 this.send(target.getPage(), Broadcast.BREADTH, new NoterArtisanEventOpen(target));
             }
 
+        };
+
+        notationAnnonceParClientContainer = new WebMarkupContainer("notationAnnonceParClientContainer") {
+
+            private static final long serialVersionUID = 1L;
+
             /*
              * (non-Javadoc)
              * 
@@ -521,13 +528,13 @@ public class Annonce extends MasterPage {
             public boolean isVisible() {
                 return annonceAffichageDTO.getAnnonce().getEtatAnnonce().equals(EtatAnnonce.A_NOTER);
             }
-
         };
 
-        notationAnnonceParClient.setOutputMarkupId(true);
+        notationAnnonceParClientContainer.add(notationAnnonceParClient);
+        notationAnnonceParClientContainer.setOutputMarkupId(true);
 
         containerEntrepriseSelectionnee.add(entrepriseSelectionnee, voirProfilEntrepriseEntrepriseSelectionnee,
-                downloadDevisEntrepriseSelectionnee, notationAnnonceParClient);
+                downloadDevisEntrepriseSelectionnee, notationAnnonceParClientContainer);
         containerEntreprisesGlobales.add(containerEntrepriseSelectionnee);
     }
 
@@ -814,7 +821,7 @@ public class Annonce extends MasterPage {
             desinscriptionArtisanAnnonceEvent.getTarget().add(feedBackPanelGeneral, containerEntreprisesGlobales);
         }
 
-        if (event.getPayload() instanceof DesinscriptionArtisanAnnonceEvent) {
+        if (event.getPayload() instanceof NoterArtisanEventClose) {
             NoterArtisanEventClose noterArtisanEventClose = (NoterArtisanEventClose) event.getPayload();
 
             NotationDTO notationDTO = new NotationDTO();
@@ -829,6 +836,19 @@ public class Annonce extends MasterPage {
             noterArtisanDTO.setNotation(notationDTO);
 
             Integer codeService = annonceServiceREST.noterUnArtisan(noterArtisanDTO);
+
+            annonceAffichageDTO.getAnnonce().setEtatAnnonce(EtatAnnonce.TERMINER);
+            etatAnnonceValue.setObject(annonceAffichageDTO.getAnnonce().getEtatAnnonce().getType());
+
+            if (codeService.equals(CodeRetourService.RETOUR_OK)) {
+                feedBackPanelGeneral.success("Artisan noté avec succés, merci de votre retour");
+            } else {
+                feedBackPanelGeneral
+                        .error("Problème lors de la notation d'une entreprise, veuillez réessayer ultérieurement");
+            }
+
+            noterArtisanEventClose.getTarget()
+                    .add(feedBackPanelGeneral, etatAnnonce, notationAnnonceParClientContainer);
         }
     }
 
