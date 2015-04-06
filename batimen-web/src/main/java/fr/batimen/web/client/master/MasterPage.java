@@ -410,10 +410,14 @@ public abstract class MasterPage extends WebPage {
         StringBuilder balise = new StringBuilder("<meta content=\"");
         balise.append(content);
         balise.append("\"");
+        balise.append(" ");
         if (!"".equals(httpEquiv)) {
             balise.append(generateAttribute("http-equiv", httpEquiv));
         }
         if (!"".equals(name)) {
+            balise.append(generateAttribute("name", name));
+        } else if (!"".equals(httpEquiv) && !"".equals(name)) {
+            balise.append(" ");
             balise.append(generateAttribute("name", name));
         }
         balise.append("/>");

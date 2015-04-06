@@ -23,9 +23,7 @@ public class RaterCastor extends Panel {
 
     public RaterCastor(String id, Integer nbEtoile, boolean required) {
         this(id);
-        setNumberOfStars(nbEtoile);
-
-        rater.setModel(new Model<String>(nbEtoile.toString()));
+        rater.setModel(new Model<String>());
         if (required) {
             rater.setRequired(required);
             rater.add(new RequiredBorderBehaviour());

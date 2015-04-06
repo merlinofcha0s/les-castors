@@ -4,10 +4,17 @@
 	<script>
 		hideWaiterModal();
 		Wicket.Event.subscribe('/ajax/call/beforeSend', function(attributes,jqXHR, settings) {
+			
+			
 			var classes = attributes.target.activeElement.className;
-			var skipWait = classes.indexOf("skipWaiter")>=0;
-			if(!skipWait){
-				showWaiterModal();
+
+			if(classes instanceof String){
+				 var skipWait = classes.indexOf("skipWaiter")>=0;
+	              if(!skipWait){
+	                    showWaiterModal();
+	              }
+			} else {
+				 showWaiterModal();
 			}
 		});
 		Wicket.Event.subscribe('/ajax/call/complete', function(attributes,jqXHR, textStatus) {

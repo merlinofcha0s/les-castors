@@ -5,6 +5,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptContentHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -30,6 +31,7 @@ public class MapFrance extends Panel {
     private final Map<String, Map<String, String>> departements = new HashMap<String, Map<String, String>>();
     private StringBuilder jsMapFrance;
     private final AjaxMapFranceBehaviour ajaxMapFranceBehaviour = new AjaxMapFranceBehaviour();
+    private boolean isRendered = false;
 
     public MapFrance(String id) {
         super(id);
@@ -683,7 +685,7 @@ public class MapFrance extends Panel {
 
         jsMapFrance.append("}");
 
-        jsMapFrance.append("initMapFrance();");
+        // jsMapFrance.append("initMapFrance();");
 
         return jsMapFrance.toString();
     }
@@ -691,8 +693,13 @@ public class MapFrance extends Panel {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        populateMap();
-        response.render(OnDomReadyHeaderItem.forScript(createJSCarteFrance()));
+        if (!isRendered) {
+            populateMap();
+            response.render(JavaScriptContentHeaderItem.forScript(createJSCarteFrance(), "carteFrance"));
+        }
+        isRendered = true;
+
+        response.render(OnDomReadyHeaderItem.forScript("initMapFrance();"));
     }
 
     /**
