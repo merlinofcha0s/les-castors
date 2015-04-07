@@ -3,18 +3,12 @@ package fr.batimen.dto;
 import static fr.batimen.dto.constant.ValidatorConstant.CLIENT_LOGIN_RANGE_MAX;
 import static fr.batimen.dto.constant.ValidatorConstant.CLIENT_LOGIN_RANGE_MIN;
 
-import java.lang.reflect.Type;
-import java.util.List;
 import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 import fr.batimen.dto.enums.TypeCompte;
-import fr.batimen.dto.helper.DeserializeJsonHelper;
 
 public class DemandeAnnonceDTO extends AbstractDTO {
 
@@ -104,17 +98,4 @@ public class DemandeAnnonceDTO extends AbstractDTO {
         }
         return false;
     }
-
-    public static DemandeAnnonceDTO deserializeDemandeAnnonceDTO(String json) {
-        Gson gson = DeserializeJsonHelper.createGsonObject();
-        return gson.fromJson(json, DemandeAnnonceDTO.class);
-    }
-
-    public static List<DemandeAnnonceDTO> deserializeDemandeAnnonceDTOList(String json) {
-        Gson gson = DeserializeJsonHelper.createGsonObject();
-        Type collectionType = new TypeToken<List<DemandeAnnonceDTO>>() {
-        }.getType();
-        return gson.fromJson(json, collectionType);
-    }
-
 }

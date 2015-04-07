@@ -1,26 +1,21 @@
 package fr.batimen.dto;
 
 import static fr.batimen.dto.constant.ValidatorConstant.NOTATION_MAX_COMMENTAIRE;
+import static fr.batimen.dto.constant.ValidatorConstant.NOTATION_MIN_COMMENTAIRE;
 
-import java.lang.reflect.Type;
-import java.util.List;
 import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import fr.batimen.dto.helper.DeserializeJsonHelper;
-
 public class NotationDTO extends AbstractDTO {
 
     private static final long serialVersionUID = 2210249579834795935L;
+
     @NotNull
     private Double score;
     @NotNull
-    @Size(max = NOTATION_MAX_COMMENTAIRE)
+    @Size(min = NOTATION_MIN_COMMENTAIRE, max = NOTATION_MAX_COMMENTAIRE)
     private String commentaire;
     @NotNull
     private String nomEntreprise;
@@ -98,17 +93,4 @@ public class NotationDTO extends AbstractDTO {
         }
         return false;
     }
-
-    public static NotationDTO deserializeNotationDTO(String json) {
-        Gson gson = DeserializeJsonHelper.createGsonObject();
-        return gson.fromJson(json, NotationDTO.class);
-    }
-
-    public static List<NotationDTO> deserializeNotationDTOList(String json) {
-        Gson gson = DeserializeJsonHelper.createGsonObject();
-        Type collectionType = new TypeToken<List<NotationDTO>>() {
-        }.getType();
-        return gson.fromJson(json, collectionType);
-    }
-
 }

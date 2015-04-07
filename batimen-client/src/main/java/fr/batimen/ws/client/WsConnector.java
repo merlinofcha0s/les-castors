@@ -106,6 +106,21 @@ public class WsConnector implements Serializable {
         return reponse;
     }
 
+    /**
+     * Permet de requeter le Webservice, en mode mutlipart (POST)<br/>
+     * Utile quand on veut envoyer un fichier en plus du flux de données en une
+     * seule requete
+     * 
+     * @param controller
+     *            Nom du controleur
+     * @param method
+     *            Nom de la méthode
+     * @param files
+     *            Listes des fichiers à envoyer
+     * @param object
+     *            Le flux
+     * @return JSON
+     */
     public String sendRequestWithFile(String controller, String method, List<File> files, Object object) {
         WebResource call = generateWebResource(controller, method);
 
@@ -113,14 +128,17 @@ public class WsConnector implements Serializable {
 
         FormDataMultiPart form = new FormDataMultiPart();
 
+        // On wrap le json dans un form datamultipart
         FormDataBodyPart jsonContent = new FormDataBodyPart("content", json, MediaType.APPLICATION_JSON_TYPE);
         form.bodyPart(jsonContent);
 
+        // On wrap les fichiers dans la request
         for (File file : files) {
             FileDataBodyPart fileBodyPart = new FileDataBodyPart("files", file, MediaType.APPLICATION_OCTET_STREAM_TYPE);
             form.bodyPart(fileBodyPart);
         }
 
+        // On appel le WS en spécifiant le type de flux qu'il y a a l'interieur.
         String reponse = call.type(MediaType.MULTIPART_FORM_DATA).accept(MediaType.APPLICATION_OCTET_STREAM_TYPE)
                 .accept(MediaType.APPLICATION_JSON_TYPE).post(String.class, form);
 

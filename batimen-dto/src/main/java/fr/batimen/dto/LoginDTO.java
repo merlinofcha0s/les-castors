@@ -5,17 +5,10 @@ import static fr.batimen.dto.constant.ValidatorConstant.CLIENT_LOGIN_RANGE_MIN;
 import static fr.batimen.dto.constant.ValidatorConstant.PASSWORD_RANGE_MAX;
 import static fr.batimen.dto.constant.ValidatorConstant.PASSWORD_RANGE_MIN;
 
-import java.lang.reflect.Type;
-import java.util.List;
 import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import fr.batimen.dto.helper.DeserializeJsonHelper;
 
 /**
  * Objet d'echange pour le login
@@ -92,17 +85,5 @@ public class LoginDTO extends AbstractDTO {
     @Override
     public int hashCode() {
         return Objects.hashCode(Objects.hash(this.login, this.password));
-    }
-
-    public static LoginDTO deserializeLoginDTO(String json) {
-        Gson gson = DeserializeJsonHelper.createGsonObject();
-        return gson.fromJson(json, LoginDTO.class);
-    }
-
-    public static List<LoginDTO> deserializeLoginDTOList(String json) {
-        Gson gson = DeserializeJsonHelper.createGsonObject();
-        Type collectionType = new TypeToken<List<LoginDTO>>() {
-        }.getType();
-        return gson.fromJson(json, collectionType);
     }
 }

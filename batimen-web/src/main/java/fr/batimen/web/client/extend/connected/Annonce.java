@@ -28,11 +28,13 @@ import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.EntrepriseDTO;
 import fr.batimen.dto.ImageDTO;
+import fr.batimen.dto.NotationDTO;
 import fr.batimen.dto.PermissionDTO;
 import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
 import fr.batimen.dto.aggregate.AnnonceSelectEntrepriseDTO;
 import fr.batimen.dto.aggregate.DesinscriptionAnnonceDTO;
 import fr.batimen.dto.aggregate.NbConsultationDTO;
+import fr.batimen.dto.aggregate.NoterArtisanDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.helper.CategorieLoader;
@@ -44,6 +46,8 @@ import fr.batimen.web.client.component.LinkLabel;
 import fr.batimen.web.client.component.Profil;
 import fr.batimen.web.client.event.DesinscriptionArtisanAnnonceEvent;
 import fr.batimen.web.client.event.InscriptionArtisanEvent;
+import fr.batimen.web.client.event.NoterArtisanEventClose;
+import fr.batimen.web.client.event.NoterArtisanEventOpen;
 import fr.batimen.web.client.event.SelectionEntrepriseEvent;
 import fr.batimen.web.client.event.SuppressionOpenEvent;
 import fr.batimen.web.client.extend.error.AccesInterdit;
@@ -51,6 +55,7 @@ import fr.batimen.web.client.extend.error.NonTrouvee;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.web.client.modal.DesincriptionArtisanModal;
 import fr.batimen.web.client.modal.InscriptionModal;
+import fr.batimen.web.client.modal.NotationArtisanModal;
 import fr.batimen.web.client.modal.SelectionEntrepriseModal;
 import fr.batimen.web.client.modal.SuppressionModal;
 import fr.batimen.ws.client.service.AnnonceServiceREST;
@@ -79,12 +84,14 @@ public class Annonce extends MasterPage {
     private WebMarkupContainer containerEntreprisesGlobales;
     private WebMarkupContainer containerContactMaster;
     private WebMarkupContainer containerActions;
+    private WebMarkupContainer notationAnnonceParClientContainer;
 
     private WebMarkupContainer envoyerDevisContainer;
 
     private InscriptionModal inscriptionModal;
     private SelectionEntrepriseModal selectionEntrepriseModal;
     private DesincriptionArtisanModal desincriptionArtisanModal;
+    private NotationArtisanModal notationArtisanModal;
 
     private AnnonceAffichageDTO annonceAffichageDTO;
 
@@ -118,6 +125,7 @@ public class Annonce extends MasterPage {
         initPopupSelectionEntreprise();
         initPopupSuppression();
         initPopupDesinscriptionEntreprise();
+        initPopupNotationArtisan();
         initAction();
         initContainerPhoto();
         affichageDonneesAnnonce();
@@ -496,8 +504,37 @@ public class Annonce extends MasterPage {
 
         downloadDevisEntrepriseSelectionnee.setOutputMarkupId(true);
 
+        AjaxLink<Void> notationAnnonceParClient = new AjaxLink<Void>("notationAnnonceParClient") {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                this.send(target.getPage(), Broadcast.BREADTH, new NoterArtisanEventOpen(target));
+            }
+
+        };
+
+        notationAnnonceParClientContainer = new WebMarkupContainer("notationAnnonceParClientContainer") {
+
+            private static final long serialVersionUID = 1L;
+
+            /*
+             * (non-Javadoc)
+             * 
+             * @see org.apache.wicket.Component#isVisible()
+             */
+            @Override
+            public boolean isVisible() {
+                return annonceAffichageDTO.getAnnonce().getEtatAnnonce().equals(EtatAnnonce.A_NOTER);
+            }
+        };
+
+        notationAnnonceParClientContainer.add(notationAnnonceParClient);
+        notationAnnonceParClientContainer.setOutputMarkupId(true);
+
         containerEntrepriseSelectionnee.add(entrepriseSelectionnee, voirProfilEntrepriseEntrepriseSelectionnee,
-                downloadDevisEntrepriseSelectionnee);
+                downloadDevisEntrepriseSelectionnee, notationAnnonceParClientContainer);
         containerEntreprisesGlobales.add(containerEntrepriseSelectionnee);
     }
 
@@ -624,6 +661,11 @@ public class Annonce extends MasterPage {
     private void initPopupDesinscriptionEntreprise() {
         desincriptionArtisanModal = new DesincriptionArtisanModal("desincriptionArtisanModal");
         add(desincriptionArtisanModal);
+    }
+
+    private void initPopupNotationArtisan() {
+        notationArtisanModal = new NotationArtisanModal("notationArtisanModal");
+        add(notationArtisanModal);
     }
 
     private void initContainerPhoto() {
@@ -777,6 +819,36 @@ public class Annonce extends MasterPage {
             // rafraichi par la requette ajax
 
             desinscriptionArtisanAnnonceEvent.getTarget().add(feedBackPanelGeneral, containerEntreprisesGlobales);
+        }
+
+        if (event.getPayload() instanceof NoterArtisanEventClose) {
+            NoterArtisanEventClose noterArtisanEventClose = (NoterArtisanEventClose) event.getPayload();
+
+            NotationDTO notationDTO = new NotationDTO();
+            notationDTO.setNomEntreprise(annonceAffichageDTO.getEntrepriseSelectionnee().getNomComplet());
+            notationDTO.setCommentaire(noterArtisanEventClose.getCommentaireNotation());
+            notationDTO.setScore(noterArtisanEventClose.getNbEtoiles());
+
+            NoterArtisanDTO noterArtisanDTO = new NoterArtisanDTO();
+            noterArtisanDTO.setHashID(idAnnonce);
+            noterArtisanDTO.setLoginArtisan(annonceAffichageDTO.getEntrepriseSelectionnee().getArtisan().getLogin());
+            noterArtisanDTO.setLoginDemandeur(userConnected.getLogin());
+            noterArtisanDTO.setNotation(notationDTO);
+
+            Integer codeService = annonceServiceREST.noterUnArtisan(noterArtisanDTO);
+
+            annonceAffichageDTO.getAnnonce().setEtatAnnonce(EtatAnnonce.TERMINER);
+            etatAnnonceValue.setObject(annonceAffichageDTO.getAnnonce().getEtatAnnonce().getType());
+
+            if (codeService.equals(CodeRetourService.RETOUR_OK)) {
+                feedBackPanelGeneral.success("Artisan noté avec succés, merci de votre retour");
+            } else {
+                feedBackPanelGeneral
+                        .error("Problème lors de la notation d'une entreprise, veuillez réessayer ultérieurement");
+            }
+
+            noterArtisanEventClose.getTarget()
+                    .add(feedBackPanelGeneral, etatAnnonce, notationAnnonceParClientContainer);
         }
     }
 

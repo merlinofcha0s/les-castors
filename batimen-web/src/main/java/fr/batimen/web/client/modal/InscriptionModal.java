@@ -9,6 +9,12 @@ import org.slf4j.LoggerFactory;
 import fr.batimen.web.client.component.ModalCastor;
 import fr.batimen.web.client.event.InscriptionArtisanEvent;
 
+/**
+ * Modal permettant a un artisan de confirmer / payer son inscription
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class InscriptionModal extends ModalCastor {
 
     private static final long serialVersionUID = 1615403190862019400L;

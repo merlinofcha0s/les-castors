@@ -10,6 +10,13 @@ import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 
+/**
+ * Validator qui permet de controler les extensions des fichiers que les
+ * utilisateurs veulent uploader.
+ * 
+ * @author Casaucau Cyril
+ * 
+ */
 public class FileUploadValidator implements IValidator<Collection<FileUpload>> {
 
     private static final long serialVersionUID = 1L;

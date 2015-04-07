@@ -92,6 +92,7 @@ public class SuppressionModal extends ModalCastor {
                         mesAnnonces = new MesAnnonces(
                                 "Problème technique, impossible de supprimer votre annonce :( Veuillez reessayer plus tard",
                                 FeedbackMessageLevel.ERROR);
+                        this.setResponsePage(mesAnnonces);
                     }
                 } else if (rolesUtils.checkRoles(TypeCompte.ADMINISTRATEUR)) {
                     // TODO Faire la meme chose que pour les clients mais

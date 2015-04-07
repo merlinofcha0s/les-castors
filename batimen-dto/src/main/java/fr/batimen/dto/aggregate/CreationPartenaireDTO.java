@@ -1,19 +1,13 @@
 package fr.batimen.dto.aggregate;
 
-import java.lang.reflect.Type;
-import java.util.List;
 import java.util.Objects;
 
 import javax.validation.Valid;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import fr.batimen.dto.AbstractDTO;
 import fr.batimen.dto.AdresseDTO;
 import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.EntrepriseDTO;
-import fr.batimen.dto.helper.DeserializeJsonHelper;
 
 public class CreationPartenaireDTO extends AbstractDTO {
 
@@ -100,17 +94,4 @@ public class CreationPartenaireDTO extends AbstractDTO {
         }
         return false;
     }
-
-    public static CreationPartenaireDTO deserializeCreationPartenaireDTO(String json) {
-        Gson gson = DeserializeJsonHelper.createGsonObject();
-        return gson.fromJson(json, CreationPartenaireDTO.class);
-    }
-
-    public static List<CreationPartenaireDTO> deserializeCreationPartenaireDTOList(String json) {
-        Gson gson = DeserializeJsonHelper.createGsonObject();
-        Type collectionType = new TypeToken<List<CreationPartenaireDTO>>() {
-        }.getType();
-        return gson.fromJson(json, collectionType);
-    }
-
 }

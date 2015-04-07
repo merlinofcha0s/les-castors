@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import fr.batimen.ws.entity.Image;
 
 /**
- * Classe d'accés aux données pour les entreprises.
+ * Classe d'accés aux données pour les images.
  * 
  * @author Casaucau Cyril
  */

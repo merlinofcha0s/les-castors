@@ -1,17 +1,11 @@
 package fr.batimen.dto.aggregate;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 import fr.batimen.dto.AbstractDTO;
 import fr.batimen.dto.NotationDTO;
-import fr.batimen.dto.NotificationDTO;
-import fr.batimen.dto.helper.DeserializeJsonHelper;
 
 /**
  * Objet de transfert a destination de la page de mon profil (coté client)
@@ -100,17 +94,4 @@ public class MonProfilDTO extends AbstractDTO {
         }
         return false;
     }
-
-    public static MonProfilDTO deserializeMonProfilDTO(String json) {
-        Gson gson = DeserializeJsonHelper.createGsonObject();
-        return gson.fromJson(json, MonProfilDTO.class);
-    }
-
-    public static List<MonProfilDTO> deserializeMonProfilDTOList(String json) {
-        Gson gson = DeserializeJsonHelper.createGsonObject();
-        Type collectionType = new TypeToken<List<NotificationDTO>>() {
-        }.getType();
-        return gson.fromJson(json, collectionType);
-    }
-
 }

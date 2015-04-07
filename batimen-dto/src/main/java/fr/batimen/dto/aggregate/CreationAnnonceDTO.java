@@ -9,7 +9,6 @@ import static fr.batimen.dto.constant.ValidatorConstant.COMPLEMENT_ADRESSE_MAX;
 import static fr.batimen.dto.constant.ValidatorConstant.VILLE_MAX;
 
 import java.io.File;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -21,9 +20,6 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 import fr.batimen.dto.AbstractDTO;
 import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.ClientDTO;
@@ -31,7 +27,6 @@ import fr.batimen.dto.SousCategorieMetierDTO;
 import fr.batimen.dto.enums.DelaiIntervention;
 import fr.batimen.dto.enums.TypeContact;
 import fr.batimen.dto.enums.TypeTravaux;
-import fr.batimen.dto.helper.DeserializeJsonHelper;
 
 /**
  * Objet d'échange permettant la creation d'annonce.
@@ -287,17 +282,4 @@ public class CreationAnnonceDTO extends AbstractDTO {
         }
         return false;
     }
-
-    public static CreationAnnonceDTO deserializeCreationAnnonceDTO(String json) {
-        Gson gson = DeserializeJsonHelper.createGsonObject();
-        return gson.fromJson(json, CreationAnnonceDTO.class);
-    }
-
-    public static List<CreationAnnonceDTO> deserializeCreationAnnonceDTOList(String json) {
-        Gson gson = DeserializeJsonHelper.createGsonObject();
-        Type collectionType = new TypeToken<List<CreationAnnonceDTO>>() {
-        }.getType();
-        return gson.fromJson(json, collectionType);
-    }
-
 }

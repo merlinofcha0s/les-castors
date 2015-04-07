@@ -6,13 +6,21 @@
 		href="css/bootstrap-rating.css"
 		rel="stylesheet"
 		type="text/css">
+	<link
+		href="css/lineglyphs.css"
+		rel="stylesheet"
+		type="text/css">
+	<link
+		rel="stylesheet"
+		href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
 </wicket:head>
 <wicket:panel>
 	<div class="raterContainer">
-		<input wicket:id="rater"
+		<input
+			wicket:id="rater"
 			type="hidden"
 			class="rating"
-			data-filled="icon-Star"
-			data-empty="lineglyph-84" />
+			data-filled="fa fa-star"
+			data-empty="fa fa-star-o" />
 	</div>
 </wicket:panel>

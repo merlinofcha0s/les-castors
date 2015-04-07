@@ -1,26 +1,34 @@
 package fr.batimen.web.client.component;
 
 import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.Model;
+
+import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
 
 public class RaterCastor extends Panel {
 
     private static final long serialVersionUID = 6704123311798304893L;
 
-    private final WebMarkupContainer rater;
+    private final HiddenField<String> rater;
 
     private final AttributeModifier readOnly = new AttributeModifier("readOnly", "readOnly");
 
     public RaterCastor(String id) {
         super(id);
-        rater = new WebMarkupContainer("rater");
+        rater = new HiddenField<String>("rater", new Model<String>());
         this.add(rater);
     }
 
-    public RaterCastor(String id, Integer nbEtoile) {
+    public RaterCastor(String id, Integer nbEtoile, boolean required) {
         this(id);
-        setNumberOfStars(nbEtoile);
+        rater.setModel(new Model<String>());
+        if (required) {
+            rater.setRequired(required);
+            rater.add(new RequiredBorderBehaviour());
+        }
+
     }
 
     public void setNumberOfStars(Integer nbEtoile) {
@@ -35,6 +43,10 @@ public class RaterCastor extends Panel {
                 rater.remove(readOnly);
             }
         }
+    }
+
+    public Double getScore() {
+        return Double.parseDouble(rater.getConvertedInput());
     }
 
     public String getCommentaireScore(Integer nbEtoile) {

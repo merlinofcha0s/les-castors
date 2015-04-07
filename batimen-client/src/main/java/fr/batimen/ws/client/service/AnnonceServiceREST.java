@@ -9,6 +9,7 @@ import javax.inject.Named;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.constant.WsPath;
 import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.DemandeAnnonceDTO;
@@ -17,6 +18,8 @@ import fr.batimen.dto.aggregate.AnnonceSelectEntrepriseDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.aggregate.DesinscriptionAnnonceDTO;
 import fr.batimen.dto.aggregate.NbConsultationDTO;
+import fr.batimen.dto.aggregate.NoterArtisanDTO;
+import fr.batimen.dto.helper.DeserializeJsonHelper;
 import fr.batimen.ws.client.WsConnector;
 
 /**
@@ -63,7 +66,9 @@ public class AnnonceServiceREST implements Serializable {
     }
 
     /**
-     * Appel le webservice pour creer l'annonce.
+     * Appel le webservice pour creer l'annonce. <br/>
+     * 
+     * Contient des images, l'appel au web service est fait en mode multipart
      * 
      * @param nouvelleAnnonce
      *            l'objet a envoyé au webservice pour qu'il puisse créer
@@ -106,7 +111,7 @@ public class AnnonceServiceREST implements Serializable {
         String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_ANNONCE_SERVICE_PATH,
                 WsPath.GESTION_ANNONCE_SERVICE_GET_ANNONCES_BY_LOGIN, login);
 
-        List<AnnonceDTO> annonces = AnnonceDTO.deserializeAnnonceDTOList(objectInJSON);
+        List<AnnonceDTO> annonces = DeserializeJsonHelper.deserializeDTOList(objectInJSON);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Fin appel service creation annonce.....");
@@ -135,7 +140,7 @@ public class AnnonceServiceREST implements Serializable {
         String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_ANNONCE_SERVICE_PATH,
                 WsPath.GESTION_ANNONCE_SERVICE_GET_ANNONCES_BY_ID, demandeAnnonceDTO);
 
-        AnnonceAffichageDTO annonce = AnnonceAffichageDTO.deserializeAnnonceAffichageDTO(objectInJSON);
+        AnnonceAffichageDTO annonce = DeserializeJsonHelper.deserializeDTO(objectInJSON, AnnonceAffichageDTO.class);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Fin appel service creation annonce.....");
@@ -271,6 +276,31 @@ public class AnnonceServiceREST implements Serializable {
         }
 
         return updateOK;
+    }
+
+    /**
+     * Service qui permet à un client de noter un artisan<br/>
+     * 
+     * Fais passer l'annonce en mode terminer
+     * 
+     * @param noterArtisanDTO
+     *            Objet permettant de valider la note de l'artisan
+     * @return {@link CodeRetourService}
+     */
+    public Integer noterUnArtisan(NoterArtisanDTO noterArtisanDTO) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Début appel service de notation d'un artisan.....");
+        }
+
+        String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_ANNONCE_SERVICE_PATH,
+                WsPath.GESTION_ANNONCE_SERVICE_NOTER_UN_ARTISAN, noterArtisanDTO);
+
+        Integer notationOK = Integer.valueOf(objectInJSON);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Fin appel service de notation d'un artisan.");
+        }
+        return notationOK;
     }
 
 }

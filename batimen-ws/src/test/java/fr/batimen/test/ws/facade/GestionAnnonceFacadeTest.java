@@ -16,12 +16,14 @@ import org.junit.Test;
 import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.DemandeAnnonceDTO;
+import fr.batimen.dto.NotationDTO;
 import fr.batimen.dto.NotificationDTO;
 import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
 import fr.batimen.dto.aggregate.AnnonceSelectEntrepriseDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.aggregate.DesinscriptionAnnonceDTO;
 import fr.batimen.dto.aggregate.NbConsultationDTO;
+import fr.batimen.dto.aggregate.NoterArtisanDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.StatutNotification;
 import fr.batimen.dto.enums.TypeCompte;
@@ -452,9 +454,9 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         Assert.assertTrue(artisanIsPresent);
 
         // VERIFICATION DE L'ENREGISTREMENT DE LA NOTIFICATION
-        List<NotificationDTO> notifications = notificationService.getNotificationByLogin(artisan.getLogin(),
-                TypeCompte.ARTISAN);
-        Assert.assertEquals(1, notifications.size());
+        List<NotificationDTO> notifications = notificationService.getNotificationByLogin(annonce.getDemandeur()
+                .getLogin(), TypeCompte.CLIENT);
+        Assert.assertEquals(2, notifications.size());
         boolean isNotificationCorrecte = false;
 
         for (NotificationDTO notificationDTO : notifications) {
@@ -567,6 +569,52 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         Annonce annonce = testDesinscriptionArtisan("pebronne");
         Assert.assertEquals(4, annonce.getArtisans().size());
         Assert.assertEquals(EtatAnnonce.ACTIVE, annonce.getEtatAnnonce());
+    }
+
+    /**
+     * Cas de test : Un client veut noter un artisan car les travaux sont
+     * terminés
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonces_by_id.yml")
+    @ShouldMatchDataSet(value = "datasets/out/notation_artisan_par_client_et_admin.yml", excludeColumns = { "id",
+            "datemaj", "datecreation", "datenotation", "datenotification" })
+    public void testNotationArtisanParClient() {
+        NoterArtisanDTO noterArtisanDTO = createNotationDTO("pebronne");
+
+        Integer codeRetour = annonceServiceREST.noterUnArtisan(noterArtisanDTO);
+        Assert.assertEquals(CodeRetourService.RETOUR_OK, codeRetour);
+    }
+
+    /**
+     * Cas de test : Un admin veut noter un artisan car les travaux sont
+     * terminés
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonces_by_id.yml")
+    @ShouldMatchDataSet(value = "datasets/out/notation_artisan_par_client_et_admin.yml", excludeColumns = { "id",
+            "datemaj", "datecreation", "datenotation", "datenotification" })
+    public void testNotationArtisanParAdmin() {
+        NoterArtisanDTO noterArtisanDTO = createNotationDTO("admin");
+
+        Integer codeRetour = annonceServiceREST.noterUnArtisan(noterArtisanDTO);
+        Assert.assertEquals(CodeRetourService.RETOUR_OK, codeRetour);
+    }
+
+    private NoterArtisanDTO createNotationDTO(String loginDemandeur) {
+        NotationDTO notationDTO = new NotationDTO();
+        notationDTO.setScore((double) 4);
+        notationDTO.setCommentaire("Bon travaux");
+        notationDTO.setNomEntreprise("Pebronne enterprise");
+
+        NoterArtisanDTO noterArtisanDTO = new NoterArtisanDTO();
+        noterArtisanDTO.setNotation(notationDTO);
+        noterArtisanDTO
+                .setHashID("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
+        noterArtisanDTO.setLoginArtisan("pebronneArtisanne");
+        noterArtisanDTO.setLoginDemandeur(loginDemandeur);
+
+        return noterArtisanDTO;
     }
 
     private Annonce testDesinscriptionArtisan(String loginDemandeur) {

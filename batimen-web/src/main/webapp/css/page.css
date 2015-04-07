@@ -359,6 +359,10 @@ table tr td .error {
 		rgba(255, 255, 255, 1);
 }
 
+.feedbackCastorPanel{
+	padding-bottom: 15px;
+}
+
 /* Page d'erreur */
 .wrapper500 {
 	background: url("../img/bg_500.png") no-repeat scroll center top

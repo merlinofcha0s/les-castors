@@ -10,7 +10,6 @@ import static fr.batimen.dto.constant.ValidatorConstant.PASSWORD_RANGE_MAX;
 import static fr.batimen.dto.constant.ValidatorConstant.PASSWORD_RANGE_MIN;
 import static fr.batimen.dto.constant.ValidatorConstant.TELEPHONE_REGEX;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -23,11 +22,7 @@ import javax.validation.constraints.Size;
 import org.hibernate.validator.constraints.Email;
 import org.modelmapper.ModelMapper;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
 import fr.batimen.dto.enums.Civilite;
-import fr.batimen.dto.helper.DeserializeJsonHelper;
 
 /**
  * Objet d'échanges pour les informations utilisateurs
@@ -242,18 +237,6 @@ public class ClientDTO extends AbstractDTO {
     @Override
     public int hashCode() {
         return Objects.hashCode(Objects.hash(this.login, this.email));
-    }
-
-    public static ClientDTO deserializeUserDTO(String json) {
-        Gson gson = DeserializeJsonHelper.createGsonObject();
-        return gson.fromJson(json, ClientDTO.class);
-    }
-
-    public static List<ClientDTO> deserializeUserDTOList(String json) {
-        Gson gson = DeserializeJsonHelper.createGsonObject();
-        Type collectionType = new TypeToken<List<ClientDTO>>() {
-        }.getType();
-        return gson.fromJson(json, collectionType);
     }
 
     public static ClientDTO copy(ClientDTO clientSource) {

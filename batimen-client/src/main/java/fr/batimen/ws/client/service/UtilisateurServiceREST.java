@@ -12,6 +12,7 @@ import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.WsPath;
 import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.LoginDTO;
+import fr.batimen.dto.helper.DeserializeJsonHelper;
 import fr.batimen.ws.client.WsConnector;
 
 /**
@@ -47,7 +48,7 @@ public class UtilisateurServiceREST implements Serializable {
         String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_UTILISATEUR_SERVICE_PATH,
                 WsPath.GESTION_UTILISATEUR_SERVICE_LOGIN, loginDTO);
 
-        ClientDTO clientDTO = ClientDTO.deserializeUserDTO(objectInJSON);
+        ClientDTO clientDTO = DeserializeJsonHelper.deserializeDTO(objectInJSON, ClientDTO.class);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Fin appel service login + deserialization");
@@ -72,7 +73,7 @@ public class UtilisateurServiceREST implements Serializable {
         String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_UTILISATEUR_SERVICE_PATH,
                 WsPath.GESTION_UTILISATEUR_SERVICE_BY_EMAIL, email);
 
-        ClientDTO clientDTO = ClientDTO.deserializeUserDTO(objectInJSON);
+        ClientDTO clientDTO = DeserializeJsonHelper.deserializeDTO(objectInJSON, ClientDTO.class);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Fin appel service service de recuperation client par email + deserialization");
