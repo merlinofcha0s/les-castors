@@ -274,9 +274,11 @@ public class TestAnnonce extends AbstractITTest {
     /**
      * Cas de test : Un client se connecte sur le site, va sur une annonce et et
      * note l'artisan qu'il a selectionné auparavant, tout se passe comme prévu
+     * 
+     * @throws InterruptedException
      */
     @Test
-    public void testNotationArtisanByClient() {
+    public void testNotationArtisanByClient() throws InterruptedException {
         testNotation(TypeCompte.CLIENT);
     }
 
@@ -284,13 +286,15 @@ public class TestAnnonce extends AbstractITTest {
      * Cas de test : Un administrateur se connecte sur le site, va sur une
      * annonce et note l'artisan qui a été selectionné auparavant par le client,
      * tout se passe comme prévu
+     * 
+     * @throws InterruptedException
      */
     @Test
-    public void testNotationArtisanByAdmin() {
+    public void testNotationArtisanByAdmin() throws InterruptedException {
         testNotation(TypeCompte.ADMINISTRATEUR);
     }
 
-    private void testNotation(TypeCompte typeCompte) {
+    private void testNotation(TypeCompte typeCompte) throws InterruptedException {
         connectAndGoToAnnonce(typeCompte, "lolmdrxD");
         assertCoreInformationOfAnnonce(EtatAnnonce.A_NOTER);
 
@@ -299,10 +303,12 @@ public class TestAnnonce extends AbstractITTest {
                 By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[4]/div/div/div/div[2]/div[2]/div/div[3]/a"))
                 .click();
 
-        // Clique sur la troisieme etoile
-        driver.findElement(
-                By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[9]/div/div[2]/form/div[2]/div[2]/div/div/span[1]/div[3]/div[2]/span"))
-                .click();
+        WebElement checkElementEnvoyerDevisPresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.presenceOfElementLocated(By.id("notationArtisanModal")));
+        assertNotNull(checkElementEnvoyerDevisPresent);
+
+        // Clique sur la première étoile
+        driver.findElement(By.className("rating-symbol")).click();
 
         driver.findElement(By.id("textAreaCommentaireNotation")).clear();
         driver.findElement(By.id("textAreaCommentaireNotation")).sendKeys("moyen moyen le pébron !!");

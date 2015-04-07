@@ -449,7 +449,6 @@ public class GestionAnnonceFacade {
             LOGGER.debug("| Hash ID : " + demandeAnnonceDTO.getHashID());
             LOGGER.debug("| Login demandeur : " + demandeAnnonceDTO.getLoginDemandeur());
             LOGGER.debug("| Ajout / suppression : " + demandeAnnonceDTO.getAjoutOuSupprimeArtisan());
-            LOGGER.debug("| Type compte : " + demandeAnnonceDTO.getTypeCompteDemandeur().getNomCompte());
             LOGGER.debug("| Artisan choisi : " + demandeAnnonceDTO.getLoginArtisanChoisi());
             LOGGER.debug("+------------------------------------------------------------------------------+");
         }
@@ -535,7 +534,6 @@ public class GestionAnnonceFacade {
             LOGGER.debug("+------------------------------------------------------------------------------+");
             LOGGER.debug("| Hash ID : " + demandeAnnonceDTO.getHashID());
             LOGGER.debug("| Login demandeur : " + demandeAnnonceDTO.getLoginDemandeur());
-            LOGGER.debug("| Type compte : " + demandeAnnonceDTO.getTypeCompteDemandeur().getNomCompte());
             LOGGER.debug("+------------------------------------------------------------------------------+");
         }
 
