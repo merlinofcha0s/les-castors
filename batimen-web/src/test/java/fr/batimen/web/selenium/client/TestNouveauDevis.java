@@ -20,9 +20,8 @@ import fr.batimen.web.utils.UtilsSelenium;
 
 /**
  * Classe de test selenium pour la creation de nouveau devis par le client
- * 
+ *
  * @author Casaucau Cyril
- * 
  */
 public class TestNouveauDevis extends AbstractITTest {
 
@@ -40,9 +39,8 @@ public class TestNouveauDevis extends AbstractITTest {
     /**
      * Cas de test : L'utilisateur rempli son devis en s'étant authentifié juste
      * avant. Le devis doit se créer correctement.
-     * 
+     *
      * @throws InterruptedException
-     * 
      */
     @Test
     public void testCreationNouveauDevisAuthenticatedSucceed() throws InterruptedException {
@@ -59,9 +57,15 @@ public class TestNouveauDevis extends AbstractITTest {
         }
         // On remplit l'étape 2
         etape2();
+        if (browser.equals("ie")) {
+            Thread.sleep(1000);
+        }
         // On passe l'etape 3
         etape3(false);
 
+        if (browser.equals("ie")) {
+            Thread.sleep(1000);
+        }
         // On s'authentifie à l'application
         connexionApplication("raiden", AbstractITTest.BON_MOT_DE_PASSE, Boolean.TRUE);
 
@@ -74,7 +78,7 @@ public class TestNouveauDevis extends AbstractITTest {
     /**
      * Cas de test : L'utilisateur crée un nouveau devis alors qu'il n'est pas
      * inscrit (et donc pas authentifié). Le devis doit se créer correctement.
-     * 
+     *
      * @throws InterruptedException
      */
     @Test
@@ -114,7 +118,7 @@ public class TestNouveauDevis extends AbstractITTest {
      * Cas de test : L'utilisateur crée un nouveau devis alors qu'il est inscrit
      * mais pas authentifié, il s'authentifie lors de l'étape 3. Le devis doit
      * se créer correctement.
-     * 
+     *
      * @throws InterruptedException
      */
     @Test
@@ -145,7 +149,7 @@ public class TestNouveauDevis extends AbstractITTest {
     /**
      * Cas de test : L'utilisateur crée deux devis, la deuxieme, l'application
      * doit lui renvoyer un message d'erreur.
-     * 
+     *
      * @throws InterruptedException
      */
     @Test
@@ -179,21 +183,16 @@ public class TestNouveauDevis extends AbstractITTest {
      * Cas de test : L'utilisateur crée un devis mais veut modifier les
      * informations de l'etape précédente, il clique soit sur le bouton etape
      * précédente ou soit sur le wizard, l'operation doit etre un succés
-     * 
+     *
      * @throws InterruptedException
      */
     @Test
-    public void testEtapePrecedente() {
+    public void testEtapePrecedente() throws InterruptedException {
         driver.get(appUrl + nouveauDevisDepartementURL);
         // On selectionne le bon département
         UtilsSelenium.selectionDepartement(driver);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            if (LOGGER.isErrorEnabled()) {
-                LOGGER.error("Fail to wait authentication", e);
-            }
-        }
+
+        Thread.sleep(1000);
         // On remplit l'étape 2
         etape2();
         // On remplit l'étape 3
@@ -201,42 +200,18 @@ public class TestNouveauDevis extends AbstractITTest {
 
         driver.findElement(By.id("etapePrecedente4")).click();
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            if (LOGGER.isErrorEnabled()) {
-                LOGGER.error("Fail to wait authentication", e);
-            }
-        }
+        Thread.sleep(1000);
         driver.findElement(By.id("etapePrecedente3")).click();
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            if (LOGGER.isErrorEnabled()) {
-                LOGGER.error("Fail to wait authentication", e);
-            }
-        }
+        Thread.sleep(1000);
         driver.findElement(By.id("etapePrecedente2")).click();
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            if (LOGGER.isErrorEnabled()) {
-                LOGGER.error("Fail to wait authentication", e);
-            }
-        }
+        Thread.sleep(1000);
 
         // On selectionne le bon département
         UtilsSelenium.selectionDepartement(driver);
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            if (LOGGER.isErrorEnabled()) {
-                LOGGER.error("Fail to wait authentication", e);
-            }
-        }
+        Thread.sleep(1000);
         // On remplit l'étape 2
         etape2();
         // On remplit l'étape 3
@@ -256,7 +231,10 @@ public class TestNouveauDevis extends AbstractITTest {
 
     }
 
-    private void etape3(boolean isAlreadyAuthenticate) {
+    private void etape3(boolean isAlreadyAuthenticate) throws InterruptedException {
+        if (browser.equals("ie")) {
+            Thread.sleep(1000);
+        }
         new Select(driver.findElement(By.id("sousCategorieSelect"))).selectByVisibleText("Tableaux électriques");
         driver.findElement(By.id("descriptionDevisField")).clear();
         driver.findElement(By.id("descriptionDevisField")).sendKeys("Refonte complete de l'electricite dans la maison");
@@ -277,9 +255,16 @@ public class TestNouveauDevis extends AbstractITTest {
         if (!isAlreadyAuthenticate) {
             (new WebDriverWait(driver, 5)).until(ExpectedConditions.presenceOfElementLocated(By.id("dejaInscrit")));
         }
+
+        if (browser.equals("ie")) {
+            Thread.sleep(1000);
+        }
     }
 
-    private void etape2() {
+    private void etape2() throws InterruptedException {
+        if (browser.equals("ie")) {
+            Thread.sleep(1000);
+        }
         driver.findElement(By.id("electricite")).click();
     }
 

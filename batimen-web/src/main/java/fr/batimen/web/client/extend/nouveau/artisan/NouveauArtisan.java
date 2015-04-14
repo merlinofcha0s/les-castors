@@ -252,7 +252,7 @@ public class NouveauArtisan extends MasterPage {
                 feedBackPanelGeneral.error("Numéro de département incorrecte, veuillez recommencer");
             }
 
-            navigationWizard.setStep(nouveauPartenaire.getNumeroEtape() + 1);
+            navigationWizard.setStep(nouveauPartenaire.getNumeroEtape());
 
             if (feedBackPanelGeneral.hasFeedbackMessage()) {
                 feedBackPanelGeneral.getFeedbackMessages().clear();
@@ -305,6 +305,7 @@ public class NouveauArtisan extends MasterPage {
             navigationWizard.setStep(nouveauPartenaire.getNumeroEtape());
             // On dit a wicket de rafraichir ce panel avec la requete ajax
             castorWizardEvent.getTarget().add(masterContainer);
+            castorWizardEvent.getTarget().add(feedBackPanelGeneral);
         }
     }
 }

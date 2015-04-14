@@ -36,7 +36,7 @@ public class AnnonceServiceREST implements Serializable {
     private static final Logger LOGGER = LoggerFactory.getLogger(AnnonceServiceREST.class);
 
     @Inject
-    private transient WsConnector wsConnector;
+    private WsConnector wsConnector;
 
     /**
      * Appel le webservice pour creer l'annonce.

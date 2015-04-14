@@ -65,7 +65,7 @@ public class TestAnnonce extends AbstractITTest {
                         By.cssSelector("#containerEnteprisesInscrites > div.row-fluid > div.span12 > div.bg_title > h2.headInModule"))
                         .getText());
         WebElement checkConditionAnnoncePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
-                .until(ExpectedConditions.presenceOfElementLocated(By.id("containerContactMaster")));
+                .until(ExpectedConditions.visibilityOfElementLocated(By.id("containerContactMaster")));
         assertNotNull(checkConditionAnnoncePresent);
         assertEquals("Modifier votre annonce", driver.findElement(By.linkText("Modifier votre annonce")).getText());
         assertEquals("Supprimer l'annonce", driver.findElement(By.id("supprimerAnnonce")).getText());
@@ -84,9 +84,9 @@ public class TestAnnonce extends AbstractITTest {
         assertCoreInformationOfAnnonce(EtatAnnonce.ACTIVE);
 
         WebElement checkConditionAnnoncePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
-                .until(ExpectedConditions.presenceOfElementLocated(By.id("containerContactMaster")));
+                .until(ExpectedConditions.visibilityOfElementLocated(By.id("containerContactMaster")));
         WebElement checkConditionImageAnnoncePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
-                .until(ExpectedConditions.presenceOfElementLocated(By
+                .until(ExpectedConditions.visibilityOfElementLocated(By
                         .xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[3]/div/div/div[2]/div[1]/a")));
         assertNotNull(checkConditionAnnoncePresent);
         assertNotNull(checkConditionImageAnnoncePresent);
@@ -137,7 +137,7 @@ public class TestAnnonce extends AbstractITTest {
         assertEquals("Supprimer l'annonce", driver.findElement(By.id("supprimerAnnonce")).getText());
 
         WebElement checkConditionAnnoncePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
-                .until(ExpectedConditions.presenceOfElementLocated(By.id("containerContactMaster")));
+                .until(ExpectedConditions.visibilityOfElementLocated(By.id("containerContactMaster")));
         assertNotNull(checkConditionAnnoncePresent);
         assertEquals(
                 "ENTREPRISES QUI SOUHAITENT VOUS CONTACTER",
@@ -184,6 +184,10 @@ public class TestAnnonce extends AbstractITTest {
         connectAndGoToAnnonce(TypeCompte.CLIENT, "toto");
         assertCoreInformationOfAnnonce(EtatAnnonce.ACTIVE);
         driver.findElement(By.id("supprimerAnnonce")).click();
+
+        WebElement yesModalSuppression = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.visibilityOfElementLocated(By.id("yes")));
+
         driver.findElement(By.id("yes")).click();
         assertEquals("Votre annonce a bien été supprimée", driver.findElement(By.cssSelector("span.box_type4"))
                 .getText());
@@ -199,6 +203,10 @@ public class TestAnnonce extends AbstractITTest {
         connectAndGoToAnnonce(TypeCompte.ADMINISTRATEUR, "toto");
         assertCoreInformationOfAnnonce(EtatAnnonce.ACTIVE);
         driver.findElement(By.id("supprimerAnnonce")).click();
+
+        WebElement yesModalSuppression = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.visibilityOfElementLocated(By.id("yes")));
+
         driver.findElement(By.id("yes")).click();
         // TODO Verifier que l'on a bien redirigé l'admin sur la bonne page
         // quand la page d'accueil admin sera faites
@@ -209,7 +217,7 @@ public class TestAnnonce extends AbstractITTest {
      * annonce.
      */
     @Test
-    public void testChoixEntrepriseAnnonceByClient() {
+    public void testChoixEntrepriseAnnonceByClient() throws InterruptedException {
         testSelectionEntreprise(TypeCompte.CLIENT);
     }
 
@@ -218,7 +226,7 @@ public class TestAnnonce extends AbstractITTest {
      * annonce.
      */
     @Test
-    public void testChoixEntrepriseAnnonceByAdmin() {
+    public void testChoixEntrepriseAnnonceByAdmin() throws InterruptedException {
         testSelectionEntreprise(TypeCompte.ADMINISTRATEUR);
     }
 
@@ -232,7 +240,7 @@ public class TestAnnonce extends AbstractITTest {
         driver.findElement(By.id("inscrireAnnonce")).click();
 
         WebElement checkConditionAnnoncePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
-                .until(ExpectedConditions.presenceOfElementLocated(By
+                .until(ExpectedConditions.visibilityOfElementLocated(By
                         .cssSelector("#inscriptionModal > div.modal-header > #myModalLabel")));
         assertNotNull(checkConditionAnnoncePresent);
 
@@ -247,7 +255,7 @@ public class TestAnnonce extends AbstractITTest {
         assertTrue(checkCondition);
 
         WebElement checkElementEnvoyerDevisPresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
-                .until(ExpectedConditions.presenceOfElementLocated(By.linkText("Envoyer votre devis")));
+                .until(ExpectedConditions.visibilityOfElementLocated(By.linkText("Envoyer votre devis")));
         assertNotNull(checkElementEnvoyerDevisPresent);
 
     }
@@ -304,7 +312,7 @@ public class TestAnnonce extends AbstractITTest {
                 .click();
 
         WebElement checkElementEnvoyerDevisPresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
-                .until(ExpectedConditions.presenceOfElementLocated(By.id("notationArtisanModal")));
+                .until(ExpectedConditions.visibilityOfElementLocated(By.id("notationArtisanModal")));
         assertNotNull(checkElementEnvoyerDevisPresent);
 
         // Clique sur la première étoile
@@ -319,7 +327,7 @@ public class TestAnnonce extends AbstractITTest {
                 .click();
 
         WebElement checkFeedbackPanelNotationOK = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
-                .until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("span.box_type4")));
+                .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("span.box_type4")));
         assertNotNull(checkFeedbackPanelNotationOK);
 
         assertEquals(EtatAnnonce.TERMINER.getType(), driver.findElement(By.id("etatAnnonce")).getText());
@@ -375,7 +383,7 @@ public class TestAnnonce extends AbstractITTest {
                 .click();
 
         WebElement checkConditionAnnoncePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
-                .until(ExpectedConditions.presenceOfElementLocated(By
+                .until(ExpectedConditions.visibilityOfElementLocated(By
                         .cssSelector("#desincriptionArtisanModal > div.modal-header > #myModalLabel")));
         assertNotNull(checkConditionAnnoncePresent);
 
@@ -391,7 +399,7 @@ public class TestAnnonce extends AbstractITTest {
         assertTrue(checkCondition);
     }
 
-    private void testSelectionEntreprise(TypeCompte typeCompte) {
+    private void testSelectionEntreprise(TypeCompte typeCompte) throws InterruptedException {
         connectAndGoToAnnonce(typeCompte, "toto");
         assertCoreInformationOfAnnonce(EtatAnnonce.ACTIVE);
         // Le lien de selection de la premiere entreprise
@@ -399,10 +407,16 @@ public class TestAnnonce extends AbstractITTest {
                 By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[4]/div/div/div/div[2]/div[2]/div[3]/a[1]"))
                 .click();
 
-        WebElement checkConditionAnnoncePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
-                .until(ExpectedConditions.presenceOfElementLocated(By
-                        .cssSelector("#selectionEntrepriseModal > div.modal-header > #myModalLabel")));
+        WebElement checkConditionAnnoncePresent = new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX)
+                .until(ExpectedConditions.visibilityOfElementLocated(By
+                        .xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[7]/div/div[2]/a[1]")));
         assertNotNull(checkConditionAnnoncePresent);
+
+        //WebElement webDriverWait = new WebDriverWait(driver,20).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[7]/div/div[2]/a[1]")));
+
+//        Thread.sleep(3000);
+
+
 
         // Le bouton oui de la modal
         driver.findElement(

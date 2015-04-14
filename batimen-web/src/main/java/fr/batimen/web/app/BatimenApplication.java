@@ -41,6 +41,8 @@ import fr.batimen.web.client.extend.nouveau.artisan.NouveauArtisan;
 import fr.batimen.web.client.extend.nouveau.devis.NouveauDevis;
 import fr.batimen.web.client.session.BatimenSession;
 import fr.batimen.web.enums.PropertiesFileWeb;
+import org.wicketstuff.javaee.injection.JavaEEComponentInjector;
+import org.wicketstuff.javaee.naming.global.ModuleJndiNamingStrategy;
 
 /**
  * Classe principale de l'application
@@ -53,6 +55,16 @@ public class BatimenApplication extends AuthenticatedWebApplication {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BatimenApplication.class);
 
+    private void getAppProperties() {
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Récuperation des properties....");
+        }
+
+        Properties appProperties = PropertiesFileWeb.APP.getProperties();
+        setStripWicketTags = Boolean.valueOf(appProperties.getProperty("app.setStripWicketTags"));
+    }
+
     /**
      * @see org.apache.wicket.Application#getHomePage()
      */
@@ -61,11 +73,22 @@ public class BatimenApplication extends AuthenticatedWebApplication {
         return Accueil.class;
     }
 
+    @Override
+    protected Class<? extends WebPage> getSignInPageClass() {
+        return Authentification.class;
+    }
+
+    @Override
+    protected Class<? extends AbstractAuthenticatedWebSession> getWebSessionClass() {
+        return BatimenSession.class;
+    }
+
     /**
      * @see org.apache.wicket.Application#init()
      */
     @Override
     public void init() {
+        getComponentInstantiationListeners().add(new JavaEEComponentInjector(this, new ModuleJndiNamingStrategy()));
         super.init();
 
         // On récup les properties de conf de la web app
@@ -134,15 +157,12 @@ public class BatimenApplication extends AuthenticatedWebApplication {
         // Configuration de CDI en enlevant le mode conversation
         new CdiConfiguration(manager).setPropagation(ConversationPropagation.NONE).configure(this);
 
+
+
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Init de la Web app.....OK");
         }
 
-    }
-
-    @Override
-    protected Class<? extends AbstractAuthenticatedWebSession> getWebSessionClass() {
-        return BatimenSession.class;
     }
 
     /*
@@ -155,20 +175,5 @@ public class BatimenApplication extends AuthenticatedWebApplication {
     @Override
     public Session newSession(Request request, Response response) {
         return new BatimenSession(request);
-    }
-
-    @Override
-    protected Class<? extends WebPage> getSignInPageClass() {
-        return Authentification.class;
-    }
-
-    private void getAppProperties() {
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Récuperation des properties....");
-        }
-
-        Properties appProperties = PropertiesFileWeb.APP.getProperties();
-        setStripWicketTags = Boolean.valueOf(appProperties.getProperty("app.setStripWicketTags"));
     }
 }
