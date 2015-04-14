@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -44,8 +45,17 @@ public class TestNouveauPartenaire extends AbstractITTest {
 
         // On selectionne un departement
         UtilsSelenium.selectionDepartement(driver);
+        if(browser.equals("ie")){
+            Thread.sleep(1000);
+        }
         etape2();
+        if(browser.equals("ie")){
+            Thread.sleep(1000);
+        }
         etape3();
+        if(browser.equals("ie")){
+            Thread.sleep(1000);
+        }
         etape4();
     }
 
@@ -63,11 +73,18 @@ public class TestNouveauPartenaire extends AbstractITTest {
         // On selectionne un departement
         UtilsSelenium.selectionDepartement(driver);
         etape2();
-        driver.findElement(By.id("etapePrecedenteNouveauArtisan3")).click();
+
+        WebElement etapeButionNouveauArtisan = new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX).until(ExpectedConditions
+                .visibilityOfElementLocated(By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div/div/form/a")));
+        Thread.sleep(1000);
+
+        driver.findElement(By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div/div/form/a")).click();
         etape2();
         Thread.sleep(1000);
         driver.findElement(By.xpath("//div[@id='batimenWizard']/ul/li[2]/span")).click();
+        Thread.sleep(1000);
         etape2();
+        Thread.sleep(1000);
         etape3();
 
         etape4();
@@ -99,7 +116,7 @@ public class TestNouveauPartenaire extends AbstractITTest {
         Thread.sleep(1000);
         // Etape 4 confirmation
         (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX)).until(ExpectedConditions
-                .presenceOfElementLocated(By.xpath("//label[@id='containerDecorationMaconnerie']/span")));
+                .visibilityOfElementLocated(By.xpath("//label[@id='containerDecorationMaconnerie']/span")));
         driver.findElement(By.xpath("//label[@id='containerDecorationMaconnerie']/span")).click();
         driver.findElement(By.id("nomComplet")).clear();
         driver.findElement(By.id("nomComplet")).sendKeys("Xav Entreprise");

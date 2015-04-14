@@ -6,13 +6,14 @@ import java.util.List;
 
 import org.apache.commons.io.FilenameUtils;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
+import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;
 import org.apache.wicket.validation.ValidationError;
 
 /**
  * Validator qui permet de controler les extensions des fichiers que les
- * utilisateurs veulent uploader.
+ * utilisateurs veulent uploader ainsi que la taille des fichiers.
  * 
  * @author Casaucau Cyril
  * 

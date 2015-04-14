@@ -1,5 +1,6 @@
 package fr.batimen.web.client.extend.nouveau.devis;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,9 +44,8 @@ import fr.batimen.ws.client.service.AnnonceServiceREST;
 
 /**
  * Permet la création de nouveau devis par un client.
- * 
+ *
  * @author Casaucau Cyril
- * 
  */
 public class NouveauDevis extends MasterPage {
 
@@ -149,7 +149,7 @@ public class NouveauDevis extends MasterPage {
         containerInscription = new WebMarkupContainer("containerInscription") {
 
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -312,42 +312,42 @@ public class NouveauDevis extends MasterPage {
     private void changementEtape(Integer numeroEtape) throws FrontEndException {
         // On charge l'etape demandé grace au numero d'etape passé en parametre
         switch (numeroEtape) {
-        case 1:
-            loggerChangementEtape("Passage dans l'étape 1");
-            etapeEncours = Etape.ETAPE_1;
-            break;
-        case 2:
-            loggerChangementEtape("Passage dans l'étape 2");
-            etapeEncours = Etape.ETAPE_2;
-            break;
-        case 3:
-            loggerChangementEtape("Passage dans l'étape 3");
-            etapeEncours = Etape.ETAPE_3;
-            break;
-        case 4:
-            loggerChangementEtape("Passage dans l'étape 4");
-            // Si l'utilisateur est deja authentifié on saute l'inscription
-            // (etape 3)
-            if (SecurityUtils.getSubject().isAuthenticated()) {
-                loggerChangementEtape("L'utilisateur s'est connecté, on passe l'etape 5");
-                changementEtape(5);
-            } else {
-                etapeEncours = Etape.ETAPE_4;
-            }
-            break;
-        case 5:
-            loggerChangementEtape("Passage dans l'étape 5");
-            // Si il est authentifié on l'enregistre dans la DTO (pour le
-            // backend) et on charge le bon message de confirmation
-            if (SecurityUtils.getSubject().isAuthenticated()) {
-                remplissageCreationAnnonceSiLogin();
-            }
-            Integer codeRetour = creationAnnonce();
-            chooseConfirmationMessage(true, codeRetour);
-            etapeEncours = Etape.ETAPE_5;
-            break;
-        default:
-            throw new FrontEndException("Aucune étape du nouveau devis chargées, Situation Impossible");
+            case 1:
+                loggerChangementEtape("Passage dans l'étape 1");
+                etapeEncours = Etape.ETAPE_1;
+                break;
+            case 2:
+                loggerChangementEtape("Passage dans l'étape 2");
+                etapeEncours = Etape.ETAPE_2;
+                break;
+            case 3:
+                loggerChangementEtape("Passage dans l'étape 3");
+                etapeEncours = Etape.ETAPE_3;
+                break;
+            case 4:
+                loggerChangementEtape("Passage dans l'étape 4");
+                // Si l'utilisateur est deja authentifié on saute l'inscription
+                // (etape 3)
+                if (SecurityUtils.getSubject().isAuthenticated()) {
+                    loggerChangementEtape("L'utilisateur s'est connecté, on passe l'etape 5");
+                    changementEtape(5);
+                } else {
+                    etapeEncours = Etape.ETAPE_4;
+                }
+                break;
+            case 5:
+                loggerChangementEtape("Passage dans l'étape 5");
+                // Si il est authentifié on l'enregistre dans la DTO (pour le
+                // backend) et on charge le bon message de confirmation
+                if (SecurityUtils.getSubject().isAuthenticated()) {
+                    remplissageCreationAnnonceSiLogin();
+                }
+                Integer codeRetour = creationAnnonce();
+                chooseConfirmationMessage(true, codeRetour);
+                etapeEncours = Etape.ETAPE_5;
+                break;
+            default:
+                throw new FrontEndException("Aucune étape du nouveau devis chargées, Situation Impossible");
         }
 
     }
@@ -383,6 +383,8 @@ public class NouveauDevis extends MasterPage {
                         LOGGER.error("Probleme frontend", e);
                     }
                 }
+
+                navigationWizard.setStep(etapeEncours.ordinal() + 1);
                 update.getTarget().add(containerGeneral);
             }
         }
@@ -445,6 +447,7 @@ public class NouveauDevis extends MasterPage {
             }
             // On dit a wicket de rafraichir ce panel avec la requete ajax
             eventCategorie.getTarget().add(containerGeneral);
+            eventCategorie.getTarget().add(feedBackPanelGeneral);
         }
 
         if (event.getPayload() instanceof ChangementEtapeClientEvent) {
@@ -472,6 +475,7 @@ public class NouveauDevis extends MasterPage {
             navigationWizard.setStep(etapeEncours.ordinal() + 1);
             // On dit a wicket de rafraichir ce panel avec la requete ajax
             eventChangementEtapeClient.getTarget().add(containerGeneral);
+            eventChangementEtapeClient.getTarget().add(feedBackPanelGeneral);
         }
 
         if (event.getPayload() instanceof CastorWizardEvent) {
@@ -493,12 +497,15 @@ public class NouveauDevis extends MasterPage {
             navigationWizard.setStep(nouvelleAnnonce.getNumeroEtape());
             // On dit a wicket de rafraichir ce panel avec la requete ajax
             castorWizardEvent.getTarget().add(containerGeneral);
+            castorWizardEvent.getTarget().add(feedBackPanelGeneral);
         }
 
     }
 
     private Integer creationAnnonce() {
-
+        if (nouvelleAnnonce.getPhotos() == null) {
+            nouvelleAnnonce.setPhotos(new ArrayList<File>());
+        }
         if (nouvelleAnnonce.getPhotos().isEmpty()) {
             return annonceService.creationAnnonce(nouvelleAnnonce);
         } else {

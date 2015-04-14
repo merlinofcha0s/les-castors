@@ -17,6 +17,7 @@ import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
@@ -47,8 +48,9 @@ public abstract class AbstractITTest {
     private String dataSourceAddress;
     private String loginDB;
     private String passwordDB;
-    private String browser;
+    protected String browser;
     private String chromeDriverAddress;
+    private String ieDriverAddress;
 
     public final static String BON_MOT_DE_PASSE = "lollollol";
     public final static String MAUVAIS_MOT_DE_PASSE = "kikoulolmauvais";
@@ -81,6 +83,11 @@ public abstract class AbstractITTest {
     public void setUpITTest() throws Exception {
         setUpDB();
         setUpSelenium();
+
+        if (browser.equals("ie")) {
+            driver.get(appUrl);
+            driver.findElement(By.id("overridelink")).click();
+        }
     }
 
     public abstract void prepareDB() throws Exception;
@@ -103,6 +110,7 @@ public abstract class AbstractITTest {
         nomApp = wsProperties.getProperty("app.name");
         browser = wsProperties.getProperty("app.browser.target");
         chromeDriverAddress = wsProperties.getProperty("app.address.chrome.driver");
+        ieDriverAddress = wsProperties.getProperty("app.address.ie.driver");
 
         StringBuilder sbUrlApp = new StringBuilder("https://");
         sbUrlApp.append(ipServeur);
@@ -119,9 +127,9 @@ public abstract class AbstractITTest {
         case "firefox":
             driver = new FirefoxDriver();
             break;
-        default:
-            driver = new FirefoxDriver();
-            break;
+        case "ie":
+            System.setProperty("webdriver.ie.driver", ieDriverAddress);
+            driver = new InternetExplorerDriver();
         }
 
         appUrl = sbUrlApp.toString();

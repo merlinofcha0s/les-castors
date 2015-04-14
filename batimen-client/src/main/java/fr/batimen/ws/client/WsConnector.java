@@ -53,7 +53,6 @@ public class WsConnector implements Serializable {
 
     private static final long serialVersionUID = 4898933306261359715L;
 
-    private final transient Client client;
     private String ipServeur;
     private String portServeur;
     private String nomWs;
@@ -67,14 +66,101 @@ public class WsConnector implements Serializable {
         // Consomme bcp de ressource pour creer le client, il est thread
         // safe. Voir si ca ne pose pas de probleme de perf de l'avoir mis
         // en singleton
+
+    }
+
+    /**
+     * Configure et initialise les differents composants permettant de
+     * comuniquer en SSL avec le webservice
+     * 
+     * @return Le ClientConfig avec le SSL correctement configurer
+     */
+    private ClientConfig configSSL() {
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Début de la configuration du SSL (init du context).....");
+        }
+
+        SSLContext context = null;
+
+        // On initialise le context avec le bon trust manager qui activera ou
+        // non la verification du certificat.
+        try {
+            context = SSLContext.getInstance("SSLv3");
+            context.init(null, TrustManagerSingleton.getTrustedCertificate(), TrustManagerSingleton.secureRandomOrNot());
+
+            HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Config de client config.....");
+            }
+
+            ClientConfig config = new DefaultClientConfig();
+            config.getProperties().put(HTTPSProperties.PROPERTY_HTTPS_PROPERTIES,
+                    new HTTPSProperties(new HostnameVerifier() {
+                        @Override
+                        public boolean verify(String s, SSLSession sslSession) {
+                            return true;
+                        }
+                    }, context));
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Config de client config.....OK");
+            }
+
+            return config;
+        } catch (KeyManagementException e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Problème de chargement de certificat", e);
+            }
+            return null;
+        } catch (NoSuchAlgorithmException e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Algorithme SSL introuvable", e);
+            }
+            return null;
+        }
+    }
+
+    private WebResource generateWebResource(String controller, String method) {
+        StringBuilder adresseService = new StringBuilder("https://");
+        adresseService.append(ipServeur);
+        adresseService.append(":");
+        adresseService.append(portServeur);
+        adresseService.append("/");
+        if (isTest) {
+            adresseService.append(nomWsTest);
+        } else {
+            adresseService.append(nomWs);
+        }
+        adresseService.append("/");
+        adresseService.append(controller);
+        adresseService.append("/");
+        adresseService.append(method);
+
         ClientConfig clientConfig = configSSL();
         // Fix pour le serv d'integration
         clientConfig.getClasses().add(MultiPartWriter.class);
-        client = Client.create(clientConfig);
+        Client client = Client.create(clientConfig);
         client.setFollowRedirects(true);
         // Authentification du client
         client.addFilter(new HTTPBasicAuthFilter(Constant.BATIMEN_USERS_WS, Constant.BATIMEN_PWD_WS));
         client.setConnectTimeout(Constant.CONNECT_TIMEOUT);
+
+        return client.resource(adresseService.toString());
+    }
+
+    private void getWsProperties() {
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Récuperation des properties....");
+        }
+
+        Properties wsProperties = PropertiesFileWsClient.WS.getProperties();
+        ipServeur = wsProperties.getProperty("ws.ip");
+        portServeur = wsProperties.getProperty("ws.port");
+        nomWs = wsProperties.getProperty("ws.name");
+        nomWsTest = wsProperties.getProperty("ws.name.test.arquillian");
     }
 
     /**
@@ -145,25 +231,6 @@ public class WsConnector implements Serializable {
         return reponse;
     }
 
-    private WebResource generateWebResource(String controller, String method) {
-        StringBuilder adresseService = new StringBuilder("https://");
-        adresseService.append(ipServeur);
-        adresseService.append(":");
-        adresseService.append(portServeur);
-        adresseService.append("/");
-        if (isTest) {
-            adresseService.append(nomWsTest);
-        } else {
-            adresseService.append(nomWs);
-        }
-        adresseService.append("/");
-        adresseService.append(controller);
-        adresseService.append("/");
-        adresseService.append(method);
-
-        return client.resource(adresseService.toString());
-    }
-
     private String serializeToJSON(Object object) {
 
         if (LOGGER.isDebugEnabled()) {
@@ -192,72 +259,6 @@ public class WsConnector implements Serializable {
 
         return jsonRequest;
 
-    }
-
-    private void getWsProperties() {
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Récuperation des properties....");
-        }
-
-        Properties wsProperties = PropertiesFileWsClient.WS.getProperties();
-        ipServeur = wsProperties.getProperty("ws.ip");
-        portServeur = wsProperties.getProperty("ws.port");
-        nomWs = wsProperties.getProperty("ws.name");
-        nomWsTest = wsProperties.getProperty("ws.name.test.arquillian");
-    }
-
-    /**
-     * Configure et initialise les differents composants permettant de
-     * comuniquer en SSL avec le webservice
-     * 
-     * @return Le ClientConfig avec le SSL correctement configurer
-     */
-    private ClientConfig configSSL() {
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Début de la configuration du SSL (init du context).....");
-        }
-
-        SSLContext context = null;
-
-        // On initialise le context avec le bon trust manager qui activera ou
-        // non la verification du certificat.
-        try {
-            context = SSLContext.getInstance("SSLv3");
-            context.init(null, TrustManagerSingleton.getTrustedCertificate(), TrustManagerSingleton.secureRandomOrNot());
-
-            HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
-
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Config de client config.....");
-            }
-
-            ClientConfig config = new DefaultClientConfig();
-            config.getProperties().put(HTTPSProperties.PROPERTY_HTTPS_PROPERTIES,
-                    new HTTPSProperties(new HostnameVerifier() {
-                        @Override
-                        public boolean verify(String s, SSLSession sslSession) {
-                            return true;
-                        }
-                    }, context));
-
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Config de client config.....OK");
-            }
-
-            return config;
-        } catch (KeyManagementException e) {
-            if (LOGGER.isErrorEnabled()) {
-                LOGGER.error("Problème de chargement de certificat", e);
-            }
-            return null;
-        } catch (NoSuchAlgorithmException e) {
-            if (LOGGER.isErrorEnabled()) {
-                LOGGER.error("Algorithme SSL introuvable", e);
-            }
-            return null;
-        }
     }
 
     /**

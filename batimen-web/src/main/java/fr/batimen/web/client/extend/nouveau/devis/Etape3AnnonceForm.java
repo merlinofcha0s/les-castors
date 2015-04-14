@@ -1,26 +1,22 @@
 package fr.batimen.web.client.extend.nouveau.devis;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 
+import fr.batimen.web.app.constants.FeedbackMessageLevel;
+import fr.batimen.web.client.behaviour.FileFieldValidatorAndLoaderBehaviour;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.event.IEvent;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.Radio;
-import org.apache.wicket.markup.html.form.RadioGroup;
-import org.apache.wicket.markup.html.form.TextArea;
-import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.markup.html.form.upload.FileUpload;
-import org.apache.wicket.markup.html.form.upload.MultiFileUploadField;
+import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.model.PropertyModel;
 import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.apache.wicket.validation.validator.StringValidator;
@@ -41,13 +37,11 @@ import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.web.client.extend.nouveau.devis.event.CategorieEvent;
 import fr.batimen.web.client.extend.nouveau.devis.event.ChangementEtapeClientEvent;
-import fr.batimen.web.client.validator.FileUploadValidator;
 
 /**
  * Form de l'etape 3 de création d'annonce.
- * 
+ *
  * @author Casaucau Cyril
- * 
  */
 public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
 
@@ -57,14 +51,15 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
 
     private final CreationAnnonceDTO nouvelleAnnonce;
 
-    private final Collection<FileUpload> photos = new ArrayList<FileUpload>();
+    private FileFieldValidatorAndLoaderBehaviour fileFieldValidatorBehaviour;
 
-    public Etape3AnnonceForm(String id, IModel<CreationAnnonceDTO> model) {
+    public Etape3AnnonceForm(final String id, IModel<CreationAnnonceDTO> model) {
         super(id, model);
 
         // Mode Multipart pour l'upload de fichier.
         setMultiPart(true);
         setFileMaxSize(Bytes.megabytes(10));
+        setMaxSize(Bytes.megabytes(11));
 
         setMarkupId("formEtape3");
 
@@ -124,10 +119,11 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
         typeTravaux.add(new RequiredBorderBehaviour());
         typeTravaux.setMarkupId("typeTravaux");
 
-        MultiFileUploadField photoField = new MultiFileUploadField("photos", new PropertyModel<Collection<FileUpload>>(
-                this, "photos"), 5, true);
+
+        final FileUploadField photoField = new FileUploadField("photos");
         photoField.setMarkupId("photoField");
-        photoField.add(new FileUploadValidator());
+        fileFieldValidatorBehaviour = new FileFieldValidatorAndLoaderBehaviour();
+        photoField.add(fileFieldValidatorBehaviour);
 
         TextField<String> adresseField = new TextField<String>("adresse");
         adresseField.setRequired(true);
@@ -162,7 +158,7 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
 
             /*
              * (non-Javadoc)
-             * 
+             *
              * @see
              * org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink#onSubmit
              * (org.apache.wicket.ajax.AjaxRequestTarget,
@@ -170,29 +166,34 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
              */
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                nouvelleAnnonce.getPhotos().clear();
-                for (FileUpload photo : photos) {
+                nouvelleAnnonce.setPhotos(new ArrayList<File>());
+                //On enregistre les fichiers dans la DTO
+                for (FileUpload photo : photoField.getFileUploads()) {
                     try {
                         nouvelleAnnonce.getPhotos().add(photo.writeToTempFile());
                     } catch (IOException e) {
                         if (LOGGER.isErrorEnabled()) {
-                            LOGGER.error("Problème durant l'ecriture de la photo sur le disque", e);
+                            LOGGER.error("Problème durant l'écriture de la photo sur le disque", e);
                         }
                     }
                 }
+                if (!fileFieldValidatorBehaviour.isValidationOK()) {
+                    target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Validation erronnée de vos photos, veuillez corriger", FeedbackMessageLevel.ERROR));
+                } else {
+                    nouvelleAnnonce.setNumeroEtape(4);
+                    ChangementEtapeClientEvent changementEtapeEventClient = new ChangementEtapeClientEvent(target,
+                            nouvelleAnnonce);
+                    PermissionDTO permissionDTO = new PermissionDTO();
+                    permissionDTO.setTypeCompte(TypeCompte.CLIENT);
+                    nouvelleAnnonce.getClient().getPermissions().add(permissionDTO);
+                    this.send(target.getPage(), Broadcast.BREADTH, changementEtapeEventClient);
+                }
 
-                nouvelleAnnonce.setNumeroEtape(4);
-                ChangementEtapeClientEvent changementEtapeEventClient = new ChangementEtapeClientEvent(target,
-                        nouvelleAnnonce);
-                PermissionDTO permissionDTO = new PermissionDTO();
-                permissionDTO.setTypeCompte(TypeCompte.CLIENT);
-                nouvelleAnnonce.getClient().getPermissions().add(permissionDTO);
-                this.send(target.getPage(), Broadcast.BREADTH, changementEtapeEventClient);
             }
 
             /*
              * (non-Javadoc)
-             * 
+             *
              * @see
              * org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink#onError
              * (org.apache.wicket.ajax.AjaxRequestTarget,
@@ -224,12 +225,4 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
                 adresseField, adresseComplementField, codePostalField, villeField, validateQualification, typeTravaux,
                 etapePrecedente3);
     }
-
-    /**
-     * @return the photos
-     */
-    public Collection<FileUpload> getPhotos() {
-        return photos;
-    }
-
 }
