@@ -100,6 +100,8 @@ public class NotationArtisanModal extends ModalCastor {
         if (event.getPayload() instanceof NoterArtisanEventOpen) {
             NoterArtisanEventOpen noterArtisanEventOpen = (NoterArtisanEventOpen) event.getPayload();
             open(noterArtisanEventOpen.getTarget());
+            //CA ca marche !!!!
+            //noterArtisanEventOpen.getTarget().appendJavaScript(RaterCastor.nameFctJsInitRaterCastor);
         }
 
         if (event.getPayload() instanceof NoterArtisanEventClose) {
@@ -107,5 +109,4 @@ public class NotationArtisanModal extends ModalCastor {
             close(noterArtisanEventClose.getTarget());
         }
     }
-
 }

@@ -1,9 +1,23 @@
 package fr.batimen.web.client.extend.connected;
 
-import java.text.SimpleDateFormat;
-
-import javax.inject.Inject;
-
+import fr.batimen.core.constant.CodeRetourService;
+import fr.batimen.dto.*;
+import fr.batimen.dto.aggregate.*;
+import fr.batimen.dto.enums.EtatAnnonce;
+import fr.batimen.dto.enums.TypeCompte;
+import fr.batimen.dto.helper.CategorieLoader;
+import fr.batimen.web.app.security.Authentication;
+import fr.batimen.web.app.security.RolesUtils;
+import fr.batimen.web.client.component.Commentaire;
+import fr.batimen.web.client.component.ContactezNous;
+import fr.batimen.web.client.component.LinkLabel;
+import fr.batimen.web.client.component.Profil;
+import fr.batimen.web.client.event.*;
+import fr.batimen.web.client.extend.error.AccesInterdit;
+import fr.batimen.web.client.extend.error.NonTrouvee;
+import fr.batimen.web.client.master.MasterPage;
+import fr.batimen.web.client.modal.*;
+import fr.batimen.ws.client.service.AnnonceServiceREST;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.RestartResponseAtInterceptPageException;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -23,42 +37,8 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.batimen.core.constant.CodeRetourService;
-import fr.batimen.dto.ClientDTO;
-import fr.batimen.dto.DemandeAnnonceDTO;
-import fr.batimen.dto.EntrepriseDTO;
-import fr.batimen.dto.ImageDTO;
-import fr.batimen.dto.NotationDTO;
-import fr.batimen.dto.PermissionDTO;
-import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
-import fr.batimen.dto.aggregate.AnnonceSelectEntrepriseDTO;
-import fr.batimen.dto.aggregate.DesinscriptionAnnonceDTO;
-import fr.batimen.dto.aggregate.NbConsultationDTO;
-import fr.batimen.dto.aggregate.NoterArtisanDTO;
-import fr.batimen.dto.enums.EtatAnnonce;
-import fr.batimen.dto.enums.TypeCompte;
-import fr.batimen.dto.helper.CategorieLoader;
-import fr.batimen.web.app.security.Authentication;
-import fr.batimen.web.app.security.RolesUtils;
-import fr.batimen.web.client.component.Commentaire;
-import fr.batimen.web.client.component.ContactezNous;
-import fr.batimen.web.client.component.LinkLabel;
-import fr.batimen.web.client.component.Profil;
-import fr.batimen.web.client.event.DesinscriptionArtisanAnnonceEvent;
-import fr.batimen.web.client.event.InscriptionArtisanEvent;
-import fr.batimen.web.client.event.NoterArtisanEventClose;
-import fr.batimen.web.client.event.NoterArtisanEventOpen;
-import fr.batimen.web.client.event.SelectionEntrepriseEvent;
-import fr.batimen.web.client.event.SuppressionOpenEvent;
-import fr.batimen.web.client.extend.error.AccesInterdit;
-import fr.batimen.web.client.extend.error.NonTrouvee;
-import fr.batimen.web.client.master.MasterPage;
-import fr.batimen.web.client.modal.DesincriptionArtisanModal;
-import fr.batimen.web.client.modal.InscriptionModal;
-import fr.batimen.web.client.modal.NotationArtisanModal;
-import fr.batimen.web.client.modal.SelectionEntrepriseModal;
-import fr.batimen.web.client.modal.SuppressionModal;
-import fr.batimen.ws.client.service.AnnonceServiceREST;
+import javax.inject.Inject;
+import java.text.SimpleDateFormat;
 
 /**
  * TODO : Action qui reste : Modifier , Envoyer devis <br/>
@@ -85,6 +65,7 @@ public class Annonce extends MasterPage {
     private WebMarkupContainer containerContactMaster;
     private WebMarkupContainer containerActions;
     private WebMarkupContainer notationAnnonceParClientContainer;
+    private WebMarkupContainer containerPopupNotationArtisan;
 
     private WebMarkupContainer envoyerDevisContainer;
 
@@ -342,8 +323,7 @@ public class Annonce extends MasterPage {
              */
             @Override
             public boolean isVisible() {
-                return (roleUtils.checkRoles(TypeCompte.CLIENT) || roleUtils.checkRoles(TypeCompte.ADMINISTRATEUR))
-                        && annonceAffichageDTO.getEntrepriseSelectionnee() == null;
+                return visibilityEntreprisesIncritesField();
             }
 
         };
@@ -445,6 +425,15 @@ public class Annonce extends MasterPage {
         add(containerEntreprisesGlobales);
     }
 
+    private boolean visibilityEntreprisesIncritesField(){
+        return (roleUtils.checkRoles(TypeCompte.CLIENT) || roleUtils.checkRoles(TypeCompte.ADMINISTRATEUR))
+                && annonceAffichageDTO.getEntrepriseSelectionnee() == null;
+    }
+    private boolean visibilityEntrepriseSelectionneeField(){
+        return (roleUtils.checkRoles(TypeCompte.CLIENT) || roleUtils.checkRoles(TypeCompte.ADMINISTRATEUR))
+                && annonceAffichageDTO.getEntrepriseSelectionnee() != null;
+    }
+
     private void affichageEntrepriseSelectionnee() {
         containerEntrepriseSelectionnee = new WebMarkupContainer("containerEntrepriseSelectionnee") {
 
@@ -457,8 +446,7 @@ public class Annonce extends MasterPage {
              */
             @Override
             public boolean isVisible() {
-                return (roleUtils.checkRoles(TypeCompte.CLIENT) || roleUtils.checkRoles(TypeCompte.ADMINISTRATEUR))
-                        && annonceAffichageDTO.getEntrepriseSelectionnee() != null;
+                return visibilityEntrepriseSelectionneeField();
             }
         };
 
@@ -644,28 +632,68 @@ public class Annonce extends MasterPage {
 
     private void initPopupSuppression() {
         SuppressionModal suppressionModal = new SuppressionModal("suppressionModal", idAnnonce,
-                "Suppression de mon annonce", "390");
+                "Suppression de mon annonce", "390"){
+            /**
+             * Gets whether this component and any children are visible.
+             * <p/>
+             * WARNING: this method can be called multiple times during a request. If you override this
+             * method, it is a good idea to keep it cheap in terms of processing. Alternatively, you can
+             * call {@link #setVisible(boolean)}.
+             * <p/>
+             *
+             * @return True if component and any children are visible
+             */
+            @Override
+            public boolean isVisible() {
+                return roleUtils.checkClientAndAdminRoles();
+            }
+        };
         add(suppressionModal);
     }
 
     private void initPopupInscription() {
-        inscriptionModal = new InscriptionModal("inscriptionModal");
+        inscriptionModal = new InscriptionModal("inscriptionModal"){
+
+            @Override
+            public boolean isVisible() {
+                return afficherInscrireAnnonce();
+            }
+        };
         add(inscriptionModal);
     }
 
     private void initPopupSelectionEntreprise() {
-        selectionEntrepriseModal = new SelectionEntrepriseModal("selectionEntrepriseModal");
+        selectionEntrepriseModal = new SelectionEntrepriseModal("selectionEntrepriseModal"){
+            @Override
+            public boolean isVisible() {
+                return visibilityEntreprisesIncritesField();
+            }
+        };
         add(selectionEntrepriseModal);
     }
 
     private void initPopupDesinscriptionEntreprise() {
-        desincriptionArtisanModal = new DesincriptionArtisanModal("desincriptionArtisanModal");
+        desincriptionArtisanModal = new DesincriptionArtisanModal("desincriptionArtisanModal"){
+            @Override
+            public boolean isVisible() {
+                return visibilityEntreprisesIncritesField();
+            }
+        };
         add(desincriptionArtisanModal);
     }
 
     private void initPopupNotationArtisan() {
-        notationArtisanModal = new NotationArtisanModal("notationArtisanModal");
-        add(notationArtisanModal);
+        containerPopupNotationArtisan = new WebMarkupContainer("containerPopupNotationArtisan");
+        containerPopupNotationArtisan.setOutputMarkupId(true);
+        notationArtisanModal = new NotationArtisanModal("notationArtisanModal"){
+            @Override
+            public boolean isVisible() {
+                return annonceAffichageDTO.getAnnonce().getEtatAnnonce().equals(EtatAnnonce.A_NOTER) && visibilityEntrepriseSelectionneeField();
+            }
+        };
+
+        containerPopupNotationArtisan.add(notationArtisanModal);
+        add(containerPopupNotationArtisan);
     }
 
     private void initContainerPhoto() {
@@ -782,7 +810,7 @@ public class Annonce extends MasterPage {
             // On set le model pour que le nom de l'entreprise soit
             // rafraichi par la requette ajax
 
-            selectionEntrepriseEvent.getTarget().add(feedBackPanelGeneral, containerEntreprisesGlobales, etatAnnonce);
+            selectionEntrepriseEvent.getTarget().add(feedBackPanelGeneral, containerEntreprisesGlobales, etatAnnonce, containerPopupNotationArtisan);
         }
 
         if (event.getPayload() instanceof DesinscriptionArtisanAnnonceEvent) {
