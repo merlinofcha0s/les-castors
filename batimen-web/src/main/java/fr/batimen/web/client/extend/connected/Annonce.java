@@ -498,6 +498,11 @@ public class Annonce extends MasterPage {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
+                if(feedBackPanelGeneral.hasFeedbackMessage()){
+                    feedBackPanelGeneral.getFeedbackMessages().clear();
+                }
+                target.add(feedBackPanelGeneral);
+                target.add(containerPopupNotationArtisan);
                 this.send(target.getPage(), Broadcast.BREADTH, new NoterArtisanEventOpen(target));
             }
 

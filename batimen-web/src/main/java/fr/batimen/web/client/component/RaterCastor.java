@@ -3,6 +3,7 @@ package fr.batimen.web.client.component;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
@@ -79,6 +80,15 @@ public class RaterCastor extends Panel {
         super.renderHead(response);
         response.render(JavaScriptHeaderItem.forScript("function initRaterCastor() { $('.rating').rating({filled: 'fa fa-star',filledSelected: 'fa fa-star', empty: 'fa fa-star-o'});}", "initCastorRater"));
         response.render(CssHeaderItem.forUrl("//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"));
-       // response.render(JavaScriptHeaderItem.forScript(nameFctJsInitRaterCastor, "refreshRaterCastorAjax"));
+    }
+
+    @Override
+    protected void onComponentTag(ComponentTag tag) {
+        super.onComponentTag(tag);
+        //Réinitialisaton du javascript pour que le composant s'affiche en cas de requete ajax
+        AjaxRequestTarget target = RequestCycle.get().find(AjaxRequestTarget.class);
+        if (target != null) {
+            target.appendJavaScript(RaterCastor.nameFctJsInitRaterCastor);
+        }
     }
 }

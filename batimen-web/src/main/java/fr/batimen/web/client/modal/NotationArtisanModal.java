@@ -4,6 +4,9 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.event.IEvent;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.Model;
@@ -32,6 +35,12 @@ public class NotationArtisanModal extends ModalCastor {
     private final TextArea<String> textAreaCommentaire;
 
     private final BatimenFeedbackPanel feedBackPanel;
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.render(CssHeaderItem.forUrl("//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"));
+    }
 
     public NotationArtisanModal(String id) {
         super(id, "Evaluation de votre artisan", "550");
@@ -100,8 +109,6 @@ public class NotationArtisanModal extends ModalCastor {
         if (event.getPayload() instanceof NoterArtisanEventOpen) {
             NoterArtisanEventOpen noterArtisanEventOpen = (NoterArtisanEventOpen) event.getPayload();
             open(noterArtisanEventOpen.getTarget());
-            //CA ca marche !!!!
-            //noterArtisanEventOpen.getTarget().appendJavaScript(RaterCastor.nameFctJsInitRaterCastor);
         }
 
         if (event.getPayload() instanceof NoterArtisanEventClose) {
