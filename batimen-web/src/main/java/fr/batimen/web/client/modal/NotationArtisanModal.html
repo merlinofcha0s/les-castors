@@ -1,26 +1,20 @@
-<wicket:head>
-	<link
-		rel="stylesheet"
-		href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-</wicket:head>
 <wicket:extend>
 	<div wicket:id="feedbackPanelNotationArtisan"></div>
 	<form wicket:id="formNotationCastor">
 		<div class="row-fluid">
 			<div class="span5">
 					<span
-						class="fa fa-line-chart"
-						style="font-size: 26px; padding-right: 9px;"></span>
-						<span style="vertical-align: super;">Performance globale :</span>
+						class="fa fa-line-chart" id="notation-perf"></span>
+						<span id="performanceGlobale">Performance globale :</span>
 			</div>
 			<div class="span4">
-				<div wicket:id="raterCastor" style="padding-top: 3px;"></div>
+				<div wicket:id="raterCastor" id="rater"></div>
 			</div>
 		</div>
 		<div class="row-fluid">
 			<div class="span5">
-				<span class="icon-Speech-Buble5" style="font-size: 26px; padding-right: 24px;"></span> 
-				<span style="vertical-align: sub;">Commentaire :</span>
+				<span class="icon-Speech-Buble5" id="notation-commentaire"></span>
+				<span id="commentaireNotation">Commentaire :</span>
 			</div>
 			<div class="span7">
 				<textarea
@@ -30,8 +24,7 @@
 					type="text"
 					name="textAreaCommentaireNotation"
 					id="textAreaCommentaireNotation"
-					value=""
-					style="width: 258px; height: 90px; margin-top: 5px;"> </textarea>
+					value=""> </textarea>
 			</div>
 		</div>
 		<div class="row-fluid">

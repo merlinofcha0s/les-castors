@@ -775,3 +775,32 @@ table tr td .error {
 	padding-bottom: 20px;
 	padding-left: 5px;
 }
+
+/* Notation Modal */
+#notation-perf{
+	font-size: 26px;
+	padding-right: 9px;
+}
+
+#performanceGlobale{
+	vertical-align: super;
+}
+
+#rater{
+	padding-top: 3px;
+}
+
+#notation-commentaire{
+	font-size: 26px;
+	padding-right: 24px;
+}
+
+#commentaireNotation{
+	vertical-align: sub;
+}
+
+#textAreaCommentaireNotation{
+	width: 258px;
+	height: 90px;
+	margin-top: 5px;
+}

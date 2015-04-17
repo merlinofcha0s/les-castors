@@ -246,7 +246,7 @@ public class TestAnnonce extends AbstractITTest {
 
         // Lien inscription artisan sur la page de l'annonce.
         driver.findElement(
-                By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[6]/div/div[2]/a[1]"))
+                By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[5]/div/div[2]/a[1]"))
                 .click();
 
         Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
@@ -323,7 +323,7 @@ public class TestAnnonce extends AbstractITTest {
 
         // Envoyer la notation
         driver.findElement(
-                By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[9]/div/div[2]/form/div[4]/div/a"))
+                By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[6]/div/div/div[2]/form/div[4]/div/a"))
                 .click();
 
         WebElement checkFeedbackPanelNotationOK = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
@@ -389,7 +389,7 @@ public class TestAnnonce extends AbstractITTest {
 
         // Le bouton oui de la modal
         driver.findElement(
-                By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[8]/div/div[2]/a[1]"))
+                By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[7]/div/div[2]/a[1]"))
                 .click();
 
         Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
@@ -409,18 +409,12 @@ public class TestAnnonce extends AbstractITTest {
 
         WebElement checkConditionAnnoncePresent = new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX)
                 .until(ExpectedConditions.visibilityOfElementLocated(By
-                        .xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[7]/div/div[2]/a[1]")));
+                        .xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[6]/div/div[2]/a[1]")));
         assertNotNull(checkConditionAnnoncePresent);
-
-        //WebElement webDriverWait = new WebDriverWait(driver,20).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[7]/div/div[2]/a[1]")));
-
-//        Thread.sleep(3000);
-
-
 
         // Le bouton oui de la modal
         driver.findElement(
-                By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[7]/div/div[2]/a[1]"))
+                By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[6]/div/div[2]/a[1]"))
                 .click();
 
         Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))

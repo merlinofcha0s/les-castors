@@ -1,342 +1,359 @@
 <wicket:head>
-	<link
-		rel="stylesheet"
-		type="text/css"
-		href="css/font_icons8.css" />
+    <link
+            rel="stylesheet"
+            type="text/css"
+            href="css/font_icons8.css"/>
 </wicket:head>
 <wicket:extend>
-	<div class="row-fluid">
-		<div wicket:id="profil"></div>
-		<div class="span7">
-			<h2 class="headInModule">Description</h2>
-			<div wicket:id="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-				incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi
-				ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-				fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit
-				anim id est laborum.</div>
-			<div id="containerInformationsAnnonce">
-				<div class="bg_title">
-					<h2 class="headInModule">Informations sur l'annonce</h2>
-				</div>
-				<div>
-					<div class="containerGlyph">
+    <div class="row-fluid">
+        <div wicket:id="profil"></div>
+        <div class="span7">
+            <h2 class="headInModule">Description</h2>
+
+            <div wicket:id="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                laboris nisi
+                ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                cillum dolore eu
+                fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+                deserunt mollit
+                anim id est laborum.
+            </div>
+            <div id="containerInformationsAnnonce">
+                <div class="bg_title">
+                    <h2 class="headInModule">Informations sur l'annonce</h2>
+                </div>
+                <div>
+                    <div class="containerGlyph">
 						<span
-							wicket:id="iconCategorie"
-							class="glyphAnnonce"></span>
-					</div>
-					<div
-						class="labelAnnonce"
-						wicket:id="categorie"></div>
-					<div id="categorieLabelSpace">&nbsp;:&nbsp;</div>
-					<div
-						id="sousCategorieLabel"
-						wicket:id="sousCategorie"></div>
-				</div>
-				<div class="containerInformationAnnonce">
-					<div class="containerGlyph">
-						<span class="icon-Label glyphAnnonce"></span>
-					</div>
-					<div class="labelAnnonce">Type de travaux :</div>
-					<div
-						class="informationAnnonce"
-						wicket:id="typeTravaux"></div>
-				</div>
-				<div class="containerInformationAnnonce">
-					<div class="containerGlyph">
-						<span class="icon-Alarm-Clock glyphAnnonce"></span>
-					</div>
-					<div class="labelAnnonce">Délai d'intervention :</div>
-					<div
-						class="informationAnnonce"
-						wicket:id="delaiIntervention">Le plus rapidement possible</div>
-				</div>
-				<div class="containerInformationAnnonce">
-					<div class="containerGlyph">
-						<span class="icon-Speech-Buble5 glyphAnnonce"></span>
-					</div>
-					<div class="labelAnnonce">Type de contact préféré :</div>
-					<div
-						class="informationAnnonce"
-						wicket:id="typeContact"></div>
-				</div>
-				<div class="containerInformationAnnonce">
-					<div class="containerGlyph">
-						<span class="icon-Open glyphAnnonce"></span>
-					</div>
-					<div class="labelAnnonce">Etat de l'annonce :</div>
-					<div
-						class="informationAnnonce"
-						wicket:id="etatAnnonce"></div>
-				</div>
-				<div class="containerInformationAnnonce">
-					<div class="containerGlyph">
-						<span class="icon-Calendar glyphAnnonce"></span>
-					</div>
-					<div class="labelAnnonce">Date de création :</div>
-					<div
-						class="informationAnnonce"
-						wicket:id="dateCreation"></div>
-				</div>
-				<div class="containerInformationAnnonce">
-					<div class="containerGlyph">
-						<span class="icon-Chart1 glyphAnnonce"></span>
-					</div>
-					<div class="labelAnnonce">Nombres de consultation :</div>
-					<div
-						class="informationAnnonce"
-						wicket:id="nbConsultation"></div>
-				</div>
-			</div>
-			<div id="containerPhoto">
-				<div class="row-fluid">
-					<div
-						class="span12 module_cont module_gallery"
-						wicket:id="photosContainer">
-						<div class="bg_title">
-							<h2 class="headInModule">Photos du chantier</h2>
-						</div>
-						<div
-							class="list-of-images"
-							id="galleriePhotoAnnonce">
-							<div
-								class="gallery_item view view-tenth"
-								wicket:id="imagesView">
-								<a
-									href=""
-									class="prettyPhoto"
-									wicket:id="thumbnails"> <img
-									class="gallery-stand-img"
-									src=""
-									alt=""
-									width="200"
-									height="210"
-									wicket:id="photo">
-									<div class="mask">
-										<div class="gallery_descr">
-											<h2 class="post_type_image">Lorem ipsum</h2>
-											<p>Pellentesque consequat viverra lorem a gestas placerat ligula.</p>
-										</div>
-									</div>
-								</a>
-							</div>
-							<div class="clear"></div>
-							<a id="anchor6"></a>
-						</div>
-					</div>
-					<div
-						class="span12"
-						wicket:id="aucunePhotoContainer">
-						<div class="bg_title">
-							<h2 class="headInModule">Photos du chantier</h2>
-						</div>
-						<div
-							wicket:id="aucunePhoto"
-							id="aucunePhoto"></div>
-						<div class="clear"></div>
-					</div>
-				</div>
-				<!-- .module_cont -->
-			</div>
-			<div wicket:id="containerEntreprisesGlobales">
-				<!-- .row-fluid ENTREPRISE A SELECTIONNER -->
-				<div wicket:id="containerEnteprisesInscrites">
-					<div class="row-fluid">
-						<div class="span12">
-							<div class="bg_title">
-								<h2 class="headInModule">Entreprises qui souhaitent vous contacter</h2>
-							</div>
-							<div
-								class="containerEntrepriseSelectionnee row-fluid"
-								wicket:id="entreprises">
-								<div class="span4">
-									<div class="containerGlyph">
-										<img
-											class="imgEntreprise"
-											src="img/store.png" />
-									</div>
+                                wicket:id="iconCategorie"
+                                class="glyphAnnonce"></span>
+                    </div>
+                    <div
+                            class="labelAnnonce"
+                            wicket:id="categorie"></div>
+                    <div id="categorieLabelSpace">&nbsp;:&nbsp;</div>
+                    <div
+                            id="sousCategorieLabel"
+                            wicket:id="sousCategorie"></div>
+                </div>
+                <div class="containerInformationAnnonce">
+                    <div class="containerGlyph">
+                        <span class="icon-Label glyphAnnonce"></span>
+                    </div>
+                    <div class="labelAnnonce">Type de travaux :</div>
+                    <div
+                            class="informationAnnonce"
+                            wicket:id="typeTravaux"></div>
+                </div>
+                <div class="containerInformationAnnonce">
+                    <div class="containerGlyph">
+                        <span class="icon-Alarm-Clock glyphAnnonce"></span>
+                    </div>
+                    <div class="labelAnnonce">Délai d'intervention :</div>
+                    <div
+                            class="informationAnnonce"
+                            wicket:id="delaiIntervention">Le plus rapidement possible
+                    </div>
+                </div>
+                <div class="containerInformationAnnonce">
+                    <div class="containerGlyph">
+                        <span class="icon-Speech-Buble5 glyphAnnonce"></span>
+                    </div>
+                    <div class="labelAnnonce">Type de contact préféré :</div>
+                    <div
+                            class="informationAnnonce"
+                            wicket:id="typeContact"></div>
+                </div>
+                <div class="containerInformationAnnonce">
+                    <div class="containerGlyph">
+                        <span class="icon-Open glyphAnnonce"></span>
+                    </div>
+                    <div class="labelAnnonce">Etat de l'annonce :</div>
+                    <div
+                            class="informationAnnonce"
+                            wicket:id="etatAnnonce"></div>
+                </div>
+                <div class="containerInformationAnnonce">
+                    <div class="containerGlyph">
+                        <span class="icon-Calendar glyphAnnonce"></span>
+                    </div>
+                    <div class="labelAnnonce">Date de création :</div>
+                    <div
+                            class="informationAnnonce"
+                            wicket:id="dateCreation"></div>
+                </div>
+                <div class="containerInformationAnnonce">
+                    <div class="containerGlyph">
+                        <span class="icon-Chart1 glyphAnnonce"></span>
+                    </div>
+                    <div class="labelAnnonce">Nombres de consultation :</div>
+                    <div
+                            class="informationAnnonce"
+                            wicket:id="nbConsultation"></div>
+                </div>
+            </div>
+            <div id="containerPhoto">
+                <div class="row-fluid">
+                    <div
+                            class="span12 module_cont module_gallery"
+                            wicket:id="photosContainer">
+                        <div class="bg_title">
+                            <h2 class="headInModule">Photos du chantier</h2>
+                        </div>
+                        <div
+                                class="list-of-images"
+                                id="galleriePhotoAnnonce">
+                            <div
+                                    class="gallery_item view view-tenth"
+                                    wicket:id="imagesView">
+                                <a
+                                        href=""
+                                        class="prettyPhoto"
+                                        wicket:id="thumbnails"> <img
+                                        class="gallery-stand-img"
+                                        src=""
+                                        alt=""
+                                        width="200"
+                                        height="210"
+                                        wicket:id="photo">
+
+                                    <div class="mask">
+                                        <div class="gallery_descr">
+                                            <h2 class="post_type_image">Lorem ipsum</h2>
+
+                                            <p>Pellentesque consequat viverra lorem a gestas placerat ligula.</p>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="clear"></div>
+                            <a id="anchor6"></a>
+                        </div>
+                    </div>
+                    <div
+                            class="span12"
+                            wicket:id="aucunePhotoContainer">
+                        <div class="bg_title">
+                            <h2 class="headInModule">Photos du chantier</h2>
+                        </div>
+                        <div
+                                wicket:id="aucunePhoto"
+                                id="aucunePhoto"></div>
+                        <div class="clear"></div>
+                    </div>
+                </div>
+                <!-- .module_cont -->
+            </div>
+            <div wicket:id="containerEntreprisesGlobales">
+                <!-- .row-fluid ENTREPRISE A SELECTIONNER -->
+                <div wicket:id="containerEnteprisesInscrites">
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <div class="bg_title">
+                                <h2 class="headInModule">Entreprises qui souhaitent vous contacter</h2>
+                            </div>
+                            <div
+                                    class="containerEntrepriseSelectionnee row-fluid"
+                                    wicket:id="entreprises">
+                                <div class="span4">
+                                    <div class="containerGlyph">
+                                        <img
+                                                class="imgEntreprise"
+                                                src="img/store.png"/>
+                                    </div>
 									<span
-										class="labelEntreprise"
-										href="#"
-										wicket:id="labelEntreprise">Ké buenos enterprise</span>
-								</div>
-								<div class="span8 containerAcceptDevis">
-									<div class="menuEntrepriseInscrite">
-										<span class="icon-Eye glyphAnnonce"></span> <a
-											href="#"
-											wicket:id="voirProfilEntreprise"
-											class="lienMenuEntrepriseInscrite"></a>
-									</div>
-									<div class="menuEntrepriseInscrite containerLienDevisEntreprise">
-										<span class="icon-Letter glyphAnnonce"></span> <a
-											href="#"
-											wicket:id="downloadDevis"
-											class="lienMenuEntrepriseInscrite"></a>
-									</div>
-									<div class="menuEntrepriseInscrite">
+                                            class="labelEntreprise"
+                                            href="#"
+                                            wicket:id="labelEntreprise">Ké buenos enterprise</span>
+                                </div>
+                                <div class="span8 containerAcceptDevis">
+                                    <div class="menuEntrepriseInscrite">
+                                        <span class="icon-Eye glyphAnnonce"></span> <a
+                                            href="#"
+                                            wicket:id="voirProfilEntreprise"
+                                            class="lienMenuEntrepriseInscrite"></a>
+                                    </div>
+                                    <div class="menuEntrepriseInscrite containerLienDevisEntreprise">
+                                        <span class="icon-Letter glyphAnnonce"></span> <a
+                                            href="#"
+                                            wicket:id="downloadDevis"
+                                            class="lienMenuEntrepriseInscrite"></a>
+                                    </div>
+                                    <div class="menuEntrepriseInscrite">
 										<span
-											class="icon-Star glyphAnnonce"
-											id="iconStarMenuEntrepriseSelection"></span>
-										<div
-											id="labelEntrepriseChoisi"
-											style="">Entreprise choisi ?</div>
-										<a
-											class="linkAcceptDevis"
-											href="#"
-											wicket:id="linkAcceptDevis"
-											id="lienOuiSelectionEntreprise">Oui</a> / <a
-											href="#"
-											class="linkAcceptDevis"
-											wicket:id="linkRefusDevis">Non</a>
-									</div>
-								</div>
-							</div>
-							<div wicket:id="aucuneEntreprise"></div>
-						</div>
-					</div>
-					<!-- .module_cont -->
-				</div>
-				<!-- .row-fluid ENTREPRISE A SELECTIONNER -->
-				<!-- .row-fluid ENTREPRISE SELECTIONNER PAR LE CLIENT -->
-				<div wicket:id="containerEntrepriseSelectionnee">
-					<div class="row-fluid">
-						<div class="span12">
-							<div class="bg_title">
-								<h2 class="headInModule">Entreprise que vous avez choisi</h2>
-							</div>
-							<div class="containerEnptrepriseSelectionnee row-fluid">
-								<div class="span4">
-									<div class="containerGlyph">
-										<img
-											class="imgEntreprise"
-											src="img/store.png" />
-									</div>
+                                                class="icon-Star glyphAnnonce"
+                                                id="iconStarMenuEntrepriseSelection"></span>
+
+                                        <div
+                                                id="labelEntrepriseChoisi"
+                                                style="">Entreprise choisi ?
+                                        </div>
+                                        <a
+                                                class="linkAcceptDevis"
+                                                href="#"
+                                                wicket:id="linkAcceptDevis"
+                                                id="lienOuiSelectionEntreprise">Oui</a> / <a
+                                            href="#"
+                                            class="linkAcceptDevis"
+                                            wicket:id="linkRefusDevis">Non</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div wicket:id="aucuneEntreprise"></div>
+                        </div>
+                    </div>
+                    <!-- .module_cont -->
+                </div>
+                <!-- .row-fluid ENTREPRISE A SELECTIONNER -->
+                <!-- .row-fluid ENTREPRISE SELECTIONNER PAR LE CLIENT -->
+                <div wicket:id="containerEntrepriseSelectionnee">
+                    <div class="row-fluid">
+                        <div class="span12">
+                            <div class="bg_title">
+                                <h2 class="headInModule">Entreprise que vous avez choisi</h2>
+                            </div>
+                            <div class="containerEnptrepriseSelectionnee row-fluid">
+                                <div class="span4">
+                                    <div class="containerGlyph">
+                                        <img
+                                                class="imgEntreprise"
+                                                src="img/store.png"/>
+                                    </div>
 									<span
-										wicket:id="entrepriseSelectionnee"
-										class="labelEntreprise"
-										href="#">Ké buenos enterprise</span>
-								</div>
-								<div class="span8">
-									<div class="row-fluid">
-										<div class="menuEntrepriseSelectionnee span3">
-											<span class="icon-Eye glyphAnnonce"></span> <a
-												href="#"
-												wicket:id="voirProfilEntrepriseSelectionnee"
-												class="lienMenuEntrepriseInscrite"></a>
-										</div>
-										<div class="menuEntrepriseSelectionnee span4">
-											<span class="icon-Letter glyphAnnonce"></span> <a
-												href="#"
-												wicket:id="downloadDevisEntrepriseSelectionnee"
-												class="lienMenuEntrepriseInscrite"></a>
-										</div>
-										<div class="menuEntrepriseSelectionnee span4" wicket:id="notationAnnonceParClientContainer">
-											<span class="icon-Equaliser glyphAnnonce"></span> <a
-												href="#"
-												wicket:id="notationAnnonceParClient"
-												class="lienMenuEntrepriseInscrite">Notez l'artisan</a>
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
-					</div>
-					<!-- .module_cont -->
-				</div>
-				<!-- .row-fluid ENTREPRISE A SELECTIONNER -->
-			</div>
-		</div>
-		<div class="span3">
-			<div
-				class="containerActions"
-				wicket:id="containerActions">
-				<h2 class="headInModule">Action</h2>
-				<div wicket:id="modifierAnnonceContainer">
-					<div class="containerGlyph">
-						<span class="icon-Write glyphAnnonce"></span>
-					</div>
-					<div class="sidebarRightWithPaddingTop">
-						<a
-							href="#"
-							wicket:id="modifierAnnonce">Modifier votre annonce</a>
-					</div>
-				</div>
-				<div
-					class="containerAction"
-					wicket:id="supprimerAnnonceContainer">
-					<div class="containerGlyph">
-						<span class="icon-Trash glyphAnnonce"></span>
-					</div>
-					<div class="sidebarRightWithPaddingTop">
-						<a
-							href="#"
-							wicket:id="supprimerAnnonce">Supprimer l'annonce</a>
-					</div>
-				</div>
-				<div wicket:id="inscrireAnnonceContainer">
-					<div class="containerGlyph">
-						<span class="icon-PeopleTalk glyphAnnonce"></span>
-					</div>
-					<div class="sidebarRightWithPaddingTop">
-						<a
-							href="#"
-							wicket:id="inscrireAnnonce">Contacter l'annonceur</a>
-					</div>
-				</div>
-				<div
-					class="containerAction"
-					wicket:id="envoyerDevisContainer">
-					<div wicket:id="envoyerDevis">
-						<div class="containerGlyph">
-							<span class="icon-Envelope4 glyphAnnonce"></span>
-						</div>
-						<div class="sidebarRightWithPaddingTop">
-							<a href="#">Envoyer votre devis</a>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div
-				id="containerContactMaster"
-				wicket:id="containerContactMaster">
-				<div
-					id="containerContact"
-					wicket:id="containerContact">
-					<h2 class="headInModule">Contact</h2>
-					<div>
-						<div class="containerGlyph">
-							<span class="icon-MapPin1 glyphAnnonce"></span>
-						</div>
-						<div
-							class="contactInfo"
-							wicket:id="adresse">210 chemin du devis, 06600 Castors cedex</div>
-					</div>
-					<div
-						class="containerInfo"
-						wicket:id="containerTelContact">
-						<div class="containerGlyph">
-							<span class="icon-Handset glyphAnnonce"></span>
-						</div>
-						<div
-							class="sidebarRightWithPaddingTop"
-							wicket:id="telephone">0493524585</div>
-					</div>
-					<div class="containerInfo">
-						<div class="containerGlyph">
-							<span class="icon-Envelope1 glyphAnnonce"></span>
-						</div>
-						<div class="sidebarRightWithPaddingTop">
-							<a wicket:id="email">client@castors.fr</a>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div wicket:id="commentaire"></div>
-	<div wicket:id="contactezNous"></div>
-	<div wicket:id="suppressionModal"></div>
-	<div wicket:id="inscriptionModal"></div>
-	<div wicket:id="selectionEntrepriseModal"></div>
-	<div wicket:id="desincriptionArtisanModal"></div>
-	<div wicket:id="notationArtisanModal"></div>
+                                            wicket:id="entrepriseSelectionnee"
+                                            class="labelEntreprise"
+                                            href="#">Ké buenos enterprise</span>
+                                </div>
+                                <div class="span8">
+                                    <div class="row-fluid">
+                                        <div class="menuEntrepriseSelectionnee span3">
+                                            <span class="icon-Eye glyphAnnonce"></span> <a
+                                                href="#"
+                                                wicket:id="voirProfilEntrepriseSelectionnee"
+                                                class="lienMenuEntrepriseInscrite"></a>
+                                        </div>
+                                        <div class="menuEntrepriseSelectionnee span4">
+                                            <span class="icon-Letter glyphAnnonce"></span> <a
+                                                href="#"
+                                                wicket:id="downloadDevisEntrepriseSelectionnee"
+                                                class="lienMenuEntrepriseInscrite"></a>
+                                        </div>
+                                        <div class="menuEntrepriseSelectionnee span4"
+                                             wicket:id="notationAnnonceParClientContainer">
+                                            <span class="icon-Equaliser glyphAnnonce"></span> <a
+                                                href="#"
+                                                wicket:id="notationAnnonceParClient"
+                                                class="lienMenuEntrepriseInscrite">Notez l'artisan</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- .module_cont -->
+                </div>
+                <!-- .row-fluid ENTREPRISE A SELECTIONNER -->
+            </div>
+        </div>
+        <div class="span3">
+            <div
+                    class="containerActions"
+                    wicket:id="containerActions">
+                <h2 class="headInModule">Action</h2>
+
+                <div wicket:id="modifierAnnonceContainer">
+                    <div class="containerGlyph">
+                        <span class="icon-Write glyphAnnonce"></span>
+                    </div>
+                    <div class="sidebarRightWithPaddingTop">
+                        <a
+                                href="#"
+                                wicket:id="modifierAnnonce">Modifier votre annonce</a>
+                    </div>
+                </div>
+                <div
+                        class="containerAction"
+                        wicket:id="supprimerAnnonceContainer">
+                    <div class="containerGlyph">
+                        <span class="icon-Trash glyphAnnonce"></span>
+                    </div>
+                    <div class="sidebarRightWithPaddingTop">
+                        <a
+                                href="#"
+                                wicket:id="supprimerAnnonce">Supprimer l'annonce</a>
+                    </div>
+                </div>
+                <div wicket:id="inscrireAnnonceContainer">
+                    <div class="containerGlyph">
+                        <span class="icon-PeopleTalk glyphAnnonce"></span>
+                    </div>
+                    <div class="sidebarRightWithPaddingTop">
+                        <a
+                                href="#"
+                                wicket:id="inscrireAnnonce">Contacter l'annonceur</a>
+                    </div>
+                </div>
+                <div
+                        class="containerAction"
+                        wicket:id="envoyerDevisContainer">
+                    <div wicket:id="envoyerDevis">
+                        <div class="containerGlyph">
+                            <span class="icon-Envelope4 glyphAnnonce"></span>
+                        </div>
+                        <div class="sidebarRightWithPaddingTop">
+                            <a href="#">Envoyer votre devis</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div
+                    id="containerContactMaster"
+                    wicket:id="containerContactMaster">
+                <div
+                        id="containerContact"
+                        wicket:id="containerContact">
+                    <h2 class="headInModule">Contact</h2>
+
+                    <div>
+                        <div class="containerGlyph">
+                            <span class="icon-MapPin1 glyphAnnonce"></span>
+                        </div>
+                        <div
+                                class="contactInfo"
+                                wicket:id="adresse">210 chemin du devis, 06600 Castors cedex
+                        </div>
+                    </div>
+                    <div
+                            class="containerInfo"
+                            wicket:id="containerTelContact">
+                        <div class="containerGlyph">
+                            <span class="icon-Handset glyphAnnonce"></span>
+                        </div>
+                        <div
+                                class="sidebarRightWithPaddingTop"
+                                wicket:id="telephone">0493524585
+                        </div>
+                    </div>
+                    <div class="containerInfo">
+                        <div class="containerGlyph">
+                            <span class="icon-Envelope1 glyphAnnonce"></span>
+                        </div>
+                        <div class="sidebarRightWithPaddingTop">
+                            <a wicket:id="email">client@castors.fr</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div wicket:id="commentaire"></div>
+    <div wicket:id="contactezNous"></div>
+    <div wicket:id="suppressionModal"></div>
+    <div wicket:id="inscriptionModal"></div>
+    <div wicket:id="selectionEntrepriseModal"></div>
+    <div wicket:id="desincriptionArtisanModal"></div>
+    <div wicket:id="containerPopupNotationArtisan">
+        <div wicket:id="notationArtisanModal"></div>
+    </div>
 </wicket:extend>
