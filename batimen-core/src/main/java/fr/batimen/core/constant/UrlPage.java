@@ -25,5 +25,6 @@ public class UrlPage {
     public static final String MON_PROFIL_URL = "/profil";
     public static final String MODIFIER_MON_PROFIL = "/modifiermonprofil";
     public static final String ANNONCE = "/annonce";
+    public static final String MODIFIER_MON_ANNONCE = "/modifierannonce";
 
 }

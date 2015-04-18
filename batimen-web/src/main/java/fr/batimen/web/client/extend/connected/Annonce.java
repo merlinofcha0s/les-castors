@@ -15,6 +15,7 @@ import fr.batimen.web.client.component.Profil;
 import fr.batimen.web.client.event.*;
 import fr.batimen.web.client.extend.error.AccesInterdit;
 import fr.batimen.web.client.extend.error.NonTrouvee;
+import fr.batimen.web.client.extend.member.client.ModifierAnnonce;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.web.client.modal.*;
 import fr.batimen.ws.client.service.AnnonceServiceREST;
@@ -172,7 +173,10 @@ public class Annonce extends MasterPage {
 
             @Override
             public void onClick() {
-                // TODO Plugger la modification de l'annonce une fois page faite
+                PageParameters parameters = new PageParameters();
+                parameters.add("annonceId", idAnnonce);
+                ModifierAnnonce modifierAnnoncePage = new ModifierAnnonce(parameters, annonceAffichageDTO);
+                this.setResponsePage(modifierAnnoncePage);
             }
 
         };
