@@ -179,6 +179,11 @@
 	height: 130px; 
 }
 
+#descriptionModificationField{
+	width: 430px;
+	height: 170px;
+}
+
 
 /* Activation compte */
 .confirmationactivationok {

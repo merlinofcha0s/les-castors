@@ -3,9 +3,9 @@
         <div wicket:id="profil"></div>
         <div>
             <div class="row-fluid">
-                <div class="span12 module_cont module_text_area module_small_padding">
+                <div class="span10 module_cont module_text_area module_small_padding">
                     <div class="bg_title">
-                        <h4 class="headInModule">Renseignez les caracteristiques de l'annonce</h4>
+                        <h4 class="headInModule">Modifiez les caractéristiques de l'annonce</h4>
                     </div>
                     <div class="bg_title">
                         <h5 class="headInModule">Description de votre annonce</h5>
@@ -18,7 +18,7 @@
                                     cols="500"
                                     type="text"
                                     name="descriptionDevisField"
-                                    id="descriptionDevisField"
+                                    id="descriptionModificationField"
                                     value=""> </textarea>
                         </div>
                         <div class="clear"></div>
@@ -28,28 +28,28 @@
                         <div class="span7 offset3">
                             <table class="tableBatimen">
                                 <tr>
-                                    <th>Quelle sous catégorie métier recherchez vous ?</th>
+                                    <th>Sous catégorie métier:</th>
                                     <td><select
                                             wicket:id="sousCategorie"
                                             name="sousCategorieSelect"
                                             id="sousCategorieSelect"></select></td>
                                 </tr>
                                 <tr>
-                                    <th>Comment souhaitez-vous être contacté ?</th>
+                                    <th>Type de contact:</th>
                                     <td><select
                                             wicket:id="typeContact"
                                             name="typeContactField"
                                             id="typeContactField"></select></td>
                                 </tr>
                                 <tr>
-                                    <th>Quel est le délai d'intervention ?</th>
+                                    <th>Délai d'intervention:</th>
                                     <td><select
                                             wicket:id="delaiIntervention"
                                             name="delaiInterventionField"
                                             id="delaiInterventionField"></select></td>
                                 </tr>
                                 <tr class="fuelux">
-                                    <th>Quel est le type de travaux ?</th>
+                                    <th>Type de travaux:</th>
                                     <td><span wicket:id="typeTravaux"> <label
                                             class="radio"
                                             id="radioTypeTravauxNeuf"> <input
@@ -66,45 +66,45 @@
 									</span></td>
                                 </tr>
                                 <tr>
-                                    <th>Quelle est l'adresse du chantier ?</th>
+                                    <th>Adresse du chantier:</th>
                                     <td><input
                                             wicket:id="adresse"
                                             type="text"
                                             name="adresseField"
                                             id="adresseField"
-                                            value="" /></td>
+                                            value=""/></td>
                                 </tr>
                                 <tr>
-                                    <th>Quelle est le complément d'adresse du chantier ?</th>
+                                    <th>Complément d'adresse du chantier:</th>
                                     <td><input
                                             wicket:id="complementAdresse"
                                             type="text"
                                             name="adresseComplementField"
                                             id="adresseComplementField"
-                                            value="" /></td>
+                                            value=""/></td>
                                 </tr>
                                 <tr>
-                                    <th>Quelle est le code postal du chantier ?</th>
+                                    <th>Code postal du chantier:</th>
                                     <td><input
                                             wicket:id="codePostal"
                                             type="text"
                                             name="codePostalField"
                                             id="codePostalField"
-                                            value="" /></td>
+                                            value=""/></td>
                                 </tr>
                                 <tr>
-                                    <th>Quelle est la ville du chantier ?</th>
+                                    <th>Ville du chantier:</th>
                                     <td><input
                                             wicket:id="ville"
                                             type="text"
                                             name="villeField"
                                             id="villeField"
-                                            value="" /></td>
+                                            value=""/></td>
                                 </tr>
-                                <tr>
-                                    <th>Souhaitez-vous ajouter des photos à votre devis ?</th>
+                                <tr wicket:id="containerPhoto">
+                                    <th wicket:id="lblPhoto">Ajouter des photos à votre devis:</th>
                                     <td>
-                                        <input wicket:id="photos" type="file" multiple="multiple" />
+                                        <input wicket:id="photos" type="file" multiple="multiple"/>
                                     </td>
                                 </tr>
                             </table>
@@ -112,12 +112,12 @@
                                 <div class="span7">
                                     <a
                                             class="btn btn-info"
-                                            wicket:id="etapePrecedente3">Etape précédente</a>
+                                            wicket:id="etapePrecedente3">Revenir à votre annonce</a>
                                 </div>
                                 <div class="span3">
                                     <a
                                             class="btn btn-info"
-                                            wicket:id="validateQualification">Etape suivante</a>
+                                            wicket:id="validateQualification" style="padding-left: 32px;">Terminer</a>
                                 </div>
                             </div>
                             <div class="row-fluid">

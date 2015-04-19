@@ -16,6 +16,8 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 /**
  *
  * TODO Voir comment charger correctement la sous categorie (alternative à l'event)
@@ -29,6 +31,9 @@ public class ModifierAnnonce extends MasterPage{
 
     private AnnonceAffichageDTO annonceAffichageDTO;
     private CompoundPropertyModel propertyModelModificationAnnonce;
+
+    private List<SousCategorieMetierDTO> sousCategorieMetierDTOList;
+    private SousCategorieMetierDTO sousCategorieMetierDTO;
 
     public ModifierAnnonce(){
         this((AnnonceAffichageDTO) null);
@@ -64,7 +69,7 @@ public class ModifierAnnonce extends MasterPage{
             LOGGER.debug("Init des composants de la page de modification de mon annonce");
         }
         Profil profil = new Profil("profil");
-        Etape3AnnonceForm etape3AnnonceForm = new Etape3AnnonceForm("formQualification", propertyModelModificationAnnonce);
+        Etape3AnnonceForm etape3AnnonceForm = new Etape3AnnonceForm("formQualification", propertyModelModificationAnnonce, sousCategorieMetierDTOList, sousCategorieMetierDTO);
 
         ContactezNous contactezNous = new ContactezNous("contactezNous");
         Commentaire commentaire = new Commentaire("commentaire");
@@ -85,16 +90,12 @@ public class ModifierAnnonce extends MasterPage{
         CategorieMetierDTO categorieMetierDTO = CategorieLoader.getCategorieByCode(annonceAffichageDTO.getAnnonce().getCategorieMetier());
         creationAnnonceDTO.setCategorieMetier(categorieMetierDTO);
 
-        SousCategorieMetierDTO sousCategorie = new SousCategorieMetierDTO();
+        sousCategorieMetierDTOList = categorieMetierDTO.getSousCategories();
 
-        for(SousCategorieMetierDTO sousCategorieMetierDTO : categorieMetierDTO.getSousCategories()){
-            if(sousCategorieMetierDTO.getName().equals(annonceAffichageDTO.getAnnonce().getSousCategorieMetier())){
-                sousCategorie = new SousCategorieMetierDTO(annonceAffichageDTO.getAnnonce().getSousCategorieMetier());
+        for(SousCategorieMetierDTO sousCategorieMetierDTOPossible : sousCategorieMetierDTOList){
+            if(sousCategorieMetierDTOPossible.getName().equals(annonceAffichageDTO.getAnnonce().getSousCategorieMetier())){
+                sousCategorieMetierDTO = new SousCategorieMetierDTO(annonceAffichageDTO.getAnnonce().getSousCategorieMetier());
             }
-        }
-
-        if(sousCategorie != null){
-            creationAnnonceDTO.setSousCategorie(sousCategorie);
         }
 
         propertyModelModificationAnnonce = new CompoundPropertyModel<CreationAnnonceDTO>(creationAnnonceDTO);
