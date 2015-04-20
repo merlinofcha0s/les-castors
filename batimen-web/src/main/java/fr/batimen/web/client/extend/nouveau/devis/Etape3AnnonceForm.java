@@ -1,13 +1,24 @@
 package fr.batimen.web.client.extend.nouveau.devis;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import fr.batimen.dto.PermissionDTO;
+import fr.batimen.dto.SousCategorieMetierDTO;
+import fr.batimen.dto.aggregate.CreationAnnonceDTO;
+import fr.batimen.dto.constant.ValidatorConstant;
+import fr.batimen.dto.enums.DelaiIntervention;
+import fr.batimen.dto.enums.TypeCompte;
+import fr.batimen.dto.enums.TypeContact;
+import fr.batimen.dto.enums.TypeTravaux;
+import fr.batimen.web.app.constants.Etape;
 import fr.batimen.web.app.constants.FeedbackMessageLevel;
+import fr.batimen.web.app.constants.ParamsConstant;
+import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
 import fr.batimen.web.client.behaviour.FileFieldValidatorAndLoaderBehaviour;
+import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
+import fr.batimen.web.client.event.FeedBackPanelEvent;
+import fr.batimen.web.client.event.ModificationAnnonceEvent;
+import fr.batimen.web.client.extend.connected.Annonce;
+import fr.batimen.web.client.extend.nouveau.devis.event.CategorieEvent;
+import fr.batimen.web.client.extend.nouveau.devis.event.ChangementEtapeClientEvent;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
@@ -20,26 +31,18 @@ import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.util.lang.Bytes;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.batimen.dto.PermissionDTO;
-import fr.batimen.dto.SousCategorieMetierDTO;
-import fr.batimen.dto.aggregate.CreationAnnonceDTO;
-import fr.batimen.dto.constant.ValidatorConstant;
-import fr.batimen.dto.enums.DelaiIntervention;
-import fr.batimen.dto.enums.TypeCompte;
-import fr.batimen.dto.enums.TypeContact;
-import fr.batimen.dto.enums.TypeTravaux;
-import fr.batimen.web.app.constants.Etape;
-import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
-import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
-import fr.batimen.web.client.event.FeedBackPanelEvent;
-import fr.batimen.web.client.extend.nouveau.devis.event.CategorieEvent;
-import fr.batimen.web.client.extend.nouveau.devis.event.ChangementEtapeClientEvent;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Form de l'etape 3 de création d'annonce.
@@ -56,6 +59,7 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
 
     private FileFieldValidatorAndLoaderBehaviour fileFieldValidatorBehaviour;
     private DropDownChoice<SousCategorieMetierDTO> sousCategorieSelect;
+    private String idAnnonce;
 
     private boolean forModification = false;
 
@@ -210,29 +214,33 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
              */
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                nouvelleAnnonce.setPhotos(new ArrayList<File>());
-                //On enregistre les fichiers dans la DTO
-                for (FileUpload photo : photoField.getFileUploads()) {
-                    try {
-                        nouvelleAnnonce.getPhotos().add(photo.writeToTempFile());
-                    } catch (IOException e) {
-                        if (LOGGER.isErrorEnabled()) {
-                            LOGGER.error("Problème durant l'écriture de la photo sur le disque", e);
+                if (forModification) {
+                    ModificationAnnonceEvent modificationAnnonceEvent = new ModificationAnnonceEvent(target, nouvelleAnnonce);
+                    this.send(target.getPage(), Broadcast.BREADTH, modificationAnnonceEvent);
+                } else {
+                    nouvelleAnnonce.setPhotos(new ArrayList<File>());
+                    //On enregistre les fichiers dans la DTO
+                    for (FileUpload photo : photoField.getFileUploads()) {
+                        try {
+                            nouvelleAnnonce.getPhotos().add(photo.writeToTempFile());
+                        } catch (IOException e) {
+                            if (LOGGER.isErrorEnabled()) {
+                                LOGGER.error("Problème durant l'écriture de la photo sur le disque", e);
+                            }
                         }
                     }
+                    if (!fileFieldValidatorBehaviour.isValidationOK()) {
+                        target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Validation erronnée de vos photos, veuillez corriger", FeedbackMessageLevel.ERROR));
+                    } else {
+                        nouvelleAnnonce.setNumeroEtape(4);
+                        ChangementEtapeClientEvent changementEtapeEventClient = new ChangementEtapeClientEvent(target,
+                                nouvelleAnnonce);
+                        PermissionDTO permissionDTO = new PermissionDTO();
+                        permissionDTO.setTypeCompte(TypeCompte.CLIENT);
+                        nouvelleAnnonce.getClient().getPermissions().add(permissionDTO);
+                        this.send(target.getPage(), Broadcast.BREADTH, changementEtapeEventClient);
+                    }
                 }
-                if (!fileFieldValidatorBehaviour.isValidationOK()) {
-                    target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Validation erronnée de vos photos, veuillez corriger", FeedbackMessageLevel.ERROR));
-                } else {
-                    nouvelleAnnonce.setNumeroEtape(4);
-                    ChangementEtapeClientEvent changementEtapeEventClient = new ChangementEtapeClientEvent(target,
-                            nouvelleAnnonce);
-                    PermissionDTO permissionDTO = new PermissionDTO();
-                    permissionDTO.setTypeCompte(TypeCompte.CLIENT);
-                    nouvelleAnnonce.getClient().getPermissions().add(permissionDTO);
-                    this.send(target.getPage(), Broadcast.BREADTH, changementEtapeEventClient);
-                }
-
             }
 
             /*
@@ -258,7 +266,14 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                NouveauUtils.sendEventForPreviousStep(target, Etape.ETAPE_3.ordinal() + 1);
+                if(forModification){
+                    PageParameters params = new PageParameters();
+                    params.add(ParamsConstant.idAnnonceParam, idAnnonce);
+                    this.setResponsePage(Annonce.class, params);
+                }else{
+                    NouveauUtils.sendEventForPreviousStep(target, Etape.ETAPE_3.ordinal() + 1);
+                }
+
             }
         };
 
@@ -268,5 +283,9 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
         this.add(sousCategorieSelect, descriptionDevisField, typeContactField, delaiInterventionField,
                 adresseField, adresseComplementField, codePostalField, villeField, validateQualification, typeTravaux,
                 etapePrecedente3, containerPhoto);
+    }
+
+    public void setIdAnnonce(String idAnnonce) {
+        this.idAnnonce = idAnnonce;
     }
 }

@@ -5,11 +5,15 @@ import fr.batimen.dto.SousCategorieMetierDTO;
 import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.helper.CategorieLoader;
+import fr.batimen.web.app.constants.FeedbackMessageLevel;
 import fr.batimen.web.client.component.Commentaire;
 import fr.batimen.web.client.component.ContactezNous;
 import fr.batimen.web.client.component.Profil;
+import fr.batimen.web.client.event.FeedBackPanelEvent;
+import fr.batimen.web.client.event.ModificationAnnonceEvent;
 import fr.batimen.web.client.extend.nouveau.devis.Etape3AnnonceForm;
 import fr.batimen.web.client.master.MasterPage;
+import org.apache.wicket.event.IEvent;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.modelmapper.ModelMapper;
@@ -19,15 +23,15 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 /**
- *
- * TODO Voir comment charger correctement la sous categorie (alternative à l'event)
  * TODO Modifier le design pour que ca rentre dans une seule colonne.
- *
+ * <p/>
  * Created by Casaucau on 17/04/2015.
  */
-public class ModifierAnnonce extends MasterPage{
+public class ModifierAnnonce extends MasterPage {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ModifierAnnonce.class);
+
+    private Etape3AnnonceForm etape3AnnonceForm;
 
     private AnnonceAffichageDTO annonceAffichageDTO;
     private CompoundPropertyModel propertyModelModificationAnnonce;
@@ -35,15 +39,17 @@ public class ModifierAnnonce extends MasterPage{
     private List<SousCategorieMetierDTO> sousCategorieMetierDTOList;
     private SousCategorieMetierDTO sousCategorieMetierDTO;
 
-    public ModifierAnnonce(){
+    private String idAnnonce;
+
+    public ModifierAnnonce() {
         this((AnnonceAffichageDTO) null);
     }
 
-    public ModifierAnnonce(AnnonceAffichageDTO annonceAffichageDTO){
+    public ModifierAnnonce(AnnonceAffichageDTO annonceAffichageDTO) {
         super("Modifier mon annonce", "lol", "Modifier mon annonce", true, "img/bg_title1.jpg");
         this.annonceAffichageDTO = annonceAffichageDTO;
 
-        if(annonceAffichageDTO == null){
+        if (annonceAffichageDTO == null) {
             this.setResponsePage(MesAnnonces.class);
         }
 
@@ -55,8 +61,10 @@ public class ModifierAnnonce extends MasterPage{
         initComposant();
     }
 
-    public ModifierAnnonce(PageParameters params, AnnonceAffichageDTO annonceAffichageDTO) {
+    public ModifierAnnonce(String idAnnonce, AnnonceAffichageDTO annonceAffichageDTO) {
         this(annonceAffichageDTO);
+        this.idAnnonce = idAnnonce;
+        etape3AnnonceForm.setIdAnnonce(idAnnonce);
     }
 
     public ModifierAnnonce(PageParameters params) {
@@ -64,12 +72,13 @@ public class ModifierAnnonce extends MasterPage{
     }
 
 
+
     private void initComposant() {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Init des composants de la page de modification de mon annonce");
         }
         Profil profil = new Profil("profil");
-        Etape3AnnonceForm etape3AnnonceForm = new Etape3AnnonceForm("formQualification", propertyModelModificationAnnonce, sousCategorieMetierDTOList, sousCategorieMetierDTO);
+        etape3AnnonceForm = new Etape3AnnonceForm("formQualification", propertyModelModificationAnnonce, sousCategorieMetierDTOList, sousCategorieMetierDTO);
 
         ContactezNous contactezNous = new ContactezNous("contactezNous");
         Commentaire commentaire = new Commentaire("commentaire");
@@ -92,12 +101,21 @@ public class ModifierAnnonce extends MasterPage{
 
         sousCategorieMetierDTOList = categorieMetierDTO.getSousCategories();
 
-        for(SousCategorieMetierDTO sousCategorieMetierDTOPossible : sousCategorieMetierDTOList){
-            if(sousCategorieMetierDTOPossible.getName().equals(annonceAffichageDTO.getAnnonce().getSousCategorieMetier())){
+        for (SousCategorieMetierDTO sousCategorieMetierDTOPossible : sousCategorieMetierDTOList) {
+            if (sousCategorieMetierDTOPossible.getName().equals(annonceAffichageDTO.getAnnonce().getSousCategorieMetier())) {
                 sousCategorieMetierDTO = new SousCategorieMetierDTO(annonceAffichageDTO.getAnnonce().getSousCategorieMetier());
             }
         }
-
         propertyModelModificationAnnonce = new CompoundPropertyModel<CreationAnnonceDTO>(creationAnnonceDTO);
+    }
+
+    @Override
+    public void onEvent(IEvent<?> event) {
+        super.onEvent(event);
+        if (event.getPayload() instanceof ModificationAnnonceEvent) {
+            ModificationAnnonceEvent modificationAnnonceEvent = (ModificationAnnonceEvent) event.getPayload();
+            feedBackPanelGeneral.sendMessage("Votre annonce a été modifiée avec succés !", FeedbackMessageLevel.SUCCESS);
+            modificationAnnonceEvent.getTarget().add(feedBackPanelGeneral);
+        }
     }
 }

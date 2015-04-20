@@ -6,6 +6,7 @@ import fr.batimen.dto.aggregate.*;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.helper.CategorieLoader;
+import fr.batimen.web.app.constants.ParamsConstant;
 import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.app.security.RolesUtils;
 import fr.batimen.web.client.component.Commentaire;
@@ -98,7 +99,7 @@ public class Annonce extends MasterPage {
 
     public Annonce(PageParameters params) {
         this();
-        idAnnonce = params.get("idAnnonce").toString();
+        idAnnonce = params.get(ParamsConstant.idAnnonceParam).toString();
         roleUtils = new RolesUtils();
         loadAnnonceInfos(idAnnonce);
         updateNbConsultation();
@@ -173,9 +174,7 @@ public class Annonce extends MasterPage {
 
             @Override
             public void onClick() {
-                PageParameters parameters = new PageParameters();
-                parameters.add("annonceId", idAnnonce);
-                ModifierAnnonce modifierAnnoncePage = new ModifierAnnonce(parameters, annonceAffichageDTO);
+                ModifierAnnonce modifierAnnoncePage = new ModifierAnnonce(idAnnonce, annonceAffichageDTO);
                 this.setResponsePage(modifierAnnoncePage);
             }
 
