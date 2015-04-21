@@ -8,6 +8,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -19,10 +20,10 @@ import static fr.batimen.web.selenium.dataset.AnnonceDataset.*;
  * Test Selenium concernant la page de modification d'une annonce.
  *
  * @author Casaucau Cyril.
- *
- * Created by Casaucau on 20/04/2015.
+ *         <p/>
+ *         Created by Casaucau on 20/04/2015.
  */
-public class TestModificationAnnonce  extends AbstractITTest {
+public class TestModificationAnnonce extends AbstractITTest {
 
     @Override
     public void prepareDB() throws Exception {
@@ -34,7 +35,7 @@ public class TestModificationAnnonce  extends AbstractITTest {
     }
 
     @Before
-    public void connectToAnnonceBeforeModification(){
+    public void connectToAnnonceBeforeModification() {
         driver.get(appUrl);
         connexionApplication("raiden", AbstractITTest.BON_MOT_DE_PASSE, Boolean.TRUE);
         // On calcul l'url d'accés direct à l'annonce.
@@ -47,19 +48,31 @@ public class TestModificationAnnonce  extends AbstractITTest {
     /**
      * Cas de test : Le client accede a son annonce en se connectant a les
      * castors, puis modifie les données de l'annonce
-     *
      */
     @Test
-    public void testModificationAnnonce() {
+    public void testModificationAnnonceNominale() {
         driver.findElement(By.linkText("Modifier votre annonce")).click();
         new Select(driver.findElement(By.id("typeContactField"))).selectByVisibleText("Téléphone");
         new Select(driver.findElement(By.id("sousCategorieSelect"))).selectByVisibleText("Interphone");
         driver.findElement(By.id("radioTypeTravauxRenovation")).click();
         driver.findElement(By.id("typeTravauxRenovation")).click();
         driver.findElement(By.id("validateQualification")).click();
-        Boolean checkSousCategoriePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+        Boolean checkUntilModifOK = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("span.box_type4"),
                         "Votre annonce a été modifiée avec succés !"));
-        Assert.assertTrue(checkSousCategoriePresent);
+        Assert.assertTrue(checkUntilModifOK);
+    }
+
+    /**
+     * Cas de test : Le client accede a son annonce en se connectant a les
+     * castors, puis ne modifie pas les données de son annonce et clique sur le bouton revenir à l'annonce.
+     */
+    @Test
+    public void testModificationAnnonceRetourAnnonce() {
+        driver.findElement(By.linkText("Modifier votre annonce")).click();
+        driver.findElement(By.id("etapePrecedente3")).click();
+        WebElement checkUntilBackToAnnonce = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("h2.headInModule")));
+        Assert.assertNotNull(checkUntilBackToAnnonce);
     }
 }
