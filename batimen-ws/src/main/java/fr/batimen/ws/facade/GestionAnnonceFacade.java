@@ -738,6 +738,22 @@ public class GestionAnnonceFacade {
         return CodeRetourService.RETOUR_OK;
     }
 
+    /**
+     * Service qui permet à un client de pouvoir modifier son annonce<br/>
+     *
+     * Génére une notification à destination des artisans inscrits
+     *
+     * @param annonceModifiee
+     *            Objet permettant de récuperer les informations qui ont été modifiée par le client
+     * @return {@link CodeRetourService}
+     */
+    @POST
+    @Path(WsPath.GESTION_ANNONCE_SERVICE_MODIFICATION_ANNONCE)
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public Integer modifierAnnonce(AnnonceAffichageDTO annonceModifiee) {
+        return 0;
+    }
+
     private Annonce loadAnnonceAndCheckUserClientOrAdminRight(String rolesClientDemandeur, String hashID) {
         if (rolesUtils.checkIfAdminWithString(rolesClientDemandeur)) {
             return annonceDAO.getAnnonceByIDWithTransaction(hashID, true);

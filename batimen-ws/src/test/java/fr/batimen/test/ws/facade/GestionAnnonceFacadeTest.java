@@ -594,6 +594,17 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @UsingDataSet("datasets/in/annonces_by_id.yml")
     @ShouldMatchDataSet(value = "datasets/out/notation_artisan_par_client_et_admin.yml", excludeColumns = { "id",
             "datemaj", "datecreation", "datenotation", "datenotification" })
+    public void testModificationAnnonceParClient() {
+    }
+
+    /**
+     * Cas de test : Un admin veut noter un artisan car les travaux sont
+     * terminés
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonces_by_id.yml")
+    @ShouldMatchDataSet(value = "datasets/out/notation_artisan_par_client_et_admin.yml", excludeColumns = { "id",
+            "datemaj", "datecreation", "datenotation", "datenotification" })
     public void testNotationArtisanParAdmin() {
         NoterArtisanDTO noterArtisanDTO = createNotationDTO("admin");
 
