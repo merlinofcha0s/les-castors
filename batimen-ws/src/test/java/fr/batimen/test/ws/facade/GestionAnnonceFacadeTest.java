@@ -7,6 +7,8 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
+import fr.batimen.dto.aggregate.*;
+import fr.batimen.dto.enums.*;
 import org.jboss.arquillian.persistence.ShouldMatchDataSet;
 import org.jboss.arquillian.persistence.UsingDataSet;
 import org.junit.Assert;
@@ -18,16 +20,6 @@ import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.NotationDTO;
 import fr.batimen.dto.NotificationDTO;
-import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
-import fr.batimen.dto.aggregate.AnnonceSelectEntrepriseDTO;
-import fr.batimen.dto.aggregate.CreationAnnonceDTO;
-import fr.batimen.dto.aggregate.DesinscriptionAnnonceDTO;
-import fr.batimen.dto.aggregate.NbConsultationDTO;
-import fr.batimen.dto.aggregate.NoterArtisanDTO;
-import fr.batimen.dto.enums.EtatAnnonce;
-import fr.batimen.dto.enums.StatutNotification;
-import fr.batimen.dto.enums.TypeCompte;
-import fr.batimen.dto.enums.TypeNotification;
 import fr.batimen.test.ws.AbstractBatimenWsTest;
 import fr.batimen.test.ws.helper.DataHelper;
 import fr.batimen.ws.client.service.AnnonceServiceREST;
@@ -594,7 +586,11 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @UsingDataSet("datasets/in/annonces_by_id.yml")
     @ShouldMatchDataSet(value = "datasets/out/notation_artisan_par_client_et_admin.yml", excludeColumns = { "id",
             "datemaj", "datecreation", "datenotation", "datenotification" })
-    public void testModificationAnnonceParClient() {
+    public void testNotationArtisanParAdmin() {
+        NoterArtisanDTO noterArtisanDTO = createNotationDTO("admin");
+
+        Integer codeRetour = annonceServiceREST.noterUnArtisan(noterArtisanDTO);
+        Assert.assertEquals(CodeRetourService.RETOUR_OK, codeRetour);
     }
 
     /**
@@ -603,13 +599,33 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
-    @ShouldMatchDataSet(value = "datasets/out/notation_artisan_par_client_et_admin.yml", excludeColumns = { "id",
-            "datemaj", "datecreation", "datenotation", "datenotification" })
-    public void testNotationArtisanParAdmin() {
-        NoterArtisanDTO noterArtisanDTO = createNotationDTO("admin");
+    public void testModificationAnnonceParClient() {
+        DemandeAnnonceDTO demandeAnnonceDTO = createDemandeAnnonceDTO(
+                "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
+                "pebronne", TypeCompte.CLIENT);
 
-        Integer codeRetour = annonceServiceREST.noterUnArtisan(noterArtisanDTO);
-        Assert.assertEquals(CodeRetourService.RETOUR_OK, codeRetour);
+        AnnonceAffichageDTO annonceAffichage = annonceServiceREST.getAnnonceByIDForAffichage(demandeAnnonceDTO);
+        Assert.assertNotNull(annonceAffichage);
+
+        ModificationAnnonceDTO modificationAnnonceDTO = new ModificationAnnonceDTO();
+        modificationAnnonceDTO.setAnnonce(annonceAffichage.getAnnonce());
+        modificationAnnonceDTO.getAnnonce().setHashID(demandeAnnonceDTO.getHashID());
+        modificationAnnonceDTO.setAdresse(annonceAffichage.getAdresse());
+        modificationAnnonceDTO.setLoginDemandeur("pebronne");
+
+        modificationAnnonceDTO.getAnnonce().setTypeContact(TypeContact.TELEPHONE);
+        modificationAnnonceDTO.getAnnonce().setTypeTravaux(TypeTravaux.RENOVATION);
+        modificationAnnonceDTO.getAnnonce().setDelaiIntervention(DelaiIntervention.SIX_MOIS);
+
+        Integer codeRetourOK = annonceServiceREST.modifierAnnonce(modificationAnnonceDTO);
+
+        Assert.assertNotNull(codeRetourOK);
+        Assert.assertEquals(CodeRetourService.RETOUR_OK, codeRetourOK);
+
+        Annonce annonceVerification = annonceDAO.getAnnonceByIDWithTransaction("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21", true);
+        Assert.assertEquals(TypeContact.TELEPHONE, annonceVerification.getTypeContact());
+        Assert.assertEquals(TypeTravaux.RENOVATION, annonceVerification.getTypeTravaux());
+        Assert.assertEquals(DelaiIntervention.SIX_MOIS, annonceVerification.getDelaiIntervention());
     }
 
     private NoterArtisanDTO createNotationDTO(String loginDemandeur) {

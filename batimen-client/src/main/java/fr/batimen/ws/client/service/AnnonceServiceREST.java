@@ -6,6 +6,7 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import fr.batimen.dto.aggregate.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,12 +14,6 @@ import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.constant.WsPath;
 import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.DemandeAnnonceDTO;
-import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
-import fr.batimen.dto.aggregate.AnnonceSelectEntrepriseDTO;
-import fr.batimen.dto.aggregate.CreationAnnonceDTO;
-import fr.batimen.dto.aggregate.DesinscriptionAnnonceDTO;
-import fr.batimen.dto.aggregate.NbConsultationDTO;
-import fr.batimen.dto.aggregate.NoterArtisanDTO;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 import fr.batimen.ws.client.WsConnector;
 
@@ -125,7 +120,7 @@ public class AnnonceServiceREST implements Serializable {
      * Récupère également les informations sur les artisans et les entreprise
      * inscrites a cette annonce
      * 
-     * @param demandeAnnonce
+     * @param demandeAnnonceDTO
      *            le hashID avec le login du demandeur dans le but de vérifier
      *            les droits.
      * @return l'ensemble des informations qui permettent d'afficher l'annonce
@@ -177,7 +172,7 @@ public class AnnonceServiceREST implements Serializable {
     /**
      * Permet de supprimer une annonce.
      * 
-     * @param demandeAnnonce
+     * @param demandeAnnonceDTO
      *            le hashID avec le login du demandeur dans le but de vérifier
      *            les droits.
      * @return 0 si c'est OK
@@ -202,8 +197,8 @@ public class AnnonceServiceREST implements Serializable {
 
     /**
      * Permet de selectionner un entreprise pour une annonce.
-     * 
-     * @param demandeAnnonce
+     *
+     * @param demandeAnnonceDTO
      *            le hashID avec le login du demandeur dans le but de vérifier
      *            les droits ainsi que le siret de l'entreprise.
      * @return 0 si c'est OK
@@ -229,7 +224,7 @@ public class AnnonceServiceREST implements Serializable {
     /**
      * Permet de selectionner un entreprise pour une annonce.
      * 
-     * @param demandeAnnonce
+     * @param demandeAnnonceDTO
      *            le hashID avec le login du demandeur dans le but de vérifier
      *            les droits ainsi que le siret de l'entreprise.
      * @return 0 si c'est OK
@@ -253,9 +248,9 @@ public class AnnonceServiceREST implements Serializable {
     }
 
     /**
-     * Permet de selectionner un entreprise pour une annonce.
+     * Permet de déselectionner une entreprise pour une annonce.
      * 
-     * @param demandeAnnonce
+     * @param desinscriptionAnnonceDTO
      *            le hashID avec le login du demandeur dans le but de vérifier
      *            les droits ainsi que le siret de l'entreprise.
      * @return 0 si c'est OK
@@ -299,6 +294,31 @@ public class AnnonceServiceREST implements Serializable {
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Fin appel service de notation d'un artisan.");
+        }
+        return notationOK;
+    }
+
+    /**
+     * Service qui permet à un client de pouvoir modifier son annonce<br/>
+     *
+     * Génére une notification à destination des artisans inscrits
+     *
+     * @param modificationAnnonceDTO
+     *            Objet permettant de récuperer les informations qui ont été modifiée par le client
+     * @return {@link CodeRetourService}
+     */
+    public Integer modifierAnnonce(ModificationAnnonceDTO modificationAnnonceDTO) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Début appel service de modification d'une annonce.....");
+        }
+
+        String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_ANNONCE_SERVICE_PATH,
+                WsPath.GESTION_ANNONCE_SERVICE_MODIFICATION_ANNONCE, modificationAnnonceDTO);
+
+        Integer notationOK = Integer.valueOf(objectInJSON);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Fin appel service de modification d'une annonce.");
         }
         return notationOK;
     }

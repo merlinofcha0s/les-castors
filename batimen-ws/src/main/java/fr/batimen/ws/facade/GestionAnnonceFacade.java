@@ -24,6 +24,9 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import fr.batimen.dto.aggregate.*;
+import fr.batimen.ws.mapper.AnnonceMap;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,12 +43,6 @@ import fr.batimen.core.exception.DuplicateEntityException;
 import fr.batimen.core.exception.EmailException;
 import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.DemandeAnnonceDTO;
-import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
-import fr.batimen.dto.aggregate.AnnonceSelectEntrepriseDTO;
-import fr.batimen.dto.aggregate.CreationAnnonceDTO;
-import fr.batimen.dto.aggregate.DesinscriptionAnnonceDTO;
-import fr.batimen.dto.aggregate.NbConsultationDTO;
-import fr.batimen.dto.aggregate.NoterArtisanDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.enums.TypeNotification;
@@ -199,7 +196,7 @@ public class GestionAnnonceFacade {
      * 
      * @see Constant
      * 
-     * @param nouvelleAnnonceDTO
+     * @param content
      *            L'objet provenant du frontend qui permet la creation de
      *            l'annonce.
      * @return CODE_SERVICE_RETOUR_KO ou CODE_SERVICE_RETOUR_OK voir la classe
@@ -743,15 +740,41 @@ public class GestionAnnonceFacade {
      *
      * Génére une notification à destination des artisans inscrits
      *
-     * @param annonceModifiee
+     * @param modificationAnnonceDTO
      *            Objet permettant de récuperer les informations qui ont été modifiée par le client
      * @return {@link CodeRetourService}
      */
     @POST
     @Path(WsPath.GESTION_ANNONCE_SERVICE_MODIFICATION_ANNONCE)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public Integer modifierAnnonce(AnnonceAffichageDTO annonceModifiee) {
-        return 0;
+    public Integer modifierAnnonce(ModificationAnnonceDTO modificationAnnonceDTO) {
+        //TODO : Verification des droits => OK
+        //TODO : Enregistremenn des changements
+        //TODO : Génération d'une notification a destination des artisan
+        String rolesDemandeur = utilisateurFacade.getUtilisateurRoles(modificationAnnonceDTO.getLoginDemandeur());
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Roles du demandeur : {}", rolesDemandeur);
+        }
+
+        Annonce annonceAModifier = loadAnnonceAndCheckUserClientOrAdminRight(rolesDemandeur, modificationAnnonceDTO.getAnnonce().getHashID());
+        if(annonceAModifier != null){
+            ModelMapper mapper = new ModelMapper();
+            mapper.addMappings(new AnnonceMap());
+           // String hashid = modificationAnnonceDTO.getAnnonce().getHashID();
+            //modificationAnnonceDTO.getAnnonce().setHashID(null);
+
+            mapper.map(modificationAnnonceDTO.getAnnonce(), annonceAModifier);
+            //annonceAModifier.setHashID(hashid);
+
+
+            mapper.map(modificationAnnonceDTO.getAdresse(), annonceAModifier.getAdresseChantier());
+            annonceDAO.update(annonceAModifier);
+        }else{
+            return CodeRetourService.ANNONCE_RETOUR_INTROUVABLE;
+        }
+
+        return CodeRetourService.RETOUR_OK;
     }
 
     private Annonce loadAnnonceAndCheckUserClientOrAdminRight(String rolesClientDemandeur, String hashID) {
@@ -761,15 +784,9 @@ public class GestionAnnonceFacade {
             return annonceDAO.getAnnonceByIDWithTransaction(hashID, false);
         } else {
             if (LOGGER.isErrorEnabled()) {
-                StringBuilder errorRoles = new StringBuilder();
-                errorRoles.append("Roles : ").append(rolesClientDemandeur);
-
-                StringBuilder errorHashID = new StringBuilder();
-                errorHashID.append("Hash ID : ").append(hashID);
-
                 LOGGER.error("N'a pas les bons droits pour accéder à ce service !!!");
-                LOGGER.error(errorRoles.toString());
-                LOGGER.error(errorHashID.toString());
+                LOGGER.error("Roles : {}", rolesClientDemandeur);
+                LOGGER.error("Hash ID : {}", hashID);
             }
             return null;
         }
