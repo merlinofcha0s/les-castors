@@ -32,9 +32,7 @@ import fr.batimen.ws.entity.Client;
 import fr.batimen.ws.service.NotificationService;
 
 /**
- * 
  * @author Casaucau Cyril
- * 
  */
 public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
@@ -63,13 +61,13 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     /**
      * Cas de test : le client n'est pas inscrit sur le site. Il faut donc creer
      * l'annonce mais également enregister son compte dans la base de données.
-     * 
+     * <p/>
      * On ignore volontairement date inscription et datemaj car elles sont
      * généréés dynamiquement lors de la creation de l'annonce.
      */
     @Test
-    @ShouldMatchDataSet(value = "datasets/out/creation_annonce_is_not_signed_in.yml", excludeColumns = { "id",
-            "datemaj", "datecreation" })
+    @ShouldMatchDataSet(value = "datasets/out/creation_annonce_is_not_signed_in.yml", excludeColumns = {"id",
+            "datemaj", "datecreation"})
     public void testCreationAnnonceIsNotSignedIn() {
         creationVerificationAnnonce();
     }
@@ -78,14 +76,14 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
      * Cas de test : le client est inscrit sur le site. Il faut donc creer
      * l'annonce mais ne pas enregistrer son compte, juste lier le compte de
      * l'utilisateur avec l'annonce.
-     * 
+     * <p/>
      * On ignore volontairement date inscription et datemaj car elles sont
      * généréés dynamiquement lors de la creation de l'annonce.
      */
     @Test
     @UsingDataSet("datasets/in/client_creation_annonce.yml")
-    @ShouldMatchDataSet(value = "datasets/out/creation_annonce_is_signed_in.yml", excludeColumns = { "id", "datemaj",
-            "datecreation" })
+    @ShouldMatchDataSet(value = "datasets/out/creation_annonce_is_signed_in.yml", excludeColumns = {"id", "datemaj",
+            "datecreation"})
     public void testCreationAnnonceIsSignedIn() {
         creationAnnonceDTO.setIsSignedUp(true);
         creationVerificationAnnonce();
@@ -96,14 +94,14 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
      * l'annonce mais ne pas enregistrer son compte, juste lier le compte de
      * l'utilisateur avec l'annonce.<br/>
      * De plus dans ce cas, il enregistre des photos avec son annonce
-     * 
+     * <p/>
      * On ignore volontairement date inscription et datemaj car elles sont
      * généréés dynamiquement lors de la creation de l'annonce.
      */
     @Test
     @UsingDataSet("datasets/in/client_creation_annonce.yml")
-    @ShouldMatchDataSet(value = "datasets/out/creation_annonce_is_signed_in.yml", excludeColumns = { "id", "datemaj",
-            "datecreation" })
+    @ShouldMatchDataSet(value = "datasets/out/creation_annonce_is_signed_in.yml", excludeColumns = {"id", "datemaj",
+            "datecreation"})
     public void testCreationAnnonceIsSignedInWithImage() {
         creationAnnonceDTO.setIsSignedUp(true);
 
@@ -125,7 +123,6 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     /**
      * Cas de test : Le client tente de creer une annonce qui existe déjà avec
      * le même titre.
-     * 
      */
     @Test
     public void testCreationAnnonceDuplicata() {
@@ -138,7 +135,6 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     /**
      * Cas de test : récupération des annonces des clients. /!\ charge
      * automatiquement les artisans qui sont inscrits a l'annonce.
-     * 
      */
     @Test
     @UsingDataSet("datasets/in/annonces.yml")
@@ -150,7 +146,6 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
     /**
      * Cas de test : récupération de l'annonce d'un client par un client.
-     * 
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
@@ -176,7 +171,6 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     /**
      * Cas de test : Récuperation d'une annonce par son id a partir d'un artisan
      * qui n'est pas inscrit à cette derniere.
-     * 
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
@@ -198,7 +192,6 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     /**
      * Cas de test : Récuperation d'une annonce par son id a partir d'un artisan
      * qui est inscrit à cette derniere.
-     * 
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
@@ -220,7 +213,6 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     /**
      * Cas de test : Récuperation d'une annonce par son id a partir d'un artisan
      * qui est inscrit à cette derniere.
-     * 
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
@@ -242,7 +234,6 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     /**
      * Cas de test : Incrémentation du nb de consultation quand un artisan
      * accede à la page d'annonce.
-     * 
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
@@ -266,7 +257,6 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     /**
      * Cas de test : Suppression d'une annonce par un client, le test doit
      * mettre l'annonce en statut supprimer correctement.
-     * 
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
@@ -294,7 +284,6 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
      * Cas de test : Un client essai d'effacer d'une annonce qui n'est pas a
      * lui, le webservice refuse. Aucune demande de devis ne s'efface, on la
      * passe juste en mode supprimé
-     * 
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
@@ -320,7 +309,6 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     /**
      * Cas de test : Suppression d'une annonce par un admin, le test doit mettre
      * l'annonce en statut supprimer correctement.
-     * 
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
@@ -345,7 +333,6 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
     /**
      * Cas de test : Selection d'un artisan par un client dans son annonce
-     * 
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
@@ -366,7 +353,6 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
     /**
      * Cas de test : Selection d'un artisan par un admin pour une annonce.
-     * 
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
@@ -388,7 +374,6 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     /**
      * Cas de test : Suppression d'une entreprise qui avait été selectionnée. <br/>
      * Suppression faite par un administrateur
-     * 
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
@@ -411,7 +396,6 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     /**
      * Cas de test : l'artisan s'inscrit à l'annonce, il recoit une
      * notification, le tout doit etre correctement enregistré dans la BDD
-     * 
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
@@ -466,7 +450,6 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
      * Cas de test: L'artisan essaye de s'inscrire deux fois, la premiere fois
      * se passe bien, la deuxieme fois on renvoi un code retour indiquant qu'il
      * est deja inscrit.
-     * 
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
@@ -569,8 +552,8 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
-    @ShouldMatchDataSet(value = "datasets/out/notation_artisan_par_client_et_admin.yml", excludeColumns = { "id",
-            "datemaj", "datecreation", "datenotation", "datenotification" })
+    @ShouldMatchDataSet(value = "datasets/out/notation_artisan_par_client_et_admin.yml", excludeColumns = {"id",
+            "datemaj", "datecreation", "datenotation", "datenotification"})
     public void testNotationArtisanParClient() {
         NoterArtisanDTO noterArtisanDTO = createNotationDTO("pebronne");
 
@@ -584,8 +567,8 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
-    @ShouldMatchDataSet(value = "datasets/out/notation_artisan_par_client_et_admin.yml", excludeColumns = { "id",
-            "datemaj", "datecreation", "datenotation", "datenotification" })
+    @ShouldMatchDataSet(value = "datasets/out/notation_artisan_par_client_et_admin.yml", excludeColumns = {"id",
+            "datemaj", "datecreation", "datenotation", "datenotification"})
     public void testNotationArtisanParAdmin() {
         NoterArtisanDTO noterArtisanDTO = createNotationDTO("admin");
 
@@ -599,6 +582,8 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
+    @ShouldMatchDataSet(value = "datasets/out/modification_annonce_par_client.yml", excludeColumns = {"id",
+            "datemaj", "datecreation", "datenotation", "datenotification"})
     public void testModificationAnnonceParClient() {
         DemandeAnnonceDTO demandeAnnonceDTO = createDemandeAnnonceDTO(
                 "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
@@ -621,11 +606,6 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
         Assert.assertNotNull(codeRetourOK);
         Assert.assertEquals(CodeRetourService.RETOUR_OK, codeRetourOK);
-
-        Annonce annonceVerification = annonceDAO.getAnnonceByIDWithTransaction("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21", true);
-        Assert.assertEquals(TypeContact.TELEPHONE, annonceVerification.getTypeContact());
-        Assert.assertEquals(TypeTravaux.RENOVATION, annonceVerification.getTypeTravaux());
-        Assert.assertEquals(DelaiIntervention.SIX_MOIS, annonceVerification.getDelaiIntervention());
     }
 
     private NoterArtisanDTO createNotationDTO(String loginDemandeur) {
