@@ -315,12 +315,12 @@ public class AnnonceServiceREST implements Serializable {
         String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_ANNONCE_SERVICE_PATH,
                 WsPath.GESTION_ANNONCE_SERVICE_MODIFICATION_ANNONCE, modificationAnnonceDTO);
 
-        Integer notationOK = Integer.valueOf(objectInJSON);
+        Integer modificationOK = Integer.valueOf(objectInJSON);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Fin appel service de modification d'une annonce.");
         }
-        return notationOK;
+        return modificationOK;
     }
 
 }

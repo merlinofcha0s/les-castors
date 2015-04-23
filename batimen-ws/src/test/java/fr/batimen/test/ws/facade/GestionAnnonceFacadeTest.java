@@ -577,17 +577,45 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     }
 
     /**
-     * Cas de test : Un admin veut noter un artisan car les travaux sont
-     * terminés
+     * Cas de test : Un client veut modifier son annonce, tout se passe comme prévu
+     *
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
     @ShouldMatchDataSet(value = "datasets/out/modification_annonce_par_client.yml", excludeColumns = {"id",
             "datemaj", "datecreation", "datenotation", "datenotification"})
     public void testModificationAnnonceParClient() {
+        testModificationAnnonce(TypeCompte.CLIENT, "pebronne", CodeRetourService.RETOUR_OK);
+    }
+
+    /**
+     * Cas de test : Un admin veut modifier l'annonce d'un client tout se passe comme prévu.
+     *
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonces_by_id.yml")
+    @ShouldMatchDataSet(value = "datasets/out/modification_annonce_par_client.yml", excludeColumns = {"id",
+            "datemaj", "datecreation", "datenotation", "datenotification"})
+    public void testModificationAnnonceParAdmin() {
+        testModificationAnnonce(TypeCompte.ADMINISTRATEUR, "admin", CodeRetourService.RETOUR_OK);
+    }
+
+    /**
+     * Cas de test : Un client ne possédant pas l'annonce veut la modifier, On lui refuse.
+     *
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonces_by_id.yml")
+    @ShouldMatchDataSet(value = "datasets/in/annonces_by_id.yml", excludeColumns = {"id",
+            "datemaj", "datecreation", "datenotation", "datenotification"})
+    public void testModificationAnnonceParClientNotAllowed() {
+        testModificationAnnonce(TypeCompte.CLIENT, "raiden", CodeRetourService.ANNONCE_RETOUR_INTROUVABLE);
+    }
+
+    private void testModificationAnnonce(TypeCompte typeCompte, String loginDemandeur, Integer codeRetourServiceAttendu){
         DemandeAnnonceDTO demandeAnnonceDTO = createDemandeAnnonceDTO(
                 "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
-                "pebronne", TypeCompte.CLIENT);
+                "pebronne", typeCompte);
 
         AnnonceAffichageDTO annonceAffichage = annonceServiceREST.getAnnonceByIDForAffichage(demandeAnnonceDTO);
         Assert.assertNotNull(annonceAffichage);
@@ -596,7 +624,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         modificationAnnonceDTO.setAnnonce(annonceAffichage.getAnnonce());
         modificationAnnonceDTO.getAnnonce().setHashID(demandeAnnonceDTO.getHashID());
         modificationAnnonceDTO.setAdresse(annonceAffichage.getAdresse());
-        modificationAnnonceDTO.setLoginDemandeur("pebronne");
+        modificationAnnonceDTO.setLoginDemandeur(loginDemandeur);
 
         modificationAnnonceDTO.getAnnonce().setTypeContact(TypeContact.TELEPHONE);
         modificationAnnonceDTO.getAnnonce().setTypeTravaux(TypeTravaux.RENOVATION);
@@ -605,7 +633,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         Integer codeRetourOK = annonceServiceREST.modifierAnnonce(modificationAnnonceDTO);
 
         Assert.assertNotNull(codeRetourOK);
-        Assert.assertEquals(CodeRetourService.RETOUR_OK, codeRetourOK);
+        Assert.assertEquals(codeRetourServiceAttendu, codeRetourOK);
     }
 
     private NoterArtisanDTO createNotationDTO(String loginDemandeur) {

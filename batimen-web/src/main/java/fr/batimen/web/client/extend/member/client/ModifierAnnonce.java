@@ -23,8 +23,6 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 /**
- * TODO Modifier le design pour que ca rentre dans une seule colonne.
- * <p/>
  * Created by Casaucau on 17/04/2015.
  */
 public class ModifierAnnonce extends MasterPage {

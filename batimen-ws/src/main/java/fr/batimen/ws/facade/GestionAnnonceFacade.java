@@ -3,11 +3,7 @@ package fr.batimen.ws.facade;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.LocalBean;
@@ -748,32 +744,38 @@ public class GestionAnnonceFacade {
     @Path(WsPath.GESTION_ANNONCE_SERVICE_MODIFICATION_ANNONCE)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public Integer modifierAnnonce(ModificationAnnonceDTO modificationAnnonceDTO) {
-        //TODO : Verification des droits => OK
-        //TODO : Enregistremenn des changements
-        //TODO : Génération d'une notification a destination des artisan
         String rolesDemandeur = utilisateurFacade.getUtilisateurRoles(modificationAnnonceDTO.getLoginDemandeur());
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Roles du demandeur : {}", rolesDemandeur);
         }
 
+        boolean generateNotification = false;
+
         Annonce annonceAModifier = loadAnnonceAndCheckUserClientOrAdminRight(rolesDemandeur, modificationAnnonceDTO.getAnnonce().getHashID());
         if(annonceAModifier != null){
             ModelMapper mapper = new ModelMapper();
             mapper.addMappings(new AnnonceMap());
-           // String hashid = modificationAnnonceDTO.getAnnonce().getHashID();
-            //modificationAnnonceDTO.getAnnonce().setHashID(null);
-
             mapper.map(modificationAnnonceDTO.getAnnonce(), annonceAModifier);
-            //annonceAModifier.setHashID(hashid);
-
-
             mapper.map(modificationAnnonceDTO.getAdresse(), annonceAModifier.getAdresseChantier());
+            annonceAModifier.setDateMAJ(new Date());
             annonceDAO.update(annonceAModifier);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Mise à jour de l'annonce : {}", annonceAModifier);
+            }
+            generateNotification = true;
         }else{
             return CodeRetourService.ANNONCE_RETOUR_INTROUVABLE;
         }
 
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Génération des notifications à destinations des artisans inscrit à cette annonce");
+        }
+        if(generateNotification){
+            for(Artisan artisanToNotify : annonceAModifier.getArtisans()){
+                notificationService.generationNotificationArtisan(annonceAModifier, artisanToNotify, TypeCompte.ARTISAN, TypeNotification.A_MODIFIER_ANNONCE);
+            }
+        }
         return CodeRetourService.RETOUR_OK;
     }
 

@@ -167,6 +167,22 @@ notification:
      id_client: 1001
      id_artisan: 1003
      id_annonce: 1020
+   - id: 1003
+     typenotification: 4
+     datenotification: "2015-04-23 12:01:00"
+     statutNotification: 1
+     pourQuiNotification: 3
+     id_client: 1001
+     id_artisan: 1003
+     id_annonce: 1020
+   - id: 1004
+     typenotification: 4
+     datenotification: "2015-04-23 12:01:00"
+     statutNotification: 1
+     pourQuiNotification: 3
+     id_client: 1001
+     id_artisan: 1005
+     id_annonce: 1020
 image:
    - id: 1000
      url: "https://res.cloudinary.com/lescastors/image/upload/v1427874120/test/zbeod6tici6yrphpco39.jpg"
