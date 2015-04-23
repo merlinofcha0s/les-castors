@@ -322,5 +322,4 @@ public class AnnonceServiceREST implements Serializable {
         }
         return modificationOK;
     }
-
 }

@@ -18,4 +18,8 @@ public class ModificationAnnonceEvent extends AbstractEvent{
         super(target);
         this.creationAnnonceDTO = creationAnnonceDTO;
     }
+
+    public CreationAnnonceDTO getCreationAnnonceDTO() {
+        return creationAnnonceDTO;
+    }
 }

@@ -1,11 +1,16 @@
 package fr.batimen.web.client.extend.member.client;
 
+import fr.batimen.core.constant.CodeRetourService;
+import fr.batimen.dto.AdresseDTO;
+import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.SousCategorieMetierDTO;
 import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
+import fr.batimen.dto.aggregate.ModificationAnnonceDTO;
 import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.web.app.constants.FeedbackMessageLevel;
+import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.client.component.Commentaire;
 import fr.batimen.web.client.component.ContactezNous;
 import fr.batimen.web.client.component.Profil;
@@ -13,6 +18,7 @@ import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.web.client.event.ModificationAnnonceEvent;
 import fr.batimen.web.client.extend.nouveau.devis.Etape3AnnonceForm;
 import fr.batimen.web.client.master.MasterPage;
+import fr.batimen.ws.client.service.AnnonceServiceREST;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -20,14 +26,28 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
+import java.util.Date;
 import java.util.List;
 
 /**
+ * Page permettant aux clients ou aux admins de modifier une annonce postée par un client
+ *
  * Created by Casaucau on 17/04/2015.
+ *
+ * TODO : L'annonce doit etre active, en attente, ou quotas max sinon refus d'accés à la page
+ *
+ * @author Casaucau Cyril
  */
 public class ModifierAnnonce extends MasterPage {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ModifierAnnonce.class);
+
+    @Inject
+    private AnnonceServiceREST annonceServiceREST;
+
+    @Inject
+    private Authentication authentication;
 
     private Etape3AnnonceForm etape3AnnonceForm;
 
@@ -111,8 +131,37 @@ public class ModifierAnnonce extends MasterPage {
     public void onEvent(IEvent<?> event) {
         super.onEvent(event);
         if (event.getPayload() instanceof ModificationAnnonceEvent) {
+            //Extraction des infos
             ModificationAnnonceEvent modificationAnnonceEvent = (ModificationAnnonceEvent) event.getPayload();
-            feedBackPanelGeneral.sendMessage("Votre annonce a été modifiée avec succés !", FeedbackMessageLevel.SUCCESS);
+            CreationAnnonceDTO creationAnnonceDTO = modificationAnnonceEvent.getCreationAnnonceDTO();
+
+            ModelMapper mapper = new ModelMapper();
+
+            //Init des objets
+            ModificationAnnonceDTO modificationAnnonceDTO = new ModificationAnnonceDTO();
+            modificationAnnonceDTO.setAnnonce(new AnnonceDTO());
+            modificationAnnonceDTO.setAdresse(new AdresseDTO());
+
+
+            //Remplissage des DTOs
+            mapper.map(creationAnnonceDTO, modificationAnnonceDTO.getAnnonce());
+            mapper.map(creationAnnonceDTO, modificationAnnonceDTO.getAdresse());
+
+            //Champs non mappés
+            modificationAnnonceDTO.setLoginDemandeur(authentication.getCurrentUserInfo().getLogin());
+            modificationAnnonceDTO.getAnnonce().setDateMAJ(new Date());
+            modificationAnnonceDTO.getAnnonce().setEtatAnnonce(annonceAffichageDTO.getAnnonce().getEtatAnnonce());
+            modificationAnnonceDTO.getAnnonce().setDateCreation(annonceAffichageDTO.getAnnonce().getDateCreation());
+
+            //Appel du service
+            Integer codeRetourService = annonceServiceREST.modifierAnnonce(modificationAnnonceDTO);
+
+            if(codeRetourService == CodeRetourService.RETOUR_OK){
+                feedBackPanelGeneral.sendMessage("Votre annonce a été modifiée avec succés !", FeedbackMessageLevel.SUCCESS);
+            }else{
+                feedBackPanelGeneral.sendMessage("Problème lors de l'enregistrement de l'annonce, veuillez réessayer ultérieurement", FeedbackMessageLevel.ERROR);
+            }
+
             modificationAnnonceEvent.getTarget().add(feedBackPanelGeneral);
         }
     }
