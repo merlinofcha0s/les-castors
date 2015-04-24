@@ -27,6 +27,7 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.extensions.markup.html.basic.SmartLinkLabel;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
@@ -68,6 +69,8 @@ public class Annonce extends MasterPage {
     private WebMarkupContainer containerActions;
     private WebMarkupContainer notationAnnonceParClientContainer;
     private WebMarkupContainer containerPopupNotationArtisan;
+    private WebMarkupContainer modifierAnnonceContainer;
+    private WebMarkupContainer supprimerAnnonceContainer;
 
     private WebMarkupContainer envoyerDevisContainer;
 
@@ -156,7 +159,7 @@ public class Annonce extends MasterPage {
         containerActions.setOutputMarkupId(true);
         containerActions.setMarkupId("containerActions");
 
-        WebMarkupContainer modifierAnnonceContainer = new WebMarkupContainer("modifierAnnonceContainer") {
+        modifierAnnonceContainer = new WebMarkupContainer("modifierAnnonceContainer") {
             /**
              * 
              */
@@ -164,9 +167,14 @@ public class Annonce extends MasterPage {
 
             @Override
             public boolean isVisible() {
-                return roleUtils.checkClientAndAdminRoles();
+                return roleUtils.checkClientAndAdminRoles() && !(annonceAffichageDTO.getAnnonce().getEtatAnnonce().equals(EtatAnnonce.DESACTIVE)
+                        || annonceAffichageDTO.getAnnonce().getEtatAnnonce().equals(EtatAnnonce.A_NOTER)
+                        || annonceAffichageDTO.getAnnonce().getEtatAnnonce().equals(EtatAnnonce.SUPPRIMER)
+                        || annonceAffichageDTO.getAnnonce().getEtatAnnonce().equals(EtatAnnonce.TERMINER));
             }
         };
+
+        modifierAnnonceContainer.setOutputMarkupId(true);
 
         Link<Void> modifierAnnonce = new Link<Void>("modifierAnnonce") {
 
@@ -180,7 +188,7 @@ public class Annonce extends MasterPage {
 
         };
 
-        WebMarkupContainer supprimerAnnonceContainer = new WebMarkupContainer("supprimerAnnonceContainer") {
+        supprimerAnnonceContainer = new WebMarkupContainer("supprimerAnnonceContainer") {
             /**
              * 
              */
@@ -190,7 +198,19 @@ public class Annonce extends MasterPage {
             public boolean isVisible() {
                 return roleUtils.checkClientAndAdminRoles();
             }
+
+            @Override
+            protected void onComponentTag(ComponentTag tag) {
+                super.onComponentTag(tag);
+                if(!modifierAnnonceContainer.isVisible()){
+                    tag.remove("class");
+                }else{
+                    tag.put("class", "containerAction");
+                }
+            }
         };
+
+        supprimerAnnonceContainer.setOutputMarkupId(true);
 
         AjaxLink<Void> supprimerAnnonce = new AjaxLink<Void>("supprimerAnnonce") {
 
@@ -200,7 +220,6 @@ public class Annonce extends MasterPage {
             public void onClick(AjaxRequestTarget target) {
                 this.send(target.getPage(), Broadcast.BREADTH, new SuppressionOpenEvent(target));
             }
-
         };
 
         supprimerAnnonce.setOutputMarkupId(true);
@@ -818,7 +837,7 @@ public class Annonce extends MasterPage {
             // On set le model pour que le nom de l'entreprise soit
             // rafraichi par la requette ajax
 
-            selectionEntrepriseEvent.getTarget().add(feedBackPanelGeneral, containerEntreprisesGlobales, etatAnnonce, containerPopupNotationArtisan);
+            selectionEntrepriseEvent.getTarget().add(feedBackPanelGeneral, containerEntreprisesGlobales, etatAnnonce, containerPopupNotationArtisan, modifierAnnonceContainer, supprimerAnnonceContainer);
         }
 
         if (event.getPayload() instanceof DesinscriptionArtisanAnnonceEvent) {

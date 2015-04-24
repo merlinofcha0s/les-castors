@@ -8,6 +8,7 @@ import fr.batimen.dto.SousCategorieMetierDTO;
 import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.aggregate.ModificationAnnonceDTO;
+import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.web.app.constants.FeedbackMessageLevel;
 import fr.batimen.web.app.security.Authentication;
@@ -32,9 +33,9 @@ import java.util.List;
 
 /**
  * Page permettant aux clients ou aux admins de modifier une annonce postée par un client
- *
+ * <p/>
  * Created by Casaucau on 17/04/2015.
- *
+ * <p/>
  * TODO : L'annonce doit etre active, en attente, ou quotas max sinon refus d'accés à la page
  *
  * @author Casaucau Cyril
@@ -67,7 +68,11 @@ public class ModifierAnnonce extends MasterPage {
         super("Modifier mon annonce", "lol", "Modifier mon annonce", true, "img/bg_title1.jpg");
         this.annonceAffichageDTO = annonceAffichageDTO;
 
-        if (annonceAffichageDTO == null) {
+        if (annonceAffichageDTO == null
+                || !annonceAffichageDTO.getAnnonce().getEtatAnnonce().equals(EtatAnnonce.DESACTIVE)
+                || !annonceAffichageDTO.getAnnonce().getEtatAnnonce().equals(EtatAnnonce.A_NOTER)
+                || !annonceAffichageDTO.getAnnonce().getEtatAnnonce().equals(EtatAnnonce.SUPPRIMER)
+                || !annonceAffichageDTO.getAnnonce().getEtatAnnonce().equals(EtatAnnonce.TERMINER)) {
             this.setResponsePage(MesAnnonces.class);
         }
 
@@ -88,7 +93,6 @@ public class ModifierAnnonce extends MasterPage {
     public ModifierAnnonce(PageParameters params) {
         this((AnnonceAffichageDTO) null);
     }
-
 
 
     private void initComposant() {
@@ -160,9 +164,9 @@ public class ModifierAnnonce extends MasterPage {
             //Appel du service
             Integer codeRetourService = annonceServiceREST.modifierAnnonce(modificationAnnonceDTO);
 
-            if(codeRetourService == CodeRetourService.RETOUR_OK){
+            if (codeRetourService == CodeRetourService.RETOUR_OK) {
                 feedBackPanelGeneral.sendMessage("Votre annonce a été modifiée avec succés !", FeedbackMessageLevel.SUCCESS);
-            }else{
+            } else {
                 feedBackPanelGeneral.sendMessage("Problème lors de l'enregistrement de l'annonce, veuillez réessayer ultérieurement", FeedbackMessageLevel.ERROR);
             }
 
