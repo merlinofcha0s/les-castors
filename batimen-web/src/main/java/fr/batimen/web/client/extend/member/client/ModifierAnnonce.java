@@ -149,9 +149,13 @@ public class ModifierAnnonce extends MasterPage {
 
             //Champs non mappés
             modificationAnnonceDTO.setLoginDemandeur(authentication.getCurrentUserInfo().getLogin());
+            modificationAnnonceDTO.getAnnonce().setSousCategorieMetier(creationAnnonceDTO.getSousCategorie().getName());
             modificationAnnonceDTO.getAnnonce().setDateMAJ(new Date());
             modificationAnnonceDTO.getAnnonce().setEtatAnnonce(annonceAffichageDTO.getAnnonce().getEtatAnnonce());
             modificationAnnonceDTO.getAnnonce().setDateCreation(annonceAffichageDTO.getAnnonce().getDateCreation());
+            modificationAnnonceDTO.getAnnonce().setHashID(idAnnonce);
+            modificationAnnonceDTO.getAnnonce().setNbConsultation(annonceAffichageDTO.getAnnonce().getNbConsultation());
+            modificationAnnonceDTO.getAnnonce().setNbDevis(annonceAffichageDTO.getAnnonce().getNbDevis());
 
             //Appel du service
             Integer codeRetourService = annonceServiceREST.modifierAnnonce(modificationAnnonceDTO);

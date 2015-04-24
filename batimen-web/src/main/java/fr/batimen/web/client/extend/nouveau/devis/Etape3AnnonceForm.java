@@ -215,6 +215,7 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 if (forModification) {
+                    //nouvelleAnnonce.setSousCategorie(sousCategorieSelect.getConvertedInput());
                     ModificationAnnonceEvent modificationAnnonceEvent = new ModificationAnnonceEvent(target, nouvelleAnnonce);
                     this.send(target.getPage(), Broadcast.BREADTH, modificationAnnonceEvent);
                 } else {
