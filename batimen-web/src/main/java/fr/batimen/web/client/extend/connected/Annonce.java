@@ -9,10 +9,7 @@ import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.web.app.constants.ParamsConstant;
 import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.app.security.RolesUtils;
-import fr.batimen.web.client.component.Commentaire;
-import fr.batimen.web.client.component.ContactezNous;
-import fr.batimen.web.client.component.LinkLabel;
-import fr.batimen.web.client.component.Profil;
+import fr.batimen.web.client.component.*;
 import fr.batimen.web.client.event.*;
 import fr.batimen.web.client.extend.error.AccesInterdit;
 import fr.batimen.web.client.extend.error.NonTrouvee;
@@ -724,48 +721,8 @@ public class Annonce extends MasterPage {
     }
 
     private void initContainerPhoto() {
-
-        WebMarkupContainer photosContainer = new WebMarkupContainer("photosContainer") {
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public boolean isVisible() {
-                return !annonceAffichageDTO.getImages().isEmpty();
-            }
-        };
-
-        ListView<ImageDTO> imagesView = new ListView<ImageDTO>("imagesView", annonceAffichageDTO.getImages()) {
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected void populateItem(ListItem<ImageDTO> item) {
-                final ImageDTO imageDTO = item.getModelObject();
-                ExternalLink linkOnPhoto = new ExternalLink("thumbnails", imageDTO.getUrl());
-                Image imageHtml = new Image("photo", new Model<String>(imageDTO.getUrl()));
-                imageHtml.add(new AttributeModifier("src", imageDTO.getUrl()));
-                linkOnPhoto.add(imageHtml);
-                item.add(linkOnPhoto);
-            }
-        };
-
-        photosContainer.add(imagesView);
-
-        WebMarkupContainer aucunePhotoContainer = new WebMarkupContainer("aucunePhotoContainer") {
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public boolean isVisible() {
-                return annonceAffichageDTO.getImages().isEmpty();
-            }
-        };
-
-        Label aucunePhoto = new Label("aucunePhoto", "Aucune photo du chantier pour le moment :(");
-        aucunePhotoContainer.add(aucunePhoto);
-
-        add(photosContainer, aucunePhotoContainer);
+        PhotosContainer photosContainer = new PhotosContainer("containerPhotos", annonceAffichageDTO.getImages(), "Photos du chantier", "h2", false);
+        add(photosContainer);
     }
 
     /*

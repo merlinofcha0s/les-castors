@@ -14,6 +14,7 @@ import fr.batimen.web.app.constants.FeedbackMessageLevel;
 import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.client.component.Commentaire;
 import fr.batimen.web.client.component.ContactezNous;
+import fr.batimen.web.client.component.PhotosContainer;
 import fr.batimen.web.client.component.Profil;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.web.client.event.ModificationAnnonceEvent;
@@ -102,10 +103,12 @@ public class ModifierAnnonce extends MasterPage {
         Profil profil = new Profil("profil");
         etape3AnnonceForm = new Etape3AnnonceForm("formQualification", propertyModelModificationAnnonce, sousCategorieMetierDTOList, sousCategorieMetierDTO);
 
+        PhotosContainer photosContainer = new PhotosContainer("afficheurPhotos", annonceAffichageDTO.getImages(), "Les photos de votre annonce", "h4", true);
+
         ContactezNous contactezNous = new ContactezNous("contactezNous");
         Commentaire commentaire = new Commentaire("commentaire");
 
-        this.add(profil, etape3AnnonceForm, contactezNous, commentaire);
+        this.add(profil, etape3AnnonceForm, photosContainer, contactezNous, commentaire);
     }
 
     private void initData() {
