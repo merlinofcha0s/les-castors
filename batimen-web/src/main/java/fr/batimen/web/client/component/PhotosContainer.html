@@ -44,11 +44,20 @@
             <div class="bg_title">
                 <h4 class="headInModule">Ajouter des photos</h4>
             </div>
-            <div class="blog_info_block">
-                <div class="blog_author">
-                    <a href="">Tom Sawyer</a> <!-- icon-Plus -->
+            <form wicket:id="addPhotoForm" class="photoFieldContainer">
+                <div class="row-fluid">
+                    <div class="span12 offset4">
+                        <input wicket:id="photoField" type="file" multiple="multiple"/>
+                    </div>
                 </div>
-            </div>
+                <div class="row-fluid">
+                    <div id="btnAjoutPhoto">
+                        <a
+                                class="btn btn-info"
+                                wicket:id="envoyerPhotos">Valider ajout de photo(s)</a>
+                    </div>
+                </div>
+            </form>
             <div class="clear"></div>
         </div>
     </div>

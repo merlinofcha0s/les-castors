@@ -809,3 +809,9 @@ table tr td .error {
 	height: 90px;
 	margin-top: 5px;
 }
+
+/* Modifier annonce */
+#btnAjoutPhoto{
+	float: right;
+	margin-top: 10px;
+}

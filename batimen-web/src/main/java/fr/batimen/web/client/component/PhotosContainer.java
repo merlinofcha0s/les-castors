@@ -2,12 +2,16 @@ package fr.batimen.web.client.component;
 
 import fr.batimen.dto.ImageDTO;
 import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
+import fr.batimen.web.client.behaviour.FileFieldValidatorAndLoaderBehaviour;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -33,7 +37,9 @@ public class PhotosContainer extends Panel {
         this.title = title;
         this.baliseTypeTitle = baliseTypeTitle;
         this.canAdd = canAdd;
+
         initComponent();
+        initAjoutPhotoSection();
     }
 
     private void initComponent() {
@@ -47,6 +53,8 @@ public class PhotosContainer extends Panel {
             }
         };
 
+        photosContainer.setOutputMarkupId(true);
+
         Label titleContainer = new Label("titleContainer", title){
 
             @Override
@@ -55,13 +63,6 @@ public class PhotosContainer extends Panel {
                 tag.setName(baliseTypeTitle);
             }
         };
-
-       /* AjaxLink<Void> addPhoto = new AjaxLink<Void>("addPhoto") {
-            @Override
-            public void onClick(AjaxRequestTarget target) {
-
-            }
-        };*/
 
         ListView<ImageDTO> imagesView = new ListView<ImageDTO>("imagesView", images) {
 
@@ -95,4 +96,33 @@ public class PhotosContainer extends Panel {
 
         add(photosContainer, aucunePhotoContainer);
     }
+
+    private void initAjoutPhotoSection(){
+
+        Form<List<ImageDTO>> addPhotoForm = new Form<List<ImageDTO>>("addPhotoForm"){
+
+            @Override
+            public boolean isVisible() {
+                return canAdd;
+            }
+        };
+
+        final FileUploadField photoField = new FileUploadField("photoField");
+        photoField.setMarkupId("photoField");
+        FileFieldValidatorAndLoaderBehaviour fileFieldValidatorBehaviour = new FileFieldValidatorAndLoaderBehaviour();
+        photoField.add(fileFieldValidatorBehaviour);
+
+        AjaxSubmitLink envoyerPhotos = new AjaxSubmitLink("envoyerPhotos") {
+
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                super.onSubmit(target, form);
+            }
+        };
+
+        addPhotoForm.add(photoField, envoyerPhotos);
+        add(addPhotoForm);
+    }
+
+
 }
