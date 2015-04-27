@@ -34,6 +34,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.StringValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -721,7 +722,7 @@ public class Annonce extends MasterPage {
     }
 
     private void initContainerPhoto() {
-        PhotosContainer photosContainer = new PhotosContainer("containerPhotos", annonceAffichageDTO.getImages(), "Photos du chantier", "h2", false);
+        PhotosContainer photosContainer = new PhotosContainer("containerPhotos", annonceAffichageDTO.getImages(), "Photos du chantier", "h2", false, "");
         add(photosContainer);
     }
 

@@ -1,16 +1,20 @@
 package fr.batimen.web.client.component;
 
 import fr.batimen.dto.ImageDTO;
-import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
+import fr.batimen.dto.aggregate.AjoutPhotoDTO;
+import fr.batimen.web.app.constants.FeedbackMessageLevel;
+import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.client.behaviour.FileFieldValidatorAndLoaderBehaviour;
+import fr.batimen.web.client.event.FeedBackPanelEvent;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.ExternalLink;
@@ -18,7 +22,11 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -26,17 +34,26 @@ import java.util.List;
  */
 public class PhotosContainer extends Panel {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(PhotosContainer.class);
+
     private List<ImageDTO> images;
     private String title;
     private String baliseTypeTitle;
     private boolean canAdd;
+    private String hashId;
 
-    public PhotosContainer(String id, List<ImageDTO> images, String title, String baliseTypeTitle, boolean canAdd) {
+    @Inject
+    private Authentication authentication;
+
+    private AjoutPhotoDTO ajoutImageDTO = new AjoutPhotoDTO();
+
+    public PhotosContainer(String id, List<ImageDTO> images, String title, String baliseTypeTitle, boolean canAdd, String hashId) {
         super(id);
         this.images = images;
         this.title = title;
         this.baliseTypeTitle = baliseTypeTitle;
         this.canAdd = canAdd;
+        this.hashId = hashId;
 
         initComponent();
         initAjoutPhotoSection();
@@ -99,30 +116,52 @@ public class PhotosContainer extends Panel {
 
     private void initAjoutPhotoSection(){
 
-        Form<List<ImageDTO>> addPhotoForm = new Form<List<ImageDTO>>("addPhotoForm"){
-
+        WebMarkupContainer ajoutPhotoContainer = new WebMarkupContainer("ajoutPhotoContainer"){
             @Override
             public boolean isVisible() {
                 return canAdd;
             }
         };
 
+        Form<AjoutPhotoDTO> addPhotoForm = new Form<AjoutPhotoDTO>("addPhotoForm");
+
         final FileUploadField photoField = new FileUploadField("photoField");
         photoField.setMarkupId("photoField");
-        FileFieldValidatorAndLoaderBehaviour fileFieldValidatorBehaviour = new FileFieldValidatorAndLoaderBehaviour();
+        final FileFieldValidatorAndLoaderBehaviour fileFieldValidatorBehaviour = new FileFieldValidatorAndLoaderBehaviour();
         photoField.add(fileFieldValidatorBehaviour);
 
         AjaxSubmitLink envoyerPhotos = new AjaxSubmitLink("envoyerPhotos") {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                super.onSubmit(target, form);
+                for (FileUpload photo : photoField.getFileUploads()) {
+                    try {
+                        ajoutImageDTO.getImages().add(photo.writeToTempFile());
+                    } catch (IOException e) {
+                        if (LOGGER.isErrorEnabled()) {
+                            LOGGER.error("Problème durant l'écriture de la photo sur le disque", e);
+                        }
+                    }
+                }
+
+                if (!fileFieldValidatorBehaviour.isValidationOK()) {
+                   target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Validation erronnée de vos photos, veuillez corriger", FeedbackMessageLevel.ERROR));
+                }else{
+                    ajoutImageDTO.setHashID(hashId);
+                    ajoutImageDTO.setLoginDemandeur(authentication.getCurrentUserInfo().getLogin());
+                    //TODO brancher le service d'ajout d'image ici
+                }
+            }
+
+            @Override
+            protected void onError(AjaxRequestTarget target, Form<?> form) {
+                target.add(getForm());
+                this.send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target));
             }
         };
 
         addPhotoForm.add(photoField, envoyerPhotos);
-        add(addPhotoForm);
+        ajoutPhotoContainer.add(addPhotoForm);
+        add(ajoutPhotoContainer);
     }
-
-
 }

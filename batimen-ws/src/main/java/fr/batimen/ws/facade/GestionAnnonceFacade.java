@@ -64,10 +64,8 @@ import fr.batimen.ws.utils.RolesUtils;
 
 /**
  * Facade REST de gestion des annonces.
- * 
- * 
+ *
  * @author Casaucau Cyril
- * 
  */
 @Stateless(name = "GestionAnnonceFacade")
 @LocalBean
@@ -75,7 +73,7 @@ import fr.batimen.ws.utils.RolesUtils;
 @RolesAllowed(Constant.USERS_ROLE)
 @Produces(JsonHelper.JSON_MEDIA_TYPE_AND_UTF_8_CHARSET)
 @Consumes(JsonHelper.JSON_MEDIA_TYPE_AND_UTF_8_CHARSET)
-@Interceptors(value = { BatimenInterceptor.class })
+@Interceptors(value = {BatimenInterceptor.class})
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class GestionAnnonceFacade {
 
@@ -117,14 +115,12 @@ public class GestionAnnonceFacade {
     /**
      * Permet la creation d'une nouvelle annonce par le client ainsi que le
      * compte de ce dernier
-     * 
-     * @see Constant
-     * 
-     * @param nouvelleAnnonceDTO
-     *            L'objet provenant du frontend qui permet la creation de
-     *            l'annonce.
+     *
+     * @param nouvelleAnnonceDTO L'objet provenant du frontend qui permet la creation de
+     *                           l'annonce.
      * @return CODE_SERVICE_RETOUR_KO ou CODE_SERVICE_RETOUR_OK voir la classe
-     *         Constant
+     * Constant
+     * @see Constant
      */
     @POST
     @Path(WsPath.GESTION_ANNONCE_SERVICE_CREATION_ANNONCE)
@@ -187,24 +183,24 @@ public class GestionAnnonceFacade {
     /**
      * Permet la creation d'une nouvelle annonce par le client ainsi que le
      * compte de ce dernier <br/>
-     * 
+     * <p/>
      * Mode multipart, en plus de JSON la request contient des photos.
-     * 
-     * @see Constant
-     * 
-     * @param content
-     *            L'objet provenant du frontend qui permet la creation de
-     *            l'annonce.
+     *
+     * @param content     L'objet provenant du frontend qui permet la creation de
+     *                    l'annonce.
+     * @param files       Liste contenant l'ensemble des photos.
+     * @param filesDetail Liste contenant les metadata des photos du client.
      * @return CODE_SERVICE_RETOUR_KO ou CODE_SERVICE_RETOUR_OK voir la classe
-     *         Constant
+     * Constant
+     * @see Constant
      */
     @POST
     @Path(WsPath.GESTION_ANNONCE_SERVICE_CREATION_ANNONCE_AVEC_IMAGES)
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public Integer creationAnnonceAvecImage(@FormDataParam("content") final InputStream content,
-            @FormDataParam("files") final List<FormDataBodyPart> files,
-            @FormDataParam("files") final List<FormDataContentDisposition> filesDetail) {
+                                            @FormDataParam("files") final List<FormDataBodyPart> files,
+                                            @FormDataParam("files") final List<FormDataContentDisposition> filesDetail) {
 
         CreationAnnonceDTO nouvelleAnnonceDTO = DeserializeJsonHelper.deserializeDTO(
                 FluxUtils.getJsonByInputStream(content), CreationAnnonceDTO.class);
@@ -227,9 +223,8 @@ public class GestionAnnonceFacade {
     /**
      * Permet de récuperer les annonces d'un client à partir de son login <br/>
      * Service servant principalement a la page mes annonces
-     * 
-     * @param login
-     *            l'identifiant de l'utilisateur
+     *
+     * @param login l'identifiant de l'utilisateur
      * @return La liste des annonces de cet utilisateur
      */
     @POST
@@ -265,12 +260,11 @@ public class GestionAnnonceFacade {
      * Permet de récuperer une annonce dans le but de l'afficher <br/>
      * Récupère également les informations sur les artisans et les entreprise
      * inscrites a cette annonce
-     * 
-     * @param demandeAnnonce
-     *            le hashID avec le login du demandeur dans le but de vérifier
-     *            les droits.
+     *
+     * @param demandeAnnonce le hashID avec le login du demandeur dans le but de vérifier
+     *                       les droits.
      * @return l'ensemble des informations qui permettent d'afficher l'annonce
-     *         correctement
+     * correctement
      */
     @POST
     @Path(WsPath.GESTION_ANNONCE_SERVICE_GET_ANNONCES_BY_ID)
@@ -341,9 +335,8 @@ public class GestionAnnonceFacade {
 
     /**
      * Met à jour le nombre de consultation d'une annonce
-     * 
-     * @param nbConsultationDTO
-     *            Objet contenant toutes les informations necessaires
+     *
+     * @param nbConsultationDTO Objet contenant toutes les informations necessaires
      * @return
      */
     @POST
@@ -375,7 +368,7 @@ public class GestionAnnonceFacade {
      * Service de suppression d'une annonce <br/>
      * Si c'est un client, il doit posseder l'annonce, sinon le demandeur doit
      * etre admin.
-     * 
+     *
      * @param demandeAnnonce
      * @return {@link CodeRetourService}
      */
@@ -425,10 +418,10 @@ public class GestionAnnonceFacade {
 
     /**
      * Selection d'une entreprise par un particulier ou un admin <br/>
-     * 
+     * <p/>
      * Si c'est un client, il doit posseder l'annonce, sinon le demandeur doit
      * etre admin.
-     * 
+     *
      * @param demandeAnnonceDTO
      * @return {@link CodeRetourService}
      */
@@ -513,9 +506,8 @@ public class GestionAnnonceFacade {
     /**
      * Service qui permet à un artisan de s'inscrire à une annonce, pas besoin
      * du type de compte dans l'objet demande anonnce DTO
-     * 
-     * @param demandeAnnonceDTO
-     *            Objet permettant de faire la demande
+     *
+     * @param demandeAnnonceDTO Objet permettant de faire la demande
      * @return {@link CodeRetourService}
      */
     @POST
@@ -562,11 +554,10 @@ public class GestionAnnonceFacade {
     /**
      * Service qui permet à un client de ne pas accepter un artisan à son
      * annonce <br/>
-     * 
+     * <p/>
      * Réactive l'annonce si elle etait en quotas max atteint.
-     * 
-     * @param desinscriptionAnnonceDTO
-     *            Objet permettant de faire la demande de desinscription
+     *
+     * @param desinscriptionAnnonceDTO Objet permettant de faire la demande de desinscription
      * @return {@link CodeRetourService}
      */
     @POST
@@ -603,7 +594,7 @@ public class GestionAnnonceFacade {
 
             }
 
-            for (Iterator<Artisan> itArtisan = artisans.iterator(); itArtisan.hasNext();) {
+            for (Iterator<Artisan> itArtisan = artisans.iterator(); itArtisan.hasNext(); ) {
 
                 Artisan artisanADesinscrire = itArtisan.next();
 
@@ -646,13 +637,12 @@ public class GestionAnnonceFacade {
 
     /**
      * Service qui permet à un client de noter un artisan<br/>
-     * 
+     * <p/>
      * Fait passer l'annonce en état terminer
-     * 
+     * <p/>
      * Génére une notification à destination de l'artisan
-     * 
-     * @param noterArtisanDTO
-     *            Objet permettant de valider la note de l'artisan
+     *
+     * @param noterArtisanDTO Objet permettant de valider la note de l'artisan
      * @return {@link CodeRetourService}
      */
     @POST
@@ -733,11 +723,10 @@ public class GestionAnnonceFacade {
 
     /**
      * Service qui permet à un client de pouvoir modifier son annonce<br/>
-     *
+     * <p/>
      * Génére une notification à destination des artisans inscrits
      *
-     * @param modificationAnnonceDTO
-     *            Objet permettant de récuperer les informations qui ont été modifiée par le client
+     * @param modificationAnnonceDTO Objet permettant de récuperer les informations qui ont été modifiée par le client
      * @return {@link CodeRetourService}
      */
     @POST
@@ -753,7 +742,7 @@ public class GestionAnnonceFacade {
         boolean generateNotification = false;
 
         Annonce annonceAModifier = loadAnnonceAndCheckUserClientOrAdminRight(rolesDemandeur, modificationAnnonceDTO.getAnnonce().getHashID());
-        if(annonceAModifier != null){
+        if (annonceAModifier != null) {
             ModelMapper mapper = new ModelMapper();
             mapper.addMappings(new AnnonceMap());
             mapper.map(modificationAnnonceDTO.getAnnonce(), annonceAModifier);
@@ -764,18 +753,60 @@ public class GestionAnnonceFacade {
                 LOGGER.debug("Mise à jour de l'annonce : {}", annonceAModifier);
             }
             generateNotification = true;
-        }else{
+        } else {
             return CodeRetourService.ANNONCE_RETOUR_INTROUVABLE;
         }
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Génération des notifications à destinations des artisans inscrit à cette annonce");
         }
-        if(generateNotification){
-            for(Artisan artisanToNotify : annonceAModifier.getArtisans()){
+        if (generateNotification) {
+            for (Artisan artisanToNotify : annonceAModifier.getArtisans()) {
                 notificationService.generationNotificationArtisan(annonceAModifier, artisanToNotify, TypeCompte.ARTISAN, TypeNotification.A_MODIFIER_ANNONCE);
             }
         }
+        return CodeRetourService.RETOUR_OK;
+    }
+
+    /**
+     * Service qui permet à un client de pouvoir ajouter / rajouter des photos à son annonce<br/>
+     * <p/>
+     * Génére une notification à destination des artisans inscrits
+     * <p/>
+     * <p/>
+     * Mode multipart, en plus du JSON la request contient des photos.
+     *
+     * @param content     L'objet provenant du frontend qui permet la creation de
+     *                    l'annonce.
+     * @param files       Liste contenant l'ensemble des photos.
+     * @param filesDetail Liste contenant les metadata des photos du client.
+     * @return {@link CodeRetourService}
+     */
+    @POST
+    @Path(WsPath.GESTION_ANNONCE_SERVICE_AJOUT_PHOTO)
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public Integer ajouterPhoto(@FormDataParam("content") final InputStream content,
+                                @FormDataParam("files") final List<FormDataBodyPart> files,
+                                @FormDataParam("files") final List<FormDataContentDisposition> filesDetail) {
+
+        AjoutPhotoDTO ajoutPhotoDTO = DeserializeJsonHelper.deserializeDTO(
+                FluxUtils.getJsonByInputStream(content), AjoutPhotoDTO.class);
+
+        if (LOGGER.isDebugEnabled()) {
+            for (FormDataContentDisposition fileDetail : filesDetail) {
+                LOGGER.debug("Details fichier : " + fileDetail);
+            }
+        }
+
+        List<File> photos = FluxUtils.transformFormDataBodyPartsToFiles(files);
+
+        //TODO appeler le service cloud pour les photos
+        //TODO Une fois les urls recuperer les persister dans l'annonce charger en dessous.
+
+        Annonce annonceRajouterPhoto = loadAnnonceAndCheckUserClientOrAdminRight(
+                utilisateurFacade.getUtilisateurRoles(ajoutPhotoDTO.getLoginDemandeur()), ajoutPhotoDTO.getHashID());
+
         return CodeRetourService.RETOUR_OK;
     }
 
@@ -783,7 +814,8 @@ public class GestionAnnonceFacade {
         if (rolesUtils.checkIfAdminWithString(rolesClientDemandeur)) {
             return annonceDAO.getAnnonceByIDWithTransaction(hashID, true);
         } else if (rolesUtils.checkIfClientWithString(rolesClientDemandeur)) {
-            return annonceDAO.getAnnonceByIDWithTransaction(hashID, false);
+            return  annonceDAO.getAnnonceByIDWithTransaction(hashID, false);
+            //TODO Refactorer pour checker que le client possede l'annonce
         } else {
             if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("N'a pas les bons droits pour accéder à ce service !!!");

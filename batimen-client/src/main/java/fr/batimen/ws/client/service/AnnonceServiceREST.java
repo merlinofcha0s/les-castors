@@ -322,4 +322,29 @@ public class AnnonceServiceREST implements Serializable {
         }
         return modificationOK;
     }
+
+    /**
+     * Service qui permet à un client de pouvoir ajouter / rajouter des photos à son annonce<br/>
+     *
+     * Génére une notification à destination des artisans inscrits
+     *
+     * @param ajoutPhotoDTO
+     *            Objet permettant de récuperer les photos et informations qui ont été transmise par le client
+     * @return {@link CodeRetourService}
+     */
+    public Integer ajouterPhoto(AjoutPhotoDTO ajoutPhotoDTO) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Début appel service d'ajout de photo pour une annonce.....");
+        }
+
+        String objectInJSON = wsConnector.sendRequestWithFile(WsPath.GESTION_ANNONCE_SERVICE_PATH,
+                WsPath.GESTION_ANNONCE_SERVICE_AJOUT_PHOTO, ajoutPhotoDTO.getImages(), ajoutPhotoDTO);
+
+        Integer modificationOK = Integer.valueOf(objectInJSON);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Fin appel service d'ajout de photo  pour une annonce.");
+        }
+        return modificationOK;
+    }
 }

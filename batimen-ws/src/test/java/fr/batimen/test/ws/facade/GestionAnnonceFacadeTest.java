@@ -612,6 +612,29 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         testModificationAnnonce(TypeCompte.CLIENT, "raiden", CodeRetourService.ANNONCE_RETOUR_INTROUVABLE);
     }
 
+    /**
+     * Cas de test : Un client veut rajouter des photos à son annonce, tout se passe comme prévu
+     *
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonces_by_id.yml")
+    @ShouldMatchDataSet(value = "datasets/out/ajout_photo_annonce.yml", excludeColumns = {"id",
+            "datemaj", "datecreation", "datenotation", "datenotification"})
+    public void testAjoutPhoto() {
+        // On recupére la photo dans les ressources de la webapp de test
+        ClassLoader classLoader = getClass().getClassLoader();
+        File file = new File(classLoader.getResource("img/castor.jpg").getFile());
+
+        AjoutPhotoDTO ajoutPhotoDTO = new AjoutPhotoDTO();
+        ajoutPhotoDTO.setLoginDemandeur("pebronne");
+        ajoutPhotoDTO.setHashID("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
+        ajoutPhotoDTO.getImages().add(file);
+
+        Integer codeRetour = annonceServiceREST.ajouterPhoto(ajoutPhotoDTO);
+
+        Assert.assertEquals(CodeRetourService.RETOUR_OK, codeRetour);
+    }
+
     private void testModificationAnnonce(TypeCompte typeCompte, String loginDemandeur, Integer codeRetourServiceAttendu){
         DemandeAnnonceDTO demandeAnnonceDTO = createDemandeAnnonceDTO(
                 "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",

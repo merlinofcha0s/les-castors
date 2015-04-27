@@ -246,7 +246,8 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
 
             /*
              * (non-Javadoc)
-             *
+             *target.add(getForm());
+                this.send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target));
              * @see
              * org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink#onError
              * (org.apache.wicket.ajax.AjaxRequestTarget,
