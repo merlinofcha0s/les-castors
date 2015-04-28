@@ -16,11 +16,11 @@ public class DemandeAnnonceDTO extends AbstractDTO {
 
     @NotNull
     @Size(max = 255)
-    private String hashID;
+    protected String hashID;
     @NotNull
     @Size(min = CLIENT_LOGIN_RANGE_MIN, max = CLIENT_LOGIN_RANGE_MAX)
-    private String loginDemandeur;
-    private TypeCompte typeCompteDemandeur;
+    protected String loginDemandeur;
+    protected TypeCompte typeCompteDemandeur;
 
     /**
      * @return the hashID
@@ -97,5 +97,15 @@ public class DemandeAnnonceDTO extends AbstractDTO {
                     && Objects.equals(this.getTypeCompteDemandeur(), other.getTypeCompteDemandeur());
         }
         return false;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("DemandeAnnonceDTO{");
+        sb.append("hashID='").append(hashID).append('\'');
+        sb.append(", loginDemandeur='").append(loginDemandeur).append('\'');
+        sb.append(", typeCompteDemandeur=").append(typeCompteDemandeur);
+        sb.append('}');
+        return sb.toString();
     }
 }

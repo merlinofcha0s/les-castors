@@ -1,21 +1,20 @@
 package fr.batimen.ws.client.service;
 
-import java.io.Serializable;
-import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import fr.batimen.dto.aggregate.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.constant.WsPath;
 import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.DemandeAnnonceDTO;
+import fr.batimen.dto.ImageDTO;
+import fr.batimen.dto.aggregate.*;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 import fr.batimen.ws.client.WsConnector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * Classe d'appel au webservice concernant les annonces.
@@ -346,5 +345,21 @@ public class AnnonceServiceREST implements Serializable {
             LOGGER.debug("Fin appel service d'ajout de photo  pour une annonce.");
         }
         return modificationOK;
+    }
+
+    public List<ImageDTO> getPhotos(DemandeAnnonceDTO demandeAnnonceDTO) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Début appel service de recuperation des photos d'une annonce.....");
+        }
+
+        String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_ANNONCE_SERVICE_PATH,
+                WsPath.GESTION_ANNONCE_SERVICE_RECUPERATION_PHOTO, demandeAnnonceDTO);
+
+        List<ImageDTO> imageDTOs = DeserializeJsonHelper.deserializeDTOList(objectInJSON);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Fin appel service de recuperation des photos d'une annonce.");
+        }
+        return imageDTOs;
     }
 }

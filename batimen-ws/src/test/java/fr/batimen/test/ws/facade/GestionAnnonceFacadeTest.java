@@ -7,6 +7,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
 
+import fr.batimen.dto.*;
 import fr.batimen.dto.aggregate.*;
 import fr.batimen.dto.enums.*;
 import org.jboss.arquillian.persistence.ShouldMatchDataSet;
@@ -16,10 +17,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import fr.batimen.core.constant.CodeRetourService;
-import fr.batimen.dto.AnnonceDTO;
-import fr.batimen.dto.DemandeAnnonceDTO;
-import fr.batimen.dto.NotationDTO;
-import fr.batimen.dto.NotificationDTO;
 import fr.batimen.test.ws.AbstractBatimenWsTest;
 import fr.batimen.test.ws.helper.DataHelper;
 import fr.batimen.ws.client.service.AnnonceServiceREST;
@@ -578,7 +575,6 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
     /**
      * Cas de test : Un client veut modifier son annonce, tout se passe comme prévu
-     *
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
@@ -590,7 +586,6 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
     /**
      * Cas de test : Un admin veut modifier l'annonce d'un client tout se passe comme prévu.
-     *
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
@@ -602,40 +597,107 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
     /**
      * Cas de test : Un client ne possédant pas l'annonce veut la modifier, On lui refuse.
-     *
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
     @ShouldMatchDataSet(value = "datasets/in/annonces_by_id.yml", excludeColumns = {"id",
             "datemaj", "datecreation", "datenotation", "datenotification"})
     public void testModificationAnnonceParClientNotAllowed() {
-        testModificationAnnonce(TypeCompte.CLIENT, "raiden", CodeRetourService.ANNONCE_RETOUR_INTROUVABLE);
+        testModificationAnnonce(TypeCompte.CLIENT, "bertrand", CodeRetourService.ANNONCE_RETOUR_INTROUVABLE);
     }
 
     /**
      * Cas de test : Un client veut rajouter des photos à son annonce, tout se passe comme prévu
-     *
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
     @ShouldMatchDataSet(value = "datasets/out/ajout_photo_annonce.yml", excludeColumns = {"id",
-            "datemaj", "datecreation", "datenotation", "datenotification"})
-    public void testAjoutPhoto() {
+            "datemaj", "datecreation", "datenotation", "datenotification", "url"})
+    public void testAjoutPhotoParClient() {
+        testAjoutPhoto("pebronne", CodeRetourService.RETOUR_OK);
+    }
+
+    /**
+     * Cas de test : Un client veut rajouter des photos à son annonce, tout se passe comme prévu
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonces_by_id.yml")
+    @ShouldMatchDataSet(value = "datasets/out/ajout_photo_annonce.yml", excludeColumns = {"id",
+            "datemaj", "datecreation", "datenotation", "datenotification", "url"})
+    public void testAjoutPhotoParAdmin() {
+        testAjoutPhoto("admin", CodeRetourService.RETOUR_OK);
+    }
+
+    /**
+     * Cas de test : Un client veut rajouter des photos à son annonce, mais il ne la possede pas, on lui refuse l'accés.
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonces_by_id.yml")
+    @ShouldMatchDataSet(value = "datasets/in/annonces_by_id.yml", excludeColumns = {"id",
+            "datemaj", "datecreation", "datenotation", "datenotification", "url"})
+    public void testAjoutPhotoClientNotAllowed() {
+        testAjoutPhoto("bertrand", CodeRetourService.RETOUR_KO);
+    }
+
+    /**
+     * Cas de test : Un client veut récuperer les photos liées à son annonce, tout se passe comme prévu.
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonces_by_id.yml")
+    public void testGetPhotoAnnonceByClient() {
+        List<ImageDTO> imageDTOs = testGetPhoto("pebronne");
+
+        Assert.assertNotNull(imageDTOs);
+        Assert.assertEquals(2, imageDTOs.size());
+    }
+
+    /**
+     * Cas de test : Un admin veut récuperer les photos liées à son annonce, tout se passe comme prévu.
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonces_by_id.yml")
+    public void testGetPhotoAnnonceByAdmin() {
+        List<ImageDTO> imageDTOs = testGetPhoto("admin");
+
+        Assert.assertNotNull(imageDTOs);
+        Assert.assertEquals(2, imageDTOs.size());
+    }
+
+    /**
+     * Cas de test : Un client veut récuperer les photos liées à son annonce, mais celui ci ne la possede pas.
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonces_by_id.yml")
+    public void testGetPhotoAnnonceByClientNotAllowed() {
+        List<ImageDTO> imageDTOs = testGetPhoto("bertrand");
+        Assert.assertNull(imageDTOs);
+    }
+
+    private List<ImageDTO> testGetPhoto(String login){
+        DemandeAnnonceDTO demandeAnnonceDTO = new DemandeAnnonceDTO();
+        demandeAnnonceDTO.setHashID("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
+        demandeAnnonceDTO.setLoginDemandeur(login);
+
+        return  annonceServiceREST.getPhotos(demandeAnnonceDTO);
+    }
+
+    private void testAjoutPhoto(String login, int codeRetourAttendu) {
         // On recupére la photo dans les ressources de la webapp de test
         ClassLoader classLoader = getClass().getClassLoader();
         File file = new File(classLoader.getResource("img/castor.jpg").getFile());
 
         AjoutPhotoDTO ajoutPhotoDTO = new AjoutPhotoDTO();
-        ajoutPhotoDTO.setLoginDemandeur("pebronne");
+        ajoutPhotoDTO.setLoginDemandeur(login);
         ajoutPhotoDTO.setHashID("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
         ajoutPhotoDTO.getImages().add(file);
 
-        Integer codeRetour = annonceServiceREST.ajouterPhoto(ajoutPhotoDTO);
+        int codeRetour = annonceServiceREST.ajouterPhoto(ajoutPhotoDTO);
 
-        Assert.assertEquals(CodeRetourService.RETOUR_OK, codeRetour);
+        Assert.assertNotNull(codeRetour);
+        Assert.assertEquals(codeRetourAttendu, codeRetour);
     }
 
-    private void testModificationAnnonce(TypeCompte typeCompte, String loginDemandeur, Integer codeRetourServiceAttendu){
+    private void testModificationAnnonce(TypeCompte typeCompte, String loginDemandeur, Integer codeRetourServiceAttendu) {
         DemandeAnnonceDTO demandeAnnonceDTO = createDemandeAnnonceDTO(
                 "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
                 "pebronne", typeCompte);

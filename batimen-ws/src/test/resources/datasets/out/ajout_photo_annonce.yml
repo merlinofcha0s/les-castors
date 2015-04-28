@@ -17,9 +17,20 @@ client:
     numerotel: "0615125645"
     prenom: Pebron
     isActive: true
+  - id: 1012
+    dateinscription: "2015-01-10 10:00:00"
+    email: bertrand@lol.com
+    password: $s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=
+    login: bertrand
+    nom: De la Pebronne
+    numerotel: "0615125645"
+    prenom: Bertrand
+    isActive: true
 permission:
   - typecompte: 4
     client_fk: 1001
+  - typecompte: 4
+    client_fk: 1012
   - typecompte: 5
     client_fk: 1011
   - typecompte: 3
@@ -172,5 +183,5 @@ image:
      url: "https://res.cloudinary.com/lescastors/image/upload/v1427874120/test/zbeod6tici6yrphpco39.jpg"
      id_annonce: 1020
    - id: 1001
-     url: "https://res.cloudinary.com/lescastors/image/upload/v1427874120/test/zbeod6tici6yrphpco39.jpg"
+     url: "https://res.cloudinary.com/lescastors/image/upload/v1430201897/test/sbvsbtgbtusnrskmsznt.jpg"
      id_annonce: 1020

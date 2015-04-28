@@ -20,6 +20,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import fr.batimen.dto.ImageDTO;
 import fr.batimen.dto.aggregate.*;
 import fr.batimen.ws.mapper.AnnonceMap;
 import org.modelmapper.ModelMapper;
@@ -167,14 +168,7 @@ public class GestionAnnonceFacade {
 
         if (!nouvelleAnnonceDTO.getPhotos().isEmpty()) {
             List<String> imageUrls = photoService.sendPhotoToCloud(nouvelleAnnonceDTO.getPhotos());
-
-            for (String url : imageUrls) {
-                Image nouvelleImage = new Image();
-                nouvelleImage.setUrl(url);
-                nouvelleImage.setAnnonce(nouvelleAnnonce);
-                nouvelleAnnonce.getImages().add(nouvelleImage);
-                imageDAO.createMandatory(nouvelleImage);
-            }
+            photoService.persistPhoto(nouvelleAnnonce, imageUrls);
         }
 
         return CodeRetourService.RETOUR_OK;
@@ -455,7 +449,7 @@ public class GestionAnnonceFacade {
 
         Annonce annonceToUpdate = null;
 
-        annonceToUpdate = loadAnnonceAndCheckUserClientOrAdminRight(rolesDemandeur, demandeAnnonceDTO.getHashID());
+        annonceToUpdate = loadAnnonceAndCheckUserClientOrAdminRight(rolesDemandeur, demandeAnnonceDTO.getHashID(), demandeAnnonceDTO.getLoginDemandeur());
 
         if (annonceToUpdate != null) {
 
@@ -581,7 +575,8 @@ public class GestionAnnonceFacade {
             LOGGER.debug("Role du client récupéré: " + rolesClientDemandeur);
         }
 
-        annonce = loadAnnonceAndCheckUserClientOrAdminRight(rolesClientDemandeur, desinscriptionAnnonceDTO.getHashID());
+        annonce = loadAnnonceAndCheckUserClientOrAdminRight(rolesClientDemandeur, desinscriptionAnnonceDTO.getHashID(), desinscriptionAnnonceDTO
+                .getLoginDemandeur());
 
         boolean atLeastOneRemoved = false;
 
@@ -667,7 +662,7 @@ public class GestionAnnonceFacade {
             LOGGER.debug("Roles du demandeur : {}", rolesDemandeur);
         }
 
-        Annonce annonceANoter = loadAnnonceAndCheckUserClientOrAdminRight(rolesDemandeur, noterArtisanDTO.getHashID());
+        Annonce annonceANoter = loadAnnonceAndCheckUserClientOrAdminRight(rolesDemandeur, noterArtisanDTO.getHashID(), noterArtisanDTO.getLoginDemandeur());
 
         if (annonceANoter == null) {
             if (LOGGER.isErrorEnabled()) {
@@ -741,7 +736,7 @@ public class GestionAnnonceFacade {
 
         boolean generateNotification = false;
 
-        Annonce annonceAModifier = loadAnnonceAndCheckUserClientOrAdminRight(rolesDemandeur, modificationAnnonceDTO.getAnnonce().getHashID());
+        Annonce annonceAModifier = loadAnnonceAndCheckUserClientOrAdminRight(rolesDemandeur, modificationAnnonceDTO.getAnnonce().getHashID(), modificationAnnonceDTO.getLoginDemandeur());
         if (annonceAModifier != null) {
             ModelMapper mapper = new ModelMapper();
             mapper.addMappings(new AnnonceMap());
@@ -795,27 +790,83 @@ public class GestionAnnonceFacade {
 
         if (LOGGER.isDebugEnabled()) {
             for (FormDataContentDisposition fileDetail : filesDetail) {
-                LOGGER.debug("Details fichier : " + fileDetail);
+                LOGGER.debug("Details fichier : {}", fileDetail);
             }
         }
 
+        Annonce annonceRajouterPhoto = loadAnnonceAndCheckUserClientOrAdminRight(
+                utilisateurFacade.getUtilisateurRoles(ajoutPhotoDTO.getLoginDemandeur()), ajoutPhotoDTO.getHashID(), ajoutPhotoDTO.getLoginDemandeur());
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Chargement de l'annonce en cours, grace à la DTO en entrée : {}", ajoutPhotoDTO.toString());
+        }
+
+        if (annonceRajouterPhoto == null) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Impossible de trouver l'annonce avec le compte demandé, Détails : {}", ajoutPhotoDTO.toString());
+            }
+            return CodeRetourService.RETOUR_KO;
+        }
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Transformation des forms data body parts en files");
+        }
         List<File> photos = FluxUtils.transformFormDataBodyPartsToFiles(files);
 
-        //TODO appeler le service cloud pour les photos
-        //TODO Une fois les urls recuperer les persister dans l'annonce charger en dessous.
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Envoi des photos vers le service de cloud");
+        }
+        List<String> urlsPhoto = photoService.sendPhotoToCloud(photos);
 
-        Annonce annonceRajouterPhoto = loadAnnonceAndCheckUserClientOrAdminRight(
-                utilisateurFacade.getUtilisateurRoles(ajoutPhotoDTO.getLoginDemandeur()), ajoutPhotoDTO.getHashID());
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Persistance des urls des images");
+        }
+        photoService.persistPhoto(annonceRajouterPhoto, urlsPhoto);
 
         return CodeRetourService.RETOUR_OK;
     }
 
-    private Annonce loadAnnonceAndCheckUserClientOrAdminRight(String rolesClientDemandeur, String hashID) {
+
+    /**
+     * Récupération de toutes les photos d'une annonce avec vérificatin des droits
+     *
+     * @param demandeAnnonceDTO L'hash id + le login du demandeur
+     * @return La liste des objets images appartenant à l'annonce.
+     */
+    @POST
+    @Path(WsPath.GESTION_ANNONCE_SERVICE_RECUPERATION_PHOTO)
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public List<ImageDTO> getPhotos(DemandeAnnonceDTO demandeAnnonceDTO) {
+        String hashID = demandeAnnonceDTO.getHashID();
+        String loginDemandeur = demandeAnnonceDTO.getLoginDemandeur();
+
+        //TODO : Lancer une requete avec les deux parametre => Select image by hash by
+        // TODO suite : logindemandeur si c'est un client, Sinon juste par hash (admin) (voir methode util pour droit)
+        //TODO : checker si resultat nulle si ok traduire l'entité en DTO puis renvoyer.
+
+        return new ArrayList<ImageDTO>();
+    }
+
+    /**
+     * Verifie les droits d'un demandeur par rapport a son role.
+     * <p/>
+     * Dans le cas d'un client, on verifie si ce dernier est bien le detenteur de l'annonce.
+     *
+     * @param rolesClientDemandeur role du demandeur
+     * @param hashID               La reference de l'annonce
+     * @param login                login du demandeur
+     * @return L'annonce si les droits sont accordés
+     */
+    private Annonce loadAnnonceAndCheckUserClientOrAdminRight(String rolesClientDemandeur, String hashID, String login) {
         if (rolesUtils.checkIfAdminWithString(rolesClientDemandeur)) {
             return annonceDAO.getAnnonceByIDWithTransaction(hashID, true);
         } else if (rolesUtils.checkIfClientWithString(rolesClientDemandeur)) {
-            return  annonceDAO.getAnnonceByIDWithTransaction(hashID, false);
-            //TODO Refactorer pour checker que le client possede l'annonce
+            Annonce annonce = annonceDAO.getAnnonceByIDWithTransaction(hashID, false);
+            if (annonce != null && annonce.getDemandeur().getLogin().equals(login)) {
+                return annonce;
+            } else {
+                return null;
+            }
         } else {
             if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("N'a pas les bons droits pour accéder à ce service !!!");

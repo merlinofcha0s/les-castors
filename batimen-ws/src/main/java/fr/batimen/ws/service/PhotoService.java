@@ -7,12 +7,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
+import javax.ejb.*;
 import javax.inject.Inject;
 
+import fr.batimen.ws.dao.ImageDAO;
+import fr.batimen.ws.entity.Annonce;
+import fr.batimen.ws.entity.Image;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,6 +33,9 @@ public class PhotoService {
 
     @Inject
     private CloudinaryService cloudinaryService;
+
+    @Inject
+    private ImageDAO imageDAO;
 
     /**
      * Envoi les photos vers le cloud de cloudinary
@@ -64,7 +67,17 @@ public class PhotoService {
                 }
             }
         }
-
         return urlPhotosInCloud;
+    }
+
+    @TransactionAttribute(TransactionAttributeType.MANDATORY)
+    public void persistPhoto(Annonce annonce, List<String> imageUrls){
+        for (String url : imageUrls) {
+            Image nouvelleImage = new Image();
+            nouvelleImage.setUrl(url);
+            nouvelleImage.setAnnonce(annonce);
+            annonce.getImages().add(nouvelleImage);
+            imageDAO.createMandatory(nouvelleImage);
+        }
     }
 }

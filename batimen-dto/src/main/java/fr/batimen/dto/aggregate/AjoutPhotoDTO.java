@@ -40,7 +40,8 @@ public class AjoutPhotoDTO extends DemandeAnnonceDTO {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("AjoutPhotoDTO{");
-        sb.append("images=").append(images);
+        sb.append("hashid=").append(hashID);
+        sb.append("loginDemandeur=").append(loginDemandeur);
         sb.append('}');
         return sb.toString();
     }
