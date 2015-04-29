@@ -648,7 +648,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         List<ImageDTO> imageDTOs = testGetPhoto("pebronne");
 
         Assert.assertNotNull(imageDTOs);
-        Assert.assertEquals(2, imageDTOs.size());
+        Assert.assertEquals(1, imageDTOs.size());
     }
 
     /**
@@ -660,7 +660,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         List<ImageDTO> imageDTOs = testGetPhoto("admin");
 
         Assert.assertNotNull(imageDTOs);
-        Assert.assertEquals(2, imageDTOs.size());
+        Assert.assertEquals(1, imageDTOs.size());
     }
 
     /**
@@ -670,7 +670,8 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @UsingDataSet("datasets/in/annonces_by_id.yml")
     public void testGetPhotoAnnonceByClientNotAllowed() {
         List<ImageDTO> imageDTOs = testGetPhoto("bertrand");
-        Assert.assertNull(imageDTOs);
+        Assert.assertNotNull(imageDTOs);
+        Assert.assertEquals(0, imageDTOs.size());
     }
 
     private List<ImageDTO> testGetPhoto(String login){

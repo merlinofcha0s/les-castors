@@ -837,14 +837,48 @@ public class GestionAnnonceFacade {
     @Path(WsPath.GESTION_ANNONCE_SERVICE_RECUPERATION_PHOTO)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public List<ImageDTO> getPhotos(DemandeAnnonceDTO demandeAnnonceDTO) {
+
+        if(LOGGER.isDebugEnabled()){
+            LOGGER.debug("Début de la récupération des photos d'une annonce {}", demandeAnnonceDTO);
+        }
+
+        //Extraction des paramètres
         String hashID = demandeAnnonceDTO.getHashID();
         String loginDemandeur = demandeAnnonceDTO.getLoginDemandeur();
+
+        //Calcul du role
+        String rolesDemandeur = utilisateurFacade.getUtilisateurRoles(demandeAnnonceDTO.getLoginDemandeur());
+
+        List<Image> images = null;
+
+        if(rolesUtils.checkIfClientWithString(rolesDemandeur)){
+            images = imageDAO.getImageByHashIDByClient(hashID, loginDemandeur);
+        }else if(rolesUtils.checkIfAdminWithString(rolesDemandeur)){
+            images = imageDAO.getImageByHashID(hashID);
+        }
+
+        if(images == null){
+            if(LOGGER.isErrorEnabled()){
+                LOGGER.error("Impossible de trouver les photos correspondantes à l'annonce {}", demandeAnnonceDTO);
+            }
+            return new ArrayList<>();
+        }
+
+        //Préparation de la sortie
+        ModelMapper mapper = new ModelMapper();
+        List<ImageDTO> imageDTOs = new ArrayList<>();
+
+        for(Image image : images){
+            ImageDTO imageDTO = new ImageDTO();
+            mapper.map(image, imageDTO);
+            imageDTOs.add(imageDTO);
+        }
 
         //TODO : Lancer une requete avec les deux parametre => Select image by hash by
         // TODO suite : logindemandeur si c'est un client, Sinon juste par hash (admin) (voir methode util pour droit)
         //TODO : checker si resultat nulle si ok traduire l'entité en DTO puis renvoyer.
 
-        return new ArrayList<ImageDTO>();
+        return imageDTOs;
     }
 
     /**
