@@ -649,6 +649,10 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
         Assert.assertNotNull(imageDTOs);
         Assert.assertEquals(1, imageDTOs.size());
+
+        for(ImageDTO imageDTO : imageDTOs){
+            Assert.assertFalse(imageDTO.getUrl().isEmpty());
+        }
     }
 
     /**
@@ -661,6 +665,10 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
         Assert.assertNotNull(imageDTOs);
         Assert.assertEquals(1, imageDTOs.size());
+
+        for(ImageDTO imageDTO : imageDTOs){
+            Assert.assertFalse(imageDTO.getUrl().isEmpty());
+        }
     }
 
     /**

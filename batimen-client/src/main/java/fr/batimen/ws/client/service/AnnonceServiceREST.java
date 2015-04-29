@@ -355,7 +355,7 @@ public class AnnonceServiceREST implements Serializable {
         String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_ANNONCE_SERVICE_PATH,
                 WsPath.GESTION_ANNONCE_SERVICE_RECUPERATION_PHOTO, demandeAnnonceDTO);
 
-        List<ImageDTO> imageDTOs = DeserializeJsonHelper.deserializeDTOList(objectInJSON);
+        List<ImageDTO> imageDTOs = DeserializeJsonHelper.deserializeImagesDTOList(objectInJSON);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Fin appel service de recuperation des photos d'une annonce.");
