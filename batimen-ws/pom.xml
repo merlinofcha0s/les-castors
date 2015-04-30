@@ -1,622 +1,621 @@
 <?xml version="1.0"?>
 <project
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-	<modelVersion>4.0.0</modelVersion>
+        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+        xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <modelVersion>4.0.0</modelVersion>
 
-	<parent>
-		<groupId>fr.batimen.app</groupId>
-		<artifactId>batimen-module</artifactId>
-		<version>0.3.0-SNAPSHOT</version>
-		<relativePath>../batimen-module</relativePath>
-	</parent>
+    <parent>
+        <groupId>fr.batimen.app</groupId>
+        <artifactId>batimen-module</artifactId>
+        <version>0.3.0-SNAPSHOT</version>
+        <relativePath>../batimen-module</relativePath>
+    </parent>
 
-	<artifactId>batimen-ws</artifactId>
-	<name>batimen-ws</name>
-	<description>Projet qui porte la logique metier et le webservice</description>
-	<packaging>war</packaging>
+    <artifactId>batimen-ws</artifactId>
+    <name>batimen-ws</name>
+    <description>Projet qui porte la logique metier et le webservice</description>
+    <packaging>war</packaging>
 
-	<properties>
-		<hibernate.version>4.2.16.Final</hibernate.version>
+    <properties>
+        <hibernate.version>4.2.16.Final</hibernate.version>
 
-		<!-- Propriétés de la BDD pour les tests -->
-		<database.address>127.0.0.1</database.address>
-		<database.name>batimen_test</database.name>
-		<datasource.url>jdbc:postgresql://${database.address}:5432/${database.name}</datasource.url>
-		<database.login>postgres</database.login>
-		<database.password>123456</database.password>
+        <!-- Propriétés de la BDD pour les tests -->
+        <database.address>127.0.0.1</database.address>
+        <database.name>batimen_test</database.name>
+        <datasource.url>jdbc:postgresql://${database.address}:5432/${database.name}</datasource.url>
+        <database.login>postgres</database.login>
+        <database.password>123456</database.password>
 
-		<!-- Logs -->
-		<logs.address>c:/logs/log-batimen/dev</logs.address>
-		<logs.archives>${logs.address}/archived</logs.archives>
-		<logs.lvl>DEBUG</logs.lvl>
+        <!-- Logs -->
+        <logs.address>c:/logs/log-batimen/dev</logs.address>
+        <logs.archives>${logs.address}/archived</logs.archives>
+        <logs.lvl>DEBUG</logs.lvl>
 
-		<!-- Logs pour les tests -->
-		<logs.test.address>c:/logs/log-batimen/test</logs.test.address>
-		<logs.test.archives>${logs.test.address}/archived</logs.test.archives>
-		<logs.test.lvl>DEBUG</logs.test.lvl>
+        <!-- Logs pour les tests -->
+        <logs.test.address>c:/logs/log-batimen/test</logs.test.address>
+        <logs.test.archives>${logs.test.address}/archived</logs.test.archives>
+        <logs.test.lvl>DEBUG</logs.test.lvl>
 
-		<!-- Config Hibernate -->
-		<jdbc.jndi>jdbc/__BatimenPG</jdbc.jndi>
-		<hibernate.show_sql>true</hibernate.show_sql>
-		<hibernate.format_sql>true</hibernate.format_sql>
-		<hibernate.use_sql_comments>true</hibernate.use_sql_comments>
-		<hibernate.generate_statistics>true</hibernate.generate_statistics>
+        <!-- Config Hibernate -->
+        <jdbc.jndi>jdbc/__BatimenPG</jdbc.jndi>
+        <hibernate.show_sql>true</hibernate.show_sql>
+        <hibernate.format_sql>true</hibernate.format_sql>
+        <hibernate.use_sql_comments>true</hibernate.use_sql_comments>
+        <hibernate.generate_statistics>true</hibernate.generate_statistics>
 
-		<!-- Config Arquillian -->
-		<glassfish.location>D:\dev\glassfish3wp</glassfish.location>
-		<glassfish.adminHost>localhost</glassfish.adminHost>
-		<glassfish.adminPort>4848</glassfish.adminPort>
-		<glassfish.adminHttps>false</glassfish.adminHttps>
-		<glassfish.adminUser></glassfish.adminUser>
-		<glassfish.adminPassword></glassfish.adminPassword>
-		<glassfish.domain>domain1</glassfish.domain>
-		<glassfish.debug>false</glassfish.debug>
+        <!-- Config Arquillian -->
+        <glassfish.location>D:\dev\glassfish3wp</glassfish.location>
+        <glassfish.adminHost>localhost</glassfish.adminHost>
+        <glassfish.adminPort>4848</glassfish.adminPort>
+        <glassfish.adminHttps>false</glassfish.adminHttps>
+        <glassfish.adminUser></glassfish.adminUser>
+        <glassfish.adminPassword></glassfish.adminPassword>
+        <glassfish.domain>domain1</glassfish.domain>
+        <glassfish.debug>false</glassfish.debug>
 
-		<!-- Email -->
-		<mandrill.api.key>OOBiT-ollMvq7_JaMjyDOQ</mandrill.api.key>
-		<email.active>true</email.active>
+        <!-- Email -->
+        <mandrill.api.key>OOBiT-ollMvq7_JaMjyDOQ</mandrill.api.key>
+        <email.active>true</email.active>
 
-		<!-- URL du frontend -->
-		<url.frontend.web>https://127.0.0.1:8181/batimen-web/</url.frontend.web>
+        <!-- URL du frontend -->
+        <url.frontend.web>https://127.0.0.1:8181/batimen-web/</url.frontend.web>
 
-		<!-- Cloudinary MGT -->
-		<prop.temp.img.dir>D:/dev/temp/</prop.temp.img.dir>
-		<prop.image.cloudinary.cloud_name>lescastors</prop.image.cloudinary.cloud_name>
-		<prop.image.cloudinary.api_key>445898463279963</prop.image.cloudinary.api_key>
-		<prop.image.cloudinary.api_secret>av_FudaoLvP0Oz5VPqspL8_WPpA</prop.image.cloudinary.api_secret>
-		<prop.image.is.test>true</prop.image.is.test>
-	</properties>
+        <!-- Cloudinary MGT -->
+        <prop.temp.img.dir>D:/dev/temp/</prop.temp.img.dir>
+        <prop.image.cloudinary.cloud_name>lescastors</prop.image.cloudinary.cloud_name>
+        <prop.image.cloudinary.api_key>445898463279963</prop.image.cloudinary.api_key>
+        <prop.image.cloudinary.api_secret>av_FudaoLvP0Oz5VPqspL8_WPpA</prop.image.cloudinary.api_secret>
+        <prop.image.is.test>true</prop.image.is.test>
+    </properties>
 
-	<issueManagement>
-		<system>Redmine</system>
-		<url>${redmine.address}</url>
-	</issueManagement>
-	<ciManagement>
-		<system>Jenkins</system>
-		<url>${jenkins.address}</url>
-	</ciManagement>
-	<scm>
-		<connection>${git.repository}</connection>
-		<developerConnection>${git.repository}</developerConnection>
-		<url>${redmine.depot.address}</url>
-	</scm>
+    <issueManagement>
+        <system>Redmine</system>
+        <url>${redmine.address}</url>
+    </issueManagement>
+    <ciManagement>
+        <system>Jenkins</system>
+        <url>${jenkins.address}</url>
+    </ciManagement>
+    <scm>
+        <connection>${git.repository}</connection>
+        <developerConnection>${git.repository}</developerConnection>
+        <url>${redmine.depot.address}</url>
+    </scm>
 
-	<build>
-		<plugins>
-			<!-- Conf eclipse M2e -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-eclipse-plugin</artifactId>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-project-info-reports-plugin</artifactId>
-			</plugin>
-			<!-- Génération du war -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>2.6</version>
-				<configuration>
-					<warName>${project.artifactId}</warName>
-					<failOnMissingWebXml>true</failOnMissingWebXml>
-					<webResources>
-						<resource>
-							<directory>${basedir}/src/main/webapp/WEB-INF</directory>
-							<filtering>true</filtering>
-							<targetPath>WEB-INF</targetPath>
-							<includes>
-								<include>**/*.xml</include>
-							</includes>
-						</resource>
-						<!-- <resource> <directory>${basedir}/src/main/resources/META-INF</directory> 
-							<filtering>true</filtering> <targetPath>META-INF</targetPath> <includes> 
-							<include>**/*.xml</include> </includes> </resource> -->
-					</webResources>
-				</configuration>
-			</plugin>
-			<!-- Pour les tests unitaires (Junit) -->
-			<plugin>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.17</version>
-				<configuration>
-					<skipTests>false</skipTests>
-					<testFailureIgnore>true</testFailureIgnore>
-					<argLine>${surefireArgLine}</argLine>
-					<disableXmlReport>false</disableXmlReport>
-					<trimStackTrace>false</trimStackTrace>
-					<reportFormat>plain</reportFormat>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.jacoco</groupId>
-				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.7.1.201405082137</version>
-				<configuration>
-					<destFile>${sonar.jacoco.reportPath}</destFile>
-					<dataFile>${sonar.jacoco.reportPath}</dataFile>
-					<!--<append>true</append> -->
-				</configuration>
-				<executions>
-					<execution>
-						<id>pre-unit-test</id>
-						<goals>
-							<goal>prepare-agent</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>report</id>
-						<phase>prepare-package</phase>
-						<goals>
-							<goal>report</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
+    <build>
+        <plugins>
+            <!-- Conf eclipse M2e -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-eclipse-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+            </plugin>
+            <!-- Génération du war -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>2.6</version>
+                <configuration>
+                    <warName>${project.artifactId}</warName>
+                    <failOnMissingWebXml>true</failOnMissingWebXml>
+                    <webResources>
+                        <resource>
+                            <directory>${basedir}/src/main/webapp/WEB-INF</directory>
+                            <filtering>true</filtering>
+                            <targetPath>WEB-INF</targetPath>
+                            <includes>
+                                <include>**/*.xml</include>
+                            </includes>
+                        </resource>
+                        <!-- <resource> <directory>${basedir}/src/main/resources/META-INF</directory>
+                            <filtering>true</filtering> <targetPath>META-INF</targetPath> <includes>
+                            <include>**/*.xml</include> </includes> </resource> -->
+                    </webResources>
+                </configuration>
+            </plugin>
+            <!-- Pour les tests unitaires (Junit) -->
+            <plugin>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.17</version>
+                <configuration>
+                    <skipTests>false</skipTests>
+                    <testFailureIgnore>true</testFailureIgnore>
+                    <argLine>${surefireArgLine}</argLine>
+                    <disableXmlReport>false</disableXmlReport>
+                    <trimStackTrace>false</trimStackTrace>
+                    <reportFormat>plain</reportFormat>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.7.1.201405082137</version>
+                <configuration>
+                    <destFile>${sonar.jacoco.reportPath}</destFile>
+                    <dataFile>${sonar.jacoco.reportPath}</dataFile>
+                    <!--<append>true</append> -->
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>pre-unit-test</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 
-			<!-- Execute .sql avant les tests -->
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>sql-maven-plugin</artifactId>
-				<version>1.5</version>
-				<dependencies>
-					<dependency>
-						<groupId>org.postgresql</groupId>
-						<artifactId>postgresql</artifactId>
-						<version>9.3-1102-jdbc41</version>
-					</dependency>
-				</dependencies>
-				<configuration>
-					<driver>org.postgresql.Driver</driver>
-					<url>${datasource.url}</url>
-					<username>${database.login}</username>
-					<password>${database.password}</password>
-					<skip>${maven.test.skip}</skip>
-					<autocommit>true</autocommit>
-					<delimiterType>row</delimiterType>
-					<orderFile>ascending</orderFile>
-					<encoding>utf-8</encoding>
-				</configuration>
-				<executions>
-					<execution>
-						<id>drop-schema-before-unit-test</id>
-						<phase>process-test-resources</phase>
-						<goals>
-							<goal>execute</goal>
-						</goals>
-						<configuration>
-							<sqlCommand>DROP SCHEMA IF EXISTS public CASCADE;</sqlCommand>
-							<onError>continue</onError>
-						</configuration>
-					</execution>
-					<execution>
-						<id>inject-v1.0-before-unit-test</id>
-						<phase>process-test-resources</phase>
-						<goals>
-							<goal>execute</goal>
-						</goals>
-						<configuration>
-							<fileset>
-								<basedir>${basedir}</basedir>
-								<includes>
-									<include>src/main/sql/v1.0/*.sql</include>
-									<include>src/test/sql/v1.0/*.sql</include>
-								</includes>
-							</fileset>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
-				<groupId>org.hibernate.orm.tooling</groupId>
-				<artifactId>hibernate-enhance-maven-plugin</artifactId>
-				<version>4.2.16.Final</version>
-				<executions>
-					<execution>
-						<phase>compile</phase>
-						<goals>
-							<goal>enhance</goal>
-						</goals>
-					</execution>
-				</executions>
-				<dependencies>
-					<!-- Yes, you really must have an explicit dependency on the thing you 
-						want to enhance -->
-					<dependency>
-						<groupId>${project.groupId}</groupId>
-						<artifactId>batimen-dto</artifactId>
-						<version>${project.version}</version>
-					</dependency>
-					<!-- Yes, you really must have an explicit dependency on the thing you 
-						want to enhance -->
-					<dependency>
-						<groupId>${project.groupId}</groupId>
-						<artifactId>batimen-ws</artifactId>
-						<version>${project.version}</version>
-					</dependency>
-				</dependencies>
-			</plugin>
-		</plugins>
-		<resources>
-			<resource>
-				<filtering>true</filtering>
-				<directory>src/main/resources/dev</directory>
-				<includes>
-					<include>**</include>
-				</includes>
-			</resource>
-		</resources>
-		<testResources>
-			<testResource>
-				<filtering>true</filtering>
-				<directory>src/test/resources</directory>
-				<includes>
-					<include>**</include>
-				</includes>
-			</testResource>
-		</testResources>
-	</build>
+            <!-- Execute .sql avant les tests -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>sql-maven-plugin</artifactId>
+                <version>1.5</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.postgresql</groupId>
+                        <artifactId>postgresql</artifactId>
+                        <version>9.3-1102-jdbc41</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <driver>org.postgresql.Driver</driver>
+                    <url>${datasource.url}</url>
+                    <username>${database.login}</username>
+                    <password>${database.password}</password>
+                    <skip>${maven.test.skip}</skip>
+                    <autocommit>true</autocommit>
+                    <delimiterType>row</delimiterType>
+                    <orderFile>ascending</orderFile>
+                    <encoding>utf-8</encoding>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>drop-schema-before-unit-test</id>
+                        <phase>process-test-resources</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                        <configuration>
+                            <sqlCommand>DROP SCHEMA IF EXISTS public CASCADE;</sqlCommand>
+                            <onError>continue</onError>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>inject-v1.0-before-unit-test</id>
+                        <phase>process-test-resources</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                        <configuration>
+                            <fileset>
+                                <basedir>${basedir}</basedir>
+                                <includes>
+                                    <include>src/main/sql/v1.0/*.sql</include>
+                                    <include>src/test/sql/v1.0/*.sql</include>
+                                </includes>
+                            </fileset>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.hibernate.orm.tooling</groupId>
+                <artifactId>hibernate-enhance-maven-plugin</artifactId>
+                <version>4.2.16.Final</version>
+                <executions>
+                    <execution>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>enhance</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <!-- Yes, you really must have an explicit dependency on the thing you
+                        want to enhance -->
+                    <dependency>
+                        <groupId>${project.groupId}</groupId>
+                        <artifactId>batimen-dto</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
+                    <!-- Yes, you really must have an explicit dependency on the thing you
+                        want to enhance -->
+                    <dependency>
+                        <groupId>${project.groupId}</groupId>
+                        <artifactId>batimen-ws</artifactId>
+                        <version>${project.version}</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+        <resources>
+            <resource>
+                <filtering>true</filtering>
+                <directory>src/main/resources/dev</directory>
+                <includes>
+                    <include>**</include>
+                </includes>
+            </resource>
+        </resources>
+        <testResources>
+            <testResource>
+                <filtering>true</filtering>
+                <directory>src/test/resources</directory>
+                <includes>
+                    <include>**</include>
+                </includes>
+            </testResource>
+        </testResources>
+    </build>
 
-	<dependencies>
-		<!-- Code -->
-		<dependency>
-			<groupId>org.jboss.spec</groupId>
-			<artifactId>jboss-javaee-6.0</artifactId>
-			<scope>provided</scope>
-			<type>pom</type>
-		</dependency>
+    <dependencies>
+        <!-- Code -->
+        <dependency>
+            <groupId>org.jboss.spec</groupId>
+            <artifactId>jboss-javaee-6.0</artifactId>
+            <scope>provided</scope>
+            <type>pom</type>
+        </dependency>
 
-		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-server</artifactId>
-			<version>${jersey.version}</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-servlet</artifactId>
-			<version>${jersey.version}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			<version>2.4</version>
-			<scope>compile</scope>
-		</dependency>
-		<!-- Scope Compile car sinon glassfish ne voit pas les providers -->
-		<dependency>
-			<groupId>com.sun.jersey</groupId>
-			<artifactId>jersey-json</artifactId>
-			<version>${jersey.version}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-core</artifactId>
-			<version>${hibernate.version}</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-jpamodelgen</artifactId>
-			<version>1.3.0.Final</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.hibernate</groupId>
-			<artifactId>hibernate-entitymanager</artifactId>
-			<version>${hibernate.version}</version>
-			<scope>compile</scope>
-		</dependency>
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-server</artifactId>
+            <version>${jersey.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-servlet</artifactId>
+            <version>${jersey.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>2.4</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- Scope Compile car sinon glassfish ne voit pas les providers -->
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-json</artifactId>
+            <version>${jersey.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-jpamodelgen</artifactId>
+            <version>1.3.0.Final</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>${hibernate.version}</version>
+            <scope>compile</scope>
+        </dependency>
 
-		<!-- Object mapping -->
-		<dependency>
-			<groupId>org.modelmapper</groupId>
-			<artifactId>modelmapper</artifactId>
-			<scope>compile</scope>
-		</dependency>
+        <!-- Object mapping -->
+        <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
+            <scope>compile</scope>
+        </dependency>
 
-		<!-- Email -->
-		<dependency>
-			<groupId>com.mandrillapp.wrapper.lutung</groupId>
-			<artifactId>lutung</artifactId>
-			<version>0.0.5</version>
-			<scope>compile</scope>
-		</dependency>
+        <!-- Email -->
+        <dependency>
+            <groupId>com.mandrillapp.wrapper.lutung</groupId>
+            <artifactId>lutung</artifactId>
+            <version>0.0.5</version>
+            <scope>compile</scope>
+        </dependency>
 
-		<!-- Photo cloud service -->
-		<dependency>
-			<groupId>com.cloudinary</groupId>
-			<artifactId>cloudinary-http42</artifactId>
-			<version>1.1.3</version>
-		</dependency>
+        <!-- Photo cloud service -->
+        <dependency>
+            <groupId>com.cloudinary</groupId>
+            <artifactId>cloudinary-http42</artifactId>
+            <version>1.1.3</version>
+        </dependency>
 
-		<!-- Security -->
-		<dependency>
-			<groupId>com.lambdaworks</groupId>
-			<artifactId>scrypt</artifactId>
-			<scope>compile</scope>
-		</dependency>
+        <!-- Security -->
+        <dependency>
+            <groupId>com.lambdaworks</groupId>
+            <artifactId>scrypt</artifactId>
+            <scope>compile</scope>
+        </dependency>
 
-		<!-- Scheduling -->
-		<dependency>
-			<groupId>org.quartz-scheduler</groupId>
-			<artifactId>quartz</artifactId>
-			<version>2.2.1</version>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.quartz-scheduler</groupId>
-			<artifactId>quartz-jobs</artifactId>
-			<version>2.2.1</version>
-			<scope>compile</scope>
-		</dependency>
-
-
-
-		<!-- Log -->
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-access</artifactId>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-api</artifactId>
-			<scope>compile</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>log4j-over-slf4j</artifactId>
-			<version>${slf4j.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>jcl-over-slf4j</artifactId>
-			<version>${slf4j.version}</version>
-		</dependency>
-		<!-- Dependence intra projet -->
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>batimen-dto</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>batimen-core</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-
-		<!-- Test Arquillian -->
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.arquillian.junit</groupId>
-			<artifactId>arquillian-junit-container</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.arquillian.extension</groupId>
-			<artifactId>arquillian-jacoco</artifactId>
-			<version>1.0.0.Alpha7</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jacoco</groupId>
-			<artifactId>org.jacoco.core</artifactId>
-			<version>0.7.1.201405082137</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.arquillian.container</groupId>
-			<artifactId>arquillian-glassfish-managed-3.1</artifactId>
-			<version>1.0.0.CR4</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.glassfish.main.extras</groupId>
-			<artifactId>glassfish-embedded-all</artifactId>
-			<version>3.1.2.2</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.shrinkwrap.resolver</groupId>
-			<artifactId>shrinkwrap-resolver-impl-maven</artifactId>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.jboss.arquillian.extension</groupId>
-			<artifactId>arquillian-persistence-impl</artifactId>
-			<version>1.0.0.Alpha6</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>batimen-client</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
-
-	<dependencyManagement>
-		<dependencies>
-			<dependency>
-				<groupId>xalan</groupId>
-				<artifactId>xalan</artifactId>
-				<version>2.7.1</version>
-			</dependency>
-			<!-- Test arquillian -->
-			<dependency>
-				<groupId>org.jboss.arquillian</groupId>
-				<artifactId>arquillian-bom</artifactId>
-				<version>1.1.5.Final</version>
-				<scope>import</scope>
-				<type>pom</type>
-			</dependency>
-			<dependency>
-				<groupId>org.jboss.shrinkwrap.resolver</groupId>
-				<artifactId>shrinkwrap-resolver-bom</artifactId>
-				<version>2.1.1</version>
-				<scope>import</scope>
-				<type>pom</type>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
-
-	<profiles>
-		<profile>
-			<id>integration</id>
-			<properties>
-				<!-- BDD pour les tests -->
-				<database.address>127.0.0.1</database.address>
-				<database.name>batimen_test</database.name>
-				<database.login>raiden</database.login>
-				<database.password>M0ntaleign3</database.password>
-
-				<!-- Logs -->
-				<logs.address>/usr/share/log-batimen</logs.address>
-				<logs.archives>${logs.address}/archived</logs.archives>
-				<logs.lvl>DEBUG</logs.lvl>
-
-				<!-- Logs pour les tests -->
-				<logs.test.address>/usr/share/log-test-batimen</logs.test.address>
-				<logs.test.archives>${logs.test.address}/archived</logs.test.archives>
-				<logs.test.lvl>DEBUG</logs.test.lvl>
-
-				<!-- Hibernate -->
-				<hibernate.show_sql>false</hibernate.show_sql>
-				<hibernate.format_sql>false</hibernate.format_sql>
-				<hibernate.use_sql_comments>false</hibernate.use_sql_comments>
-				<hibernate.generate_statistics>false</hibernate.generate_statistics>
-
-				<!-- Config Arquillian -->
-				<glassfish.location>/usr/share/glassfish3</glassfish.location>
-				<glassfish.adminHost>127.0.0.1</glassfish.adminHost>
-				<glassfish.adminPort>4747</glassfish.adminPort>
-				<glassfish.adminHttps>false</glassfish.adminHttps>
-				<glassfish.adminUser>admin</glassfish.adminUser>
-				<glassfish.adminPassword>OIOIUenoBueno</glassfish.adminPassword>
-				<glassfish.domain>batimendomain</glassfish.domain>
-
-				<!-- Email -->
-				<!-- <mandrill.api.key>AqM7U8jIxFR7GURuupcsIA</mandrill.api.key> -->
-				<mandrill.api.key>OOBiT-ollMvq7_JaMjyDOQ</mandrill.api.key>
-				<email.active>true</email.active>
-
-				<!-- URL du frontend -->
-				<url.frontend.web>https://127.0.0.1:6161/batimen-web/</url.frontend.web>
-
-				<!-- Gestion des images -->
-				<prop.temp.img.dir>/usr/share/castor-temp/img/</prop.temp.img.dir>
-				<prop.image.is.test>false</prop.image.is.test>
-			</properties>
-			<build>
-				<resources>
-					<resource>
-						<filtering>true</filtering>
-						<directory>src/main/resources/prod</directory>
-						<includes>
-							<include>**</include>
-						</includes>
-					</resource>
-				</resources>
-				<plugins>
-					<plugin>
-						<groupId>org.glassfish.maven.plugin</groupId>
-						<artifactId>maven-glassfish-plugin</artifactId>
-						<version>2.1</version>
-						<configuration>
-							<user>admin</user>
-							<adminPassword>OIOIUenoBueno</adminPassword>
-							<glassfishDirectory>/usr/share/glassfish3</glassfishDirectory>
-							<components>
-								<component>
-									<name>${project.artifactId}</name>
-									<artifact>${project.build.directory}/${project.artifactId}.war</artifact>
-								</component>
-							</components>
-							<domain>
-								<name>batimendomain</name>
-								<adminPort>4747</adminPort>
-								<httpPort>6060</httpPort>
-								<httpsPort>6161</httpsPort>
-							</domain>
-						</configuration>
-						<executions>
-							<execution>
-								<id>deploy-ws</id>
-								<phase>pre-integration-test</phase>
-								<goals>
-									<goal>redeploy</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-					<plugin>
-						<groupId>org.jacoco</groupId>
-						<artifactId>jacoco-maven-plugin</artifactId>
-						<version>0.7.1.201405082137</version>
-						<configuration>
-							<destFile>${sonar.jacoco.reportPath}</destFile>
-							<dataFile>${sonar.jacoco.reportPath}</dataFile>
-							<append>true</append>
-						</configuration>
-						<executions>
-							<execution>
-								<id>pre-unit-test</id>
-								<goals>
-									<goal>prepare-agent</goal>
-								</goals>
-							</execution>
-							<execution>
-								<id>report</id>
-								<phase>prepare-package</phase>
-								<goals>
-									<goal>report</goal>
-								</goals>
-							</execution>
-						</executions>
-					</plugin>
-				</plugins>
-			</build>
-		</profile>
-		<profile>
-			<id>glassfish-managed-debug</id>
-			<properties>
-				<glassfish.debug>true</glassfish.debug>
-			</properties>
-		</profile>
-	</profiles>
+        <!-- Scheduling -->
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
+            <version>2.2.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz-jobs</artifactId>
+            <version>2.2.1</version>
+            <scope>compile</scope>
+        </dependency>
 
 
-	<repositories>
-		<repository>
-			<id>Nexus JBoss</id>
-			<url>https://repository.jboss.org/nexus/content/repositories/</url>
-		</repository>
-		<repository>
-			<id>java.net</id>
-			<url>http://download.java.net/maven/</url>
-		</repository>
-		<repository>
-			<id>Apache Nexus</id>
-			<url>https://repository.apache.org/content/repositories/snapshots/</url>
-			<releases>
-				<enabled>false</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-		</repository>
-	</repositories>
+        <!-- Log -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-access</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>log4j-over-slf4j</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>jcl-over-slf4j</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <!-- Dependence intra projet -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>batimen-dto</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>batimen-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
+        <!-- Test Arquillian -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.junit</groupId>
+            <artifactId>arquillian-junit-container</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.extension</groupId>
+            <artifactId>arquillian-jacoco</artifactId>
+            <version>1.0.0.Alpha7</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jacoco</groupId>
+            <artifactId>org.jacoco.core</artifactId>
+            <version>0.7.1.201405082137</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.container</groupId>
+            <artifactId>arquillian-glassfish-managed-3.1</artifactId>
+            <version>1.0.0.CR4</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.main.extras</groupId>
+            <artifactId>glassfish-embedded-all</artifactId>
+            <version>3.1.2.2</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.shrinkwrap.resolver</groupId>
+            <artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.arquillian.extension</groupId>
+            <artifactId>arquillian-persistence-impl</artifactId>
+            <version>1.0.0.Alpha6</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>batimen-client</artifactId>
+            <version>${project.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>xalan</groupId>
+                <artifactId>xalan</artifactId>
+                <version>2.7.1</version>
+            </dependency>
+            <!-- Test arquillian -->
+            <dependency>
+                <groupId>org.jboss.arquillian</groupId>
+                <artifactId>arquillian-bom</artifactId>
+                <version>1.1.5.Final</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>org.jboss.shrinkwrap.resolver</groupId>
+                <artifactId>shrinkwrap-resolver-bom</artifactId>
+                <version>2.1.1</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <profiles>
+        <profile>
+            <id>integration</id>
+            <properties>
+                <!-- BDD pour les tests -->
+                <database.address>127.0.0.1</database.address>
+                <database.name>batimen_test</database.name>
+                <database.login>raiden</database.login>
+                <database.password>M0ntaleign3</database.password>
+
+                <!-- Logs -->
+                <logs.address>/usr/share/log-batimen</logs.address>
+                <logs.archives>${logs.address}/archived</logs.archives>
+                <logs.lvl>DEBUG</logs.lvl>
+
+                <!-- Logs pour les tests -->
+                <logs.test.address>/usr/share/log-test-batimen</logs.test.address>
+                <logs.test.archives>${logs.test.address}/archived</logs.test.archives>
+                <logs.test.lvl>DEBUG</logs.test.lvl>
+
+                <!-- Hibernate -->
+                <hibernate.show_sql>false</hibernate.show_sql>
+                <hibernate.format_sql>false</hibernate.format_sql>
+                <hibernate.use_sql_comments>false</hibernate.use_sql_comments>
+                <hibernate.generate_statistics>false</hibernate.generate_statistics>
+
+                <!-- Config Arquillian -->
+                <glassfish.location>/usr/share/glassfish3</glassfish.location>
+                <glassfish.adminHost>127.0.0.1</glassfish.adminHost>
+                <glassfish.adminPort>4747</glassfish.adminPort>
+                <glassfish.adminHttps>false</glassfish.adminHttps>
+                <glassfish.adminUser>admin</glassfish.adminUser>
+                <glassfish.adminPassword>OIOIUenoBueno</glassfish.adminPassword>
+                <glassfish.domain>batimendomain</glassfish.domain>
+
+                <!-- Email -->
+                <!-- <mandrill.api.key>AqM7U8jIxFR7GURuupcsIA</mandrill.api.key> -->
+                <mandrill.api.key>OOBiT-ollMvq7_JaMjyDOQ</mandrill.api.key>
+                <email.active>true</email.active>
+
+                <!-- URL du frontend -->
+                <url.frontend.web>https://127.0.0.1:6161/batimen-web/</url.frontend.web>
+
+                <!-- Gestion des images -->
+                <prop.temp.img.dir>/usr/share/castor-temp/img/</prop.temp.img.dir>
+                <prop.image.is.test>false</prop.image.is.test>
+            </properties>
+            <build>
+                <resources>
+                    <resource>
+                        <filtering>true</filtering>
+                        <directory>src/main/resources/prod</directory>
+                        <includes>
+                            <include>**</include>
+                        </includes>
+                    </resource>
+                </resources>
+                <plugins>
+                    <plugin>
+                        <groupId>org.glassfish.maven.plugin</groupId>
+                        <artifactId>maven-glassfish-plugin</artifactId>
+                        <version>2.1</version>
+                        <configuration>
+                            <user>admin</user>
+                            <adminPassword>OIOIUenoBueno</adminPassword>
+                            <glassfishDirectory>/usr/share/glassfish3</glassfishDirectory>
+                            <components>
+                                <component>
+                                    <name>${project.artifactId}</name>
+                                    <artifact>${project.build.directory}/${project.artifactId}.war</artifact>
+                                </component>
+                            </components>
+                            <domain>
+                                <name>batimendomain</name>
+                                <adminPort>4747</adminPort>
+                                <httpPort>6060</httpPort>
+                                <httpsPort>6161</httpsPort>
+                            </domain>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>deploy-ws</id>
+                                <phase>pre-integration-test</phase>
+                                <goals>
+                                    <goal>redeploy</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.jacoco</groupId>
+                        <artifactId>jacoco-maven-plugin</artifactId>
+                        <version>0.7.1.201405082137</version>
+                        <configuration>
+                            <destFile>${sonar.jacoco.reportPath}</destFile>
+                            <dataFile>${sonar.jacoco.reportPath}</dataFile>
+                            <append>true</append>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>pre-unit-test</id>
+                                <goals>
+                                    <goal>prepare-agent</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>report</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>report</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
+            <id>glassfish-managed-debug</id>
+            <properties>
+                <glassfish.debug>true</glassfish.debug>
+            </properties>
+        </profile>
+    </profiles>
+
+
+    <repositories>
+        <repository>
+            <id>Nexus JBoss</id>
+            <url>https://repository.jboss.org/nexus/content/repositories/</url>
+        </repository>
+        <repository>
+            <id>java.net</id>
+            <url>http://download.java.net/maven/</url>
+        </repository>
+        <repository>
+            <id>Apache Nexus</id>
+            <url>https://repository.apache.org/content/repositories/snapshots/</url>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 </project>

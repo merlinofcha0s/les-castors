@@ -889,7 +889,25 @@ public class GestionAnnonceFacade {
         String rolesDemandeur = utilisateurFacade.getUtilisateurRoles(suppressionPhotoDTO.getLoginDemandeur());
         List<Image> images = photoService.getImagesByHashIDByLoginDemandeur(rolesDemandeur, suppressionPhotoDTO.getHashID(), suppressionPhotoDTO.getLoginDemandeur());
 
-        return CodeRetourService.RETOUR_KO;
+        //Si c'est images est null ce que l'utilisateur n'a pas les droits
+        if(images == null){
+            return CodeRetourService.RETOUR_KO;
+        }
+
+        boolean deleteAtLeastOne = false;
+
+        for(Image image : images){
+          if(image.getUrl().equals(suppressionPhotoDTO.getImageASupprimer().getUrl())){
+              imageDAO.delete(image);
+              deleteAtLeastOne = true;
+          }
+        }
+
+        if(!deleteAtLeastOne){
+            return CodeRetourService.RETOUR_KO;
+        }
+
+        return CodeRetourService.RETOUR_OK;
     }
 
     /**

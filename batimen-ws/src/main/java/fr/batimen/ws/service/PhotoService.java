@@ -98,7 +98,7 @@ public class PhotoService {
      * @param rolesDemandeur Le role du demandeur
      * @param hashID L'identifiant unique de l'annonce
      * @param loginDemandeur Le login du demandeur de l'operation
-     * @return L'ensemble des images de l'annonce.
+     * @return L'ensemble des images de l'annonce si pas les droits => null
      */
     @TransactionAttribute(TransactionAttributeType.MANDATORY)
     public List<Image> getImagesByHashIDByLoginDemandeur(String rolesDemandeur, String hashID, String loginDemandeur) {
