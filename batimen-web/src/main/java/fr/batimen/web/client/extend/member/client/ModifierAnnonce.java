@@ -59,6 +59,8 @@ public class ModifierAnnonce extends MasterPage {
     private List<SousCategorieMetierDTO> sousCategorieMetierDTOList;
     private SousCategorieMetierDTO sousCategorieMetierDTO;
 
+    private PhotosContainer photosContainer;
+
     private String idAnnonce;
 
     public ModifierAnnonce() {
@@ -88,6 +90,7 @@ public class ModifierAnnonce extends MasterPage {
     public ModifierAnnonce(String idAnnonce, AnnonceAffichageDTO annonceAffichageDTO) {
         this(annonceAffichageDTO);
         this.idAnnonce = idAnnonce;
+        photosContainer.setIdAnnonce(idAnnonce);
         etape3AnnonceForm.setIdAnnonce(idAnnonce);
     }
 
@@ -103,7 +106,7 @@ public class ModifierAnnonce extends MasterPage {
         Profil profil = new Profil("profil");
         etape3AnnonceForm = new Etape3AnnonceForm("formQualification", propertyModelModificationAnnonce, sousCategorieMetierDTOList, sousCategorieMetierDTO);
 
-        PhotosContainer photosContainer = new PhotosContainer("afficheurPhotos", annonceAffichageDTO.getImages(), "Les photos de votre annonce", "h4", true, idAnnonce);
+        photosContainer = new PhotosContainer("afficheurPhotos", annonceAffichageDTO.getImages(), "Les photos de votre annonce", "h4", true);
 
         ContactezNous contactezNous = new ContactezNous("contactezNous");
         Commentaire commentaire = new Commentaire("commentaire");

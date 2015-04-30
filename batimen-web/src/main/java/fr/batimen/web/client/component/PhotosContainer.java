@@ -1,11 +1,13 @@
 package fr.batimen.web.client.component;
 
+import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.ImageDTO;
 import fr.batimen.dto.aggregate.AjoutPhotoDTO;
 import fr.batimen.web.app.constants.FeedbackMessageLevel;
 import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.client.behaviour.FileFieldValidatorAndLoaderBehaviour;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
+import fr.batimen.ws.client.service.AnnonceServiceREST;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
@@ -40,20 +42,23 @@ public class PhotosContainer extends Panel {
     private String title;
     private String baliseTypeTitle;
     private boolean canAdd;
-    private String hashId;
+    private String idAnnonce;
+    private WebMarkupContainer photosContainer;
+
+    @Inject
+    private AnnonceServiceREST annonceServiceREST;
 
     @Inject
     private Authentication authentication;
 
     private AjoutPhotoDTO ajoutImageDTO = new AjoutPhotoDTO();
 
-    public PhotosContainer(String id, List<ImageDTO> images, String title, String baliseTypeTitle, boolean canAdd, String hashId) {
+    public PhotosContainer(String id, List<ImageDTO> images, String title, String baliseTypeTitle, boolean canAdd) {
         super(id);
         this.images = images;
         this.title = title;
         this.baliseTypeTitle = baliseTypeTitle;
         this.canAdd = canAdd;
-        this.hashId = hashId;
 
         initComponent();
         initAjoutPhotoSection();
@@ -72,7 +77,7 @@ public class PhotosContainer extends Panel {
 
         photosContainer.setOutputMarkupId(true);
 
-        Label titleContainer = new Label("titleContainer", title){
+        Label titleContainer = new Label("titleContainer", title) {
 
             @Override
             protected void onComponentTag(ComponentTag tag) {
@@ -114,9 +119,9 @@ public class PhotosContainer extends Panel {
         add(photosContainer, aucunePhotoContainer);
     }
 
-    private void initAjoutPhotoSection(){
+    private void initAjoutPhotoSection() {
 
-        WebMarkupContainer ajoutPhotoContainer = new WebMarkupContainer("ajoutPhotoContainer"){
+        WebMarkupContainer ajoutPhotoContainer = new WebMarkupContainer("ajoutPhotoContainer") {
             @Override
             public boolean isVisible() {
                 return canAdd;
@@ -145,11 +150,21 @@ public class PhotosContainer extends Panel {
                 }
 
                 if (!fileFieldValidatorBehaviour.isValidationOK()) {
-                   target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Validation erronnée de vos photos, veuillez corriger", FeedbackMessageLevel.ERROR));
-                }else{
-                    ajoutImageDTO.setHashID(hashId);
-                    ajoutImageDTO.setLoginDemandeur(authentication.getCurrentUserInfo().getLogin());
-                    //TODO brancher le service d'ajout d'image ici
+                    target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Validation erronnée de vos photos, veuillez corriger", FeedbackMessageLevel.ERROR));
+                } else {
+                    String loginDemandeur = authentication.getCurrentUserInfo().getLogin();
+
+                    //Ajout des photos
+                    ajoutImageDTO.setHashID(idAnnonce);
+                    ajoutImageDTO.setLoginDemandeur(loginDemandeur);
+                    annonceServiceREST.ajouterPhoto(ajoutImageDTO);
+
+                    //Récuperation des nouvelles urls des photos.
+                    DemandeAnnonceDTO demandeAnnonceDTO = new DemandeAnnonceDTO();
+                    demandeAnnonceDTO.setHashID(idAnnonce);
+                    demandeAnnonceDTO.setLoginDemandeur(loginDemandeur);
+                    images = annonceServiceREST.getPhotos(demandeAnnonceDTO);
+                    target.add(photosContainer);
                 }
             }
 
@@ -162,6 +177,11 @@ public class PhotosContainer extends Panel {
 
         addPhotoForm.add(photoField, envoyerPhotos);
         ajoutPhotoContainer.add(addPhotoForm);
+
         add(ajoutPhotoContainer);
+    }
+
+    public void setIdAnnonce(String idAnnonce) {
+        this.idAnnonce = idAnnonce;
     }
 }

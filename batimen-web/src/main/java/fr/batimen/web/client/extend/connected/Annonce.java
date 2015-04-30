@@ -722,7 +722,7 @@ public class Annonce extends MasterPage {
     }
 
     private void initContainerPhoto() {
-        PhotosContainer photosContainer = new PhotosContainer("containerPhotos", annonceAffichageDTO.getImages(), "Photos du chantier", "h2", false, "");
+        PhotosContainer photosContainer = new PhotosContainer("containerPhotos", annonceAffichageDTO.getImages(), "Photos du chantier", "h2", false);
         add(photosContainer);
     }
 

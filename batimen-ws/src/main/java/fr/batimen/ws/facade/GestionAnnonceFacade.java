@@ -837,7 +837,6 @@ public class GestionAnnonceFacade {
     @Path(WsPath.GESTION_ANNONCE_SERVICE_RECUPERATION_PHOTO)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public List<ImageDTO> getPhotos(DemandeAnnonceDTO demandeAnnonceDTO) {
-
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Début de la récupération des photos d'une annonce {}", demandeAnnonceDTO);
         }
@@ -881,11 +880,6 @@ public class GestionAnnonceFacade {
     @Path(WsPath.GESTION_ANNONCE_SERVICE_SUPPRESSION_PHOTO)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public Integer suppressionPhoto(SuppressionPhotoDTO suppressionPhotoDTO) {
-        //TODO : Si null => Code Retour pas les droits
-        //TODO : Recherche de la photo
-        //TODO : Suppression de la photo
-        //TODO : Retour service
-
         String rolesDemandeur = utilisateurFacade.getUtilisateurRoles(suppressionPhotoDTO.getLoginDemandeur());
         List<Image> images = photoService.getImagesByHashIDByLoginDemandeur(rolesDemandeur, suppressionPhotoDTO.getHashID(), suppressionPhotoDTO.getLoginDemandeur());
 
