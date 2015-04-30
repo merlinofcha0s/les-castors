@@ -37,6 +37,7 @@ public class WsPath {
     public static final String GESTION_ANNONCE_SERVICE_MODIFICATION_ANNONCE = "modifierAnnonce";
     public static final String GESTION_ANNONCE_SERVICE_AJOUT_PHOTO = "ajoutPhoto";
     public static final String GESTION_ANNONCE_SERVICE_RECUPERATION_PHOTO = "getPhotos";
+    public static final String GESTION_ANNONCE_SERVICE_SUPPRESSION_PHOTO = "supprimerPhoto";
 
     // Path Gestion Partenaire
     public static final String GESTION_PARTENAIRE_SERVICE_PATH = "gestionPartenaire";

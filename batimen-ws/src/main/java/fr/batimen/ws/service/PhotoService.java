@@ -10,9 +10,11 @@ import java.util.Map;
 import javax.ejb.*;
 import javax.inject.Inject;
 
+import fr.batimen.dto.ImageDTO;
 import fr.batimen.ws.dao.ImageDAO;
 import fr.batimen.ws.entity.Annonce;
 import fr.batimen.ws.entity.Image;
+import fr.batimen.ws.utils.RolesUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,9 +22,8 @@ import com.cloudinary.Cloudinary;
 
 /**
  * Classe de gestion des photos
- * 
+ *
  * @author Casaucau Cyril
- * 
  */
 @Stateless(name = "PhotoService")
 @LocalBean
@@ -37,11 +38,13 @@ public class PhotoService {
     @Inject
     private ImageDAO imageDAO;
 
+    @Inject
+    private RolesUtils rolesUtils;
+
     /**
      * Envoi les photos vers le cloud de cloudinary
-     * 
-     * @param photos
-     *            Liste des photos sous forme de file
+     *
+     * @param photos Liste des photos sous forme de file
      * @return Les adresses internet des photos une fois uploadées
      */
     public List<String> sendPhotoToCloud(List<File> photos) {
@@ -70,8 +73,14 @@ public class PhotoService {
         return urlPhotosInCloud;
     }
 
+    /**
+     * Persist l'url des images en BDD
+     *
+     * @param annonce l'annonce auquel sont rattachés les images
+     * @param imageUrls La liste des urls des images
+     */
     @TransactionAttribute(TransactionAttributeType.MANDATORY)
-    public void persistPhoto(Annonce annonce, List<String> imageUrls){
+    public void persistPhoto(Annonce annonce, List<String> imageUrls) {
         for (String url : imageUrls) {
             Image nouvelleImage = new Image();
             nouvelleImage.setUrl(url);
@@ -79,5 +88,26 @@ public class PhotoService {
             annonce.getImages().add(nouvelleImage);
             imageDAO.createMandatory(nouvelleImage);
         }
+    }
+
+    /**
+     * Récupère les images d'une annonces
+     * <p/>
+     * Check les droits du demandeur et dans le cas d'un client verifie qu'il possede bien l'annonce.
+     *
+     * @param rolesDemandeur Le role du demandeur
+     * @param hashID L'identifiant unique de l'annonce
+     * @param loginDemandeur Le login du demandeur de l'operation
+     * @return L'ensemble des images de l'annonce.
+     */
+    @TransactionAttribute(TransactionAttributeType.MANDATORY)
+    public List<Image> getImagesByHashIDByLoginDemandeur(String rolesDemandeur, String hashID, String loginDemandeur) {
+        List<Image> images = null;
+        if (rolesUtils.checkIfClientWithString(rolesDemandeur)) {
+            images = imageDAO.getImageByHashIDByClient(hashID, loginDemandeur);
+        } else if (rolesUtils.checkIfAdminWithString(rolesDemandeur)) {
+            images = imageDAO.getImageByHashID(hashID);
+        }
+        return images;
     }
 }

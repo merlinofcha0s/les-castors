@@ -9,7 +9,7 @@ import java.util.*;
  * Objet d'échance servant à ajouter une image
  *
  *
- * Created by Casaucau on 27/04/2015.
+ * @author Casaucau Cyril
  */
 public class AjoutPhotoDTO extends DemandeAnnonceDTO {
 

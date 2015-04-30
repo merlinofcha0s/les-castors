@@ -650,7 +650,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         Assert.assertNotNull(imageDTOs);
         Assert.assertEquals(1, imageDTOs.size());
 
-        for(ImageDTO imageDTO : imageDTOs){
+        for (ImageDTO imageDTO : imageDTOs) {
             Assert.assertFalse(imageDTO.getUrl().isEmpty());
         }
     }
@@ -666,7 +666,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         Assert.assertNotNull(imageDTOs);
         Assert.assertEquals(1, imageDTOs.size());
 
-        for(ImageDTO imageDTO : imageDTOs){
+        for (ImageDTO imageDTO : imageDTOs) {
             Assert.assertFalse(imageDTO.getUrl().isEmpty());
         }
     }
@@ -682,12 +682,66 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         Assert.assertEquals(0, imageDTOs.size());
     }
 
-    private List<ImageDTO> testGetPhoto(String login){
+    /**
+     * Cas de test : Un client veut supprimer une des photos liées à son annonce, tout se passe comme prévu.
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonce_suppression_img.yml")
+    @ShouldMatchDataSet(value = "datasets/out/annonce_suppression_img.yml", excludeColumns = {"id",
+            "datemaj", "datecreation", "datenotation", "datenotification", "url"})
+    public void testSuppressPhotoAnnonceByClient() {
+        Integer codeRetourService = testSuppressionPhoto("pebronne");
+
+        Assert.assertNotNull(codeRetourService);
+        Assert.assertEquals(CodeRetourService.RETOUR_OK, codeRetourService);
+    }
+
+    /**
+     * Cas de test : Un admin veut supprimer une des photos liées à son annonce, tout se passe comme prévu.
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonce_suppression_img.yml")
+    @ShouldMatchDataSet(value = "datasets/out/annonce_suppression_img.yml", excludeColumns = {"id",
+            "datemaj", "datecreation", "datenotation", "datenotification", "url"})
+    public void testSuppressPhotoAnnonceByAdmin() {
+        Integer codeRetourService = testSuppressionPhoto("admin");
+
+        Assert.assertNotNull(codeRetourService);
+        Assert.assertEquals(CodeRetourService.RETOUR_OK, codeRetourService);
+    }
+
+    /**
+     * Cas de test : Un client veut supprimer une des photos liées à son annonce, mais il n'a pas les droits
+     * On lui refuse l'accés
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonce_suppression_img.yml")
+    @ShouldMatchDataSet(value = "datasets/in/annonce_suppression_img.yml", excludeColumns = {"id",
+            "datemaj", "datecreation", "datenotation", "datenotification", "url"})
+    public void testSuppressPhotoAnnonceByClientNotAllowed() {
+        Integer codeRetourService = testSuppressionPhoto("bertrand");
+
+        Assert.assertNotNull(codeRetourService);
+        Assert.assertEquals(CodeRetourService.RETOUR_KO, codeRetourService);
+    }
+
+    private Integer testSuppressionPhoto(String loginDemandeur) {
+        ImageDTO imageDTO = new ImageDTO();
+        imageDTO.setUrl("https://res.cloudinary.com/lescastors/image/upload/v1427874120/test/zbeod6tioi6yrphpco39.jpg");
+        SuppressionPhotoDTO suppressionPhotoDTO = new SuppressionPhotoDTO();
+        suppressionPhotoDTO.setLoginDemandeur("pebronne");
+        suppressionPhotoDTO.setHashID("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
+        suppressionPhotoDTO.setImageASupprimer(imageDTO);
+
+        return annonceServiceREST.suppressionPhoto(suppressionPhotoDTO);
+    }
+
+    private List<ImageDTO> testGetPhoto(String login) {
         DemandeAnnonceDTO demandeAnnonceDTO = new DemandeAnnonceDTO();
         demandeAnnonceDTO.setHashID("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
         demandeAnnonceDTO.setLoginDemandeur(login);
 
-        return  annonceServiceREST.getPhotos(demandeAnnonceDTO);
+        return annonceServiceREST.getPhotos(demandeAnnonceDTO);
     }
 
     private void testAjoutPhoto(String login, int codeRetourAttendu) {

@@ -838,7 +838,7 @@ public class GestionAnnonceFacade {
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public List<ImageDTO> getPhotos(DemandeAnnonceDTO demandeAnnonceDTO) {
 
-        if(LOGGER.isDebugEnabled()){
+        if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Début de la récupération des photos d'une annonce {}", demandeAnnonceDTO);
         }
 
@@ -849,16 +849,10 @@ public class GestionAnnonceFacade {
         //Calcul du role
         String rolesDemandeur = utilisateurFacade.getUtilisateurRoles(demandeAnnonceDTO.getLoginDemandeur());
 
-        List<Image> images = null;
+        List<Image> images = photoService.getImagesByHashIDByLoginDemandeur(rolesDemandeur, hashID, loginDemandeur);
 
-        if(rolesUtils.checkIfClientWithString(rolesDemandeur)){
-            images = imageDAO.getImageByHashIDByClient(hashID, loginDemandeur);
-        }else if(rolesUtils.checkIfAdminWithString(rolesDemandeur)){
-            images = imageDAO.getImageByHashID(hashID);
-        }
-
-        if(images == null){
-            if(LOGGER.isErrorEnabled()){
+        if (images == null) {
+            if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("Impossible de trouver les photos correspondantes à l'annonce {}", demandeAnnonceDTO);
             }
             return new ArrayList<>();
@@ -868,17 +862,34 @@ public class GestionAnnonceFacade {
         ModelMapper mapper = new ModelMapper();
         List<ImageDTO> imageDTOs = new ArrayList<>();
 
-        for(Image image : images){
+        for (Image image : images) {
             ImageDTO imageDTO = new ImageDTO();
             mapper.map(image, imageDTO);
             imageDTOs.add(imageDTO);
         }
 
-        //TODO : Lancer une requete avec les deux parametre => Select image by hash by
-        // TODO suite : logindemandeur si c'est un client, Sinon juste par hash (admin) (voir methode util pour droit)
-        //TODO : checker si resultat nulle si ok traduire l'entité en DTO puis renvoyer.
-
         return imageDTOs;
+    }
+
+    /**
+     * Récupération de toutes les photos d'une annonce avec vérificatin des droits
+     *
+     * @param suppressionPhotoDTO L'hash id + le login du demandeur
+     * @return La liste des objets images appartenant à l'annonce.
+     */
+    @POST
+    @Path(WsPath.GESTION_ANNONCE_SERVICE_SUPPRESSION_PHOTO)
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public Integer suppressionPhoto(SuppressionPhotoDTO suppressionPhotoDTO) {
+        //TODO : Si null => Code Retour pas les droits
+        //TODO : Recherche de la photo
+        //TODO : Suppression de la photo
+        //TODO : Retour service
+
+        String rolesDemandeur = utilisateurFacade.getUtilisateurRoles(suppressionPhotoDTO.getLoginDemandeur());
+        List<Image> images = photoService.getImagesByHashIDByLoginDemandeur(rolesDemandeur, suppressionPhotoDTO.getHashID(), suppressionPhotoDTO.getLoginDemandeur());
+
+        return CodeRetourService.RETOUR_KO;
     }
 
     /**

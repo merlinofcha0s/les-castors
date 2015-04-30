@@ -362,4 +362,20 @@ public class AnnonceServiceREST implements Serializable {
         }
         return imageDTOs;
     }
+
+    public Integer suppressionPhoto(SuppressionPhotoDTO suppressionPhotoDTO) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Début appel service de suppression d'une photo d'une annonce.....");
+        }
+
+        String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_ANNONCE_SERVICE_PATH,
+                WsPath.GESTION_ANNONCE_SERVICE_SUPPRESSION_PHOTO, suppressionPhotoDTO);
+
+        Integer codeRetourService =  Integer.valueOf(objectInJSON);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Fin appel service de recuperation d'une photo d'une annonce.");
+        }
+        return codeRetourService;
+    }
 }
