@@ -1,41 +1,44 @@
 <wicket:panel>
     <div class="row-fluid">
-        <div
-                class="span12 module_cont module_gallery"
-                wicket:id="photosContainer">
-            <div class="bg_title">
-                <h2 class="headInModule" wicket:id="titleContainer">Photos du chantier</h2>
-            </div>
+        <div wicket:id="transparentMarkupForPhotosAjax">
             <div
-                    class="list-of-images"
-                    id="galleriePhotoAnnonce">
-                <div
-                        class="gallery_item view"
-                        wicket:id="imagesView">
-                    <a
-                            href=""
-                            class="prettyPhoto"
-                            wicket:id="thumbnails">
-                        <img
-                                class="gallery-stand-img img-ratio"
-                                src=""
-                                alt=""
-                                wicket:id="photo"/>
-                    </a>
+                    class="span12 module_cont module_gallery"
+                    wicket:id="photosContainer">
+                <div class="bg_title">
+                    <h2 class="headInModule" wicket:id="titleContainer">Photos du chantier</h2>
                 </div>
+                <div
+                        class="list-of-images"
+                        id="galleriePhotoAnnonce">
+                    <div class="gallery_item view" wicket:id="imagesView">
+                        <div wicket:id="imageWithOptions">
+                            <a href="" class="prettyPhoto" wicket:id="thumbnails">
+                                <img class="gallery-stand-img img-ratio" src="" alt="" wicket:id="photo"/>
+                            </a>
+
+                            <div wicket:id="imageOptions">
+                                <a href="" wicket:id="supprimerImage">
+                                    <div class="glyphAnnonce icon-Trash">
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+            </div>
+
+            <div
+                    class="span12"
+                    wicket:id="aucunePhotoContainer">
+                <div class="bg_title">
+                    <h2 class="headInModule">Photos du chantier</h2>
+                </div>
+                <div
+                        wicket:id="aucunePhoto"
+                        id="aucunePhoto"></div>
                 <div class="clear"></div>
             </div>
-        </div>
-        <div
-                class="span12"
-                wicket:id="aucunePhotoContainer">
-            <div class="bg_title">
-                <h2 class="headInModule">Photos du chantier</h2>
-            </div>
-            <div
-                    wicket:id="aucunePhoto"
-                    id="aucunePhoto"></div>
-            <div class="clear"></div>
         </div>
     </div>
     <div class="row-fluid">

@@ -5,6 +5,7 @@ import fr.batimen.core.enums.PropertiesFileGeneral;
 import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.ImageDTO;
 import fr.batimen.dto.aggregate.AjoutPhotoDTO;
+import fr.batimen.dto.aggregate.SuppressionPhotoDTO;
 import fr.batimen.web.app.constants.FeedbackMessageLevel;
 import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.client.behaviour.FileFieldValidatorAndLoaderBehaviour;
@@ -13,6 +14,7 @@ import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.ws.client.service.AnnonceServiceREST;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.ComponentTag;
@@ -47,6 +49,8 @@ public class PhotosContainer extends Panel {
     private boolean canAdd;
     private String idAnnonce;
     private WebMarkupContainer photosContainer;
+    private WebMarkupContainer aucunePhotoContainer;
+    private WebMarkupContainer transparentMarkupForPhotosAjax;
     private ListView<ImageDTO> imagesView;
 
     @Inject
@@ -96,19 +100,69 @@ public class PhotosContainer extends Panel {
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void populateItem(ListItem<ImageDTO> item) {
+            protected void populateItem(final ListItem<ImageDTO> item) {
                 final ImageDTO imageDTO = item.getModelObject();
+                WebMarkupContainer imageWithOptions = new WebMarkupContainer("imageWithOptions") {
+
+                    @Override
+                    protected void onComponentTag(ComponentTag tag) {
+                        super.onComponentTag(tag);
+                        if (canAdd) {
+                            tag.put("style", "height:165px;");
+                        } else {
+                            tag.remove("style");
+                        }
+                    }
+                };
+
+                WebMarkupContainer imageOptions = new WebMarkupContainer("imageOptions") {
+                    @Override
+                    public boolean isVisible() {
+                        return canAdd;
+                    }
+                };
+
+                AjaxLink<Void> supprimerImage = new AjaxLink<Void>("supprimerImage") {
+                    @Override
+                    public void onClick(AjaxRequestTarget target) {
+                        String loginDemandeur = authentication.getCurrentUserInfo().getLogin();
+
+                        SuppressionPhotoDTO suppressionPhotoDTO = new SuppressionPhotoDTO();
+                        suppressionPhotoDTO.setHashID(idAnnonce);
+                        suppressionPhotoDTO.setLoginDemandeur(loginDemandeur);
+                        suppressionPhotoDTO.setImageASupprimer(item.getModelObject());
+
+                        Integer codeRetour = annonceServiceREST.suppressionPhoto(suppressionPhotoDTO);
+
+                        if (codeRetour.equals(CodeRetourService.RETOUR_OK)) {
+                            updatePhotoContainer(loginDemandeur, target);
+                            target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Suppression effectuée !", FeedbackMessageLevel.SUCCESS));
+                        } else {
+                            target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Problème durant la suppression de la photo sur le serveur, veuillez réessayer ultérieurement", FeedbackMessageLevel.ERROR));
+                        }
+                    }
+
+                    @Override
+                    protected void onComponentTag(ComponentTag tag) {
+                        super.onComponentTag(tag);
+                        tag.put("style", "overflow:visible;");
+                    }
+                };
+
                 ExternalLink linkOnPhoto = new ExternalLink("thumbnails", imageDTO.getUrl());
                 Image imageHtml = new Image("photo", new Model<String>(imageDTO.getUrl()));
                 imageHtml.add(new AttributeModifier("src", imageDTO.getUrl()));
+
+                imageOptions.add(supprimerImage);
                 linkOnPhoto.add(imageHtml);
-                item.add(linkOnPhoto);
+                imageWithOptions.add(linkOnPhoto, imageOptions);
+                item.add(imageWithOptions);
             }
         };
 
         photosContainer.add(imagesView, titleContainer);
 
-        WebMarkupContainer aucunePhotoContainer = new WebMarkupContainer("aucunePhotoContainer") {
+        aucunePhotoContainer = new WebMarkupContainer("aucunePhotoContainer") {
 
             private static final long serialVersionUID = 1L;
 
@@ -118,10 +172,15 @@ public class PhotosContainer extends Panel {
             }
         };
 
+        aucunePhotoContainer.setOutputMarkupId(true);
+
         Label aucunePhoto = new Label("aucunePhoto", "Aucune photo du chantier pour le moment :(");
         aucunePhotoContainer.add(aucunePhoto);
 
-        add(photosContainer, aucunePhotoContainer);
+        transparentMarkupForPhotosAjax = new WebMarkupContainer("transparentMarkupForPhotosAjax");
+        transparentMarkupForPhotosAjax.setOutputMarkupId(true);
+        transparentMarkupForPhotosAjax.add(photosContainer, aucunePhotoContainer);
+        add(transparentMarkupForPhotosAjax);
     }
 
     private void initAjoutPhotoSection() {
@@ -172,20 +231,15 @@ public class PhotosContainer extends Panel {
                     } else if (codeRetour.equals(CodeRetourService.RETOUR_KO)) {
                         target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Problème durant le chargement des photos sur le serveur, veuillez réessayer ultérieurement", FeedbackMessageLevel.ERROR));
                     } else {
-                        //Récuperation des nouvelles urls des photos.
-                        DemandeAnnonceDTO demandeAnnonceDTO = new DemandeAnnonceDTO();
-                        demandeAnnonceDTO.setHashID(idAnnonce);
-                        demandeAnnonceDTO.setLoginDemandeur(loginDemandeur);
-                        images = annonceServiceREST.getPhotos(demandeAnnonceDTO);
+                        updatePhotoContainer(loginDemandeur, target);
 
                         //Mise a jour des champs
                         ajoutImageDTO.getImages().clear();
                         photoField.getFileUploads().clear();
-                        imagesView.setList(images);
 
                         target.getPage().send(target.getPage(), Broadcast.BREADTH, new ClearFeedbackPanelEvent(target));
                     }
-                    target.add(photosContainer);
+
                     target.add(photoField);
                 }
             }
@@ -205,5 +259,15 @@ public class PhotosContainer extends Panel {
 
     public void setIdAnnonce(String idAnnonce) {
         this.idAnnonce = idAnnonce;
+    }
+
+    private void updatePhotoContainer(String loginDemandeur, AjaxRequestTarget target) {
+        //Récuperation des nouvelles urls des photos.
+        DemandeAnnonceDTO demandeAnnonceDTO = new DemandeAnnonceDTO();
+        demandeAnnonceDTO.setHashID(idAnnonce);
+        demandeAnnonceDTO.setLoginDemandeur(loginDemandeur);
+        images = annonceServiceREST.getPhotos(demandeAnnonceDTO);
+        imagesView.setList(images);
+        target.add(transparentMarkupForPhotosAjax);
     }
 }

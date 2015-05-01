@@ -102,4 +102,13 @@ public class Image extends AbstractEntity implements Serializable {
         return false;
     }
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Image{");
+        sb.append("id=").append(id);
+        sb.append(", url='").append(url).append('\'');
+        sb.append(", annonce=").append(annonce);
+        sb.append('}');
+        return sb.toString();
+    }
 }

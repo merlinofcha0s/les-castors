@@ -13,7 +13,9 @@ import fr.batimen.ws.dao.ArtisanDAO;
 import fr.batimen.ws.dao.ClientDAO;
 import fr.batimen.ws.entity.Annonce;
 import fr.batimen.ws.entity.Client;
+import fr.batimen.ws.entity.Image;
 import fr.batimen.ws.service.NotificationService;
+import fr.batimen.ws.service.PhotoService;
 import org.junit.Assert;
 
 import javax.ejb.TransactionAttribute;
@@ -26,8 +28,8 @@ import java.util.List;
 
 /**
  * Classe contenant le code de test quand celui ci est utilisé a plusieurs endroits.
- *
- *
+ * <p/>
+ * <p/>
  * Created by Casaucau on 30/04/2015.
  */
 @ApplicationScoped
@@ -52,14 +54,39 @@ public class AnnonceServiceTest {
     @Inject
     private AnnonceServiceTest annonceServiceTest;
 
-    public Integer testSuppressionPhoto(String loginDemandeur) {
+    @Inject
+    private PhotoService photoService;
+
+    public Integer testSuppressionPhoto(String loginDemandeur, boolean allowed) {
+
+        List<Image> images = null;
+        String hashID = "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21";
+        if (allowed) {
+            testAjoutPhoto(loginDemandeur, CodeRetourService.RETOUR_OK);
+            //On prends tjr les photos de pebronne pour le cas ou on test avec l'admin
+            images = photoService.getImagesByHashIDByLoginDemandeur("particulier", hashID, "pebronne");
+            Assert.assertEquals(3, images.size());
+        }
+        
         ImageDTO imageDTO = new ImageDTO();
-        imageDTO.setUrl("https://res.cloudinary.com/lescastors/image/upload/v1427874120/test/zbeod6tioi6yrphpco39.jpg");
+
+        if (!allowed) {
+            imageDTO.setUrl("https://res.cloudinary.com/lescastors/image/upload/v1427874120/test/zbeod6tici6yrphpco39.jpg");
+        } else {
+            imageDTO.setUrl(images.get(0).getUrl());
+        }
+
         SuppressionPhotoDTO suppressionPhotoDTO = new SuppressionPhotoDTO();
         suppressionPhotoDTO.setLoginDemandeur(loginDemandeur);
-        suppressionPhotoDTO.setHashID("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
+        suppressionPhotoDTO.setHashID(hashID);
         suppressionPhotoDTO.setImageASupprimer(imageDTO);
-        return annonceServiceREST.suppressionPhoto(suppressionPhotoDTO);
+
+        Integer codeRetourService = annonceServiceREST.suppressionPhoto(suppressionPhotoDTO);
+
+        images = photoService.getImagesByHashIDByLoginDemandeur("particulier", hashID, "pebronne");
+        Assert.assertEquals(2, images.size());
+
+        return codeRetourService;
     }
 
     public List<ImageDTO> testGetPhoto(String login) {

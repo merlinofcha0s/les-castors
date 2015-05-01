@@ -815,7 +815,7 @@ public class GestionAnnonceFacade {
         Integer nbPhotosTotale = annonceRajouterPhoto.getImages().size() + files.size();
         Integer nbPhotosMaxParAnnonce = Integer.valueOf(PropertiesFileGeneral.GENERAL.getProperties().getProperty("gen.max.number.file.annonce"));
 
-        if(nbPhotosTotale > nbPhotosMaxParAnnonce){
+        if (nbPhotosTotale > nbPhotosMaxParAnnonce) {
             if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("Dépassement du nombre de photos autorisées par annonce {}", nbPhotosTotale);
             }
@@ -898,20 +898,21 @@ public class GestionAnnonceFacade {
         List<Image> images = photoService.getImagesByHashIDByLoginDemandeur(rolesDemandeur, suppressionPhotoDTO.getHashID(), suppressionPhotoDTO.getLoginDemandeur());
 
         //Si c'est images est null ce que l'utilisateur n'a pas les droits
-        if(images == null){
+        if (images == null) {
             return CodeRetourService.RETOUR_KO;
         }
 
         boolean deleteAtLeastOne = false;
 
-        for(Image image : images){
-          if(image.getUrl().equals(suppressionPhotoDTO.getImageASupprimer().getUrl())){
-              imageDAO.delete(image);
-              deleteAtLeastOne = true;
-          }
+        for (Image image : images) {
+            if (image.getUrl().equals(suppressionPhotoDTO.getImageASupprimer().getUrl())) {
+                imageDAO.delete(image);
+                photoService.supprimerPhotoDansCloud(image);
+                deleteAtLeastOne = true;
+            }
         }
 
-        if(!deleteAtLeastOne){
+        if (!deleteAtLeastOne) {
             return CodeRetourService.RETOUR_KO;
         }
 

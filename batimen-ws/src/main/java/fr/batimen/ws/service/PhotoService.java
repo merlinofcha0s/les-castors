@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.ejb.*;
 import javax.inject.Inject;
 
+import com.cloudinary.api.ApiResponse;
 import fr.batimen.dto.ImageDTO;
 import fr.batimen.ws.dao.ImageDAO;
 import fr.batimen.ws.entity.Annonce;
@@ -51,10 +52,9 @@ public class PhotoService {
 
         List<String> urlPhotosInCloud = new LinkedList<String>();
 
-        Cloudinary cloudinary = cloudinaryService.getCloudinaryInstance();
-
         Map<String, Object> options = new HashMap<String, Object>();
 
+        Cloudinary cloudinary = cloudinaryService.getCloudinaryInstance();
         if (cloudinaryService.isInTestMode()) {
             options.put(CloudinaryService.FOLDER_PARAM, "test");
         }
@@ -64,9 +64,9 @@ public class PhotoService {
             try {
                 uploadResults = cloudinary.uploader().upload(photo, options);
                 urlPhotosInCloud.add(uploadResults.get(CloudinaryService.SECURE_URL_PARAM));
-            } catch (IOException e) {
+            } catch (IOException | NullPointerException e) {
                 if (LOGGER.isErrorEnabled()) {
-                    LOGGER.error("Probleme durant l'upload de la photo vers le cloud", e);
+                    LOGGER.error("Problème durant l'upload de la photo vers le cloud", e);
                 }
             }
         }
@@ -74,9 +74,39 @@ public class PhotoService {
     }
 
     /**
+     * Supprime une image de cloudinary
+     * <p/>
+     *
+     * @param imageASupprimer L'entité a supprimer.
+     * @return True si la suppression c'est bien passé ou true si on est en test mode.
+     */
+    public boolean supprimerPhotoDansCloud(Image imageASupprimer) {
+        List<String> imageSupprToCloud = new LinkedList<>();
+
+        String idImage = cloudinaryService.getImageID(imageASupprimer);
+
+        imageSupprToCloud.add(idImage);
+
+        Cloudinary cloudinary = cloudinaryService.getCloudinaryInstance();
+
+        ApiResponse response;
+        try {
+            response = cloudinary.api().deleteResources(imageSupprToCloud, new HashMap());
+        } catch (Exception e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Un problème est survenue lors de la suppression d'une photo dans cloudinary {}", imageASupprimer.toString(), e);
+            }
+            return false;
+        }
+
+        return cloudinaryService.verificationSuppressionCloudinary(response, idImage);
+    }
+
+
+    /**
      * Persist l'url des images en BDD
      *
-     * @param annonce l'annonce auquel sont rattachés les images
+     * @param annonce   l'annonce auquel sont rattachés les images
      * @param imageUrls La liste des urls des images
      */
     @TransactionAttribute(TransactionAttributeType.MANDATORY)
@@ -96,7 +126,7 @@ public class PhotoService {
      * Check les droits du demandeur et dans le cas d'un client verifie qu'il possede bien l'annonce.
      *
      * @param rolesDemandeur Le role du demandeur
-     * @param hashID L'identifiant unique de l'annonce
+     * @param hashID         L'identifiant unique de l'annonce
      * @param loginDemandeur Le login du demandeur de l'operation
      * @return L'ensemble des images de l'annonce si pas les droits => null
      */

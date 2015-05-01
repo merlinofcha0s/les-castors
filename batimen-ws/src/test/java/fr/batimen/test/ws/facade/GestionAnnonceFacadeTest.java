@@ -703,10 +703,10 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
      */
     @Test
     @UsingDataSet("datasets/in/annonce_suppression_img.yml")
-    @ShouldMatchDataSet(value = "datasets/out/annonce_suppression_img.yml", excludeColumns = {"id",
+    @ShouldMatchDataSet(value = "datasets/in/annonce_suppression_img.yml", excludeColumns = {"id",
             "datemaj", "datecreation", "datenotation", "datenotification", "url"})
     public void testSuppressPhotoAnnonceByClient() {
-        Integer codeRetourService = annonceServiceTest.testSuppressionPhoto("pebronne");
+        Integer codeRetourService = annonceServiceTest.testSuppressionPhoto("pebronne", true);
         Assert.assertNotNull(codeRetourService);
         Assert.assertEquals(CodeRetourService.RETOUR_OK, codeRetourService);
     }
@@ -716,10 +716,10 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
      */
     @Test
     @UsingDataSet("datasets/in/annonce_suppression_img.yml")
-    @ShouldMatchDataSet(value = "datasets/out/annonce_suppression_img.yml", excludeColumns = {"id",
+    @ShouldMatchDataSet(value = "datasets/in/annonce_suppression_img.yml", excludeColumns = {"id",
             "datemaj", "datecreation", "datenotation", "datenotification", "url"})
     public void testSuppressPhotoAnnonceByAdmin() {
-        Integer codeRetourService = annonceServiceTest.testSuppressionPhoto("admin");
+        Integer codeRetourService = annonceServiceTest.testSuppressionPhoto("admin", true);
         Assert.assertNotNull(codeRetourService);
         Assert.assertEquals(CodeRetourService.RETOUR_OK, codeRetourService);
     }
@@ -733,7 +733,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @ShouldMatchDataSet(value = "datasets/in/annonce_suppression_img.yml", excludeColumns = {"id",
             "datemaj", "datecreation", "datenotation", "datenotification", "url"})
     public void testSuppressPhotoAnnonceByClientNotAllowed() {
-        Integer codeRetourService = annonceServiceTest.testSuppressionPhoto("bertrand");
+        Integer codeRetourService = annonceServiceTest.testSuppressionPhoto("bertrand", false);
         Assert.assertNotNull(codeRetourService);
         Assert.assertEquals(CodeRetourService.RETOUR_KO, codeRetourService);
     }
