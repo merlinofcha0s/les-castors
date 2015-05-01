@@ -1,11 +1,14 @@
 package fr.batimen.web.client.component;
 
+import fr.batimen.core.constant.CodeRetourService;
+import fr.batimen.core.enums.PropertiesFileGeneral;
 import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.ImageDTO;
 import fr.batimen.dto.aggregate.AjoutPhotoDTO;
 import fr.batimen.web.app.constants.FeedbackMessageLevel;
 import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.client.behaviour.FileFieldValidatorAndLoaderBehaviour;
+import fr.batimen.web.client.event.ClearFeedbackPanelEvent;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.ws.client.service.AnnonceServiceREST;
 import org.apache.wicket.AttributeModifier;
@@ -44,6 +47,7 @@ public class PhotosContainer extends Panel {
     private boolean canAdd;
     private String idAnnonce;
     private WebMarkupContainer photosContainer;
+    private ListView<ImageDTO> imagesView;
 
     @Inject
     private AnnonceServiceREST annonceServiceREST;
@@ -65,7 +69,8 @@ public class PhotosContainer extends Panel {
     }
 
     private void initComponent() {
-        WebMarkupContainer photosContainer = new WebMarkupContainer("photosContainer") {
+
+        photosContainer = new WebMarkupContainer("photosContainer") {
 
             private static final long serialVersionUID = 1L;
 
@@ -86,7 +91,7 @@ public class PhotosContainer extends Panel {
             }
         };
 
-        ListView<ImageDTO> imagesView = new ListView<ImageDTO>("imagesView", images) {
+        imagesView = new ListView<ImageDTO>("imagesView", images) {
 
             private static final long serialVersionUID = 1L;
 
@@ -132,6 +137,7 @@ public class PhotosContainer extends Panel {
 
         final FileUploadField photoField = new FileUploadField("photoField");
         photoField.setMarkupId("photoField");
+        photoField.setOutputMarkupId(true);
         final FileFieldValidatorAndLoaderBehaviour fileFieldValidatorBehaviour = new FileFieldValidatorAndLoaderBehaviour();
         photoField.add(fileFieldValidatorBehaviour);
 
@@ -157,14 +163,30 @@ public class PhotosContainer extends Panel {
                     //Ajout des photos
                     ajoutImageDTO.setHashID(idAnnonce);
                     ajoutImageDTO.setLoginDemandeur(loginDemandeur);
-                    annonceServiceREST.ajouterPhoto(ajoutImageDTO);
+                    Integer codeRetour = annonceServiceREST.ajouterPhoto(ajoutImageDTO);
 
-                    //Récuperation des nouvelles urls des photos.
-                    DemandeAnnonceDTO demandeAnnonceDTO = new DemandeAnnonceDTO();
-                    demandeAnnonceDTO.setHashID(idAnnonce);
-                    demandeAnnonceDTO.setLoginDemandeur(loginDemandeur);
-                    images = annonceServiceREST.getPhotos(demandeAnnonceDTO);
+                    if (codeRetour.equals(CodeRetourService.ANNONCE_RETOUR_TROP_DE_PHOTOS)) {
+                        StringBuilder sbErrorTropPhoto = new StringBuilder("Vous dépassez le nombre de photos autorisées par annonce, veuillez en supprimer avant d'en rajouter ! (Pour rappel la limite est de ");
+                        sbErrorTropPhoto.append(PropertiesFileGeneral.GENERAL.getProperties().getProperty("gen.max.number.file.annonce")).append(" photos par annonce)");
+                        target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, sbErrorTropPhoto.toString(), FeedbackMessageLevel.ERROR));
+                    } else if (codeRetour.equals(CodeRetourService.RETOUR_KO)) {
+                        target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Problème durant le chargement des photos sur le serveur, veuillez réessayer ultérieurement", FeedbackMessageLevel.ERROR));
+                    } else {
+                        //Récuperation des nouvelles urls des photos.
+                        DemandeAnnonceDTO demandeAnnonceDTO = new DemandeAnnonceDTO();
+                        demandeAnnonceDTO.setHashID(idAnnonce);
+                        demandeAnnonceDTO.setLoginDemandeur(loginDemandeur);
+                        images = annonceServiceREST.getPhotos(demandeAnnonceDTO);
+
+                        //Mise a jour des champs
+                        ajoutImageDTO.getImages().clear();
+                        photoField.getFileUploads().clear();
+                        imagesView.setList(images);
+
+                        target.getPage().send(target.getPage(), Broadcast.BREADTH, new ClearFeedbackPanelEvent(target));
+                    }
                     target.add(photosContainer);
+                    target.add(photoField);
                 }
             }
 

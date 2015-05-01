@@ -18,6 +18,7 @@ public class CodeRetourService {
 
     // Code retour propre aux annonces
     public static final Integer ANNONCE_RETOUR_DUPLICATE = 10;
+    public static final Integer ANNONCE_RETOUR_TROP_DE_PHOTOS = 15;
 
     // Inscription Annonce artisan
     public static final Integer ANNONCE_RETOUR_ARTISAN_DEJA_INSCRIT = 11;
@@ -25,7 +26,7 @@ public class CodeRetourService {
     public static final Integer ANNONCE_RETOUR_ARTISAN_INTROUVABLE = 13;
     public static final Integer ANNONCE_RETOUR_INTROUVABLE = 14;
 
-    // Code Retour service propres aux client
+    // Code Retour service propres aux clients
     public static final Integer ANNONCE_RETOUR_DEJA_ACTIF = 10;
     public static final Integer ANNONCE_RETOUR_COMPTE_INEXISTANT = 11;
 

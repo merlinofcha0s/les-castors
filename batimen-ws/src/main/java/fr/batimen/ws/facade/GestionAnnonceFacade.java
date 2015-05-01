@@ -20,6 +20,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import fr.batimen.core.enums.PropertiesFileGeneral;
 import fr.batimen.dto.ImageDTO;
 import fr.batimen.dto.aggregate.*;
 import fr.batimen.ws.mapper.AnnonceMap;
@@ -806,6 +807,19 @@ public class GestionAnnonceFacade {
                 LOGGER.error("Impossible de trouver l'annonce avec le compte demandé, Détails : {}", ajoutPhotoDTO.toString());
             }
             return CodeRetourService.RETOUR_KO;
+        }
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Calcul du nombre de photos qui peuvent etre uploader avant d'atteindre la limite");
+        }
+        Integer nbPhotosTotale = annonceRajouterPhoto.getImages().size() + files.size();
+        Integer nbPhotosMaxParAnnonce = Integer.valueOf(PropertiesFileGeneral.GENERAL.getProperties().getProperty("gen.max.number.file.annonce"));
+
+        if(nbPhotosTotale > nbPhotosMaxParAnnonce){
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Dépassement du nombre de photos autorisées par annonce {}", nbPhotosTotale);
+            }
+            return CodeRetourService.ANNONCE_RETOUR_TROP_DE_PHOTOS;
         }
 
         if (LOGGER.isDebugEnabled()) {

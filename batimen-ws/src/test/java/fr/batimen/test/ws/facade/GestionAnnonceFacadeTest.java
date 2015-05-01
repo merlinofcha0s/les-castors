@@ -623,6 +623,17 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     }
 
     /**
+     * Cas de test : Un client veut rajouter des photos à son annonce, mais il a déjà cinq photos a son annonce, le webservice refuse.
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonce_limite_photo.yml")
+    @ShouldMatchDataSet(value = "datasets/in/annonce_limite_photo.yml", excludeColumns = {"id",
+            "datemaj", "datecreation", "datenotation", "datenotification", "url"})
+    public void testAjoutPhotoParClientTropDePhoto() {
+        annonceServiceTest.testAjoutPhoto("pebronne", CodeRetourService.ANNONCE_RETOUR_TROP_DE_PHOTOS);
+    }
+
+    /**
      * Cas de test : Un client veut rajouter des photos à son annonce, tout se passe comme prévu
      */
     @Test

@@ -815,3 +815,8 @@ table tr td .error {
 	float: right;
 	margin-top: 10px;
 }
+
+.img-ratio{
+	width: 200px;
+	height: 135px;
+}

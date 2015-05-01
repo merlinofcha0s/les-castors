@@ -1,5 +1,6 @@
 package fr.batimen.web.client.master;
 
+import fr.batimen.web.client.event.*;
 import org.apache.shiro.SecurityUtils;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Session;
@@ -31,10 +32,6 @@ import fr.batimen.web.client.behaviour.LoginDialogBehaviour;
 import fr.batimen.web.client.component.BatimenFeedbackPanel;
 import fr.batimen.web.client.component.LinkLabel;
 import fr.batimen.web.client.component.WaiterModal;
-import fr.batimen.web.client.event.Event;
-import fr.batimen.web.client.event.FeedBackPanelEvent;
-import fr.batimen.web.client.event.LoginDialogEvent;
-import fr.batimen.web.client.event.LoginEvent;
 import fr.batimen.web.client.extend.Accueil;
 import fr.batimen.web.client.extend.member.client.MesAnnonces;
 import fr.batimen.web.client.extend.nouveau.artisan.NouveauArtisan;
@@ -44,9 +41,8 @@ import fr.batimen.web.client.modal.AuthentificationModal;
 /**
  * Page principal de l'application dans laquelle tous les autres panels seront
  * contenues
- * 
+ *
  * @author Casaucau Cyril
- * 
  */
 public abstract class MasterPage extends WebPage {
 
@@ -72,7 +68,6 @@ public abstract class MasterPage extends WebPage {
 
     /**
      * Constructeur par defaut, initialise les composants de base de la page
-     * 
      */
     public MasterPage() {
         super();
@@ -99,20 +94,16 @@ public abstract class MasterPage extends WebPage {
 
     /**
      * Constructeur a utiliser obligatoirement quand on instantie une page
-     * 
-     * @param metaDescription
-     *            rempli le contenue de la balise meta content de la page
-     * @param metaKeywords
-     *            Rempli le contenu de la balise meta keyword
-     * @param title
-     *            Utilisé pour remplir la balise title et le titre principal de
-     *            la page
-     * @param isPageWithTitleHeader
-     *            est ce que la page doit avoir un bandeau en dessous du menu
-     *            avec le titre de la page ?
+     *
+     * @param metaDescription       rempli le contenue de la balise meta content de la page
+     * @param metaKeywords          Rempli le contenu de la balise meta keyword
+     * @param title                 Utilisé pour remplir la balise title et le titre principal de
+     *                              la page
+     * @param isPageWithTitleHeader est ce que la page doit avoir un bandeau en dessous du menu
+     *                              avec le titre de la page ?
      */
     public MasterPage(String metaDescription, String metaKeywords, String title, boolean isPageWithTitleHeader,
-            String adresseImgBackground) {
+                      String adresseImgBackground) {
         this();
         this.metaDescription = metaDescription;
         this.metaKeywords = metaKeywords;
@@ -144,13 +135,10 @@ public abstract class MasterPage extends WebPage {
     /**
      * Permet d'afficher un titre et une image de fond dynamiquement sur chaque
      * page
-     * 
-     * @param isPageWithTitleHeader
-     *            Est ce qu'on veut un titre avec un fond ?
-     * @param title
-     *            Le titre de la page
-     * @param adresseImgBackGround
-     *            L'image de fond que l'on veut afficher
+     *
+     * @param isPageWithTitleHeader Est ce qu'on veut un titre avec un fond ?
+     * @param title                 Le titre de la page
+     * @param adresseImgBackGround  L'image de fond que l'on veut afficher
      */
     private void initTitleHeader(final boolean isPageWithTitleHeader, String title, String adresseImgBackGround) {
         WebMarkupContainer containerTitleHeader = new WebMarkupContainer("containerTitleHeader") {
@@ -338,7 +326,7 @@ public abstract class MasterPage extends WebPage {
     /**
      * Fix wicket : prends en charge les <!--[if IE 7 ]><html class="ie ie7"
      * lang="en"> <![endif]--> du template de maniere programmatic
-     * 
+     *
      * @return les classes CSS qui vont bien avec le navigateur
      */
     private IModel<String> getCSSHtmlTagClass() {
@@ -395,12 +383,10 @@ public abstract class MasterPage extends WebPage {
 
     /**
      * Génére une balise meta de maniere custom.
-     * 
-     * @param content
-     *            Le type de contenu (en general text/html)
+     *
+     * @param content   Le type de contenu (en general text/html)
      * @param httpEquiv
-     * @param name
-     *            Type de la balise meta
+     * @param name      Type de la balise meta
      * @return objet wicket qui permet de generer la balise link
      */
     private StringHeaderItem addStringToMetaResourcesToHeader(String content, String httpEquiv, String name) {
@@ -453,6 +439,11 @@ public abstract class MasterPage extends WebPage {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Affichage message dans le feedBackPanel");
             }
+
+            if (feedBackPanelGeneral.hasFeedbackMessage()) {
+                feedBackPanelGeneral.getFeedbackMessages().clear();
+            }
+
             if (!feedBackPanelUpdate.getMessage().isEmpty()) {
                 feedBackPanelGeneral.sendMessage(feedBackPanelUpdate.getMessage(),
                         feedBackPanelUpdate.getMessageLevel());
@@ -472,7 +463,17 @@ public abstract class MasterPage extends WebPage {
 
             update.getTarget().add(this);
             getLoginDialog().close(update.getTarget());
+        } else if (event.getPayload() instanceof ClearFeedbackPanelEvent) {
+
+            Event update = (Event) event.getPayload();
+
+            if (feedBackPanelGeneral.hasFeedbackMessage()) {
+                feedBackPanelGeneral.getFeedbackMessages().clear();
+            }
+
+            update.getTarget().add(feedBackPanelGeneral);
         }
+
     }
 
     public static void triggerEventFeedBackPanel(AjaxRequestTarget target, String message) {

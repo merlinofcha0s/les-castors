@@ -1,19 +1,18 @@
 package fr.batimen.core.security;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
-import java.security.SecureRandom;
-import java.util.Random;
-
+import com.lambdaworks.crypto.SCryptUtil;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.lambdaworks.crypto.SCryptUtil;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
+import java.security.SecureRandom;
+import java.util.Random;
 
 /**
  * Classe d'aide au hash (mot de passe, activation compte, etc)

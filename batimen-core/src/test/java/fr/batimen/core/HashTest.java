@@ -1,11 +1,10 @@
 package fr.batimen.core;
 
+import fr.batimen.core.security.HashHelper;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import fr.batimen.core.security.HashHelper;
 
 public class HashTest {
 
