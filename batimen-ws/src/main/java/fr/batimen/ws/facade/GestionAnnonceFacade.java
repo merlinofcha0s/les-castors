@@ -783,8 +783,8 @@ public class GestionAnnonceFacade {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public List<ImageDTO> ajouterPhoto(@FormDataParam("content") final InputStream content,
-                                @FormDataParam("files") final List<FormDataBodyPart> files,
-                                @FormDataParam("files") final List<FormDataContentDisposition> filesDetail) {
+                                       @FormDataParam("files") final List<FormDataBodyPart> files,
+                                       @FormDataParam("files") final List<FormDataContentDisposition> filesDetail) {
 
         AjoutPhotoDTO ajoutPhotoDTO = DeserializeJsonHelper.deserializeDTO(
                 FluxUtils.getJsonByInputStream(content), AjoutPhotoDTO.class);
@@ -899,20 +899,12 @@ public class GestionAnnonceFacade {
 
         for (int i = 0; i < images.size(); i++) {
             Image image = images.get(i);
-            boolean isRemoved = false;
 
             if (image.getUrl().equals(suppressionPhotoDTO.getImageASupprimer().getUrl())) {
                 imageDAO.delete(image);
                 images.remove(i);
                 photoService.supprimerPhotoDansCloud(image);
                 deleteAtLeastOne = true;
-                isRemoved = true;
-            }
-
-            if (!isRemoved) {
-                ImageDTO imageDTO = new ImageDTO();
-                mapper.map(image, imageDTO);
-                imageDTOs.add(imageDTO);
             }
         }
 
@@ -920,13 +912,14 @@ public class GestionAnnonceFacade {
             try {
                 throw new BackendException("Aucune image supprimée, ca ne doit pas arriver");
             } catch (BackendException e) {
-                if(LOGGER.isErrorEnabled()){
+                if (LOGGER.isErrorEnabled()) {
                     LOGGER.error("Problème avec le service de suppresson d'image", e);
                 }
                 return imageDTOs;
             }
+        } else {
+            imageDTOs = photoService.imageToImageDTO(new HashSet<>(images));
         }
-
         return imageDTOs;
     }
 

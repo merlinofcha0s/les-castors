@@ -13,6 +13,9 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.File;
+import java.net.URL;
+
 import static com.ninja_squad.dbsetup.Operations.sequenceOf;
 import static fr.batimen.web.selenium.dataset.AnnonceDataset.*;
 
@@ -74,5 +77,33 @@ public class TestModificationAnnonce extends AbstractITTest {
         WebElement checkUntilBackToAnnonce = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("h2.headInModule")));
         Assert.assertNotNull(checkUntilBackToAnnonce);
+    }
+
+    /**
+     * Cas de test : Le client accede a son annonce en se connectant a les
+     * castors, puis rajoute une photo, tout doit bien se passer.
+     */
+    @Test
+    public void testAjoutPhotoModificationAnnonce() {
+        testAjoutPhotoIT();
+    }
+
+    private void testAjoutPhotoIT() {
+        driver.findElement(By.linkText("Modifier votre annonce")).click();
+        WebElement checkUntilAfficheModifPage = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("html.ie.ie9 body div.main_wrapper div.content_wrapper div.container div.content_block.no-sidebar.row div.fl-container.span12 div.row div.posts-block.span12 div.contentarea div.row-fluid div.span10.module_cont.module_text_area.module_small_padding div div.row-fluid div.span12 div.bg_title h4.headInModule")));
+        Assert.assertNotNull(checkUntilAfficheModifPage);
+
+        ClassLoader classLoader = getClass().getClassLoader();
+        File file = new File(classLoader.getResource("img/castor.jpg").getFile());
+
+        WebElement El = driver.findElement(By.id("photoField"));
+        El.sendKeys(file.getAbsolutePath());
+        driver.findElement(By.id("envoyerPhotos")).click();
+
+        Boolean checkUntilModifOK = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("span.box_type4"),
+                        "Photo(s) rajoutée(s) avec succés"));
+        Assert.assertTrue(checkUntilModifOK);
     }
 }

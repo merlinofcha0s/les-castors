@@ -1,8 +1,6 @@
 package fr.batimen.web.client.component;
 
-import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.enums.PropertiesFileGeneral;
-import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.ImageDTO;
 import fr.batimen.dto.aggregate.AjoutPhotoDTO;
 import fr.batimen.dto.aggregate.SuppressionPhotoDTO;
@@ -58,8 +56,6 @@ public class PhotosContainer extends Panel {
 
     @Inject
     private Authentication authentication;
-
-    private AjoutPhotoDTO ajoutImageDTO = new AjoutPhotoDTO();
 
     public PhotosContainer(String id, List<ImageDTO> images, String title, String baliseTypeTitle, boolean canAdd) {
         super(id);
@@ -132,10 +128,11 @@ public class PhotosContainer extends Panel {
                         suppressionPhotoDTO.setLoginDemandeur(loginDemandeur);
                         suppressionPhotoDTO.setImageASupprimer(item.getModelObject());
 
-                        Integer codeRetour = annonceServiceREST.suppressionPhoto(suppressionPhotoDTO);
+                        int sizeBefore = images.size();
+                        images = annonceServiceREST.suppressionPhoto(suppressionPhotoDTO);
 
-                        if (codeRetour.equals(CodeRetourService.RETOUR_OK)) {
-                            updatePhotoContainer(loginDemandeur, target);
+                        updatePhotoContainer(loginDemandeur, target);
+                        if (sizeBefore != images.size()) {
                             target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Suppression effectuée !", FeedbackMessageLevel.SUCCESS));
                         } else {
                             target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Problème durant la suppression de la photo sur le serveur, veuillez réessayer ultérieurement", FeedbackMessageLevel.ERROR));
@@ -150,7 +147,7 @@ public class PhotosContainer extends Panel {
                 };
 
                 ExternalLink linkOnPhoto = new ExternalLink("thumbnails", imageDTO.getUrl());
-                Image imageHtml = new Image("photo", new Model<String>(imageDTO.getUrl()));
+                Image imageHtml = new Image("photo", new Model<>(imageDTO.getUrl()));
                 imageHtml.add(new AttributeModifier("src", imageDTO.getUrl()));
 
                 imageOptions.add(supprimerImage);
@@ -204,6 +201,7 @@ public class PhotosContainer extends Panel {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                final AjoutPhotoDTO ajoutImageDTO = new AjoutPhotoDTO();
                 for (FileUpload photo : photoField.getFileUploads()) {
                     try {
                         ajoutImageDTO.getImages().add(photo.writeToTempFile());
@@ -222,13 +220,14 @@ public class PhotosContainer extends Panel {
                     //Ajout des photos
                     ajoutImageDTO.setHashID(idAnnonce);
                     ajoutImageDTO.setLoginDemandeur(loginDemandeur);
-                    Integer codeRetour = annonceServiceREST.ajouterPhoto(ajoutImageDTO);
+                    int sizeBefore = images.size();
+                    images = annonceServiceREST.ajouterPhoto(ajoutImageDTO);
 
-                    if (codeRetour.equals(CodeRetourService.ANNONCE_RETOUR_TROP_DE_PHOTOS)) {
+                    if (sizeBefore == images.size()) {
                         StringBuilder sbErrorTropPhoto = new StringBuilder("Vous dépassez le nombre de photos autorisées par annonce, veuillez en supprimer avant d'en rajouter ! (Pour rappel la limite est de ");
                         sbErrorTropPhoto.append(PropertiesFileGeneral.GENERAL.getProperties().getProperty("gen.max.number.file.annonce")).append(" photos par annonce)");
                         target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, sbErrorTropPhoto.toString(), FeedbackMessageLevel.ERROR));
-                    } else if (codeRetour.equals(CodeRetourService.RETOUR_KO)) {
+                    } else if (images.isEmpty()) {
                         target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Problème durant le chargement des photos sur le serveur, veuillez réessayer ultérieurement", FeedbackMessageLevel.ERROR));
                     } else {
                         updatePhotoContainer(loginDemandeur, target);
@@ -238,6 +237,7 @@ public class PhotosContainer extends Panel {
                         photoField.getFileUploads().clear();
 
                         target.getPage().send(target.getPage(), Broadcast.BREADTH, new ClearFeedbackPanelEvent(target));
+                        target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Photo(s) rajoutée(s) avec succés", FeedbackMessageLevel.SUCCESS));
                     }
 
                     target.add(photoField);
@@ -251,6 +251,8 @@ public class PhotosContainer extends Panel {
             }
         };
 
+        envoyerPhotos.setMarkupId("envoyerPhotos");
+
         addPhotoForm.add(photoField, envoyerPhotos);
         ajoutPhotoContainer.add(addPhotoForm);
 
@@ -262,11 +264,6 @@ public class PhotosContainer extends Panel {
     }
 
     private void updatePhotoContainer(String loginDemandeur, AjaxRequestTarget target) {
-        //Récuperation des nouvelles urls des photos.
-        DemandeAnnonceDTO demandeAnnonceDTO = new DemandeAnnonceDTO();
-        demandeAnnonceDTO.setHashID(idAnnonce);
-        demandeAnnonceDTO.setLoginDemandeur(loginDemandeur);
-        images = annonceServiceREST.getPhotos(demandeAnnonceDTO);
         imagesView.setList(images);
         target.add(transparentMarkupForPhotosAjax);
     }
