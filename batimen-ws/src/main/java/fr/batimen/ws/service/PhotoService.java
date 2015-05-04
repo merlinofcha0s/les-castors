@@ -1,25 +1,21 @@
 package fr.batimen.ws.service;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-
-import javax.ejb.*;
-import javax.inject.Inject;
-
+import com.cloudinary.Cloudinary;
 import com.cloudinary.api.ApiResponse;
 import fr.batimen.dto.ImageDTO;
 import fr.batimen.ws.dao.ImageDAO;
 import fr.batimen.ws.entity.Annonce;
 import fr.batimen.ws.entity.Image;
 import fr.batimen.ws.utils.RolesUtils;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.cloudinary.Cloudinary;
+import javax.ejb.*;
+import javax.inject.Inject;
+import java.io.File;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * Classe de gestion des photos
@@ -139,5 +135,18 @@ public class PhotoService {
             images = imageDAO.getImageByHashID(hashID);
         }
         return images;
+    }
+
+    public List<ImageDTO> imageToImageDTO(Set<Image> images) {
+        List<ImageDTO> imageDTOs = new ArrayList<>();
+        ModelMapper mapper = new ModelMapper();
+
+        for (Image image : images) {
+            ImageDTO imageDTO = new ImageDTO();
+            mapper.map(image, imageDTO);
+            imageDTOs.add(imageDTO);
+        }
+
+        return imageDTOs;
     }
 }

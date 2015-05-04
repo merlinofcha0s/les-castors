@@ -57,7 +57,7 @@ public class AnnonceServiceTest {
     @Inject
     private PhotoService photoService;
 
-    public Integer testSuppressionPhoto(String loginDemandeur, boolean allowed) {
+    public List<ImageDTO> testSuppressionPhoto(String loginDemandeur, boolean allowed) {
 
         List<Image> images = null;
         String hashID = "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21";
@@ -81,12 +81,12 @@ public class AnnonceServiceTest {
         suppressionPhotoDTO.setHashID(hashID);
         suppressionPhotoDTO.setImageASupprimer(imageDTO);
 
-        Integer codeRetourService = annonceServiceREST.suppressionPhoto(suppressionPhotoDTO);
+        List<ImageDTO> imageDTOs = annonceServiceREST.suppressionPhoto(suppressionPhotoDTO);
 
         images = photoService.getImagesByHashIDByLoginDemandeur("particulier", hashID, "pebronne");
         Assert.assertEquals(2, images.size());
 
-        return codeRetourService;
+        return imageDTOs;
     }
 
     public List<ImageDTO> testGetPhoto(String login) {
@@ -97,7 +97,7 @@ public class AnnonceServiceTest {
         return annonceServiceREST.getPhotos(demandeAnnonceDTO);
     }
 
-    public void testAjoutPhoto(String login, int codeRetourAttendu) {
+    public void testAjoutPhoto(String login, int nbImageAttendu) {
         // On recupére la photo dans les ressources de la webapp de test
         ClassLoader classLoader = getClass().getClassLoader();
         File file = new File(classLoader.getResource("img/castor.jpg").getFile());
@@ -107,10 +107,10 @@ public class AnnonceServiceTest {
         ajoutPhotoDTO.setHashID("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
         ajoutPhotoDTO.getImages().add(file);
 
-        int codeRetour = annonceServiceREST.ajouterPhoto(ajoutPhotoDTO);
+        List<ImageDTO> imageDTOs = annonceServiceREST.ajouterPhoto(ajoutPhotoDTO);
 
-        Assert.assertNotNull(codeRetour);
-        Assert.assertEquals(codeRetourAttendu, codeRetour);
+        Assert.assertNotNull(imageDTOs);
+        Assert.assertEquals(nbImageAttendu, imageDTOs.size());
     }
 
     public void testModificationAnnonce(TypeCompte typeCompte, String loginDemandeur, Integer codeRetourServiceAttendu) {

@@ -782,7 +782,7 @@ public class GestionAnnonceFacade {
     @Path(WsPath.GESTION_ANNONCE_SERVICE_AJOUT_PHOTO)
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public Integer ajouterPhoto(@FormDataParam("content") final InputStream content,
+    public List<ImageDTO> ajouterPhoto(@FormDataParam("content") final InputStream content,
                                 @FormDataParam("files") final List<FormDataBodyPart> files,
                                 @FormDataParam("files") final List<FormDataContentDisposition> filesDetail) {
 
@@ -806,7 +806,7 @@ public class GestionAnnonceFacade {
             if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("Impossible de trouver l'annonce avec le compte demandé, Détails : {}", ajoutPhotoDTO.toString());
             }
-            return CodeRetourService.RETOUR_KO;
+            return new ArrayList<>();
         }
 
         if (LOGGER.isDebugEnabled()) {
@@ -819,7 +819,7 @@ public class GestionAnnonceFacade {
             if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("Dépassement du nombre de photos autorisées par annonce {}", nbPhotosTotale);
             }
-            return CodeRetourService.ANNONCE_RETOUR_TROP_DE_PHOTOS;
+            return photoService.imageToImageDTO(annonceRajouterPhoto.getImages());
         }
 
         if (LOGGER.isDebugEnabled()) {
@@ -837,7 +837,7 @@ public class GestionAnnonceFacade {
         }
         photoService.persistPhoto(annonceRajouterPhoto, urlsPhoto);
 
-        return CodeRetourService.RETOUR_OK;
+        return photoService.imageToImageDTO(annonceRajouterPhoto.getImages());
     }
 
 
@@ -871,17 +871,7 @@ public class GestionAnnonceFacade {
             return new ArrayList<>();
         }
 
-        //Préparation de la sortie
-        ModelMapper mapper = new ModelMapper();
-        List<ImageDTO> imageDTOs = new ArrayList<>();
-
-        for (Image image : images) {
-            ImageDTO imageDTO = new ImageDTO();
-            mapper.map(image, imageDTO);
-            imageDTOs.add(imageDTO);
-        }
-
-        return imageDTOs;
+        return photoService.imageToImageDTO(new HashSet<Image>(images));
     }
 
     /**
@@ -893,30 +883,51 @@ public class GestionAnnonceFacade {
     @POST
     @Path(WsPath.GESTION_ANNONCE_SERVICE_SUPPRESSION_PHOTO)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public Integer suppressionPhoto(SuppressionPhotoDTO suppressionPhotoDTO) {
+    public List<ImageDTO> suppressionPhoto(SuppressionPhotoDTO suppressionPhotoDTO) {
         String rolesDemandeur = utilisateurFacade.getUtilisateurRoles(suppressionPhotoDTO.getLoginDemandeur());
         List<Image> images = photoService.getImagesByHashIDByLoginDemandeur(rolesDemandeur, suppressionPhotoDTO.getHashID(), suppressionPhotoDTO.getLoginDemandeur());
+        List<ImageDTO> imageDTOs = new LinkedList<>();
+        ModelMapper mapper = new ModelMapper();
+
 
         //Si c'est images est null ce que l'utilisateur n'a pas les droits
         if (images == null) {
-            return CodeRetourService.RETOUR_KO;
+            return new ArrayList<>();
         }
 
         boolean deleteAtLeastOne = false;
 
-        for (Image image : images) {
+        for (int i = 0; i < images.size(); i++) {
+            Image image = images.get(i);
+            boolean isRemoved = false;
+
             if (image.getUrl().equals(suppressionPhotoDTO.getImageASupprimer().getUrl())) {
                 imageDAO.delete(image);
+                images.remove(i);
                 photoService.supprimerPhotoDansCloud(image);
                 deleteAtLeastOne = true;
+                isRemoved = true;
+            }
+
+            if (!isRemoved) {
+                ImageDTO imageDTO = new ImageDTO();
+                mapper.map(image, imageDTO);
+                imageDTOs.add(imageDTO);
             }
         }
 
         if (!deleteAtLeastOne) {
-            return CodeRetourService.RETOUR_KO;
+            try {
+                throw new BackendException("Aucune image supprimée, ca ne doit pas arriver");
+            } catch (BackendException e) {
+                if(LOGGER.isErrorEnabled()){
+                    LOGGER.error("Problème avec le service de suppresson d'image", e);
+                }
+                return imageDTOs;
+            }
         }
 
-        return CodeRetourService.RETOUR_OK;
+        return imageDTOs;
     }
 
     /**

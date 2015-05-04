@@ -18,9 +18,8 @@ import java.util.List;
 
 /**
  * Classe d'appel au webservice concernant les annonces.
- * 
+ *
  * @author Casaucau Cyril
- * 
  */
 @Named("annonceServiceREST")
 public class AnnonceServiceREST implements Serializable {
@@ -34,12 +33,11 @@ public class AnnonceServiceREST implements Serializable {
 
     /**
      * Appel le webservice pour creer l'annonce.
-     * 
-     * @param nouvelleAnnonce
-     *            l'objet a envoyé au webservice pour qu'il puisse créer
-     *            l'annonce.
+     *
+     * @param nouvelleAnnonce l'objet a envoyé au webservice pour qu'il puisse créer
+     *                        l'annonce.
      * @return Constant.CODE_SERVICE_RETOUR_OK ou
-     *         Constant.CODE_SERVICE_RETOUR_KO
+     * Constant.CODE_SERVICE_RETOUR_KO
      */
     public Integer creationAnnonce(CreationAnnonceDTO nouvelleAnnonce) {
 
@@ -61,14 +59,13 @@ public class AnnonceServiceREST implements Serializable {
 
     /**
      * Appel le webservice pour creer l'annonce. <br/>
-     * 
+     * <p/>
      * Contient des images, l'appel au web service est fait en mode multipart
-     * 
-     * @param nouvelleAnnonce
-     *            l'objet a envoyé au webservice pour qu'il puisse créer
-     *            l'annonce.
+     *
+     * @param nouvelleAnnonce l'objet a envoyé au webservice pour qu'il puisse créer
+     *                        l'annonce.
      * @return Constant.CODE_SERVICE_RETOUR_OK ou
-     *         Constant.CODE_SERVICE_RETOUR_KO
+     * Constant.CODE_SERVICE_RETOUR_KO
      */
     public Integer creationAnnonceAvecImage(CreationAnnonceDTO nouvelleAnnonce) {
 
@@ -91,9 +88,8 @@ public class AnnonceServiceREST implements Serializable {
 
     /**
      * Appel le webservice pour recuperer les annonces par login client.
-     * 
-     * @param login
-     *            L'identifiant du client
+     *
+     * @param login L'identifiant du client
      * @return
      */
     public List<AnnonceDTO> getAnnonceByLoginForClient(String login) {
@@ -118,12 +114,11 @@ public class AnnonceServiceREST implements Serializable {
      * Permet de récuperer une annonce dans le but de l'afficher <br/>
      * Récupère également les informations sur les artisans et les entreprise
      * inscrites a cette annonce
-     * 
-     * @param demandeAnnonceDTO
-     *            le hashID avec le login du demandeur dans le but de vérifier
-     *            les droits.
+     *
+     * @param demandeAnnonceDTO le hashID avec le login du demandeur dans le but de vérifier
+     *                          les droits.
      * @return l'ensemble des informations qui permettent d'afficher l'annonce
-     *         correctement
+     * correctement
      */
     public AnnonceAffichageDTO getAnnonceByIDForAffichage(DemandeAnnonceDTO demandeAnnonceDTO) {
 
@@ -145,9 +140,8 @@ public class AnnonceServiceREST implements Serializable {
 
     /**
      * Permet de mettre à jour le nombre de consultation d'une annonce.
-     * 
-     * @param nbConsultationDTO
-     *            le hashID avec le nb de consultation
+     *
+     * @param nbConsultationDTO le hashID avec le nb de consultation
      * @return 0 si c'est OK
      */
     public Integer updateNbConsultationAnnonce(NbConsultationDTO nbConsultationDTO) {
@@ -170,10 +164,9 @@ public class AnnonceServiceREST implements Serializable {
 
     /**
      * Permet de supprimer une annonce.
-     * 
-     * @param demandeAnnonceDTO
-     *            le hashID avec le login du demandeur dans le but de vérifier
-     *            les droits.
+     *
+     * @param demandeAnnonceDTO le hashID avec le login du demandeur dans le but de vérifier
+     *                          les droits.
      * @return 0 si c'est OK
      */
     public Integer suppressionAnnonce(DemandeAnnonceDTO demandeAnnonceDTO) {
@@ -197,9 +190,8 @@ public class AnnonceServiceREST implements Serializable {
     /**
      * Permet de selectionner un entreprise pour une annonce.
      *
-     * @param demandeAnnonceDTO
-     *            le hashID avec le login du demandeur dans le but de vérifier
-     *            les droits ainsi que le siret de l'entreprise.
+     * @param demandeAnnonceDTO le hashID avec le login du demandeur dans le but de vérifier
+     *                          les droits ainsi que le siret de l'entreprise.
      * @return 0 si c'est OK
      */
     public Integer selectOneEnterprise(AnnonceSelectEntrepriseDTO demandeAnnonceDTO) {
@@ -222,10 +214,9 @@ public class AnnonceServiceREST implements Serializable {
 
     /**
      * Permet de selectionner un entreprise pour une annonce.
-     * 
-     * @param demandeAnnonceDTO
-     *            le hashID avec le login du demandeur dans le but de vérifier
-     *            les droits ainsi que le siret de l'entreprise.
+     *
+     * @param demandeAnnonceDTO le hashID avec le login du demandeur dans le but de vérifier
+     *                          les droits ainsi que le siret de l'entreprise.
      * @return 0 si c'est OK
      */
     public Integer inscriptionUnArtisan(DemandeAnnonceDTO demandeAnnonceDTO) {
@@ -248,10 +239,9 @@ public class AnnonceServiceREST implements Serializable {
 
     /**
      * Permet de déselectionner une entreprise pour une annonce.
-     * 
-     * @param desinscriptionAnnonceDTO
-     *            le hashID avec le login du demandeur dans le but de vérifier
-     *            les droits ainsi que le siret de l'entreprise.
+     *
+     * @param desinscriptionAnnonceDTO le hashID avec le login du demandeur dans le but de vérifier
+     *                                 les droits ainsi que le siret de l'entreprise.
      * @return 0 si c'est OK
      */
     public Integer desinscriptionArtisan(DesinscriptionAnnonceDTO desinscriptionAnnonceDTO) {
@@ -274,11 +264,10 @@ public class AnnonceServiceREST implements Serializable {
 
     /**
      * Service qui permet à un client de noter un artisan<br/>
-     * 
+     * <p/>
      * Fais passer l'annonce en mode terminer
-     * 
-     * @param noterArtisanDTO
-     *            Objet permettant de valider la note de l'artisan
+     *
+     * @param noterArtisanDTO Objet permettant de valider la note de l'artisan
      * @return {@link CodeRetourService}
      */
     public Integer noterUnArtisan(NoterArtisanDTO noterArtisanDTO) {
@@ -299,11 +288,10 @@ public class AnnonceServiceREST implements Serializable {
 
     /**
      * Service qui permet à un client de pouvoir modifier son annonce<br/>
-     *
+     * <p/>
      * Génére une notification à destination des artisans inscrits
      *
-     * @param modificationAnnonceDTO
-     *            Objet permettant de récuperer les informations qui ont été modifiée par le client
+     * @param modificationAnnonceDTO Objet permettant de récuperer les informations qui ont été modifiée par le client
      * @return {@link CodeRetourService}
      */
     public Integer modifierAnnonce(ModificationAnnonceDTO modificationAnnonceDTO) {
@@ -324,14 +312,13 @@ public class AnnonceServiceREST implements Serializable {
 
     /**
      * Service qui permet à un client de pouvoir ajouter / rajouter des photos à son annonce<br/>
-     *
+     * <p/>
      * Génére une notification à destination des artisans inscrits
      *
-     * @param ajoutPhotoDTO
-     *            Objet permettant de récuperer les photos et informations qui ont été transmise par le client
+     * @param ajoutPhotoDTO Objet permettant de récuperer les photos et informations qui ont été transmise par le client
      * @return {@link CodeRetourService}
      */
-    public Integer ajouterPhoto(AjoutPhotoDTO ajoutPhotoDTO) {
+    public List<ImageDTO> ajouterPhoto(AjoutPhotoDTO ajoutPhotoDTO) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Début appel service d'ajout de photo pour une annonce.....");
         }
@@ -339,12 +326,12 @@ public class AnnonceServiceREST implements Serializable {
         String objectInJSON = wsConnector.sendRequestWithFile(WsPath.GESTION_ANNONCE_SERVICE_PATH,
                 WsPath.GESTION_ANNONCE_SERVICE_AJOUT_PHOTO, ajoutPhotoDTO.getImages(), ajoutPhotoDTO);
 
-        Integer modificationOK = Integer.valueOf(objectInJSON);
+        List<ImageDTO> imageDTOs = DeserializeJsonHelper.deserializeImagesDTOList(objectInJSON);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Fin appel service d'ajout de photo  pour une annonce.");
         }
-        return modificationOK;
+        return imageDTOs;
     }
 
     public List<ImageDTO> getPhotos(DemandeAnnonceDTO demandeAnnonceDTO) {
@@ -363,7 +350,7 @@ public class AnnonceServiceREST implements Serializable {
         return imageDTOs;
     }
 
-    public Integer suppressionPhoto(SuppressionPhotoDTO suppressionPhotoDTO) {
+    public List<ImageDTO> suppressionPhoto(SuppressionPhotoDTO suppressionPhotoDTO) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Début appel service de suppression d'une photo d'une annonce.....");
         }
@@ -371,11 +358,11 @@ public class AnnonceServiceREST implements Serializable {
         String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_ANNONCE_SERVICE_PATH,
                 WsPath.GESTION_ANNONCE_SERVICE_SUPPRESSION_PHOTO, suppressionPhotoDTO);
 
-        Integer codeRetourService =  Integer.valueOf(objectInJSON);
+        List<ImageDTO> imageDTOs = DeserializeJsonHelper.deserializeImagesDTOList(objectInJSON);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Fin appel service de recuperation d'une photo d'une annonce.");
         }
-        return codeRetourService;
+        return imageDTOs;
     }
 }

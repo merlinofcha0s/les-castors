@@ -619,7 +619,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @ShouldMatchDataSet(value = "datasets/out/ajout_photo_annonce.yml", excludeColumns = {"id",
             "datemaj", "datecreation", "datenotation", "datenotification", "url"})
     public void testAjoutPhotoParClient() {
-        annonceServiceTest.testAjoutPhoto("pebronne", CodeRetourService.RETOUR_OK);
+        annonceServiceTest.testAjoutPhoto("pebronne", 2);
     }
 
     /**
@@ -630,7 +630,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @ShouldMatchDataSet(value = "datasets/in/annonce_limite_photo.yml", excludeColumns = {"id",
             "datemaj", "datecreation", "datenotation", "datenotification", "url"})
     public void testAjoutPhotoParClientTropDePhoto() {
-        annonceServiceTest.testAjoutPhoto("pebronne", CodeRetourService.ANNONCE_RETOUR_TROP_DE_PHOTOS);
+        annonceServiceTest.testAjoutPhoto("pebronne", 5);
     }
 
     /**
@@ -641,7 +641,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @ShouldMatchDataSet(value = "datasets/out/ajout_photo_annonce.yml", excludeColumns = {"id",
             "datemaj", "datecreation", "datenotation", "datenotification", "url"})
     public void testAjoutPhotoParAdmin() {
-        annonceServiceTest.testAjoutPhoto("admin", CodeRetourService.RETOUR_OK);
+        annonceServiceTest.testAjoutPhoto("admin", 2);
     }
 
     /**
@@ -652,7 +652,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @ShouldMatchDataSet(value = "datasets/in/annonces_by_id.yml", excludeColumns = {"id",
             "datemaj", "datecreation", "datenotation", "datenotification", "url"})
     public void testAjoutPhotoClientNotAllowed() {
-        annonceServiceTest.testAjoutPhoto("bertrand", CodeRetourService.RETOUR_KO);
+        annonceServiceTest.testAjoutPhoto("bertrand", 0);
     }
 
     /**
@@ -706,9 +706,9 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @ShouldMatchDataSet(value = "datasets/in/annonce_suppression_img.yml", excludeColumns = {"id",
             "datemaj", "datecreation", "datenotation", "datenotification", "url"})
     public void testSuppressPhotoAnnonceByClient() {
-        Integer codeRetourService = annonceServiceTest.testSuppressionPhoto("pebronne", true);
-        Assert.assertNotNull(codeRetourService);
-        Assert.assertEquals(CodeRetourService.RETOUR_OK, codeRetourService);
+        List<ImageDTO> imageDTOs = annonceServiceTest.testSuppressionPhoto("pebronne", true);
+        Assert.assertNotNull(imageDTOs);
+        Assert.assertEquals(1, imageDTOs.size());
     }
 
     /**
@@ -719,9 +719,9 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @ShouldMatchDataSet(value = "datasets/in/annonce_suppression_img.yml", excludeColumns = {"id",
             "datemaj", "datecreation", "datenotation", "datenotification", "url"})
     public void testSuppressPhotoAnnonceByAdmin() {
-        Integer codeRetourService = annonceServiceTest.testSuppressionPhoto("admin", true);
-        Assert.assertNotNull(codeRetourService);
-        Assert.assertEquals(CodeRetourService.RETOUR_OK, codeRetourService);
+        List<ImageDTO> imageDTOs = annonceServiceTest.testSuppressionPhoto("admin", true);
+        Assert.assertNotNull(imageDTOs);
+        Assert.assertEquals(1, imageDTOs.size());
     }
 
     /**
@@ -733,8 +733,8 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @ShouldMatchDataSet(value = "datasets/in/annonce_suppression_img.yml", excludeColumns = {"id",
             "datemaj", "datecreation", "datenotation", "datenotification", "url"})
     public void testSuppressPhotoAnnonceByClientNotAllowed() {
-        Integer codeRetourService = annonceServiceTest.testSuppressionPhoto("bertrand", false);
-        Assert.assertNotNull(codeRetourService);
-        Assert.assertEquals(CodeRetourService.RETOUR_KO, codeRetourService);
+        List<ImageDTO> imageDTOs = annonceServiceTest.testSuppressionPhoto("bertrand", false);
+        Assert.assertNotNull(imageDTOs);
+        Assert.assertEquals(0, imageDTOs.size());
     }
 }
