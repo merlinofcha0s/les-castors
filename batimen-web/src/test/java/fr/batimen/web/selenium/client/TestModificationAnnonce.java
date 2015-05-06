@@ -88,6 +88,24 @@ public class TestModificationAnnonce extends AbstractITTest {
         testAjoutPhotoIT();
     }
 
+    /**
+     * Cas de test : Le client accede a son annonce en se connectant a les
+     * castors, puis rajoute une photo, puis la supprime
+     */
+    @Test
+    public void testSuppressionPhotoModificationAnnonce() {
+        testAjoutPhotoIT();
+        //Clique sur le bouton supprimer la photo
+        driver.findElement(By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[3]/div[2]/div/div[1]/div/div/div[2]/div[1]/div/div/a/div")).click();
+
+        Boolean checkUntilModifOK = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("span.box_type4"),
+                        "Suppression effectuée !"));
+        Assert.assertTrue(checkUntilModifOK);
+    }
+
+
+
     private void testAjoutPhotoIT() {
         driver.findElement(By.linkText("Modifier votre annonce")).click();
         WebElement checkUntilAfficheModifPage = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))

@@ -16,6 +16,8 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
@@ -35,7 +37,10 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Created by Casaucau on 26/04/2015.
+ * Composant qui permet la gestion des photos du chantier client par les clients / admin
+ * Ajout, Suppression
+ *
+ * @author Casaucau Cyril
  */
 public class PhotosContainer extends Panel {
 
@@ -50,6 +55,9 @@ public class PhotosContainer extends Panel {
     private WebMarkupContainer aucunePhotoContainer;
     private WebMarkupContainer transparentMarkupForPhotosAjax;
     private ListView<ImageDTO> imagesView;
+
+    private final String refreshTooltipOnSuppressLink = "$('.suppress-link').tooltip()";
+    private final String refreshPrettyPhotoOnPicture = "$(\"a[class^='prettyPhoto']\").prettyPhoto();";
 
     @Inject
     private AnnonceServiceREST annonceServiceREST;
@@ -66,6 +74,12 @@ public class PhotosContainer extends Panel {
 
         initComponent();
         initAjoutPhotoSection();
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.render(OnDomReadyHeaderItem.forScript(refreshTooltipOnSuppressLink));
     }
 
     private void initComponent() {
@@ -266,5 +280,9 @@ public class PhotosContainer extends Panel {
     private void updatePhotoContainer(String loginDemandeur, AjaxRequestTarget target) {
         imagesView.setList(images);
         target.add(transparentMarkupForPhotosAjax);
+        //Reload de la tooltip sur les liens de suppression
+        target.appendJavaScript(refreshTooltipOnSuppressLink);
+        //Reload de pretty photo sur les photos client
+        target.appendJavaScript(refreshPrettyPhotoOnPicture);
     }
 }

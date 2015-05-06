@@ -88,7 +88,7 @@ public class TestAnnonce extends AbstractITTest {
                 .until(ExpectedConditions.visibilityOfElementLocated(By.id("containerContactMaster")));
         WebElement checkConditionImageAnnoncePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.visibilityOfElementLocated(By
-                        .xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[3]/div/div/div[2]/div[1]/a")));
+                        .xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[3]/div[1]/div/div/div[2]/div[1]/div/a")));
         assertNotNull(checkConditionAnnoncePresent);
         assertNotNull(checkConditionImageAnnoncePresent);
         assertEquals("Modifier votre annonce", driver.findElement(By.linkText("Modifier votre annonce")).getText());

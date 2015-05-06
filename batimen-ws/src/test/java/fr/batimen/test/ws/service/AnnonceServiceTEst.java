@@ -62,7 +62,7 @@ public class AnnonceServiceTest {
         List<Image> images = null;
         String hashID = "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21";
         if (allowed) {
-            testAjoutPhoto(loginDemandeur, CodeRetourService.RETOUR_OK);
+            testAjoutPhoto(loginDemandeur, 3);
             //On prends tjr les photos de pebronne pour le cas ou on test avec l'admin
             images = photoService.getImagesByHashIDByLoginDemandeur("particulier", hashID, "pebronne");
             Assert.assertEquals(3, images.size());

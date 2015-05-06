@@ -3,6 +3,7 @@ package fr.batimen.web.selenium.artisan;
 import static com.ninja_squad.dbsetup.Operations.sequenceOf;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -18,9 +19,8 @@ import fr.batimen.web.utils.UtilsSelenium;
 
 /**
  * Classe de cas de test concernant l'inscription d'un nouveau partenaire
- * 
+ *
  * @author Casaucau Cyril
- * 
  */
 public class TestNouveauPartenaire extends AbstractITTest {
 
@@ -36,7 +36,7 @@ public class TestNouveauPartenaire extends AbstractITTest {
     /**
      * Cas de test : L'utilisateur (artisan) crée son compte, l'operation doit
      * être un succés
-     * 
+     *
      * @throws InterruptedException
      */
     @Test
@@ -45,15 +45,15 @@ public class TestNouveauPartenaire extends AbstractITTest {
 
         // On selectionne un departement
         UtilsSelenium.selectionDepartement(driver);
-        if(browser.equals("ie")){
+        if (browser.equals("ie")) {
             Thread.sleep(1000);
         }
         etape2();
-        if(browser.equals("ie")){
+        if (browser.equals("ie")) {
             Thread.sleep(1000);
         }
         etape3();
-        if(browser.equals("ie")){
+        if (browser.equals("ie")) {
             Thread.sleep(1000);
         }
         etape4();
@@ -63,7 +63,7 @@ public class TestNouveauPartenaire extends AbstractITTest {
      * Cas de test : L'utilisateur (artisan) crée son compte, mais il n'est pas
      * sur des informations donc il revient sur les etapes précédentes,
      * l'operation doit être un succés
-     * 
+     *
      * @throws InterruptedException
      */
     @Test
@@ -81,7 +81,7 @@ public class TestNouveauPartenaire extends AbstractITTest {
         driver.findElement(By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div/div/form/a")).click();
         etape2();
         Thread.sleep(1000);
-        driver.findElement(By.xpath("//div[@id='batimenWizard']/ul/li[2]/span")).click();
+        driver.findElement(By.cssSelector("complete")).click();
         Thread.sleep(1000);
         etape2();
         Thread.sleep(1000);

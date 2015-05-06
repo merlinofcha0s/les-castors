@@ -708,7 +708,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     public void testSuppressPhotoAnnonceByClient() {
         List<ImageDTO> imageDTOs = annonceServiceTest.testSuppressionPhoto("pebronne", true);
         Assert.assertNotNull(imageDTOs);
-        Assert.assertEquals(1, imageDTOs.size());
+        Assert.assertEquals(2, imageDTOs.size());
     }
 
     /**
@@ -721,7 +721,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     public void testSuppressPhotoAnnonceByAdmin() {
         List<ImageDTO> imageDTOs = annonceServiceTest.testSuppressionPhoto("admin", true);
         Assert.assertNotNull(imageDTOs);
-        Assert.assertEquals(1, imageDTOs.size());
+        Assert.assertEquals(2, imageDTOs.size());
     }
 
     /**
