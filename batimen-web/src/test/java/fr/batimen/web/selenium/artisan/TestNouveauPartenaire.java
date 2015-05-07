@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
@@ -81,7 +82,7 @@ public class TestNouveauPartenaire extends AbstractITTest {
         driver.findElement(By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div/div/form/a")).click();
         etape2();
         Thread.sleep(1000);
-        driver.findElement(By.cssSelector("complete")).click();
+        driver.findElement(By.xpath("//div[@id='batimenWizard']/ul/li[2]/span")).click();
         Thread.sleep(1000);
         etape2();
         Thread.sleep(1000);
@@ -112,11 +113,17 @@ public class TestNouveauPartenaire extends AbstractITTest {
 
     private void etape3() throws InterruptedException {
         // Etape 3
-        driver.findElement(By.xpath("//label[@id='containerElectricite']/span")).click();
+        (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX)).until(ExpectedConditions
+                .elementToBeClickable(By.xpath("//label[@id='containerElectricite']/span")));
+
+        WebElement electricite = driver.findElement(By.xpath("//label[@id='containerElectricite']/span"));
+        electricite.sendKeys(Keys.CONTROL);
+        electricite.click();
+
         Thread.sleep(1000);
         // Etape 4 confirmation
         (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX)).until(ExpectedConditions
-                .visibilityOfElementLocated(By.xpath("//label[@id='containerDecorationMaconnerie']/span")));
+                .elementToBeClickable(By.xpath("//label[@id='containerDecorationMaconnerie']/span")));
         driver.findElement(By.xpath("//label[@id='containerDecorationMaconnerie']/span")).click();
         driver.findElement(By.id("nomComplet")).clear();
         driver.findElement(By.id("nomComplet")).sendKeys("Xav Entreprise");

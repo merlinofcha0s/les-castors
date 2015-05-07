@@ -1,5 +1,6 @@
 package fr.batimen.web.client.master;
 
+import fr.batimen.web.app.constants.FeedbackMessageLevel;
 import fr.batimen.web.client.event.*;
 import org.apache.shiro.SecurityUtils;
 import org.apache.wicket.AttributeModifier;
@@ -476,9 +477,10 @@ public abstract class MasterPage extends WebPage {
 
     }
 
-    public static void triggerEventFeedBackPanel(AjaxRequestTarget target, String message) {
+    public static void triggerEventFeedBackPanel(AjaxRequestTarget target, String message, FeedbackMessageLevel levelMessage) {
         FeedBackPanelEvent feedbackPanelEvent = new FeedBackPanelEvent(target);
         feedbackPanelEvent.setMessage(message);
+        feedbackPanelEvent.setMessageLevel(levelMessage);
         target.getPage().send(target.getPage(), Broadcast.EXACT, feedbackPanelEvent);
     }
 

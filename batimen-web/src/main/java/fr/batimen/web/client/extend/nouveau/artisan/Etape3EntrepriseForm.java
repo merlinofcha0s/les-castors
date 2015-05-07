@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import fr.batimen.web.app.constants.FeedbackMessageLevel;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
@@ -162,7 +163,7 @@ public class Etape3EntrepriseForm extends Form<CreationPartenaireDTO> {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 if (categorieSelectionnees.isEmpty()) {
-                    MasterPage.triggerEventFeedBackPanel(target, "Veuillez selectionner au moins une categorie");
+                    MasterPage.triggerEventFeedBackPanel(target, "Veuillez selectionner au moins une categorie", FeedbackMessageLevel.ERROR);
                 } else {
                     nouveauPartenaire.setNumeroEtape(4);
                     ChangementEtapeEventArtisan changementEtapeEvent = new ChangementEtapeEventArtisan(target,
