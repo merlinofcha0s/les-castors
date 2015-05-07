@@ -1,5 +1,6 @@
 package fr.batimen.dto;
 
+import java.awt.*;
 import java.util.Objects;
 
 import javax.validation.constraints.NotNull;
@@ -59,5 +60,13 @@ public class ImageDTO extends AbstractDTO {
             return Objects.equals(this.url, other.getUrl());
         }
         return false;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("ImageDTO{");
+        sb.append("url='").append(url).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }

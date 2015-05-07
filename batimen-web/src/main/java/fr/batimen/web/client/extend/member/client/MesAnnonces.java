@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import fr.batimen.web.app.constants.ParamsConstant;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -196,7 +197,7 @@ public final class MesAnnonces extends MasterPage {
                     @Override
                     public void onClick() {
                         PageParameters params = new PageParameters();
-                        params.add("idAnnonce", annonce.getHashID());
+                        params.add(ParamsConstant.idAnnonceParam, annonce.getHashID());
                         this.setResponsePage(Annonce.class, params);
                     }
 

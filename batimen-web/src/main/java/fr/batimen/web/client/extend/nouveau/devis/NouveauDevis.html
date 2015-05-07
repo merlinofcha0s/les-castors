@@ -1,275 +1,275 @@
 <wicket:head>
-	<link
-		rel="stylesheet"
-		type="text/css"
-		href="css/font_icons8.css" />
+    <link
+            rel="stylesheet"
+            type="text/css"
+            href="css/font_icons8.css"/>
 </wicket:head>
 <wicket:extend>
-	<div wicket:id="containerGeneral">
-		<div wicket:id="navigationWizard"></div>
-		<div wicket:id="mapFrance"></div>
-		<div wicket:id="etape2Categorie"></div>
-		<div wicket:id="containerQualification">
-			<div class="row-fluid">
-				<div class="span12 module_cont module_text_area module_small_padding">
-					<div class="bg_title">
-						<h4 class="headInModule">Renseignez les caracteristiques de l'annonce</h4>
-					</div>
-					<div class="bg_title">
-						<h5 class="headInModule">Description de votre annonce</h5>
-					</div>
-					<form wicket:id="formQualification">
-						<div class="span7 offset3">
+    <div wicket:id="containerGeneral">
+        <div wicket:id="navigationWizard"></div>
+        <div wicket:id="mapFrance"></div>
+        <div wicket:id="etape2Categorie"></div>
+        <div wicket:id="containerQualification">
+            <div class="row-fluid">
+                <div class="span12 module_cont module_text_area module_small_padding">
+                    <div class="bg_title">
+                        <h4 class="headInModule">Renseignez les caracteristiques de l'annonce</h4>
+                    </div>
+                    <div class="bg_title">
+                        <h5 class="headInModule">Description de votre annonce</h5>
+                    </div>
+                    <form wicket:id="formQualification">
+                        <div class="span7 offset3">
 							<textarea
-								wicket:id="description"
-								rows="6"
-								cols="500"
-								type="text"
-								name="descriptionDevisField"
-								id="descriptionDevisField"
-								value=""> </textarea>
-						</div>
-						<div class="clear"></div>
-						<div class="bg_title">
-							<h5 class="headInModule">Informations de votre annonce</h5>
-						</div>
-						<div class="span7 offset3">
-							<table class="tableBatimen">
-								<tr>
-									<th>Quelle sous catégorie métier recherchez vous ?</th>
-									<td><select
-										wicket:id="sousCategorie"
-										name="sousCategorieSelect"
-										id="sousCategorieSelect"></select></td>
-								</tr>
-								<tr>
-									<th>Comment souhaitez-vous être contacté ?</th>
-									<td><select
-										wicket:id="typeContact"
-										name="typeContactField"
-										id="typeContactField"></select></td>
-								</tr>
-								<tr>
-									<th>Quel est le délai d'intervention ?</th>
-									<td><select
-										wicket:id="delaiIntervention"
-										name="delaiInterventionField"
-										id="delaiInterventionField"></select></td>
-								</tr>
-								<tr class="fuelux">
-									<th>Quel est le type de travaux ?</th>
-									<td><span wicket:id="typeTravaux"> <label
-											class="radio"
-											id="radioTypeTravauxNeuf"> <input
-												type="radio"
-												wicket:id="typeTravaux.neuf"
-												id="typeTravauxNeuf">Neuf
-										</label> <label
-											class="radio"
-											id="radioTypeTravauxRenovation"> <input
-												type="radio"
-												wicket:id="typeTravaux.renovation"
-												id="typeTravauxRenovation">Rénovation
-										</label>
+                                    wicket:id="description"
+                                    rows="6"
+                                    cols="500"
+                                    type="text"
+                                    name="descriptionDevisField"
+                                    id="descriptionDevisField"
+                                    value=""> </textarea>
+                        </div>
+                        <div class="clear"></div>
+                        <div class="bg_title">
+                            <h5 class="headInModule">Informations de votre annonce</h5>
+                        </div>
+                        <div class="span7 offset3">
+                            <table class="tableBatimen">
+                                <tr>
+                                    <th>Quelle sous catégorie métier recherchez vous ?</th>
+                                    <td><select
+                                            wicket:id="sousCategorie"
+                                            name="sousCategorieSelect"
+                                            id="sousCategorieSelect"></select></td>
+                                </tr>
+                                <tr>
+                                    <th>Comment souhaitez-vous être contacté ?</th>
+                                    <td><select
+                                            wicket:id="typeContact"
+                                            name="typeContactField"
+                                            id="typeContactField"></select></td>
+                                </tr>
+                                <tr>
+                                    <th>Quel est le délai d'intervention ?</th>
+                                    <td><select
+                                            wicket:id="delaiIntervention"
+                                            name="delaiInterventionField"
+                                            id="delaiInterventionField"></select></td>
+                                </tr>
+                                <tr class="fuelux">
+                                    <th>Quel est le type de travaux ?</th>
+                                    <td><span wicket:id="typeTravaux"> <label
+                                            class="radio"
+                                            id="radioTypeTravauxNeuf"> <input
+                                            type="radio"
+                                            wicket:id="typeTravaux.neuf"
+                                            id="typeTravauxNeuf">Neuf
+                                    </label> <label
+                                            class="radio"
+                                            id="radioTypeTravauxRenovation"> <input
+                                            type="radio"
+                                            wicket:id="typeTravaux.renovation"
+                                            id="typeTravauxRenovation">Rénovation
+                                    </label>
 									</span></td>
-								</tr>
-								<tr>
-									<th>Quelle est l'adresse du chantier ?</th>
-									<td><input
-										wicket:id="adresse"
-										type="text"
-										name="adresseField"
-										id="adresseField"
-										value="" /></td>
-								</tr>
-								<tr>
-									<th>Quelle est le complément d'adresse du chantier ?</th>
-									<td><input
-										wicket:id="complementAdresse"
-										type="text"
-										name="adresseComplementField"
-										id="adresseComplementField"
-										value="" /></td>
-								</tr>
-								<tr>
-									<th>Quelle est le code postal du chantier ?</th>
-									<td><input
-										wicket:id="codePostal"
-										type="text"
-										name="codePostalField"
-										id="codePostalField"
-										value="" /></td>
-								</tr>
-								<tr>
-									<th>Quelle est la ville du chantier ?</th>
-									<td><input
-										wicket:id="ville"
-										type="text"
-										name="villeField"
-										id="villeField"
-										value="" /></td>
-								</tr>
-								<tr>
-									<th>Souhaitez-vous ajouter des photos à votre devis ?</th>
-									<td>
-										<input wicket:id="photos" type="file" multiple="multiple" />
-									</td>
-								</tr>
-							</table>
-							<div class="row-fluid">
-								<div class="span7">
-									<a
-										class="btn btn-info"
-										wicket:id="etapePrecedente3">Etape précédente</a>
-								</div>
-								<div class="span3">
-									<a
-										class="btn btn-info"
-										wicket:id="validateQualification">Etape suivante</a>
-								</div>
-							</div>
-							<div class="row-fluid">
-								<div class="span12">
-									<div id="champsObligatoire">
-										<span class='required'>*</span> : champs obligatoires
-									</div>
-								</div>
-							</div>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-		<div wicket:id="containerInscription">
-			<div class="row-fluid">
-				<div class="span12 module_cont module_text_area module_small_padding">
-					<div class="bg_title">
-						<h4 class="headInModule">Inscription / Connexion</h4>
-					</div>
-					<form wicket:id="formInscription">
-						<table class="tableBatimen">
-							<tr>
-								<th>Nom :</th>
-								<td><input
-									wicket:id="client.nom"
-									type="text"
-									name="nom"
-									id="nom"
-									value="" /></td>
-							</tr>
-							<tr>
-								<th>Prénom :</th>
-								<td><input
-									wicket:id="client.prenom"
-									type="text"
-									name="prenom"
-									id="prenom"
-									value="" /></td>
-							</tr>
-							<tr>
-								<th>Numéro de téléphone :</th>
-								<td><input
-									wicket:id="client.numeroTel"
-									type="text"
-									name="numeroTel"
-									id="numeroTel"
-									value="" /></td>
-							</tr>
-							<tr>
-								<th>Adresse mail :</th>
-								<td><input
-									wicket:id="client.email"
-									type="text"
-									name="email"
-									id="email"
-									value="" /></td>
-							</tr>
-							<tr>
-								<th>Identifiant :</th>
-								<td><input
-									wicket:id="client.login"
-									type="text"
-									name="login"
-									id="login"
-									value="" /></td>
-							</tr>
-							<tr wicket:id="oldPasswordContainer">
-								<th>Ancien mot de passe :</th>
-								<td><input
-									wicket:id="client.oldPassword"
-									type="password"
-									name="oldpassword"
-									id="oldpassword"
-									value="" /></td>
-							</tr>
-							<tr>
-								<th>Mot de passe :</th>
-								<td><input
-									wicket:id="client.password"
-									type="password"
-									name="password"
-									id="password"
-									value="" /></td>
-							</tr>
-							<tr>
-								<th>Confirmer le mot de passe :</th>
-								<td><input
-									wicket:id="confirmPassword"
-									type="password"
-									name="confirmPassword"
-									id="confirmPassword"
-									value="" /></td>
-							</tr>
-							<tr wicket:id="CGUContainer">
-								<th>J'accepte les <a
-									wicket:id="cguLink"
-									target="_blank">CGU</a></th>
-								<td><input
-									type="checkbox"
-									wicket:id="cguConfirmation" /></td>
-							</tr>
-						</table>
-						<div id="terminerAnnonce">
-							<a
-								class="btn btn-info"
-								wicket:id="etapePrecedente4">Etape précédente</a> <a
-								class="btn btn-info"
-								wicket:id="validateInscription">Terminer</a>
-						</div>
-						<div id="champsObligatoire">
-							<span class='required'>*</span> : champs obligatoires
-						</div>
-					</form>
-					<div id="dejaInscrit">
-						Vous possédez déjà un compte ? <a
-							wicket:id="connexion"
-							id="connexionEtape3">Connectez-vous</a>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div wicket:id="containerConfirmation">
-			<div class="row-fluid">
-				<div class="span12 module_cont module_text_area module_small_padding">
-					<div class="bg_title">
-						<h4 class="headInModule">Confirmation</h4>
-					</div>
-					<div id="confirmation">
-						<img
-							wicket:id="imageConfirmation"
-							src="img/check.png"
-							alt="ok" />
-						<h5 wicket:id="confirmation1"></h5>
-						<h5>
-							<span wicket:id="confirmation2"></span> <a wicket:id="contactezNous">contactez nous</a>
-						</h5>
-						<a
-							wicket:id="retourAccueil"
-							id="retourAccueil">Retour à l'accueil</a>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div wicket:id="contactezNous"></div>
+                                </tr>
+                                <tr>
+                                    <th>Quelle est l'adresse du chantier ?</th>
+                                    <td><input
+                                            wicket:id="adresse"
+                                            type="text"
+                                            name="adresseField"
+                                            id="adresseField"
+                                            value=""/></td>
+                                </tr>
+                                <tr>
+                                    <th>Quelle est le complément d'adresse du chantier ?</th>
+                                    <td><input
+                                            wicket:id="complementAdresse"
+                                            type="text"
+                                            name="adresseComplementField"
+                                            id="adresseComplementField"
+                                            value=""/></td>
+                                </tr>
+                                <tr>
+                                    <th>Quelle est le code postal du chantier ?</th>
+                                    <td><input
+                                            wicket:id="codePostal"
+                                            type="text"
+                                            name="codePostalField"
+                                            id="codePostalField"
+                                            value=""/></td>
+                                </tr>
+                                <tr>
+                                    <th>Quelle est la ville du chantier ?</th>
+                                    <td><input
+                                            wicket:id="ville"
+                                            type="text"
+                                            name="villeField"
+                                            id="villeField"
+                                            value=""/></td>
+                                </tr>
+                                <tr wicket:id="containerPhoto">
+                                    <th wicket:id="lblPhoto">Souhaitez-vous ajouter des photos à votre devis ?</th>
+                                    <td>
+                                        <input wicket:id="photos" type="file" multiple="multiple"/>
+                                    </td>
+                                </tr>
+                            </table>
+                            <div class="row-fluid">
+                                <div class="span7">
+                                    <a
+                                            class="btn btn-info"
+                                            wicket:id="etapePrecedente3">Etape précédente</a>
+                                </div>
+                                <div class="span3">
+                                    <a
+                                            class="btn btn-info"
+                                            wicket:id="validateQualification">Etape suivante</a>
+                                </div>
+                            </div>
+                            <div class="row-fluid">
+                                <div class="span12">
+                                    <div id="champsObligatoire">
+                                        <span class='required'>*</span> : champs obligatoires
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div wicket:id="containerInscription">
+            <div class="row-fluid">
+                <div class="span12 module_cont module_text_area module_small_padding">
+                    <div class="bg_title">
+                        <h4 class="headInModule">Inscription / Connexion</h4>
+                    </div>
+                    <form wicket:id="formInscription">
+                        <table class="tableBatimen">
+                            <tr>
+                                <th>Nom :</th>
+                                <td><input
+                                        wicket:id="client.nom"
+                                        type="text"
+                                        name="nom"
+                                        id="nom"
+                                        value=""/></td>
+                            </tr>
+                            <tr>
+                                <th>Prénom :</th>
+                                <td><input
+                                        wicket:id="client.prenom"
+                                        type="text"
+                                        name="prenom"
+                                        id="prenom"
+                                        value=""/></td>
+                            </tr>
+                            <tr>
+                                <th>Numéro de téléphone :</th>
+                                <td><input
+                                        wicket:id="client.numeroTel"
+                                        type="text"
+                                        name="numeroTel"
+                                        id="numeroTel"
+                                        value=""/></td>
+                            </tr>
+                            <tr>
+                                <th>Adresse mail :</th>
+                                <td><input
+                                        wicket:id="client.email"
+                                        type="text"
+                                        name="email"
+                                        id="email"
+                                        value=""/></td>
+                            </tr>
+                            <tr>
+                                <th>Identifiant :</th>
+                                <td><input
+                                        wicket:id="client.login"
+                                        type="text"
+                                        name="login"
+                                        id="login"
+                                        value=""/></td>
+                            </tr>
+                            <tr wicket:id="oldPasswordContainer">
+                                <th>Ancien mot de passe :</th>
+                                <td><input
+                                        wicket:id="client.oldPassword"
+                                        type="password"
+                                        name="oldpassword"
+                                        id="oldpassword"
+                                        value=""/></td>
+                            </tr>
+                            <tr>
+                                <th>Mot de passe :</th>
+                                <td><input
+                                        wicket:id="client.password"
+                                        type="password"
+                                        name="password"
+                                        id="password"
+                                        value=""/></td>
+                            </tr>
+                            <tr>
+                                <th>Confirmer le mot de passe :</th>
+                                <td><input
+                                        wicket:id="confirmPassword"
+                                        type="password"
+                                        name="confirmPassword"
+                                        id="confirmPassword"
+                                        value=""/></td>
+                            </tr>
+                            <tr wicket:id="CGUContainer">
+                                <th>J'accepte les <a
+                                        wicket:id="cguLink"
+                                        target="_blank">CGU</a></th>
+                                <td><input
+                                        type="checkbox"
+                                        wicket:id="cguConfirmation"/></td>
+                            </tr>
+                        </table>
+                        <div id="terminerAnnonce">
+                            <a
+                                    class="btn btn-info"
+                                    wicket:id="etapePrecedente4">Etape précédente</a> <a
+                                class="btn btn-info"
+                                wicket:id="validateInscription">Terminer</a>
+                        </div>
+                        <div id="champsObligatoire">
+                            <span class='required'>*</span> : champs obligatoires
+                        </div>
+                    </form>
+                    <div id="dejaInscrit">
+                        Vous possédez déjà un compte ? <a
+                            wicket:id="connexion"
+                            id="connexionEtape3">Connectez-vous</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div wicket:id="containerConfirmation">
+            <div class="row-fluid">
+                <div class="span12 module_cont module_text_area module_small_padding">
+                    <div class="bg_title">
+                        <h4 class="headInModule">Confirmation</h4>
+                    </div>
+                    <div id="confirmation">
+                        <img
+                                wicket:id="imageConfirmation"
+                                src="img/check.png"
+                                alt="ok"/>
+                        <h5 wicket:id="confirmation1"></h5>
+                        <h5>
+                            <span wicket:id="confirmation2"></span> <a wicket:id="contactezNous">contactez nous</a>
+                        </h5>
+                        <a
+                                wicket:id="retourAccueil"
+                                id="retourAccueil">Retour à l'accueil</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div wicket:id="contactezNous"></div>
 </wicket:extend>

@@ -49,6 +49,7 @@ public abstract class AbstractBatimenWsTest {
                 .addPackages(true, "fr/batimen/ws/service")
                 .addPackages(true, "fr/batimen/ws/utils")
                 .addPackages(true, "fr/batimen/ws/quartz")
+                .addPackages(true, "fr/batimen/ws/mapper")
                 .addPackages(true, "fr/batimen/test/ws")
                 .addAsLibraries(
                         resolver.loadPomFromFile("pom.xml").importCompileAndRuntimeDependencies()

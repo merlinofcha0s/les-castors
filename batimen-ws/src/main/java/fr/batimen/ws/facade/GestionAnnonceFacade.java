@@ -3,11 +3,7 @@ package fr.batimen.ws.facade;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
 import javax.annotation.security.RolesAllowed;
 import javax.ejb.LocalBean;
@@ -24,6 +20,11 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import fr.batimen.core.enums.PropertiesFileGeneral;
+import fr.batimen.dto.ImageDTO;
+import fr.batimen.dto.aggregate.*;
+import fr.batimen.ws.mapper.AnnonceMap;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,12 +41,6 @@ import fr.batimen.core.exception.DuplicateEntityException;
 import fr.batimen.core.exception.EmailException;
 import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.DemandeAnnonceDTO;
-import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
-import fr.batimen.dto.aggregate.AnnonceSelectEntrepriseDTO;
-import fr.batimen.dto.aggregate.CreationAnnonceDTO;
-import fr.batimen.dto.aggregate.DesinscriptionAnnonceDTO;
-import fr.batimen.dto.aggregate.NbConsultationDTO;
-import fr.batimen.dto.aggregate.NoterArtisanDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.enums.TypeNotification;
@@ -71,10 +66,8 @@ import fr.batimen.ws.utils.RolesUtils;
 
 /**
  * Facade REST de gestion des annonces.
- * 
- * 
+ *
  * @author Casaucau Cyril
- * 
  */
 @Stateless(name = "GestionAnnonceFacade")
 @LocalBean
@@ -82,7 +75,7 @@ import fr.batimen.ws.utils.RolesUtils;
 @RolesAllowed(Constant.USERS_ROLE)
 @Produces(JsonHelper.JSON_MEDIA_TYPE_AND_UTF_8_CHARSET)
 @Consumes(JsonHelper.JSON_MEDIA_TYPE_AND_UTF_8_CHARSET)
-@Interceptors(value = { BatimenInterceptor.class })
+@Interceptors(value = {BatimenInterceptor.class})
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class GestionAnnonceFacade {
 
@@ -124,14 +117,12 @@ public class GestionAnnonceFacade {
     /**
      * Permet la creation d'une nouvelle annonce par le client ainsi que le
      * compte de ce dernier
-     * 
-     * @see Constant
-     * 
-     * @param nouvelleAnnonceDTO
-     *            L'objet provenant du frontend qui permet la creation de
-     *            l'annonce.
+     *
+     * @param nouvelleAnnonceDTO L'objet provenant du frontend qui permet la creation de
+     *                           l'annonce.
      * @return CODE_SERVICE_RETOUR_KO ou CODE_SERVICE_RETOUR_OK voir la classe
-     *         Constant
+     * Constant
+     * @see Constant
      */
     @POST
     @Path(WsPath.GESTION_ANNONCE_SERVICE_CREATION_ANNONCE)
@@ -178,14 +169,7 @@ public class GestionAnnonceFacade {
 
         if (!nouvelleAnnonceDTO.getPhotos().isEmpty()) {
             List<String> imageUrls = photoService.sendPhotoToCloud(nouvelleAnnonceDTO.getPhotos());
-
-            for (String url : imageUrls) {
-                Image nouvelleImage = new Image();
-                nouvelleImage.setUrl(url);
-                nouvelleImage.setAnnonce(nouvelleAnnonce);
-                nouvelleAnnonce.getImages().add(nouvelleImage);
-                imageDAO.createMandatory(nouvelleImage);
-            }
+            photoService.persistPhoto(nouvelleAnnonce, imageUrls);
         }
 
         return CodeRetourService.RETOUR_OK;
@@ -194,24 +178,24 @@ public class GestionAnnonceFacade {
     /**
      * Permet la creation d'une nouvelle annonce par le client ainsi que le
      * compte de ce dernier <br/>
-     * 
+     * <p/>
      * Mode multipart, en plus de JSON la request contient des photos.
-     * 
-     * @see Constant
-     * 
-     * @param nouvelleAnnonceDTO
-     *            L'objet provenant du frontend qui permet la creation de
-     *            l'annonce.
+     *
+     * @param content     L'objet provenant du frontend qui permet la creation de
+     *                    l'annonce.
+     * @param files       Liste contenant l'ensemble des photos.
+     * @param filesDetail Liste contenant les metadata des photos du client.
      * @return CODE_SERVICE_RETOUR_KO ou CODE_SERVICE_RETOUR_OK voir la classe
-     *         Constant
+     * Constant
+     * @see Constant
      */
     @POST
     @Path(WsPath.GESTION_ANNONCE_SERVICE_CREATION_ANNONCE_AVEC_IMAGES)
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public Integer creationAnnonceAvecImage(@FormDataParam("content") final InputStream content,
-            @FormDataParam("files") final List<FormDataBodyPart> files,
-            @FormDataParam("files") final List<FormDataContentDisposition> filesDetail) {
+                                            @FormDataParam("files") final List<FormDataBodyPart> files,
+                                            @FormDataParam("files") final List<FormDataContentDisposition> filesDetail) {
 
         CreationAnnonceDTO nouvelleAnnonceDTO = DeserializeJsonHelper.deserializeDTO(
                 FluxUtils.getJsonByInputStream(content), CreationAnnonceDTO.class);
@@ -234,9 +218,8 @@ public class GestionAnnonceFacade {
     /**
      * Permet de récuperer les annonces d'un client à partir de son login <br/>
      * Service servant principalement a la page mes annonces
-     * 
-     * @param login
-     *            l'identifiant de l'utilisateur
+     *
+     * @param login l'identifiant de l'utilisateur
      * @return La liste des annonces de cet utilisateur
      */
     @POST
@@ -272,12 +255,11 @@ public class GestionAnnonceFacade {
      * Permet de récuperer une annonce dans le but de l'afficher <br/>
      * Récupère également les informations sur les artisans et les entreprise
      * inscrites a cette annonce
-     * 
-     * @param demandeAnnonce
-     *            le hashID avec le login du demandeur dans le but de vérifier
-     *            les droits.
+     *
+     * @param demandeAnnonce le hashID avec le login du demandeur dans le but de vérifier
+     *                       les droits.
      * @return l'ensemble des informations qui permettent d'afficher l'annonce
-     *         correctement
+     * correctement
      */
     @POST
     @Path(WsPath.GESTION_ANNONCE_SERVICE_GET_ANNONCES_BY_ID)
@@ -348,9 +330,8 @@ public class GestionAnnonceFacade {
 
     /**
      * Met à jour le nombre de consultation d'une annonce
-     * 
-     * @param nbConsultationDTO
-     *            Objet contenant toutes les informations necessaires
+     *
+     * @param nbConsultationDTO Objet contenant toutes les informations necessaires
      * @return
      */
     @POST
@@ -382,7 +363,7 @@ public class GestionAnnonceFacade {
      * Service de suppression d'une annonce <br/>
      * Si c'est un client, il doit posseder l'annonce, sinon le demandeur doit
      * etre admin.
-     * 
+     *
      * @param demandeAnnonce
      * @return {@link CodeRetourService}
      */
@@ -432,10 +413,10 @@ public class GestionAnnonceFacade {
 
     /**
      * Selection d'une entreprise par un particulier ou un admin <br/>
-     * 
+     * <p/>
      * Si c'est un client, il doit posseder l'annonce, sinon le demandeur doit
      * etre admin.
-     * 
+     *
      * @param demandeAnnonceDTO
      * @return {@link CodeRetourService}
      */
@@ -469,7 +450,7 @@ public class GestionAnnonceFacade {
 
         Annonce annonceToUpdate = null;
 
-        annonceToUpdate = loadAnnonceAndCheckUserClientOrAdminRight(rolesDemandeur, demandeAnnonceDTO.getHashID());
+        annonceToUpdate = loadAnnonceAndCheckUserClientOrAdminRight(rolesDemandeur, demandeAnnonceDTO.getHashID(), demandeAnnonceDTO.getLoginDemandeur());
 
         if (annonceToUpdate != null) {
 
@@ -520,9 +501,8 @@ public class GestionAnnonceFacade {
     /**
      * Service qui permet à un artisan de s'inscrire à une annonce, pas besoin
      * du type de compte dans l'objet demande anonnce DTO
-     * 
-     * @param demandeAnnonceDTO
-     *            Objet permettant de faire la demande
+     *
+     * @param demandeAnnonceDTO Objet permettant de faire la demande
      * @return {@link CodeRetourService}
      */
     @POST
@@ -569,11 +549,10 @@ public class GestionAnnonceFacade {
     /**
      * Service qui permet à un client de ne pas accepter un artisan à son
      * annonce <br/>
-     * 
+     * <p/>
      * Réactive l'annonce si elle etait en quotas max atteint.
-     * 
-     * @param desinscriptionAnnonceDTO
-     *            Objet permettant de faire la demande de desinscription
+     *
+     * @param desinscriptionAnnonceDTO Objet permettant de faire la demande de desinscription
      * @return {@link CodeRetourService}
      */
     @POST
@@ -597,7 +576,8 @@ public class GestionAnnonceFacade {
             LOGGER.debug("Role du client récupéré: " + rolesClientDemandeur);
         }
 
-        annonce = loadAnnonceAndCheckUserClientOrAdminRight(rolesClientDemandeur, desinscriptionAnnonceDTO.getHashID());
+        annonce = loadAnnonceAndCheckUserClientOrAdminRight(rolesClientDemandeur, desinscriptionAnnonceDTO.getHashID(), desinscriptionAnnonceDTO
+                .getLoginDemandeur());
 
         boolean atLeastOneRemoved = false;
 
@@ -610,7 +590,7 @@ public class GestionAnnonceFacade {
 
             }
 
-            for (Iterator<Artisan> itArtisan = artisans.iterator(); itArtisan.hasNext();) {
+            for (Iterator<Artisan> itArtisan = artisans.iterator(); itArtisan.hasNext(); ) {
 
                 Artisan artisanADesinscrire = itArtisan.next();
 
@@ -653,13 +633,12 @@ public class GestionAnnonceFacade {
 
     /**
      * Service qui permet à un client de noter un artisan<br/>
-     * 
+     * <p/>
      * Fait passer l'annonce en état terminer
-     * 
+     * <p/>
      * Génére une notification à destination de l'artisan
-     * 
-     * @param noterArtisanDTO
-     *            Objet permettant de valider la note de l'artisan
+     *
+     * @param noterArtisanDTO Objet permettant de valider la note de l'artisan
      * @return {@link CodeRetourService}
      */
     @POST
@@ -684,7 +663,7 @@ public class GestionAnnonceFacade {
             LOGGER.debug("Roles du demandeur : {}", rolesDemandeur);
         }
 
-        Annonce annonceANoter = loadAnnonceAndCheckUserClientOrAdminRight(rolesDemandeur, noterArtisanDTO.getHashID());
+        Annonce annonceANoter = loadAnnonceAndCheckUserClientOrAdminRight(rolesDemandeur, noterArtisanDTO.getHashID(), noterArtisanDTO.getLoginDemandeur());
 
         if (annonceANoter == null) {
             if (LOGGER.isErrorEnabled()) {
@@ -738,22 +717,237 @@ public class GestionAnnonceFacade {
         return CodeRetourService.RETOUR_OK;
     }
 
-    private Annonce loadAnnonceAndCheckUserClientOrAdminRight(String rolesClientDemandeur, String hashID) {
+    /**
+     * Service qui permet à un client de pouvoir modifier son annonce<br/>
+     * <p/>
+     * Génére une notification à destination des artisans inscrits
+     *
+     * @param modificationAnnonceDTO Objet permettant de récuperer les informations qui ont été modifiée par le client
+     * @return {@link CodeRetourService}
+     */
+    @POST
+    @Path(WsPath.GESTION_ANNONCE_SERVICE_MODIFICATION_ANNONCE)
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public Integer modifierAnnonce(ModificationAnnonceDTO modificationAnnonceDTO) {
+        String rolesDemandeur = utilisateurFacade.getUtilisateurRoles(modificationAnnonceDTO.getLoginDemandeur());
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Roles du demandeur : {}", rolesDemandeur);
+        }
+
+        boolean generateNotification = false;
+
+        Annonce annonceAModifier = loadAnnonceAndCheckUserClientOrAdminRight(rolesDemandeur, modificationAnnonceDTO.getAnnonce().getHashID(), modificationAnnonceDTO.getLoginDemandeur());
+        if (annonceAModifier != null) {
+            ModelMapper mapper = new ModelMapper();
+            mapper.addMappings(new AnnonceMap());
+            mapper.map(modificationAnnonceDTO.getAnnonce(), annonceAModifier);
+            mapper.map(modificationAnnonceDTO.getAdresse(), annonceAModifier.getAdresseChantier());
+            annonceAModifier.setDateMAJ(new Date());
+            annonceDAO.update(annonceAModifier);
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Mise à jour de l'annonce : {}", annonceAModifier);
+            }
+            generateNotification = true;
+        } else {
+            return CodeRetourService.ANNONCE_RETOUR_INTROUVABLE;
+        }
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Génération des notifications à destinations des artisans inscrit à cette annonce");
+        }
+        if (generateNotification) {
+            for (Artisan artisanToNotify : annonceAModifier.getArtisans()) {
+                notificationService.generationNotificationArtisan(annonceAModifier, artisanToNotify, TypeCompte.ARTISAN, TypeNotification.A_MODIFIER_ANNONCE);
+            }
+        }
+        return CodeRetourService.RETOUR_OK;
+    }
+
+    /**
+     * Service qui permet à un client de pouvoir ajouter / rajouter des photos à son annonce<br/>
+     * <p/>
+     * Génére une notification à destination des artisans inscrits
+     * <p/>
+     * <p/>
+     * Mode multipart, en plus du JSON la request contient des photos.
+     *
+     * @param content     L'objet provenant du frontend qui permet la creation de
+     *                    l'annonce.
+     * @param files       Liste contenant l'ensemble des photos.
+     * @param filesDetail Liste contenant les metadata des photos du client.
+     * @return {@link CodeRetourService}
+     */
+    @POST
+    @Path(WsPath.GESTION_ANNONCE_SERVICE_AJOUT_PHOTO)
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public List<ImageDTO> ajouterPhoto(@FormDataParam("content") final InputStream content,
+                                       @FormDataParam("files") final List<FormDataBodyPart> files,
+                                       @FormDataParam("files") final List<FormDataContentDisposition> filesDetail) {
+
+        AjoutPhotoDTO ajoutPhotoDTO = DeserializeJsonHelper.deserializeDTO(
+                FluxUtils.getJsonByInputStream(content), AjoutPhotoDTO.class);
+
+        if (LOGGER.isDebugEnabled()) {
+            for (FormDataContentDisposition fileDetail : filesDetail) {
+                LOGGER.debug("Details fichier : {}", fileDetail);
+            }
+        }
+
+        Annonce annonceRajouterPhoto = loadAnnonceAndCheckUserClientOrAdminRight(
+                utilisateurFacade.getUtilisateurRoles(ajoutPhotoDTO.getLoginDemandeur()), ajoutPhotoDTO.getHashID(), ajoutPhotoDTO.getLoginDemandeur());
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Chargement de l'annonce en cours, grace à la DTO en entrée : {}", ajoutPhotoDTO.toString());
+        }
+
+        if (annonceRajouterPhoto == null) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Impossible de trouver l'annonce avec le compte demandé, Détails : {}", ajoutPhotoDTO.toString());
+            }
+            return new ArrayList<>();
+        }
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Calcul du nombre de photos qui peuvent etre uploader avant d'atteindre la limite");
+        }
+        Integer nbPhotosTotale = annonceRajouterPhoto.getImages().size() + files.size();
+        Integer nbPhotosMaxParAnnonce = Integer.valueOf(PropertiesFileGeneral.GENERAL.getProperties().getProperty("gen.max.number.file.annonce"));
+
+        if (nbPhotosTotale > nbPhotosMaxParAnnonce) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Dépassement du nombre de photos autorisées par annonce {}", nbPhotosTotale);
+            }
+            return photoService.imageToImageDTO(annonceRajouterPhoto.getImages());
+        }
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Transformation des forms data body parts en files");
+        }
+        List<File> photos = FluxUtils.transformFormDataBodyPartsToFiles(files);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Envoi des photos vers le service de cloud");
+        }
+        List<String> urlsPhoto = photoService.sendPhotoToCloud(photos);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Persistance des urls des images");
+        }
+        photoService.persistPhoto(annonceRajouterPhoto, urlsPhoto);
+
+        return photoService.imageToImageDTO(annonceRajouterPhoto.getImages());
+    }
+
+
+    /**
+     * Récupération de toutes les photos d'une annonce avec vérificatin des droits
+     *
+     * @param demandeAnnonceDTO L'hash id + le login du demandeur
+     * @return La liste des objets images appartenant à l'annonce.
+     */
+    @POST
+    @Path(WsPath.GESTION_ANNONCE_SERVICE_RECUPERATION_PHOTO)
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public List<ImageDTO> getPhotos(DemandeAnnonceDTO demandeAnnonceDTO) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Début de la récupération des photos d'une annonce {}", demandeAnnonceDTO);
+        }
+
+        //Extraction des paramètres
+        String hashID = demandeAnnonceDTO.getHashID();
+        String loginDemandeur = demandeAnnonceDTO.getLoginDemandeur();
+
+        //Calcul du role
+        String rolesDemandeur = utilisateurFacade.getUtilisateurRoles(demandeAnnonceDTO.getLoginDemandeur());
+
+        List<Image> images = photoService.getImagesByHashIDByLoginDemandeur(rolesDemandeur, hashID, loginDemandeur);
+
+        if (images == null) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Impossible de trouver les photos correspondantes à l'annonce {}", demandeAnnonceDTO);
+            }
+            return new ArrayList<>();
+        }
+
+        return photoService.imageToImageDTO(new HashSet<Image>(images));
+    }
+
+    /**
+     * Récupération de toutes les photos d'une annonce avec vérificatin des droits
+     *
+     * @param suppressionPhotoDTO L'hash id + le login du demandeur
+     * @return La liste des objets images appartenant à l'annonce.
+     */
+    @POST
+    @Path(WsPath.GESTION_ANNONCE_SERVICE_SUPPRESSION_PHOTO)
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public List<ImageDTO> suppressionPhoto(SuppressionPhotoDTO suppressionPhotoDTO) {
+        String rolesDemandeur = utilisateurFacade.getUtilisateurRoles(suppressionPhotoDTO.getLoginDemandeur());
+        List<Image> images = photoService.getImagesByHashIDByLoginDemandeur(rolesDemandeur, suppressionPhotoDTO.getHashID(), suppressionPhotoDTO.getLoginDemandeur());
+        List<ImageDTO> imageDTOs = new LinkedList<>();
+        ModelMapper mapper = new ModelMapper();
+
+
+        //Si c'est images est null ce que l'utilisateur n'a pas les droits
+        if (images == null) {
+            return new ArrayList<>();
+        }
+
+        boolean deleteAtLeastOne = false;
+
+        for (int i = 0; i < images.size(); i++) {
+            Image image = images.get(i);
+
+            if (image.getUrl().equals(suppressionPhotoDTO.getImageASupprimer().getUrl())) {
+                imageDAO.delete(image);
+                images.remove(i);
+                photoService.supprimerPhotoDansCloud(image);
+                deleteAtLeastOne = true;
+            }
+        }
+
+        if (!deleteAtLeastOne) {
+            try {
+                throw new BackendException("Aucune image supprimée, ca ne doit pas arriver");
+            } catch (BackendException e) {
+                if (LOGGER.isErrorEnabled()) {
+                    LOGGER.error("Problème avec le service de suppresson d'image", e);
+                }
+                return imageDTOs;
+            }
+        } else {
+            imageDTOs = photoService.imageToImageDTO(new HashSet<>(images));
+        }
+        return imageDTOs;
+    }
+
+    /**
+     * Verifie les droits d'un demandeur par rapport a son role.
+     * <p/>
+     * Dans le cas d'un client, on verifie si ce dernier est bien le detenteur de l'annonce.
+     *
+     * @param rolesClientDemandeur role du demandeur
+     * @param hashID               La reference de l'annonce
+     * @param login                login du demandeur
+     * @return L'annonce si les droits sont accordés
+     */
+    private Annonce loadAnnonceAndCheckUserClientOrAdminRight(String rolesClientDemandeur, String hashID, String login) {
         if (rolesUtils.checkIfAdminWithString(rolesClientDemandeur)) {
             return annonceDAO.getAnnonceByIDWithTransaction(hashID, true);
         } else if (rolesUtils.checkIfClientWithString(rolesClientDemandeur)) {
-            return annonceDAO.getAnnonceByIDWithTransaction(hashID, false);
+            Annonce annonce = annonceDAO.getAnnonceByIDWithTransaction(hashID, false);
+            if (annonce != null && annonce.getDemandeur().getLogin().equals(login)) {
+                return annonce;
+            } else {
+                return null;
+            }
         } else {
             if (LOGGER.isErrorEnabled()) {
-                StringBuilder errorRoles = new StringBuilder();
-                errorRoles.append("Roles : ").append(rolesClientDemandeur);
-
-                StringBuilder errorHashID = new StringBuilder();
-                errorHashID.append("Hash ID : ").append(hashID);
-
                 LOGGER.error("N'a pas les bons droits pour accéder à ce service !!!");
-                LOGGER.error(errorRoles.toString());
-                LOGGER.error(errorHashID.toString());
+                LOGGER.error("Roles : {}", rolesClientDemandeur);
+                LOGGER.error("Hash ID : {}", hashID);
             }
             return null;
         }

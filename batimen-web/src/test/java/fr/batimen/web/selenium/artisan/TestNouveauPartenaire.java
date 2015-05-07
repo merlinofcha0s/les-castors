@@ -3,8 +3,10 @@ package fr.batimen.web.selenium.artisan;
 import static com.ninja_squad.dbsetup.Operations.sequenceOf;
 import static org.junit.Assert.assertTrue;
 
+import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
@@ -18,9 +20,8 @@ import fr.batimen.web.utils.UtilsSelenium;
 
 /**
  * Classe de cas de test concernant l'inscription d'un nouveau partenaire
- * 
+ *
  * @author Casaucau Cyril
- * 
  */
 public class TestNouveauPartenaire extends AbstractITTest {
 
@@ -36,7 +37,7 @@ public class TestNouveauPartenaire extends AbstractITTest {
     /**
      * Cas de test : L'utilisateur (artisan) crée son compte, l'operation doit
      * être un succés
-     * 
+     *
      * @throws InterruptedException
      */
     @Test
@@ -45,15 +46,15 @@ public class TestNouveauPartenaire extends AbstractITTest {
 
         // On selectionne un departement
         UtilsSelenium.selectionDepartement(driver);
-        if(browser.equals("ie")){
+        if (browser.equals("ie")) {
             Thread.sleep(1000);
         }
         etape2();
-        if(browser.equals("ie")){
+        if (browser.equals("ie")) {
             Thread.sleep(1000);
         }
         etape3();
-        if(browser.equals("ie")){
+        if (browser.equals("ie")) {
             Thread.sleep(1000);
         }
         etape4();
@@ -63,7 +64,7 @@ public class TestNouveauPartenaire extends AbstractITTest {
      * Cas de test : L'utilisateur (artisan) crée son compte, mais il n'est pas
      * sur des informations donc il revient sur les etapes précédentes,
      * l'operation doit être un succés
-     * 
+     *
      * @throws InterruptedException
      */
     @Test
@@ -112,11 +113,17 @@ public class TestNouveauPartenaire extends AbstractITTest {
 
     private void etape3() throws InterruptedException {
         // Etape 3
-        driver.findElement(By.xpath("//label[@id='containerElectricite']/span")).click();
+        (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX)).until(ExpectedConditions
+                .elementToBeClickable(By.xpath("//label[@id='containerElectricite']/span")));
+
+        WebElement electricite = driver.findElement(By.xpath("//label[@id='containerElectricite']/span"));
+        electricite.sendKeys(Keys.CONTROL);
+        electricite.click();
+
         Thread.sleep(1000);
         // Etape 4 confirmation
         (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX)).until(ExpectedConditions
-                .visibilityOfElementLocated(By.xpath("//label[@id='containerDecorationMaconnerie']/span")));
+                .elementToBeClickable(By.xpath("//label[@id='containerDecorationMaconnerie']/span")));
         driver.findElement(By.xpath("//label[@id='containerDecorationMaconnerie']/span")).click();
         driver.findElement(By.id("nomComplet")).clear();
         driver.findElement(By.id("nomComplet")).sendKeys("Xav Entreprise");

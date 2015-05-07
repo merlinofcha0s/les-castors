@@ -1,31 +1,26 @@
 package fr.batimen.ws.entity;
 
+import fr.batimen.core.constant.QueryJPQL;
+
 import java.io.Serializable;
 import java.util.Objects;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Entité Image, est utilisée pour symboliser une image d'une annonce
- * 
+ *
  * @author Casaucau Cyril
- * 
  */
 @Entity
 @Table(name = "Image")
+@NamedQueries(value = {
+        @NamedQuery(name = QueryJPQL.IMAGE_BY_HASH_ID_AND_LOGIN_CLIENT,
+                query = "SELECT i FROM Image AS i WHERE i.annonce.hashID = :hashID AND i.annonce.demandeur.login = :login"),
+        @NamedQuery(name = QueryJPQL.IMAGE_BY_HASH_ID,
+        query = "SELECT i FROM Image AS i WHERE i.annonce.hashID = :hashID")})
 public class Image extends AbstractEntity implements Serializable {
 
-    /**
-     * 
-     */
     private static final long serialVersionUID = 8005599117537733385L;
 
     @Id
@@ -59,24 +54,21 @@ public class Image extends AbstractEntity implements Serializable {
     }
 
     /**
-     * @param id
-     *            the id to set
+     * @param id the id to set
      */
     public void setId(Long id) {
         this.id = id;
     }
 
     /**
-     * @param url
-     *            the url to set
+     * @param url the url to set
      */
     public void setUrl(String url) {
         this.url = url;
     }
 
     /**
-     * @param annonce
-     *            the annonce to set
+     * @param annonce the annonce to set
      */
     public void setAnnonce(Annonce annonce) {
         this.annonce = annonce;
@@ -110,4 +102,13 @@ public class Image extends AbstractEntity implements Serializable {
         return false;
     }
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Image{");
+        sb.append("id=").append(id);
+        sb.append(", url='").append(url).append('\'');
+        sb.append(", annonce=").append(annonce);
+        sb.append('}');
+        return sb.toString();
+    }
 }

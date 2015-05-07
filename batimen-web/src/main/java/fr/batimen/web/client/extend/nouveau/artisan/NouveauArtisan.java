@@ -276,7 +276,7 @@ public class NouveauArtisan extends MasterPage {
                 }
             }
 
-            navigationWizard.setStep(nouveauPartenaire.getNumeroEtape() + 1);
+            navigationWizard.setStep(nouveauPartenaire.getNumeroEtape());
 
             if (feedBackPanelGeneral.hasFeedbackMessage()) {
                 feedBackPanelGeneral.getFeedbackMessages().clear();

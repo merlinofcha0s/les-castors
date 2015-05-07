@@ -1,48 +1,37 @@
 package fr.batimen.test.ws.facade;
 
-import java.io.File;
-import java.util.List;
-
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
-import javax.inject.Inject;
-
-import org.jboss.arquillian.persistence.ShouldMatchDataSet;
-import org.jboss.arquillian.persistence.UsingDataSet;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
 
 import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.DemandeAnnonceDTO;
-import fr.batimen.dto.NotationDTO;
+import fr.batimen.dto.ImageDTO;
 import fr.batimen.dto.NotificationDTO;
-import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
-import fr.batimen.dto.aggregate.AnnonceSelectEntrepriseDTO;
-import fr.batimen.dto.aggregate.CreationAnnonceDTO;
-import fr.batimen.dto.aggregate.DesinscriptionAnnonceDTO;
-import fr.batimen.dto.aggregate.NbConsultationDTO;
-import fr.batimen.dto.aggregate.NoterArtisanDTO;
+import fr.batimen.dto.aggregate.*;
 import fr.batimen.dto.enums.EtatAnnonce;
-import fr.batimen.dto.enums.StatutNotification;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.enums.TypeNotification;
 import fr.batimen.test.ws.AbstractBatimenWsTest;
 import fr.batimen.test.ws.helper.DataHelper;
+import fr.batimen.test.ws.service.AnnonceServiceTest;
 import fr.batimen.ws.client.service.AnnonceServiceREST;
 import fr.batimen.ws.dao.AnnonceDAO;
 import fr.batimen.ws.dao.ArtisanDAO;
 import fr.batimen.ws.dao.ClientDAO;
 import fr.batimen.ws.entity.Annonce;
 import fr.batimen.ws.entity.Artisan;
-import fr.batimen.ws.entity.Client;
 import fr.batimen.ws.service.NotificationService;
+import org.jboss.arquillian.persistence.ShouldMatchDataSet;
+import org.jboss.arquillian.persistence.UsingDataSet;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import javax.inject.Inject;
+import java.io.File;
+import java.util.List;
 
 /**
- * 
  * @author Casaucau Cyril
- * 
  */
 public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
@@ -63,6 +52,9 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @Inject
     private AnnonceServiceREST annonceServiceREST;
 
+    @Inject
+    private AnnonceServiceTest annonceServiceTest;
+
     @Before
     public void init() {
         creationAnnonceDTO = DataHelper.getAnnonceDTOData();
@@ -71,32 +63,32 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     /**
      * Cas de test : le client n'est pas inscrit sur le site. Il faut donc creer
      * l'annonce mais également enregister son compte dans la base de données.
-     * 
+     * <p/>
      * On ignore volontairement date inscription et datemaj car elles sont
      * généréés dynamiquement lors de la creation de l'annonce.
      */
     @Test
-    @ShouldMatchDataSet(value = "datasets/out/creation_annonce_is_not_signed_in.yml", excludeColumns = { "id",
-            "datemaj", "datecreation" })
+    @ShouldMatchDataSet(value = "datasets/out/creation_annonce_is_not_signed_in.yml", excludeColumns = {"id",
+            "datemaj", "datecreation"})
     public void testCreationAnnonceIsNotSignedIn() {
-        creationVerificationAnnonce();
+        annonceServiceTest.creationVerificationAnnonce(creationAnnonceDTO);
     }
 
     /**
      * Cas de test : le client est inscrit sur le site. Il faut donc creer
      * l'annonce mais ne pas enregistrer son compte, juste lier le compte de
      * l'utilisateur avec l'annonce.
-     * 
+     * <p/>
      * On ignore volontairement date inscription et datemaj car elles sont
      * généréés dynamiquement lors de la creation de l'annonce.
      */
     @Test
     @UsingDataSet("datasets/in/client_creation_annonce.yml")
-    @ShouldMatchDataSet(value = "datasets/out/creation_annonce_is_signed_in.yml", excludeColumns = { "id", "datemaj",
-            "datecreation" })
+    @ShouldMatchDataSet(value = "datasets/out/creation_annonce_is_signed_in.yml", excludeColumns = {"id", "datemaj",
+            "datecreation"})
     public void testCreationAnnonceIsSignedIn() {
         creationAnnonceDTO.setIsSignedUp(true);
-        creationVerificationAnnonce();
+        annonceServiceTest.creationVerificationAnnonce(creationAnnonceDTO);
     }
 
     /**
@@ -104,14 +96,14 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
      * l'annonce mais ne pas enregistrer son compte, juste lier le compte de
      * l'utilisateur avec l'annonce.<br/>
      * De plus dans ce cas, il enregistre des photos avec son annonce
-     * 
+     * <p/>
      * On ignore volontairement date inscription et datemaj car elles sont
      * généréés dynamiquement lors de la creation de l'annonce.
      */
     @Test
     @UsingDataSet("datasets/in/client_creation_annonce.yml")
-    @ShouldMatchDataSet(value = "datasets/out/creation_annonce_is_signed_in.yml", excludeColumns = { "id", "datemaj",
-            "datecreation" })
+    @ShouldMatchDataSet(value = "datasets/out/creation_annonce_is_signed_in.yml", excludeColumns = {"id", "datemaj",
+            "datecreation"})
     public void testCreationAnnonceIsSignedInWithImage() {
         creationAnnonceDTO.setIsSignedUp(true);
 
@@ -133,11 +125,10 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     /**
      * Cas de test : Le client tente de creer une annonce qui existe déjà avec
      * le même titre.
-     * 
      */
     @Test
     public void testCreationAnnonceDuplicata() {
-        creationVerificationAnnonce();
+        annonceServiceTest.creationVerificationAnnonce(creationAnnonceDTO);
         Integer isCreationOK = annonceServiceREST.creationAnnonce(creationAnnonceDTO);
         // Le service doit remonter une erreur
         Assert.assertTrue(isCreationOK == CodeRetourService.ANNONCE_RETOUR_DUPLICATE);
@@ -146,7 +137,6 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     /**
      * Cas de test : récupération des annonces des clients. /!\ charge
      * automatiquement les artisans qui sont inscrits a l'annonce.
-     * 
      */
     @Test
     @UsingDataSet("datasets/in/annonces.yml")
@@ -158,12 +148,11 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
     /**
      * Cas de test : récupération de l'annonce d'un client par un client.
-     * 
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
     public void testGetAnnonceByIDForAffichage() {
-        DemandeAnnonceDTO demandeAnnonceDTO = createDemandeAnnonceDTO(
+        DemandeAnnonceDTO demandeAnnonceDTO = annonceServiceTest.createDemandeAnnonceDTO(
                 "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
                 "pebronne", TypeCompte.CLIENT);
 
@@ -184,12 +173,11 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     /**
      * Cas de test : Récuperation d'une annonce par son id a partir d'un artisan
      * qui n'est pas inscrit à cette derniere.
-     * 
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
     public void testGetAnnonceByIDWithArtisanNotInscritAtAnnonce() {
-        DemandeAnnonceDTO demandeAnnonceDTO = createDemandeAnnonceDTO(
+        DemandeAnnonceDTO demandeAnnonceDTO = annonceServiceTest.createDemandeAnnonceDTO(
                 "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
                 "pebronArtisanPasInsc", TypeCompte.ARTISAN);
 
@@ -206,12 +194,11 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     /**
      * Cas de test : Récuperation d'une annonce par son id a partir d'un artisan
      * qui est inscrit à cette derniere.
-     * 
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
     public void testGetAnnonceByIDWithArtisanInscritAtAnnonce() {
-        DemandeAnnonceDTO demandeAnnonceDTO = createDemandeAnnonceDTO(
+        DemandeAnnonceDTO demandeAnnonceDTO = annonceServiceTest.createDemandeAnnonceDTO(
                 "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
                 "pebronneArtisanne", TypeCompte.ARTISAN);
 
@@ -228,12 +215,11 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     /**
      * Cas de test : Récuperation d'une annonce par son id a partir d'un artisan
      * qui est inscrit à cette derniere.
-     * 
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
     public void testGetAnnonceByIDWithAdmin() {
-        DemandeAnnonceDTO demandeAnnonceDTO = createDemandeAnnonceDTO(
+        DemandeAnnonceDTO demandeAnnonceDTO = annonceServiceTest.createDemandeAnnonceDTO(
                 "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
                 "admin", TypeCompte.ADMINISTRATEUR);
 
@@ -250,7 +236,6 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     /**
      * Cas de test : Incrémentation du nb de consultation quand un artisan
      * accede à la page d'annonce.
-     * 
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
@@ -274,7 +259,6 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     /**
      * Cas de test : Suppression d'une annonce par un client, le test doit
      * mettre l'annonce en statut supprimer correctement.
-     * 
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
@@ -302,7 +286,6 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
      * Cas de test : Un client essai d'effacer d'une annonce qui n'est pas a
      * lui, le webservice refuse. Aucune demande de devis ne s'efface, on la
      * passe juste en mode supprimé
-     * 
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
@@ -328,7 +311,6 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     /**
      * Cas de test : Suppression d'une annonce par un admin, le test doit mettre
      * l'annonce en statut supprimer correctement.
-     * 
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
@@ -353,7 +335,6 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
     /**
      * Cas de test : Selection d'un artisan par un client dans son annonce
-     * 
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
@@ -369,12 +350,11 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
         Assert.assertEquals(CodeRetourService.RETOUR_OK, updateOK);
 
-        assertEntrepriseForChoixArtisanWithTransaction(false);
+        annonceServiceTest.assertEntrepriseForChoixArtisanWithTransaction(false);
     }
 
     /**
      * Cas de test : Selection d'un artisan par un admin pour une annonce.
-     * 
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
@@ -390,13 +370,12 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
         Assert.assertEquals(CodeRetourService.RETOUR_OK, updateOK);
 
-        assertEntrepriseForChoixArtisanWithTransaction(false);
+        annonceServiceTest.assertEntrepriseForChoixArtisanWithTransaction(false);
     }
 
     /**
      * Cas de test : Suppression d'une entreprise qui avait été selectionnée. <br/>
      * Suppression faite par un administrateur
-     * 
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
@@ -413,13 +392,12 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
         Assert.assertEquals(CodeRetourService.RETOUR_KO, updateKO);
 
-        assertEntrepriseForChoixArtisanWithTransaction(true);
+        annonceServiceTest.assertEntrepriseForChoixArtisanWithTransaction(true);
     }
 
     /**
      * Cas de test : l'artisan s'inscrit à l'annonce, il recoit une
      * notification, le tout doit etre correctement enregistré dans la BDD
-     * 
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
@@ -427,7 +405,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
         String loginArtisan = "pebronneChoisi";
 
-        DemandeAnnonceDTO demandeAnnonceDTO = initAndGetDemandeAnnonceDTO(
+        DemandeAnnonceDTO demandeAnnonceDTO = annonceServiceTest.initAndGetDemandeAnnonceDTO(
                 "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
                 loginArtisan, TypeCompte.ARTISAN);
 
@@ -474,7 +452,6 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
      * Cas de test: L'artisan essaye de s'inscrire deux fois, la premiere fois
      * se passe bien, la deuxieme fois on renvoi un code retour indiquant qu'il
      * est deja inscrit.
-     * 
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
@@ -482,7 +459,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
         String loginArtisan = "pebronneChoisi";
 
-        DemandeAnnonceDTO demandeAnnonceDTO = initAndGetDemandeAnnonceDTO("lolmdrp", loginArtisan, TypeCompte.ARTISAN);
+        DemandeAnnonceDTO demandeAnnonceDTO = annonceServiceTest.initAndGetDemandeAnnonceDTO("lolmdrp", loginArtisan, TypeCompte.ARTISAN);
 
         Integer codeRetourOK = annonceServiceREST.inscriptionUnArtisan(demandeAnnonceDTO);
         Assert.assertEquals(CodeRetourService.RETOUR_OK, codeRetourOK);
@@ -503,7 +480,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
         String loginArtisan = "pebronneChoisi";
 
-        DemandeAnnonceDTO demandeAnnonceDTO = initAndGetDemandeAnnonceDTO(
+        DemandeAnnonceDTO demandeAnnonceDTO = annonceServiceTest.initAndGetDemandeAnnonceDTO(
                 "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
                 loginArtisan, TypeCompte.ARTISAN);
 
@@ -530,7 +507,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
         String loginArtisan = "pebronneChoisi";
 
-        DemandeAnnonceDTO demandeAnnonceDTO = initAndGetDemandeAnnonceDTO("toto", loginArtisan, TypeCompte.ARTISAN);
+        DemandeAnnonceDTO demandeAnnonceDTO = annonceServiceTest.initAndGetDemandeAnnonceDTO("toto", loginArtisan, TypeCompte.ARTISAN);
 
         Integer codeRetourKO = annonceServiceREST.inscriptionUnArtisan(demandeAnnonceDTO);
 
@@ -544,7 +521,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
     public void testDesinscriptionArtisanAvecIDValid() {
-        Annonce annonce = testDesinscriptionArtisan("pebronne");
+        Annonce annonce = annonceServiceTest.testDesinscriptionArtisan("pebronne");
         Assert.assertEquals(1, annonce.getArtisans().size());
     }
 
@@ -555,7 +532,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
     public void testDesinscriptionArtisanAvecIDValidByAdmin() {
-        Annonce annonce = testDesinscriptionArtisan("admin");
+        Annonce annonce = annonceServiceTest.testDesinscriptionArtisan("admin");
         Assert.assertEquals(1, annonce.getArtisans().size());
     }
 
@@ -566,7 +543,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @Test
     @UsingDataSet("datasets/in/annonce_5_artisans.yml")
     public void testDesinscriptionArtisanAvecIDValidReactivationAnnonce() {
-        Annonce annonce = testDesinscriptionArtisan("pebronne");
+        Annonce annonce = annonceServiceTest.testDesinscriptionArtisan("pebronne");
         Assert.assertEquals(4, annonce.getArtisans().size());
         Assert.assertEquals(EtatAnnonce.ACTIVE, annonce.getEtatAnnonce());
     }
@@ -577,10 +554,10 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
-    @ShouldMatchDataSet(value = "datasets/out/notation_artisan_par_client_et_admin.yml", excludeColumns = { "id",
-            "datemaj", "datecreation", "datenotation", "datenotification" })
+    @ShouldMatchDataSet(value = "datasets/out/notation_artisan_par_client_et_admin.yml", excludeColumns = {"id",
+            "datemaj", "datecreation", "datenotation", "datenotification"})
     public void testNotationArtisanParClient() {
-        NoterArtisanDTO noterArtisanDTO = createNotationDTO("pebronne");
+        NoterArtisanDTO noterArtisanDTO = annonceServiceTest.createNotationDTO("pebronne");
 
         Integer codeRetour = annonceServiceREST.noterUnArtisan(noterArtisanDTO);
         Assert.assertEquals(CodeRetourService.RETOUR_OK, codeRetour);
@@ -592,108 +569,172 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
-    @ShouldMatchDataSet(value = "datasets/out/notation_artisan_par_client_et_admin.yml", excludeColumns = { "id",
-            "datemaj", "datecreation", "datenotation", "datenotification" })
+    @ShouldMatchDataSet(value = "datasets/out/notation_artisan_par_client_et_admin.yml", excludeColumns = {"id",
+            "datemaj", "datecreation", "datenotation", "datenotification"})
     public void testNotationArtisanParAdmin() {
-        NoterArtisanDTO noterArtisanDTO = createNotationDTO("admin");
+        NoterArtisanDTO noterArtisanDTO = annonceServiceTest.createNotationDTO("admin");
 
         Integer codeRetour = annonceServiceREST.noterUnArtisan(noterArtisanDTO);
         Assert.assertEquals(CodeRetourService.RETOUR_OK, codeRetour);
     }
 
-    private NoterArtisanDTO createNotationDTO(String loginDemandeur) {
-        NotationDTO notationDTO = new NotationDTO();
-        notationDTO.setScore((double) 4);
-        notationDTO.setCommentaire("Bon travaux");
-        notationDTO.setNomEntreprise("Pebronne enterprise");
-
-        NoterArtisanDTO noterArtisanDTO = new NoterArtisanDTO();
-        noterArtisanDTO.setNotation(notationDTO);
-        noterArtisanDTO
-                .setHashID("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
-        noterArtisanDTO.setLoginArtisan("pebronneArtisanne");
-        noterArtisanDTO.setLoginDemandeur(loginDemandeur);
-
-        return noterArtisanDTO;
+    /**
+     * Cas de test : Un client veut modifier son annonce, tout se passe comme prévu
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonces_by_id.yml")
+    @ShouldMatchDataSet(value = "datasets/out/modification_annonce_par_client.yml", excludeColumns = {"id",
+            "datemaj", "datecreation", "datenotation", "datenotification"})
+    public void testModificationAnnonceParClient() {
+        annonceServiceTest.testModificationAnnonce(TypeCompte.CLIENT, "pebronne", CodeRetourService.RETOUR_OK);
     }
 
-    private Annonce testDesinscriptionArtisan(String loginDemandeur) {
-        DesinscriptionAnnonceDTO desinscriptionAnnonceDTO = new DesinscriptionAnnonceDTO();
-        desinscriptionAnnonceDTO
-                .setHashID("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
-        desinscriptionAnnonceDTO.setLoginDemandeur(loginDemandeur);
-        desinscriptionAnnonceDTO.setLoginArtisan("pebronneArtisanne");
-
-        Integer codeRetourOK = annonceServiceREST.desinscriptionArtisan(desinscriptionAnnonceDTO);
-
-        Assert.assertEquals(CodeRetourService.RETOUR_OK, codeRetourOK);
-
-        Annonce annonce = annonceDAO
-                .getAnnonceByIDWithTransaction(
-                        "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21",
-                        false);
-
-        return annonce;
+    /**
+     * Cas de test : Un admin veut modifier l'annonce d'un client tout se passe comme prévu.
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonces_by_id.yml")
+    @ShouldMatchDataSet(value = "datasets/out/modification_annonce_par_client.yml", excludeColumns = {"id",
+            "datemaj", "datecreation", "datenotation", "datenotification"})
+    public void testModificationAnnonceParAdmin() {
+        annonceServiceTest.testModificationAnnonce(TypeCompte.ADMINISTRATEUR, "admin", CodeRetourService.RETOUR_OK);
     }
 
-    private DemandeAnnonceDTO initAndGetDemandeAnnonceDTO(String hash, String loginDemandeur, TypeCompte typeCompte) {
-        DemandeAnnonceDTO demandeAnnonceDTO = new DemandeAnnonceDTO();
-        demandeAnnonceDTO.setHashID(hash);
-        demandeAnnonceDTO.setLoginDemandeur(loginDemandeur);
-        demandeAnnonceDTO.setTypeCompteDemandeur(typeCompte);
-        return demandeAnnonceDTO;
+    /**
+     * Cas de test : Un client ne possédant pas l'annonce veut la modifier, On lui refuse.
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonces_by_id.yml")
+    @ShouldMatchDataSet(value = "datasets/in/annonces_by_id.yml", excludeColumns = {"id",
+            "datemaj", "datecreation", "datenotation", "datenotification"})
+    public void testModificationAnnonceParClientNotAllowed() {
+        annonceServiceTest.testModificationAnnonce(TypeCompte.CLIENT, "bertrand", CodeRetourService.ANNONCE_RETOUR_INTROUVABLE);
     }
 
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    private void assertEntrepriseForChoixArtisanWithTransaction(boolean isSuppression) {
-        Annonce annonce = annonceDAO.getAnnonceByIDWithTransaction("lolmdrp", true);
-        Assert.assertNotNull(annonce);
-        if (isSuppression) {
-            Assert.assertNull(annonce.getEntrepriseSelectionnee());
-        } else {
-            Assert.assertNotNull(annonce.getEntrepriseSelectionnee());
-            Assert.assertEquals("Pebronne enterprise choisi", annonce.getEntrepriseSelectionnee().getNomComplet());
-            Assert.assertEquals(EtatAnnonce.A_NOTER, annonce.getEtatAnnonce());
-            List<NotificationDTO> notificationsDTO = notificationService.getNotificationByLogin(annonce
-                    .getEntrepriseSelectionnee().getArtisan().getLogin(), TypeCompte.ARTISAN);
+    /**
+     * Cas de test : Un client veut rajouter des photos à son annonce, tout se passe comme prévu
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonces_by_id.yml")
+    @ShouldMatchDataSet(value = "datasets/out/ajout_photo_annonce.yml", excludeColumns = {"id",
+            "datemaj", "datecreation", "datenotation", "datenotification", "url"})
+    public void testAjoutPhotoParClient() {
+        annonceServiceTest.testAjoutPhoto("pebronne", 2);
+    }
 
-            for (NotificationDTO notification : notificationsDTO) {
-                Assert.assertEquals(TypeNotification.A_CHOISI_ENTREPRISE, notification.getTypeNotification());
-                Assert.assertEquals(StatutNotification.PAS_VUE, notification.getStatutNotification());
-            }
+    /**
+     * Cas de test : Un client veut rajouter des photos à son annonce, mais il a déjà cinq photos a son annonce, le webservice refuse.
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonce_limite_photo.yml")
+    @ShouldMatchDataSet(value = "datasets/in/annonce_limite_photo.yml", excludeColumns = {"id",
+            "datemaj", "datecreation", "datenotation", "datenotification", "url"})
+    public void testAjoutPhotoParClientTropDePhoto() {
+        annonceServiceTest.testAjoutPhoto("pebronne", 5);
+    }
+
+    /**
+     * Cas de test : Un client veut rajouter des photos à son annonce, tout se passe comme prévu
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonces_by_id.yml")
+    @ShouldMatchDataSet(value = "datasets/out/ajout_photo_annonce.yml", excludeColumns = {"id",
+            "datemaj", "datecreation", "datenotation", "datenotification", "url"})
+    public void testAjoutPhotoParAdmin() {
+        annonceServiceTest.testAjoutPhoto("admin", 2);
+    }
+
+    /**
+     * Cas de test : Un client veut rajouter des photos à son annonce, mais il ne la possede pas, on lui refuse l'accés.
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonces_by_id.yml")
+    @ShouldMatchDataSet(value = "datasets/in/annonces_by_id.yml", excludeColumns = {"id",
+            "datemaj", "datecreation", "datenotation", "datenotification", "url"})
+    public void testAjoutPhotoClientNotAllowed() {
+        annonceServiceTest.testAjoutPhoto("bertrand", 0);
+    }
+
+    /**
+     * Cas de test : Un client veut récuperer les photos liées à son annonce, tout se passe comme prévu.
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonces_by_id.yml")
+    public void testGetPhotoAnnonceByClient() {
+        List<ImageDTO> imageDTOs = annonceServiceTest.testGetPhoto("pebronne");
+
+        Assert.assertNotNull(imageDTOs);
+        Assert.assertEquals(1, imageDTOs.size());
+
+        for (ImageDTO imageDTO : imageDTOs) {
+            Assert.assertFalse(imageDTO.getUrl().isEmpty());
         }
     }
 
-    private DemandeAnnonceDTO createDemandeAnnonceDTO(String hashID, String login, TypeCompte typeCompte) {
-        DemandeAnnonceDTO demandeAnnonceDTO = new DemandeAnnonceDTO();
-        demandeAnnonceDTO.setHashID(hashID);
-        demandeAnnonceDTO.setLoginDemandeur(login);
-        demandeAnnonceDTO.setTypeCompteDemandeur(typeCompte);
-        return demandeAnnonceDTO;
+    /**
+     * Cas de test : Un admin veut récuperer les photos liées à son annonce, tout se passe comme prévu.
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonces_by_id.yml")
+    public void testGetPhotoAnnonceByAdmin() {
+        List<ImageDTO> imageDTOs = annonceServiceTest.testGetPhoto("admin");
+
+        Assert.assertNotNull(imageDTOs);
+        Assert.assertEquals(1, imageDTOs.size());
+
+        for (ImageDTO imageDTO : imageDTOs) {
+            Assert.assertFalse(imageDTO.getUrl().isEmpty());
+        }
     }
 
-    private void creationVerificationAnnonce() {
-        String loginDeJohnny = "johnny06";
-        Integer isCreationOK = annonceServiceREST.creationAnnonce(creationAnnonceDTO);
+    /**
+     * Cas de test : Un client veut récuperer les photos liées à son annonce, mais celui ci ne la possede pas.
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonces_by_id.yml")
+    public void testGetPhotoAnnonceByClientNotAllowed() {
+        List<ImageDTO> imageDTOs = annonceServiceTest.testGetPhoto("bertrand");
+        Assert.assertNotNull(imageDTOs);
+        Assert.assertEquals(0, imageDTOs.size());
+    }
 
-        // On utilise le DAO de l'annonce et de l'user pour vérifier le tout
-        Client johnny = clientDAO.getClientByLoginName(loginDeJohnny);
-        List<Annonce> annoncesDeJohnny = annonceDAO.getAnnoncesByLogin(loginDeJohnny);
+    /**
+     * Cas de test : Un client veut supprimer une des photos liées à son annonce, tout se passe comme prévu.
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonce_suppression_img.yml")
+    @ShouldMatchDataSet(value = "datasets/in/annonce_suppression_img.yml", excludeColumns = {"id",
+            "datemaj", "datecreation", "datenotation", "datenotification", "url"})
+    public void testSuppressPhotoAnnonceByClient() {
+        List<ImageDTO> imageDTOs = annonceServiceTest.testSuppressionPhoto("pebronne", true);
+        Assert.assertNotNull(imageDTOs);
+        Assert.assertEquals(2, imageDTOs.size());
+    }
 
-        // On test que la creation de l'annonce et du client en bdd est ok
-        Assert.assertTrue(isCreationOK == CodeRetourService.RETOUR_OK);
-        // On check que le client est présent dans la BDD
-        Assert.assertNotNull(johnny);
-        // On regarde que ce soit le bon login
-        Assert.assertTrue(loginDeJohnny.equals(johnny.getLogin()));
-        // On s'assure que la liste d'annonce renvoyées n'est pas null
-        Assert.assertNotNull(annoncesDeJohnny);
-        // On test qu'il y a bien une annonce liée à Johnny boy
-        Assert.assertTrue(annoncesDeJohnny.size() == 1);
+    /**
+     * Cas de test : Un admin veut supprimer une des photos liées à son annonce, tout se passe comme prévu.
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonce_suppression_img.yml")
+    @ShouldMatchDataSet(value = "datasets/in/annonce_suppression_img.yml", excludeColumns = {"id",
+            "datemaj", "datecreation", "datenotation", "datenotification", "url"})
+    public void testSuppressPhotoAnnonceByAdmin() {
+        List<ImageDTO> imageDTOs = annonceServiceTest.testSuppressionPhoto("admin", true);
+        Assert.assertNotNull(imageDTOs);
+        Assert.assertEquals(2, imageDTOs.size());
+    }
 
-        for (Annonce annonce : annoncesDeJohnny) {
-            Assert.assertFalse(annonce.getHashID().isEmpty());
-            Assert.assertFalse(annonce.getSelHashID().isEmpty());
-        }
+    /**
+     * Cas de test : Un client veut supprimer une des photos liées à son annonce, mais il n'a pas les droits
+     * On lui refuse l'accés
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonce_suppression_img.yml")
+    @ShouldMatchDataSet(value = "datasets/in/annonce_suppression_img.yml", excludeColumns = {"id",
+            "datemaj", "datecreation", "datenotation", "datenotification", "url"})
+    public void testSuppressPhotoAnnonceByClientNotAllowed() {
+        List<ImageDTO> imageDTOs = annonceServiceTest.testSuppressionPhoto("bertrand", false);
+        Assert.assertNotNull(imageDTOs);
+        Assert.assertEquals(0, imageDTOs.size());
     }
 }

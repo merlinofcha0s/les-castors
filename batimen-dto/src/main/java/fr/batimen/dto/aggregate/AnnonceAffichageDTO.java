@@ -35,7 +35,6 @@ public class AnnonceAffichageDTO extends AbstractDTO {
 
     @NotNull
     private Boolean isArtisanInscrit;
-    @NotNull
     @Size(max = 10)
     private String telephoneClient;
     @Email

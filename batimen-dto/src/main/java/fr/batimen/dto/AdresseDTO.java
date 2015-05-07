@@ -139,4 +139,15 @@ public class AdresseDTO extends AbstractDTO {
         return false;
     }
 
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("AdresseDTO{");
+        sb.append("adresse='").append(adresse).append('\'');
+        sb.append(", complementAdresse='").append(complementAdresse).append('\'');
+        sb.append(", codePostal='").append(codePostal).append('\'');
+        sb.append(", ville='").append(ville).append('\'');
+        sb.append(", departement=").append(departement);
+        sb.append('}');
+        return sb.toString();
+    }
 }

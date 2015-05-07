@@ -85,4 +85,8 @@ public class QueryJPQL {
     // Entity adresse
     public static final String ADRESSE_BY_NOM_COMPLET_ENTREPRISE = "adresseByNomCompletEntreprise";
 
+    // Entity image
+    public static final String IMAGE_BY_HASH_ID_AND_LOGIN_CLIENT = "imageByHashIdAndLoginClient";
+    public static final String IMAGE_BY_HASH_ID = "imageByHashId";
+
 }

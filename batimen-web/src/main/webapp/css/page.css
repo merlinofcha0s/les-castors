@@ -179,6 +179,11 @@
 	height: 130px; 
 }
 
+#descriptionModificationField{
+	width: 430px;
+	height: 170px;
+}
+
 
 /* Activation compte */
 .confirmationactivationok {
@@ -690,7 +695,7 @@ table tr td .error {
 	padding-top: 7px;
 }
 
-.containerActions{
+#containerActions{
 	padding-bottom: 20px;
 }
 
@@ -803,4 +808,15 @@ table tr td .error {
 	width: 258px;
 	height: 90px;
 	margin-top: 5px;
+}
+
+/* Modifier annonce */
+#btnAjoutPhoto{
+	float: right;
+	margin-top: 10px;
+}
+
+.img-ratio{
+	width: 200px;
+	height: 135px;
 }

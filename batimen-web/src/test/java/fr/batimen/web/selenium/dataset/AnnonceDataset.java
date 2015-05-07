@@ -78,6 +78,6 @@ public class AnnonceDataset {
     public static final Operation INSERT_ANNONCE_IMAGE = insertInto("image")
             .columns("id", "url", "id_annonce")
             .values(10001,
-                    "http://res.cloudinary.com/lescastors/image/upload/v1427874120/test/zbeod6tici6yrphpco39.jpg",
+                    "http://res.cloudinary.com/lescastors/image/upload/q_27/v1430908935/test/srwdbvzwlvhxoytsheha.jpg",
                     200011).build();
 }

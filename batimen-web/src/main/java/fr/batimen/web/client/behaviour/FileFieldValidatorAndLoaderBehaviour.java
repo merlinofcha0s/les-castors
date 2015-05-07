@@ -1,7 +1,10 @@
 package fr.batimen.web.client.behaviour;
 
+import fr.batimen.core.enums.PropertiesFileGeneral;
 import fr.batimen.web.app.constants.FeedbackMessageLevel;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
+import fr.batimen.web.enums.PropertiesFileWeb;
+import fr.batimen.ws.client.enums.PropertiesFileWsClient;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.event.Broadcast;
@@ -17,7 +20,7 @@ import java.util.List;
 /**
  * Created by Casaucau Cyril on 14/04/2015.
  * <p/>
- * Behaviour permettant de valider une photo : son type et son poids, le tout coté client
+ * Behaviour permettant de valider une photo : son type et son poids ainsi que le nombre de fichier, le tout coté client
  * <p/>
  * Elle charge également les photos directement dans la DTO
  *
@@ -51,20 +54,30 @@ public class FileFieldValidatorAndLoaderBehaviour extends FileFieldSizeCheckBeha
     @Override
     protected void onSubmit(AjaxRequestTarget target, FileList fileList) {
         boolean errorExtensionInvalide = false;
+        boolean errorNumberOfFiles = false;
 
-        //On valide le type de fichier
-        for (int i = 0; i < fileList.getNumOfFiles(); i++) {
-            Html5File file = fileList.get(i);
-            String extension = FilenameUtils.getExtension(file.getName());
-            if (!allowedFileTypes.contains(extension.toUpperCase())) {
-                StringBuilder errorMessage = new StringBuilder("Votre fichier doit être de type ");
-                errorMessage.append(allowedFileTypes.toString());
-                target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, errorMessage.toString(), FeedbackMessageLevel.ERROR));
-                errorExtensionInvalide = true;
+        Integer maxFileParAnnonce = Integer.valueOf(PropertiesFileGeneral.GENERAL.getProperties().getProperty("gen.max.number.file.annonce"));
+
+        if (fileList.getNumOfFiles() > maxFileParAnnonce) {
+            errorExtensionInvalide = true;
+            StringBuilder sbErreurMaxFile = new StringBuilder("Vous ne pouvez pas charger plus de ");
+            sbErreurMaxFile.append(maxFileParAnnonce).append(" photos par annonce.");
+            target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, sbErreurMaxFile.toString(), FeedbackMessageLevel.ERROR));
+        } else {
+            //On valide le type de fichier
+            for (int i = 0; i < fileList.getNumOfFiles(); i++) {
+                Html5File file = fileList.get(i);
+                String extension = FilenameUtils.getExtension(file.getName());
+                if (!allowedFileTypes.contains(extension.toUpperCase())) {
+                    StringBuilder errorMessage = new StringBuilder("Votre fichier doit être de type ");
+                    errorMessage.append(allowedFileTypes.toString());
+                    target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, errorMessage.toString(), FeedbackMessageLevel.ERROR));
+                    errorExtensionInvalide = true;
+                }
             }
         }
 
-        if (!errorExtensionInvalide) {
+        if (!errorExtensionInvalide && !errorNumberOfFiles) {
             validationOK = true;
             target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Vérification photo(s) OK !", FeedbackMessageLevel.SUCCESS));
         } else {

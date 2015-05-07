@@ -1,28 +1,5 @@
 package fr.batimen.web.client.extend.nouveau.devis;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-
-import fr.batimen.web.app.constants.FeedbackMessageLevel;
-import fr.batimen.web.client.behaviour.FileFieldValidatorAndLoaderBehaviour;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
-import org.apache.wicket.event.Broadcast;
-import org.apache.wicket.event.IEvent;
-import org.apache.wicket.markup.html.form.*;
-import org.apache.wicket.markup.html.form.upload.FileUpload;
-import org.apache.wicket.markup.html.form.upload.FileUploadField;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.util.lang.Bytes;
-import org.apache.wicket.validation.validator.PatternValidator;
-import org.apache.wicket.validation.validator.StringValidator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import fr.batimen.dto.PermissionDTO;
 import fr.batimen.dto.SousCategorieMetierDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
@@ -32,11 +9,40 @@ import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.enums.TypeContact;
 import fr.batimen.dto.enums.TypeTravaux;
 import fr.batimen.web.app.constants.Etape;
+import fr.batimen.web.app.constants.FeedbackMessageLevel;
+import fr.batimen.web.app.constants.ParamsConstant;
 import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
+import fr.batimen.web.client.behaviour.FileFieldValidatorAndLoaderBehaviour;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
+import fr.batimen.web.client.event.ModificationAnnonceEvent;
+import fr.batimen.web.client.extend.connected.Annonce;
 import fr.batimen.web.client.extend.nouveau.devis.event.CategorieEvent;
 import fr.batimen.web.client.extend.nouveau.devis.event.ChangementEtapeClientEvent;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.event.Broadcast;
+import org.apache.wicket.event.IEvent;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.*;
+import org.apache.wicket.markup.html.form.upload.FileUpload;
+import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.lang.Bytes;
+import org.apache.wicket.validation.validator.PatternValidator;
+import org.apache.wicket.validation.validator.StringValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Form de l'etape 3 de création d'annonce.
@@ -52,10 +58,36 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
     private final CreationAnnonceDTO nouvelleAnnonce;
 
     private FileFieldValidatorAndLoaderBehaviour fileFieldValidatorBehaviour;
+    private DropDownChoice<SousCategorieMetierDTO> sousCategorieSelect;
+    private String idAnnonce;
 
+    private boolean forModification = false;
+
+    /**
+     * Constructeur utile pour la modification d'une annonce.
+     * <p/>
+     * Particularité : on charge le composant de selection des sous categories differement car à la creation de l'annonce celui ci est rempli grace a un event ajax que nous n'avons pas ici.
+     *
+     * @param id                         l'id wicket du composant sur la page
+     * @param model                      Le model permettant l'affichage des données;
+     * @param sousCategorieMetierDTOList La liste des sous catégories chargé au demarrage du composant
+     * @param sousCategorieChoisie       La sous catégorie choisi précedemment par l'utilisateur
+     */
+    public Etape3AnnonceForm(final String id, IModel<CreationAnnonceDTO> model, List<SousCategorieMetierDTO> sousCategorieMetierDTOList, SousCategorieMetierDTO sousCategorieChoisie) {
+        this(id, model);
+        forModification = true;
+        sousCategorieSelect.setChoices(sousCategorieMetierDTOList);
+        sousCategorieSelect.setModelObject(sousCategorieChoisie);
+    }
+
+    /**
+     * Constructeur utilisé lors de la création d'annonce.
+     *
+     * @param id    l'id wicket du composant sur la page
+     * @param model Le model permettant l'affichage des données;
+     */
     public Etape3AnnonceForm(final String id, IModel<CreationAnnonceDTO> model) {
         super(id, model);
-
         // Mode Multipart pour l'upload de fichier.
         setMultiPart(true);
         setFileMaxSize(Bytes.megabytes(10));
@@ -65,7 +97,7 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
 
         nouvelleAnnonce = model.getObject();
 
-        DropDownChoice<SousCategorieMetierDTO> sousCategorieSelect = new DropDownChoice<SousCategorieMetierDTO>(
+        sousCategorieSelect = new DropDownChoice<SousCategorieMetierDTO>(
                 "sousCategorie") {
 
             private static final long serialVersionUID = -4258418495065575690L;
@@ -91,7 +123,7 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
         descriptionDevisField.setRequired(true);
         descriptionDevisField.add(StringValidator.lengthBetween(ValidatorConstant.ANNONCE_DESCRIPTION_MIN,
                 ValidatorConstant.ANNONCE_DESCRIPTION_MAX));
-        descriptionDevisField.setMarkupId("descriptionDevisField");
+
         descriptionDevisField.add(new ErrorHighlightBehavior());
         descriptionDevisField.add(new RequiredBorderBehaviour());
 
@@ -119,11 +151,27 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
         typeTravaux.add(new RequiredBorderBehaviour());
         typeTravaux.setMarkupId("typeTravaux");
 
+        Label lblPhoto = new Label("lblPhoto", new Model<String>());
+
+        if (forModification) {
+            lblPhoto.setDefaultModelObject("Ajouter des photos à votre devis: ");
+        } else {
+            lblPhoto.setDefaultModelObject("Souhaitez-vous ajouter des photos à votre devis ?");
+        }
 
         final FileUploadField photoField = new FileUploadField("photos");
         photoField.setMarkupId("photoField");
         fileFieldValidatorBehaviour = new FileFieldValidatorAndLoaderBehaviour();
         photoField.add(fileFieldValidatorBehaviour);
+
+        WebMarkupContainer containerPhoto = new WebMarkupContainer("containerPhoto") {
+            @Override
+            public boolean isVisible() {
+                return !forModification;
+            }
+        };
+
+        containerPhoto.add(lblPhoto, photoField);
 
         TextField<String> adresseField = new TextField<String>("adresse");
         adresseField.setRequired(true);
@@ -166,34 +214,40 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
              */
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                nouvelleAnnonce.setPhotos(new ArrayList<File>());
-                //On enregistre les fichiers dans la DTO
-                for (FileUpload photo : photoField.getFileUploads()) {
-                    try {
-                        nouvelleAnnonce.getPhotos().add(photo.writeToTempFile());
-                    } catch (IOException e) {
-                        if (LOGGER.isErrorEnabled()) {
-                            LOGGER.error("Problème durant l'écriture de la photo sur le disque", e);
+                if (forModification) {
+                    //nouvelleAnnonce.setSousCategorie(sousCategorieSelect.getConvertedInput());
+                    ModificationAnnonceEvent modificationAnnonceEvent = new ModificationAnnonceEvent(target, nouvelleAnnonce);
+                    this.send(target.getPage(), Broadcast.BREADTH, modificationAnnonceEvent);
+                } else {
+                    nouvelleAnnonce.setPhotos(new ArrayList<File>());
+                    //On enregistre les fichiers dans la DTO
+                    for (FileUpload photo : photoField.getFileUploads()) {
+                        try {
+                            nouvelleAnnonce.getPhotos().add(photo.writeToTempFile());
+                        } catch (IOException e) {
+                            if (LOGGER.isErrorEnabled()) {
+                                LOGGER.error("Problème durant l'écriture de la photo sur le disque", e);
+                            }
                         }
                     }
+                    if (!fileFieldValidatorBehaviour.isValidationOK()) {
+                        target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Validation erronnée de vos photos, veuillez corriger", FeedbackMessageLevel.ERROR));
+                    } else {
+                        nouvelleAnnonce.setNumeroEtape(4);
+                        ChangementEtapeClientEvent changementEtapeEventClient = new ChangementEtapeClientEvent(target,
+                                nouvelleAnnonce);
+                        PermissionDTO permissionDTO = new PermissionDTO();
+                        permissionDTO.setTypeCompte(TypeCompte.CLIENT);
+                        nouvelleAnnonce.getClient().getPermissions().add(permissionDTO);
+                        this.send(target.getPage(), Broadcast.BREADTH, changementEtapeEventClient);
+                    }
                 }
-                if (!fileFieldValidatorBehaviour.isValidationOK()) {
-                    target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Validation erronnée de vos photos, veuillez corriger", FeedbackMessageLevel.ERROR));
-                } else {
-                    nouvelleAnnonce.setNumeroEtape(4);
-                    ChangementEtapeClientEvent changementEtapeEventClient = new ChangementEtapeClientEvent(target,
-                            nouvelleAnnonce);
-                    PermissionDTO permissionDTO = new PermissionDTO();
-                    permissionDTO.setTypeCompte(TypeCompte.CLIENT);
-                    nouvelleAnnonce.getClient().getPermissions().add(permissionDTO);
-                    this.send(target.getPage(), Broadcast.BREADTH, changementEtapeEventClient);
-                }
-
             }
 
             /*
              * (non-Javadoc)
-             *
+             *target.add(getForm());
+                this.send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target));
              * @see
              * org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink#onError
              * (org.apache.wicket.ajax.AjaxRequestTarget,
@@ -214,15 +268,26 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                NouveauUtils.sendEventForPreviousStep(target, Etape.ETAPE_3.ordinal() + 1);
+                if(forModification){
+                    PageParameters params = new PageParameters();
+                    params.add(ParamsConstant.idAnnonceParam, idAnnonce);
+                    this.setResponsePage(Annonce.class, params);
+                }else{
+                    NouveauUtils.sendEventForPreviousStep(target, Etape.ETAPE_3.ordinal() + 1);
+                }
+
             }
         };
 
         etapePrecedente3.setOutputMarkupId(true);
         etapePrecedente3.setMarkupId("etapePrecedente3");
 
-        this.add(sousCategorieSelect, descriptionDevisField, typeContactField, delaiInterventionField, photoField,
+        this.add(sousCategorieSelect, descriptionDevisField, typeContactField, delaiInterventionField,
                 adresseField, adresseComplementField, codePostalField, villeField, validateQualification, typeTravaux,
-                etapePrecedente3);
+                etapePrecedente3, containerPhoto);
+    }
+
+    public void setIdAnnonce(String idAnnonce) {
+        this.idAnnonce = idAnnonce;
     }
 }

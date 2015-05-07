@@ -129,7 +129,7 @@ public class NotificationService {
         notification.setStatutNotification(StatutNotification.PAS_VUE);
         notification.setTypeNotification(typeNotification);
 
-        notificationDAO.create(notification);
+        notificationDAO.createMandatory(notification);
 
         try {
             emailService.envoiEmailNotification(notification);

@@ -6,15 +6,14 @@ import fr.batimen.dto.aggregate.*;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.helper.CategorieLoader;
+import fr.batimen.web.app.constants.ParamsConstant;
 import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.app.security.RolesUtils;
-import fr.batimen.web.client.component.Commentaire;
-import fr.batimen.web.client.component.ContactezNous;
-import fr.batimen.web.client.component.LinkLabel;
-import fr.batimen.web.client.component.Profil;
+import fr.batimen.web.client.component.*;
 import fr.batimen.web.client.event.*;
 import fr.batimen.web.client.extend.error.AccesInterdit;
 import fr.batimen.web.client.extend.error.NonTrouvee;
+import fr.batimen.web.client.extend.member.client.ModifierAnnonce;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.web.client.modal.*;
 import fr.batimen.ws.client.service.AnnonceServiceREST;
@@ -25,6 +24,7 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.extensions.markup.html.basic.SmartLinkLabel;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
@@ -34,6 +34,7 @@ import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
+import org.apache.wicket.util.string.StringValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -66,6 +67,8 @@ public class Annonce extends MasterPage {
     private WebMarkupContainer containerActions;
     private WebMarkupContainer notationAnnonceParClientContainer;
     private WebMarkupContainer containerPopupNotationArtisan;
+    private WebMarkupContainer modifierAnnonceContainer;
+    private WebMarkupContainer supprimerAnnonceContainer;
 
     private WebMarkupContainer envoyerDevisContainer;
 
@@ -97,7 +100,7 @@ public class Annonce extends MasterPage {
 
     public Annonce(PageParameters params) {
         this();
-        idAnnonce = params.get("idAnnonce").toString();
+        idAnnonce = params.get(ParamsConstant.idAnnonceParam).toString();
         roleUtils = new RolesUtils();
         loadAnnonceInfos(idAnnonce);
         updateNbConsultation();
@@ -154,7 +157,7 @@ public class Annonce extends MasterPage {
         containerActions.setOutputMarkupId(true);
         containerActions.setMarkupId("containerActions");
 
-        WebMarkupContainer modifierAnnonceContainer = new WebMarkupContainer("modifierAnnonceContainer") {
+        modifierAnnonceContainer = new WebMarkupContainer("modifierAnnonceContainer") {
             /**
              * 
              */
@@ -162,9 +165,14 @@ public class Annonce extends MasterPage {
 
             @Override
             public boolean isVisible() {
-                return roleUtils.checkClientAndAdminRoles();
+                return roleUtils.checkClientAndAdminRoles() && !(annonceAffichageDTO.getAnnonce().getEtatAnnonce().equals(EtatAnnonce.DESACTIVE)
+                        || annonceAffichageDTO.getAnnonce().getEtatAnnonce().equals(EtatAnnonce.A_NOTER)
+                        || annonceAffichageDTO.getAnnonce().getEtatAnnonce().equals(EtatAnnonce.SUPPRIMER)
+                        || annonceAffichageDTO.getAnnonce().getEtatAnnonce().equals(EtatAnnonce.TERMINER));
             }
         };
+
+        modifierAnnonceContainer.setOutputMarkupId(true);
 
         Link<Void> modifierAnnonce = new Link<Void>("modifierAnnonce") {
 
@@ -172,12 +180,13 @@ public class Annonce extends MasterPage {
 
             @Override
             public void onClick() {
-                // TODO Plugger la modification de l'annonce une fois page faite
+                ModifierAnnonce modifierAnnoncePage = new ModifierAnnonce(idAnnonce, annonceAffichageDTO);
+                this.setResponsePage(modifierAnnoncePage);
             }
 
         };
 
-        WebMarkupContainer supprimerAnnonceContainer = new WebMarkupContainer("supprimerAnnonceContainer") {
+        supprimerAnnonceContainer = new WebMarkupContainer("supprimerAnnonceContainer") {
             /**
              * 
              */
@@ -187,7 +196,19 @@ public class Annonce extends MasterPage {
             public boolean isVisible() {
                 return roleUtils.checkClientAndAdminRoles();
             }
+
+            @Override
+            protected void onComponentTag(ComponentTag tag) {
+                super.onComponentTag(tag);
+                if(!modifierAnnonceContainer.isVisible()){
+                    tag.remove("class");
+                }else{
+                    tag.put("class", "containerAction");
+                }
+            }
         };
+
+        supprimerAnnonceContainer.setOutputMarkupId(true);
 
         AjaxLink<Void> supprimerAnnonce = new AjaxLink<Void>("supprimerAnnonce") {
 
@@ -197,7 +218,6 @@ public class Annonce extends MasterPage {
             public void onClick(AjaxRequestTarget target) {
                 this.send(target.getPage(), Broadcast.BREADTH, new SuppressionOpenEvent(target));
             }
-
         };
 
         supprimerAnnonce.setOutputMarkupId(true);
@@ -702,48 +722,8 @@ public class Annonce extends MasterPage {
     }
 
     private void initContainerPhoto() {
-
-        WebMarkupContainer photosContainer = new WebMarkupContainer("photosContainer") {
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public boolean isVisible() {
-                return !annonceAffichageDTO.getImages().isEmpty();
-            }
-        };
-
-        ListView<ImageDTO> imagesView = new ListView<ImageDTO>("imagesView", annonceAffichageDTO.getImages()) {
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected void populateItem(ListItem<ImageDTO> item) {
-                final ImageDTO imageDTO = item.getModelObject();
-                ExternalLink linkOnPhoto = new ExternalLink("thumbnails", imageDTO.getUrl());
-                Image imageHtml = new Image("photo", new Model<String>(imageDTO.getUrl()));
-                imageHtml.add(new AttributeModifier("src", imageDTO.getUrl()));
-                linkOnPhoto.add(imageHtml);
-                item.add(linkOnPhoto);
-            }
-        };
-
-        photosContainer.add(imagesView);
-
-        WebMarkupContainer aucunePhotoContainer = new WebMarkupContainer("aucunePhotoContainer") {
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public boolean isVisible() {
-                return annonceAffichageDTO.getImages().isEmpty();
-            }
-        };
-
-        Label aucunePhoto = new Label("aucunePhoto", "Aucune photo du chantier pour le moment :(");
-        aucunePhotoContainer.add(aucunePhoto);
-
-        add(photosContainer, aucunePhotoContainer);
+        PhotosContainer photosContainer = new PhotosContainer("containerPhotos", annonceAffichageDTO.getImages(), "Photos du chantier", "h2", false);
+        add(photosContainer);
     }
 
     /*
@@ -815,7 +795,7 @@ public class Annonce extends MasterPage {
             // On set le model pour que le nom de l'entreprise soit
             // rafraichi par la requette ajax
 
-            selectionEntrepriseEvent.getTarget().add(feedBackPanelGeneral, containerEntreprisesGlobales, etatAnnonce, containerPopupNotationArtisan);
+            selectionEntrepriseEvent.getTarget().add(feedBackPanelGeneral, containerEntreprisesGlobales, etatAnnonce, containerPopupNotationArtisan, modifierAnnonceContainer, supprimerAnnonceContainer);
         }
 
         if (event.getPayload() instanceof DesinscriptionArtisanAnnonceEvent) {

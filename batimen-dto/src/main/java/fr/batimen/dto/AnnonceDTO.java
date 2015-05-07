@@ -41,7 +41,6 @@ public class AnnonceDTO extends AbstractDTO {
     private String sousCategorieMetier;
     @NotNull
     private EtatAnnonce etatAnnonce;
-    @NotNull
     private Long nbDevis;
     @NotNull
     private TypeTravaux typeTravaux;
@@ -275,5 +274,25 @@ public class AnnonceDTO extends AbstractDTO {
                     && Objects.equals(this.description, other.description);
         }
         return false;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("AnnonceDTO{");
+        sb.append("description='").append(description).append('\'');
+        sb.append(", typeContact=").append(typeContact);
+        sb.append(", delaiIntervention=").append(delaiIntervention);
+        sb.append(", dateCreation=").append(dateCreation);
+        sb.append(", dateMAJ=").append(dateMAJ);
+        sb.append(", nbConsultation=").append(nbConsultation);
+        sb.append(", categorieMetier=").append(categorieMetier);
+        sb.append(", sousCategorieMetier='").append(sousCategorieMetier).append('\'');
+        sb.append(", etatAnnonce=").append(etatAnnonce);
+        sb.append(", nbDevis=").append(nbDevis);
+        sb.append(", typeTravaux=").append(typeTravaux);
+        sb.append(", hashID='").append(hashID).append('\'');
+        sb.append(", loginOwner='").append(loginOwner).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }
