@@ -48,7 +48,7 @@ public class NotationArtisanModal extends ModalCastor {
         feedBackPanel = new BatimenFeedbackPanel("feedbackPanelNotationArtisan");
         feedBackPanel.setOutputMarkupId(true);
 
-        raterCastor = new RaterCastor("raterCastor", 5, true);
+        raterCastor = new RaterCastor("raterCastor", true);
         raterCastor.setMarkupId("raterCastor");
 
         textAreaCommentaire = new TextArea<String>("textAreaCommentaireNotation", new Model<String>());

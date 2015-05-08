@@ -170,7 +170,7 @@ public class ModifierAnnonce extends MasterPage {
             //Appel du service
             Integer codeRetourService = annonceServiceREST.modifierAnnonce(modificationAnnonceDTO);
 
-            if (codeRetourService == CodeRetourService.RETOUR_OK) {
+            if (codeRetourService.equals(CodeRetourService.RETOUR_OK)) {
                 feedBackPanelGeneral.sendMessage("Votre annonce a été modifiée avec succés !", FeedbackMessageLevel.SUCCESS);
             } else {
                 feedBackPanelGeneral.sendMessage("Problème lors de l'enregistrement de l'annonce, veuillez réessayer ultérieurement", FeedbackMessageLevel.ERROR);

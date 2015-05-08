@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import fr.batimen.ws.entity.Image;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,7 +47,7 @@ public class ImageDAO extends AbstractDAO<Image> {
             if (LOGGER.isWarnEnabled()) {
                 LOGGER.warn("Aucune images trouvées dans la BDD pour l'annonce {}", hashID, nre);
             }
-            return null;
+            return new ArrayList<>();
         }
     }
 
@@ -66,7 +67,7 @@ public class ImageDAO extends AbstractDAO<Image> {
             if (LOGGER.isWarnEnabled()) {
                 LOGGER.warn("Aucune images trouvées dans la BDD pour l'annonce {}", hashID, nre);
             }
-            return null;
+            return new ArrayList<>();
         }
     }
 }

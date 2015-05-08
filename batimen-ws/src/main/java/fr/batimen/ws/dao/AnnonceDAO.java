@@ -382,7 +382,7 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
             if (LOGGER.isWarnEnabled()) {
                 LOGGER.warn("Aucune correspondance trouvées dans la BDD", nre);
             }
-            return null;
+            return Boolean.FALSE;
         }
     }
 

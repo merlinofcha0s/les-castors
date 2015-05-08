@@ -197,7 +197,7 @@ public final class MesAnnonces extends MasterPage {
                     @Override
                     public void onClick() {
                         PageParameters params = new PageParameters();
-                        params.add(ParamsConstant.idAnnonceParam, annonce.getHashID());
+                        params.add(ParamsConstant.ID_ANNONCE_PARAM, annonce.getHashID());
                         this.setResponsePage(Annonce.class, params);
                     }
 

@@ -9,8 +9,10 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.api.ApiResponse;
 import com.cloudinary.utils.ObjectUtils;
 
+import fr.batimen.core.exception.BackendException;
 import fr.batimen.ws.entity.Image;
 import fr.batimen.ws.enums.PropertiesFileWS;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,14 +62,17 @@ public class CloudinaryService {
      */
     public String getImageID(Image imageASupprimer) {
         //On decoupe l'url pour en extraire l'id de l'image
-        String[] morceauURL = imageASupprimer.getUrl().split("/");
-        String idImage = morceauURL[8].replace(".jpg", "");
+        int dernierPoint = imageASupprimer.getUrl().lastIndexOf(".");
+        String urlMinusExtension = imageASupprimer.getUrl().substring(0, dernierPoint);
+        int dernierSlash = urlMinusExtension.lastIndexOf("/");
+        String idImage = urlMinusExtension.substring(dernierSlash + 1, urlMinusExtension.length());
 
-        if (isInTestMode()) {
-            StringBuilder testIdImage = new StringBuilder("test/");
-            testIdImage.append(idImage);
-            idImage = testIdImage.toString();
+        if(isInTestMode()){
+            StringBuilder testModeImageId = new StringBuilder(idImage);
+            testModeImageId.insert(0, "test/");
+            idImage = testModeImageId.toString();
         }
+
         return idImage;
     }
 
@@ -94,8 +99,12 @@ public class CloudinaryService {
         if (deletedResult.equals("deleted")) {
             return true;
         } else {
-            if (LOGGER.isErrorEnabled()) {
-                LOGGER.error("L'image n'a pas été supprimée, ne doit pas arriver", idImage.toString());
+            try {
+                throw new BackendException("L'image n'a pas été supprimée du cloud");
+            } catch (BackendException e) {
+                if (LOGGER.isErrorEnabled()) {
+                    LOGGER.error("L'image n'a pas été supprimée, ne doit pas arriver", idImage.toString(), e);
+                }
             }
             return false;
         }
