@@ -87,5 +87,11 @@
 			<artifactId>logback-access</artifactId>
 			<scope>provided</scope>
 		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>batimen-core</artifactId>
+			<version>${project.version}</version>
+			<scope>compile</scope>
+		</dependency>
 	</dependencies>
 </project>

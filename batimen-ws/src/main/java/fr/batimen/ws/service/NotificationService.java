@@ -117,8 +117,8 @@ public class NotificationService {
      * 
      */
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void generationNotificationArtisan(Annonce annonce, Artisan artisan, TypeCompte typeCompte,
-            TypeNotification typeNotification) {
+    public void generationNotification(Annonce annonce, Artisan artisan, TypeCompte typeCompte,
+                                       TypeNotification typeNotification) {
 
         Notification notification = new Notification();
         notification.setAnnonce(annonce);
@@ -141,6 +141,5 @@ public class NotificationService {
                 LOGGER.error(logError.toString(), e);
             }
         }
-
     }
 }

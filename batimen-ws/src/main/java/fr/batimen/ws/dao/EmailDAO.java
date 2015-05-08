@@ -25,7 +25,7 @@ import fr.batimen.ws.enums.PropertiesFileWS;
 /**
  * Classe de formatage et d'envoi d'email, l'envoi de mail est realisé par
  * mandrillapp
- * 
+ *
  * @author Casaucau Cyril
  */
 @Stateless(name = "EmailDAO")
@@ -44,9 +44,8 @@ public class EmailDAO {
 
     /**
      * Prepare l'email : régle les differentes options, ajoute l'emetteur, etc
-     * 
-     * @param subject
-     *            L'objet du mail, null dans le cas d'un template
+     *
+     * @param subject L'objet du mail, null dans le cas d'un template
      * @return
      */
     public MandrillMessage prepareEmail(String subject) {
@@ -63,13 +62,10 @@ public class EmailDAO {
 
     /**
      * Ajoute le ou les recepteurs au mail.
-     * 
-     * @param message
-     *            Le message qui sera envoyé
-     * @param recipients
-     *            Les recepteurs sous forme de map
-     * @param preserveRecipients
-     *            est ce que les recepteurs doivent se voir entre eux?
+     *
+     * @param message            Le message qui sera envoyé
+     * @param recipients         Les recepteurs sous forme de map
+     * @param preserveRecipients est ce que les recepteurs doivent se voir entre eux?
      */
     public void prepareRecipient(MandrillMessage message, Map<String, String> recipients, boolean preserveRecipients) {
 
@@ -89,7 +85,7 @@ public class EmailDAO {
     /**
      * Ajoute le contenu au mail <br/>
      * A utiliser dans le cas de l'envoi sans template.
-     * 
+     *
      * @param message
      * @param htmlContent
      */
@@ -101,12 +97,11 @@ public class EmailDAO {
 
     /**
      * Envoi d'un message sans template
-     * 
-     * @see prepareContent a utiliser obligatoirement en passant par cette
-     *      methode.
-     * 
-     * @param message
-     *            le message a envoyé
+     * <p/>
+     * Méthode prepareContent a utiliser obligatoirement en passant par cette
+     * methode.
+     *
+     * @param message le message a envoyé
      * @return vrai si pas d'erreur
      * @throws MandrillApiError
      * @throws IOException
@@ -124,13 +119,10 @@ public class EmailDAO {
 
     /**
      * Envoi de mail avec template
-     * 
-     * @param message
-     *            le mail que l'on va envoyer
-     * @param templateName
-     *            Le nom du template présent sur mandrillapp
-     * @param templateContent
-     *            Le contenu dynamic à remplacer.
+     *
+     * @param message         le mail que l'on va envoyer
+     * @param templateName    Le nom du template présent sur mandrillapp
+     * @param templateContent Le contenu dynamic à remplacer.
      * @return vrai si pas d'erreur
      * @throws MandrillApiError
      * @throws IOException
@@ -138,7 +130,9 @@ public class EmailDAO {
      */
     public boolean sendEmailTemplate(MandrillMessage message, String templateName, Map<String, String> templateContent)
             throws MandrillApiError, IOException, EmailException {
+
         if (emailActive) {
+            remplirFooter(message);
             MandrillMessageStatus[] messagesStatus = mandrillApi.messages().sendTemplate(templateName, templateContent,
                     message, false);
 
@@ -149,10 +143,47 @@ public class EmailDAO {
     }
 
     /**
+     * Charge le contenu à remplacer dynamiquement dans le mail
+     * <p/>
+     * Tag à remplacer dans le mail qui ne sont pas des balises mais peuvent être n'importe quoi a remplacer dans le mail.
+     * <p/>
+     * Exemple : *|TOTO|*
+     *
+     * @param mail Le mail
+     */
+    public void remplirFooter(MandrillMessage mail) {
+        // On charge les variables dynamique à remplacer
+        Properties urlProperties = PropertiesFileWS.URL.getProperties();
+        String urlFront = urlProperties.getProperty("url.frontend.web");
+        String urlFb = urlProperties.getProperty("url.fb");
+        String urlTwitter = urlProperties.getProperty("url.twitter");
+        String urlGooglePlus = urlProperties.getProperty("url.google.plus");
+
+        List<MandrillMessage.MergeVar> mergevars = new LinkedList<>();
+
+        MandrillMessage.MergeVar mergeVarsHome = new MandrillMessage.MergeVar(EmailConstant.TAG_EMAIL_HOME, urlFront);
+        MandrillMessage.MergeVar mergeVarsEspaceClient = new MandrillMessage.MergeVar(EmailConstant.TAG_EMAIL_ESPACE_CLIENT, urlFront);
+        MandrillMessage.MergeVar mergeVarsFB = new MandrillMessage.MergeVar(EmailConstant.TAG_EMAIL_FB, urlFb);
+        MandrillMessage.MergeVar mergeVarsTwitter = new MandrillMessage.MergeVar(EmailConstant.TAG_EMAIL_TWITTER, urlTwitter);
+        MandrillMessage.MergeVar mergeVarsGooglePlus = new MandrillMessage.MergeVar(EmailConstant.TAG_EMAIL_GOOGLEPLUS, urlGooglePlus);
+
+        mergevars.add(mergeVarsHome);
+        mergevars.add(mergeVarsEspaceClient);
+        mergevars.add(mergeVarsFB);
+        mergevars.add(mergeVarsTwitter);
+        mergevars.add(mergeVarsGooglePlus);
+
+        if(mail.getGlobalMergeVars() != null){
+            mail.getGlobalMergeVars().addAll(mergevars);
+        }else{
+            mail.setGlobalMergeVars(mergevars);
+        }
+    }
+
+    /**
      * Regarde si des erreurs reviennent lors de l'envoi des mails
-     * 
-     * @param messagesStatus
-     *            Tableau d'erreurs d'envoi de mail
+     *
+     * @param messagesStatus Tableau d'erreurs d'envoi de mail
      * @return vrai si pas d'erreur.
      * @throws EmailException
      */
@@ -167,7 +198,6 @@ public class EmailDAO {
                         messagesStatus[i].getEmail(), messagesStatus[i].getStatus());
             }
         }
-
         return noError;
     }
 
