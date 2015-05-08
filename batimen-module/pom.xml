@@ -6,7 +6,7 @@
 	<groupId>fr.batimen.app</groupId>
 	<artifactId>batimen-module</artifactId>
 	<description>Projet principal de Batimen</description>
-	<version>0.3.0-SNAPSHOT</version>
+	<version>0.4.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<name>batimen-module</name>
@@ -29,7 +29,8 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<logback.version>1.1.2</logback.version>
 		<jersey.version>1.18.1</jersey.version>
-		<slf4j.version>1.7.9</slf4j.version>
+		<slf4j.version>1.7.12</slf4j.version>
+		<jacoco.version>0.7.4.201502262128</jacoco.version>
 		<!-- Sonar -->
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.junit.reportsPath>${basedir}/target/surefire-reports</sonar.junit.reportsPath>
@@ -172,7 +173,7 @@
 				<groupId>org.jboss.spec</groupId>
 				<artifactId>jboss-javaee-6.0</artifactId>
 				<type>pom</type>
-				<version>3.0.2.Final</version>
+				<version>3.0.3.Final</version>
 			</dependency>
 			<dependency>
 				<groupId>ch.qos.logback</groupId>
@@ -192,7 +193,7 @@
 			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
-				<version>4.11</version>
+				<version>4.12</version>
 			</dependency>
 			<dependency>
 				<groupId>com.lambdaworks</groupId>
@@ -202,7 +203,7 @@
 			<dependency>
 				<groupId>org.modelmapper</groupId>
 				<artifactId>modelmapper</artifactId>
-				<version>0.7.2</version>
+				<version>0.7.4</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
