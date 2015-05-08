@@ -145,7 +145,7 @@ public class PhotosContainer extends Panel {
                         int sizeBefore = images.size();
                         images = annonceServiceREST.suppressionPhoto(suppressionPhotoDTO);
 
-                        updatePhotoContainer(loginDemandeur, target);
+                        updatePhotoContainer(target);
                         if (sizeBefore != images.size()) {
                             target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Suppression effectuée !", FeedbackMessageLevel.SUCCESS));
                         } else {
@@ -244,7 +244,7 @@ public class PhotosContainer extends Panel {
                     } else if (images.isEmpty()) {
                         target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Problème durant le chargement des photos sur le serveur, veuillez réessayer ultérieurement", FeedbackMessageLevel.ERROR));
                     } else {
-                        updatePhotoContainer(loginDemandeur, target);
+                        updatePhotoContainer(target);
 
                         //Mise a jour des champs
                         ajoutImageDTO.getImages().clear();
