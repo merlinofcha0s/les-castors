@@ -270,7 +270,7 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
             public void onClick(AjaxRequestTarget target) {
                 if(forModification){
                     PageParameters params = new PageParameters();
-                    params.add(ParamsConstant.idAnnonceParam, idAnnonce);
+                    params.add(ParamsConstant.ID_ANNONCE_PARAM, idAnnonce);
                     this.setResponsePage(Annonce.class, params);
                 }else{
                     NouveauUtils.sendEventForPreviousStep(target, Etape.ETAPE_3.ordinal() + 1);

@@ -11,8 +11,13 @@ import org.apache.wicket.markup.html.form.HiddenField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.resource.ContextRelativeResourceReference;
 
+/**
+ * Composant permettant de noter un artisan
+ *
+ * @author Casaucau Cyril
+ *
+ */
 public class RaterCastor extends Panel {
 
     private static final long serialVersionUID = 6704123311798304893L;
@@ -21,16 +26,16 @@ public class RaterCastor extends Panel {
 
     private final AttributeModifier readOnly = new AttributeModifier("readOnly", "readOnly");
 
-    public final static String nameFctJsInitRaterCastor = "initRaterCastor()";
+    public final static String NAME_FCT_JS_INIT_RATER_CASTOR = "initRaterCastor()";
 
     public RaterCastor(String id) {
         super(id);
-        rater = new HiddenField<String>("rater", new Model<String>());
+        rater = new HiddenField<>("rater", new Model<String>());
         rater.setMarkupId("raterCastorField");
         this.add(rater);
     }
 
-    public RaterCastor(String id, Integer nbEtoile, boolean required) {
+    public RaterCastor(String id, boolean required) {
         this(id);
         rater.setModel(new Model<String>());
         if (required) {
@@ -88,7 +93,7 @@ public class RaterCastor extends Panel {
         //Réinitialisaton du javascript pour que le composant s'affiche en cas de requete ajax
         AjaxRequestTarget target = RequestCycle.get().find(AjaxRequestTarget.class);
         if (target != null) {
-            target.appendJavaScript(RaterCastor.nameFctJsInitRaterCastor);
+            target.appendJavaScript(RaterCastor.NAME_FCT_JS_INIT_RATER_CASTOR);
         }
     }
 }

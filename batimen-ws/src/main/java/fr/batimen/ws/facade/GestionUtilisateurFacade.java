@@ -72,13 +72,10 @@ public class GestionUtilisateurFacade {
     @Inject
     private ArtisanDAO artisanDAO;
 
-    @Inject
-    private NotificationDAO notificationDAO;
-
     /**
      * Methode de login des utilisateurs
      * 
-     * @param LoginDTO
+     * @param toLogin
      *            loginDTO objet permettant l'authentification
      * @return vide si la combinaison login / mdp ne corresponds pas ou si
      *         inexistant

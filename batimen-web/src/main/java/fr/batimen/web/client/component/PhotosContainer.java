@@ -56,8 +56,8 @@ public class PhotosContainer extends Panel {
     private WebMarkupContainer transparentMarkupForPhotosAjax;
     private ListView<ImageDTO> imagesView;
 
-    private final String refreshTooltipOnSuppressLink = "$('.suppress-link').tooltip()";
-    private final String refreshPrettyPhotoOnPicture = "$(\"a[class^='prettyPhoto']\").prettyPhoto();";
+    private static final  String REFRESH_TOOLTIP_ON_SUPPRESS_LINK = "$('.suppress-link').tooltip()";
+    private static final  String REFRESH_PRETTY_PHOTO_ON_PICTURE = "$(\"a[class^='prettyPhoto']\").prettyPhoto();";
 
     @Inject
     private AnnonceServiceREST annonceServiceREST;
@@ -79,7 +79,7 @@ public class PhotosContainer extends Panel {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.render(OnDomReadyHeaderItem.forScript(refreshTooltipOnSuppressLink));
+        response.render(OnDomReadyHeaderItem.forScript(REFRESH_TOOLTIP_ON_SUPPRESS_LINK));
     }
 
     private void initComponent() {
@@ -277,12 +277,12 @@ public class PhotosContainer extends Panel {
         this.idAnnonce = idAnnonce;
     }
 
-    private void updatePhotoContainer(String loginDemandeur, AjaxRequestTarget target) {
+    private void updatePhotoContainer(AjaxRequestTarget target) {
         imagesView.setList(images);
         target.add(transparentMarkupForPhotosAjax);
         //Reload de la tooltip sur les liens de suppression
-        target.appendJavaScript(refreshTooltipOnSuppressLink);
+        target.appendJavaScript(REFRESH_TOOLTIP_ON_SUPPRESS_LINK);
         //Reload de pretty photo sur les photos client
-        target.appendJavaScript(refreshPrettyPhotoOnPicture);
+        target.appendJavaScript(REFRESH_PRETTY_PHOTO_ON_PICTURE);
     }
 }

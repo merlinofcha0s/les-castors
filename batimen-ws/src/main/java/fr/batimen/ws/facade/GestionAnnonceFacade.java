@@ -887,9 +887,6 @@ public class GestionAnnonceFacade {
         String rolesDemandeur = utilisateurFacade.getUtilisateurRoles(suppressionPhotoDTO.getLoginDemandeur());
         List<Image> images = photoService.getImagesByHashIDByLoginDemandeur(rolesDemandeur, suppressionPhotoDTO.getHashID(), suppressionPhotoDTO.getLoginDemandeur());
         List<ImageDTO> imageDTOs = new LinkedList<>();
-        ModelMapper mapper = new ModelMapper();
-
-
         //Si c'est images est null ce que l'utilisateur n'a pas les droits
         if (images == null) {
             return new ArrayList<>();

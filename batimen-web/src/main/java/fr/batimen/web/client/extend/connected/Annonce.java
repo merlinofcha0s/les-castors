@@ -27,14 +27,11 @@ import org.apache.wicket.extensions.markup.html.basic.SmartLinkLabel;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.image.Image;
-import org.apache.wicket.markup.html.link.ExternalLink;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.util.string.StringValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -100,7 +97,7 @@ public class Annonce extends MasterPage {
 
     public Annonce(PageParameters params) {
         this();
-        idAnnonce = params.get(ParamsConstant.idAnnonceParam).toString();
+        idAnnonce = params.get(ParamsConstant.ID_ANNONCE_PARAM).toString();
         roleUtils = new RolesUtils();
         loadAnnonceInfos(idAnnonce);
         updateNbConsultation();

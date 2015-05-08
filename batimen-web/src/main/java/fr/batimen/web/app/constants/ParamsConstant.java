@@ -1,9 +1,15 @@
 package fr.batimen.web.app.constants;
 
 /**
- * Created by Casaucau on 20/04/2015.
+ * Classe de constante concernant les parametres dans les URLS pour la Web App
+ *
+ * @author Casaucau Cyril
  */
 public class ParamsConstant {
 
-    public static final String idAnnonceParam = "idAnnonce";
+    public static final String ID_ANNONCE_PARAM = "idAnnonce";
+
+    private ParamsConstant(){
+
+    }
 }

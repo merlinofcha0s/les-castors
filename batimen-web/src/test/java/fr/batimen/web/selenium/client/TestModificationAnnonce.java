@@ -121,9 +121,7 @@ public class TestModificationAnnonce extends AbstractITTest {
             Thread.sleep(2000);
         }
 
-        WebElement boutonEnvoiPhoto = driver.findElement(By.id("envoyerPhotos"));
-        boutonEnvoiPhoto.sendKeys(Keys.CONTROL);
-        boutonEnvoiPhoto.click();
+        driver.findElement(By.id("envoyerPhotos")).click();
 
         Boolean checkUntilModifOK = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("span.box_type4"),

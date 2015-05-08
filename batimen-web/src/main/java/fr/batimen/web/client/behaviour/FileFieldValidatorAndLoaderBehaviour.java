@@ -33,7 +33,7 @@ public class FileFieldValidatorAndLoaderBehaviour extends FileFieldSizeCheckBeha
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FileFieldValidatorAndLoaderBehaviour.class);
 
-    private final List<String> allowedFileTypes = Arrays.asList("JPG", "PNG");
+    private final List<String> allowedFileTypes = Arrays.asList("JPG", "PNG", "JPEG");
 
     private boolean validationOK = true;
 
