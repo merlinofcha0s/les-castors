@@ -282,5 +282,4 @@ public class EmailService {
         notificationMail.setGlobalMergeVars(mergevars);
         return templateContent;
     }
-
 }

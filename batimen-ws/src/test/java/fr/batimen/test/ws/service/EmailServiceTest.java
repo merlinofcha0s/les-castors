@@ -7,6 +7,8 @@ import java.util.Properties;
 
 import javax.inject.Inject;
 
+import fr.batimen.dto.NotificationDTO;
+import fr.batimen.ws.entity.Notification;
 import org.jboss.arquillian.persistence.UsingDataSet;
 import org.junit.Assert;
 import org.junit.Before;
@@ -137,5 +139,4 @@ public class EmailServiceTest extends AbstractBatimenWsTest {
         boolean noError = emailService.envoiEmailAccuseReception(contactMailDTO);
         Assert.assertTrue(noError);
     }
-
 }

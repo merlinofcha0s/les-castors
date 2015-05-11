@@ -53,7 +53,4 @@ public class EmailConstant {
     public static final String TAG_EMAIL_NOTIFICATION_ARTISAN = "nomartisan";
     public static final String TAG_EMAIL_NOTIFICATION_NOM_ENTREPRISE = "nomentreprise";
     public static final String TAG_EMAIL_NOTIFICATION_URL_FRONT = "urlCastor";
-
-
-
 }
