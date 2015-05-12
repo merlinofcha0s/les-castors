@@ -16,6 +16,7 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
+import fr.batimen.dto.ModifClientDTO;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -253,11 +254,11 @@ public class GestionUtilisateurFacade {
     @POST
     @Path(WsPath.GESTION_UTILISATEUR_SERVICE_UPDATE_INFO)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public Integer updateUtilisateurInfos(ClientDTO clientDTO) {
+    public Integer updateUtilisateurInfos(ModifClientDTO clientDTO) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Récuperation de l'entité client pour : " + clientDTO.getLogin());
         }
-        Client clientInDB = clientDAO.getClientByEmail(clientDTO.getEmail());
+        Client clientInDB = clientDAO.getClientByEmail(clientDTO.getOldEmail());
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Mapping de la dto avec l'entité.....");

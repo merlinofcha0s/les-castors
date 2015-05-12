@@ -7,6 +7,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import fr.batimen.dto.ModifClientDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -154,7 +155,7 @@ public class UtilisateurServiceREST implements Serializable{
      *            DTO contenant les informations
      * @return code retour @see {@link Constant}
      */
-    public Integer updateUtilisateurInfos(ClientDTO utilisateurToUpdate) {
+    public Integer updateUtilisateurInfos(ModifClientDTO utilisateurToUpdate) {
         Integer codeRetour;
 
         if (LOGGER.isDebugEnabled()) {

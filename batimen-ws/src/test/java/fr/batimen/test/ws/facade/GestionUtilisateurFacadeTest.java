@@ -8,10 +8,12 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
+import fr.batimen.dto.ModifClientDTO;
 import org.jboss.arquillian.persistence.ShouldMatchDataSet;
 import org.jboss.arquillian.persistence.UsingDataSet;
 import org.junit.Assert;
 import org.junit.Test;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -305,6 +307,7 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
     @UsingDataSet("datasets/in/update_utilisateur.yml")
     @ShouldMatchDataSet(value = "datasets/out/update_utilisateur.yml", excludeColumns = { "id", "datemaj" })
     public void testUpdateUtilisateurInfos() throws BackendException {
+
         // On charge le client de la bdd
         ClientDTO client = utilisateurServiceREST.getUtilisateurByEmail("lol@lol.com");
         Assert.assertNotNull(client);
@@ -313,8 +316,15 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
         client.setNom("Du pébron");
         client.setNumeroTel("0512458596");
 
+        ModifClientDTO modifClientDTO = new ModifClientDTO();
+
+        ModelMapper mapper = new ModelMapper();
+        mapper.map(client, modifClientDTO);
+
+        modifClientDTO.setOldEmail(client.getEmail());
+
         // On appel le ws
-        Integer codeRetour = utilisateurServiceREST.updateUtilisateurInfos(client);
+        Integer codeRetour = utilisateurServiceREST.updateUtilisateurInfos(modifClientDTO);
         Assert.assertEquals(CodeRetourService.RETOUR_OK, codeRetour);
     }
 

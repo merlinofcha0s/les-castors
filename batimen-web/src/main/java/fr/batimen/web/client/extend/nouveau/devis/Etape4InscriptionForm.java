@@ -1,7 +1,23 @@
 package fr.batimen.web.client.extend.nouveau.devis;
 
-import javax.inject.Inject;
-
+import fr.batimen.core.constant.CodeRetourService;
+import fr.batimen.core.security.HashHelper;
+import fr.batimen.dto.ModifClientDTO;
+import fr.batimen.dto.aggregate.CreationAnnonceDTO;
+import fr.batimen.dto.constant.ValidatorConstant;
+import fr.batimen.web.app.constants.Etape;
+import fr.batimen.web.app.security.Authentication;
+import fr.batimen.web.app.utils.ProgrammaticBeanLookup;
+import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
+import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
+import fr.batimen.web.client.event.FeedBackPanelEvent;
+import fr.batimen.web.client.extend.CGU;
+import fr.batimen.web.client.extend.nouveau.devis.event.ChangementEtapeClientEvent;
+import fr.batimen.web.client.validator.ChangePasswordValidator;
+import fr.batimen.web.client.validator.CheckBoxTrueValidator;
+import fr.batimen.web.client.validator.EmailUniquenessValidator;
+import fr.batimen.web.client.validator.LoginUniquenessValidator;
+import fr.batimen.ws.client.service.UtilisateurServiceREST;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
@@ -18,32 +34,16 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.apache.wicket.validation.validator.StringValidator;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.batimen.core.constant.CodeRetourService;
-import fr.batimen.core.security.HashHelper;
-import fr.batimen.dto.aggregate.CreationAnnonceDTO;
-import fr.batimen.dto.constant.ValidatorConstant;
-import fr.batimen.web.app.constants.Etape;
-import fr.batimen.web.app.security.Authentication;
-import fr.batimen.web.app.utils.ProgrammaticBeanLookup;
-import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
-import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
-import fr.batimen.web.client.event.FeedBackPanelEvent;
-import fr.batimen.web.client.extend.CGU;
-import fr.batimen.web.client.extend.nouveau.devis.event.ChangementEtapeClientEvent;
-import fr.batimen.web.client.validator.ChangePasswordValidator;
-import fr.batimen.web.client.validator.CheckBoxTrueValidator;
-import fr.batimen.web.client.validator.EmailUniquenessValidator;
-import fr.batimen.web.client.validator.LoginUniquenessValidator;
-import fr.batimen.ws.client.service.UtilisateurServiceREST;
+import javax.inject.Inject;
 
 /**
  * Form de l'etape 4 de création d'annonce.
- * 
+ *
  * @author Casaucau Cyril
- * 
  */
 public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
 
@@ -326,7 +326,13 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
                 LOGGER.debug("Les données et le champs requis sont valides, on appel le webservice pour enregistrer les données");
             }
             // Call ws service pour la mise a jour des données.
-            Integer codeRetour = utilisateurServiceREST.updateUtilisateurInfos(nouvelleAnnonce.getClient());
+            ModifClientDTO modifClientDTO = new ModifClientDTO();
+
+            ModelMapper mapper = new ModelMapper();
+            mapper.map(nouvelleAnnonce.getClient(), modifClientDTO);
+            modifClientDTO.setOldEmail(authentication.getCurrentUserInfo().getEmail());
+
+            Integer codeRetour = utilisateurServiceREST.updateUtilisateurInfos(modifClientDTO);
 
             if (codeRetour.equals(CodeRetourService.RETOUR_OK)) {
                 // Si tout est ok setter les infos du client dto
@@ -334,7 +340,7 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("Set des nouvelles informations en session de l'utilisateur");
                 }
-                authentication.setCurrentUserInfo(nouvelleAnnonce.getClient());
+                authentication.setCurrentUserInfo(utilisateurServiceREST.getUtilisateurByEmail(modifClientDTO.getEmail()));
                 success("Vos données ont bien été mises à jour");
             } else {
                 error("Problème de mise à jour avec vos données, veuillez réessayer plus tard");
@@ -344,62 +350,4 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
             }
         }
     }
-
-    /**
-     * @return the passwordField
-     */
-    public PasswordTextField getPasswordField() {
-        return passwordField;
-    }
-
-    /**
-     * @return the nomField
-     */
-    public TextField<String> getNomField() {
-        return nomField;
-    }
-
-    /**
-     * @return the prenomField
-     */
-    public TextField<String> getPrenomField() {
-        return prenomField;
-    }
-
-    /**
-     * @return the numeroTelField
-     */
-    public TextField<String> getNumeroTelField() {
-        return numeroTelField;
-    }
-
-    /**
-     * @return the emailField
-     */
-    public TextField<String> getEmailField() {
-        return emailField;
-    }
-
-    /**
-     * @return the loginField
-     */
-    public TextField<String> getLoginField() {
-        return loginField;
-    }
-
-    /**
-     * @param validateInscription
-     *            the validateInscription to set
-     */
-    public void setValidateInscription(AjaxSubmitLink validateInscription) {
-        this.validateInscription = validateInscription;
-    }
-
-    /**
-     * @return the idValidateInscription
-     */
-    public String getIdValidateInscription() {
-        return ID_VALIDATE_INSCRIPTION;
-    }
-
 }
