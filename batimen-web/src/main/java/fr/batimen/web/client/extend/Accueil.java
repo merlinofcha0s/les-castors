@@ -69,16 +69,6 @@ public class Accueil extends MasterPage {
             }
         };
 
-        Link<String> contactLink = new Link<String>("contactLink") {
-
-            private static final long serialVersionUID = 9089145391867475874L;
-
-            @Override
-            public void onClick() {
-                this.setResponsePage(Contact.class);
-            }
-        };
-
         Link<String> faireUnDevisSlide1 = new Link<String>("faireUnDevisSlide1") {
 
             private static final long serialVersionUID = 9089145391867475874L;
@@ -109,7 +99,7 @@ public class Accueil extends MasterPage {
             }
         };
 
-        this.add(nouveauDevis, nouveauDevis1, nouveauDevis2, rejoignezNousLink, contactLink, faireUnDevisSlide1,
+        this.add(nouveauDevis, nouveauDevis1, nouveauDevis2, rejoignezNousLink,  faireUnDevisSlide1,
                 faireUnDevisSlide2, faireUnDevisSlide3);
     }
 
