@@ -5,6 +5,7 @@ import fr.batimen.core.security.HashHelper;
 import fr.batimen.dto.ModifClientDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.constant.ValidatorConstant;
+import fr.batimen.dto.enums.TypeContact;
 import fr.batimen.web.app.constants.Etape;
 import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.app.utils.ProgrammaticBeanLookup;
@@ -71,6 +72,7 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
     private static final String ID_VALIDATE_INSCRIPTION = "validateInscription";
     private WebMarkupContainer cguContainer;
     private CheckBox cguConfirm;
+    public boolean addedRequiredBehaviour;
 
     public Etape4InscriptionForm(String id, IModel<CreationAnnonceDTO> model, final Boolean forModification) {
         super(id, model);
@@ -88,12 +90,32 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
         prenomField.add(StringValidator.lengthBetween(ValidatorConstant.CLIENT_PRENOM_MIN,
                 ValidatorConstant.CLIENT_PRENOM_MAX));
 
-        numeroTelField = new TextField<String>("client.numeroTel");
+        final RequiredBorderBehaviour requiredBorderBehaviour = new RequiredBorderBehaviour();
+        boolean addedRequiredBehaviour = false;
+
+        numeroTelField = new TextField<String>("client.numeroTel") {
+
+            @Override
+            protected void onConfigure() {
+                if (nouvelleAnnonce.getTypeContact() != null && nouvelleAnnonce.getTypeContact().equals(TypeContact.TELEPHONE)) {
+                    setRequired(true);
+                    add(requiredBorderBehaviour);
+                    setAddedRequiredBehaviour(true);
+                } else {
+                    setRequired(false);
+                    if(isAddedRequiredBehaviour()){
+                        remove(requiredBorderBehaviour);
+                    }
+                    setAddedRequiredBehaviour(false);
+                }
+            }
+        };
         numeroTelField.setMarkupId("numeroTel");
         numeroTelField.add(new ErrorHighlightBehavior());
         numeroTelField.add(new PatternValidator(ValidatorConstant.TELEPHONE_REGEX));
 
-        emailField = new TextField<String>("client.email");
+
+        emailField = new TextField<>("client.email");
         emailField.setMarkupId("email");
         emailField.setRequired(true);
         emailField.add(new RequiredBorderBehaviour());
@@ -349,5 +371,13 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
                 LOGGER.debug("Résultat de l'appel du webservice : " + codeRetour);
             }
         }
+    }
+
+    public boolean isAddedRequiredBehaviour() {
+        return addedRequiredBehaviour;
+    }
+
+    public void setAddedRequiredBehaviour(boolean addedRequiredBehaviour){
+        this.addedRequiredBehaviour = addedRequiredBehaviour;
     }
 }
