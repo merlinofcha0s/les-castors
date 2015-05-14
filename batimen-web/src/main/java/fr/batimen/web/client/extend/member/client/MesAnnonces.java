@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.web.app.constants.ParamsConstant;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -104,47 +105,43 @@ public final class MesAnnonces extends MasterPage {
             protected void populateItem(ListItem<NotificationDTO> item) {
                 final NotificationDTO notification = item.getModelObject();
 
-                final Model<String> nomEntrepriseModelForLbl = new Model<String>(notification.getNomEntreprise());
+                final Model<String> parQuiModel = new Model<>(parQui(notification));
 
-                LinkLabel linkEntreprise = new LinkLabel("linkEntreprise", nomEntrepriseModelForLbl) {
+                LinkLabel linkParQui = new LinkLabel("linkParQui", parQuiModel) {
 
                     private static final long serialVersionUID = 1L;
 
                     @Override
                     public void onClick() {
-                        // URLEncoder.encode(notification.getArtisanNotifier().getEntreprise().getNomComplet(),
-                        // "UTF-8")
-                        // TODO A Completer quand la page entreprise sera prete
+                        onclickParQuiLink(notification);
                     }
-
                 };
 
                 StringBuilder contenuNotification = new StringBuilder(" ");
                 contenuNotification.append(notification.getTypeNotification().getAffichage()).append(" ");
                 Label typeNotification = new Label("typeNotification", contenuNotification.toString());
 
-                Link<Void> linkAnnonce = new Link<Void>("linkAnnonce") {
+                final Model<String> objetNotification = new Model<>(getObjetNotification(notification));
+
+                LinkLabel linkObjetNotification = new LinkLabel("linkObjetNotification", objetNotification) {
 
                     private static final long serialVersionUID = 1L;
 
                     @Override
                     public void onClick() {
-                        PageParameters params = new PageParameters();
-                        params.add("idAnnonce", notification.getHashIDAnnonce());
-                        this.setResponsePage(Annonce.class, params);
+                        onclickObjetNotification(notification);
                     }
-
                 };
 
-                linkAnnonce.setOutputMarkupId(true);
+                linkObjetNotification.setOutputMarkupId(true);
 
                 SimpleDateFormat dateNotificationFormatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                 Label dateNotification = new Label("dateNotification", dateNotificationFormatter.format(notification
                         .getDateNotification()));
 
-                item.add(linkEntreprise);
+                item.add(linkParQui);
                 item.add(typeNotification);
-                item.add(linkAnnonce);
+                item.add(linkObjetNotification);
                 item.add(dateNotification);
             }
 
@@ -227,5 +224,46 @@ public final class MesAnnonces extends MasterPage {
 
         annonces = mesInfos.getAnnonces();
         notifications = mesInfos.getNotifications();
+    }
+
+    private String parQui(NotificationDTO notificationDTO){
+        if(notificationDTO.getTypeNotification().getParQui().equals(TypeCompte.ARTISAN)){
+            return notificationDTO.getNomEntreprise();
+        } else if(notificationDTO.getTypeNotification().getParQui().equals(TypeCompte.CLIENT)){
+            return notificationDTO.getClientLogin();
+        }
+        return "";
+    }
+
+    private void onclickParQuiLink(NotificationDTO notificationDTO){
+        if(notificationDTO.getTypeNotification().getParQui().equals(TypeCompte.ARTISAN)){
+            // URLEncoder.encode(notification.getArtisanNotifier().getEntreprise().getNomComplet(),
+            // "UTF-8")
+            // TODO A Completer quand la page entreprise sera prete
+        } else if(notificationDTO.getTypeNotification().getParQui().equals(TypeCompte.CLIENT)){
+            PageParameters parameters = new PageParameters();
+            parameters.add("login", notificationDTO.getClientLogin());
+            this.setResponsePage(MonProfil.class, parameters);
+        }
+    }
+
+    private String getObjetNotification(NotificationDTO notificationDTO){
+        if(notificationDTO.getTypeNotification().getParQui().equals(TypeCompte.ARTISAN)){
+            return "annonce";
+        } else if(notificationDTO.getTypeNotification().getParQui().equals(TypeCompte.CLIENT)){
+            return "entreprise";
+        }else{
+            return "";
+        }
+    }
+
+    private void onclickObjetNotification(NotificationDTO notificationDTO){
+        if(notificationDTO.getTypeNotification().getParQui().equals(TypeCompte.ARTISAN)){
+            PageParameters params = new PageParameters();
+            params.add(ParamsConstant.ID_ANNONCE_PARAM, notificationDTO.getHashIDAnnonce());
+            this.setResponsePage(Annonce.class, params);
+        } else if(notificationDTO.getTypeNotification().getParQui().equals(TypeCompte.CLIENT)){
+            // TODO A Completer quand la page entreprise sera prete
+        }
     }
 }
