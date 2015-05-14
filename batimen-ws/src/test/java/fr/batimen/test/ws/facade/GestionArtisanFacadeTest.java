@@ -7,6 +7,7 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import fr.batimen.dto.aggregate.MesAnnoncesDTO;
 import org.junit.Assert;
 import org.junit.Test;
 

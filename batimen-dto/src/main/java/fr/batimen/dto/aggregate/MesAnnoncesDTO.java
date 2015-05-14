@@ -8,10 +8,14 @@ import fr.batimen.dto.AbstractDTO;
 import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.NotificationDTO;
 
+import javax.validation.Valid;
+
 public class MesAnnoncesDTO extends AbstractDTO {
 
     private static final long serialVersionUID = -8241631062405568121L;
+    @Valid
     private List<NotificationDTO> notifications = new ArrayList<NotificationDTO>();
+    @Valid
     private List<AnnonceDTO> annonces = new ArrayList<AnnonceDTO>();
 
     /**

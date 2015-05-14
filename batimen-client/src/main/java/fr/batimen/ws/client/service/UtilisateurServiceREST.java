@@ -7,7 +7,9 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import fr.batimen.dto.DemandeMesAnnoncesDTO;
 import fr.batimen.dto.ModifClientDTO;
+import fr.batimen.dto.aggregate.MesAnnoncesDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -172,5 +174,24 @@ public class UtilisateurServiceREST implements Serializable{
         }
 
         return codeRetour;
+    }
+
+    public MesAnnoncesDTO getMesInfosAnnonce(DemandeMesAnnoncesDTO demandeMesAnnoncesDTO) {
+        MesAnnoncesDTO mesInfosAnnonces = null;
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Début appel service de recuperation des données de la page mes annonces");
+        }
+
+        String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_UTILISATEUR_SERVICE_PATH,
+                WsPath.GESTION_UTILISATEUR_SERVICE_INFOS_MES_ANNONCES, demandeMesAnnoncesDTO);
+
+        mesInfosAnnonces = DeserializeJsonHelper.deserializeDTO(objectInJSON, MesAnnoncesDTO.class);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Fin appel service de recuperation des données de la page mes annonces + deserialization");
+        }
+
+        return mesInfosAnnonces;
     }
 }

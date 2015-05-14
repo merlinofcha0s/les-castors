@@ -48,13 +48,21 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
      * @return Liste d'annonces appartenant à l'utilisateur.
      */
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public List<Object[]> getAnnoncesByLoginForMesAnnonces(String login) {
+    public List<Object[]> getAnnoncesByLoginForMesAnnonces(String login, boolean isArtisan) {
 
         List<Object[]> listAnnonceByLogin = null;
 
         try {
-            TypedQuery<Object[]> query = entityManager.createNamedQuery(QueryJPQL.ANNONCE_BY_LOGIN_FETCH_ARTISAN,
-                    Object[].class);
+            TypedQuery<Object[]> query = null;
+
+            if(isArtisan){
+                query = entityManager.createNamedQuery(QueryJPQL.ANNONCE_BY_ARTISAN_LOGIN_FETCH_ARTISAN,
+                        Object[].class);
+            }else{
+                query = entityManager.createNamedQuery(QueryJPQL.ANNONCE_BY_DEMANDEUR_LOGIN_FETCH_ARTISAN,
+                        Object[].class);
+            }
+
             query.setParameter(QueryJPQL.PARAM_CLIENT_LOGIN, login);
 
             if (LOGGER.isDebugEnabled()) {
@@ -114,7 +122,7 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
     /**
      * Recupere les annonces par titre, description et login : notament utilisé
      * dans la verification de la duplication.
-     * 
+     *
      * @param titre
      *            Le titre de l'annonce.
      * @param description

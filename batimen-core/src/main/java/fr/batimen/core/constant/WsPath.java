@@ -21,6 +21,7 @@ public class WsPath {
     public static final String GESTION_UTILISATEUR_SERVICE_HASH = "byHash";
     public static final String GESTION_UTILISATEUR_SERVICE_ROLES = "getRoles";
     public static final String GESTION_UTILISATEUR_SERVICE_UPDATE_INFO = "update";
+    public static final String GESTION_UTILISATEUR_SERVICE_INFOS_MES_ANNONCES = "getInfoForMesAnnoncesByLogin";
 
     // Path Gestion Annonce
     public static final String GESTION_ANNONCE_SERVICE_PATH = "gestionAnnonce";
@@ -49,6 +50,5 @@ public class WsPath {
 
     // Path Gestion client
     public static final String GESTION_CLIENT_SERVICE_PATH = "gestionClient";
-    public static final String GESTION_CLIENT_SERVICE_INFOS_MES_ANNONCES = "getInfoForMesAnnoncesByLogin";
     public static final String GESTION_CLIENT_SERVICE_INFOS_MON_PROFIL = "getInfoForMonProfil";
 }

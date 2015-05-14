@@ -5,8 +5,10 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import fr.batimen.dto.DemandeMesAnnoncesDTO;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.web.app.constants.ParamsConstant;
+import fr.batimen.ws.client.service.UtilisateurServiceREST;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -30,7 +32,6 @@ import fr.batimen.web.client.component.LinkLabel;
 import fr.batimen.web.client.component.Profil;
 import fr.batimen.web.client.extend.connected.Annonce;
 import fr.batimen.web.client.master.MasterPage;
-import fr.batimen.ws.client.service.ClientsServiceREST;
 
 /**
  * Page ou l'utilisateur pourra consulter son compte ainsi que l'avancement de
@@ -47,7 +48,7 @@ public final class MesAnnonces extends MasterPage {
     private static final Logger LOGGER = LoggerFactory.getLogger(MesAnnonces.class);
 
     @Inject
-    private ClientsServiceREST clientsServiceREST;
+    private UtilisateurServiceREST utilisateurServiceREST;
 
     @Inject
     private Authentication authentication;
@@ -63,7 +64,7 @@ public final class MesAnnonces extends MasterPage {
         }
 
         initStaticComposant();
-        getMesInfosForPage();
+        loadInfosMesAnnonces();
         initRepeaterNotifications();
         initRepeaterAnnonces();
         this.setOutputMarkupId(true);
@@ -83,9 +84,8 @@ public final class MesAnnonces extends MasterPage {
         Profil profil = new Profil("profil");
         ContactezNous contactezNous = new ContactezNous("contactezNous");
         Commentaire commentaire = new Commentaire("commentaire");
-        this.add(profil);
-        this.add(commentaire);
-        this.add(contactezNous);
+
+        this.add(profil, commentaire,contactezNous);
     }
 
     private void initRepeaterNotifications() {
@@ -215,12 +215,16 @@ public final class MesAnnonces extends MasterPage {
         this.add(listViewAnnonce);
     }
 
-    private void getMesInfosForPage() {
+    private void loadInfosMesAnnonces() {
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Appel webservice pour la récupération des données a afficher");
+            LOGGER.debug("Appel webservice pour la récupération des données à afficher");
         }
-        MesAnnoncesDTO mesInfos = clientsServiceREST.getMesInfosAnnonce(authentication.getCurrentUserInfo().getLogin());
+        DemandeMesAnnoncesDTO demandeMesAnnoncesDTO = new DemandeMesAnnoncesDTO();
+        demandeMesAnnoncesDTO.setLoginDemandeur(authentication.getCurrentUserInfo().getLogin());
+        demandeMesAnnoncesDTO.setLogin(authentication.getCurrentUserInfo().getLogin());
+
+        MesAnnoncesDTO mesInfos = utilisateurServiceREST.getMesInfosAnnonce(demandeMesAnnoncesDTO);
 
         annonces = mesInfos.getAnnonces();
         notifications = mesInfos.getNotifications();
