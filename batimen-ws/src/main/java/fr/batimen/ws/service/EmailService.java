@@ -1,10 +1,7 @@
 package fr.batimen.ws.service;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -24,10 +21,11 @@ import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.ws.dao.EmailDAO;
 import fr.batimen.ws.entity.Annonce;
 import fr.batimen.ws.entity.Notification;
+import fr.batimen.ws.enums.PropertiesFileWS;
 
 /**
  * Classe de gestion d'envoi de mail.
- * 
+ *
  * @author Casaucau Cyril
  * @author Adnane
  */
@@ -42,11 +40,8 @@ public class EmailService {
     /**
      * Preparation et envoi d'un mail de confirmation, dans le but d'informer
      * l'utilisateur que l'annonce a correctement été enregistrée.
-     * 
-     * @param nouvelleAnnonceDTO
-     *            L'objet que l'on a recu du frontend
-     * @param clientDejaInscrit
-     *            informations du client, si celui ci est deja inscrit
+     *
+     * @param nouvelleAnnonce L'objet que l'on a recu du frontend
      * @return vrai si l'envoi s'est bien passé.
      * @throws EmailException
      * @throws MandrillApiError
@@ -88,20 +83,16 @@ public class EmailService {
 
     /**
      * Envoi d'un mail d'activation pour les nouveaux clients.
-     * 
-     * @param nouvelleAnnonceDTO
-     *            La DTO contenant toutes les infos.
-     * @param cleActivation
-     *            La clé d'activation généré
-     * @param url
-     *            L'url du front
+     *
+     * @param cleActivation La clé d'activation généré
+     * @param url           L'url du front
      * @return True si l'envoi du mail s'est bien passé
      * @throws EmailException
      * @throws MandrillApiError
      * @throws IOException
      */
     public boolean envoiMailActivationCompte(String nom, String prenom, String login, String email,
-            String cleActivation, String url) throws EmailException, MandrillApiError, IOException {
+                                             String cleActivation, String url) throws EmailException, MandrillApiError, IOException {
 
         // On prepare l'entete, on ne mets pas de titre (il est géré par
         // mandrillApp).
@@ -125,7 +116,7 @@ public class EmailService {
         lienActivation.append(cleActivation);
 
         // On charge les variables dynamique à remplacer
-        List<MergeVar> mergevars = new LinkedList<MergeVar>();
+        List<MergeVar> mergevars = new LinkedList<>();
         MergeVar mergeVar = new MergeVar(EmailConstant.TAG_EMAIL_ACTIVATION_LINK, lienActivation.toString());
         mergevars.add(mergeVar);
         activationCompteMessage.setGlobalMergeVars(mergevars);
@@ -139,10 +130,9 @@ public class EmailService {
 
     /**
      * Envoi un email de contact contenant l'information contenue dans le DTO
-     * 
-     * @param mail
-     *            DTO contenant l'information du mail de contact saisie par le
-     *            client
+     *
+     * @param mail DTO contenant l'information du mail de contact saisie par le
+     *             client
      * @return état d'envoi du mail
      */
     public boolean envoiEmailContact(ContactMailDTO mail) throws EmailException, MandrillApiError, IOException {
@@ -174,10 +164,9 @@ public class EmailService {
 
     /**
      * Envoi un email d'accusé de reception du message de contact
-     * 
-     * @param mail
-     *            DTO contenant l'information du mail de contact saisie par le
-     *            client
+     *
+     * @param mail DTO contenant l'information du mail de contact saisie par le
+     *             client
      * @return état d'envoi du mail
      */
     public boolean envoiEmailAccuseReception(ContactMailDTO mail) throws EmailException, MandrillApiError, IOException {
@@ -200,10 +189,9 @@ public class EmailService {
 
     /**
      * Envoi un email de notification
-     * 
-     * @param notification
-     *            contient toutes les infos (le type, le destinataire, etc) de
-     *            la notification
+     *
+     * @param notification contient toutes les infos (le type, le destinataire, etc) de
+     *                     la notification
      * @return état d'envoi du mail
      */
     public boolean envoiEmailNotification(Notification notification) throws EmailException, MandrillApiError,
@@ -213,7 +201,7 @@ public class EmailService {
         MandrillMessage notificationMail = emailDAO.prepareEmail(null);
 
         // On construit les recepteurs
-        Map<String, String> recipients = new HashMap<String, String>();
+        Map<String, String> recipients = new HashMap<>();
 
         if (notification.getPourQuiNotification().equals(TypeCompte.CLIENT)) {
             recipients.put(notification.getClientNotifier().getEmail(), notification.getClientNotifier().getEmail());
@@ -221,18 +209,20 @@ public class EmailService {
             recipients.put(notification.getArtisanNotifier().getEmail(), notification.getArtisanNotifier().getEmail());
         }
 
+        // On charge le contenu
+        Map<String, String> templateContent = generateAndSaveContentForNotificationMail(notification, notificationMail);
         // On charge les recepteurs
         emailDAO.prepareRecipient(notificationMail, recipients, true);
 
         // On envoi le mail
-        boolean noError = emailDAO.sendEmailTemplate(notificationMail, EmailConstant.TEMPLATE_NOTIFICATION, null);
+        boolean noError = emailDAO.sendEmailTemplate(notificationMail, notification.getTypeNotification().getEmailTemplate(), templateContent);
 
         return noError;
     }
 
     /**
      * Util method to generate destinatary name
-     * 
+     *
      * @param nom
      * @param prenom
      * @param login
@@ -248,4 +238,48 @@ public class EmailService {
         }
     }
 
+    /**
+     * Suivant le type de notification on rajoute le contenu qui sera remplacé dans l'email template
+     * <p/>
+     * Deux type de tags sont présents ceux qui remplacent une balise via mc:edit (templateContent) et ceux qui remplacent un tag du type *|TOTO|* (mergedVars) dans le template
+     *
+     * @param notification     La notification qui va etre générée
+     * @param notificationMail L'objet qui symbolise le mail
+     * @return Une map contenant en clé le nom du tag dans le template avec sa valeur associée
+     */
+    private Map<String, String> generateAndSaveContentForNotificationMail(Notification notification, MandrillMessage notificationMail) {
+        StringBuilder nomClient = new StringBuilder();
+        getNomDestinataire(notification.getClientNotifier().getNom(), notification.getClientNotifier().getPrenom(), notification.getClientNotifier().getLogin(), nomClient);
+
+        StringBuilder nomArtisan = new StringBuilder();
+        getNomDestinataire(notification.getArtisanNotifier().getNom(), notification.getArtisanNotifier().getPrenom(), notification.getArtisanNotifier().getLogin(), nomArtisan);
+
+        Properties urlProperties = PropertiesFileWS.URL.getProperties();
+        String urlFrontend = urlProperties.getProperty("url.frontend.web");
+
+        List<MandrillMessage.MergeVar> mergevars = new LinkedList<>();
+        Map<String, String> templateContent = new HashMap<>();
+        templateContent.put(EmailConstant.TAG_EMAIL_NOTIFICATION_CLIENT, nomClient.toString());
+
+        switch (notification.getTypeNotification()) {
+            case A_NOTER_ENTREPRISE:
+                MandrillMessage.MergeVar mergeVarsHomeANoter = new MandrillMessage.MergeVar(EmailConstant.TAG_EMAIL_NOTIFICATION_URL_FRONT, urlFrontend);
+                mergevars.add(mergeVarsHomeANoter);
+                templateContent.put(EmailConstant.TAG_EMAIL_NOTIFICATION_ARTISAN, nomArtisan.toString());
+                break;
+            case REPONDU_A_ANNONCE:
+                MandrillMessage.MergeVar mergeVarsHomeARepondu = new MandrillMessage.MergeVar(EmailConstant.TAG_EMAIL_NOTIFICATION_URL_FRONT, urlFrontend);
+                mergevars.add(mergeVarsHomeARepondu);
+                templateContent.put(EmailConstant.TAG_EMAIL_NOTIFICATION_NOM_ENTREPRISE, notification.getArtisanNotifier().getEntreprise().getNomComplet());
+                break;
+            case A_CHOISI_ENTREPRISE:
+                MandrillMessage.MergeVar mergeVarsEspaceClientARepondu = new MandrillMessage.MergeVar(EmailConstant.TAG_EMAIL_ESPACE_CLIENT, urlFrontend);
+                mergevars.add(mergeVarsEspaceClientARepondu);
+                templateContent.put(EmailConstant.TAG_EMAIL_NOTIFICATION_ARTISAN, nomArtisan.toString());
+                break;
+        }
+
+        notificationMail.setGlobalMergeVars(mergevars);
+        return templateContent;
+    }
 }

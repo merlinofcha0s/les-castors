@@ -226,7 +226,7 @@ header:before {
 }
 
 header .header_wrapper {
-	padding-top: 25px;
+	padding-top: 15px;
 }
 
 header .logo {
@@ -244,7 +244,7 @@ header .logo img {
 header nav {
 	display: block;
 	float: right;
-	padding-top: 6px;
+	padding-top: 15px;
 }
 
 header nav ul.menu>li {

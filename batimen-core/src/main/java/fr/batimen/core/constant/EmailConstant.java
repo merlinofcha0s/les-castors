@@ -26,7 +26,13 @@ public class EmailConstant {
     public static final String TEMPLATE_ACTIVATION_COMPTE = "activation_compte";
     public static final String TEMPLATE_EMAIL_CONTACT = "contact_email";
     public static final String TEMPLATE_ACCUSE_RECEPTION = "accuse_reception_contact";
-    public static final String TEMPLATE_NOTIFICATION = "notification";
+
+    //Tag Email Généraux
+    public static final String TAG_EMAIL_HOME = "urlhome";
+    public static final String TAG_EMAIL_ESPACE_CLIENT = "urlespaceclient";
+    public static final String TAG_EMAIL_FB = "urlfb";
+    public static final String TAG_EMAIL_TWITTER = "urltwitter";
+    public static final String TAG_EMAIL_GOOGLEPLUS = "urlgoogleplus";
 
     // Creation annonce tags Email
     public static final String TAG_EMAIL_USERNAME = "username";
@@ -43,4 +49,8 @@ public class EmailConstant {
     public static final String TAG_EMAIL_CONTACT_SUBJECT = "MESSAGESUBJECT";
     public static final String TAG_EMAIL_CONTACT_MESSAGE = "MESSAGECONTENT";
 
+    public static final String TAG_EMAIL_NOTIFICATION_CLIENT = "nomclient";
+    public static final String TAG_EMAIL_NOTIFICATION_ARTISAN = "nomartisan";
+    public static final String TAG_EMAIL_NOTIFICATION_NOM_ENTREPRISE = "nomentreprise";
+    public static final String TAG_EMAIL_NOTIFICATION_URL_FRONT = "urlCastor";
 }

@@ -476,7 +476,7 @@ public class GestionAnnonceFacade {
                 }
                 annonceToUpdate.setEntrepriseSelectionnee(entrepriseChoisi);
                 annonceToUpdate.setEtatAnnonce(EtatAnnonce.A_NOTER);
-                notificationService.generationNotificationArtisan(annonceToUpdate, artisan, TypeCompte.ARTISAN,
+                notificationService.generationNotification(annonceToUpdate, artisan, TypeCompte.ARTISAN,
                         TypeNotification.A_CHOISI_ENTREPRISE);
             } else {
                 if (LOGGER.isErrorEnabled()) {
@@ -540,7 +540,7 @@ public class GestionAnnonceFacade {
             return codeRetourInscription;
         }
 
-        notificationService.generationNotificationArtisan(annonce, artisan, TypeCompte.CLIENT,
+        notificationService.generationNotification(annonce, artisan, TypeCompte.CLIENT,
                 TypeNotification.INSCRIT_A_ANNONCE);
 
         return CodeRetourService.RETOUR_OK;
@@ -707,7 +707,7 @@ public class GestionAnnonceFacade {
             LOGGER.debug("Génération de la notification à destination de l'artisan");
         }
 
-        notificationService.generationNotificationArtisan(annonceANoter, artisan, TypeCompte.ARTISAN,
+        notificationService.generationNotification(annonceANoter, artisan, TypeCompte.ARTISAN,
                 TypeNotification.A_NOTER_ENTREPRISE);
 
         if (LOGGER.isDebugEnabled()) {
@@ -758,7 +758,7 @@ public class GestionAnnonceFacade {
         }
         if (generateNotification) {
             for (Artisan artisanToNotify : annonceAModifier.getArtisans()) {
-                notificationService.generationNotificationArtisan(annonceAModifier, artisanToNotify, TypeCompte.ARTISAN, TypeNotification.A_MODIFIER_ANNONCE);
+                notificationService.generationNotification(annonceAModifier, artisanToNotify, TypeCompte.ARTISAN, TypeNotification.A_MODIFIER_ANNONCE);
             }
         }
         return CodeRetourService.RETOUR_OK;

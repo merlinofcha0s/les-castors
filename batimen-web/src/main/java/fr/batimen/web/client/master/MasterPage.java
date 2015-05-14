@@ -192,7 +192,7 @@ public abstract class MasterPage extends WebPage {
         if (SecurityUtils.getSubject().isAuthenticated()) {
             connexionlbl.setDefaultModelObject("Mon Compte");
         } else {
-            connexionlbl.setDefaultModelObject("Espace Membre");
+            connexionlbl.setDefaultModelObject("Connexion à l’espace membre");
         }
 
         connexionlbl.setOutputMarkupId(true);
@@ -203,7 +203,7 @@ public abstract class MasterPage extends WebPage {
             LOGGER.debug("Initialisation du composant de connexion.....OK");
         }
 
-        final LinkLabel demandeDevis = new LinkLabel("demandeDevis", new Model<String>("DEMANDE DE DEVIS")) {
+        final LinkLabel demandeDevis = new LinkLabel("demandeDevis", new Model<String>("Obtenir des devis gratuitement")) {
 
             private static final long serialVersionUID = 737917087176303983L;
 
@@ -243,7 +243,7 @@ public abstract class MasterPage extends WebPage {
         demandeDevisContainer.setOutputMarkupId(true);
         demandeDevisContainer.add(demandeDevis);
 
-        final LinkLabel devenirPartenaire = new LinkLabel("devenirPartenaire", new Model<String>("DEVENIR PARTENAIRE")) {
+        final LinkLabel devenirPartenaire = new LinkLabel("devenirPartenaire", new Model<>("Devenir une entreprise partenaire")) {
 
             private static final long serialVersionUID = 3349463856140732172L;
 

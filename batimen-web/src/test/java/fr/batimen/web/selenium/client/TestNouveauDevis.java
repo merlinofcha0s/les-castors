@@ -2,10 +2,12 @@ package fr.batimen.web.selenium.client;
 
 import static com.ninja_squad.dbsetup.Operations.sequenceOf;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -231,6 +233,33 @@ public class TestNouveauDevis extends AbstractITTest {
 
     }
 
+    /**
+     * Cas de test : L'utilisateur crée un devis. Il est connecté, lors de l'etape 3, il dit qu'il veut etre contacté par téléphone
+     * mais il n'a pas spécifié de numéro, on lui refuse tant qu'il ne l'a pas fait.
+     *
+     * @throws InterruptedException
+     */
+    @Test
+    public void testContactTelMaisPasTelPasRenseigne() throws InterruptedException {
+        driver.get(appUrl + nouveauDevisDepartementURL);
+        // On selectionne le bon département
+        UtilsSelenium.selectionDepartement(driver);
+
+        Thread.sleep(1000);
+        // On remplit l'étape 2
+        etape2();
+        connexionApplication("xavier", BON_MOT_DE_PASSE, Boolean.TRUE);
+        // On remplit l'étape 3
+        etape3(true);
+
+        Boolean checkConditionModificationInformation = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("span.box_type6"),
+                        "Veuillez renseigner un numéro de téléphone dans la rubrique mon compte > modifier mon profil si vous voulez être contacté par téléphone"));
+        assertTrue(checkConditionModificationInformation);
+
+        Thread.sleep(1000);
+    }
+
     private void etape3(boolean isAlreadyAuthenticate) throws InterruptedException {
         if (browser.equals("ie")) {
             Thread.sleep(1000);
@@ -238,7 +267,7 @@ public class TestNouveauDevis extends AbstractITTest {
         new Select(driver.findElement(By.id("sousCategorieSelect"))).selectByVisibleText("Tableaux électriques");
         driver.findElement(By.id("descriptionDevisField")).clear();
         driver.findElement(By.id("descriptionDevisField")).sendKeys("Refonte complete de l'electricite dans la maison");
-        new Select(driver.findElement(By.id("typeContactField"))).selectByVisibleText("Email");
+        new Select(driver.findElement(By.id("typeContactField"))).selectByVisibleText("Téléphone");
         new Select(driver.findElement(By.id("delaiInterventionField")))
                 .selectByVisibleText("Le plus rapidement possible");
         driver.findElement(By.id("radioTypeTravauxRenovation")).click();

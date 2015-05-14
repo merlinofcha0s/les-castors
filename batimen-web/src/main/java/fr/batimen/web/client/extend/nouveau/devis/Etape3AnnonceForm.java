@@ -19,6 +19,7 @@ import fr.batimen.web.client.event.ModificationAnnonceEvent;
 import fr.batimen.web.client.extend.connected.Annonce;
 import fr.batimen.web.client.extend.nouveau.devis.event.CategorieEvent;
 import fr.batimen.web.client.extend.nouveau.devis.event.ChangementEtapeClientEvent;
+import fr.batimen.web.client.validator.TelephonePresentValidator;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
@@ -38,6 +39,8 @@ import org.apache.wicket.validation.validator.StringValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
+import javax.inject.Named;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -60,6 +63,9 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
     private FileFieldValidatorAndLoaderBehaviour fileFieldValidatorBehaviour;
     private DropDownChoice<SousCategorieMetierDTO> sousCategorieSelect;
     private String idAnnonce;
+
+    @Inject
+    private TelephonePresentValidator telephonePresentValidator;
 
     private boolean forModification = false;
 
@@ -133,6 +139,7 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
         typeContactField.setMarkupId("typeContactField");
         typeContactField.add(new ErrorHighlightBehavior());
         typeContactField.add(new RequiredBorderBehaviour());
+        typeContactField.add(telephonePresentValidator);
 
         DropDownChoice<DelaiIntervention> delaiInterventionField = new DropDownChoice<DelaiIntervention>(
                 "delaiIntervention", Arrays.asList(DelaiIntervention.values()));
@@ -215,7 +222,6 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 if (forModification) {
-                    //nouvelleAnnonce.setSousCategorie(sousCategorieSelect.getConvertedInput());
                     ModificationAnnonceEvent modificationAnnonceEvent = new ModificationAnnonceEvent(target, nouvelleAnnonce);
                     this.send(target.getPage(), Broadcast.BREADTH, modificationAnnonceEvent);
                 } else {
