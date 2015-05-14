@@ -5,7 +5,9 @@ import fr.batimen.dto.*;
 import fr.batimen.dto.aggregate.*;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.TypeCompte;
+import fr.batimen.dto.enums.TypeContact;
 import fr.batimen.dto.helper.CategorieLoader;
+import fr.batimen.web.app.constants.FeedbackMessageLevel;
 import fr.batimen.web.app.constants.ParamsConstant;
 import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.app.security.RolesUtils;
@@ -40,9 +42,8 @@ import java.text.SimpleDateFormat;
 
 /**
  * TODO : Action qui reste : Modifier , Envoyer devis <br/>
- * 
+ *
  * @author Casaucau Cyril
- * 
  */
 public class Annonce extends MasterPage {
 
@@ -114,6 +115,13 @@ public class Annonce extends MasterPage {
         affichageContactAnnonce();
 
         affichageEntrepriseSelectionnee();
+
+        if (params.getNamedKeys().contains(ParamsConstant.IS_MODIF_PARAM)) {
+            String modifOK = params.get(ParamsConstant.IS_MODIF_PARAM).toString();
+            if (!modifOK.isEmpty() && modifOK.equals("OK")) {
+                feedBackPanelGeneral.sendMessage("Votre annonce a été modifiée avec succés !", FeedbackMessageLevel.SUCCESS);
+            }
+        }
     }
 
     private void loadAnnonceInfos(String idAnnonce) {
@@ -156,7 +164,7 @@ public class Annonce extends MasterPage {
 
         modifierAnnonceContainer = new WebMarkupContainer("modifierAnnonceContainer") {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -185,7 +193,7 @@ public class Annonce extends MasterPage {
 
         supprimerAnnonceContainer = new WebMarkupContainer("supprimerAnnonceContainer") {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -197,9 +205,9 @@ public class Annonce extends MasterPage {
             @Override
             protected void onComponentTag(ComponentTag tag) {
                 super.onComponentTag(tag);
-                if(!modifierAnnonceContainer.isVisible()){
+                if (!modifierAnnonceContainer.isVisible()) {
                     tag.remove("class");
-                }else{
+                } else {
                     tag.put("class", "containerAction");
                 }
             }
@@ -222,7 +230,7 @@ public class Annonce extends MasterPage {
 
         WebMarkupContainer inscrireAnnonceContainer = new WebMarkupContainer("inscrireAnnonceContainer") {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -250,7 +258,7 @@ public class Annonce extends MasterPage {
 
         envoyerDevisContainer = new WebMarkupContainer("envoyerDevisContainer") {
             /**
-             * 
+             *
              */
             private static final long serialVersionUID = 1L;
 
@@ -354,8 +362,8 @@ public class Annonce extends MasterPage {
 
         listViewEntrepriseInscrite = new ListView<EntrepriseDTO>("entreprises", annonceAffichageDTO.getEntreprises()) {
             /**
-                     * 
-                     */
+             *
+             */
             private static final long serialVersionUID = 1L;
 
             @Override
@@ -442,11 +450,12 @@ public class Annonce extends MasterPage {
         add(containerEntreprisesGlobales);
     }
 
-    private boolean visibilityEntreprisesIncritesField(){
+    private boolean visibilityEntreprisesIncritesField() {
         return (roleUtils.checkRoles(TypeCompte.CLIENT) || roleUtils.checkRoles(TypeCompte.ADMINISTRATEUR))
                 && annonceAffichageDTO.getEntrepriseSelectionnee() == null;
     }
-    private boolean visibilityEntrepriseSelectionneeField(){
+
+    private boolean visibilityEntrepriseSelectionneeField() {
         return (roleUtils.checkRoles(TypeCompte.CLIENT) || roleUtils.checkRoles(TypeCompte.ADMINISTRATEUR))
                 && annonceAffichageDTO.getEntrepriseSelectionnee() != null;
     }
@@ -515,7 +524,7 @@ public class Annonce extends MasterPage {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                if(feedBackPanelGeneral.hasFeedbackMessage()){
+                if (feedBackPanelGeneral.hasFeedbackMessage()) {
                     feedBackPanelGeneral.getFeedbackMessages().clear();
                 }
                 target.add(feedBackPanelGeneral);
@@ -590,13 +599,26 @@ public class Annonce extends MasterPage {
              */
             @Override
             public boolean isVisible() {
-                if (roleUtils.checkRoles(TypeCompte.ARTISAN) || roleUtils.checkRoles(TypeCompte.ADMINISTRATEUR)) {
-                    return annonceAffichageDTO.getTelephoneClient() != null;
+                if (annonceAffichageDTO.getAnnonce().getTypeContact().equals(TypeContact.TELEPHONE)) {
+                    if (roleUtils.checkRoles(TypeCompte.ARTISAN) || roleUtils.checkRoles(TypeCompte.ADMINISTRATEUR)) {
+                        return annonceAffichageDTO.getTelephoneClient() != null;
+                    } else {
+                        return userConnected.getNumeroTel() != null;
+                    }
                 } else {
-                    return userConnected.getNumeroTel() != null;
+                    return false;
                 }
             }
+        };
 
+        WebMarkupContainer containerEmailContact = new WebMarkupContainer("containerEmailContact") {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public boolean isVisible() {
+                return annonceAffichageDTO.getAnnonce().getTypeContact().equals(TypeContact.EMAIL);
+            }
         };
 
         String complementAdresse = annonceAffichageDTO.getAdresse().getComplementAdresse();
@@ -618,10 +640,11 @@ public class Annonce extends MasterPage {
         containerTelContact.add(telephone);
 
         email = new SmartLinkLabel("email");
+        containerEmailContact.add(email);
 
         initModelPhoneAndEmailContact();
 
-        containerContact.add(adresse, email, containerTelContact);
+        containerContact.add(adresse, containerEmailContact, containerTelContact);
         containerContactMaster.add(containerContact);
         add(containerContactMaster);
     }
@@ -631,11 +654,11 @@ public class Annonce extends MasterPage {
         // webservice renvoi le téléphone et l'adresse mail.
         // Sinon c'est que c'est le client
         if (roleUtils.checkRoles(TypeCompte.ARTISAN) || roleUtils.checkRoles(TypeCompte.ADMINISTRATEUR)) {
-            telephoneValue = new Model<String>(annonceAffichageDTO.getTelephoneClient());
-            emailValue = new Model<String>(annonceAffichageDTO.getEmailClient());
+            telephoneValue = new Model<>(annonceAffichageDTO.getTelephoneClient());
+            emailValue = new Model<>(annonceAffichageDTO.getEmailClient());
         } else {
-            telephoneValue = new Model<String>(userConnected.getNumeroTel());
-            emailValue = new Model<String>(userConnected.getEmail());
+            telephoneValue = new Model<>(userConnected.getNumeroTel());
+            emailValue = new Model<>(userConnected.getEmail());
         }
 
         telephone.setDefaultModel(telephoneValue);
@@ -654,7 +677,7 @@ public class Annonce extends MasterPage {
 
     private void initPopupSuppression() {
         SuppressionModal suppressionModal = new SuppressionModal("suppressionModal", idAnnonce,
-                "Suppression de mon annonce", "390"){
+                "Suppression de mon annonce", "390") {
             /**
              * Gets whether this component and any children are visible.
              * <p/>
@@ -674,7 +697,7 @@ public class Annonce extends MasterPage {
     }
 
     private void initPopupInscription() {
-        inscriptionModal = new InscriptionModal("inscriptionModal"){
+        inscriptionModal = new InscriptionModal("inscriptionModal") {
 
             @Override
             public boolean isVisible() {
@@ -685,7 +708,7 @@ public class Annonce extends MasterPage {
     }
 
     private void initPopupSelectionEntreprise() {
-        selectionEntrepriseModal = new SelectionEntrepriseModal("selectionEntrepriseModal"){
+        selectionEntrepriseModal = new SelectionEntrepriseModal("selectionEntrepriseModal") {
             @Override
             public boolean isVisible() {
                 return visibilityEntreprisesIncritesField();
@@ -695,7 +718,7 @@ public class Annonce extends MasterPage {
     }
 
     private void initPopupDesinscriptionEntreprise() {
-        desincriptionArtisanModal = new DesincriptionArtisanModal("desincriptionArtisanModal"){
+        desincriptionArtisanModal = new DesincriptionArtisanModal("desincriptionArtisanModal") {
             @Override
             public boolean isVisible() {
                 return visibilityEntreprisesIncritesField();
@@ -707,7 +730,7 @@ public class Annonce extends MasterPage {
     private void initPopupNotationArtisan() {
         containerPopupNotationArtisan = new WebMarkupContainer("containerPopupNotationArtisan");
         containerPopupNotationArtisan.setOutputMarkupId(true);
-        notationArtisanModal = new NotationArtisanModal("notationArtisanModal"){
+        notationArtisanModal = new NotationArtisanModal("notationArtisanModal") {
             @Override
             public boolean isVisible() {
                 return annonceAffichageDTO.getAnnonce().getEtatAnnonce().equals(EtatAnnonce.A_NOTER) && visibilityEntrepriseSelectionneeField();
@@ -864,9 +887,9 @@ public class Annonce extends MasterPage {
 
     /**
      * Principalement utilisé pour l'affichage des liens dans le menu action
-     * 
+     * <p/>
      * Check si l'artisan a le bon role et que l'annonce est active
-     * 
+     *
      * @return true si les verifications sont OK !!
      */
     private boolean basicCheckForArtisanLink() {
@@ -881,7 +904,7 @@ public class Annonce extends MasterPage {
 
     /**
      * Check pour savoir si on affiche le lien d'inscription à l'annonce
-     * 
+     *
      * @return true si le lien doit etre affiché
      */
     private boolean afficherInscrireAnnonce() {
@@ -890,7 +913,7 @@ public class Annonce extends MasterPage {
 
     /**
      * Check pour savoir si on affiche le lien d'envoi du devis
-     * 
+     *
      * @return true si le lien doit etre affiché
      */
     private boolean afficherEnvoyerDevisAnnonce() {

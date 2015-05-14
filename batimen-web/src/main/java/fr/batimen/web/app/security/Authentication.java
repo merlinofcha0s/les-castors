@@ -91,4 +91,8 @@ public class Authentication implements Serializable {
         return getCurrentUserInfo().getPermissions().get(0).getTypeCompte();
     }
 
+    public boolean isAuthenticated(){
+        return SecurityUtils.getSubject().isAuthenticated();
+    }
+
 }

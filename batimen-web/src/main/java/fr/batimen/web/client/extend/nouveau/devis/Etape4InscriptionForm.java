@@ -91,7 +91,6 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
                 ValidatorConstant.CLIENT_PRENOM_MAX));
 
         final RequiredBorderBehaviour requiredBorderBehaviour = new RequiredBorderBehaviour();
-        boolean addedRequiredBehaviour = false;
 
         numeroTelField = new TextField<String>("client.numeroTel") {
 

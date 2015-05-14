@@ -11,6 +11,7 @@ import fr.batimen.dto.aggregate.ModificationAnnonceDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.web.app.constants.FeedbackMessageLevel;
+import fr.batimen.web.app.constants.ParamsConstant;
 import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.client.component.Commentaire;
 import fr.batimen.web.client.component.ContactezNous;
@@ -18,6 +19,7 @@ import fr.batimen.web.client.component.PhotosContainer;
 import fr.batimen.web.client.component.Profil;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.web.client.event.ModificationAnnonceEvent;
+import fr.batimen.web.client.extend.connected.Annonce;
 import fr.batimen.web.client.extend.nouveau.devis.Etape3AnnonceForm;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.ws.client.service.AnnonceServiceREST;
@@ -171,7 +173,11 @@ public class ModifierAnnonce extends MasterPage {
             Integer codeRetourService = annonceServiceREST.modifierAnnonce(modificationAnnonceDTO);
 
             if (codeRetourService.equals(CodeRetourService.RETOUR_OK)) {
-                feedBackPanelGeneral.sendMessage("Votre annonce a été modifiée avec succés !", FeedbackMessageLevel.SUCCESS);
+                PageParameters params = new PageParameters();
+                params.add(ParamsConstant.ID_ANNONCE_PARAM, idAnnonce);
+                params.add(ParamsConstant.IS_MODIF_PARAM, "OK");
+                this.setResponsePage(Annonce.class, params);
+                //feedBackPanelGeneral.sendMessage("Votre annonce a été modifiée avec succés !", FeedbackMessageLevel.SUCCESS);
             } else {
                 feedBackPanelGeneral.sendMessage("Problème lors de l'enregistrement de l'annonce, veuillez réessayer ultérieurement", FeedbackMessageLevel.ERROR);
             }
