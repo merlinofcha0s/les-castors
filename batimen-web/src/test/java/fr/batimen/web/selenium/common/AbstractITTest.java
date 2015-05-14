@@ -68,7 +68,7 @@ public abstract class AbstractITTest {
                     "$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=", "0614125696",
                     "2014-01-08", true, "lolmdr")
             .values(100002, "xaviern@batimen.fr", "Dupont", "Xavier", "xavier",
-                    "$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=", "0614125696",
+                    "$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=", null,
                     "2014-01-08", true, "lolmdr06")
             .values(100003, "admin@lescastors.fr", "Casaucau", "Cyril", "admin",
                     "$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=", "0614125696",
