@@ -8,11 +8,11 @@ import javax.inject.Inject;
 import fr.batimen.dto.DemandeMesAnnoncesDTO;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.web.app.constants.ParamsConstant;
+import fr.batimen.web.app.security.RolesUtils;
 import fr.batimen.ws.client.service.UtilisateurServiceREST;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
@@ -53,8 +53,15 @@ public final class MesAnnonces extends MasterPage {
     @Inject
     private Authentication authentication;
 
+    @Inject
+    private RolesUtils rolesUtils;
+
     private List<AnnonceDTO> annonces;
     private List<NotificationDTO> notifications;
+
+    private Model<String> voirAnnonceModel;
+    private Model<String> demandeDeDevisTitleModel;
+    private Model<String> pasDeNotificationModel;
 
     public MesAnnonces() {
         super("Mes annonces ", "lol", "Bienvenue sur lescastors.fr", true, "img/bg_title1.jpg");
@@ -63,6 +70,7 @@ public final class MesAnnonces extends MasterPage {
             LOGGER.debug("Init de la page mes annonces");
         }
 
+        calculModelLabelByTypeCompte();
         initStaticComposant();
         loadInfosMesAnnonces();
         initRepeaterNotifications();
@@ -85,7 +93,10 @@ public final class MesAnnonces extends MasterPage {
         ContactezNous contactezNous = new ContactezNous("contactezNous");
         Commentaire commentaire = new Commentaire("commentaire");
 
-        this.add(profil, commentaire,contactezNous);
+        Label demandeDeDevisTitle = new Label("demandeDeDevisTitle", demandeDeDevisTitleModel);
+        Label pasDeNotificationLbl = new Label("pasDeNotificationLbl", pasDeNotificationModel);
+
+        add(profil, commentaire, contactezNous, demandeDeDevisTitle, pasDeNotificationLbl);
     }
 
     private void initRepeaterNotifications() {
@@ -187,7 +198,7 @@ public final class MesAnnonces extends MasterPage {
                 Label nbDevis = new Label("nbDevis", annonce.getNbDevis());
                 Label etatAnnonce = new Label("etatAnnonce", annonce.getEtatAnnonce().getType());
 
-                Link<Void> voirAnnonce = new Link<Void>("voirAnnonce") {
+                LinkLabel voirAnnonce = new LinkLabel("voirAnnonce", voirAnnonceModel) {
 
                     private static final long serialVersionUID = 1L;
 
@@ -197,7 +208,6 @@ public final class MesAnnonces extends MasterPage {
                         params.add(ParamsConstant.ID_ANNONCE_PARAM, annonce.getHashID());
                         this.setResponsePage(Annonce.class, params);
                     }
-
                 };
 
                 voirAnnonce.setOutputMarkupId(true);
@@ -268,6 +278,21 @@ public final class MesAnnonces extends MasterPage {
             this.setResponsePage(Annonce.class, params);
         } else if(notificationDTO.getTypeNotification().getParQui().equals(TypeCompte.CLIENT)){
             // TODO A Completer quand la page entreprise sera prete
+        }
+    }
+
+    private void calculModelLabelByTypeCompte(){
+        demandeDeDevisTitleModel = new Model<>();
+        voirAnnonceModel = new Model<>();
+        pasDeNotificationModel = new Model<>();
+        if(rolesUtils.checkRoles(TypeCompte.ARTISAN)){
+            demandeDeDevisTitleModel.setObject("Les annonces où je suis inscris");
+            voirAnnonceModel.setObject("Voir annonce");
+            pasDeNotificationModel.setObject("Retrouvez ici toutes les notifications des annonces où vous êtes inscrit");
+        }else if(rolesUtils.checkRoles(TypeCompte.CLIENT)){
+            demandeDeDevisTitleModel.setObject("Mes demandes de devis");
+            voirAnnonceModel.setObject("Voir / modifier annonce");
+            pasDeNotificationModel.setObject("Retrouvez ici toutes les notifications sur vos demandes de devis");
         }
     }
 }
