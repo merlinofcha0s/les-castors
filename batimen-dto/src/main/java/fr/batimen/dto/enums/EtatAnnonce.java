@@ -2,17 +2,24 @@ package fr.batimen.dto.enums;
 
 public enum EtatAnnonce {
 
-    ACTIVE("Active"), DESACTIVE("Désactivée"), A_NOTER("A noter"), EN_ATTENTE("En attente"), SUPPRIMER("Supprimer"), QUOTA_MAX_ATTEINT(
-            "Quota devis atteint"), TERMINER("Terminer");
+    ACTIVE("Active", "30%"), DESACTIVE("Désactivée", "0%"), A_NOTER("A noter", "60%"), EN_ATTENTE("En attente", "15%"), SUPPRIMER("Supprimer", "75%"), QUOTA_MAX_ATTEINT(
+            "Quota devis atteint", "45%"), TERMINER("Terminer", "100%");
 
-    private EtatAnnonce(String affichage) {
+    EtatAnnonce(String affichage, String percentage) {
         this.affichage = affichage;
+        this.percentage = percentage;
     }
 
     private String affichage;
 
+    private String percentage;
+
     public String getType() {
         return affichage;
+    }
+
+    public String getPercentage() {
+        return percentage;
     }
 
     @Override

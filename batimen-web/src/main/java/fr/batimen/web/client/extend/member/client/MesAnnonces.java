@@ -195,6 +195,12 @@ public final class MesAnnonces extends MasterPage {
                 Label categorie = new Label("categorie", CategorieLoader.getCategorieByCode(annonce
                         .getCategorieMetier()));
                 Label description = new Label("description", descriptionCutting.toString());
+
+                WebMarkupContainer progressBar = new WebMarkupContainer("progressBar");
+                StringBuilder sizeCSSProgressBar = new StringBuilder("width: ");
+                sizeCSSProgressBar.append(annonce.getEtatAnnonce().getPercentage()).append(";");
+                progressBar.add(new AttributeModifier("style", sizeCSSProgressBar.toString()));
+
                 Label nbDevis = new Label("nbDevis", annonce.getNbDevis());
                 Label etatAnnonce = new Label("etatAnnonce", annonce.getEtatAnnonce().getType());
 
@@ -212,12 +218,7 @@ public final class MesAnnonces extends MasterPage {
 
                 voirAnnonce.setOutputMarkupId(true);
 
-                item.add(iconCategorie);
-                item.add(categorie);
-                item.add(description);
-                item.add(nbDevis);
-                item.add(etatAnnonce);
-                item.add(voirAnnonce);
+                item.add(iconCategorie, categorie, description, nbDevis, etatAnnonce, voirAnnonce, progressBar);
             }
         };
 

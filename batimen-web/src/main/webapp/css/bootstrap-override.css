@@ -30,3 +30,7 @@
 .btn-info:active,.btn-info.active {
     background-color: #0f74a6 \9;
 }
+
+.progress {
+    margin-bottom: 0px;
+}

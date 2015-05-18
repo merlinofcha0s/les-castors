@@ -568,6 +568,12 @@ table tr td .error {
 	width: 10px;
 }
 
+.progress-mes-annonces{
+	float: left;
+	width: 50%;
+	margin-right: 10px;
+}
+
 /* Mon profil */
 #infoPerso {
 	padding-bottom: 80px;
