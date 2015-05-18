@@ -268,11 +268,7 @@ public abstract class MasterPage extends WebPage {
             @Override
             public boolean isVisible() {
                 if (SecurityUtils.getSubject().isAuthenticated()) {
-                    if (SecurityUtils.getSubject().hasRole(TypeCompte.CLIENT.getRole())) {
-                        return Boolean.FALSE;
-                    } else {
-                        return Boolean.TRUE;
-                    }
+                    return Boolean.FALSE;
                 } else {
                     return Boolean.TRUE;
                 }

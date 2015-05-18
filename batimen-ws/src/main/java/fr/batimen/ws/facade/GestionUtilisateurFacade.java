@@ -10,13 +10,19 @@ import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
+import javax.inject.Provider;
 import javax.interceptor.Interceptors;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
-import fr.batimen.dto.ModifClientDTO;
+import fr.batimen.dto.*;
+import fr.batimen.dto.aggregate.MesAnnoncesDTO;
+import fr.batimen.dto.enums.TypeCompte;
+import fr.batimen.ws.service.AnnonceService;
+import fr.batimen.ws.service.NotificationService;
+import fr.batimen.ws.utils.RolesUtils;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,13 +30,9 @@ import org.slf4j.LoggerFactory;
 import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.WsPath;
-import fr.batimen.dto.ClientDTO;
-import fr.batimen.dto.LoginDTO;
-import fr.batimen.dto.PermissionDTO;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 import fr.batimen.ws.dao.ArtisanDAO;
 import fr.batimen.ws.dao.ClientDAO;
-import fr.batimen.ws.dao.NotificationDAO;
 import fr.batimen.ws.dao.PermissionDAO;
 import fr.batimen.ws.entity.Artisan;
 import fr.batimen.ws.entity.Client;
@@ -72,6 +74,15 @@ public class GestionUtilisateurFacade {
 
     @Inject
     private ArtisanDAO artisanDAO;
+
+    @Inject
+    private RolesUtils rolesUtils;
+
+    @Inject
+    private NotificationService notificationService;
+
+    @Inject
+    private AnnonceService annonceService;
 
     /**
      * Methode de login des utilisateurs
@@ -280,6 +291,65 @@ public class GestionUtilisateurFacade {
             }
             return CodeRetourService.RETOUR_KO;
         }
+    }
 
+    /**
+     * Methode de récuperation des informations de la page de mes annonces
+     * (notifications + annonces) d'un client / artisan
+     *
+     * @param demandeMesAnnoncesDTO Permet de connaitre le login pour le chargement des infos ainsi que le demandeur
+     * @return Les notifications + les annonces (5 max)
+     * @see DemandeMesAnnoncesDTO
+     * @see MesAnnoncesDTO
+     */
+    @POST
+    @Path(WsPath.GESTION_UTILISATEUR_SERVICE_INFOS_MES_ANNONCES)
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public MesAnnoncesDTO getInfoForMesAnnonces(DemandeMesAnnoncesDTO demandeMesAnnoncesDTO) {
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug(demandeMesAnnoncesDTO.toString());
+        }
+        MesAnnoncesDTO mesAnnoncesDTO = new MesAnnoncesDTO();
+
+        String rolesDemandeur = getUtilisateurRoles(demandeMesAnnoncesDTO
+                .getLoginDemandeur());
+        String rolesDemander = getUtilisateurRoles(demandeMesAnnoncesDTO
+                .getLogin());
+
+        if (rolesDemandeur.isEmpty()) {
+            return new MesAnnoncesDTO();
+        }
+
+        if (!rolesUtils.checkIfAdminWithString(rolesDemandeur)
+                && !demandeMesAnnoncesDTO.getLogin().equals(demandeMesAnnoncesDTO.getLoginDemandeur())) {
+            return new MesAnnoncesDTO();
+        }
+
+        String login = demandeMesAnnoncesDTO.getLogin();
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Récuperation notification.........");
+        }
+
+        List<NotificationDTO> notificationsDTO = null;
+
+        if (rolesUtils.checkIfArtisanWithString(rolesDemander)) {
+            notificationsDTO = notificationService.getNotificationByLogin(login, TypeCompte.ARTISAN);
+        } else if (rolesUtils.checkIfClientWithString(rolesDemander)) {
+            notificationsDTO = notificationService.getNotificationByLogin(login, TypeCompte.CLIENT);
+        }
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Récuperation annonce.........");
+        }
+
+        List<AnnonceDTO> annoncesDTO =
+                annonceService.getAnnoncesByClientLoginForMesAnnonces(login, rolesUtils.checkIfArtisanWithString(rolesDemander));
+
+        mesAnnoncesDTO.setNotifications(notificationsDTO);
+        mesAnnoncesDTO.setAnnonces(annoncesDTO);
+
+        return mesAnnoncesDTO;
     }
 }

@@ -87,30 +87,6 @@ public class AnnonceServiceREST implements Serializable {
     }
 
     /**
-     * Appel le webservice pour recuperer les annonces par login client.
-     *
-     * @param login L'identifiant du client
-     * @return
-     */
-    public List<AnnonceDTO> getAnnonceByLoginForClient(String login) {
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Début appel service creation annonce.....");
-        }
-
-        String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_ANNONCE_SERVICE_PATH,
-                WsPath.GESTION_ANNONCE_SERVICE_GET_ANNONCES_BY_LOGIN, login);
-
-        List<AnnonceDTO> annonces = DeserializeJsonHelper.deserializeDTOList(objectInJSON);
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Fin appel service creation annonce.....");
-        }
-
-        return annonces;
-    }
-
-    /**
      * Permet de récuperer une annonce dans le but de l'afficher <br/>
      * Récupère également les informations sur les artisans et les entreprise
      * inscrites a cette annonce

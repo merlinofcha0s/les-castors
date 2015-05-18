@@ -47,8 +47,10 @@ import fr.batimen.dto.enums.TypeTravaux;
 @NamedQueries(value = {
         @NamedQuery(name = QueryJPQL.ANNONCE_BY_LOGIN,
                 query = "SELECT a FROM Annonce AS a WHERE a.demandeur.login = :login AND a.etatAnnonce != 4"),
-        @NamedQuery(name = QueryJPQL.ANNONCE_BY_LOGIN_FETCH_ARTISAN,
+        @NamedQuery(name = QueryJPQL.ANNONCE_BY_DEMANDEUR_LOGIN_FETCH_ARTISAN,
                 query = "SELECT a.categorieMetier, a.description, a.etatAnnonce, count(art), a.hashID FROM Annonce AS a LEFT OUTER JOIN a.artisans AS art WHERE a.demandeur.login = :login AND a.etatAnnonce != 4 AND a.etatAnnonce != 1 GROUP BY a ORDER BY dateCreation ASC"),
+        @NamedQuery(name = QueryJPQL.ANNONCE_BY_ARTISAN_LOGIN_FETCH_ARTISAN,
+                query = "SELECT a.categorieMetier, a.description, a.etatAnnonce, count(art), a.hashID FROM Annonce AS a LEFT OUTER JOIN a.artisans AS art WHERE art.login = :login AND a.etatAnnonce != 4 AND a.etatAnnonce != 1 GROUP BY a ORDER BY dateCreation ASC"),
         @NamedQuery(name = QueryJPQL.ANNONCE_BY_TITLE_AND_DESCRIPTION,
                 query = "SELECT a FROM Annonce AS a WHERE a.description = :description AND a.demandeur.login = :login AND a.etatAnnonce != 4 AND a.etatAnnonce != 1"),
         @NamedQuery(name = QueryJPQL.NB_ANNONCE_BY_LOGIN,

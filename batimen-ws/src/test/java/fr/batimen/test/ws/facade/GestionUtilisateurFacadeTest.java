@@ -8,7 +8,11 @@ import java.util.Locale;
 
 import javax.inject.Inject;
 
-import fr.batimen.dto.ModifClientDTO;
+import fr.batimen.dto.*;
+import fr.batimen.dto.aggregate.MesAnnoncesDTO;
+import fr.batimen.dto.enums.StatutNotification;
+import fr.batimen.dto.enums.TypeNotification;
+import fr.batimen.ws.client.service.ClientServiceREST;
 import org.jboss.arquillian.persistence.ShouldMatchDataSet;
 import org.jboss.arquillian.persistence.UsingDataSet;
 import org.junit.Assert;
@@ -20,8 +24,6 @@ import org.slf4j.LoggerFactory;
 import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.exception.BackendException;
 import fr.batimen.core.exception.DuplicateEntityException;
-import fr.batimen.dto.ClientDTO;
-import fr.batimen.dto.LoginDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.test.ws.AbstractBatimenWsTest;
@@ -49,6 +51,9 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
 
     @Inject
     private UtilisateurServiceREST utilisateurServiceREST;
+
+    @Inject
+    private ClientServiceREST clientsServiceREST;
 
     @Test
     @UsingDataSet("datasets/in/clients.yml")
@@ -326,6 +331,158 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
         // On appel le ws
         Integer codeRetour = utilisateurServiceREST.updateUtilisateurInfos(modifClientDTO);
         Assert.assertEquals(CodeRetourService.RETOUR_OK, codeRetour);
+    }
+
+    /**
+     * Cas de test : Le client se rend sur la page "mes annonces" <br/>
+     * Ce test verifie que les données remontent de maniere correctes
+     *
+     */
+    @Test
+    @UsingDataSet("datasets/in/client_notification_annonce.yml")
+    public void testGetInfoForMesAnnoncesParUnClient() {
+        DemandeMesAnnoncesDTO demandeMesAnnoncesDTO = new DemandeMesAnnoncesDTO();
+        demandeMesAnnoncesDTO.setLogin("pebronne");
+        demandeMesAnnoncesDTO.setLoginDemandeur("pebronne");
+
+        MesAnnoncesDTO mesAnnonces = utilisateurServiceREST.getMesInfosAnnonce(demandeMesAnnoncesDTO);
+
+        List<NotificationDTO> notifications = mesAnnonces.getNotifications();
+        List<AnnonceDTO> annonces = mesAnnonces.getAnnonces();
+
+        Assert.assertEquals(1, notifications.size());
+        Assert.assertEquals(1, annonces.size());
+
+        // Check de la notification.
+        Boolean notificationPresent = Boolean.FALSE;
+
+        for (NotificationDTO notification : notifications) {
+            if (notification.getTypeNotification().equals(TypeNotification.INSCRIT_A_ANNONCE)
+                    && notification.getPourQuiNotification().equals(TypeCompte.CLIENT)
+                    && notification.getStatutNotification().equals(StatutNotification.VU)
+                    && notification.getArtisanLogin().equals("pebronneArtisanne")
+                    && notification.getClientLogin().equals("pebronne")
+                    && notification.getNomEntreprise().equals("Pebronne enterprise")
+                    && notification
+                    .getHashIDAnnonce()
+                    .equals("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21")) {
+                notificationPresent = Boolean.TRUE;
+            }
+        }
+
+        Assert.assertTrue(notificationPresent);
+
+        // Check de l'annonce.
+        Boolean rightDescription = Boolean.FALSE;
+        Boolean rightHashID = Boolean.FALSE;
+
+        for (AnnonceDTO annonce : annonces) {
+            if (annonce.getDescription().equals("Peinture d'un mur")) {
+                rightDescription = Boolean.TRUE;
+            }
+            if (annonce
+                    .getHashID()
+                    .equals("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21")) {
+                rightHashID = Boolean.TRUE;
+            }
+        }
+
+        Assert.assertTrue(rightDescription);
+        Assert.assertTrue(rightHashID);
+        Assert.assertEquals(1, annonces.size());
+    }
+
+    /**
+     * Cas de test : Un artisan se rend sur la page "mes annonces" <br/>
+     * Ce test verifie que les données remontent de maniere correctes
+     *
+     */
+    @Test
+    @UsingDataSet("datasets/in/client_notification_annonce.yml")
+    public void testGetInfoForMesAnnoncesParUnArtisan() {
+        DemandeMesAnnoncesDTO demandeMesAnnoncesDTO = new DemandeMesAnnoncesDTO();
+        demandeMesAnnoncesDTO.setLogin("pebronneArtisanne");
+        demandeMesAnnoncesDTO.setLoginDemandeur("pebronneArtisanne");
+        getInfoForMesAnnoncesPourAdminOuArtisan(demandeMesAnnoncesDTO);
+    }
+
+    /**
+     * Cas de test : Un administrateur utilise le service de la page mes annonces pour récuperer les informations d'un client / artisan
+     *
+     */
+    @Test
+    @UsingDataSet("datasets/in/client_notification_annonce.yml")
+    public void testGetInfoForMesAnnoncesParUnAdmin() {
+        DemandeMesAnnoncesDTO demandeMesAnnoncesDTO = new DemandeMesAnnoncesDTO();
+        demandeMesAnnoncesDTO.setLogin("pebronneArtisanne");
+        demandeMesAnnoncesDTO.setLoginDemandeur("admin");
+
+        getInfoForMesAnnoncesPourAdminOuArtisan(demandeMesAnnoncesDTO);
+    }
+
+    /**
+     * Cas de test : Un client essaye de recuperer des informations qu'il ne possede pas.
+     * Le webservice ne lui renvoi rien.
+     *
+     */
+    @Test
+    @UsingDataSet("datasets/in/client_notification_annonce.yml")
+    public void testGetInfoForMesAnnoncesParUnClientPasLesDroits() {
+        DemandeMesAnnoncesDTO demandeMesAnnoncesDTO = new DemandeMesAnnoncesDTO();
+        demandeMesAnnoncesDTO.setLogin("pebronneArtisanne");
+        demandeMesAnnoncesDTO.setLoginDemandeur("pebronne");
+
+        MesAnnoncesDTO mesAnnonces = utilisateurServiceREST.getMesInfosAnnonce(demandeMesAnnoncesDTO);
+
+        Assert.assertTrue(mesAnnonces.getAnnonces().isEmpty());
+        Assert.assertTrue(mesAnnonces.getNotifications().isEmpty());
+    }
+
+    private void getInfoForMesAnnoncesPourAdminOuArtisan(DemandeMesAnnoncesDTO demandeMesAnnoncesDTO){
+        MesAnnoncesDTO mesAnnonces = utilisateurServiceREST.getMesInfosAnnonce(demandeMesAnnoncesDTO);
+        List<NotificationDTO> notifications = mesAnnonces.getNotifications();
+        List<AnnonceDTO> annonces = mesAnnonces.getAnnonces();
+
+        Assert.assertEquals(1, notifications.size());
+        Assert.assertEquals(1, annonces.size());
+
+        // Check de la notification.
+        Boolean notificationPresent = Boolean.FALSE;
+
+        for (NotificationDTO notification : notifications) {
+            if (notification.getTypeNotification().equals(TypeNotification.A_CHOISI_ENTREPRISE)
+                    && notification.getPourQuiNotification().equals(TypeCompte.ARTISAN)
+                    && notification.getStatutNotification().equals(StatutNotification.VU)
+                    && notification.getArtisanLogin().equals("pebronneArtisanne")
+                    && notification.getClientLogin().equals("pebronne")
+                    && notification.getNomEntreprise().equals("Pebronne enterprise")
+                    && notification
+                    .getHashIDAnnonce()
+                    .equals("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21")) {
+                notificationPresent = Boolean.TRUE;
+            }
+        }
+
+        Assert.assertTrue(notificationPresent);
+
+        // Check de l'annonce.
+        Boolean rightDescription = Boolean.FALSE;
+        Boolean rightHashID = Boolean.FALSE;
+
+        for (AnnonceDTO annonce : annonces) {
+            if (annonce.getDescription().equals("Peinture d'un mur")) {
+                rightDescription = Boolean.TRUE;
+            }
+            if (annonce
+                    .getHashID()
+                    .equals("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21")) {
+                rightHashID = Boolean.TRUE;
+            }
+        }
+
+        Assert.assertTrue(rightDescription);
+        Assert.assertTrue(rightHashID);
+        Assert.assertEquals(1, annonces.size());
     }
 
 }

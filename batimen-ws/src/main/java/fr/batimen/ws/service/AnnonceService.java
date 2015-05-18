@@ -1,18 +1,11 @@
 package fr.batimen.ws.service;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
+import javax.ejb.*;
 import javax.inject.Inject;
 
+import fr.batimen.dto.helper.DeserializeJsonHelper;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -321,5 +314,39 @@ public class AnnonceService {
         annonceDAO.desactiveAnnoncePerime(calJourPeremptionAnnonce.getTime(), nbMaxArtisanParAnnonce);
 
         return CodeRetourService.RETOUR_OK;
+    }
+
+    /**
+     * Permet de récuperer les annonces d'un client à partir de son login <br/>
+     * Service servant principalement a la page mes annonces
+     *
+     * @param login l'identifiant de l'utilisateur
+     * @return La liste des annonces de cet utilisateur
+     */
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public List<AnnonceDTO> getAnnoncesByClientLoginForMesAnnonces(String login, boolean isArtisan) {
+        // On escape les ""
+        String loginEscaped = DeserializeJsonHelper.parseString(login);
+        // On recupere les annonces de l'utilisateur
+        List<Object[]> queryAnnoncesResult = annonceDAO.getAnnoncesByLoginForMesAnnonces(loginEscaped, isArtisan);
+        // On crée la liste qui accueuillera les DTO
+        List<AnnonceDTO> annoncesDTO = new ArrayList<AnnonceDTO>();
+
+        for (Object[] annonce : queryAnnoncesResult) {
+            // On crée le nouvel objet
+            AnnonceDTO annonceDTO = new AnnonceDTO();
+            // On transfert les données d'un objet a l'autre
+            annonceDTO.setCategorieMetier((Short) annonce[0]);
+            annonceDTO.setDescription((String) annonce[1]);
+            annonceDTO.setEtatAnnonce((EtatAnnonce) annonce[2]);
+            Long nbDevis = (Long) annonce[3];
+            annonceDTO.setNbDevis(nbDevis);
+            annonceDTO.setHashID(String.valueOf(annonce[4]));
+
+            // On ajoute à la liste
+            annoncesDTO.add(annonceDTO);
+        }
+
+        return annoncesDTO;
     }
 }

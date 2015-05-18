@@ -28,7 +28,8 @@ public class QueryJPQL {
     // Entity Annonce
     public static final String ANNONCE_BY_LOGIN = "annonceByLogin";
     public static final String ANNONCE_BY_TITLE_AND_DESCRIPTION = "annonceByTitleAndDescription";
-    public static final String ANNONCE_BY_LOGIN_FETCH_ARTISAN = "annonceByLoginFetchArtisan";
+    public static final String ANNONCE_BY_DEMANDEUR_LOGIN_FETCH_ARTISAN = "annonceByDemandeurLoginFetchArtisan";
+    public static final String ANNONCE_BY_ARTISAN_LOGIN_FETCH_ARTISAN = "annonceByArtisanLoginFetchArtisan";
     public static final String NB_ANNONCE_BY_LOGIN = "nbAnnonceByLogin";
     public static final String ANNONCE_BY_ID_FETCH_ARTISAN_ENTREPRISE_CLIENT_ADRESSE = "annonceByIDFetchArtisanEntrepriseClientAdresse";
     public static final String ANNONCE_BY_ID = "annonceByID";

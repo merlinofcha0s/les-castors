@@ -1,79 +1,86 @@
 <wicket:head>
     <link
-        rel="stylesheet"
-        type="text/css"
-        href="css/font_icons8.css" />
+            rel="stylesheet"
+            type="text/css"
+            href="css/font_icons8.css"/>
 </wicket:head>
 <wicket:extend>
-	<div class="row-fluid">
-		<div wicket:id="profil"></div>
-		<div class="span10">
-			<div>
-				<div
-					class="bg_title"
-					style="clear: both;">
-					<h4 class="headInModule">
-						Mes notifications <span
-							class="badgeMesdevis badge badge-info"
-							wicket:id="nbNotification">5</span>
-					</h4>
-				</div>
-				<div>Retrouvez ici toutes les notifications sur vos demandes de devis</div>
-				<table
-					class="table table-hover">
-					<thead>
-						<tr>
-							<th></th>
-							<th></th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr wicket:id="listNotification">
-							<td class="td-IconNotif"><span class="iconNotif icon-Info"></span></td>
-							<td><a wicket:id="linkEntreprise"></a><span wicket:id="typeNotification"></span><a wicket:id="linkAnnonce">annonce</a></td>
-							<td wicket:id="dateNotification">10/11/2014 à 12:15</td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-			<div>
-				<div
-					class="bg_title"
-					style="clear: both;">
-					<h4 class="headInModule">
-						Mes demandes de devis <span
-							class="badgeMesdevis badge badge-info"
-							wicket:id="nbAnnonce"></span>
-					</h4>
-				</div>
-				<table
-					class="table table-hover">
-					<thead>
-						<tr>
-							<th>Catégorie</th>
-							<th>Description</th>
-							<th>Nb devis</th>
-							<th>Etat devis</th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr wicket:id="listAnnonce">
-							<td><span
-								class="iconsMesDevis"
-								wicket:id="iconCategorie"></span><span wicket:id="categorie"></span></td>
-							<td><span wicket:id="description"></span></td>
-							<td><span wicket:id="nbDevis"></span></td>
-							<td><span wicket:id="etatAnnonce"></span></td>
-							<td><a wicket:id="voirAnnonce">Voir / modifier annonce</a></td>
-						</tr>
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</div>
-	<div wicket:id="commentaire"></div>
-	<div wicket:id="contactezNous"></div>
-	<!-- .module_line_trigger -->
+    <div class="row-fluid">
+        <div wicket:id="profil"></div>
+        <div class="span10">
+            <div>
+                <div
+                        class="bg_title"
+                        style="clear: both;">
+                    <h4 class="headInModule">
+                        Mes notifications <span
+                            class="badgeMesdevis badge badge-info"
+                            wicket:id="nbNotification">5</span>
+                    </h4>
+                </div>
+                <div wicket:id="pasDeNotificationLbl">Retrouvez ici toutes les notifications sur vos demandes de devis
+                </div>
+                <table
+                        class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr wicket:id="listNotification">
+                        <td class="td-IconNotif"><span class="iconNotif icon-Info"></span></td>
+                        <td><a wicket:id="linkParQui"></a><span wicket:id="typeNotification"></span><a
+                                wicket:id="linkObjetNotification"></a></td>
+                        <td wicket:id="dateNotification">10/11/2014 à 12:15</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div>
+                <div
+                        class="bg_title"
+                        style="clear: both;">
+                    <h4 class="headInModule">
+                        <span wicket:id="demandeDeDevisTitle">Mes demandes de devis</span> <span
+                            class="badgeMesdevis badge badge-info"
+                            wicket:id="nbAnnonce"></span>
+                    </h4>
+                </div>
+                <table
+                        class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>Catégorie</th>
+                        <th>Description</th>
+                        <th>Nb devis</th>
+                        <th>Progression annonce</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr wicket:id="listAnnonce">
+                        <td><span
+                                class="iconsMesDevis"
+                                wicket:id="iconCategorie"></span><span wicket:id="categorie"></span></td>
+                        <td><span wicket:id="description"></span></td>
+                        <td><span wicket:id="nbDevis"></span></td>
+                        <td>
+                            <div class="progress progress-mes-annonces">
+                                <div wicket:id="progressBar" class="bar" style="width: 50%"></div>
+                            </div>
+                            <span wicket:id="etatAnnonce"></span>
+                        </td>
+                        <td><a wicket:id="voirAnnonce">Voir / modifier annonce</a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div wicket:id="commentaire"></div>
+    <div wicket:id="contactezNous"></div>
+    <!-- .module_line_trigger -->
 </wicket:extend>

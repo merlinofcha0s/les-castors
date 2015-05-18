@@ -5,11 +5,14 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import fr.batimen.dto.DemandeMesAnnoncesDTO;
+import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.web.app.constants.ParamsConstant;
+import fr.batimen.web.app.security.RolesUtils;
+import fr.batimen.ws.client.service.UtilisateurServiceREST;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
@@ -29,7 +32,6 @@ import fr.batimen.web.client.component.LinkLabel;
 import fr.batimen.web.client.component.Profil;
 import fr.batimen.web.client.extend.connected.Annonce;
 import fr.batimen.web.client.master.MasterPage;
-import fr.batimen.ws.client.service.ClientsServiceREST;
 
 /**
  * Page ou l'utilisateur pourra consulter son compte ainsi que l'avancement de
@@ -46,13 +48,20 @@ public final class MesAnnonces extends MasterPage {
     private static final Logger LOGGER = LoggerFactory.getLogger(MesAnnonces.class);
 
     @Inject
-    private ClientsServiceREST clientsServiceREST;
+    private UtilisateurServiceREST utilisateurServiceREST;
 
     @Inject
     private Authentication authentication;
 
+    @Inject
+    private RolesUtils rolesUtils;
+
     private List<AnnonceDTO> annonces;
     private List<NotificationDTO> notifications;
+
+    private Model<String> voirAnnonceModel;
+    private Model<String> demandeDeDevisTitleModel;
+    private Model<String> pasDeNotificationModel;
 
     public MesAnnonces() {
         super("Mes annonces ", "lol", "Bienvenue sur lescastors.fr", true, "img/bg_title1.jpg");
@@ -61,8 +70,9 @@ public final class MesAnnonces extends MasterPage {
             LOGGER.debug("Init de la page mes annonces");
         }
 
+        calculModelLabelByTypeCompte();
         initStaticComposant();
-        getMesInfosForPage();
+        loadInfosMesAnnonces();
         initRepeaterNotifications();
         initRepeaterAnnonces();
         this.setOutputMarkupId(true);
@@ -82,9 +92,11 @@ public final class MesAnnonces extends MasterPage {
         Profil profil = new Profil("profil");
         ContactezNous contactezNous = new ContactezNous("contactezNous");
         Commentaire commentaire = new Commentaire("commentaire");
-        this.add(profil);
-        this.add(commentaire);
-        this.add(contactezNous);
+
+        Label demandeDeDevisTitle = new Label("demandeDeDevisTitle", demandeDeDevisTitleModel);
+        Label pasDeNotificationLbl = new Label("pasDeNotificationLbl", pasDeNotificationModel);
+
+        add(profil, commentaire, contactezNous, demandeDeDevisTitle, pasDeNotificationLbl);
     }
 
     private void initRepeaterNotifications() {
@@ -104,47 +116,43 @@ public final class MesAnnonces extends MasterPage {
             protected void populateItem(ListItem<NotificationDTO> item) {
                 final NotificationDTO notification = item.getModelObject();
 
-                final Model<String> nomEntrepriseModelForLbl = new Model<String>(notification.getNomEntreprise());
+                final Model<String> parQuiModel = new Model<>(parQui(notification));
 
-                LinkLabel linkEntreprise = new LinkLabel("linkEntreprise", nomEntrepriseModelForLbl) {
+                LinkLabel linkParQui = new LinkLabel("linkParQui", parQuiModel) {
 
                     private static final long serialVersionUID = 1L;
 
                     @Override
                     public void onClick() {
-                        // URLEncoder.encode(notification.getArtisanNotifier().getEntreprise().getNomComplet(),
-                        // "UTF-8")
-                        // TODO A Completer quand la page entreprise sera prete
+                        onclickParQuiLink(notification);
                     }
-
                 };
 
                 StringBuilder contenuNotification = new StringBuilder(" ");
                 contenuNotification.append(notification.getTypeNotification().getAffichage()).append(" ");
                 Label typeNotification = new Label("typeNotification", contenuNotification.toString());
 
-                Link<Void> linkAnnonce = new Link<Void>("linkAnnonce") {
+                final Model<String> objetNotification = new Model<>(getObjetNotification(notification));
+
+                LinkLabel linkObjetNotification = new LinkLabel("linkObjetNotification", objetNotification) {
 
                     private static final long serialVersionUID = 1L;
 
                     @Override
                     public void onClick() {
-                        PageParameters params = new PageParameters();
-                        params.add("idAnnonce", notification.getHashIDAnnonce());
-                        this.setResponsePage(Annonce.class, params);
+                        onclickObjetNotification(notification);
                     }
-
                 };
 
-                linkAnnonce.setOutputMarkupId(true);
+                linkObjetNotification.setOutputMarkupId(true);
 
                 SimpleDateFormat dateNotificationFormatter = new SimpleDateFormat("dd/MM/yyyy HH:mm");
                 Label dateNotification = new Label("dateNotification", dateNotificationFormatter.format(notification
                         .getDateNotification()));
 
-                item.add(linkEntreprise);
+                item.add(linkParQui);
                 item.add(typeNotification);
-                item.add(linkAnnonce);
+                item.add(linkObjetNotification);
                 item.add(dateNotification);
             }
 
@@ -187,10 +195,16 @@ public final class MesAnnonces extends MasterPage {
                 Label categorie = new Label("categorie", CategorieLoader.getCategorieByCode(annonce
                         .getCategorieMetier()));
                 Label description = new Label("description", descriptionCutting.toString());
+
+                WebMarkupContainer progressBar = new WebMarkupContainer("progressBar");
+                StringBuilder sizeCSSProgressBar = new StringBuilder("width: ");
+                sizeCSSProgressBar.append(annonce.getEtatAnnonce().getPercentage()).append(";");
+                progressBar.add(new AttributeModifier("style", sizeCSSProgressBar.toString()));
+
                 Label nbDevis = new Label("nbDevis", annonce.getNbDevis());
                 Label etatAnnonce = new Label("etatAnnonce", annonce.getEtatAnnonce().getType());
 
-                Link<Void> voirAnnonce = new Link<Void>("voirAnnonce") {
+                LinkLabel voirAnnonce = new LinkLabel("voirAnnonce", voirAnnonceModel) {
 
                     private static final long serialVersionUID = 1L;
 
@@ -200,17 +214,11 @@ public final class MesAnnonces extends MasterPage {
                         params.add(ParamsConstant.ID_ANNONCE_PARAM, annonce.getHashID());
                         this.setResponsePage(Annonce.class, params);
                     }
-
                 };
 
                 voirAnnonce.setOutputMarkupId(true);
 
-                item.add(iconCategorie);
-                item.add(categorie);
-                item.add(description);
-                item.add(nbDevis);
-                item.add(etatAnnonce);
-                item.add(voirAnnonce);
+                item.add(iconCategorie, categorie, description, nbDevis, etatAnnonce, voirAnnonce, progressBar);
             }
         };
 
@@ -218,14 +226,74 @@ public final class MesAnnonces extends MasterPage {
         this.add(listViewAnnonce);
     }
 
-    private void getMesInfosForPage() {
+    private void loadInfosMesAnnonces() {
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Appel webservice pour la récupération des données a afficher");
+            LOGGER.debug("Appel webservice pour la récupération des données à afficher");
         }
-        MesAnnoncesDTO mesInfos = clientsServiceREST.getMesInfosAnnonce(authentication.getCurrentUserInfo().getLogin());
+        DemandeMesAnnoncesDTO demandeMesAnnoncesDTO = new DemandeMesAnnoncesDTO();
+        demandeMesAnnoncesDTO.setLoginDemandeur(authentication.getCurrentUserInfo().getLogin());
+        demandeMesAnnoncesDTO.setLogin(authentication.getCurrentUserInfo().getLogin());
+
+        MesAnnoncesDTO mesInfos = utilisateurServiceREST.getMesInfosAnnonce(demandeMesAnnoncesDTO);
 
         annonces = mesInfos.getAnnonces();
         notifications = mesInfos.getNotifications();
+    }
+
+    private String parQui(NotificationDTO notificationDTO){
+        if(notificationDTO.getTypeNotification().getParQui().equals(TypeCompte.ARTISAN)){
+            return notificationDTO.getNomEntreprise();
+        } else if(notificationDTO.getTypeNotification().getParQui().equals(TypeCompte.CLIENT)){
+            return notificationDTO.getClientLogin();
+        }
+        return "";
+    }
+
+    private void onclickParQuiLink(NotificationDTO notificationDTO){
+        if(notificationDTO.getTypeNotification().getParQui().equals(TypeCompte.ARTISAN)){
+            // URLEncoder.encode(notification.getArtisanNotifier().getEntreprise().getNomComplet(),
+            // "UTF-8")
+            // TODO A Completer quand la page entreprise sera prete
+        } else if(notificationDTO.getTypeNotification().getParQui().equals(TypeCompte.CLIENT)){
+            PageParameters parameters = new PageParameters();
+            parameters.add("login", notificationDTO.getClientLogin());
+            this.setResponsePage(MonProfil.class, parameters);
+        }
+    }
+
+    private String getObjetNotification(NotificationDTO notificationDTO){
+        if(notificationDTO.getTypeNotification().getParQui().equals(TypeCompte.ARTISAN)){
+            return "annonce";
+        } else if(notificationDTO.getTypeNotification().getParQui().equals(TypeCompte.CLIENT)){
+            return "entreprise";
+        }else{
+            return "";
+        }
+    }
+
+    private void onclickObjetNotification(NotificationDTO notificationDTO){
+        if(notificationDTO.getTypeNotification().getParQui().equals(TypeCompte.ARTISAN)){
+            PageParameters params = new PageParameters();
+            params.add(ParamsConstant.ID_ANNONCE_PARAM, notificationDTO.getHashIDAnnonce());
+            this.setResponsePage(Annonce.class, params);
+        } else if(notificationDTO.getTypeNotification().getParQui().equals(TypeCompte.CLIENT)){
+            // TODO A Completer quand la page entreprise sera prete
+        }
+    }
+
+    private void calculModelLabelByTypeCompte(){
+        demandeDeDevisTitleModel = new Model<>();
+        voirAnnonceModel = new Model<>();
+        pasDeNotificationModel = new Model<>();
+        if(rolesUtils.checkRoles(TypeCompte.ARTISAN)){
+            demandeDeDevisTitleModel.setObject("Les annonces où je suis inscris");
+            voirAnnonceModel.setObject("Voir annonce");
+            pasDeNotificationModel.setObject("Retrouvez ici toutes les notifications des annonces où vous êtes inscrit");
+        }else if(rolesUtils.checkRoles(TypeCompte.CLIENT)){
+            demandeDeDevisTitleModel.setObject("Mes annonces");
+            voirAnnonceModel.setObject("Voir / modifier annonce");
+            pasDeNotificationModel.setObject("Retrouvez ici toutes les notifications sur vos demandes de devis");
+        }
     }
 }

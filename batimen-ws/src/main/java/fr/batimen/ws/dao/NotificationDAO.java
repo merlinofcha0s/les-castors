@@ -83,7 +83,7 @@ public class NotificationDAO extends AbstractDAO<Notification> {
             if (LOGGER.isWarnEnabled()) {
                 LOGGER.warn("Aucune notifications présentes pour cet utilisateur", nre);
             }
-            return new ArrayList<Object[]>();
+            return new ArrayList<>();
         }
     }
 

@@ -13,6 +13,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
+import javax.inject.Provider;
 import javax.interceptor.Interceptors;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -94,7 +95,7 @@ public class GestionAnnonceFacade {
     private ArtisanDAO artisanDAO;
 
     @Inject
-    private GestionUtilisateurFacade utilisateurFacade;
+    private Provider<GestionUtilisateurFacade> utilisateurFacade;
 
     @Inject
     private NotificationDAO notificationDAO;
@@ -216,42 +217,6 @@ public class GestionAnnonceFacade {
     }
 
     /**
-     * Permet de récuperer les annonces d'un client à partir de son login <br/>
-     * Service servant principalement a la page mes annonces
-     *
-     * @param login l'identifiant de l'utilisateur
-     * @return La liste des annonces de cet utilisateur
-     */
-    @POST
-    @Path(WsPath.GESTION_ANNONCE_SERVICE_GET_ANNONCES_BY_LOGIN)
-    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public List<AnnonceDTO> getAnnoncesByClientLoginForMesAnnonces(String login) {
-        // On escape les ""
-        String loginEscaped = DeserializeJsonHelper.parseString(login);
-        // On recupere les annonces de l'utilisateur
-        List<Object[]> queryAnnoncesResult = annonceDAO.getAnnoncesByLoginForMesAnnonces(loginEscaped);
-        // On crée la liste qui accueuillera les DTO
-        List<AnnonceDTO> annoncesDTO = new ArrayList<AnnonceDTO>();
-
-        for (Object[] annonce : queryAnnoncesResult) {
-            // On crée le nouvel objet
-            AnnonceDTO annonceDTO = new AnnonceDTO();
-            // On transfert les données d'un objet a l'autre
-            annonceDTO.setCategorieMetier((Short) annonce[0]);
-            annonceDTO.setDescription((String) annonce[1]);
-            annonceDTO.setEtatAnnonce((EtatAnnonce) annonce[2]);
-            Long nbDevis = (Long) annonce[3];
-            annonceDTO.setNbDevis(nbDevis);
-            annonceDTO.setHashID(String.valueOf(annonce[4]));
-
-            // On ajoute à la liste
-            annoncesDTO.add(annonceDTO);
-        }
-
-        return annoncesDTO;
-    }
-
-    /**
      * Permet de récuperer une annonce dans le but de l'afficher <br/>
      * Récupère également les informations sur les artisans et les entreprise
      * inscrites a cette annonce
@@ -268,7 +233,7 @@ public class GestionAnnonceFacade {
         String loginDemandeur = demandeAnnonce.getLoginDemandeur();
         String hashID = demandeAnnonce.getHashID();
 
-        String rolesDemandeur = utilisateurFacade.getUtilisateurRoles(demandeAnnonce.getLoginDemandeur());
+        String rolesDemandeur = utilisateurFacade.get().getUtilisateurRoles(demandeAnnonce.getLoginDemandeur());
         // On crée l'objet qui contiendra les infos
         AnnonceAffichageDTO annonceAffichageDTO = new AnnonceAffichageDTO();
 
@@ -372,7 +337,7 @@ public class GestionAnnonceFacade {
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public Integer suppressionAnnonce(DemandeAnnonceDTO demandeAnnonce) {
 
-        String rolesDemandeur = utilisateurFacade.getUtilisateurRoles(demandeAnnonce.getLoginDemandeur());
+        String rolesDemandeur = utilisateurFacade.get().getUtilisateurRoles(demandeAnnonce.getLoginDemandeur());
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Suppression à la demande de : " + demandeAnnonce.getLoginDemandeur());
@@ -434,7 +399,7 @@ public class GestionAnnonceFacade {
             LOGGER.debug("+------------------------------------------------------------------------------+");
         }
 
-        String rolesDemandeur = utilisateurFacade.getUtilisateurRoles(demandeAnnonceDTO.getLoginDemandeur());
+        String rolesDemandeur = utilisateurFacade.get().getUtilisateurRoles(demandeAnnonceDTO.getLoginDemandeur());
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("On vérifie le / les role(s) du demandeur : " + rolesDemandeur);
         }
@@ -569,7 +534,7 @@ public class GestionAnnonceFacade {
             LOGGER.debug("+------------------------------------------------------------------------------+");
         }
 
-        String rolesClientDemandeur = utilisateurFacade.getUtilisateurRoles(desinscriptionAnnonceDTO
+        String rolesClientDemandeur = utilisateurFacade.get().getUtilisateurRoles(desinscriptionAnnonceDTO
                 .getLoginDemandeur());
 
         if (LOGGER.isDebugEnabled()) {
@@ -657,7 +622,7 @@ public class GestionAnnonceFacade {
             LOGGER.debug("+-------------------------------------------------------------+");
         }
 
-        String rolesDemandeur = utilisateurFacade.getUtilisateurRoles(noterArtisanDTO.getLoginDemandeur());
+        String rolesDemandeur = utilisateurFacade.get().getUtilisateurRoles(noterArtisanDTO.getLoginDemandeur());
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Roles du demandeur : {}", rolesDemandeur);
@@ -729,7 +694,7 @@ public class GestionAnnonceFacade {
     @Path(WsPath.GESTION_ANNONCE_SERVICE_MODIFICATION_ANNONCE)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public Integer modifierAnnonce(ModificationAnnonceDTO modificationAnnonceDTO) {
-        String rolesDemandeur = utilisateurFacade.getUtilisateurRoles(modificationAnnonceDTO.getLoginDemandeur());
+        String rolesDemandeur = utilisateurFacade.get().getUtilisateurRoles(modificationAnnonceDTO.getLoginDemandeur());
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Roles du demandeur : {}", rolesDemandeur);
@@ -796,7 +761,7 @@ public class GestionAnnonceFacade {
         }
 
         Annonce annonceRajouterPhoto = loadAnnonceAndCheckUserClientOrAdminRight(
-                utilisateurFacade.getUtilisateurRoles(ajoutPhotoDTO.getLoginDemandeur()), ajoutPhotoDTO.getHashID(), ajoutPhotoDTO.getLoginDemandeur());
+                utilisateurFacade.get().getUtilisateurRoles(ajoutPhotoDTO.getLoginDemandeur()), ajoutPhotoDTO.getHashID(), ajoutPhotoDTO.getLoginDemandeur());
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Chargement de l'annonce en cours, grace à la DTO en entrée : {}", ajoutPhotoDTO.toString());
@@ -860,7 +825,7 @@ public class GestionAnnonceFacade {
         String loginDemandeur = demandeAnnonceDTO.getLoginDemandeur();
 
         //Calcul du role
-        String rolesDemandeur = utilisateurFacade.getUtilisateurRoles(demandeAnnonceDTO.getLoginDemandeur());
+        String rolesDemandeur = utilisateurFacade.get().getUtilisateurRoles(demandeAnnonceDTO.getLoginDemandeur());
 
         List<Image> images = photoService.getImagesByHashIDByLoginDemandeur(rolesDemandeur, hashID, loginDemandeur);
 
@@ -884,7 +849,7 @@ public class GestionAnnonceFacade {
     @Path(WsPath.GESTION_ANNONCE_SERVICE_SUPPRESSION_PHOTO)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public List<ImageDTO> suppressionPhoto(SuppressionPhotoDTO suppressionPhotoDTO) {
-        String rolesDemandeur = utilisateurFacade.getUtilisateurRoles(suppressionPhotoDTO.getLoginDemandeur());
+        String rolesDemandeur = utilisateurFacade.get().getUtilisateurRoles(suppressionPhotoDTO.getLoginDemandeur());
         List<Image> images = photoService.getImagesByHashIDByLoginDemandeur(rolesDemandeur, suppressionPhotoDTO.getHashID(), suppressionPhotoDTO.getLoginDemandeur());
         List<ImageDTO> imageDTOs = new LinkedList<>();
         //Si c'est images est null ce que l'utilisateur n'a pas les droits

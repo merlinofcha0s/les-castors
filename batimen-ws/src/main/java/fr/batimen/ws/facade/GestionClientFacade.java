@@ -1,5 +1,6 @@
 package fr.batimen.ws.facade;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
@@ -11,11 +12,14 @@ import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
+import javax.management.relation.Role;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
+import fr.batimen.dto.DemandeMesAnnoncesDTO;
+import fr.batimen.ws.utils.RolesUtils;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,9 +42,8 @@ import fr.batimen.ws.service.NotificationService;
 
 /**
  * Facade REST de gestion des clients
- * 
+ *
  * @author Casaucau Cyril
- * 
  */
 @Stateless(name = "GestionClientFacade")
 @LocalBean
@@ -48,7 +51,7 @@ import fr.batimen.ws.service.NotificationService;
 @RolesAllowed(Constant.USERS_ROLE)
 @Produces(JsonHelper.JSON_MEDIA_TYPE_AND_UTF_8_CHARSET)
 @Consumes(JsonHelper.JSON_MEDIA_TYPE_AND_UTF_8_CHARSET)
-@Interceptors(value = { BatimenInterceptor.class })
+@Interceptors(value = {BatimenInterceptor.class})
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class GestionClientFacade {
 
@@ -67,47 +70,9 @@ public class GestionClientFacade {
     private NotificationService notificationService;
 
     /**
-     * Methode de récuperation des informations de la page de mes annonces
-     * (notifications + annonces) d'un client
-     * 
-     * @param login
-     * @return
-     */
-    @POST
-    @Path(WsPath.GESTION_CLIENT_SERVICE_INFOS_MES_ANNONCES)
-    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public MesAnnoncesDTO getInfoForMesAnnonces(String login) {
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Récuperation des annonces / notifs pour : " + login);
-        }
-
-        MesAnnoncesDTO mesAnnoncesDTO = new MesAnnoncesDTO();
-        String loginEscaped = DeserializeJsonHelper.parseString(login);
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Récuperation notification.........");
-        }
-
-        List<NotificationDTO> notificationsDTO = notificationService.getNotificationByLogin(loginEscaped,
-                TypeCompte.CLIENT);
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Récuperation annonce.........");
-        }
-
-        List<AnnonceDTO> annoncesDTO = gestionAnnonceFacade.getAnnoncesByClientLoginForMesAnnonces(loginEscaped);
-
-        mesAnnoncesDTO.setNotifications(notificationsDTO);
-        mesAnnoncesDTO.setAnnonces(annoncesDTO);
-
-        return mesAnnoncesDTO;
-    }
-
-    /**
      * Methode de récuperation des informations de la page de mon profil d'un
      * client
-     * 
+     *
      * @param login
      * @return
      */

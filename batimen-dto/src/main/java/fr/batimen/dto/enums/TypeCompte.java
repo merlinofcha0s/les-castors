@@ -4,9 +4,9 @@ public enum TypeCompte {
 
     ADMINISTRATEUR_MANAGER("Administrateur", "admin, manager"), ADMINISTRATEUR_COMMERCIAL("Administrateur",
             "admin, commercial"), ARTISAN_PREMIUM("Artisan premium", "partenaire:premium"), ARTISAN("Artisan",
-            "partenaire"), CLIENT("Client", "particulier"), ADMINISTRATEUR("Administrateur", "admin");
+            "partenaire"), CLIENT("Client", "particulier"), ADMINISTRATEUR("Administrateur", "admin"), INCONNU("Inconnu", "inconnu");
 
-    private TypeCompte(String nomCompte, String roles) {
+    TypeCompte(String nomCompte, String roles) {
         this.nomCompte = nomCompte;
         this.roles = roles;
     }

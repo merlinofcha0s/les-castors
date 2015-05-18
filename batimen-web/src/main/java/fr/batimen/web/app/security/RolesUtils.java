@@ -1,7 +1,9 @@
 package fr.batimen.web.app.security;
 
 import java.io.Serializable;
+import java.util.List;
 
+import fr.batimen.dto.PermissionDTO;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.AuthorizationException;
 import org.slf4j.Logger;

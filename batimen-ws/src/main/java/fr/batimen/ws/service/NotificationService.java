@@ -57,7 +57,7 @@ public class NotificationService {
      */
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public List<NotificationDTO> getNotificationByLogin(String login, TypeCompte typeCompte) {
-        List<NotificationDTO> notificationsDTO = new ArrayList<NotificationDTO>();
+        List<NotificationDTO> notificationsDTO = new ArrayList<>();
         String loginEscaped = DeserializeJsonHelper.parseString(login);
         List<Object[]> notifications = null;
 

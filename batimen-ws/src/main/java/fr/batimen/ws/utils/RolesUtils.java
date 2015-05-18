@@ -40,4 +40,16 @@ public class RolesUtils implements Serializable {
         return roles.indexOf(TypeCompte.ARTISAN.getRole()) != -1;
     }
 
+    public TypeCompte getTypeCompteByRole(String roles) {
+        if (checkIfClientWithString(roles)) {
+            return TypeCompte.CLIENT;
+        } else if (checkIfArtisanWithString(roles)) {
+            return TypeCompte.ARTISAN;
+        } else if (checkIfAdminWithString(roles)) {
+            return TypeCompte.ADMINISTRATEUR;
+        } else {
+            return TypeCompte.INCONNU;
+        }
+    }
+
 }
