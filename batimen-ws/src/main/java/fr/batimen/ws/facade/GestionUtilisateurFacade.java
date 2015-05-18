@@ -20,6 +20,7 @@ import javax.ws.rs.Produces;
 import fr.batimen.dto.*;
 import fr.batimen.dto.aggregate.MesAnnoncesDTO;
 import fr.batimen.dto.enums.TypeCompte;
+import fr.batimen.ws.service.AnnonceService;
 import fr.batimen.ws.service.NotificationService;
 import fr.batimen.ws.utils.RolesUtils;
 import org.modelmapper.ModelMapper;
@@ -80,9 +81,8 @@ public class GestionUtilisateurFacade {
     @Inject
     private NotificationService notificationService;
 
-    //Utilisation du provider pour eviter les problemes de circular dependance
     @Inject
-    private Provider<GestionAnnonceFacade> gestionAnnonceFacade;
+    private AnnonceService annonceService;
 
     /**
      * Methode de login des utilisateurs
@@ -345,7 +345,7 @@ public class GestionUtilisateurFacade {
         }
 
         List<AnnonceDTO> annoncesDTO =
-                gestionAnnonceFacade.get().getAnnoncesByClientLoginForMesAnnonces(login, rolesUtils.checkIfArtisanWithString(rolesDemander));
+                annonceService.getAnnoncesByClientLoginForMesAnnonces(login, rolesUtils.checkIfArtisanWithString(rolesDemander));
 
         mesAnnoncesDTO.setNotifications(notificationsDTO);
         mesAnnoncesDTO.setAnnonces(annoncesDTO);

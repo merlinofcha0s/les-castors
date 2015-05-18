@@ -1,9 +1,11 @@
-package fr.batimen.web.selenium.client;
+package fr.batimen.web.selenium;
 
 import static com.ninja_squad.dbsetup.Operations.sequenceOf;
+import static fr.batimen.web.selenium.dataset.MesAnnoncesDataset.*;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import fr.batimen.dto.enums.TypeNotification;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -18,18 +20,17 @@ import fr.batimen.web.selenium.dataset.MesAnnoncesDataset;
 
 /**
  * Test Selenium concernant la page mes annonces.
- * 
+ *
  * @author Casaucau Cyril.
- * 
  */
 public class TestMesAnnonces extends AbstractITTest {
 
     @Override
     public void prepareDB() throws Exception {
         Operation operation = sequenceOf(DELETE_ALL, INSERT_USER_DATA, INSERT_USER_PERMISSION,
-                MesAnnoncesDataset.INSERT_ADRESSE_DATA, MesAnnoncesDataset.INSERT_ENTREPRISE_DATA,
-                MesAnnoncesDataset.INSERT_ARTISAN_DATA, MesAnnoncesDataset.INSERT_NOTATION_DATA,
-                MesAnnoncesDataset.INSERT_ANNONCE_DATA, MesAnnoncesDataset.INSERT_NOTIFICATION_DATA);
+                INSERT_ADRESSE_DATA, INSERT_ENTREPRISE_DATA,
+                INSERT_ARTISAN_DATA, INSERT_ARTISAN_PERMISSION, INSERT_NOTATION_DATA,
+                INSERT_ANNONCE_DATA, INSERT_NOTIFICATION_DATA, INSERT_ANNONCE_ARTISAN);
         DbSetup dbSetup = new DbSetup(getDriverManagerDestination(), operation);
         dbSetup.launch();
     }
@@ -39,19 +40,43 @@ public class TestMesAnnonces extends AbstractITTest {
      * la rubrique mon compte. La, il tombe sur ses notifications ainsi que sur
      * ces annonces postées. Enfin il essaye d'accéder à une de ces annonces via
      * cette page
-     * 
      */
     @Test
-    public void testAccessToMesAnnonce() {
+    public void testAccessToMesAnnonceByClient() {
+        testMesAnnonces("raiden", TypeNotification.INSCRIT_A_ANNONCE);
+
+        driver.findElement(
+                By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[1]/table/tbody/tr[1]/td[2]/a[2]"))
+                .click();
+
+        Boolean checkConditionAccessToANnonceViaNotif = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("h1.title"),
+                        "ANNONCE PARTICULIER"));
+        assertTrue(checkConditionAccessToANnonceViaNotif);
+
+    }
+
+    /**
+     * Cas de test : l'artisan se rend sur le site, se connecte et va dans
+     * la rubrique mon compte. La, il tombe sur ses notifications ainsi que sur
+     * ces annonces où il s'est inscrit. Enfin il essaye d'accéder à une de ces annonces via
+     * cette page
+     */
+    @Test
+    public void testAccessToMesAnnonceByArtisan() {
+        testMesAnnonces("pebron", TypeNotification.A_CHOISI_ENTREPRISE);
+    }
+
+    private void testMesAnnonces(String login, TypeNotification typeNotification){
         driver.get(appUrl);
         // On s'authentifie à l'application
-        connexionApplication("raiden", AbstractITTest.BON_MOT_DE_PASSE, Boolean.TRUE);
+        connexionApplication(login, AbstractITTest.BON_MOT_DE_PASSE, Boolean.TRUE);
 
         driver.findElement(By.id("connexionlbl")).click();
 
         Boolean checkConditionNotificationPresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//td[2]/span"),
-                        "s'est inscrit à votre"));
+                        typeNotification.getAffichage()));
         assertTrue(checkConditionNotificationPresent);
 
         Boolean checkConditionAnnonceDescription = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
@@ -73,16 +98,6 @@ public class TestMesAnnonces extends AbstractITTest {
         assertTrue(checkConditionAccessToAnnonceViaList);
 
         driver.findElement(By.id("connexionlbl")).click();
-
-        driver.findElement(
-                By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[1]/table/tbody/tr[1]/td[2]/a[2]"))
-                .click();
-
-        Boolean checkConditionAccessToANnonceViaNotif = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
-                .until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("h1.title"),
-                        "ANNONCE PARTICULIER"));
-        assertTrue(checkConditionAccessToANnonceViaNotif);
-
     }
 
 }

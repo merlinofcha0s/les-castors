@@ -291,7 +291,7 @@ public final class MesAnnonces extends MasterPage {
             voirAnnonceModel.setObject("Voir annonce");
             pasDeNotificationModel.setObject("Retrouvez ici toutes les notifications des annonces où vous êtes inscrit");
         }else if(rolesUtils.checkRoles(TypeCompte.CLIENT)){
-            demandeDeDevisTitleModel.setObject("Mes demandes de devis");
+            demandeDeDevisTitleModel.setObject("Mes annonces");
             voirAnnonceModel.setObject("Voir / modifier annonce");
             pasDeNotificationModel.setObject("Retrouvez ici toutes les notifications sur vos demandes de devis");
         }

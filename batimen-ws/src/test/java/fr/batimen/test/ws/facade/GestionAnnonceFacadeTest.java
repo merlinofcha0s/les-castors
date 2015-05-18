@@ -135,18 +135,6 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     }
 
     /**
-     * Cas de test : récupération des annonces des clients. /!\ charge
-     * automatiquement les artisans qui sont inscrits a l'annonce.
-     */
-    @Test
-    @UsingDataSet("datasets/in/annonces.yml")
-    public void testGetAnnonceByLogin() {
-        List<AnnonceDTO> annonces = annonceServiceREST.getAnnonceByLoginForClient("pebronne");
-        Assert.assertEquals(2, annonces.size());
-
-    }
-
-    /**
      * Cas de test : récupération de l'annonce d'un client par un client.
      */
     @Test

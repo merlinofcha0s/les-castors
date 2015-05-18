@@ -3,13 +3,15 @@ package fr.batimen.web.selenium.dataset;
 import static com.ninja_squad.dbsetup.Operations.insertInto;
 
 import com.ninja_squad.dbsetup.operation.Operation;
+import fr.batimen.dto.enums.StatutNotification;
+import fr.batimen.dto.enums.TypeCompte;
+import fr.batimen.dto.enums.TypeNotification;
 
 /**
  * Dataset qui symbolise l'ensemble des données pour l'affichage d'annonces et
  * de notifications
- * 
+ *
  * @author Casaucau Cyril
- * 
  */
 public class MesAnnoncesDataset {
 
@@ -40,7 +42,7 @@ public class MesAnnoncesDataset {
             .columns("id", "dateNotification", "typeNotification", "pourquinotification", "statutnotification",
                     "id_artisan", "id_client", "id_annonce")
             .values(200006, "2014-02-10", 0, 4, 0, 200008, 100001, 200010)
-            .values(200007, "2014-02-10", 0, 4, 0, 200008, 100001, 200011).build();
+            .values(200007, "2014-02-10", TypeNotification.A_CHOISI_ENTREPRISE, TypeCompte.ARTISAN, StatutNotification.VU, 200008, 100001, 200011).build();
 
     public static final Operation INSERT_ADRESSE_DATA = insertInto("adresse")
             .columns("id", "adresse", "codepostal", "complementadresse", "ville", "departement")
@@ -51,4 +53,9 @@ public class MesAnnoncesDataset {
             .columns("id", "commentaire", "dateNotation", "score", "artisan_fk")
             .values(200012, "Ké buenos, Artisan très sympatique, travail bien fait", "2014-03-23 22:00:00.0", 4, 200008)
             .values(200013, "Artisan moins sympatique", "2014-12-01 22:00:00.0", 3, 200008).build();
+
+    public static final Operation INSERT_ARTISAN_PERMISSION = insertInto("permission").columns("typecompte", "artisan_fk")
+            .values(TypeCompte.ARTISAN, 200008).build();
+    public static final Operation INSERT_ANNONCE_ARTISAN = insertInto("annonce_artisan")
+            .columns("annonce_id", "artisans_id").values(200011, 200008).build();
 }
