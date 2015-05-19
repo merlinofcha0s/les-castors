@@ -7,6 +7,8 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.event.IEvent;
+import org.apache.wicket.markup.head.CssContentHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -18,6 +20,7 @@ import fr.batimen.dto.aggregate.CreationPartenaireDTO;
 import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.web.client.component.BatimenToolTip;
 import fr.batimen.web.client.extend.nouveau.artisan.event.UncheckedEvent;
+import org.apache.wicket.request.resource.CssResourceReference;
 
 /**
  * Etape 3 de l'inscription d'un nouvel artisan : Informations sur l'entreprise
@@ -45,7 +48,7 @@ public class Etape3Entreprise extends Panel {
         categoriesSelectionnees = nouveauPartenaire.getEntreprise().getCategoriesMetier();
 
         etape3EntrepriseForm = new Etape3EntrepriseForm("etape3EntrepriseForm",
-                new CompoundPropertyModel<CreationPartenaireDTO>(nouveauPartenaire));
+                new CompoundPropertyModel<>(nouveauPartenaire));
         containerActivite = new WebMarkupContainer("containerActivite");
         containerActivite.setOutputMarkupId(true);
         containerActivite.setMarkupId("containerActivite");
@@ -55,6 +58,12 @@ public class Etape3Entreprise extends Panel {
         this.add(etape3EntrepriseForm);
         this.add(containerActivite);
 
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.render(CssContentHeaderItem.forUrl("css/font_icons8.css"));
     }
 
     private void initActiviteSelection() {

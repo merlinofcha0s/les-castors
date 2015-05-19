@@ -2,7 +2,11 @@ package fr.batimen.web.client.extend.member.client;
 
 import javax.inject.Inject;
 
+import fr.batimen.dto.aggregate.CreationPartenaireDTO;
+import fr.batimen.web.client.extend.nouveau.artisan.Etape3Entreprise;
+import fr.batimen.web.client.extend.nouveau.artisan.Etape3EntrepriseForm;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,6 +18,8 @@ import fr.batimen.web.client.component.ContactezNous;
 import fr.batimen.web.client.component.Profil;
 import fr.batimen.web.client.extend.nouveau.devis.Etape4InscriptionForm;
 import fr.batimen.web.client.master.MasterPage;
+
+import java.io.Serializable;
 
 /**
  * Page de modification des informations utilisateurs
@@ -52,13 +58,14 @@ public class ModifierMonProfil extends MasterPage {
         Etape4InscriptionForm inscriptionForm = new Etape4InscriptionForm("formInscription",
                 propertyModelNouvelleAnnonce, Boolean.TRUE);
 
+        Etape3Entreprise entrepriseModif = new Etape3Entreprise("etape3InformationsEntreprise",
+                new Model<>(),
+                new CreationPartenaireDTO());
+
         ContactezNous contactezNous = new ContactezNous("contactezNous");
         Commentaire commentaire = new Commentaire("commentaire");
 
-        this.add(profil);
-        this.add(inscriptionForm);
-        this.add(contactezNous);
-        this.add(commentaire);
+        this.add(profil, inscriptionForm, entrepriseModif, contactezNous, commentaire);
     }
 
     private void initData() {
@@ -73,6 +80,6 @@ public class ModifierMonProfil extends MasterPage {
         // modifier par le form
         ClientDTO client = ClientDTO.copy(authentication.getCurrentUserInfo());
         creationAnnonceDTO.setClient(client);
-        propertyModelNouvelleAnnonce = new CompoundPropertyModel<CreationAnnonceDTO>(creationAnnonceDTO);
+        propertyModelNouvelleAnnonce = new CompoundPropertyModel<>(creationAnnonceDTO);
     }
 }
