@@ -11,6 +11,8 @@ import fr.batimen.web.app.constants.ParamsConstant;
 import fr.batimen.web.app.security.RolesUtils;
 import fr.batimen.ws.client.service.UtilisateurServiceREST;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ajax.AjaxEventBehavior;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -218,6 +220,14 @@ public final class MesAnnonces extends MasterPage {
 
                 voirAnnonce.setOutputMarkupId(true);
 
+                item.add(new AjaxEventBehavior("onclick") {
+                    @Override
+                    protected void onEvent(AjaxRequestTarget target) {
+                        PageParameters params = new PageParameters();
+                        params.add(ParamsConstant.ID_ANNONCE_PARAM, annonce.getHashID());
+                        setResponsePage(Annonce.class, params);
+                    }
+                });
                 item.add(iconCategorie, categorie, description, nbDevis, etatAnnonce, voirAnnonce, progressBar);
             }
         };

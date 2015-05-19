@@ -574,6 +574,10 @@ table tr td .error {
 	margin-right: 10px;
 }
 
+.annonce-list{
+	cursor: pointer;
+}
+
 /* Mon profil */
 #infoPerso {
 	padding-bottom: 80px;
