@@ -2,7 +2,8 @@
     <div class="row-fluid">
         <div class="span12 module_cont module_text_area module_small_padding">
             <div class="bg_title">
-                <h4 class="headInModule">Renseignez les informations de l'entreprise</h4>
+                <h4 class="headInModule" wicket:id="titreModificationEntreprise">Renseignez les informations de
+                    l'entreprise</h4>
             </div>
             <div class="bg_title">
                 <h5 class="headInModule">Les activités de votre entreprise</h5>
@@ -10,7 +11,7 @@
             <div
                     wicket:id="containerActivite"
                     id="containerActivite"
-                    class="fuelux offset3">
+                    class="fuelux offset4">
                 <label
                         class="checkbox-custom checkbox inline"
                         title="Electricité"
@@ -71,7 +72,7 @@
             <div class="bg_title">
                 <h5 class="headInModule">Les informations de votre entreprise</h5>
             </div>
-            <div class="offset2">
+            <div class="offset3">
                 <form wicket:id="etape3EntrepriseForm">
                     <table class="tableBatimen">
                         <tr>
@@ -165,15 +166,18 @@
                                     value=""/></td>
                         </tr>
                     </table>
-                    <a
-                            class="btn btn-info"
-                            wicket:id="etapePrecedenteNouveauArtisan3"
-                            id="etapePrecedenteNouveauArtisan3">Etape précédente</a>
-
-                    <div id="terminerInscriptionPartenaire">
-                        <a
-                                class="btn btn-info"
-                                wicket:id="validateEtape3Partenaire">Terminer</a>
+                    <div class="row-fluid">
+                        <div class="span4" wicket:id="containerEtapePrecedenteNouveauArtisan3">
+                            <a
+                                    class="btn btn-info"
+                                    wicket:id="etapePrecedenteNouveauArtisan3"
+                                    id="etapePrecedenteNouveauArtisan3">Etape précédente</a>
+                        </div>
+                        <div id="terminerInscriptionPartenaire" class="span4" wicket:id="terminerInscriptionPartenaire">
+                            <a
+                                    class="btn btn-info"
+                                    wicket:id="validateEtape3Partenaire">Terminer</a>
+                        </div>
                     </div>
                     <div id="champsObligatoireNouveauPartenaire">
                         <span class='required'>*</span> : champs obligatoires

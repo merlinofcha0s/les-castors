@@ -4,11 +4,15 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.web.app.constants.FeedbackMessageLevel;
+import fr.batimen.web.app.security.RolesUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.event.Broadcast;
+import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
@@ -34,20 +38,24 @@ import fr.batimen.web.client.extend.nouveau.devis.NouveauUtils;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.web.client.validator.SiretValidator;
 
+import javax.inject.Inject;
+
 /**
  * Form de l'etape 3 permettant au nouvel artisan de renseigner les informayions
  * de l'entreprise
- * 
+ *
  * @author Casaucau Cyril
- * 
  */
 public class Etape3EntrepriseForm extends Form<CreationPartenaireDTO> {
 
     private static final long serialVersionUID = 7654913676022607009L;
 
+    @Inject
+    private RolesUtils rolesUtils;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(Etape3EntrepriseForm.class);
 
-    public Etape3EntrepriseForm(String id, IModel<CreationPartenaireDTO> model) {
+    public Etape3EntrepriseForm(final String id, final IModel<CreationPartenaireDTO> model, final boolean isInModification) {
         super(id, model);
 
         // Mode Multipart pour l'upload de fichier.
@@ -134,32 +142,26 @@ public class Etape3EntrepriseForm extends Form<CreationPartenaireDTO> {
         etapePrecedenteNouveauArtisan3.setOutputMarkupId(true);
         etapePrecedenteNouveauArtisan3.setMarkupId("etapePrecedenteNouveauArtisan3");
 
+        WebMarkupContainer containerEtapePrecedenteNouveauArtisan3 = new WebMarkupContainer("containerEtapePrecedenteNouveauArtisan3") {
+            @Override
+            public boolean isVisible() {
+                return !isInModification;
+            }
+        };
+
+        containerEtapePrecedenteNouveauArtisan3.add(etapePrecedenteNouveauArtisan3);
+
+
         AjaxSubmitLink validateEtape3Partenaire = new AjaxSubmitLink("validateEtape3Partenaire") {
 
             private static final long serialVersionUID = 4945314422581299777L;
 
-            /*
-             * (non-Javadoc)
-             * 
-             * @see
-             * org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink#onError
-             * (org.apache.wicket.ajax.AjaxRequestTarget,
-             * org.apache.wicket.markup.html.form.Form)
-             */
             @Override
             protected void onError(AjaxRequestTarget target, Form<?> form) {
                 target.add(getForm());
                 this.send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target));
             }
 
-            /*
-             * (non-Javadoc)
-             * 
-             * @see
-             * org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink#onSubmit
-             * (org.apache.wicket.ajax.AjaxRequestTarget,
-             * org.apache.wicket.markup.html.form.Form)
-             */
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 if (categorieSelectionnees.isEmpty()) {
@@ -170,14 +172,27 @@ public class Etape3EntrepriseForm extends Form<CreationPartenaireDTO> {
                             nouveauPartenaire);
                     this.send(target.getPage(), Broadcast.EXACT, changementEtapeEvent);
                 }
-
             }
-
         };
 
         validateEtape3Partenaire.setMarkupId("validateEtape3Partenaire");
 
-        this.add(nomComplet, statutJuridique, nbEmployes, dateCreation, siret, logo, adresse, complementAdresse,
-                codePostalField, villeField, validateEtape3Partenaire, etapePrecedenteNouveauArtisan3);
+        WebMarkupContainer terminerInscriptionPartenaire = new WebMarkupContainer("terminerInscriptionPartenaire") {
+            @Override
+            protected void onComponentTag(ComponentTag tag) {
+                super.onComponentTag(tag);
+                if(isInModification){
+                    StringBuilder classCSS = new StringBuilder(tag.getAttribute("class"));
+                    classCSS.append(" offset3");
+                    tag.remove("class");
+                    tag.put("class", classCSS.toString());
+                }
+            }
+        };
+
+        terminerInscriptionPartenaire.add(validateEtape3Partenaire);
+
+        add(nomComplet, statutJuridique, nbEmployes, dateCreation, siret, logo, adresse, complementAdresse,
+                codePostalField, villeField, terminerInscriptionPartenaire, containerEtapePrecedenteNouveauArtisan3);
     }
 }

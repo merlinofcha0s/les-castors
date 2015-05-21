@@ -60,7 +60,7 @@ public class ModifierMonProfil extends MasterPage {
 
         Etape3Entreprise entrepriseModif = new Etape3Entreprise("etape3InformationsEntreprise",
                 new Model<>(),
-                new CreationPartenaireDTO());
+                new CreationPartenaireDTO(), true);
 
         ContactezNous contactezNous = new ContactezNous("contactezNous");
         Commentaire commentaire = new Commentaire("commentaire");

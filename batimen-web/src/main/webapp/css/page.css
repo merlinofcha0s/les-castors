@@ -50,7 +50,7 @@
 #formEtape4 {
 	float: left;
 	margin-top: 45px;
-	margin-left: 150px;
+	/*margin-left: 150px;*/
 }
 
 #dejaInscrit {
@@ -258,7 +258,6 @@
 }
 
 #terminerInscriptionPartenaire {
-	padding-left: 311px;
 	padding-top: 20px;
 	margin-bottom: 30px;
 }
@@ -272,8 +271,6 @@
 }
 
 #etapePrecedenteNouveauArtisan3{
-	float: left;
-	margin-left: 20px;
 	margin-top: 20px;
 }
 

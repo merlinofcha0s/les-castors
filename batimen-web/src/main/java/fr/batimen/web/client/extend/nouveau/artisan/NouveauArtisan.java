@@ -115,7 +115,7 @@ public class NouveauArtisan extends MasterPage {
 
         // Etape 3 : Information de l'entreprise
         etape3Entreprise = new Etape3Entreprise("etape3InformationsEntreprise", new Model<Serializable>(),
-                nouveauPartenaire) {
+                nouveauPartenaire, false) {
 
             private static final long serialVersionUID = 1L;
 

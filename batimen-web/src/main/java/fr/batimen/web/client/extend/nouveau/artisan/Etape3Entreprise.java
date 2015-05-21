@@ -11,6 +11,7 @@ import org.apache.wicket.markup.head.CssContentHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -41,23 +42,32 @@ public class Etape3Entreprise extends Panel {
         super(id, model);
     }
 
-    public Etape3Entreprise(String id, IModel<?> model, final CreationPartenaireDTO nouveauPartenaire) {
+    public Etape3Entreprise(String id, IModel<?> model, final CreationPartenaireDTO nouveauPartenaire, boolean isInModification) {
         this(id, model);
 
         this.add(BatimenToolTip.getTooltipBehaviour());
 
+        Model<String> titreModificationEntrepriseModel = new Model<>();
+
+        if(isInModification){
+            titreModificationEntrepriseModel.setObject("Modifier mon entreprise");
+        }else{
+            titreModificationEntrepriseModel.setObject("Renseignez les informations de l'entreprise");
+        }
+
+        Label titreModificationEntreprise = new Label("titreModificationEntreprise", titreModificationEntrepriseModel);
+
         categoriesSelectionnees = nouveauPartenaire.getEntreprise().getCategoriesMetier();
 
         etape3EntrepriseForm = new Etape3EntrepriseForm("etape3EntrepriseForm",
-                new CompoundPropertyModel<>(nouveauPartenaire));
+                new CompoundPropertyModel<>(nouveauPartenaire), isInModification);
         containerActivite = new WebMarkupContainer("containerActivite");
         containerActivite.setOutputMarkupId(true);
         containerActivite.setMarkupId("containerActivite");
 
         initActiviteSelection();
 
-        this.add(etape3EntrepriseForm);
-        this.add(containerActivite);
+        this.add(titreModificationEntreprise, etape3EntrepriseForm, containerActivite);
 
     }
 
