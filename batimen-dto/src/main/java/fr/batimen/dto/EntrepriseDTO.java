@@ -18,6 +18,7 @@ import javax.validation.constraints.Size;
 
 import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.dto.enums.StatutJuridique;
+import org.modelmapper.ModelMapper;
 
 public class EntrepriseDTO extends AbstractDTO {
 
@@ -196,5 +197,10 @@ public class EntrepriseDTO extends AbstractDTO {
         sb.append(", adresseEntreprise=").append(adresseEntreprise);
         sb.append('}');
         return sb.toString();
+    }
+
+    public static EntrepriseDTO copy(EntrepriseDTO entrepriseSource) {
+        ModelMapper mapper = new ModelMapper();
+        return  mapper.map(entrepriseSource, EntrepriseDTO.class);
     }
 }

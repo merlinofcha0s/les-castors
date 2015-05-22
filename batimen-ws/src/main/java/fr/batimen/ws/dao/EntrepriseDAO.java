@@ -76,6 +76,7 @@ public class EntrepriseDAO extends AbstractDAO<Entreprise> {
      *            Identifiant de l'artisan
      * @return
      */
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public Entreprise getEntrepriseByArtisan(String login) {
 
         String loginEscaped = DeserializeJsonHelper.parseString(login);

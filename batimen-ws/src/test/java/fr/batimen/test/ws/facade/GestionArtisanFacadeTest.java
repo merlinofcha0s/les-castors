@@ -105,11 +105,21 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
 
     @Test
     @UsingDataSet("datasets/in/entreprises_informations.yml")
-    public void getEntrepriseInformation(){
+    public void getEntrepriseInformationNominal(){
         EntrepriseDTO entrepriseDTO = artisanServiceREST.getEntrepriseInformationByArtisanLogin("pebronneArtisanne");
 
         Assert.assertNotNull(entrepriseDTO);
         Assert.assertEquals("Pebronne enterprise", entrepriseDTO.getNomComplet());
+        Assert.assertTrue(!entrepriseDTO.getCategoriesMetier().isEmpty());
+        Assert.assertNotNull(entrepriseDTO.getAdresseEntreprise());
         Assert.assertEquals("106 chemin du pébron", entrepriseDTO.getAdresseEntreprise().getAdresse());
+    }
+
+    @Test
+    @UsingDataSet("datasets/in/entreprises_informations.yml")
+    public void getEntrepriseInformationLoginExistPas(){
+        EntrepriseDTO entrepriseDTO = artisanServiceREST.getEntrepriseInformationByArtisanLogin("existpas");
+        Assert.assertNotNull(entrepriseDTO);
+        Assert.assertNull(entrepriseDTO.getAdresseEntreprise());
     }
 }

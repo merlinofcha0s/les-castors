@@ -2,11 +2,13 @@ package fr.batimen.web.client.extend.member.client;
 
 import javax.inject.Inject;
 
+import fr.batimen.dto.EntrepriseDTO;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
 import fr.batimen.web.client.extend.nouveau.artisan.Etape3Entreprise;
 import fr.batimen.web.client.extend.nouveau.artisan.Etape3EntrepriseForm;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,9 +25,8 @@ import java.io.Serializable;
 
 /**
  * Page de modification des informations utilisateurs
- * 
+ *
  * @author Casaucau Cyril
- * 
  */
 public class ModifierMonProfil extends MasterPage {
 
@@ -37,6 +38,7 @@ public class ModifierMonProfil extends MasterPage {
     private Authentication authentication;
 
     private CompoundPropertyModel<CreationAnnonceDTO> propertyModelNouvelleAnnonce;
+    private CompoundPropertyModel<CreationPartenaireDTO> propertyModelNouveauPartenaire;
 
     public ModifierMonProfil() {
         super("Modifier mon profil", "lol", "Modifier mon profil", true, "img/bg_title1.jpg");
@@ -59,8 +61,8 @@ public class ModifierMonProfil extends MasterPage {
                 propertyModelNouvelleAnnonce, Boolean.TRUE);
 
         Etape3Entreprise entrepriseModif = new Etape3Entreprise("etape3InformationsEntreprise",
-                new Model<>(),
-                new CreationPartenaireDTO(), true);
+                propertyModelNouveauPartenaire, propertyModelNouveauPartenaire.getObject()
+                , true);
 
         ContactezNous contactezNous = new ContactezNous("contactezNous");
         Commentaire commentaire = new Commentaire("commentaire");
@@ -75,11 +77,18 @@ public class ModifierMonProfil extends MasterPage {
         // Pour les besoins du form etape 4 qu'on reutilise ici, on instancie sa
         // DTO mais on ne rempli que les informations du client
         CreationAnnonceDTO creationAnnonceDTO = new CreationAnnonceDTO();
+        CreationPartenaireDTO creationPartenaireDTO = new CreationPartenaireDTO();
         // Rempli avec le client dto présent en session.
         // On la copie pour eviter que les données en session soit directement
         // modifier par le form
         ClientDTO client = ClientDTO.copy(authentication.getCurrentUserInfo());
         creationAnnonceDTO.setClient(client);
         propertyModelNouvelleAnnonce = new CompoundPropertyModel<>(creationAnnonceDTO);
+
+        EntrepriseDTO entreprise = EntrepriseDTO.copy(authentication.getEntrepriseUserInfo());
+        ModelMapper mapper = new ModelMapper();
+        mapper.map(entreprise, creationPartenaireDTO.getEntreprise());
+        mapper.map(entreprise.getAdresseEntreprise(), creationPartenaireDTO.getAdresse());
+        propertyModelNouveauPartenaire = new CompoundPropertyModel<>(creationPartenaireDTO);
     }
 }

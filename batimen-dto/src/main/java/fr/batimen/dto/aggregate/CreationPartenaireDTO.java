@@ -62,6 +62,8 @@ public class CreationPartenaireDTO extends AbstractDTO {
         this.numeroEtape = numeroEtape;
     }
 
+
+
     /*
      * (non-Javadoc)
      * 
