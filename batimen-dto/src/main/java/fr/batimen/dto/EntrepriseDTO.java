@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
@@ -46,6 +47,8 @@ public class EntrepriseDTO extends AbstractDTO {
     private String specialite;
 
     private ClientDTO artisan;
+
+    private AdresseDTO adresseEntreprise;
 
     /**
      * @return the dateCreation
@@ -140,11 +143,19 @@ public class EntrepriseDTO extends AbstractDTO {
         this.artisan = artisan;
     }
 
+    public AdresseDTO getAdresseEntreprise() {
+        return adresseEntreprise;
+    }
+
+    public void setAdresseEntreprise(AdresseDTO adresseEntreprise) {
+        this.adresseEntreprise = adresseEntreprise;
+    }
+
     /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#hashCode()
-     */
+         * (non-Javadoc)
+         *
+         * @see java.lang.Object#hashCode()
+         */
     @Override
     public int hashCode() {
         return Objects.hashCode(Objects.hash(this.getSiret(), this.getNomComplet()));
@@ -168,5 +179,22 @@ public class EntrepriseDTO extends AbstractDTO {
                     && Objects.equals(this.getNomComplet(), other.getNomComplet());
         }
         return false;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("EntrepriseDTO{");
+        sb.append("siret='").append(siret).append('\'');
+        sb.append(", categoriesMetier=").append(categoriesMetier);
+        sb.append(", nomComplet='").append(nomComplet).append('\'');
+        sb.append(", statutJuridique=").append(statutJuridique);
+        sb.append(", nbEmployees=").append(nbEmployees);
+        sb.append(", logo='").append(logo).append('\'');
+        sb.append(", dateCreation=").append(dateCreation);
+        sb.append(", specialite='").append(specialite).append('\'');
+        sb.append(", artisan=").append(artisan);
+        sb.append(", adresseEntreprise=").append(adresseEntreprise);
+        sb.append('}');
+        return sb.toString();
     }
 }

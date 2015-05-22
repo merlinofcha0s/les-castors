@@ -7,7 +7,9 @@ import java.util.Set;
 
 import javax.inject.Inject;
 
+import fr.batimen.dto.EntrepriseDTO;
 import fr.batimen.dto.aggregate.MesAnnoncesDTO;
+import org.jboss.arquillian.persistence.UsingDataSet;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -99,5 +101,15 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
 
         Assert.assertNotNull(permissions.iterator().next());
         Assert.assertEquals(TypeCompte.ARTISAN, permissions.iterator().next().getTypeCompte());
+    }
+
+    @Test
+    @UsingDataSet("datasets/in/entreprises_informations.yml")
+    public void getEntrepriseInformation(){
+        EntrepriseDTO entrepriseDTO = artisanServiceREST.getEntrepriseInformationByArtisanLogin("pebronneArtisanne");
+
+        Assert.assertNotNull(entrepriseDTO);
+        Assert.assertEquals("Pebronne enterprise", entrepriseDTO.getNomComplet());
+        Assert.assertEquals("106 chemin du pébron", entrepriseDTO.getAdresseEntreprise().getAdresse());
     }
 }

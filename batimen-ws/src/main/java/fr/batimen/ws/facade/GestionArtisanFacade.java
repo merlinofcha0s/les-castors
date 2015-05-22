@@ -18,6 +18,8 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
+import fr.batimen.dto.EntrepriseDTO;
+import fr.batimen.dto.helper.DeserializeJsonHelper;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -169,6 +171,20 @@ public class GestionArtisanFacade {
         }
 
         return CodeRetourService.RETOUR_OK;
+    }
+
+    /**
+     * Permet de récuperer les informations d'une entreprise (Infos + adresse)
+     *
+     * @param login Le login de l'artisan dont on veut l'entreprise
+     * @return Les informations de l'entreprise.
+     */
+    @POST
+    @Path(WsPath.GESTION_PARTENAIRE_SERVICE_GET_ENTREPISE_INFORMATION)
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public EntrepriseDTO getEntrepriseInformationByArtisanLogin(String login){
+        String loginDeserialized = DeserializeJsonHelper.parseString(login);
+        return null;
     }
 
 }

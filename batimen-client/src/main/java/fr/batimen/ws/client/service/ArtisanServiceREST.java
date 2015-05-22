@@ -5,6 +5,8 @@ import java.io.Serializable;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import fr.batimen.dto.EntrepriseDTO;
+import fr.batimen.dto.helper.DeserializeJsonHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,6 +56,23 @@ public class ArtisanServiceREST implements Serializable {
         }
 
         return codeRetour;
+    }
+
+    public EntrepriseDTO getEntrepriseInformationByArtisanLogin(String login){
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Début appel service nouveau partenaire + deserialization");
+        }
+
+        String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_PARTENAIRE_SERVICE_PATH,
+                WsPath.GESTION_PARTENAIRE_SERVICE_GET_ENTREPISE_INFORMATION, login);
+
+        EntrepriseDTO entrepriseDTO = DeserializeJsonHelper.deserializeDTO(objectInJSON, EntrepriseDTO.class);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Fin appel service nouveau partenaire + deserialization");
+        }
+
+        return entrepriseDTO;
     }
 
 }
