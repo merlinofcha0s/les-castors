@@ -65,10 +65,9 @@ public class Etape3Entreprise extends Panel {
         containerActivite.setOutputMarkupId(true);
         containerActivite.setMarkupId("containerActivite");
 
-        initActiviteSelection();
+        initActiviteSelection(nouveauPartenaire);
 
         this.add(titreModificationEntreprise, etape3EntrepriseForm, containerActivite);
-
     }
 
     @Override
@@ -80,7 +79,7 @@ public class Etape3Entreprise extends Panel {
         response.render(CssContentHeaderItem.forUrl("//www.fuelcdn.com/fuelux/2.6.1/css/fuelux-responsive.css"));
     }
 
-    private void initActiviteSelection() {
+    private void initActiviteSelection(CreationPartenaireDTO nouveauPartenaire) {
 
         final WebMarkupContainer iElectricite = new WebMarkupContainer("iElectricite");
         final WebMarkupContainer containerElectricite = new WebMarkupContainer("containerElectricite");
@@ -101,6 +100,14 @@ public class Etape3Entreprise extends Panel {
                 target.add(containerActivite);
             }
 
+            @Override
+            protected void onConfigure() {
+                for(CategorieMetierDTO categorieMetierDTO : categoriesSelectionnees){
+                    if(categorieMetierDTO.getCodeCategorieMetier().equals(CategorieLoader.ELECTRICITE_CODE)){
+                        checked(containerElectricite, iElectricite, this);
+                    }
+                }
+            }
         };
 
         checkBoxElectricite.setMarkupId("electriciteCheck");
@@ -127,6 +134,15 @@ public class Etape3Entreprise extends Panel {
                     sendUncheckedAllCheckBox(target);
                 }
                 target.add(containerActivite);
+            }
+
+            @Override
+            protected void onConfigure() {
+                for(CategorieMetierDTO categorieMetierDTO : categoriesSelectionnees){
+                    if(categorieMetierDTO.getCodeCategorieMetier().equals(CategorieLoader.PLOMBERIE_CODE)){
+                        checked(containerPlomberie, iPlomberie, this);
+                    }
+                }
             }
 
         };
@@ -156,6 +172,15 @@ public class Etape3Entreprise extends Panel {
                 }
                 target.add(containerActivite);
             }
+
+            @Override
+            protected void onConfigure() {
+                for(CategorieMetierDTO categorieMetierDTO : categoriesSelectionnees){
+                    if(categorieMetierDTO.getCodeCategorieMetier().equals(CategorieLoader.ESPACE_VERT_CODE)){
+                        checked(containerEspaceVert, iEspaceVert, this);
+                    }
+                }
+            }
         };
 
         checkBoxEspaceVert.setMarkupId("espaceVertCheck");
@@ -182,6 +207,15 @@ public class Etape3Entreprise extends Panel {
                     sendUncheckedAllCheckBox(target);
                 }
                 target.add(containerActivite);
+            }
+
+            @Override
+            protected void onConfigure() {
+                for(CategorieMetierDTO categorieMetierDTO : categoriesSelectionnees){
+                    if(categorieMetierDTO.getCodeCategorieMetier().equals(CategorieLoader.DECORATION_MACONNERIE_CODE)){
+                        checked(containerDecorationMaconnerie, iDecorationMaconnerie, this);
+                    }
+                }
             }
         };
 

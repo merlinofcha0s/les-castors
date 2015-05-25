@@ -1,14 +1,14 @@
 package fr.batimen.test.ws.facade;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import javax.inject.Inject;
 
+import fr.batimen.dto.AdresseDTO;
 import fr.batimen.dto.EntrepriseDTO;
 import fr.batimen.dto.aggregate.MesAnnoncesDTO;
+import fr.batimen.dto.aggregate.ModificationEntrepriseDTO;
+import org.jboss.arquillian.persistence.ShouldMatchDataSet;
 import org.jboss.arquillian.persistence.UsingDataSet;
 import org.junit.Assert;
 import org.junit.Test;
@@ -30,6 +30,8 @@ import fr.batimen.ws.entity.Adresse;
 import fr.batimen.ws.entity.Artisan;
 import fr.batimen.ws.entity.Entreprise;
 import fr.batimen.ws.entity.Permission;
+
+import static org.junit.Assert.*;
 
 public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
 
@@ -82,25 +84,25 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
 
         Integer retourService = artisanServiceREST.creationNouveauPartenaire(nouveauPartenaire);
 
-        Assert.assertNotNull(retourService);
-        Assert.assertEquals(CodeRetourService.RETOUR_OK, retourService);
+        assertNotNull(retourService);
+        assertEquals(CodeRetourService.RETOUR_OK, retourService);
 
         Artisan artisanEnregistre = artisanDAO.getArtisanByEmail(nouveauPartenaire.getArtisan().getEmail());
-        Assert.assertNotNull(artisanEnregistre);
-        Assert.assertEquals("plombier@tuyaux.com", artisanEnregistre.getEmail());
+        assertNotNull(artisanEnregistre);
+        assertEquals("plombier@tuyaux.com", artisanEnregistre.getEmail());
 
         Entreprise entreprise = entrepriseDAO.getEntrepriseByArtisan(artisanEnregistre.getLogin());
-        Assert.assertNotNull(entreprise);
-        Assert.assertEquals("Entreprise de la plomberie", entreprise.getNomComplet());
+        assertNotNull(entreprise);
+        assertEquals("Entreprise de la plomberie", entreprise.getNomComplet());
 
         Adresse adresseEntreprise = entreprise.getAdresse();
-        Assert.assertNotNull(adresseEntreprise);
-        Assert.assertEquals("250 chemin du plombier", adresseEntreprise.getAdresse());
+        assertNotNull(adresseEntreprise);
+        assertEquals("250 chemin du plombier", adresseEntreprise.getAdresse());
 
         Set<Permission> permissions = artisanEnregistre.getPermission();
 
-        Assert.assertNotNull(permissions.iterator().next());
-        Assert.assertEquals(TypeCompte.ARTISAN, permissions.iterator().next().getTypeCompte());
+        assertNotNull(permissions.iterator().next());
+        assertEquals(TypeCompte.ARTISAN, permissions.iterator().next().getTypeCompte());
     }
 
     @Test
@@ -108,18 +110,88 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
     public void getEntrepriseInformationNominal(){
         EntrepriseDTO entrepriseDTO = artisanServiceREST.getEntrepriseInformationByArtisanLogin("pebronneArtisanne");
 
-        Assert.assertNotNull(entrepriseDTO);
-        Assert.assertEquals("Pebronne enterprise", entrepriseDTO.getNomComplet());
-        Assert.assertTrue(!entrepriseDTO.getCategoriesMetier().isEmpty());
-        Assert.assertNotNull(entrepriseDTO.getAdresseEntreprise());
-        Assert.assertEquals("106 chemin du pébron", entrepriseDTO.getAdresseEntreprise().getAdresse());
+        assertNotNull(entrepriseDTO);
+        assertEquals("Pebronne enterprise", entrepriseDTO.getNomComplet());
+        assertTrue(!entrepriseDTO.getCategoriesMetier().isEmpty());
+        assertNotNull(entrepriseDTO.getAdresseEntreprise());
+        assertEquals("106 chemin du pébron", entrepriseDTO.getAdresseEntreprise().getAdresse());
     }
 
     @Test
     @UsingDataSet("datasets/in/entreprises_informations.yml")
     public void getEntrepriseInformationLoginExistPas(){
         EntrepriseDTO entrepriseDTO = artisanServiceREST.getEntrepriseInformationByArtisanLogin("existpas");
-        Assert.assertNotNull(entrepriseDTO);
-        Assert.assertNull(entrepriseDTO.getAdresseEntreprise());
+        assertNotNull(entrepriseDTO);
+        assertNull(entrepriseDTO.getAdresseEntreprise());
+    }
+
+    /**
+     * Cas de test : l'utilisateur modifie ses informations via le formulaire de modification.
+     * Tout se passe comme prévu.
+     */
+    @Test
+    @UsingDataSet("datasets/in/entreprises_informations.yml")
+    @ShouldMatchDataSet(value = "datasets/out/modification_entreprise.yml", excludeColumns = { "id", "datemaj", "datecreation" })
+    public void saveEntrepriseInformation(){
+        EntrepriseDTO entrepriseDTO = new EntrepriseDTO();
+        entrepriseDTO.setNomComplet("Pebronne enterprise");
+        entrepriseDTO.setStatutJuridique(StatutJuridique.SARL);
+        entrepriseDTO.setSiret("43394298400017");
+        entrepriseDTO.setNbEmployees(20);
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(2014, 03, 23, 22, 00, 00);
+        entrepriseDTO.setDateCreation(cal.getTime());
+
+        entrepriseDTO.getCategoriesMetier().add(CategorieLoader.getCategoriePlomberie());
+        entrepriseDTO.getCategoriesMetier().add(CategorieLoader.getCategorieDecorationMaconnerie());
+
+        AdresseDTO adresseDTO = new AdresseDTO();
+        adresseDTO.setAdresse("106 chemin de la modification");
+        adresseDTO.setComplementAdresse("Res de la modif");
+        adresseDTO.setCodePostal("06600");
+        adresseDTO.setDepartement(6);
+        adresseDTO.setVille("Antibes");
+
+        entrepriseDTO.setAdresseEntreprise(adresseDTO);
+
+        Integer codeRetour = artisanServiceREST.saveEntrepriseInformation(entrepriseDTO);
+        assertNotNull(codeRetour);
+        assertEquals(CodeRetourService.RETOUR_OK, codeRetour);
+    }
+
+    /**
+     * Cas de test : L'utilisateur essaye de modifier le code html pour changer des informations ne pouvant être modifié.
+     * Le webservice claque une erreur.
+     */
+    @Test
+    @UsingDataSet("datasets/in/entreprises_informations.yml")
+    @ShouldMatchDataSet(value = "datasets/in/entreprises_informations.yml", excludeColumns = { "id", "datemaj", "datecreation" })
+    public void saveEntrepriseInformationNotExiste(){
+        EntrepriseDTO entrepriseDTO = new EntrepriseDTO();
+        entrepriseDTO.setNomComplet("existe pas");
+        entrepriseDTO.setStatutJuridique(StatutJuridique.SARL);
+        entrepriseDTO.setSiret("43394298400017");
+        entrepriseDTO.setNbEmployees(20);
+
+        Calendar cal = Calendar.getInstance();
+        cal.set(2014, 03, 23, 22, 00, 00);
+        entrepriseDTO.setDateCreation(cal.getTime());
+
+        entrepriseDTO.getCategoriesMetier().add(CategorieLoader.getCategoriePlomberie());
+        entrepriseDTO.getCategoriesMetier().add(CategorieLoader.getCategorieDecorationMaconnerie());
+
+        AdresseDTO adresseDTO = new AdresseDTO();
+        adresseDTO.setAdresse("106 chemin de la modification");
+        adresseDTO.setComplementAdresse("Res de la modif");
+        adresseDTO.setCodePostal("06600");
+        adresseDTO.setDepartement(6);
+        adresseDTO.setVille("Antibes");
+
+        entrepriseDTO.setAdresseEntreprise(adresseDTO);
+
+        Integer codeRetour = artisanServiceREST.saveEntrepriseInformation(entrepriseDTO);
+        assertNotNull(codeRetour);
+        assertEquals(CodeRetourService.RETOUR_KO, codeRetour);
     }
 }

@@ -6,6 +6,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import fr.batimen.dto.EntrepriseDTO;
+import fr.batimen.dto.aggregate.ModificationEntrepriseDTO;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -73,5 +74,28 @@ public class ArtisanServiceREST implements Serializable {
         }
 
         return entrepriseDTO;
+    }
+
+    /**
+     * Permet de récuperer les informations d'une entreprise (Infos + adresse)
+     *
+     * @param entrepriseDTO Les informations de l'entreprise que l'on doit modifier
+     * @return CodeRetourService
+     */
+    public Integer saveEntrepriseInformation(EntrepriseDTO entrepriseDTO){
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Début appel service nouveau partenaire + deserialization");
+        }
+
+        String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_PARTENAIRE_SERVICE_PATH,
+                WsPath.GESTION_PARTENAIRE_SERVICE_SAVE_ENTREPRISE_INFORMATION, entrepriseDTO);
+
+        Integer codeRetour = Integer.valueOf(objectInJSON);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Fin appel service nouveau partenaire + deserialization");
+        }
+
+        return codeRetour;
     }
 }

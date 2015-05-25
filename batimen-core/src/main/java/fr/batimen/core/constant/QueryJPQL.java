@@ -66,11 +66,16 @@ public class QueryJPQL {
     // Entity entreprise
     public static final String ENTREPRISE_BY_SIRET = "entrepriseBySiret";
     public static final String ENTREPRISE_BY_ARTISAN = "entrepriseByArtisan";
+    public static final String ENTREPRISE_BY_NOM_COMPLET_STATUT_SIRET_DEPARTEMENT = "updateEntrepriseNomCompletStatutSiretDepartement";
 
     // Parametre Query Entity entreprise
-    public static final String PARAM_ENTEPRISE_SIRET = "siret";
+    public static final String PARAM_ENTREPRISE_SIRET = "siret";
     public static final String PARAM_ENTREPRISE_NOM_COMPLET = "entrepriseNomComplet";
-    public static final String PARAM_ENTREPRISE_ENTITY = "entrepriseEntity";
+    public static final String PARAM_ENTREPRISE_STATUT_JURIDIQUE = "entrepriseStatutJuridique";
+
+    //Parametre Query Entity adresse
+    public static final String PARAM_ENTREPRISE_DEPARTEMENT = "departement";
+
 
     // Entity permission
     public static final String PERMISSION_CLIENT_BY_LOGIN = "permissionClientByLogin";

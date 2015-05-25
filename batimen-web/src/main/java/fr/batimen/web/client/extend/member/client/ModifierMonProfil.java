@@ -4,6 +4,8 @@ import javax.inject.Inject;
 
 import fr.batimen.dto.EntrepriseDTO;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
+import fr.batimen.dto.enums.TypeCompte;
+import fr.batimen.web.app.security.RolesUtils;
 import fr.batimen.web.client.extend.nouveau.artisan.Etape3Entreprise;
 import fr.batimen.web.client.extend.nouveau.artisan.Etape3EntrepriseForm;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -37,6 +39,9 @@ public class ModifierMonProfil extends MasterPage {
     @Inject
     private Authentication authentication;
 
+    @Inject
+    private RolesUtils rolesUtils;
+
     private CompoundPropertyModel<CreationAnnonceDTO> propertyModelNouvelleAnnonce;
     private CompoundPropertyModel<CreationPartenaireDTO> propertyModelNouveauPartenaire;
 
@@ -62,7 +67,12 @@ public class ModifierMonProfil extends MasterPage {
 
         Etape3Entreprise entrepriseModif = new Etape3Entreprise("etape3InformationsEntreprise",
                 propertyModelNouveauPartenaire, propertyModelNouveauPartenaire.getObject()
-                , true);
+                , true){
+            @Override
+            public boolean isVisible() {
+                return rolesUtils.checkRoles(TypeCompte.ARTISAN);
+            }
+        };
 
         ContactezNous contactezNous = new ContactezNous("contactezNous");
         Commentaire commentaire = new Commentaire("commentaire");
@@ -85,10 +95,13 @@ public class ModifierMonProfil extends MasterPage {
         creationAnnonceDTO.setClient(client);
         propertyModelNouvelleAnnonce = new CompoundPropertyModel<>(creationAnnonceDTO);
 
-        EntrepriseDTO entreprise = EntrepriseDTO.copy(authentication.getEntrepriseUserInfo());
-        ModelMapper mapper = new ModelMapper();
-        mapper.map(entreprise, creationPartenaireDTO.getEntreprise());
-        mapper.map(entreprise.getAdresseEntreprise(), creationPartenaireDTO.getAdresse());
+        if(rolesUtils.checkRoles(TypeCompte.ARTISAN)){
+            EntrepriseDTO entreprise = EntrepriseDTO.copy(authentication.getEntrepriseUserInfo());
+            ModelMapper mapper = new ModelMapper();
+            mapper.map(entreprise, creationPartenaireDTO.getEntreprise());
+            mapper.map(entreprise.getAdresseEntreprise(), creationPartenaireDTO.getAdresse());
+            creationPartenaireDTO.getEntreprise().getCategoriesMetier().addAll(entreprise.getCategoriesMetier());
+        }
         propertyModelNouveauPartenaire = new CompoundPropertyModel<>(creationPartenaireDTO);
     }
 }

@@ -94,7 +94,7 @@ public class NouveauArtisan extends MasterPage {
 
         // Etape 2 : Informations du dirigeant
         etape2PartenaireForm = new Etape2PartenaireForm("etape2PartenaireForm",
-                new CompoundPropertyModel<CreationPartenaireDTO>(nouveauPartenaire));
+                new CompoundPropertyModel<>(nouveauPartenaire));
 
         containerEtape2 = new WebMarkupContainer("containerEtape2") {
 

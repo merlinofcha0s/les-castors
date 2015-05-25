@@ -10,6 +10,7 @@ import fr.batimen.dto.AdresseDTO;
 import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.EntrepriseDTO;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
+import fr.batimen.dto.aggregate.ModificationEntrepriseDTO;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
@@ -28,6 +29,7 @@ import javax.annotation.security.RolesAllowed;
 import javax.ejb.*;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
+import javax.swing.*;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -183,9 +185,41 @@ public class GestionArtisanFacade {
         }else{
             return new EntrepriseDTO();
         }
-
-
-
     }
 
+    /**
+     * Permet de récuperer les informations d'une entreprise (Infos + adresse)
+     *
+     * @param entrepriseDTO Les informations de l'entreprise que l'on doit modifier
+     * @return CodeRetourService
+     */
+    @POST
+    @Path(WsPath.GESTION_PARTENAIRE_SERVICE_SAVE_ENTREPRISE_INFORMATION)
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public Integer saveEntrepriseInformation(EntrepriseDTO entrepriseDTO) {
+        if(LOGGER.isDebugEnabled()){
+            LOGGER.debug(entrepriseDTO.toString());
+        }
+
+        Entreprise entrepriseAMettreAJour = entrepriseDAO.getArtisanByNomCompletSatutSiretDepartement(entrepriseDTO.getNomComplet()
+                , entrepriseDTO.getStatutJuridique(), entrepriseDTO.getSiret()
+                , entrepriseDTO.getAdresseEntreprise().getDepartement());
+
+        if(entrepriseAMettreAJour != null){
+            if(LOGGER.isDebugEnabled()){
+                LOGGER.debug("L'entreprise a été trouvée, on effectue les modifs demandé par l'utilisateur.");
+            }
+            entrepriseAMettreAJour.setNbEmployees(entrepriseDTO.getNbEmployees());
+            entrepriseAMettreAJour.setDateCreation(entrepriseDTO.getDateCreation());
+            ModelMapper mapper = new ModelMapper();
+            mapper.map(entrepriseDTO.getAdresseEntreprise(), entrepriseAMettreAJour.getAdresse());
+
+            categorieMetierDAO.updateCategorieMetier(entrepriseDTO, entrepriseAMettreAJour);
+            entrepriseDAO.update(entrepriseAMettreAJour);
+            adresseDAO.update(entrepriseAMettreAJour.getAdresse());
+            return CodeRetourService.RETOUR_OK;
+        }else{
+            return CodeRetourService.RETOUR_KO;
+        }
+    }
 }

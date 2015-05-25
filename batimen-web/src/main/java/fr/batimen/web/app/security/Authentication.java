@@ -102,6 +102,10 @@ public class Authentication implements Serializable {
         return (EntrepriseDTO) SecurityUtils.getSubject().getSession().getAttribute(ENTREPRISE_KEY);
     }
 
+    public void setEntrepriseUserInfo(EntrepriseDTO entrepriseDTO) {
+        SecurityUtils.getSubject().getSession().setAttribute(ENTREPRISE_KEY, entrepriseDTO);
+    }
+
     public void setCurrentUserInfo(ClientDTO clientDTO) {
         SecurityUtils.getSubject().getSession().setAttribute(CLIENT_KEY, clientDTO);
     }
