@@ -1,310 +1,309 @@
 @CHARSET "UTF-8";
 
 #connexion {
-	float: left;
-	padding-left: 670px;
-	padding-top: 12px;
+    float: left;
+    padding-left: 670px;
+    padding-top: 12px;
 }
 
 #connexion div {
-	color: #25B8E2;
-	transition: color 300ms ease 0s;
+    color: #25B8E2;
+    transition: color 300ms ease 0s;
 }
 
 #connexion div:hover {
-	color: #666666;
-	text-decoration: none;
+    color: #666666;
+    text-decoration: none;
 }
 
 .errorLoginActivated {
-	margin-bottom: 10px;
-	border: 1px solid;
-	border-radius: 5px;
-	-webkit-border-radius: 5px;
-	-moz-border-radius: 5px;
-	padding-top: 5px;
-	padding-bottom: 6px;
-	background: #FF6666;
-	color: #FFFFFF;
+    margin-bottom: 10px;
+    border: 1px solid;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    padding-top: 5px;
+    padding-bottom: 6px;
+    background: #FF6666;
+    color: #FFFFFF;
 }
 
 .errorLoginDeactivated {
-	margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 
 .erreur {
-	color: red;
+    color: red;
 }
 
 /* Creation d'annonce */
 #mapFrance {
-	width: 600px;
-	padding-left: 310px;
-	padding-top: 20px;
+    width: 600px;
+    padding-left: 310px;
+    padding-top: 20px;
 }
 
 #formEtape3 {
-	margin-top: 18px;
+    margin-top: 18px;
 }
 
 #formEtape4 {
-	float: left;
-	margin-top: 45px;
-	/*margin-left: 150px;*/
+    float: left;
+    margin-top: 45px;
+    /*margin-left: 150px;*/
 }
 
 #dejaInscrit {
-	float: right;
-	margin-top: 220px;
-	margin-right: 140px;
-	font-weight: bold;
-	font-size: 1.1em;
+    float: right;
+    margin-top: 220px;
+    margin-right: 140px;
+    font-weight: bold;
+    font-size: 1.1em;
 }
 
 .tableBatimen th {
-	padding-bottom: 20px;
-	text-align: left;
+    padding-bottom: 20px;
+    text-align: left;
 }
 
 .tableBatimen td {
-	padding-left: 20px;
-	padding-bottom: 8px;
+    padding-left: 20px;
+    padding-bottom: 8px;
 }
 
 .tableBatimenLogin th {
-	padding-left: 20px;
-	padding-bottom: 20px;
-	text-align: left;
+    padding-left: 20px;
+    padding-bottom: 20px;
+    text-align: left;
 }
 
 .tableBatimenLogin td {
-	padding-left: 20px;
+    padding-left: 20px;
 }
 
 #validateQualification {
-	margin-left: 4px;
+    margin-left: 4px;
 }
 
 #validateInscription {
-	float: none;
-	margin-left: 177px;
+    float: none;
+    margin-left: 177px;
 }
 
 .imgHelp {
-	vertical-align: sub;
+    vertical-align: sub;
 }
 
 #photoField {
-	margin-bottom: 7px;
+    margin-bottom: 7px;
 }
 
 #champsObligatoire {
-	margin-top: 17px;
+    margin-top: 17px;
 }
 
 #confirmation {
-	text-align: center;
+    text-align: center;
 }
 
 #confirmation img {
-	padding-bottom: 20px;
-	width: 81px;
+    padding-bottom: 20px;
+    width: 81px;
 }
 
 #confirmation h5 a {
-	color: #25B8E2;
+    color: #25B8E2;
 }
 
 #confirmation h5 a:focus {
-	outline: thin dotted #333333;
-	outline-offset: -2px;
+    outline: thin dotted #333333;
+    outline-offset: -2px;
 }
 
 #retourAccueil {
-	padding-top: 20px;
+    padding-top: 20px;
 }
 
 .tableBatimen tbody tr td input[type="checkbox"] {
-	margin-bottom: 13px;
+    margin-bottom: 13px;
 }
 
 #batimenWizard {
-	margin-bottom: 20px;
+    margin-bottom: 20px;
 }
 
 .glypheEtape2 {
-	position: absolute;
-	left: 10px;
-	top: 8px;
-	width: 20px;
-	display: block;
-	font-size: 22px;
+    position: absolute;
+    left: 10px;
+    top: 8px;
+    width: 20px;
+    display: block;
+    font-size: 22px;
 }
 
 #radioTypeTravauxNeuf {
-	float: left;
-	padding-right: 30px;
+    float: left;
+    padding-right: 30px;
 }
 
 #radioTypeTravauxRenovation {
-	float: left;
-	padding-right: 52px;
+    float: left;
+    padding-right: 52px;
 }
 
-.categorie{
-	cursor: pointer;
+.categorie {
+    cursor: pointer;
 }
 
-#etapePrecedenteCat2{
-	margin-bottom: 30px;
-	float: right;
+#etapePrecedenteCat2 {
+    margin-bottom: 30px;
+    float: right;
 }
 
-#terminerAnnonce{
+#terminerAnnonce {
     margin-bottom: 30px;
     margin-left: 19px;
     margin-top: 25px;
 }
 
-#etapePrecedenteCat3{
-	margin-top: 7px;
+#etapePrecedenteCat3 {
+    margin-top: 7px;
 }
 
 #champsObligatoireNouveauPartenaire {
     margin-left: 16px;
 }
 
-#descriptionDevisField{
-	width: 510px; 
-	height: 130px; 
+#descriptionDevisField {
+    width: 510px;
+    height: 130px;
 }
 
-#descriptionModificationField{
-	width: 430px;
-	height: 170px;
+#descriptionModificationField {
+    width: 430px;
+    height: 170px;
 }
-
 
 /* Activation compte */
 .confirmationactivationok {
-	background: url('../img/thumbsup.png');
-	width: 143px;
-	height: 143px;
-	background-repeat: no-repeat;
+    background: url('../img/thumbsup.png');
+    width: 143px;
+    height: 143px;
+    background-repeat: no-repeat;
 }
 
 .confirmationactivationko {
-	background: url('../img/error2.png');
-	width: 143px;
-	height: 143px;
-	background-repeat: no-repeat;
+    background: url('../img/error2.png');
+    width: 143px;
+    height: 143px;
+    background-repeat: no-repeat;
 }
 
 /* Creation partenaire */
 #formPartenaireEtape2 {
-	padding-left: 330px;
-	padding-top: 45px;
+    padding-left: 330px;
+    padding-top: 45px;
 }
 
 #validateEtape2Partenaire {
-	float: right;
-	margin-right: 17px;
+    float: right;
+    margin-right: 17px;
 }
 
 #categorieMetierPartenaire {
-	padding-left: 16px;
-	padding-top: 10px;
+    padding-left: 16px;
+    padding-top: 10px;
 }
 
 #enregistrerCategorie {
-	float: right;
+    float: right;
 }
 
 #formEntrepriseEtape3 {
-	/*padding-left: 350px;*/
-	padding-top: 21px;
+    /*padding-left: 350px;*/
+    padding-top: 21px;
 }
 
 #containerActivite {
-	padding-top: 15px;
-	padding-bottom: 15px;
-	/*padding-left: 480px;*/
+    padding-top: 15px;
+    padding-bottom: 15px;
+    /*padding-left: 480px;*/
 }
 
 #containerPlomberie {
-	padding-bottom: 7px;
-	padding-left: 15px;
+    padding-bottom: 7px;
+    padding-left: 15px;
 }
 
 #containerEspaceVert {
-	padding-bottom: 7px;
-	padding-left: 10px;
+    padding-bottom: 7px;
+    padding-left: 10px;
 }
 
 #containerDecorationMaconnerie {
-	padding-left: 7px;
+    padding-left: 7px;
 }
 
 #containerCategorieSelection {
-	padding-top: 15px;
+    padding-top: 15px;
 }
 
 #containerAjoutActivite {
-	padding-left: 10px;
+    padding-left: 10px;
 }
 
 #containerAjoutActivite span {
-	vertical-align: text-top;
+    vertical-align: text-top;
 }
 
 #terminerInscriptionPartenaire {
-	padding-top: 20px;
-	margin-bottom: 30px;
+    padding-top: 20px;
+    margin-bottom: 30px;
 }
 
 .font-glyph-entreprise {
-	font-size: 25px;
+    font-size: 25px;
 }
 
-#etapePrecedenteNouveauArtisan2{
-	margin-top: 12px;
+#etapePrecedenteNouveauArtisan2 {
+    margin-top: 12px;
 }
 
-#etapePrecedenteNouveauArtisan3{
-	margin-top: 20px;
+#etapePrecedenteNouveauArtisan3 {
+    margin-top: 20px;
 }
 
 /* Composant Wicket */
 .wicket-mfu-caption {
-	padding-top: 5px;
+    padding-top: 5px;
 }
 
 .wicket-mfu-container {
-	overflow: visible !important;
+    overflow: visible !important;
 }
 
 div.upload {
-	background: url(../img/cloud-upload.png);
-	background-repeat: no-repeat;
-	overflow: hidden;
+    background: url(../img/cloud-upload.png);
+    background-repeat: no-repeat;
+    overflow: hidden;
 }
 
 div.upload input[type="file"] {
-	display: block !important;
-	width: 157px !important;
-	height: 41px !important;
-	opacity: 0 !important;
-	overflow: hidden !important;
+    display: block !important;
+    width: 157px !important;
+    height: 41px !important;
+    opacity: 0 !important;
+    overflow: hidden !important;
 }
 
 .wicket-mfu-container input[type="button"] {
-	color: #ffffff;
+    color: #ffffff;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
     background-color: #0489b1;
     *background-color: #0f74a6;
     background-image: -moz-linear-gradient(top, #0489b1, #0f74a6);
     background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#0489b1),
-        to(#0f74a6));
+    to(#0f74a6));
     background-image: -webkit-linear-gradient(top, #0489b1, #0f74a6);
     background-image: -o-linear-gradient(top, #0489b1, #0f74a6);
     background-image: linear-gradient(to bottom, #0489b1, #0f74a6);
@@ -312,518 +311,518 @@ div.upload input[type="file"] {
     border-color: #2f96b4 #2f96b4 #1f6377;
     border-color: rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.1) rgba(0, 0, 0, 0.25);
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#0489b1',
-        endColorstr='#0f74a6', GradientType=0);
+    endColorstr='#0f74a6', GradientType=0);
     filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
 }
 
 #sliderUp {
-	padding-bottom: 30px;
-	padding-top: 15px;
+    padding-bottom: 30px;
+    padding-top: 15px;
 }
 
 #sliderDown {
-	padding-bottom: 20px;
-	padding-left: 300px;
+    padding-bottom: 20px;
+    padding-left: 300px;
 }
 
 /* Composant dans tout le site */
 .required {
-	color: red;
-	font-size: 1.3em;
-	padding-left: 5px;
+    color: red;
+    font-size: 1.3em;
+    padding-left: 5px;
 }
 
 table tr td .error {
-	border: 1px solid red;
+    border: 1px solid red;
 }
 
 .buttonCastor {
-	font-weight: 800;
-	font-family: 'Open Sans', sans-serif !important;
-	text-transform: uppercase;
-	font-size: 12px;
-	color: #666666;
-	padding: 4px 15px;
-	background: -moz-linear-gradient(top, #f0f0f0 0%, #f0f0f0 50%, #f0f0f0);
-	background: -webkit-gradient(linear, left top, left bottom, from(#f0f0f0),
-		color-stop(0.50, #f0f0f0), to(#f0f0f0));
-	-moz-border-radius: 4px;
-	-webkit-border-radius: 4px;
-	border-radius: 4px;
-	border: 1px solid #cfcfcf;
-	-moz-box-shadow: 1px 0px 0px rgba(0, 0, 0, 0), inset 1px 1px 2px
-		rgba(000, 000, 000, 0.4);
-	-webkit-box-shadow: 1px 0px 0px rgba(0, 0, 0, 0), inset 1px 1px 2px
-		rgba(000, 000, 000, 0.4);
-	box-shadow: 1px 0px 0px rgba(0, 0, 0, 0), inset 1px 1px 2px
-		rgba(000, 000, 000, 0.4);
-	text-shadow: 0px 0px 0px rgba(255, 255, 255, 0.2), 0px 1px 0px
-		rgba(255, 255, 255, 1);
+    font-weight: 800;
+    font-family: 'Open Sans', sans-serif !important;
+    text-transform: uppercase;
+    font-size: 12px;
+    color: #666666;
+    padding: 4px 15px;
+    background: -moz-linear-gradient(top, #f0f0f0 0%, #f0f0f0 50%, #f0f0f0);
+    background: -webkit-gradient(linear, left top, left bottom, from(#f0f0f0),
+    color-stop(0.50, #f0f0f0), to(#f0f0f0));
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    border: 1px solid #cfcfcf;
+    -moz-box-shadow: 1px 0px 0px rgba(0, 0, 0, 0), inset 1px 1px 2px rgba(000, 000, 000, 0.4);
+    -webkit-box-shadow: 1px 0px 0px rgba(0, 0, 0, 0), inset 1px 1px 2px rgba(000, 000, 000, 0.4);
+    box-shadow: 1px 0px 0px rgba(0, 0, 0, 0), inset 1px 1px 2px rgba(000, 000, 000, 0.4);
+    text-shadow: 0px 0px 0px rgba(255, 255, 255, 0.2), 0px 1px 0px rgba(255, 255, 255, 1);
 }
 
-.feedbackCastorPanel{
-	padding-bottom: 15px;
+.feedbackCastorPanel {
+    padding-bottom: 15px;
 }
 
 /* Page d'erreur */
 .wrapper500 {
-	background: url("../img/bg_500.png") no-repeat scroll center top
-		rgba(0, 0, 0, 0);
-	padding-top: 250px;
-	position: relative !important;
-	text-align: center;
+    background: url("../img/bg_500.png") no-repeat scroll center top rgba(0, 0, 0, 0);
+    padding-top: 250px;
+    position: relative !important;
+    text-align: center;
 }
 
 .block500 {
-	display: block;
-	left: 315px;
-	position: absolute;
-	text-align: inherit;
-	top: 56px;
+    display: block;
+    left: 315px;
+    position: absolute;
+    text-align: inherit;
+    top: 56px;
 }
 
 .title500 {
-	font-size: 30px !important;
-	line-height: 32px !important;
-	margin-bottom: 7px !important;
-	padding-left: 13px;
+    font-size: 30px !important;
+    line-height: 32px !important;
+    margin-bottom: 7px !important;
+    padding-left: 13px;
 }
 
 .retourAccueil500 {
-	line-height: 250px;
+    line-height: 250px;
 }
 
 .wrapperAccessDenied {
-	padding-top: 250px;
-	position: relative !important;
-	text-align: center;
+    padding-top: 250px;
+    position: relative !important;
+    text-align: center;
 }
 
 .blockAccessDenied {
-	display: block;
-	left: 245px;
-	position: absolute;
-	text-align: inherit;
-	top: 56px;
+    display: block;
+    left: 245px;
+    position: absolute;
+    text-align: inherit;
+    top: 56px;
 }
 
 .titleAccessDenied {
-	font-size: 30px !important;
-	line-height: 32px !important;
-	margin-bottom: 7px !important;
-	padding-left: 13px;
+    font-size: 30px !important;
+    line-height: 32px !important;
+    margin-bottom: 7px !important;
+    padding-left: 13px;
 }
 
 .wrapperExpiree {
-	padding-top: 250px;
-	position: relative !important;
-	text-align: center;
+    padding-top: 250px;
+    position: relative !important;
+    text-align: center;
 }
 
 .blockExpiree {
-	display: block;
-	left: 335px;
-	position: absolute;
-	text-align: inherit;
-	top: 56px;
+    display: block;
+    left: 335px;
+    position: absolute;
+    text-align: inherit;
+    top: 56px;
 }
 
 .titleExpiree {
-	font-size: 30px !important;
-	line-height: 32px !important;
-	margin-bottom: 7px !important;
-	padding-left: 13px;
+    font-size: 30px !important;
+    line-height: 32px !important;
+    margin-bottom: 7px !important;
+    padding-left: 13px;
 }
+
 /* Footer menu */
 .footer_line {
-	padding-bottom: 20px;
+    padding-bottom: 20px;
 }
 
 .footer_menu {
-	display: inline-block;
-	font-size: 14px;
-	line-height: 16px;
-	padding: 21px 0 23px;
-	margin-left: -120px;
-	text-align: center;
+    display: inline-block;
+    font-size: 14px;
+    line-height: 16px;
+    padding: 21px 0 23px;
+    margin-left: -120px;
+    text-align: center;
 }
 
 .footer_menu .item_list li {
-	display: inline-block;
-	cursor: pointer;
-	border-right: solid grey 1px;
-	padding-right: 10px;
-	padding-left: 5px;
+    display: inline-block;
+    cursor: pointer;
+    border-right: solid grey 1px;
+    padding-right: 10px;
+    padding-left: 5px;
 }
 
 .footer_menu .item_list li:last-child {
-	border-right: 0;
-	padding-right: 0;
+    border-right: 0;
+    padding-right: 0;
 }
 
-@media ( max-width : 768px) {
-	.footer_menu {
-		display: block;
-		margin-left: 0;
-	}
+@media ( max-width: 768px) {
+    .footer_menu {
+        display: block;
+        margin-left: 0;
+    }
 }
 
 #iconConnected {
-	font-family: icomoon !important;
+    font-family: icomoon !important;
 }
 
 /* Custom CSS FuelUX */
 .fuelux .wizard ul li:before {
-	content: "";
-	font-size: 13px;
+    content: "";
+    font-size: 13px;
 }
 
 .fuelux .wizard ul li {
-	font-size: 13px;
+    font-size: 13px;
 }
 
 /* MENU SUPERIEUR */
 .menu a {
-	text-transform: uppercase !important;
-	cursor: pointer;
+    text-transform: uppercase !important;
+    cursor: pointer;
 }
 
 .menu p {
-	color: #666666;
-	display: block;
-	font-size: 13px;
-	font-weight: 600;
-	line-height: 15px;
-	margin-top: -8px;
+    color: #666666;
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 15px;
+    margin-top: -8px;
 }
 
 .menu .header.ico {
-	font-size: 18px;
-	margin-right: 6px;
+    font-size: 18px;
+    margin-right: 6px;
 }
 
-.menu .callus>p {
-	text-align: right;
+.menu .callus > p {
+    text-align: right;
 }
 
 /* CONTACT */
 .feedback_form .btn {
-	font-size: 14px;
-	padding: 7px;
+    font-size: 14px;
+    padding: 7px;
 }
 
 /* Menu */
 #ulMenu {
-	padding: 5px 0 5px;
-	content: "";
+    padding: 5px 0 5px;
+    content: "";
 }
 
 #ulMenu li:BEFORE {
-	content: "";
+    content: "";
 }
 
 #ulMenu li {
-	padding: 0 0 0 0px;
+    padding: 0 0 0 0px;
 }
 
 /* Espace client - mes devis */
 #divInfoClientContenant {
-	text-align: center;
+    text-align: center;
 }
 
 #divInfoClientContenu {
-	display: inline-block;
+    display: inline-block;
 }
 
 #divInfoClientContenu div {
-	padding-top: 18px;
+    padding-top: 18px;
 }
 
 #btnDonnezAvis {
-	font-size: 20px;
-	padding: 10px;
+    font-size: 20px;
+    padding: 10px;
 }
 
 .iconsMesDevis {
-	font-size: 15px;
-	margin-right: 5px;
+    font-size: 15px;
+    margin-right: 5px;
 }
 
 .badgeMesdevis {
-	vertical-align: bottom !important;
+    vertical-align: bottom !important;
 }
 
 .promoMesDevis {
-	padding-top: 52px;
+    padding-top: 52px;
 }
 
 .iconNotif {
-	font-size: 16px;
+    font-size: 16px;
 }
 
 .td-IconNotif {
-	width: 10px;
+    width: 10px;
 }
 
-.progress-mes-annonces{
-	float: left;
-	width: 50%;
-	margin-right: 10px;
+.progress-mes-annonces {
+    float: left;
+    width: 50%;
+    margin-right: 10px;
 }
 
-.annonce-list{
-	cursor: pointer;
+.annonce-list {
+    cursor: pointer;
 }
 
 /* Mon profil */
 #infoPerso {
-	padding-bottom: 80px;
+    padding-bottom: 80px;
 }
 
-.iconMonProfil{
-	clear: both;
-	float: left;
-	width: 43px;
-	margin-right: 20px;
+.iconMonProfil {
+    clear: both;
+    float: left;
+    width: 43px;
+    margin-right: 20px;
 }
 
-#infoNomClient{
-	padding-bottom: 20px;
+#infoNomClient {
+    padding-bottom: 20px;
 }
 
-#nbTravauxRealisesLbl{
-	margin-top: 10px;
+#nbTravauxRealisesLbl {
+    margin-top: 10px;
 }
 
 .raterContainer div div {
-	font-size: 20px;
-	width: 24px;
-	vertical-align: sub !important;
+    font-size: 20px;
+    width: 24px;
+    vertical-align: sub !important;
 }
 
 .avisRater {
-	float: left;
-	padding-right: 10px;
+    float: left;
+    padding-right: 10px;
 }
 
-#avisClientContainer{
-	width: 265px;
-	float: left;
-	margin-right: 30px;
+#avisClientContainer {
+    width: 265px;
+    float: left;
+    margin-right: 30px;
 }
 
 .commentaireRater {
-	padding-top: 2px;
-	font-size: 15px;
-	font-weight: bold;
+    padding-top: 2px;
+    font-size: 15px;
+    font-weight: bold;
 }
 
 .nomEntreprise {
-	clear: both;
-	padding-top: 11px;
-	font-weight: bold;
+    clear: both;
+    padding-top: 11px;
+    font-weight: bold;
 }
 
-#travauxEffectuesContainer{
-	padding-top: 45px;
-	clear: both;
+#travauxEffectuesContainer {
+    padding-top: 45px;
+    clear: both;
 }
 
-#generalContainerAvis{
-	margin-top: 20px;
+#generalContainerAvis {
+    margin-top: 20px;
 }
 
 /* Espace client - annonce */
-#containerInformationsAnnonce{
-	padding-top: 25px;
+#containerInformationsAnnonce {
+    padding-top: 25px;
 }
 
-.containerGlyph{
-	float: left;
+.containerGlyph {
+    float: left;
 }
 
-.glyphAnnonce{
-	font-size: 26px;
+.glyphAnnonce {
+    font-size: 26px;
 }
 
-.labelAnnonce{
-	padding-left: 20px; 
-	float: left; 
-	padding-right: 5px; 
-	padding-top: 7px;
-}
-
-.labelAnnonce-icon8{
-    padding-left: 9px; 
-    float: left; 
-    padding-right: 5px; 
+.labelAnnonce {
+    padding-left: 20px;
+    float: left;
+    padding-right: 5px;
     padding-top: 7px;
 }
 
-#categorieLabelSpace{
-	float: left;
-	padding-top: 7px;
+.labelAnnonce-icon8 {
+    padding-left: 9px;
+    float: left;
+    padding-right: 5px;
+    padding-top: 7px;
 }
 
-#sousCategorieLabel{
-	padding-top: 7px;
+#categorieLabelSpace {
+    float: left;
+    padding-top: 7px;
 }
 
-.containerInformationAnnonce{
-	padding-top: 10px;
+#sousCategorieLabel {
+    padding-top: 7px;
 }
 
-.containerEntrepriseSelectionnee{
-	padding-top: 10px;
-	clear: both;
+.containerInformationAnnonce {
+    padding-top: 10px;
 }
 
-.informationAnnonce{
-	padding-left: 20px; 
-	padding-top: 7px;
+.containerEntrepriseSelectionnee {
+    padding-top: 10px;
+    clear: both;
 }
 
-#containerPhoto{
-	padding-top: 40px;
+.informationAnnonce {
+    padding-left: 20px;
+    padding-top: 7px;
 }
 
-.containerInfo{
-	padding-top: 10px;
+#containerPhoto {
+    padding-top: 40px;
 }
 
-.contactInfo{
-	padding-left: 33px; 
-	padding-right: 5px;
+.containerInfo {
+    padding-top: 10px;
 }
 
-.sidebarRightWithPaddingTop{
-	padding-left: 33px; 
-	padding-right: 5px;
-	padding-top: 7px;
+.contactInfo {
+    padding-left: 33px;
+    padding-right: 5px;
 }
 
-#containerActions{
-	padding-bottom: 20px;
+.sidebarRightWithPaddingTop {
+    padding-left: 33px;
+    padding-right: 5px;
+    padding-top: 7px;
 }
 
-.containerAction{
-	padding-top: 10px;
+#containerActions {
+    padding-bottom: 20px;
 }
 
-.actionUser{
-	padding-left: 33px; 
-	padding-right: 5px;
-	padding-top: 7px;
+.containerAction {
+    padding-top: 10px;
 }
 
-.imgEntreprise{
-	width: 40px;
-	padding-top: 4px;
+.actionUser {
+    padding-left: 33px;
+    padding-right: 5px;
+    padding-top: 7px;
 }
 
-.labelEntreprise{
-	padding-top: 15px; 
-	padding-left: 10px;
-	display: inline-block;
+.imgEntreprise {
+    width: 40px;
+    padding-top: 4px;
 }
 
-.containerAcceptDevis{
-	padding-top: 6px;
+.labelEntreprise {
+    padding-top: 15px;
+    padding-left: 10px;
+    display: inline-block;
 }
 
-.linkAcceptDevis{ 
-	display: inline-block;
-	vertical-align: text-bottom;
-	padding-top: 10px;
+.containerAcceptDevis {
+    padding-top: 6px;
 }
 
-.containerLinkRefuser{
-	padding-left: 10px;
+.linkAcceptDevis {
+    display: inline-block;
+    vertical-align: text-bottom;
+    padding-top: 10px;
 }
 
-.menuEntrepriseInscrite{
-	float: left;
+.containerLinkRefuser {
+    padding-left: 10px;
 }
 
-.lienMenuEntrepriseInscrite{
-	padding-left: 13px; 
-	vertical-align: middle; 
-	padding-top: 10px; 
-	display: inline-block;
+.menuEntrepriseInscrite {
+    float: left;
 }
 
-.containerLienDevisEntreprise{
-	padding-left: 8px; 
-	padding-right: 7px;
+.lienMenuEntrepriseInscrite {
+    padding-left: 13px;
+    vertical-align: middle;
+    padding-top: 10px;
+    display: inline-block;
 }
 
-#iconStarMenuEntrepriseSelection{
-	float: left; 
-	padding-top: 5px;
+.containerLienDevisEntreprise {
+    padding-left: 8px;
+    padding-right: 7px;
 }
 
-#labelEntrepriseChoisi{
-	padding-top: 10px; 
-	float: left; 
-	padding-left:15px; 
-	padding-top: 10px;
+#iconStarMenuEntrepriseSelection {
+    float: left;
+    padding-top: 5px;
 }
 
-#lienOuiSelectionEntreprise{
-	padding-left: 5px;
+#labelEntrepriseChoisi {
+    padding-top: 10px;
+    float: left;
+    padding-left: 15px;
+    padding-top: 10px;
 }
 
-.menuEntrepriseSelectionnee{
-	float: left;
-	padding-top: 5px;
-	
+#lienOuiSelectionEntreprise {
+    padding-left: 5px;
 }
 
-#galleriePhotoAnnonce{
-	padding-left: 2px;
+.menuEntrepriseSelectionnee {
+    float: left;
+    padding-top: 5px;
+
 }
 
-#aucunePhoto{
-	padding-bottom: 20px;
-	padding-left: 5px;
+#galleriePhotoAnnonce {
+    padding-left: 2px;
+}
+
+#aucunePhoto {
+    padding-bottom: 20px;
+    padding-left: 5px;
 }
 
 /* Notation Modal */
-#notation-perf{
-	font-size: 26px;
-	padding-right: 9px;
+#notation-perf {
+    font-size: 26px;
+    padding-right: 9px;
 }
 
-#performanceGlobale{
-	vertical-align: super;
+#performanceGlobale {
+    vertical-align: super;
 }
 
-#rater{
-	padding-top: 3px;
+#rater {
+    padding-top: 3px;
 }
 
-#notation-commentaire{
-	font-size: 26px;
-	padding-right: 24px;
+#notation-commentaire {
+    font-size: 26px;
+    padding-right: 24px;
 }
 
-#commentaireNotation{
-	vertical-align: sub;
+#commentaireNotation {
+    vertical-align: sub;
 }
 
-#textAreaCommentaireNotation{
-	width: 258px;
-	height: 90px;
-	margin-top: 5px;
+#textAreaCommentaireNotation {
+    width: 258px;
+    height: 90px;
+    margin-top: 5px;
+}
+
+#containerEnvoiAvis {
+    padding-left: 39px;
 }
 
 /* Modifier annonce */
-#btnAjoutPhoto{
-	float: right;
-	margin-top: 10px;
+#btnAjoutPhoto {
+    float: right;
+    margin-top: 10px;
 }
 
-.img-ratio{
-	width: 200px;
-	height: 135px;
+.img-ratio {
+    width: 200px;
+    height: 135px;
 }

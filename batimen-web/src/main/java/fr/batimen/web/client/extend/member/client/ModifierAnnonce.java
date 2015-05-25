@@ -17,7 +17,6 @@ import fr.batimen.web.client.component.Commentaire;
 import fr.batimen.web.client.component.ContactezNous;
 import fr.batimen.web.client.component.PhotosContainer;
 import fr.batimen.web.client.component.Profil;
-import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.web.client.event.ModificationAnnonceEvent;
 import fr.batimen.web.client.extend.connected.Annonce;
 import fr.batimen.web.client.extend.nouveau.devis.Etape3AnnonceForm;
@@ -75,7 +74,7 @@ public class ModifierAnnonce extends MasterPage {
 
         if (annonceAffichageDTO == null
                 || !annonceAffichageDTO.getAnnonce().getEtatAnnonce().equals(EtatAnnonce.DESACTIVE)
-                || !annonceAffichageDTO.getAnnonce().getEtatAnnonce().equals(EtatAnnonce.A_NOTER)
+                || !annonceAffichageDTO.getAnnonce().getEtatAnnonce().equals(EtatAnnonce.DONNER_AVIS)
                 || !annonceAffichageDTO.getAnnonce().getEtatAnnonce().equals(EtatAnnonce.SUPPRIMER)
                 || !annonceAffichageDTO.getAnnonce().getEtatAnnonce().equals(EtatAnnonce.TERMINER)) {
             this.setResponsePage(MesAnnonces.class);

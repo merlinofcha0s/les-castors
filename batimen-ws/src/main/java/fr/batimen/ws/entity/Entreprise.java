@@ -306,24 +306,4 @@ public class Entreprise extends AbstractEntity implements Serializable {
         }
         return false;
     }
-
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("Entreprise{");
-        sb.append("id=").append(id);
-        sb.append(", nomComplet='").append(nomComplet).append('\'');
-        sb.append(", statutJuridique=").append(statutJuridique);
-        sb.append(", dateCreation=").append(dateCreation);
-        sb.append(", siret='").append(siret).append('\'');
-        sb.append(", nbEmployees=").append(nbEmployees);
-        sb.append(", logo='").append(logo).append('\'');
-        sb.append(", specialite='").append(specialite).append('\'');
-        sb.append(", artisan=").append(artisan);
-        sb.append(", paiement=").append(paiement);
-        sb.append(", adresse=").append(adresse);
-        sb.append(", annonceEntrepriseSelecionnee=").append(annonceEntrepriseSelecionnee);
-        sb.append(", categoriesMetier=").append(categoriesMetier);
-        sb.append('}');
-        return sb.toString();
-    }
 }

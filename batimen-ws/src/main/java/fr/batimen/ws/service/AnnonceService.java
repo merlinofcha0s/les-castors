@@ -215,6 +215,7 @@ public class AnnonceService {
         nouvelleAnnonce.setHashID(HashHelper.hashID(nouvelleAnnonce.getId(), salt));
     }
 
+    @TransactionAttribute(TransactionAttributeType.MANDATORY)
     public AnnonceAffichageDTO doMappingAnnonceAffichageDTO(Annonce annonce, AnnonceAffichageDTO annonceAffichageDTO,
             Boolean isArtisan, Boolean isArtisanInscrit, Boolean isAdmin) {
 

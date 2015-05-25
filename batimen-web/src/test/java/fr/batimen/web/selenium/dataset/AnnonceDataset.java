@@ -34,7 +34,7 @@ public class AnnonceDataset {
                     CategorieLoader.ELECTRICITE_CODE, "Installation électrique", 0, TypeContact.EMAIL, "lolxd", "titi",
                     TypeTravaux.NEUF, 200015, 100001, null, null)
             .values(200013, "2014-01-10", "2014-01-10", DelaiIntervention.LE_PLUS_RAPIDEMENT_POSSIBLE,
-                    "Construction compliqué qui necessite des connaissance en geologie", EtatAnnonce.A_NOTER,
+                    "Construction compliqué qui necessite des connaissance en geologie", EtatAnnonce.DONNER_AVIS,
                     CategorieLoader.ELECTRICITE_CODE, "Installation électrique", 0, TypeContact.EMAIL, "lolmdrxD",
                     "titi", TypeTravaux.NEUF, 200016, 100001, 200009, null).build();
 

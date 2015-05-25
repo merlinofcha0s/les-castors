@@ -38,9 +38,8 @@ import fr.batimen.web.client.master.MasterPage;
 /**
  * Page ou l'utilisateur pourra consulter son compte ainsi que l'avancement de
  * ces differents boulot/devis/notes, etc
- * 
+ *
  * @author Casaucau Cyril
- * 
  */
 
 public final class MesAnnonces extends MasterPage {
@@ -171,6 +170,15 @@ public final class MesAnnonces extends MasterPage {
             LOGGER.debug("Init du repeater des annonces");
         }
 
+        //Pas afficher si c'est un artisan
+        Label nbDevisHeader = new Label("nbDevisHeader", "Nb devis"){
+
+            @Override
+            public boolean isVisible() {
+                return rolesUtils.checkRoles(TypeCompte.CLIENT);
+            }
+        };
+
         Label nbAnnonce = new Label("nbAnnonce", annonces.size());
 
         ListView<AnnonceDTO> listViewAnnonce = new ListView<AnnonceDTO>("listAnnonce", annonces) {
@@ -203,7 +211,13 @@ public final class MesAnnonces extends MasterPage {
                 sizeCSSProgressBar.append(annonce.getEtatAnnonce().getPercentage()).append(";");
                 progressBar.add(new AttributeModifier("style", sizeCSSProgressBar.toString()));
 
-                Label nbDevis = new Label("nbDevis", annonce.getNbDevis());
+                Label nbDevis = new Label("nbDevis", annonce.getNbDevis()){
+
+                    @Override
+                    public boolean isVisible() {
+                        return rolesUtils.checkRoles(TypeCompte.CLIENT);
+                    }
+                };
                 Label etatAnnonce = new Label("etatAnnonce", annonce.getEtatAnnonce().getType());
 
                 LinkLabel voirAnnonce = new LinkLabel("voirAnnonce", voirAnnonceModel) {
@@ -232,8 +246,7 @@ public final class MesAnnonces extends MasterPage {
             }
         };
 
-        this.add(nbAnnonce);
-        this.add(listViewAnnonce);
+        this.add(nbAnnonce, nbDevisHeader, listViewAnnonce);
     }
 
     private void loadInfosMesAnnonces() {
@@ -251,56 +264,56 @@ public final class MesAnnonces extends MasterPage {
         notifications = mesInfos.getNotifications();
     }
 
-    private String parQui(NotificationDTO notificationDTO){
-        if(notificationDTO.getTypeNotification().getParQui().equals(TypeCompte.ARTISAN)){
+    private String parQui(NotificationDTO notificationDTO) {
+        if (notificationDTO.getTypeNotification().getParQui().equals(TypeCompte.ARTISAN)) {
             return notificationDTO.getNomEntreprise();
-        } else if(notificationDTO.getTypeNotification().getParQui().equals(TypeCompte.CLIENT)){
+        } else if (notificationDTO.getTypeNotification().getParQui().equals(TypeCompte.CLIENT)) {
             return notificationDTO.getClientLogin();
         }
         return "";
     }
 
-    private void onclickParQuiLink(NotificationDTO notificationDTO){
-        if(notificationDTO.getTypeNotification().getParQui().equals(TypeCompte.ARTISAN)){
+    private void onclickParQuiLink(NotificationDTO notificationDTO) {
+        if (notificationDTO.getTypeNotification().getParQui().equals(TypeCompte.ARTISAN)) {
             // URLEncoder.encode(notification.getArtisanNotifier().getEntreprise().getNomComplet(),
             // "UTF-8")
             // TODO A Completer quand la page entreprise sera prete
-        } else if(notificationDTO.getTypeNotification().getParQui().equals(TypeCompte.CLIENT)){
+        } else if (notificationDTO.getTypeNotification().getParQui().equals(TypeCompte.CLIENT)) {
             PageParameters parameters = new PageParameters();
             parameters.add("login", notificationDTO.getClientLogin());
             this.setResponsePage(MonProfil.class, parameters);
         }
     }
 
-    private String getObjetNotification(NotificationDTO notificationDTO){
-        if(notificationDTO.getTypeNotification().getParQui().equals(TypeCompte.ARTISAN)){
+    private String getObjetNotification(NotificationDTO notificationDTO) {
+        if (notificationDTO.getTypeNotification().getParQui().equals(TypeCompte.ARTISAN)) {
             return "annonce";
-        } else if(notificationDTO.getTypeNotification().getParQui().equals(TypeCompte.CLIENT)){
+        } else if (notificationDTO.getTypeNotification().getParQui().equals(TypeCompte.CLIENT)) {
             return "entreprise";
-        }else{
+        } else {
             return "";
         }
     }
 
-    private void onclickObjetNotification(NotificationDTO notificationDTO){
-        if(notificationDTO.getTypeNotification().getParQui().equals(TypeCompte.ARTISAN)){
+    private void onclickObjetNotification(NotificationDTO notificationDTO) {
+        if (notificationDTO.getTypeNotification().getParQui().equals(TypeCompte.ARTISAN)) {
             PageParameters params = new PageParameters();
             params.add(ParamsConstant.ID_ANNONCE_PARAM, notificationDTO.getHashIDAnnonce());
             this.setResponsePage(Annonce.class, params);
-        } else if(notificationDTO.getTypeNotification().getParQui().equals(TypeCompte.CLIENT)){
+        } else if (notificationDTO.getTypeNotification().getParQui().equals(TypeCompte.CLIENT)) {
             // TODO A Completer quand la page entreprise sera prete
         }
     }
 
-    private void calculModelLabelByTypeCompte(){
+    private void calculModelLabelByTypeCompte() {
         demandeDeDevisTitleModel = new Model<>();
         voirAnnonceModel = new Model<>();
         pasDeNotificationModel = new Model<>();
-        if(rolesUtils.checkRoles(TypeCompte.ARTISAN)){
+        if (rolesUtils.checkRoles(TypeCompte.ARTISAN)) {
             demandeDeDevisTitleModel.setObject("Les annonces où je suis inscris");
             voirAnnonceModel.setObject("Voir annonce");
             pasDeNotificationModel.setObject("Retrouvez ici toutes les notifications des annonces où vous êtes inscrit");
-        }else if(rolesUtils.checkRoles(TypeCompte.CLIENT)){
+        } else if (rolesUtils.checkRoles(TypeCompte.CLIENT)) {
             demandeDeDevisTitleModel.setObject("Mes annonces");
             voirAnnonceModel.setObject("Voir / modifier annonce");
             pasDeNotificationModel.setObject("Retrouvez ici toutes les notifications sur vos demandes de devis");
