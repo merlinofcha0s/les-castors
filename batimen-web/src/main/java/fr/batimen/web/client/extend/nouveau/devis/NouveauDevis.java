@@ -17,6 +17,7 @@ import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.http.WebResponse;
 import org.apache.wicket.request.resource.ContextRelativeResource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -91,6 +92,11 @@ public class NouveauDevis extends MasterPage {
     private final Link<String> contactezNous;
 
     private Etape etapeEncours;
+
+    public NouveauDevis(Etape etapeEncours){
+        this();
+        this.etapeEncours = etapeEncours;
+    }
 
     public NouveauDevis() {
         super("Nouveau devis", "devis batiment renovation", "Nouveau devis", true, "img/bg_title1.jpg");
@@ -251,6 +257,7 @@ public class NouveauDevis extends MasterPage {
         this();
         this.nouvelleAnnonce = creationAnnonce;
         try {
+            navigationWizard.setStep(etapeEncours.ordinal() + 1);
             changementEtape(creationAnnonce.getNumeroEtape());
         } catch (FrontEndException e) {
             if (LOGGER.isErrorEnabled()) {
@@ -403,13 +410,13 @@ public class NouveauDevis extends MasterPage {
                 nouvelleAnnonce.setDepartement(departementInt);
                 // On prepare le passage à l'etape suivante
                 nouvelleAnnonce.setNumeroEtape(2);
-                try {
+                /*try {
                     changementEtape(2);
                 } catch (FrontEndException e) {
                     if (LOGGER.isErrorEnabled()) {
                         LOGGER.error("Probleme frontend avec l'etape 2", e);
                     }
-                }
+                }*/
 
                 navigationWizard.setStep(etapeEncours.ordinal() + 1);
                 // Cas ou il y aurait un snake qui essaye de modifier la requete
@@ -422,8 +429,9 @@ public class NouveauDevis extends MasterPage {
                 feedBackPanelGeneral.getFeedbackMessages().clear();
             }
 
-            eventMapFrance.getTarget().add(containerGeneral);
-            eventMapFrance.getTarget().add(feedBackPanelGeneral);
+            //eventMapFrance.getTarget().add(containerGeneral);
+            //eventMapFrance.getTarget().add(feedBackPanelGeneral);
+            setResponsePage(new NouveauDevis(nouvelleAnnonce));
         }
 
         if (event.getPayload() instanceof CategorieEvent) {
