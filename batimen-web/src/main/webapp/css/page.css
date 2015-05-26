@@ -535,8 +535,8 @@ table tr td .error {
 }
 
 #btnDonnezAvis {
-    font-size: 20px;
-    padding: 10px;
+    font-size: 18px;
+    padding: 9px;
 }
 
 .iconsMesDevis {
@@ -825,4 +825,8 @@ table tr td .error {
 .img-ratio {
     width: 200px;
     height: 135px;
+}
+
+#votreAvisInteresse{
+    padding-top: 10px;
 }
