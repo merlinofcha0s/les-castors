@@ -1,21 +1,19 @@
 package fr.batimen.web.client.validator;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.apache.wicket.validation.IValidatable;
-import org.apache.wicket.validation.IValidator;
-
 import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.LoginDTO;
 import fr.batimen.web.app.security.Authentication;
 import fr.batimen.ws.client.service.UtilisateurServiceREST;
+import org.apache.wicket.validation.IValidatable;
+import org.apache.wicket.validation.IValidator;
+
+import javax.inject.Inject;
+import javax.inject.Named;
 
 /**
  * Verifie que le login en cours d'inscription n'est pas deja présent en BDD
- * 
+ *
  * @author Casaucau Cyril
- * 
  */
 @Named
 public class LoginUniquenessValidator extends AbstractUniquenessValidator implements IValidator<String> {
@@ -36,8 +34,11 @@ public class LoginUniquenessValidator extends AbstractUniquenessValidator implem
         ClientDTO clientChecked = utilisateurServiceREST.login(loginDTO);
 
         if (!clientChecked.getLogin().isEmpty()) {
-            ClientDTO infosClient = authentication.getCurrentUserInfo();
-            super.validateField(this, login, infosClient.getLogin());
+            if (authentication.isAuthenticated()) {
+                ClientDTO infosClient = authentication.getCurrentUserInfo();
+                super.validateField(this, login, infosClient.getLogin());
+            }
+            super.validateField(this, login, "");
         }
     }
 }
