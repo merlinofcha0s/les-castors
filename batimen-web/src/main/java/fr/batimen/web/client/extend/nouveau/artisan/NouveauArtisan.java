@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -28,9 +29,8 @@ import fr.batimen.ws.client.service.ArtisanServiceREST;
 
 /**
  * Page permettant d'enregistré un nouveau partenaire (artisan)
- * 
+ *
  * @author Casaucau Cyril
- * 
  */
 public class NouveauArtisan extends MasterPage {
 
@@ -44,29 +44,39 @@ public class NouveauArtisan extends MasterPage {
     private CreationPartenaireDTO nouveauPartenaire = new CreationPartenaireDTO();
 
     // Composant maitre
-    private final WebMarkupContainer masterContainer;
+    private WebMarkupContainer masterContainer;
 
     // Composants Généraux
     private NavigationWizard navigationWizard;
     // Composants étape 1
-    private final MapFrance carteFrance;
+    private MapFrance carteFrance;
 
     // Composant étape 2
-    private final Etape2PartenaireForm etape2PartenaireForm;
-    private final WebMarkupContainer containerEtape2;
+    private Etape2PartenaireForm etape2PartenaireForm;
+    private WebMarkupContainer containerEtape2;
 
     // Composant étape 3
-    private final Etape3Entreprise etape3Entreprise;
+    private Etape3Entreprise etape3Entreprise;
 
     // Composant étape 4
-    private final Etape4Confirmation etape4Confirmation;
+    private Etape4Confirmation etape4Confirmation;
 
     private Etape etapeEncours;
 
     public NouveauArtisan() {
         super("Inscription d'un nouveau partenaire qui effectuera les travaux chez un particulier",
                 "Artisan Rénovation Inscription", "Nouveau partenaire", true, "img/bg_title1.jpg");
+        initPage();
+    }
 
+    public NouveauArtisan(CreationPartenaireDTO nouveauPartenaire) {
+        super("Nouveau devis", "devis batiment renovation", "Nouveau devis", true, "img/bg_title1.jpg");
+        this.nouveauPartenaire = nouveauPartenaire;
+        //propertyModelNouvelleAnnonce = new CompoundPropertyModel<>(nouvelleAnnonce);
+        initPage();
+    }
+
+    private void initPage() {
         etapeEncours = Etape.ETAPE_1;
 
         masterContainer = new WebMarkupContainer("masterContainer");
@@ -82,7 +92,7 @@ public class NouveauArtisan extends MasterPage {
 
             /*
              * (non-Javadoc)
-             * 
+             *
              * @see org.apache.wicket.Component#isVisible()
              */
             @Override
@@ -102,7 +112,7 @@ public class NouveauArtisan extends MasterPage {
 
             /*
              * (non-Javadoc)
-             * 
+             *
              * @see org.apache.wicket.Component#isVisible()
              */
             @Override
@@ -121,7 +131,7 @@ public class NouveauArtisan extends MasterPage {
 
             /*
              * (non-Javadoc)
-             * 
+             *
              * @see org.apache.wicket.Component#isVisible()
              */
             @Override
@@ -138,7 +148,7 @@ public class NouveauArtisan extends MasterPage {
 
             /*
              * (non-Javadoc)
-             * 
+             *
              * @see org.apache.wicket.Component#isVisible()
              */
             @Override
@@ -156,6 +166,7 @@ public class NouveauArtisan extends MasterPage {
 
         try {
             changementEtape(nouveauPartenaire.getNumeroEtape());
+            navigationWizard.setStep(nouveauPartenaire.getNumeroEtape());
         } catch (FrontEndException e) {
             if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("Erreur lors du changment d'étape pendant la creation d'un nouveau partenaire", e);
@@ -183,31 +194,31 @@ public class NouveauArtisan extends MasterPage {
     private void changementEtape(Integer numeroEtape) throws FrontEndException {
         // On charge l'etape demandé grace au numero d'etape passé en parametre
         switch (numeroEtape) {
-        case 1:
-            loggerChangementEtape("Passage dans l'étape 1");
-            etapeEncours = Etape.ETAPE_1;
-            break;
-        case 2:
-            loggerChangementEtape("Passage dans l'étape 2");
-            etapeEncours = Etape.ETAPE_2;
-            break;
-        case 3:
-            loggerChangementEtape("Passage dans l'étape 3");
-            etapeEncours = Etape.ETAPE_3;
-            break;
-        case 4:
-            loggerChangementEtape("Passage dans l'étape 4");
-            etapeEncours = Etape.ETAPE_4;
-            // Appel du service d'enregistrement du nouveau partenaire
-            Integer retourService = creationPartenaire(nouveauPartenaire);
-            if (retourService == 0) {
-                etape4Confirmation.succesInscription();
-            } else {
-                etape4Confirmation.failureInscription();
-            }
-            break;
-        default:
-            throw new FrontEndException("Aucune étape du nouveau devis chargées, Situation Impossible");
+            case 1:
+                loggerChangementEtape("Passage dans l'étape 1");
+                etapeEncours = Etape.ETAPE_1;
+                break;
+            case 2:
+                loggerChangementEtape("Passage dans l'étape 2");
+                etapeEncours = Etape.ETAPE_2;
+                break;
+            case 3:
+                loggerChangementEtape("Passage dans l'étape 3");
+                etapeEncours = Etape.ETAPE_3;
+                break;
+            case 4:
+                loggerChangementEtape("Passage dans l'étape 4");
+                etapeEncours = Etape.ETAPE_4;
+                // Appel du service d'enregistrement du nouveau partenaire
+                Integer retourService = creationPartenaire(nouveauPartenaire);
+                if (retourService == 0) {
+                    etape4Confirmation.succesInscription();
+                } else {
+                    etape4Confirmation.failureInscription();
+                }
+                break;
+            default:
+                throw new FrontEndException("Aucune étape du nouveau devis chargées, Situation Impossible");
         }
     }
 
@@ -239,27 +250,15 @@ public class NouveauArtisan extends MasterPage {
             if (departementInt != null && departementInt > 0 && departementInt < 100) {
                 nouveauPartenaire.getAdresse().setDepartement(departementInt);
                 nouveauPartenaire.setNumeroEtape(2);
-                // SI c'est bon, on passe à l'etape 2
-                try {
-                    changementEtape(2);
-                } catch (FrontEndException e) {
-                    if (LOGGER.isErrorEnabled()) {
-                        LOGGER.error("Probleme frontend avec l'etape 2", e);
-                    }
-                }
-                // Sinon affichage retour sur le feedback panel
             } else {
                 feedBackPanelGeneral.error("Numéro de département incorrecte, veuillez recommencer");
             }
-
-            navigationWizard.setStep(nouveauPartenaire.getNumeroEtape());
 
             if (feedBackPanelGeneral.hasFeedbackMessage()) {
                 feedBackPanelGeneral.getFeedbackMessages().clear();
             }
 
-            eventMapFrance.getTarget().add(masterContainer);
-            eventMapFrance.getTarget().add(feedBackPanelGeneral);
+            setResponsePage(new NouveauArtisan(nouveauPartenaire));
         }
 
         // Catch de l'event de changement d'etape
@@ -268,44 +267,23 @@ public class NouveauArtisan extends MasterPage {
 
             // On extrait le numero de l'etape
             this.nouveauPartenaire = changementEtapeEvent.getNouveauPartenaire();
-            try {
-                changementEtape(nouveauPartenaire.getNumeroEtape());
-            } catch (FrontEndException e) {
-                if (LOGGER.isErrorEnabled()) {
-                    LOGGER.error("Probleme frontend avec l'etape " + nouveauPartenaire.getNumeroEtape(), e);
-                }
-            }
-
-            navigationWizard.setStep(nouveauPartenaire.getNumeroEtape());
 
             if (feedBackPanelGeneral.hasFeedbackMessage()) {
                 feedBackPanelGeneral.getFeedbackMessages().clear();
             }
 
-            AjaxRequestTarget targetChangementEtape = changementEtapeEvent.getTarget();
-            targetChangementEtape.add(feedBackPanelGeneral);
-            targetChangementEtape.add(masterContainer);
+            setResponsePage(new NouveauArtisan(nouveauPartenaire));
         }
 
         if (event.getPayload() instanceof CastorWizardEvent) {
             CastorWizardEvent castorWizardEvent = (CastorWizardEvent) event.getPayload();
             nouveauPartenaire.setNumeroEtape(Integer.valueOf(castorWizardEvent.getStepNumber()));
 
-            try {
-                changementEtape(nouveauPartenaire.getNumeroEtape());
-            } catch (FrontEndException e) {
-                if (LOGGER.isErrorEnabled()) {
-                    LOGGER.error("Probleme frontend avec l'etape " + nouveauPartenaire.getNumeroEtape(), e);
-                }
-            }
-
             if (feedBackPanelGeneral.hasFeedbackMessage()) {
                 feedBackPanelGeneral.getFeedbackMessages().clear();
             }
-            navigationWizard.setStep(nouveauPartenaire.getNumeroEtape());
-            // On dit a wicket de rafraichir ce panel avec la requete ajax
-            castorWizardEvent.getTarget().add(masterContainer);
-            castorWizardEvent.getTarget().add(feedBackPanelGeneral);
+
+            setResponsePage(new NouveauArtisan(nouveauPartenaire));
         }
     }
 }

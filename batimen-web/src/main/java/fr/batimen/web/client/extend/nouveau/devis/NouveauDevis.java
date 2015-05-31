@@ -412,17 +412,6 @@ public class NouveauDevis extends MasterPage {
                 nouvelleAnnonce.setDepartement(departementInt);
                 // On prepare le passage à l'etape suivante
                 nouvelleAnnonce.setNumeroEtape(2);
-                /*try {
-                    changementEtape(2);
-                } catch (FrontEndException e) {
-                    if (LOGGER.isErrorEnabled()) {
-                        LOGGER.error("Probleme frontend avec l'etape 2", e);
-                    }
-                }*/
-
-                //navigationWizard.setStep(etapeEncours.ordinal() + 1);
-                // Cas ou il y aurait un snake qui essaye de modifier la requete
-                // ajax pour injecter des données erronées
             } else {
                 feedBackPanelGeneral.error("Numéro de département incorrecte, veuillez recommencer");
             }
@@ -430,9 +419,6 @@ public class NouveauDevis extends MasterPage {
             if (feedBackPanelGeneral.hasFeedbackMessage()) {
                 feedBackPanelGeneral.getFeedbackMessages().clear();
             }
-
-            //eventMapFrance.getTarget().add(containerGeneral);
-            //eventMapFrance.getTarget().add(feedBackPanelGeneral);
             setResponsePage(new NouveauDevis(nouvelleAnnonce));
         }
 
@@ -442,22 +428,10 @@ public class NouveauDevis extends MasterPage {
             nouvelleAnnonce.setCategorieMetier(eventCategorie.getCategorieChoisie());
             // On set la prochaine etape
             nouvelleAnnonce.setNumeroEtape(3);
-            // On passe à l'etape suivante
-            /*try {
-                changementEtape(3);
-            } catch (FrontEndException e) {
-                if (LOGGER.isErrorEnabled()) {
-                    LOGGER.error("Probleme frontend avec l'etape 3", e);
-                }
-            }*/
-            //navigationWizard.setStep(etapeEncours.ordinal() + 1);
 
             if (feedBackPanelGeneral.hasFeedbackMessage()) {
                 feedBackPanelGeneral.getFeedbackMessages().clear();
             }
-            // On dit a wicket de rafraichir ce panel avec la requete ajax
-            //eventCategorie.getTarget().add(containerGeneral);
-            //eventCategorie.getTarget().add(feedBackPanelGeneral);
             setResponsePage(new NouveauDevis(nouvelleAnnonce));
         }
 
@@ -471,22 +445,10 @@ public class NouveauDevis extends MasterPage {
                 nouvelleAnnonce.getClient().setPassword(HashHelper.hashScrypt(password));
             }
 
-            /*try {
-                changementEtape(nouvelleAnnonce.getNumeroEtape());
-            } catch (FrontEndException e) {
-                if (LOGGER.isErrorEnabled()) {
-                    LOGGER.error("Probleme frontend avec l'etape " + nouvelleAnnonce.getNumeroEtape(), e);
-                }
-            }*/
-
             if (feedBackPanelGeneral.hasFeedbackMessage()) {
                 feedBackPanelGeneral.getFeedbackMessages().clear();
             }
 
-            //navigationWizard.setStep(etapeEncours.ordinal() + 1);
-            // On dit a wicket de rafraichir ce panel avec la requete ajax
-            //eventChangementEtapeClient.getTarget().add(containerGeneral);
-            //eventChangementEtapeClient.getTarget().add(feedBackPanelGeneral);
             setResponsePage(new NouveauDevis(nouvelleAnnonce));
         }
 
@@ -494,22 +456,10 @@ public class NouveauDevis extends MasterPage {
             CastorWizardEvent castorWizardEvent = (CastorWizardEvent) event.getPayload();
             nouvelleAnnonce.setNumeroEtape(Integer.valueOf(castorWizardEvent.getStepNumber()));
 
-            /*try {
-                changementEtape(nouvelleAnnonce.getNumeroEtape());
-            } catch (FrontEndException e) {
-                if (LOGGER.isErrorEnabled()) {
-                    LOGGER.error("Probleme frontend avec l'etape " + nouvelleAnnonce.getNumeroEtape(), e);
-                }
-            }*/
-
             if (feedBackPanelGeneral.hasFeedbackMessage()) {
                 feedBackPanelGeneral.getFeedbackMessages().clear();
             }
 
-            //navigationWizard.setStep(nouvelleAnnonce.getNumeroEtape());
-            // On dit a wicket de rafraichir ce panel avec la requete ajax
-            //castorWizardEvent.getTarget().add(containerGeneral);
-            //castorWizardEvent.getTarget().add(feedBackPanelGeneral);
             setResponsePage(new NouveauDevis(nouvelleAnnonce));
         }
 
