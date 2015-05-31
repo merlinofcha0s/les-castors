@@ -494,22 +494,23 @@ public class NouveauDevis extends MasterPage {
             CastorWizardEvent castorWizardEvent = (CastorWizardEvent) event.getPayload();
             nouvelleAnnonce.setNumeroEtape(Integer.valueOf(castorWizardEvent.getStepNumber()));
 
-            try {
+            /*try {
                 changementEtape(nouvelleAnnonce.getNumeroEtape());
             } catch (FrontEndException e) {
                 if (LOGGER.isErrorEnabled()) {
                     LOGGER.error("Probleme frontend avec l'etape " + nouvelleAnnonce.getNumeroEtape(), e);
                 }
-            }
+            }*/
 
             if (feedBackPanelGeneral.hasFeedbackMessage()) {
                 feedBackPanelGeneral.getFeedbackMessages().clear();
             }
 
-            navigationWizard.setStep(nouvelleAnnonce.getNumeroEtape());
+            //navigationWizard.setStep(nouvelleAnnonce.getNumeroEtape());
             // On dit a wicket de rafraichir ce panel avec la requete ajax
-            castorWizardEvent.getTarget().add(containerGeneral);
-            castorWizardEvent.getTarget().add(feedBackPanelGeneral);
+            //castorWizardEvent.getTarget().add(containerGeneral);
+            //castorWizardEvent.getTarget().add(feedBackPanelGeneral);
+            setResponsePage(new NouveauDevis(nouvelleAnnonce));
         }
 
     }

@@ -2,6 +2,7 @@ package fr.batimen.web.selenium.common;
 
 import static com.ninja_squad.dbsetup.Operations.deleteAllFrom;
 import static com.ninja_squad.dbsetup.Operations.insertInto;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -11,10 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.junit.After;
 import org.junit.Before;
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.NoAlertPresentException;
-import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
@@ -181,8 +179,11 @@ public abstract class AbstractITTest {
     }
 
     protected void connexionApplication(String username, String password, Boolean isVerifLinkMonCompte) {
+        WebElement checkConditionAnnoncePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.presenceOfElementLocated((By.id("connexionlbl"))));
+        assertNotNull(checkConditionAnnoncePresent);
         driver.findElement(By.id("connexionlbl")).click();
-        Boolean checkCondition = (new WebDriverWait(driver, 5)).until(ExpectedConditions
+        Boolean checkCondition = (new WebDriverWait(driver, TEMPS_ATTENTE_AJAX)).until(ExpectedConditions
                 .textToBePresentInElementLocated(By.id("myModalLabel"), "Connexion à l'espace client / artisan"));
         assertTrue(checkCondition);
         driver.findElement(By.id("loginModal")).click();
