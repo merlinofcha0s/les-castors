@@ -2,6 +2,8 @@ package fr.batimen.web.client.modal;
 
 import javax.inject.Inject;
 
+import fr.batimen.dto.enums.TypeCompte;
+import fr.batimen.web.app.security.RolesUtils;
 import fr.batimen.web.client.extend.member.client.MesAnnonces;
 import fr.batimen.web.client.extend.nouveau.devis.NouveauDevis;
 import org.apache.wicket.AttributeModifier;
@@ -37,6 +39,9 @@ public class AuthentificationModal extends ModalCastor {
 
     @Inject
     private Authentication authentication;
+
+    @Inject
+    private RolesUtils rolesUtils;
 
     private StatelessForm<AuthentificationModal> loginForm;
     private TextField<String> login;
@@ -87,7 +92,7 @@ public class AuthentificationModal extends ModalCastor {
 
                     // Si il voulait aller sur une page en particulier, on
                     // le redirige vers celle ci
-                    if(getPage().getClass().equals(NouveauDevis.class)){
+                    if(getPage().getClass().equals(NouveauDevis.class) || rolesUtils.checkRoles(TypeCompte.ADMINISTRATEUR)){
                         continueToOriginalDestination();
                     } else {
                         this.setResponsePage(MesAnnonces.class);

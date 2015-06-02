@@ -261,6 +261,12 @@
     margin-bottom: 30px;
 }
 
+.nouveauPartenaire-btn {
+    padding-top: 20px;
+    margin-bottom: 30px;
+    padding-left: 11px;
+}
+
 .font-glyph-entreprise {
     font-size: 25px;
 }

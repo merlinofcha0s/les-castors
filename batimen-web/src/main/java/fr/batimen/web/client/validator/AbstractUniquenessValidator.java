@@ -1,5 +1,6 @@
 package fr.batimen.web.client.validator;
 
+import fr.batimen.dto.ClientDTO;
 import org.apache.shiro.SecurityUtils;
 import org.apache.wicket.validation.IValidatable;
 import org.apache.wicket.validation.IValidator;

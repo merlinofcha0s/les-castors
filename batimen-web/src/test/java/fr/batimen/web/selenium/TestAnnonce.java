@@ -311,8 +311,10 @@ public class TestAnnonce extends AbstractITTest {
                 By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[4]/div/div/div/div[2]/div[2]/div/div[3]/a"))
                 .click();
 
+        Thread.sleep(1000);
+
         WebElement checkElementEnvoyerDevisPresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
-                .until(ExpectedConditions.visibilityOfElementLocated(By.id("notationArtisanModal")));
+                .until(ExpectedConditions.presenceOfElementLocated(By.id("donnerAvisArtisanModal")));
         assertNotNull(checkElementEnvoyerDevisPresent);
 
         // Clique sur la première étoile

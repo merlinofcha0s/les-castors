@@ -40,7 +40,7 @@ public class ModifierMonEntreprise extends AbstractITTest {
      * Cas de test : L'artisan se rend dans son espace et modifie les informations de son entreprise.
      */
     @Test
-    public void modifierInformationMonEntreprise() {
+    public void modifierInformationMonEntreprise() throws InterruptedException {
         (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX)).until(ExpectedConditions
                 .elementToBeClickable(By.xpath("//label[@id='containerDecorationMaconnerie']/span")));
         driver.findElement(By.xpath("//label[@id='containerDecorationMaconnerie']/span")).click();
@@ -48,6 +48,7 @@ public class ModifierMonEntreprise extends AbstractITTest {
         driver.findElement(By.id("nbEmployeField")).clear();
         driver.findElement(By.id("nbEmployeField")).sendKeys("20");
         driver.findElement(By.id("dateCreationField")).click();
+        if(!browser.equals("ie"))
         driver.findElement(By.linkText("29")).click();
         driver.findElement(By.id("codePostalField")).clear();
         driver.findElement(By.id("codePostalField")).sendKeys("06600");

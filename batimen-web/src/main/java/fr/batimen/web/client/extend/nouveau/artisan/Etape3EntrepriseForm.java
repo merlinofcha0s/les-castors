@@ -146,14 +146,14 @@ public class Etape3EntrepriseForm extends Form<CreationPartenaireDTO> {
         departementField.add(new ErrorHighlightBehavior());
         departementField.add(new RequiredBorderBehaviour());
 
-        if(isInModification){
+        if (isInModification) {
             nomComplet.setEnabled(false);
             statutJuridique.setEnabled(false);
             siret.setEnabled(false);
             departementField.setEnabled(false);
         }
 
-        AjaxLink<Void> etapePrecedenteNouveauArtisan3 = new AjaxLink<Void>("etapePrecedenteNouveauArtisan3") {
+        final AjaxLink<Void> etapePrecedenteNouveauArtisan3 = new AjaxLink<Void>("etapePrecedenteNouveauArtisan3") {
 
             private static final long serialVersionUID = 1L;
 
@@ -218,6 +218,11 @@ public class Etape3EntrepriseForm extends Form<CreationPartenaireDTO> {
                 if (isInModification) {
                     StringBuilder classCSS = new StringBuilder(tag.getAttribute("class"));
                     classCSS.append(" offset3");
+                    tag.remove("class");
+                    tag.put("class", classCSS.toString());
+                }else{
+                    StringBuilder classCSS = new StringBuilder(tag.getAttribute("class"));
+                    classCSS.append(" nouveauPartenaire-btn");
                     tag.remove("class");
                     tag.put("class", classCSS.toString());
                 }

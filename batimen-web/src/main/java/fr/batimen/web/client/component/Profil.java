@@ -73,6 +73,9 @@ public class Profil extends Panel {
         } else if (rolesUtils.checkRoles(TypeCompte.CLIENT)) {
             voirProfilModel.setObject("Voir le profil");
             modifierProfilModel.setObject("Modifier le profil");
+        } else {
+            voirProfilModel.setObject("Voir le profil");
+            modifierProfilModel.setObject("Modifier le profil");
         }
     }
 }
