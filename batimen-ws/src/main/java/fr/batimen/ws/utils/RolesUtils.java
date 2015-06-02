@@ -9,6 +9,11 @@ import org.slf4j.LoggerFactory;
 
 import fr.batimen.dto.enums.TypeCompte;
 
+/**
+ * Classe utilitaire permettant de controler le type de role / compte de l'utlisateur
+ *
+ * @author Casaucau Cyril
+ */
 @Named
 public class RolesUtils implements Serializable {
 

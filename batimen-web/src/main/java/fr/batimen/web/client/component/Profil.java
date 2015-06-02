@@ -12,6 +12,9 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import javax.inject.Inject;
 
+/**
+ * Panel permettant à l'utilisateur de voir sa photo de profil et d'acceder a son profil ou à la modification
+ */
 public class Profil extends Panel {
 
     private static final long serialVersionUID = -3775533895973607467L;
@@ -70,9 +73,6 @@ public class Profil extends Panel {
         if (rolesUtils.checkRoles(TypeCompte.ARTISAN)) {
             voirProfilModel.setObject("Voir mon entreprise");
             modifierProfilModel.setObject("Modifier mes informations");
-        } else if (rolesUtils.checkRoles(TypeCompte.CLIENT)) {
-            voirProfilModel.setObject("Voir le profil");
-            modifierProfilModel.setObject("Modifier le profil");
         } else {
             voirProfilModel.setObject("Voir le profil");
             modifierProfilModel.setObject("Modifier le profil");

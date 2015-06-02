@@ -24,6 +24,11 @@ import fr.batimen.dto.LoginDTO;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.ws.client.service.UtilisateurServiceREST;
 
+/**
+ * Bean permettant la gestion de l'authentification d'un utilisateur
+ *
+ * @author Casaucau Cyril
+ */
 @Named
 public class Authentication implements Serializable {
 
@@ -43,6 +48,13 @@ public class Authentication implements Serializable {
     private static final String CLIENT_KEY = "client";
     private static final String ENTREPRISE_KEY = "entreprise";
 
+    /**
+     * Méthode d'authentification appeler lorsqu'un utilisateur se connecte
+     *
+     * @param username L'username fournit par l'utilisateur
+     * @param password Le password fournit par l'utilisateur
+     * @return True si l'utilisateur a fourni le bon couple user / mdp
+     */
     public Boolean authenticate(String username, String password) {
         Boolean isOk = null;
 
@@ -94,26 +106,54 @@ public class Authentication implements Serializable {
         return isOk;
     }
 
+    /**
+     *
+     * @return Les informations du client connecté
+     */
     public ClientDTO getCurrentUserInfo() {
         return (ClientDTO) SecurityUtils.getSubject().getSession().getAttribute(CLIENT_KEY);
     }
 
+    /**
+     * Retourne les informations de l'entreprise si c'est un artisan
+     *
+     * @return Les informations de l'entreprise
+     */
     public EntrepriseDTO getEntrepriseUserInfo(){
         return (EntrepriseDTO) SecurityUtils.getSubject().getSession().getAttribute(ENTREPRISE_KEY);
     }
 
+    /**
+     * Stock en session les informations de l'entreprise de l'artisan
+     *
+     * @param entrepriseDTO les informations de l'entreprise
+     */
     public void setEntrepriseUserInfo(EntrepriseDTO entrepriseDTO) {
         SecurityUtils.getSubject().getSession().setAttribute(ENTREPRISE_KEY, entrepriseDTO);
     }
 
+    /**
+     * Stocke en session les informations du client connecté
+     * @param clientDTO
+     */
     public void setCurrentUserInfo(ClientDTO clientDTO) {
         SecurityUtils.getSubject().getSession().setAttribute(CLIENT_KEY, clientDTO);
     }
 
+    /**
+     * Renvoi le role principal de l'utilisateur
+     *
+     * @return
+     * @see TypeCompte
+     */
     public TypeCompte getCurrentUserRolePrincipal() {
         return getCurrentUserInfo().getPermissions().get(0).getTypeCompte();
     }
 
+    /**
+     * Indique si le client est connecté ou pas.
+     * @return
+     */
     public boolean isAuthenticated(){
         return SecurityUtils.getSubject().isAuthenticated();
     }

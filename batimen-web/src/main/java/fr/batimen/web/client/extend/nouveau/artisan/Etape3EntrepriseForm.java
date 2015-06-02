@@ -54,9 +54,6 @@ public class Etape3EntrepriseForm extends Form<CreationPartenaireDTO> {
     private static final long serialVersionUID = 7654913676022607009L;
 
     @Inject
-    private RolesUtils rolesUtils;
-
-    @Inject
     private Authentication authentication;
 
     @Inject
@@ -193,7 +190,7 @@ public class Etape3EntrepriseForm extends Form<CreationPartenaireDTO> {
                 } else if (isInModification) {
                     nouveauPartenaire.getEntreprise().setAdresseEntreprise(nouveauPartenaire.getAdresse());
                     Integer codeRetour = artisanServiceREST.saveEntrepriseInformation(nouveauPartenaire.getEntreprise());
-                    if (codeRetour == CodeRetourService.RETOUR_OK) {
+                    if (codeRetour.equals(CodeRetourService.RETOUR_OK)) {
                         authentication.setEntrepriseUserInfo(nouveauPartenaire.getEntreprise());
                         MasterPage.triggerEventFeedBackPanel(target, "Profil mis à jour avec succés", FeedbackMessageLevel.SUCCESS);
                     } else {
