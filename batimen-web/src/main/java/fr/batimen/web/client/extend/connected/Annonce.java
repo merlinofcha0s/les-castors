@@ -374,15 +374,15 @@ public class Annonce extends MasterPage {
 
                 Label labelEntreprise = new Label("labelEntreprise", nomEntrepriseModelForLbl);
 
-                LinkLabel voirProfilEntreprise = new LinkLabel("voirProfilEntreprise", new Model<String>("Voir profil")) {
+                LinkLabel voirProfilEntreprise = new LinkLabel("voirProfilEntreprise", new Model<>("Voir profil")) {
 
                     private static final long serialVersionUID = 1L;
 
                     @Override
                     public void onClick() {
-                        // URLEncoder.encode(notification.getArtisanNotifier().getEntreprise().getNomComplet(),
-                        // "UTF-8")
-                        // TODO A Completer quand la page entreprise sera prete
+                        PageParameters params = new PageParameters();
+                        params.add(ParamsConstant.ID_ENTREPRISE_PARAM, entreprise.getSiret());
+                        this.setResponsePage(Entreprise.class, params);
                     }
                 };
 

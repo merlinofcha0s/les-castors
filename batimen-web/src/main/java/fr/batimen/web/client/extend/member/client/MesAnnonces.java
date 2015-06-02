@@ -301,7 +301,9 @@ public final class MesAnnonces extends MasterPage {
             params.add(ParamsConstant.ID_ANNONCE_PARAM, notificationDTO.getHashIDAnnonce());
             this.setResponsePage(Annonce.class, params);
         } else if (notificationDTO.getTypeNotification().getParQui().equals(TypeCompte.CLIENT)) {
-            // TODO A Completer quand la page entreprise sera prete
+            PageParameters params = new PageParameters();
+            //params.add(ParamsConstant.ID_ENTREPRISE_PARAM, notificationDTO.get());
+            this.setResponsePage(Annonce.class, params);
         }
     }
 

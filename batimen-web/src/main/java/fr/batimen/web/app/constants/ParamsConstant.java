@@ -8,6 +8,7 @@ package fr.batimen.web.app.constants;
 public class ParamsConstant {
 
     public static final String ID_ANNONCE_PARAM = "idAnnonce";
+    public static final String ID_ENTREPRISE_PARAM = "idEntreprise";
     public static final String IS_MODIF_PARAM = "estModif";
 
     private ParamsConstant(){

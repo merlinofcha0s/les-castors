@@ -1,9 +1,12 @@
 package fr.batimen.web.client.component;
 
 import fr.batimen.dto.ClientDTO;
+import fr.batimen.dto.EntrepriseDTO;
 import fr.batimen.dto.enums.TypeCompte;
+import fr.batimen.web.app.constants.ParamsConstant;
 import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.app.security.RolesUtils;
+import fr.batimen.web.client.extend.connected.Entreprise;
 import fr.batimen.web.client.extend.member.client.ModifierMonProfil;
 import fr.batimen.web.client.extend.member.client.MonProfil;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -43,7 +46,10 @@ public class Profil extends Panel {
             @Override
             public void onClick() {
                 if (rolesUtils.checkRoles(TypeCompte.ARTISAN)) {
-                    //TODO A implementer quand la page entreprise sera prete
+                    PageParameters parameters = new PageParameters();
+                    EntrepriseDTO entreprise = authentication.getEntrepriseUserInfo();
+                    parameters.add(ParamsConstant.ID_ENTREPRISE_PARAM, entreprise.getSiret());
+                    this.setResponsePage(Entreprise.class, parameters);
                 } else if (rolesUtils.checkRoles(TypeCompte.CLIENT)) {
                     PageParameters parameters = new PageParameters();
                     ClientDTO client = authentication.getCurrentUserInfo();
