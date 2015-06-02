@@ -118,7 +118,6 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
                     eventCategorie.getTarget().add(this);
                 }
             }
-
         };
         sousCategorieSelect.setMarkupId("sousCategorieSelect");
         sousCategorieSelect.setRequired(true);
@@ -281,7 +280,6 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
                 }else{
                     NouveauUtils.sendEventForPreviousStep(target, Etape.ETAPE_3.ordinal() + 1);
                 }
-
             }
         };
 
@@ -295,5 +293,9 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
 
     public void setIdAnnonce(String idAnnonce) {
         this.idAnnonce = idAnnonce;
+    }
+
+    public void setSousCategorieChoices(List<SousCategorieMetierDTO> sousCategorieMetierDTOList) {
+        sousCategorieSelect.setChoices(sousCategorieMetierDTOList);
     }
 }

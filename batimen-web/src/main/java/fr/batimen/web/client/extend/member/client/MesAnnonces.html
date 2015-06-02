@@ -55,20 +55,20 @@
                     <tr>
                         <th>Catégorie</th>
                         <th>Description</th>
-                        <th>Nb devis</th>
+                        <th wicket:id="nbDevisHeader">Nb devis</th>
                         <th>Progression annonce</th>
                         <th></th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr wicket:id="listAnnonce">
+                    <tr wicket:id="listAnnonce" class="annonce-list">
                         <td><span
                                 class="iconsMesDevis"
                                 wicket:id="iconCategorie"></span><span wicket:id="categorie"></span></td>
                         <td><span wicket:id="description"></span></td>
-                        <td><span wicket:id="nbDevis"></span></td>
+                        <td wicket:id="nbDevis"></td>
                         <td>
-                            <div class="progress progress-mes-annonces">
+                            <div class="progress progress-striped active progress-mes-annonces">
                                 <div wicket:id="progressBar" class="bar" style="width: 50%"></div>
                             </div>
                             <span wicket:id="etatAnnonce"></span>

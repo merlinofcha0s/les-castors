@@ -1,24 +1,22 @@
 package fr.batimen.ws.dao;
 
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
-import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
-
+import fr.batimen.core.constant.QueryJPQL;
+import fr.batimen.dto.CategorieMetierDTO;
+import fr.batimen.dto.EntrepriseDTO;
+import fr.batimen.dto.enums.StatutJuridique;
+import fr.batimen.dto.helper.DeserializeJsonHelper;
+import fr.batimen.ws.entity.CategorieMetier;
+import fr.batimen.ws.entity.Entreprise;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.batimen.core.constant.QueryJPQL;
-import fr.batimen.dto.helper.DeserializeJsonHelper;
-import fr.batimen.ws.entity.Entreprise;
+import javax.ejb.*;
+import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
 
 /**
  * Classe d'accés aux données pour les entreprises.
- * 
+ *
  * @author Casaucau Cyril
  */
 @Stateless(name = "EntrepriseDAO")
@@ -37,7 +35,7 @@ public class EntrepriseDAO extends AbstractDAO<Entreprise> {
      * Récupération d'une entreprise grace à son SIRET <br/>
      * Utile pour verifier si il n'y a pas de doublon lors de l'inscription
      * d'une entreprise
-     * 
+     *
      * @param siret
      * @return
      */
@@ -48,7 +46,7 @@ public class EntrepriseDAO extends AbstractDAO<Entreprise> {
         try {
             TypedQuery<Entreprise> query = entityManager.createNamedQuery(QueryJPQL.ENTREPRISE_BY_SIRET,
                     Entreprise.class);
-            query.setParameter(QueryJPQL.PARAM_ENTEPRISE_SIRET, siret);
+            query.setParameter(QueryJPQL.PARAM_ENTREPRISE_SIRET, siret);
 
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Chargement requete JPQL entreprise by siret OK ");
@@ -71,11 +69,11 @@ public class EntrepriseDAO extends AbstractDAO<Entreprise> {
 
     /**
      * Récupération d'une entreprise grace au login de l'artisan <br/>
-     * 
-     * @param login
-     *            Identifiant de l'artisan
+     *
+     * @param login Identifiant de l'artisan
      * @return
      */
+    @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public Entreprise getEntrepriseByArtisan(String login) {
 
         String loginEscaped = DeserializeJsonHelper.parseString(login);
@@ -106,4 +104,36 @@ public class EntrepriseDAO extends AbstractDAO<Entreprise> {
         }
     }
 
+    /**
+     * Récupère les informations d'une entreprise grace a plusieurs parametres.
+     *
+     * @param nomComplet
+     * @param statutJuridique
+     * @param siret
+     * @param departement
+     * @return L'entité de l'entreprise.
+     */
+    @TransactionAttribute(TransactionAttributeType.MANDATORY)
+    public Entreprise getArtisanByNomCompletSatutSiretDepartement(String nomComplet, StatutJuridique statutJuridique
+            , String siret, Integer departement) {
+        try {
+            TypedQuery<Entreprise> query = entityManager.createNamedQuery(QueryJPQL.ENTREPRISE_BY_NOM_COMPLET_STATUT_SIRET_DEPARTEMENT,
+                    Entreprise.class);
+            query.setParameter(QueryJPQL.PARAM_ENTREPRISE_NOM_COMPLET, nomComplet);
+            query.setParameter(QueryJPQL.PARAM_ENTREPRISE_SIRET, siret);
+            query.setParameter(QueryJPQL.PARAM_ENTREPRISE_STATUT_JURIDIQUE, statutJuridique);
+            query.setParameter(QueryJPQL.PARAM_ENTREPRISE_DEPARTEMENT, departement);
+
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Chargement requete JPQL entreprise by login ByNomCompletSatutSiretDepartement ");
+            }
+
+            return query.getSingleResult();
+        } catch (NoResultException nre) {
+            if (LOGGER.isWarnEnabled()) {
+                LOGGER.warn("Aucune correspondance trouvées dans la BDD", nre);
+            }
+            return null;
+        }
+    }
 }

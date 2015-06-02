@@ -189,7 +189,7 @@ public class AnnonceServiceTest {
         } else {
             Assert.assertNotNull(annonce.getEntrepriseSelectionnee());
             Assert.assertEquals("Pebronne enterprise choisi", annonce.getEntrepriseSelectionnee().getNomComplet());
-            Assert.assertEquals(EtatAnnonce.A_NOTER, annonce.getEtatAnnonce());
+            Assert.assertEquals(EtatAnnonce.DONNER_AVIS, annonce.getEtatAnnonce());
             List<NotificationDTO> notificationsDTO = notificationService.getNotificationByLogin(annonce
                     .getEntrepriseSelectionnee().getArtisan().getLogin(), TypeCompte.ARTISAN);
 

@@ -1,26 +1,5 @@
 package fr.batimen.web.client.extend.nouveau.devis;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
-import org.apache.shiro.SecurityUtils;
-import org.apache.wicket.AttributeModifier;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.event.IEvent;
-import org.apache.wicket.markup.html.WebMarkupContainer;
-import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.image.Image;
-import org.apache.wicket.markup.html.link.Link;
-import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.Model;
-import org.apache.wicket.request.resource.ContextRelativeResource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.exception.FrontEndException;
 import fr.batimen.core.security.HashHelper;
@@ -41,6 +20,25 @@ import fr.batimen.web.client.extend.nouveau.devis.event.CategorieEvent;
 import fr.batimen.web.client.extend.nouveau.devis.event.ChangementEtapeClientEvent;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.ws.client.service.AnnonceServiceREST;
+import org.apache.shiro.SecurityUtils;
+import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.event.IEvent;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.image.Image;
+import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.Model;
+import org.apache.wicket.request.resource.ContextRelativeResource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.inject.Inject;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Permet la création de nouveau devis par un client.
@@ -63,37 +61,59 @@ public class NouveauDevis extends MasterPage {
     private NavigationWizard navigationWizard;
 
     // Objet à remplir
-    private CreationAnnonceDTO nouvelleAnnonce = new CreationAnnonceDTO();
-    private final CompoundPropertyModel<CreationAnnonceDTO> propertyModelNouvelleAnnonce = new CompoundPropertyModel<CreationAnnonceDTO>(
-            nouvelleAnnonce);
+    private CreationAnnonceDTO nouvelleAnnonce;
+    private CompoundPropertyModel<CreationAnnonceDTO> propertyModelNouvelleAnnonce;
 
-    private final WebMarkupContainer containerGeneral;
+    private WebMarkupContainer containerGeneral;
 
     // Composants étape 1
-    private final MapFrance carteFrance;
+    private MapFrance carteFrance;
 
     // Composants étape 2
-    private final Etape2Categorie etape2Categorie;
+    private Etape2Categorie etape2Categorie;
 
     // Composants étape 3
-    private final Etape3AnnonceForm etape3AnnonceForm;
-    private final WebMarkupContainer containerQualification;
+    private Etape3AnnonceForm etape3AnnonceForm;
+    private WebMarkupContainer containerQualification;
 
     // Composant étape 4
-    private final Etape4InscriptionForm etape4InscriptionForm;
-    private final WebMarkupContainer containerInscription;
+    private Etape4InscriptionForm etape4InscriptionForm;
+    private WebMarkupContainer containerInscription;
 
     // Composant étape 5
-    private final WebMarkupContainer containerConfirmation;
-    private final Label confirmation1;
-    private final Label confirmation2;
+    private WebMarkupContainer containerConfirmation;
+    private Label confirmation1;
+    private Label confirmation2;
     private Image imageConfirmation;
-    private final Link<String> contactezNous;
+    private Link<String> contactezNous;
 
     private Etape etapeEncours;
 
+    public NouveauDevis(Etape etapeEncours) {
+        this();
+        this.etapeEncours = etapeEncours;
+    }
+
     public NouveauDevis() {
         super("Nouveau devis", "devis batiment renovation", "Nouveau devis", true, "img/bg_title1.jpg");
+        initPage();
+    }
+
+    public NouveauDevis(CreationAnnonceDTO creationAnnonce) {
+        super("Nouveau devis", "devis batiment renovation", "Nouveau devis", true, "img/bg_title1.jpg");
+        this.nouvelleAnnonce = creationAnnonce;
+        propertyModelNouvelleAnnonce = new CompoundPropertyModel<>(nouvelleAnnonce);
+        initPage();
+    }
+
+    public void initPage() {
+        if (nouvelleAnnonce == null) {
+            nouvelleAnnonce = new CreationAnnonceDTO();
+        }
+
+        if (propertyModelNouvelleAnnonce == null) {
+            propertyModelNouvelleAnnonce = new CompoundPropertyModel<>(nouvelleAnnonce);
+        }
 
         containerGeneral = new WebMarkupContainer("containerGeneral");
         containerGeneral.setOutputMarkupId(true);
@@ -132,7 +152,7 @@ public class NouveauDevis extends MasterPage {
 
             /*
              * (non-Javadoc)
-             * 
+             *
              * @see org.apache.wicket.Component#isVisible()
              */
             @Override
@@ -239,24 +259,13 @@ public class NouveauDevis extends MasterPage {
 
         try {
             changementEtape(nouvelleAnnonce.getNumeroEtape());
+            navigationWizard.setStep(nouvelleAnnonce.getNumeroEtape());
         } catch (FrontEndException e) {
             if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("Probleme frontend", e);
             }
         }
         chooseConfirmationMessage(false, CodeRetourService.RETOUR_OK);
-    }
-
-    public NouveauDevis(CreationAnnonceDTO creationAnnonce) {
-        this();
-        this.nouvelleAnnonce = creationAnnonce;
-        try {
-            changementEtape(creationAnnonce.getNumeroEtape());
-        } catch (FrontEndException e) {
-            if (LOGGER.isErrorEnabled()) {
-                LOGGER.error("Probleme frontend", e);
-            }
-        }
     }
 
     private void chooseConfirmationMessage(boolean isEtape4, Integer codeRetour) {
@@ -323,6 +332,7 @@ public class NouveauDevis extends MasterPage {
             case 3:
                 loggerChangementEtape("Passage dans l'étape 3");
                 etapeEncours = Etape.ETAPE_3;
+                etape3AnnonceForm.setSousCategorieChoices(nouvelleAnnonce.getCategorieMetier().getSousCategories());
                 break;
             case 4:
                 loggerChangementEtape("Passage dans l'étape 4");
@@ -349,7 +359,6 @@ public class NouveauDevis extends MasterPage {
             default:
                 throw new FrontEndException("Aucune étape du nouveau devis chargées, Situation Impossible");
         }
-
     }
 
     private void remplissageCreationAnnonceSiLogin() {
@@ -403,17 +412,6 @@ public class NouveauDevis extends MasterPage {
                 nouvelleAnnonce.setDepartement(departementInt);
                 // On prepare le passage à l'etape suivante
                 nouvelleAnnonce.setNumeroEtape(2);
-                try {
-                    changementEtape(2);
-                } catch (FrontEndException e) {
-                    if (LOGGER.isErrorEnabled()) {
-                        LOGGER.error("Probleme frontend avec l'etape 2", e);
-                    }
-                }
-
-                navigationWizard.setStep(etapeEncours.ordinal() + 1);
-                // Cas ou il y aurait un snake qui essaye de modifier la requete
-                // ajax pour injecter des données erronées
             } else {
                 feedBackPanelGeneral.error("Numéro de département incorrecte, veuillez recommencer");
             }
@@ -421,9 +419,7 @@ public class NouveauDevis extends MasterPage {
             if (feedBackPanelGeneral.hasFeedbackMessage()) {
                 feedBackPanelGeneral.getFeedbackMessages().clear();
             }
-
-            eventMapFrance.getTarget().add(containerGeneral);
-            eventMapFrance.getTarget().add(feedBackPanelGeneral);
+            setResponsePage(new NouveauDevis(nouvelleAnnonce));
         }
 
         if (event.getPayload() instanceof CategorieEvent) {
@@ -432,22 +428,11 @@ public class NouveauDevis extends MasterPage {
             nouvelleAnnonce.setCategorieMetier(eventCategorie.getCategorieChoisie());
             // On set la prochaine etape
             nouvelleAnnonce.setNumeroEtape(3);
-            // On passe à l'etape suivante
-            try {
-                changementEtape(3);
-            } catch (FrontEndException e) {
-                if (LOGGER.isErrorEnabled()) {
-                    LOGGER.error("Probleme frontend avec l'etape 3", e);
-                }
-            }
-            navigationWizard.setStep(etapeEncours.ordinal() + 1);
 
             if (feedBackPanelGeneral.hasFeedbackMessage()) {
                 feedBackPanelGeneral.getFeedbackMessages().clear();
             }
-            // On dit a wicket de rafraichir ce panel avec la requete ajax
-            eventCategorie.getTarget().add(containerGeneral);
-            eventCategorie.getTarget().add(feedBackPanelGeneral);
+            setResponsePage(new NouveauDevis(nouvelleAnnonce));
         }
 
         if (event.getPayload() instanceof ChangementEtapeClientEvent) {
@@ -460,44 +445,22 @@ public class NouveauDevis extends MasterPage {
                 nouvelleAnnonce.getClient().setPassword(HashHelper.hashScrypt(password));
             }
 
-            try {
-                changementEtape(nouvelleAnnonce.getNumeroEtape());
-            } catch (FrontEndException e) {
-                if (LOGGER.isErrorEnabled()) {
-                    LOGGER.error("Probleme frontend avec l'etape " + nouvelleAnnonce.getNumeroEtape(), e);
-                }
-            }
-
             if (feedBackPanelGeneral.hasFeedbackMessage()) {
                 feedBackPanelGeneral.getFeedbackMessages().clear();
             }
 
-            navigationWizard.setStep(etapeEncours.ordinal() + 1);
-            // On dit a wicket de rafraichir ce panel avec la requete ajax
-            eventChangementEtapeClient.getTarget().add(containerGeneral);
-            eventChangementEtapeClient.getTarget().add(feedBackPanelGeneral);
+            setResponsePage(new NouveauDevis(nouvelleAnnonce));
         }
 
         if (event.getPayload() instanceof CastorWizardEvent) {
             CastorWizardEvent castorWizardEvent = (CastorWizardEvent) event.getPayload();
             nouvelleAnnonce.setNumeroEtape(Integer.valueOf(castorWizardEvent.getStepNumber()));
 
-            try {
-                changementEtape(nouvelleAnnonce.getNumeroEtape());
-            } catch (FrontEndException e) {
-                if (LOGGER.isErrorEnabled()) {
-                    LOGGER.error("Probleme frontend avec l'etape " + nouvelleAnnonce.getNumeroEtape(), e);
-                }
-            }
-
             if (feedBackPanelGeneral.hasFeedbackMessage()) {
                 feedBackPanelGeneral.getFeedbackMessages().clear();
             }
 
-            navigationWizard.setStep(nouvelleAnnonce.getNumeroEtape());
-            // On dit a wicket de rafraichir ce panel avec la requete ajax
-            castorWizardEvent.getTarget().add(containerGeneral);
-            castorWizardEvent.getTarget().add(feedBackPanelGeneral);
+            setResponsePage(new NouveauDevis(nouvelleAnnonce));
         }
 
     }

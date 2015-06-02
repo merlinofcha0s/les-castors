@@ -131,9 +131,9 @@ public class NavigationWizard extends Panel {
         // Création du callback qui va renvoyer le numero de l'etape lorsque
         // l'utilisateur clique sur une étape du wizard.
         callbackURL = ajaxCastorWizardBehaviour.getCallbackScript().toString();
-        jsCastorWizard = new StringBuilder("$('#");
+        jsCastorWizard = new StringBuilder("$(document).ready(function(){ $('#");
         jsCastorWizard.append(wizard.getMarkupId()).append("').on('stepclick', function (e, data) { ")
-                .append("var stepNumber = data.step;").append(callbackURL).append("});");
+                .append("var stepNumber = data.step;").append(callbackURL).append("}); });");
         jsCastorWizardModel.setObject(jsCastorWizard.toString());
         super.onBeforeRender();
     }

@@ -1,0 +1,70 @@
+artisan:
+  - id: 1003
+    numerotel: "0615125645"
+    password: $s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=
+    login: pebronneArtisanne
+    email: lolPebronne@lol.com
+    dateinscription: "2014-01-10 00:00:00"
+    civilite: 0
+    prenom: Pebron
+    nom: De la Pebronne
+    isActive: false
+    cleactivation: "NTNkN2RmYzVkNWU2MDZkZjZlYTVjZGQ2ZGE0ZjljY2JhNGJjZWY5MmIxNmNiOWJmMjk2ZDVhNDY3OTEzMTIyZA=0"
+    entreprise_id: 1003
+  - id: 1004
+    numerotel: "0615125645"
+    password: $s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=
+    login: moiArtisanne
+    email: moiArtisane@lol.com
+    dateinscription: "2014-01-10 00:00:00"
+    civilite: 0
+    prenom: Pebron
+    nom: De la Pebronne
+    isActive: true
+    cleactivation: "NTNkN2RmYzVkNWU2MDZkZjZlYTVjZGQ2ZGE0ZjljY2JhNGJjZWY5MmIxNmNiOWJmMjk2ZDVhNDY3OTEzMTIyZA=G"
+    entreprise_id: 1004
+adresse:
+  - adresse: 2410 avenue de l'artisan
+    id: 1001
+    codepostal: "06700"
+    complementadresse: Res des artisans
+    ville: Nice
+    departement: 6
+  - adresse: 106 chemin de la modification
+    id: 1002
+    codepostal: "06600"
+    complementadresse: Res de la modif
+    ville: Antibes
+    departement: 6
+entreprise:
+  - id: 1003
+    nomComplet: Pebronne enterprise
+    statutJuridique: 0
+    datecreation: 2014-03-23 22:00:00.0
+    siret: 43394298400017
+    specialite: brique
+    nbemployees: 20
+    adresse_id: 1001
+  - id: 1004
+    nomComplet: Pebronne enterprise choisi
+    statutJuridique: 0
+    datecreation: 2014-03-24 21:00:00.0
+    siret: 43394298400020
+    specialite: brique
+    nbemployees: 20
+    adresse_id: 1002
+permission:
+  - typecompte: 3
+    artisan_fk: 1003
+  - typecompte: 3
+    artisan_fk: 1004
+categoriemetier:
+  - id: 1001
+    categoriemetier: 1
+    entreprise_fk: 1003
+  - id: 1002
+    categoriemetier: 0
+    entreprise_fk: 1004
+  - id: 1003
+    categoriemetier: 3
+    entreprise_fk: 1003

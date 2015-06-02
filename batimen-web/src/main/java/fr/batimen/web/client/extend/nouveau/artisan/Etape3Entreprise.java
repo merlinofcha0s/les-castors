@@ -7,7 +7,11 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.event.IEvent;
+import org.apache.wicket.markup.head.CssContentHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
@@ -18,6 +22,7 @@ import fr.batimen.dto.aggregate.CreationPartenaireDTO;
 import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.web.client.component.BatimenToolTip;
 import fr.batimen.web.client.extend.nouveau.artisan.event.UncheckedEvent;
+import org.apache.wicket.request.resource.CssResourceReference;
 
 /**
  * Etape 3 de l'inscription d'un nouvel artisan : Informations sur l'entreprise
@@ -37,27 +42,44 @@ public class Etape3Entreprise extends Panel {
         super(id, model);
     }
 
-    public Etape3Entreprise(String id, IModel<?> model, final CreationPartenaireDTO nouveauPartenaire) {
+    public Etape3Entreprise(String id, IModel<?> model, final CreationPartenaireDTO nouveauPartenaire, boolean isInModification) {
         this(id, model);
 
         this.add(BatimenToolTip.getTooltipBehaviour());
 
+        Model<String> titreModificationEntrepriseModel = new Model<>();
+
+        if(isInModification){
+            titreModificationEntrepriseModel.setObject("Modifier mon entreprise");
+        }else{
+            titreModificationEntrepriseModel.setObject("Renseignez les informations de l'entreprise");
+        }
+
+        Label titreModificationEntreprise = new Label("titreModificationEntreprise", titreModificationEntrepriseModel);
+
         categoriesSelectionnees = nouveauPartenaire.getEntreprise().getCategoriesMetier();
 
         etape3EntrepriseForm = new Etape3EntrepriseForm("etape3EntrepriseForm",
-                new CompoundPropertyModel<CreationPartenaireDTO>(nouveauPartenaire));
+                new CompoundPropertyModel<>(nouveauPartenaire), isInModification);
         containerActivite = new WebMarkupContainer("containerActivite");
         containerActivite.setOutputMarkupId(true);
         containerActivite.setMarkupId("containerActivite");
 
-        initActiviteSelection();
+        initActiviteSelection(nouveauPartenaire);
 
-        this.add(etape3EntrepriseForm);
-        this.add(containerActivite);
-
+        this.add(titreModificationEntreprise, etape3EntrepriseForm, containerActivite);
     }
 
-    private void initActiviteSelection() {
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.render(CssContentHeaderItem.forUrl("css/font_icons8.css"));
+        response.render(JavaScriptHeaderItem.forUrl("//www.fuelcdn.com/fuelux/2.6.1/loader.min.js"));
+        response.render(CssContentHeaderItem.forUrl("//www.fuelcdn.com/fuelux/2.6.1/css/fuelux.min.css"));
+        response.render(CssContentHeaderItem.forUrl("//www.fuelcdn.com/fuelux/2.6.1/css/fuelux-responsive.css"));
+    }
+
+    private void initActiviteSelection(CreationPartenaireDTO nouveauPartenaire) {
 
         final WebMarkupContainer iElectricite = new WebMarkupContainer("iElectricite");
         final WebMarkupContainer containerElectricite = new WebMarkupContainer("containerElectricite");
@@ -78,6 +100,14 @@ public class Etape3Entreprise extends Panel {
                 target.add(containerActivite);
             }
 
+            @Override
+            protected void onConfigure() {
+                for(CategorieMetierDTO categorieMetierDTO : categoriesSelectionnees){
+                    if(categorieMetierDTO.getCodeCategorieMetier().equals(CategorieLoader.ELECTRICITE_CODE)){
+                        checked(containerElectricite, iElectricite, this);
+                    }
+                }
+            }
         };
 
         checkBoxElectricite.setMarkupId("electriciteCheck");
@@ -104,6 +134,15 @@ public class Etape3Entreprise extends Panel {
                     sendUncheckedAllCheckBox(target);
                 }
                 target.add(containerActivite);
+            }
+
+            @Override
+            protected void onConfigure() {
+                for(CategorieMetierDTO categorieMetierDTO : categoriesSelectionnees){
+                    if(categorieMetierDTO.getCodeCategorieMetier().equals(CategorieLoader.PLOMBERIE_CODE)){
+                        checked(containerPlomberie, iPlomberie, this);
+                    }
+                }
             }
 
         };
@@ -133,6 +172,15 @@ public class Etape3Entreprise extends Panel {
                 }
                 target.add(containerActivite);
             }
+
+            @Override
+            protected void onConfigure() {
+                for(CategorieMetierDTO categorieMetierDTO : categoriesSelectionnees){
+                    if(categorieMetierDTO.getCodeCategorieMetier().equals(CategorieLoader.ESPACE_VERT_CODE)){
+                        checked(containerEspaceVert, iEspaceVert, this);
+                    }
+                }
+            }
         };
 
         checkBoxEspaceVert.setMarkupId("espaceVertCheck");
@@ -159,6 +207,15 @@ public class Etape3Entreprise extends Panel {
                     sendUncheckedAllCheckBox(target);
                 }
                 target.add(containerActivite);
+            }
+
+            @Override
+            protected void onConfigure() {
+                for(CategorieMetierDTO categorieMetierDTO : categoriesSelectionnees){
+                    if(categorieMetierDTO.getCodeCategorieMetier().equals(CategorieLoader.DECORATION_MACONNERIE_CODE)){
+                        checked(containerDecorationMaconnerie, iDecorationMaconnerie, this);
+                    }
+                }
             }
         };
 

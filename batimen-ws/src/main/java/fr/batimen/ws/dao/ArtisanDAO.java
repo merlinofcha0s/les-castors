@@ -9,6 +9,8 @@ import javax.ejb.TransactionManagementType;
 import javax.persistence.NoResultException;
 import javax.persistence.TypedQuery;
 
+import fr.batimen.dto.EntrepriseDTO;
+import fr.batimen.dto.enums.StatutJuridique;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +45,7 @@ public class ArtisanDAO extends AbstractDAO<Artisan> {
      * @param email
      * @return
      */
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    @TransactionAttribute(TransactionAttributeType.MANDATORY)
     public Artisan getArtisanByEmail(String email) {
 
         Artisan artisanTrouve = null;

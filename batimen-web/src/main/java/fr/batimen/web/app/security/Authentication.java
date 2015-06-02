@@ -1,10 +1,13 @@
 package fr.batimen.web.app.security;
 
 import java.io.Serializable;
+import java.lang.reflect.Type;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import fr.batimen.dto.EntrepriseDTO;
+import fr.batimen.ws.client.service.ArtisanServiceREST;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.ExcessiveAttemptsException;
@@ -31,7 +34,14 @@ public class Authentication implements Serializable {
     @Inject
     private UtilisateurServiceREST utilisateurServiceREST;
 
+    @Inject
+    private ArtisanServiceREST artisanServiceREST;
+
+    @Inject
+    private RolesUtils rolesUtils;
+
     private static final String CLIENT_KEY = "client";
+    private static final String ENTREPRISE_KEY = "entreprise";
 
     public Boolean authenticate(String username, String password) {
         Boolean isOk = null;
@@ -75,12 +85,25 @@ public class Authentication implements Serializable {
             AuthenticatedWebSession.get().authenticate(username, "");
             ClientDTO client = utilisateurServiceREST.login(loginDTO);
             SecurityUtils.getSubject().getSession(true).setAttribute(CLIENT_KEY, client);
+
+            if(rolesUtils.checkRoles(TypeCompte.ARTISAN)){
+                EntrepriseDTO entrepriseDTO = artisanServiceREST.getEntrepriseInformationByArtisanLogin(client.getLogin());
+                SecurityUtils.getSubject().getSession().setAttribute(ENTREPRISE_KEY, entrepriseDTO);
+            }
         }
         return isOk;
     }
 
     public ClientDTO getCurrentUserInfo() {
         return (ClientDTO) SecurityUtils.getSubject().getSession().getAttribute(CLIENT_KEY);
+    }
+
+    public EntrepriseDTO getEntrepriseUserInfo(){
+        return (EntrepriseDTO) SecurityUtils.getSubject().getSession().getAttribute(ENTREPRISE_KEY);
+    }
+
+    public void setEntrepriseUserInfo(EntrepriseDTO entrepriseDTO) {
+        SecurityUtils.getSubject().getSession().setAttribute(ENTREPRISE_KEY, entrepriseDTO);
     }
 
     public void setCurrentUserInfo(ClientDTO clientDTO) {

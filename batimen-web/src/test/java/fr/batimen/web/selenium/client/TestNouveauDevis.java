@@ -219,6 +219,9 @@ public class TestNouveauDevis extends AbstractITTest {
         // On remplit l'étape 3
         etape3(false);
 
+        WebElement checkConditionPresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.presenceOfElementLocated((By.xpath("//div[@id='batimenWizard']/ul/li[2]"))));
+        assertNotNull(checkConditionPresent);
         driver.findElement(By.xpath("//div[@id='batimenWizard']/ul/li[2]")).click();
 
         // On remplit l'étape 2
@@ -248,6 +251,7 @@ public class TestNouveauDevis extends AbstractITTest {
         Thread.sleep(1000);
         // On remplit l'étape 2
         etape2();
+
         connexionApplication("xavier", BON_MOT_DE_PASSE, Boolean.TRUE);
         // On remplit l'étape 3
         etape3(true);
@@ -264,6 +268,9 @@ public class TestNouveauDevis extends AbstractITTest {
         if (browser.equals("ie")) {
             Thread.sleep(1000);
         }
+        WebElement checkConditionAnnoncePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.presenceOfElementLocated((By.id("sousCategorieSelect"))));
+        assertNotNull(checkConditionAnnoncePresent);
         new Select(driver.findElement(By.id("sousCategorieSelect"))).selectByVisibleText("Tableaux électriques");
         driver.findElement(By.id("descriptionDevisField")).clear();
         driver.findElement(By.id("descriptionDevisField")).sendKeys("Refonte complete de l'electricite dans la maison");

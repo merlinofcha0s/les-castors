@@ -5,6 +5,7 @@ import static fr.batimen.web.selenium.dataset.MesAnnoncesDataset.*;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.enums.TypeNotification;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -43,7 +44,7 @@ public class TestMesAnnonces extends AbstractITTest {
      */
     @Test
     public void testAccessToMesAnnonceByClient() {
-        testMesAnnonces("raiden", TypeNotification.INSCRIT_A_ANNONCE);
+        testMesAnnonces("raiden", TypeNotification.INSCRIT_A_ANNONCE, TypeCompte.CLIENT);
 
         driver.findElement(
                 By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[1]/table/tbody/tr[1]/td[2]/a[2]"))
@@ -64,13 +65,13 @@ public class TestMesAnnonces extends AbstractITTest {
      */
     @Test
     public void testAccessToMesAnnonceByArtisan() {
-        testMesAnnonces("pebron", TypeNotification.A_CHOISI_ENTREPRISE);
+        testMesAnnonces("pebron", TypeNotification.A_CHOISI_ENTREPRISE, TypeCompte.ARTISAN);
     }
 
-    private void testMesAnnonces(String login, TypeNotification typeNotification){
+    private void testMesAnnonces(String login, TypeNotification typeNotification, TypeCompte typeCompte) {
         driver.get(appUrl);
         // On s'authentifie à l'application
-        connexionApplication(login, AbstractITTest.BON_MOT_DE_PASSE, Boolean.TRUE);
+        connexionApplication(login, AbstractITTest.BON_MOT_DE_PASSE, Boolean.FALSE);
 
         driver.findElement(By.id("connexionlbl")).click();
 
@@ -88,9 +89,17 @@ public class TestMesAnnonces extends AbstractITTest {
                 .until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("h4.headInModule")));
         assertNotNull(checkConditionAnnoncePresent);
 
-        driver.findElement(
-                By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[2]/table/tbody/tr[1]/td[5]/a"))
-                .click();
+
+        if (typeCompte.equals(TypeCompte.CLIENT)) {
+            driver.findElement(
+                    By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[2]/table/tbody/tr[1]/td[5]/a"))
+                    .click();
+        } else if (typeCompte.equals(TypeCompte.ARTISAN)) {
+            driver.findElement(
+                    By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[2]/table/tbody/tr/td[4]/a"))
+                    .click();
+        }
+
 
         Boolean checkConditionAccessToAnnonceViaList = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("h1.title"),

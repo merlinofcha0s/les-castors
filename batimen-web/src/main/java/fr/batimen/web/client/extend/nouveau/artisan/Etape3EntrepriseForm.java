@@ -1,30 +1,16 @@
 package fr.batimen.web.client.extend.nouveau.artisan;
 
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
-
-import fr.batimen.web.app.constants.FeedbackMessageLevel;
-import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
-import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
-import org.apache.wicket.event.Broadcast;
-import org.apache.wicket.markup.html.form.DropDownChoice;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.form.upload.FileUploadField;
-import org.apache.wicket.model.IModel;
-import org.apache.wicket.validation.validator.DateValidator;
-import org.apache.wicket.validation.validator.PatternValidator;
-import org.apache.wicket.validation.validator.StringValidator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
+import fr.batimen.dto.aggregate.ModificationAnnonceDTO;
+import fr.batimen.dto.aggregate.ModificationEntrepriseDTO;
 import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.dto.enums.StatutJuridique;
 import fr.batimen.web.app.constants.Etape;
+import fr.batimen.web.app.constants.FeedbackMessageLevel;
+import fr.batimen.web.app.security.Authentication;
+import fr.batimen.web.app.security.RolesUtils;
 import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.batimen.web.client.component.CastorDatePicker;
@@ -33,21 +19,52 @@ import fr.batimen.web.client.extend.nouveau.artisan.event.ChangementEtapeEventAr
 import fr.batimen.web.client.extend.nouveau.devis.NouveauUtils;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.web.client.validator.SiretValidator;
+import fr.batimen.ws.client.service.ArtisanServiceREST;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
+import org.apache.wicket.event.Broadcast;
+import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.form.DropDownChoice;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.upload.FileUploadField;
+import org.apache.wicket.model.IModel;
+import org.apache.wicket.validation.validator.DateValidator;
+import org.apache.wicket.validation.validator.PatternValidator;
+import org.apache.wicket.validation.validator.RangeValidator;
+import org.apache.wicket.validation.validator.StringValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.inject.Inject;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Form de l'etape 3 permettant au nouvel artisan de renseigner les informayions
  * de l'entreprise
- * 
+ *
  * @author Casaucau Cyril
- * 
  */
 public class Etape3EntrepriseForm extends Form<CreationPartenaireDTO> {
 
     private static final long serialVersionUID = 7654913676022607009L;
 
+    @Inject
+    private RolesUtils rolesUtils;
+
+    @Inject
+    private Authentication authentication;
+
+    @Inject
+    private ArtisanServiceREST artisanServiceREST;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(Etape3EntrepriseForm.class);
 
-    public Etape3EntrepriseForm(String id, IModel<CreationPartenaireDTO> model) {
+    public Etape3EntrepriseForm(final String id, final IModel<CreationPartenaireDTO> model, final boolean isInModification) {
         super(id, model);
 
         // Mode Multipart pour l'upload de fichier.
@@ -72,7 +89,7 @@ public class Etape3EntrepriseForm extends Form<CreationPartenaireDTO> {
         statutJuridique.add(new ErrorHighlightBehavior());
         statutJuridique.add(new RequiredBorderBehaviour());
 
-        TextField<Integer> nbEmployes = new TextField<Integer>("entreprise.nbEmployees");
+        final TextField<Integer> nbEmployes = new TextField<Integer>("entreprise.nbEmployees");
         nbEmployes.setMarkupId("nbEmployeField");
         nbEmployes.add(new ErrorHighlightBehavior());
 
@@ -121,7 +138,22 @@ public class Etape3EntrepriseForm extends Form<CreationPartenaireDTO> {
         villeField.add(new ErrorHighlightBehavior());
         villeField.add(new RequiredBorderBehaviour());
 
-        AjaxLink<Void> etapePrecedenteNouveauArtisan3 = new AjaxLink<Void>("etapePrecedenteNouveauArtisan3") {
+        TextField<Integer> departementField = new TextField<>("adresse.departement");
+        departementField.setRequired(true);
+        departementField.setMarkupId("departementField");
+        departementField.add(RangeValidator.minimum(ValidatorConstant.DEPARTEMENT_MIN));
+        departementField.add(RangeValidator.maximum(ValidatorConstant.DEPARTEMENT_MAX));
+        departementField.add(new ErrorHighlightBehavior());
+        departementField.add(new RequiredBorderBehaviour());
+
+        if (isInModification) {
+            nomComplet.setEnabled(false);
+            statutJuridique.setEnabled(false);
+            siret.setEnabled(false);
+            departementField.setEnabled(false);
+        }
+
+        final AjaxLink<Void> etapePrecedenteNouveauArtisan3 = new AjaxLink<Void>("etapePrecedenteNouveauArtisan3") {
 
             private static final long serialVersionUID = 1L;
 
@@ -134,50 +166,72 @@ public class Etape3EntrepriseForm extends Form<CreationPartenaireDTO> {
         etapePrecedenteNouveauArtisan3.setOutputMarkupId(true);
         etapePrecedenteNouveauArtisan3.setMarkupId("etapePrecedenteNouveauArtisan3");
 
+        WebMarkupContainer containerEtapePrecedenteNouveauArtisan3 = new WebMarkupContainer("containerEtapePrecedenteNouveauArtisan3") {
+            @Override
+            public boolean isVisible() {
+                return !isInModification;
+            }
+        };
+
+        containerEtapePrecedenteNouveauArtisan3.add(etapePrecedenteNouveauArtisan3);
+
+
         AjaxSubmitLink validateEtape3Partenaire = new AjaxSubmitLink("validateEtape3Partenaire") {
 
             private static final long serialVersionUID = 4945314422581299777L;
 
-            /*
-             * (non-Javadoc)
-             * 
-             * @see
-             * org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink#onError
-             * (org.apache.wicket.ajax.AjaxRequestTarget,
-             * org.apache.wicket.markup.html.form.Form)
-             */
             @Override
             protected void onError(AjaxRequestTarget target, Form<?> form) {
                 target.add(getForm());
                 this.send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target));
             }
 
-            /*
-             * (non-Javadoc)
-             * 
-             * @see
-             * org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink#onSubmit
-             * (org.apache.wicket.ajax.AjaxRequestTarget,
-             * org.apache.wicket.markup.html.form.Form)
-             */
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 if (categorieSelectionnees.isEmpty()) {
                     MasterPage.triggerEventFeedBackPanel(target, "Veuillez selectionner au moins une categorie", FeedbackMessageLevel.ERROR);
+                } else if (isInModification) {
+                    nouveauPartenaire.getEntreprise().setAdresseEntreprise(nouveauPartenaire.getAdresse());
+                    Integer codeRetour = artisanServiceREST.saveEntrepriseInformation(nouveauPartenaire.getEntreprise());
+                    if (codeRetour == CodeRetourService.RETOUR_OK) {
+                        authentication.setEntrepriseUserInfo(nouveauPartenaire.getEntreprise());
+                        MasterPage.triggerEventFeedBackPanel(target, "Profil mis à jour avec succés", FeedbackMessageLevel.SUCCESS);
+                    } else {
+                        MasterPage.triggerEventFeedBackPanel(target, "Problème durant l'appel au service de mise à jour, veuillez réessayer ultérieurement ", FeedbackMessageLevel.ERROR);
+                    }
+
                 } else {
                     nouveauPartenaire.setNumeroEtape(4);
                     ChangementEtapeEventArtisan changementEtapeEvent = new ChangementEtapeEventArtisan(target,
                             nouveauPartenaire);
                     this.send(target.getPage(), Broadcast.EXACT, changementEtapeEvent);
                 }
-
             }
-
         };
 
         validateEtape3Partenaire.setMarkupId("validateEtape3Partenaire");
 
-        this.add(nomComplet, statutJuridique, nbEmployes, dateCreation, siret, logo, adresse, complementAdresse,
-                codePostalField, villeField, validateEtape3Partenaire, etapePrecedenteNouveauArtisan3);
+        WebMarkupContainer terminerInscriptionPartenaire = new WebMarkupContainer("terminerInscriptionPartenaire") {
+            @Override
+            protected void onComponentTag(ComponentTag tag) {
+                super.onComponentTag(tag);
+                if (isInModification) {
+                    StringBuilder classCSS = new StringBuilder(tag.getAttribute("class"));
+                    classCSS.append(" offset3");
+                    tag.remove("class");
+                    tag.put("class", classCSS.toString());
+                }else{
+                    StringBuilder classCSS = new StringBuilder(tag.getAttribute("class"));
+                    classCSS.append(" nouveauPartenaire-btn");
+                    tag.remove("class");
+                    tag.put("class", classCSS.toString());
+                }
+            }
+        };
+
+        terminerInscriptionPartenaire.add(validateEtape3Partenaire);
+
+        add(nomComplet, statutJuridique, nbEmployes, dateCreation, siret, logo, adresse, complementAdresse,
+                codePostalField, villeField, departementField, terminerInscriptionPartenaire, containerEtapePrecedenteNouveauArtisan3);
     }
 }

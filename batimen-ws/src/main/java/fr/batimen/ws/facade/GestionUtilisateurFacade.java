@@ -1,5 +1,6 @@
 package fr.batimen.ws.facade;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
@@ -20,6 +21,7 @@ import javax.ws.rs.Produces;
 import fr.batimen.dto.*;
 import fr.batimen.dto.aggregate.MesAnnoncesDTO;
 import fr.batimen.dto.enums.TypeCompte;
+import fr.batimen.ws.entity.AbstractUser;
 import fr.batimen.ws.service.AnnonceService;
 import fr.batimen.ws.service.NotificationService;
 import fr.batimen.ws.utils.RolesUtils;
@@ -199,7 +201,7 @@ public class GestionUtilisateurFacade {
      */
     @POST
     @Path(WsPath.GESTION_UTILISATEUR_SERVICE_BY_EMAIL)
-    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public ClientDTO getUtilisateurByEmail(String email) {
         // Obligé pour les strings sinon il n'escape pas les ""
         String emailEscaped = DeserializeJsonHelper.parseString(email);
@@ -269,7 +271,18 @@ public class GestionUtilisateurFacade {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Récuperation de l'entité client pour : " + clientDTO.getLogin());
         }
-        Client clientInDB = clientDAO.getClientByEmail(clientDTO.getOldEmail());
+
+        boolean isArtisan = false;
+
+        AbstractUser clientInDB = clientDAO.getClientByEmail(clientDTO.getOldEmail());
+        if(clientInDB.getDateInscription() == null){
+            isArtisan = true;
+           clientInDB = artisanDAO.getArtisanByEmail(clientDTO.getOldEmail());
+        }
+
+        if(clientInDB == null){
+            return CodeRetourService.RETOUR_KO;
+        }
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Mapping de la dto avec l'entité.....");
@@ -280,17 +293,17 @@ public class GestionUtilisateurFacade {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Mise a jour de l'entité dans la BDD");
         }
-        if (clientDAO.update(clientInDB) != null) {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Code retour du service : " + CodeRetourService.RETOUR_OK);
-            }
-            return CodeRetourService.RETOUR_OK;
+
+        if (isArtisan) {
+            artisanDAO.update((Artisan) clientInDB);
         } else {
-            if (LOGGER.isDebugEnabled()) {
-                LOGGER.debug("Code retour du service : " + CodeRetourService.RETOUR_KO);
-            }
-            return CodeRetourService.RETOUR_KO;
+            clientDAO.update((Client) clientInDB);
         }
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Code retour du service : " + CodeRetourService.RETOUR_OK);
+        }
+        return CodeRetourService.RETOUR_OK;
     }
 
     /**

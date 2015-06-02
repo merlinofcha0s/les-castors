@@ -1,6 +1,7 @@
 package fr.batimen.ws.entity;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -66,4 +67,26 @@ public class CategorieMetier implements Serializable {
         this.entreprise = entreprise;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CategorieMetier that = (CategorieMetier) o;
+        return Objects.equals(categorieMetier, that.categorieMetier);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(categorieMetier);
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("CategorieMetier{");
+        sb.append("id=").append(id);
+        sb.append(", categorieMetier=").append(categorieMetier);
+        sb.append(", entreprise=").append(entreprise.getId());
+        sb.append('}');
+        return sb.toString();
+    }
 }

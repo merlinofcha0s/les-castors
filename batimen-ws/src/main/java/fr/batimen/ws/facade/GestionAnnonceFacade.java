@@ -40,7 +40,6 @@ import fr.batimen.core.constant.WsPath;
 import fr.batimen.core.exception.BackendException;
 import fr.batimen.core.exception.DuplicateEntityException;
 import fr.batimen.core.exception.EmailException;
-import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.TypeCompte;
@@ -228,7 +227,7 @@ public class GestionAnnonceFacade {
      */
     @POST
     @Path(WsPath.GESTION_ANNONCE_SERVICE_GET_ANNONCES_BY_ID)
-    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public AnnonceAffichageDTO getAnnonceByIdForAffichage(DemandeAnnonceDTO demandeAnnonce) {
         String loginDemandeur = demandeAnnonce.getLoginDemandeur();
         String hashID = demandeAnnonce.getHashID();
@@ -440,7 +439,7 @@ public class GestionAnnonceFacade {
                     LOGGER.debug("C'est un ajout, on met à jour l'annonce avec l'entreprise choisi et on change l'état de l'annonce");
                 }
                 annonceToUpdate.setEntrepriseSelectionnee(entrepriseChoisi);
-                annonceToUpdate.setEtatAnnonce(EtatAnnonce.A_NOTER);
+                annonceToUpdate.setEtatAnnonce(EtatAnnonce.DONNER_AVIS);
                 notificationService.generationNotification(annonceToUpdate, artisan, TypeCompte.ARTISAN,
                         TypeNotification.A_CHOISI_ENTREPRISE);
             } else {

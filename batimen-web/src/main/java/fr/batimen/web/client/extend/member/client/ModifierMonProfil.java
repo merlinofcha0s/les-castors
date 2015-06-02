@@ -2,7 +2,15 @@ package fr.batimen.web.client.extend.member.client;
 
 import javax.inject.Inject;
 
+import fr.batimen.dto.EntrepriseDTO;
+import fr.batimen.dto.aggregate.CreationPartenaireDTO;
+import fr.batimen.dto.enums.TypeCompte;
+import fr.batimen.web.app.security.RolesUtils;
+import fr.batimen.web.client.extend.nouveau.artisan.Etape3Entreprise;
+import fr.batimen.web.client.extend.nouveau.artisan.Etape3EntrepriseForm;
 import org.apache.wicket.model.CompoundPropertyModel;
+import org.apache.wicket.model.Model;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,11 +23,12 @@ import fr.batimen.web.client.component.Profil;
 import fr.batimen.web.client.extend.nouveau.devis.Etape4InscriptionForm;
 import fr.batimen.web.client.master.MasterPage;
 
+import java.io.Serializable;
+
 /**
  * Page de modification des informations utilisateurs
- * 
+ *
  * @author Casaucau Cyril
- * 
  */
 public class ModifierMonProfil extends MasterPage {
 
@@ -30,7 +39,11 @@ public class ModifierMonProfil extends MasterPage {
     @Inject
     private Authentication authentication;
 
+    @Inject
+    private RolesUtils rolesUtils;
+
     private CompoundPropertyModel<CreationAnnonceDTO> propertyModelNouvelleAnnonce;
+    private CompoundPropertyModel<CreationPartenaireDTO> propertyModelNouveauPartenaire;
 
     public ModifierMonProfil() {
         super("Modifier mon profil", "lol", "Modifier mon profil", true, "img/bg_title1.jpg");
@@ -52,13 +65,19 @@ public class ModifierMonProfil extends MasterPage {
         Etape4InscriptionForm inscriptionForm = new Etape4InscriptionForm("formInscription",
                 propertyModelNouvelleAnnonce, Boolean.TRUE);
 
+        Etape3Entreprise entrepriseModif = new Etape3Entreprise("etape3InformationsEntreprise",
+                propertyModelNouveauPartenaire, propertyModelNouveauPartenaire.getObject()
+                , true){
+            @Override
+            public boolean isVisible() {
+                return rolesUtils.checkRoles(TypeCompte.ARTISAN);
+            }
+        };
+
         ContactezNous contactezNous = new ContactezNous("contactezNous");
         Commentaire commentaire = new Commentaire("commentaire");
 
-        this.add(profil);
-        this.add(inscriptionForm);
-        this.add(contactezNous);
-        this.add(commentaire);
+        this.add(profil, inscriptionForm, entrepriseModif, contactezNous, commentaire);
     }
 
     private void initData() {
@@ -68,11 +87,21 @@ public class ModifierMonProfil extends MasterPage {
         // Pour les besoins du form etape 4 qu'on reutilise ici, on instancie sa
         // DTO mais on ne rempli que les informations du client
         CreationAnnonceDTO creationAnnonceDTO = new CreationAnnonceDTO();
+        CreationPartenaireDTO creationPartenaireDTO = new CreationPartenaireDTO();
         // Rempli avec le client dto présent en session.
         // On la copie pour eviter que les données en session soit directement
         // modifier par le form
         ClientDTO client = ClientDTO.copy(authentication.getCurrentUserInfo());
         creationAnnonceDTO.setClient(client);
-        propertyModelNouvelleAnnonce = new CompoundPropertyModel<CreationAnnonceDTO>(creationAnnonceDTO);
+        propertyModelNouvelleAnnonce = new CompoundPropertyModel<>(creationAnnonceDTO);
+
+        if(rolesUtils.checkRoles(TypeCompte.ARTISAN)){
+            EntrepriseDTO entreprise = EntrepriseDTO.copy(authentication.getEntrepriseUserInfo());
+            ModelMapper mapper = new ModelMapper();
+            mapper.map(entreprise, creationPartenaireDTO.getEntreprise());
+            mapper.map(entreprise.getAdresseEntreprise(), creationPartenaireDTO.getAdresse());
+            creationPartenaireDTO.getEntreprise().getCategoriesMetier().addAll(entreprise.getCategoriesMetier());
+        }
+        propertyModelNouveauPartenaire = new CompoundPropertyModel<>(creationPartenaireDTO);
     }
 }

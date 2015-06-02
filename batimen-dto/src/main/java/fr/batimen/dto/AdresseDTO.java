@@ -1,5 +1,9 @@
 package fr.batimen.dto;
 
+import fr.batimen.dto.constant.ValidatorConstant;
+import org.modelmapper.ModelMapper;
+
+import static fr.batimen.dto.constant.ValidatorConstant.*;
 import static fr.batimen.dto.constant.ValidatorConstant.ADRESSE_MAX;
 import static fr.batimen.dto.constant.ValidatorConstant.ADRESSE_MIN;
 import static fr.batimen.dto.constant.ValidatorConstant.CODE_POSTAL_REGEX;
@@ -30,8 +34,8 @@ public class AdresseDTO extends AbstractDTO {
     @Size(max = VILLE_MAX)
     private String ville;
     @NotNull
-    @Min(value = 01)
-    @Max(value = 100)
+    @Min(value = DEPARTEMENT_MIN)
+    @Max(value = DEPARTEMENT_MAX)
     private Integer departement;
 
     /**
@@ -150,4 +154,9 @@ public class AdresseDTO extends AbstractDTO {
         sb.append('}');
         return sb.toString();
     }
+    public static AdresseDTO copy(AdresseDTO adresseSource) {
+        ModelMapper mapper = new ModelMapper();
+        return  mapper.map(adresseSource, AdresseDTO.class);
+    }
+
 }

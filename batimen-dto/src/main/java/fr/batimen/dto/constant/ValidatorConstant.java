@@ -32,6 +32,8 @@ public class ValidatorConstant {
     public static final int COMPLEMENT_ADRESSE_MAX = 255;
     public static final int CODEPOSTAL_MAX = 5;
     public static final int VILLE_MAX = 45;
+    public static final int DEPARTEMENT_MIN = 1;
+    public static final int DEPARTEMENT_MAX = 100;
     // Client DTO
     public static final int CLIENT_NOM_MIN = 3;
     public static final int CLIENT_NOM_MAX = 20;

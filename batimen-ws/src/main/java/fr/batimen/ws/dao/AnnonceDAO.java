@@ -230,7 +230,7 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
      *            le login du client
      * @return Le nb d'annonce
      */
-    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    @TransactionAttribute(TransactionAttributeType.MANDATORY)
     public Annonce getAnnonceByIDForAffichage(String id) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Debut de la récuperation de l'annonce par l'id");

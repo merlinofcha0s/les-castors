@@ -38,7 +38,9 @@ import fr.batimen.dto.enums.StatutJuridique;
         @NamedQuery(name = QueryJPQL.ENTREPRISE_BY_SIRET,
                 query = "SELECT ent FROM Entreprise AS ent WHERE ent.siret = :siret"),
         @NamedQuery(name = QueryJPQL.ENTREPRISE_BY_ARTISAN,
-                query = "SELECT ent FROM Entreprise AS ent WHERE ent.artisan.login = :login"), })
+                query = "SELECT ent FROM Entreprise AS ent WHERE ent.artisan.login = :login"),
+        @NamedQuery(name = QueryJPQL.ENTREPRISE_BY_NOM_COMPLET_STATUT_SIRET_DEPARTEMENT,
+                query = "SELECT ent FROM Entreprise AS ent WHERE ent.nomComplet = :entrepriseNomComplet AND ent.siret = :siret AND ent.statutJuridique = :entrepriseStatutJuridique AND ent.adresse.departement = :departement")})
 public class Entreprise extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = 8234078910852637284L;
@@ -304,5 +306,4 @@ public class Entreprise extends AbstractEntity implements Serializable {
         }
         return false;
     }
-
 }

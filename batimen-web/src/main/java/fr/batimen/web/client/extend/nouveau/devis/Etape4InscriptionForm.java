@@ -5,9 +5,11 @@ import fr.batimen.core.security.HashHelper;
 import fr.batimen.dto.ModifClientDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.constant.ValidatorConstant;
+import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.enums.TypeContact;
 import fr.batimen.web.app.constants.Etape;
 import fr.batimen.web.app.security.Authentication;
+import fr.batimen.web.app.security.RolesUtils;
 import fr.batimen.web.app.utils.ProgrammaticBeanLookup;
 import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
@@ -56,6 +58,9 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
     @Inject
     private Authentication authentication;
 
+    @Inject
+    private RolesUtils rolesUtils;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(Etape4InscriptionForm.class);
 
     private final CreationAnnonceDTO nouvelleAnnonce;
@@ -81,12 +86,14 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
 
         nouvelleAnnonce = model.getObject();
 
-        nomField = new TextField<String>("client.nom");
+        nomField = new TextField<>("client.nom");
         nomField.setMarkupId("nom");
+        nomField.add(new ErrorHighlightBehavior());
         nomField.add(StringValidator.lengthBetween(ValidatorConstant.CLIENT_NOM_MIN, ValidatorConstant.CLIENT_NOM_MAX));
 
-        prenomField = new TextField<String>("client.prenom");
+        prenomField = new TextField<>("client.prenom");
         prenomField.setMarkupId("prenom");
+        prenomField.add(new ErrorHighlightBehavior());
         prenomField.add(StringValidator.lengthBetween(ValidatorConstant.CLIENT_PRENOM_MIN,
                 ValidatorConstant.CLIENT_PRENOM_MAX));
 
@@ -96,7 +103,7 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
 
             @Override
             protected void onConfigure() {
-                if (nouvelleAnnonce.getTypeContact() != null && nouvelleAnnonce.getTypeContact().equals(TypeContact.TELEPHONE)) {
+                if ((nouvelleAnnonce.getTypeContact() != null && nouvelleAnnonce.getTypeContact().equals(TypeContact.TELEPHONE)) || rolesUtils.checkRoles(TypeCompte.ARTISAN)) {
                     setRequired(true);
                     add(requiredBorderBehaviour);
                     setAddedRequiredBehaviour(true);
@@ -138,6 +145,13 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
                 .lookup("loginUniquenessValidator");
 
         loginField.add(loginUniquenessValidator);
+
+        if(rolesUtils.checkRoles(TypeCompte.ARTISAN)){
+            nomField.add(new RequiredBorderBehaviour());
+            prenomField.add(new RequiredBorderBehaviour());
+            nomField.setRequired(true);
+            prenomField.setRequired(true);
+        }
 
         passwordField = new PasswordTextField("client.password");
         passwordField.add(StringValidator.lengthBetween(ValidatorConstant.PASSWORD_RANGE_MIN,

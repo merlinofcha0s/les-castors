@@ -508,8 +508,8 @@
                 <glassfish.domain>batimendomain</glassfish.domain>
 
                 <!-- Email -->
-                <!-- <mandrill.api.key>AqM7U8jIxFR7GURuupcsIA</mandrill.api.key> -->
-                <mandrill.api.key>OOBiT-ollMvq7_JaMjyDOQ</mandrill.api.key>
+                <mandrill.api.key>AqM7U8jIxFR7GURuupcsIA</mandrill.api.key>
+               <!--  <mandrill.api.key>OOBiT-ollMvq7_JaMjyDOQ</mandrill.api.key> -->
                 <email.active>true</email.active>
 
                 <!-- URL du frontend -->

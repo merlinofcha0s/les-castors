@@ -20,7 +20,6 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -305,15 +304,17 @@ public class TestAnnonce extends AbstractITTest {
 
     private void testNotation(TypeCompte typeCompte) throws InterruptedException {
         connectAndGoToAnnonce(typeCompte, "lolmdrxD");
-        assertCoreInformationOfAnnonce(EtatAnnonce.A_NOTER);
+        assertCoreInformationOfAnnonce(EtatAnnonce.DONNER_AVIS);
 
         // Lien "notez artisan"
         driver.findElement(
                 By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[4]/div/div/div/div[2]/div[2]/div/div[3]/a"))
                 .click();
 
+        Thread.sleep(1000);
+
         WebElement checkElementEnvoyerDevisPresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
-                .until(ExpectedConditions.visibilityOfElementLocated(By.id("notationArtisanModal")));
+                .until(ExpectedConditions.presenceOfElementLocated(By.id("donnerAvisArtisanModal")));
         assertNotNull(checkElementEnvoyerDevisPresent);
 
         // Clique sur la première étoile

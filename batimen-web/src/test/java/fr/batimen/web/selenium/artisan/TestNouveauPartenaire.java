@@ -76,13 +76,13 @@ public class TestNouveauPartenaire extends AbstractITTest {
         etape2();
 
         WebElement etapeButionNouveauArtisan = new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX).until(ExpectedConditions
-                .visibilityOfElementLocated(By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div/div/form/a")));
+                .presenceOfElementLocated(By.id("etapePrecedenteNouveauArtisan3")));
         Thread.sleep(1000);
 
-        driver.findElement(By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div/div/form/a")).click();
+        driver.findElement(By.id("etapePrecedenteNouveauArtisan3")).click();
         etape2();
         Thread.sleep(1000);
-        driver.findElement(By.xpath("//div[@id='batimenWizard']/ul/li[2]/span")).click();
+        driver.findElement(By.id("etapePrecedenteNouveauArtisan3")).click();
         Thread.sleep(1000);
         etape2();
         Thread.sleep(1000);

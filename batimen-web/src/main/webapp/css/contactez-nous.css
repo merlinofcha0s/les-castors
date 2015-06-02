@@ -4,11 +4,13 @@
 .contacteznous .contactmethod{
     line-height: 50px;
     text-align: center;
+    font-size: 10px;
 }
 
 .contacteznous .contactmethod .ico{
-    font-size: 50px;
+    font-size: 38px;
     margin-right: 20px;
+    vertical-align: bottom;
 }
 .contacteznous .contactmethod p {
     font-size: 1.8em;
@@ -20,5 +22,4 @@
     font-weight: bold;
     text-transform: uppercase;
     font-family: "Open Sans",sans-serif;
-    padding-top: 15px;
 }

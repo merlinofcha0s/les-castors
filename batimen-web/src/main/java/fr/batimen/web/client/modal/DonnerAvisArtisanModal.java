@@ -27,7 +27,7 @@ import fr.batimen.web.client.event.NoterArtisanEventOpen;
  * @author Casaucau Cyril
  * 
  */
-public class NotationArtisanModal extends ModalCastor {
+public class DonnerAvisArtisanModal extends ModalCastor {
 
     private static final long serialVersionUID = 1L;
 
@@ -42,8 +42,8 @@ public class NotationArtisanModal extends ModalCastor {
         response.render(CssHeaderItem.forUrl("//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"));
     }
 
-    public NotationArtisanModal(String id) {
-        super(id, "Evaluation de votre artisan", "550");
+    public DonnerAvisArtisanModal(String id) {
+        super(id, "Avis sur votre artisan", "550");
 
         feedBackPanel = new BatimenFeedbackPanel("feedbackPanelNotationArtisan");
         feedBackPanel.setOutputMarkupId(true);

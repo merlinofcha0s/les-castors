@@ -77,7 +77,7 @@ public class ArtisanService {
      * @param email
      * @return
      */
-    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    @TransactionAttribute(TransactionAttributeType.MANDATORY)
     public Artisan checkArtisanExiste(String email) {
         Artisan artisanExiste = artisanDAO.getArtisanByEmail(email);
 

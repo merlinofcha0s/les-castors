@@ -64,7 +64,7 @@ public class Annonce extends MasterPage {
     private WebMarkupContainer containerContactMaster;
     private WebMarkupContainer containerActions;
     private WebMarkupContainer notationAnnonceParClientContainer;
-    private WebMarkupContainer containerPopupNotationArtisan;
+    private WebMarkupContainer containerPopupAvisArtisan;
     private WebMarkupContainer modifierAnnonceContainer;
     private WebMarkupContainer supprimerAnnonceContainer;
 
@@ -73,7 +73,7 @@ public class Annonce extends MasterPage {
     private InscriptionModal inscriptionModal;
     private SelectionEntrepriseModal selectionEntrepriseModal;
     private DesincriptionArtisanModal desincriptionArtisanModal;
-    private NotationArtisanModal notationArtisanModal;
+    private DonnerAvisArtisanModal donnerAvisArtisanModal;
 
     private AnnonceAffichageDTO annonceAffichageDTO;
 
@@ -171,7 +171,7 @@ public class Annonce extends MasterPage {
             @Override
             public boolean isVisible() {
                 return roleUtils.checkClientAndAdminRoles() && !(annonceAffichageDTO.getAnnonce().getEtatAnnonce().equals(EtatAnnonce.DESACTIVE)
-                        || annonceAffichageDTO.getAnnonce().getEtatAnnonce().equals(EtatAnnonce.A_NOTER)
+                        || annonceAffichageDTO.getAnnonce().getEtatAnnonce().equals(EtatAnnonce.DONNER_AVIS)
                         || annonceAffichageDTO.getAnnonce().getEtatAnnonce().equals(EtatAnnonce.SUPPRIMER)
                         || annonceAffichageDTO.getAnnonce().getEtatAnnonce().equals(EtatAnnonce.TERMINER));
             }
@@ -528,7 +528,7 @@ public class Annonce extends MasterPage {
                     feedBackPanelGeneral.getFeedbackMessages().clear();
                 }
                 target.add(feedBackPanelGeneral);
-                target.add(containerPopupNotationArtisan);
+                target.add(containerPopupAvisArtisan);
                 this.send(target.getPage(), Broadcast.BREADTH, new NoterArtisanEventOpen(target));
             }
 
@@ -545,7 +545,7 @@ public class Annonce extends MasterPage {
              */
             @Override
             public boolean isVisible() {
-                return annonceAffichageDTO.getAnnonce().getEtatAnnonce().equals(EtatAnnonce.A_NOTER);
+                return annonceAffichageDTO.getAnnonce().getEtatAnnonce().equals(EtatAnnonce.DONNER_AVIS);
             }
         };
 
@@ -728,17 +728,17 @@ public class Annonce extends MasterPage {
     }
 
     private void initPopupNotationArtisan() {
-        containerPopupNotationArtisan = new WebMarkupContainer("containerPopupNotationArtisan");
-        containerPopupNotationArtisan.setOutputMarkupId(true);
-        notationArtisanModal = new NotationArtisanModal("notationArtisanModal") {
+        containerPopupAvisArtisan = new WebMarkupContainer("containerPopupAvisArtisan");
+        containerPopupAvisArtisan.setOutputMarkupId(true);
+        donnerAvisArtisanModal = new DonnerAvisArtisanModal("donnerAvisArtisanModal") {
             @Override
             public boolean isVisible() {
-                return annonceAffichageDTO.getAnnonce().getEtatAnnonce().equals(EtatAnnonce.A_NOTER) && visibilityEntrepriseSelectionneeField();
+                return annonceAffichageDTO.getAnnonce().getEtatAnnonce().equals(EtatAnnonce.DONNER_AVIS) && visibilityEntrepriseSelectionneeField();
             }
         };
 
-        containerPopupNotationArtisan.add(notationArtisanModal);
-        add(containerPopupNotationArtisan);
+        containerPopupAvisArtisan.add(donnerAvisArtisanModal);
+        add(containerPopupAvisArtisan);
     }
 
     private void initContainerPhoto() {
@@ -801,7 +801,7 @@ public class Annonce extends MasterPage {
                 annonceAffichageDTO.setEntrepriseSelectionnee(entreprise);
                 nomEntrepriseSelectionnee.setObject(entreprise.getNomComplet());
 
-                annonceAffichageDTO.getAnnonce().setEtatAnnonce(EtatAnnonce.A_NOTER);
+                annonceAffichageDTO.getAnnonce().setEtatAnnonce(EtatAnnonce.DONNER_AVIS);
                 etatAnnonceValue.setObject(annonceAffichageDTO.getAnnonce().getEtatAnnonce().getType());
 
                 StringBuilder messageFeedback = new StringBuilder("L'entreprise ");
@@ -815,7 +815,7 @@ public class Annonce extends MasterPage {
             // On set le model pour que le nom de l'entreprise soit
             // rafraichi par la requette ajax
 
-            selectionEntrepriseEvent.getTarget().add(feedBackPanelGeneral, containerEntreprisesGlobales, etatAnnonce, containerPopupNotationArtisan, modifierAnnonceContainer, supprimerAnnonceContainer);
+            selectionEntrepriseEvent.getTarget().add(feedBackPanelGeneral, containerEntreprisesGlobales, etatAnnonce, containerPopupAvisArtisan, modifierAnnonceContainer, supprimerAnnonceContainer);
         }
 
         if (event.getPayload() instanceof DesinscriptionArtisanAnnonceEvent) {

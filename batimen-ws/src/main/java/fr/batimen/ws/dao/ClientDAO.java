@@ -72,7 +72,7 @@ public class ClientDAO extends AbstractDAO<Client> {
      *            L'email du client
      * @return Le client qui a le mail passé en param.
      */
-    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    @TransactionAttribute(TransactionAttributeType.MANDATORY)
     public Client getClientByEmail(String email) {
 
         Client clientFinded = null;
