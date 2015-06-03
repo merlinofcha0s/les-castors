@@ -365,7 +365,8 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
                     && notification.getNomEntreprise().equals("Pebronne enterprise")
                     && notification
                     .getHashIDAnnonce()
-                    .equals("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21")) {
+                    .equals("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21")
+                    && notification.getSiret().equals("43394298400017")) {
                 notificationPresent = Boolean.TRUE;
             }
         }
@@ -458,7 +459,8 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
                     && notification.getNomEntreprise().equals("Pebronne enterprise")
                     && notification
                     .getHashIDAnnonce()
-                    .equals("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21")) {
+                    .equals("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21")
+                    && notification.getSiret().equals("43394298400017")) {
                 notificationPresent = Boolean.TRUE;
             }
         }

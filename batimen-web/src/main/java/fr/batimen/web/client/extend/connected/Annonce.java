@@ -394,9 +394,7 @@ public class Annonce extends MasterPage {
 
                     @Override
                     public void onClick() {
-                        // URLEncoder.encode(notification.getArtisanNotifier().getEntreprise().getNomComplet(),
-                        // "UTF-8")
-                        // TODO A Completer quand la page entreprise sera prete
+                        // TODO A Completer quand la gestion des pdfs sera prete
                     }
                 };
 
@@ -489,15 +487,15 @@ public class Annonce extends MasterPage {
         Label entrepriseSelectionnee = new Label("entrepriseSelectionnee", nomEntrepriseSelectionnee);
 
         LinkLabel voirProfilEntrepriseEntrepriseSelectionnee = new LinkLabel("voirProfilEntrepriseSelectionnee",
-                new Model<String>("Voir profil")) {
+                new Model<>("Voir profil")) {
 
             private static final long serialVersionUID = 1L;
 
             @Override
             public void onClick() {
-                // URLEncoder.encode(notification.getArtisanNotifier().getEntreprise().getNomComplet(),
-                // "UTF-8")
-                // TODO A Completer quand la page entreprise sera prete
+                PageParameters params = new PageParameters();
+                params.add(ParamsConstant.ID_ENTREPRISE_PARAM, annonceAffichageDTO.getEntrepriseSelectionnee().getSiret());
+                this.setResponsePage(Entreprise.class, params);
             }
         };
 

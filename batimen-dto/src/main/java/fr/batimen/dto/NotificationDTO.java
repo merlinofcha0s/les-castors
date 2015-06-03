@@ -40,6 +40,8 @@ public class NotificationDTO extends AbstractDTO {
     private String nomEntreprise;
     @NotNull
     private String hashIDAnnonce;
+    @NotNull
+    private String siret;
 
     /**
      * @return the typeNotification
@@ -161,11 +163,19 @@ public class NotificationDTO extends AbstractDTO {
         this.hashIDAnnonce = hashIDAnnonce;
     }
 
+    public String getSiret() {
+        return siret;
+    }
+
+    public void setSiret(String siret) {
+        this.siret = siret;
+    }
+
     /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#hashCode()
-     */
+         * (non-Javadoc)
+         *
+         * @see java.lang.Object#hashCode()
+         */
     @Override
     public int hashCode() {
         return Objects.hashCode(Objects.hash(this.typeNotification, this.dateNotification, this.statutNotification,

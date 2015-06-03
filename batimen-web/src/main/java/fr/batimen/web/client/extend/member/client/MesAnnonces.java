@@ -9,6 +9,7 @@ import fr.batimen.dto.DemandeMesAnnoncesDTO;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.web.app.constants.ParamsConstant;
 import fr.batimen.web.app.security.RolesUtils;
+import fr.batimen.web.client.extend.connected.Entreprise;
 import fr.batimen.ws.client.service.UtilisateurServiceREST;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -171,7 +172,7 @@ public final class MesAnnonces extends MasterPage {
         }
 
         //Pas afficher si c'est un artisan
-        Label nbDevisHeader = new Label("nbDevisHeader", "Nb devis"){
+        Label nbDevisHeader = new Label("nbDevisHeader", "Nb devis") {
 
             @Override
             public boolean isVisible() {
@@ -211,7 +212,7 @@ public final class MesAnnonces extends MasterPage {
                 sizeCSSProgressBar.append(annonce.getEtatAnnonce().getPercentage()).append(";");
                 progressBar.add(new AttributeModifier("style", sizeCSSProgressBar.toString()));
 
-                Label nbDevis = new Label("nbDevis", annonce.getNbDevis()){
+                Label nbDevis = new Label("nbDevis", annonce.getNbDevis()) {
 
                     @Override
                     public boolean isVisible() {
@@ -275,9 +276,9 @@ public final class MesAnnonces extends MasterPage {
 
     private void onclickParQuiLink(NotificationDTO notificationDTO) {
         if (notificationDTO.getTypeNotification().getParQui().equals(TypeCompte.ARTISAN)) {
-            // URLEncoder.encode(notification.getArtisanNotifier().getEntreprise().getNomComplet(),
-            // "UTF-8")
-            // TODO A Completer quand la page entreprise sera prete
+            PageParameters params = new PageParameters();
+            params.add(ParamsConstant.ID_ENTREPRISE_PARAM, notificationDTO.getSiret());
+            this.setResponsePage(Entreprise.class, params);
         } else if (notificationDTO.getTypeNotification().getParQui().equals(TypeCompte.CLIENT)) {
             PageParameters parameters = new PageParameters();
             parameters.add("login", notificationDTO.getClientLogin());
@@ -302,8 +303,8 @@ public final class MesAnnonces extends MasterPage {
             this.setResponsePage(Annonce.class, params);
         } else if (notificationDTO.getTypeNotification().getParQui().equals(TypeCompte.CLIENT)) {
             PageParameters params = new PageParameters();
-            //params.add(ParamsConstant.ID_ENTREPRISE_PARAM, notificationDTO.get());
-            this.setResponsePage(Annonce.class, params);
+            params.add(ParamsConstant.ID_ENTREPRISE_PARAM, notificationDTO.getSiret());
+            this.setResponsePage(Entreprise.class, params);
         }
     }
 
