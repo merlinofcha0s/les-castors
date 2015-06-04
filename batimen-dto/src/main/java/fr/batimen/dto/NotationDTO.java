@@ -1,12 +1,12 @@
 package fr.batimen.dto;
 
-import static fr.batimen.dto.constant.ValidatorConstant.NOTATION_MAX_COMMENTAIRE;
-import static fr.batimen.dto.constant.ValidatorConstant.NOTATION_MIN_COMMENTAIRE;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 import java.util.Objects;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import static fr.batimen.dto.constant.ValidatorConstant.NOTATION_MAX_COMMENTAIRE;
+import static fr.batimen.dto.constant.ValidatorConstant.NOTATION_MIN_COMMENTAIRE;
 
 public class NotationDTO extends AbstractDTO {
 
@@ -19,6 +19,8 @@ public class NotationDTO extends AbstractDTO {
     private String commentaire;
     @NotNull
     private String nomEntreprise;
+    @NotNull
+    private String nomPrenomOrLoginClient;
 
     /**
      * @return the score
@@ -65,32 +67,38 @@ public class NotationDTO extends AbstractDTO {
         this.nomEntreprise = nomEntreprise;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#hashCode()
-     */
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(Objects.hash(this.score, this.commentaire, this.nomEntreprise));
+    public String getNomPrenomOrLoginClient() {
+        return nomPrenomOrLoginClient;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
-    @Override
-    public boolean equals(Object object) {
-        if (this == object) {
-            return true;
-        }
+    public void setNomPrenomOrLoginClient(String nomPrenomOrLoginClient) {
+        this.nomPrenomOrLoginClient = nomPrenomOrLoginClient;
+    }
 
-        if (object instanceof NotationDTO) {
-            NotationDTO other = (NotationDTO) object;
-            return Objects.equals(this.score, other.score) && Objects.equals(this.commentaire, other.commentaire)
-                    && Objects.equals(this.nomEntreprise, other.nomEntreprise);
-        }
-        return false;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        NotationDTO that = (NotationDTO) o;
+        return Objects.equals(score, that.score) &&
+                Objects.equals(commentaire, that.commentaire) &&
+                Objects.equals(nomEntreprise, that.nomEntreprise) &&
+                Objects.equals(nomPrenomOrLoginClient, that.nomPrenomOrLoginClient);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(score, commentaire, nomEntreprise, nomPrenomOrLoginClient);
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("NotationDTO{");
+        sb.append("score=").append(score);
+        sb.append(", commentaire='").append(commentaire).append('\'');
+        sb.append(", nomEntreprise='").append(nomEntreprise).append('\'');
+        sb.append(", nomPrenomOrLoginClient='").append(nomPrenomOrLoginClient).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }

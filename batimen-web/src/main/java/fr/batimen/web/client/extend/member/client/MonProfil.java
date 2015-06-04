@@ -1,22 +1,18 @@
 package fr.batimen.web.client.extend.member.client;
 
-import javax.inject.Inject;
-
+import fr.batimen.dto.ClientDTO;
+import fr.batimen.dto.NotationDTO;
+import fr.batimen.dto.aggregate.MonProfilDTO;
+import fr.batimen.web.app.security.Authentication;
+import fr.batimen.web.client.component.*;
+import fr.batimen.web.client.master.MasterPage;
+import fr.batimen.ws.client.service.ClientServiceREST;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
-import fr.batimen.dto.ClientDTO;
-import fr.batimen.dto.NotationDTO;
-import fr.batimen.dto.aggregate.MonProfilDTO;
-import fr.batimen.web.app.security.Authentication;
-import fr.batimen.web.client.component.Commentaire;
-import fr.batimen.web.client.component.ContactezNous;
-import fr.batimen.web.client.component.Profil;
-import fr.batimen.web.client.component.RaterCastor;
-import fr.batimen.web.client.master.MasterPage;
-import fr.batimen.ws.client.service.ClientServiceREST;
+import javax.inject.Inject;
 
 /**
  * Page où les utilisateurs pourront voir un resumé de leurs activités sur le
@@ -101,22 +97,8 @@ public class MonProfil extends MasterPage {
 
             @Override
             protected void populateItem(ListItem<NotationDTO> item) {
-                NotationDTO notation = item.getModelObject();
-
-                RaterCastor rater = new RaterCastor("raterCastor");
-                rater.setIsReadOnly(Boolean.TRUE);
-                rater.setNumberOfStars(notation.getScore().intValue());
-
-                Label commentaireNotation = new Label("commentaireRater", rater.getCommentaireScore(notation.getScore()
-                        .intValue()));
-                Label nomEntreprise = new Label("nomEntreprise", notation.getNomEntreprise());
-                Label commentaireClient = new Label("commentaireClient", notation.getCommentaire());
-
+                Rater rater = new Rater("rater",  item.getModelObject(), true);
                 item.add(rater);
-                item.add(commentaireNotation);
-                item.add(nomEntreprise);
-                item.add(nomEntreprise);
-                item.add(commentaireClient);
             }
 
             /*

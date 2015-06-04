@@ -7,6 +7,7 @@ import fr.batimen.web.client.component.Profil;
 import fr.batimen.web.client.master.MasterPage;
 import org.apache.wicket.markup.head.CssContentHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 /**
@@ -16,6 +17,8 @@ public class Entreprise extends MasterPage {
 
     //SIRET
     private String idEntreprise;
+
+    private static final  String REFRESH_TOOLTIP_ON_CATEGORIE_TYPE = "$('.categorie-entreprise').tooltip()";
 
     public Entreprise() {
         super("", "", "Entreprise", true, "img/bg_title1.jpg");
@@ -32,6 +35,7 @@ public class Entreprise extends MasterPage {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.render(CssContentHeaderItem.forUrl("css/font_icons8.css"));
+        response.render(OnDomReadyHeaderItem.forScript(REFRESH_TOOLTIP_ON_CATEGORIE_TYPE));
     }
 
     private void initComposants() {

@@ -879,6 +879,11 @@ table tr td .error {
 }
 
 .categorie-entreprise{
-    padding-left: 10px;
+    padding-left: 5px;
     font-size: 30px;
+    width: 35px;
+}
+
+.icons-8-entreprise{
+    vertical-align: top;
 }
