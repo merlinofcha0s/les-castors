@@ -836,3 +836,49 @@ table tr td .error {
 #votreAvisInteresse{
     padding-top: 10px;
 }
+
+/*Profil entreprise*/
+.containerInformationsEntreprise {
+    padding-top: 10px;
+}
+
+.containerInformationsEntrepriseGeneral{
+    padding-top: 10px;
+    padding-bottom: 15px;
+}
+
+.glyphEntreprise {
+    font-size: 26px;
+}
+
+.labelEntreprise {
+    padding-left: 20px;
+    float: left;
+    padding-right: 5px;
+    padding-top: 7px;
+}
+
+.glyphEntreprise {
+    font-size: 26px;
+}
+
+.labelEntreprise {
+    padding-left: 20px;
+    float: left;
+    padding-right: 5px;
+    padding-top: 7px;
+}
+
+.informationEntreprise {
+    padding-left: 20px;
+    padding-top: 7px;
+}
+
+.titleEntreprise{
+    padding-bottom: 15px;
+}
+
+.categorie-entreprise{
+    padding-left: 10px;
+    font-size: 30px;
+}

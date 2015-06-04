@@ -1,4 +1,60 @@
 <wicket:head>
 </wicket:head>
 <wicket:extend>
+    <div class="row-fluid">
+        <div wicket:id="profil"></div>
+        <div class="span7">
+            <h1 class="headInModule titleEntreprise">Entreprise de toto</h1>
+
+            <div class="containerInformationsEntrepriseGeneral">
+                <div class="bg_title">
+                    <h2 class="headInModule">Informations générales</h2>
+                </div>
+                <div>
+                    <div>
+                        <div class="containerGlyph">
+                            <span class="icon-Profile glyphEntreprise"></span>
+                        </div>
+                        <div class="labelEntreprise">SIRET :</div>
+                        <div class="informationEntreprise">43394298400017</div>
+                    </div>
+                    <div class="containerInformationsEntreprise">
+                        <div class="containerGlyph">
+                            <span class="icon-Flag glyphEntreprise"></span>
+                        </div>
+                        <div class="labelEntreprise">Statut juridique :</div>
+                        <div class="informationEntreprise">SARL</div>
+                    </div>
+                    <div class="containerInformationsEntreprise">
+                        <div class="containerGlyph">
+                            <span class="icon-People1 glyphEntreprise"></span>
+                        </div>
+                        <div class="labelEntreprise">Nombre d'employés :</div>
+                        <div class="informationEntreprise">10</div>
+                    </div>
+                    <div class="containerInformationsEntreprise">
+                        <div class="containerGlyph">
+                            <span class="icon-Clock glyphEntreprise"></span>
+                        </div>
+                        <div class="labelEntreprise">Date de création :</div>
+                        <div class="informationEntreprise">10/05/2012</div>
+                    </div>
+                </div>
+            </div>
+            <div class="containerInformationsEntrepriseGeneral">
+                <div class="bg_title">
+                    <h2 class="headInModule">Catégorie(s) métier(s)</h2>
+                </div>
+                <div id="containerActivite" class="fuelux offset4">
+                    <div class="icon-Lightning font-glyph-entreprise categorie-entreprise" data-toggle="tooltip"
+                          data-original-title="Electricité" data-placement="top" title="Electricité"></div>
+                    <span class="icons8-plumbing font-glyph-entreprise categorie-entreprise"></span>
+                    <span class="icons8-garden-shears font-glyph-entreprise categorie-entreprise"></span>
+                    <span class="icon-Tool font-glyph-entreprise categorie-entreprise"></span>
+                </div>
+            </div>
+        </div>
+        </div>
+        <div wicket:id="commentaire"></div>
+        <div wicket:id="contactezNous"></div>
 </wicket:extend>

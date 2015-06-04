@@ -155,7 +155,7 @@ public abstract class MasterPage extends WebPage {
 
         htmlTag.add(containerTitleHeader);
 
-        Label titleHeader = new Label("titleHeader", new Model<String>(title));
+        Label titleHeader = new Label("titleHeader", new Model<>(title));
         containerTitleHeader.add(titleHeader);
 
         // On prends l'url complete de la page d'accueil avec l'image de fonds
