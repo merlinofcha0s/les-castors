@@ -1,29 +1,24 @@
 package fr.batimen.web.client.extend.member.client;
 
-import javax.inject.Inject;
-
+import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.EntrepriseDTO;
+import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
 import fr.batimen.dto.enums.TypeCompte;
+import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.app.security.RolesUtils;
+import fr.batimen.web.client.component.Commentaire;
+import fr.batimen.web.client.component.ContactezNous;
+import fr.batimen.web.client.component.Profil;
 import fr.batimen.web.client.extend.nouveau.artisan.Etape3Entreprise;
-import fr.batimen.web.client.extend.nouveau.artisan.Etape3EntrepriseForm;
+import fr.batimen.web.client.extend.nouveau.devis.Etape4InscriptionForm;
+import fr.batimen.web.client.master.MasterPage;
 import org.apache.wicket.model.CompoundPropertyModel;
-import org.apache.wicket.model.Model;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.batimen.dto.ClientDTO;
-import fr.batimen.dto.aggregate.CreationAnnonceDTO;
-import fr.batimen.web.app.security.Authentication;
-import fr.batimen.web.client.component.Commentaire;
-import fr.batimen.web.client.component.ContactezNous;
-import fr.batimen.web.client.component.Profil;
-import fr.batimen.web.client.extend.nouveau.devis.Etape4InscriptionForm;
-import fr.batimen.web.client.master.MasterPage;
-
-import java.io.Serializable;
+import javax.inject.Inject;
 
 /**
  * Page de modification des informations utilisateurs
@@ -60,7 +55,7 @@ public class ModifierMonProfil extends MasterPage {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Init des composants de la page de modification de mon profil");
         }
-        Profil profil = new Profil("profil");
+        Profil profil = new Profil("profil", false);
 
         Etape4InscriptionForm inscriptionForm = new Etape4InscriptionForm("formInscription",
                 propertyModelNouvelleAnnonce, Boolean.TRUE);

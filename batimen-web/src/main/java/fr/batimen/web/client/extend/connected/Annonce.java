@@ -146,7 +146,7 @@ public class Annonce extends MasterPage {
     }
 
     private void initComposants() {
-        Profil profil = new Profil("profil");
+        Profil profil = new Profil("profil", false);
 
         ContactezNous contactezNous = new ContactezNous("contactezNous");
         Commentaire commentaire = new Commentaire("commentaire");

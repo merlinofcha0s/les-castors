@@ -1,15 +1,22 @@
 package fr.batimen.web.client.extend.member.client;
 
-import java.text.SimpleDateFormat;
-import java.util.List;
-
-import javax.inject.Inject;
-
+import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.DemandeMesAnnoncesDTO;
+import fr.batimen.dto.NotificationDTO;
+import fr.batimen.dto.aggregate.MesAnnoncesDTO;
 import fr.batimen.dto.enums.TypeCompte;
+import fr.batimen.dto.helper.CategorieLoader;
+import fr.batimen.web.app.constants.FeedbackMessageLevel;
 import fr.batimen.web.app.constants.ParamsConstant;
+import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.app.security.RolesUtils;
+import fr.batimen.web.client.component.Commentaire;
+import fr.batimen.web.client.component.ContactezNous;
+import fr.batimen.web.client.component.LinkLabel;
+import fr.batimen.web.client.component.Profil;
+import fr.batimen.web.client.extend.connected.Annonce;
 import fr.batimen.web.client.extend.connected.Entreprise;
+import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.ws.client.service.UtilisateurServiceREST;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -23,18 +30,9 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.batimen.dto.AnnonceDTO;
-import fr.batimen.dto.NotificationDTO;
-import fr.batimen.dto.aggregate.MesAnnoncesDTO;
-import fr.batimen.dto.helper.CategorieLoader;
-import fr.batimen.web.app.constants.FeedbackMessageLevel;
-import fr.batimen.web.app.security.Authentication;
-import fr.batimen.web.client.component.Commentaire;
-import fr.batimen.web.client.component.ContactezNous;
-import fr.batimen.web.client.component.LinkLabel;
-import fr.batimen.web.client.component.Profil;
-import fr.batimen.web.client.extend.connected.Annonce;
-import fr.batimen.web.client.master.MasterPage;
+import javax.inject.Inject;
+import java.text.SimpleDateFormat;
+import java.util.List;
 
 /**
  * Page ou l'utilisateur pourra consulter son compte ainsi que l'avancement de
@@ -91,7 +89,7 @@ public final class MesAnnonces extends MasterPage {
             LOGGER.debug("Init des composants statiques");
         }
 
-        Profil profil = new Profil("profil");
+        Profil profil = new Profil("profil", false);
         ContactezNous contactezNous = new ContactezNous("contactezNous");
         Commentaire commentaire = new Commentaire("commentaire");
 

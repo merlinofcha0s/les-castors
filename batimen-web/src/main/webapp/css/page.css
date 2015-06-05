@@ -596,6 +596,16 @@ table tr td .error {
     margin-top: 10px;
 }
 
+#container-entreprise-verifier{
+    margin-top: 40px;
+    text-align: center;
+}
+
+#container-entreprise-verifier div{
+    margin-top: 9px;
+}
+
+
 .raterContainer div div {
     font-size: 20px;
     width: 24px;
@@ -875,7 +885,7 @@ table tr td .error {
 }
 
 .titleEntreprise{
-    padding-bottom: 15px;
+    padding-bottom: 5px;
 }
 
 .categorie-entreprise{
@@ -886,4 +896,9 @@ table tr td .error {
 
 .icons-8-entreprise{
     vertical-align: top;
+}
+
+.icon-specialite{
+    font-size: 21px;
+    padding-right: 15px;
 }

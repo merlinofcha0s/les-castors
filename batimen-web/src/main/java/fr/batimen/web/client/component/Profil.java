@@ -9,6 +9,9 @@ import fr.batimen.web.app.security.RolesUtils;
 import fr.batimen.web.client.extend.connected.Entreprise;
 import fr.batimen.web.client.extend.member.client.ModifierMonProfil;
 import fr.batimen.web.client.extend.member.client.MonProfil;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
@@ -31,11 +34,34 @@ public class Profil extends Panel {
     private LinkLabel modifierMonProfil;
     private Model<String> voirProfilModel;
     private Model<String> modifierProfilModel;
+    private boolean activeEntrepriseVerif;
 
-    public Profil(String id) {
+    private static final  String REFRESH_TOOLTIP_ON_ENTREPRISE_VERIFIEE = "$('#container-entreprise-verifier').tooltip()";
+
+    public Profil(String id, boolean activeEntrepriseVerif) {
         super(id);
+        this.activeEntrepriseVerif = activeEntrepriseVerif;
         setModel();
         setLink();
+        initContainerEntrepriseVerifiee();
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        if(activeEntrepriseVerif){
+            response.render(OnDomReadyHeaderItem.forScript(REFRESH_TOOLTIP_ON_ENTREPRISE_VERIFIEE));
+        }
+    }
+
+    private void initContainerEntrepriseVerifiee(){
+        WebMarkupContainer containerEntrepriseVerifiee = new WebMarkupContainer("containerEntrepriseVerifiee"){
+            @Override
+            public boolean isVisible() {
+                return activeEntrepriseVerif;
+            }
+        };
+        add(containerEntrepriseVerifiee);
     }
 
     private void setLink() {

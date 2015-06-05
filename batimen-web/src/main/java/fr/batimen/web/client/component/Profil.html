@@ -1,12 +1,18 @@
 <wicket:panel>
-	<div id="divInfoClientContenant">
+	<div class="span2" id="divInfoClientContenant">
 		<div id="divInfoClientContenu">
 			<img
-				width="80"
-				src="img/person.png" />
+                    width="80"
+                    src="img/person.png"/>
 			<div>
-				<a wicket:id="monProfil">Voir le profil</a><br /> <a wicket:id="modifierMonProfil">Modifier le profil</a>
+				<a wicket:id="monProfil">Voir le profil</a><br/> <a wicket:id="modifierMonProfil">Modifier le profil</a>
 			</div>
+		</div>
+		<div id="container-entreprise-verifier" wicket:id="containerEntrepriseVerifiee" data-toggle="tooltip"
+             data-original-title="Cette entreprise a été verifiée par nos soins" data-placement="top"
+             title="Cette entreprise a été verifiée par nos soins">
+			<img src="img/thumbs-up.png" alt="" width="40px">
+			<div>Entreprise vérifiée</div>
 		</div>
 	</div>
 </wicket:panel>

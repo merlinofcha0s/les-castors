@@ -104,7 +104,7 @@ public class ModifierAnnonce extends MasterPage {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Init des composants de la page de modification de mon annonce");
         }
-        Profil profil = new Profil("profil");
+        Profil profil = new Profil("profil", false);
         etape3AnnonceForm = new Etape3AnnonceForm("formQualification", propertyModelModificationAnnonce, sousCategorieMetierDTOList, sousCategorieMetierDTO);
 
         photosContainer = new PhotosContainer("afficheurPhotos", annonceAffichageDTO.getImages(), "Les photos de votre annonce", "h4", true);
