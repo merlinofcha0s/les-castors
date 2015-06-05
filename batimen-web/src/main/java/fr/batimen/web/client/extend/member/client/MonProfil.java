@@ -97,7 +97,7 @@ public class MonProfil extends MasterPage {
 
             @Override
             protected void populateItem(ListItem<NotationDTO> item) {
-                Rater rater = new Rater("rater",  item.getModelObject(), true);
+                RaterCastor rater = new RaterCastor("rater",  item.getModelObject(), true);
                 item.add(rater);
             }
 

@@ -6,7 +6,6 @@ import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.Model;
@@ -16,7 +15,7 @@ import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.batimen.web.client.component.BatimenFeedbackPanel;
 import fr.batimen.web.client.component.ModalCastor;
-import fr.batimen.web.client.component.RaterCastor;
+import fr.batimen.web.client.component.RaterStarsCastor;
 import fr.batimen.web.client.event.NoterArtisanEventClose;
 import fr.batimen.web.client.event.NoterArtisanEventOpen;
 
@@ -31,7 +30,7 @@ public class DonnerAvisArtisanModal extends ModalCastor {
 
     private static final long serialVersionUID = 1L;
 
-    private final RaterCastor raterCastor;
+    private final RaterStarsCastor raterCastor;
     private final TextArea<String> textAreaCommentaire;
 
     private final BatimenFeedbackPanel feedBackPanel;
@@ -48,7 +47,7 @@ public class DonnerAvisArtisanModal extends ModalCastor {
         feedBackPanel = new BatimenFeedbackPanel("feedbackPanelNotationArtisan");
         feedBackPanel.setOutputMarkupId(true);
 
-        raterCastor = new RaterCastor("raterCastor", true);
+        raterCastor = new RaterStarsCastor("raterCastor", true);
         raterCastor.setMarkupId("raterCastor");
 
         textAreaCommentaire = new TextArea<String>("textAreaCommentaireNotation", new Model<String>());

@@ -607,7 +607,7 @@ table tr td .error {
     padding-right: 10px;
 }
 
-#avisClientContainer {
+.avisClientContainer {
     width: 265px;
     float: left;
     margin-right: 30px;
