@@ -23,6 +23,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * Created by Casaucau on 02/06/2015.
@@ -74,12 +75,12 @@ public class Entreprise extends MasterPage {
 
     private void loadEntrepriseData() {
         entrepriseDTO = new EntrepriseDTO();
-        //entrepriseDTO.setDateCreation(new Date());
+        entrepriseDTO.setDateCreation(new Date());
         entrepriseDTO.setSiret("73282932000074");
         entrepriseDTO.setStatutJuridique(StatutJuridique.SARL);
         entrepriseDTO.setNomComplet("Entreprise de toto");
         entrepriseDTO.setNbEmployees(10);
-        //entrepriseDTO.setSpecialite("Peinture sur bois");
+        entrepriseDTO.setSpecialite("Peinture sur bois");
 
         entrepriseDTO.getCategoriesMetier().add(CategorieLoader.getCategorieDecorationMaconnerie());
         entrepriseDTO.getCategoriesMetier().add(CategorieLoader.getCategoriePlomberie());
