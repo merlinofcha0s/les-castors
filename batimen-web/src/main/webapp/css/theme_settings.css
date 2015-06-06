@@ -87,3 +87,13 @@ h6,h6 span,h6 a {
 }
 
 /* ***  C O L O R   O P T I O N S  *** */
+
+/* ***  C U S T O M  *** */
+.page_title_block{
+	background : #666666 none repeat scroll 0 0;
+}
+
+.page_title_block .title{
+	color: #ffffff;
+	margin-bottom: 7px !important;
+}

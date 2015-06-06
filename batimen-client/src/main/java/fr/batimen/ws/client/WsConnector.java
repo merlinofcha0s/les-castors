@@ -1,31 +1,6 @@
 package fr.batimen.ws.client;
 
-import java.io.File;
-import java.io.Serializable;
-import java.lang.reflect.Type;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.text.DateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Properties;
-
-import javax.inject.Singleton;
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSession;
-import javax.ws.rs.core.MediaType;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonPrimitive;
-import com.google.gson.JsonSerializationContext;
-import com.google.gson.JsonSerializer;
+import com.google.gson.*;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
 import com.sun.jersey.api.client.config.ClientConfig;
@@ -36,10 +11,27 @@ import com.sun.jersey.multipart.FormDataBodyPart;
 import com.sun.jersey.multipart.FormDataMultiPart;
 import com.sun.jersey.multipart.file.FileDataBodyPart;
 import com.sun.jersey.multipart.impl.MultiPartWriter;
-
 import fr.batimen.core.constant.Constant;
 import fr.batimen.ws.client.enums.PropertiesFileWsClient;
 import fr.batimen.ws.client.ssl.TrustManagerSingleton;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.inject.Singleton;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.ws.rs.core.MediaType;
+import java.io.File;
+import java.io.Serializable;
+import java.lang.reflect.Type;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.text.DateFormat;
+import java.util.Date;
+import java.util.List;
+import java.util.Properties;
 
 /**
  * Classe qui permet de préparer les requètes qui seront envoyées pour
@@ -86,7 +78,7 @@ public class WsConnector implements Serializable {
         // On initialise le context avec le bon trust manager qui activera ou
         // non la verification du certificat.
         try {
-            context = SSLContext.getInstance("SSLv3");
+            context = SSLContext.getInstance("TLSv1.2");
             context.init(null, TrustManagerSingleton.getTrustedCertificate(), TrustManagerSingleton.secureRandomOrNot());
 
             HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
