@@ -1,24 +1,19 @@
 package fr.batimen.dto;
 
-import static fr.batimen.dto.constant.ValidatorConstant.ENTREPRISE_NOM_COMPLET_MAX;
-import static fr.batimen.dto.constant.ValidatorConstant.ENTREPRISE_SIRET_REGEXP;
-import static fr.batimen.dto.constant.ValidatorConstant.ENTREPRISE_SPECIALITE_MAX;
-import static fr.batimen.dto.constant.ValidatorConstant.ENTREPRISE_SPECIALITE_MIN;
+import fr.batimen.dto.constant.ValidatorConstant;
+import fr.batimen.dto.enums.StatutJuridique;
+import org.modelmapper.ModelMapper;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
-
-import fr.batimen.dto.constant.ValidatorConstant;
-import fr.batimen.dto.enums.StatutJuridique;
-import org.modelmapper.ModelMapper;
+import static fr.batimen.dto.constant.ValidatorConstant.*;
 
 public class EntrepriseDTO extends AbstractDTO {
 
@@ -50,6 +45,8 @@ public class EntrepriseDTO extends AbstractDTO {
     private ClientDTO artisan;
 
     private AdresseDTO adresseEntreprise;
+
+    private List<NotationDTO> notationsDTO = new ArrayList<>();
 
     /**
      * @return the dateCreation
@@ -152,11 +149,19 @@ public class EntrepriseDTO extends AbstractDTO {
         this.adresseEntreprise = adresseEntreprise;
     }
 
+    public List<NotationDTO> getNotationsDTO() {
+        return notationsDTO;
+    }
+
+    public void setNotationsDTO(List<NotationDTO> notationsDTO) {
+        this.notationsDTO = notationsDTO;
+    }
+
     /*
-         * (non-Javadoc)
-         *
-         * @see java.lang.Object#hashCode()
-         */
+             * (non-Javadoc)
+             *
+             * @see java.lang.Object#hashCode()
+             */
     @Override
     public int hashCode() {
         return Objects.hashCode(Objects.hash(this.getSiret(), this.getNomComplet()));

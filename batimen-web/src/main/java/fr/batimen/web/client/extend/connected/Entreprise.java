@@ -1,15 +1,10 @@
 package fr.batimen.web.client.extend.connected;
 
-import fr.batimen.dto.AdresseDTO;
-import fr.batimen.dto.CategorieMetierDTO;
-import fr.batimen.dto.ClientDTO;
-import fr.batimen.dto.EntrepriseDTO;
+import fr.batimen.dto.*;
 import fr.batimen.dto.enums.StatutJuridique;
 import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.web.app.constants.ParamsConstant;
-import fr.batimen.web.client.component.Commentaire;
-import fr.batimen.web.client.component.ContactezNous;
-import fr.batimen.web.client.component.Profil;
+import fr.batimen.web.client.component.*;
 import fr.batimen.web.client.master.MasterPage;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.extensions.markup.html.basic.SmartLinkLabel;
@@ -19,6 +14,7 @@ import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
@@ -56,6 +52,7 @@ public class Entreprise extends MasterPage {
         initInformationsGenerales();
         initCategorieEntreprise();
         initContactEntreprise();
+        initAvisContainer();
     }
 
     @Override
@@ -99,6 +96,43 @@ public class Entreprise extends MasterPage {
         client.setNumeroTel("0615124585");
 
         entrepriseDTO.setArtisan(client);
+
+        NotationDTO notationDTO = new NotationDTO();
+        notationDTO.setCommentaire("Bon travaux, artisan sérieux, Bon travaux, artisan sérieux, Bon travaux, artisan sérieux, Bon travaux, artisan sérieux, Bon travaux, artisan sérieux, Bon travaux, artisan sérieux");
+        notationDTO.setNomPrenomOrLoginClient("Robert Patoulachi");
+        notationDTO.setScore((double)4);
+
+        NotationDTO notationDTO2 = new NotationDTO();
+        notationDTO2.setCommentaire("Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay");
+        notationDTO2.setNomPrenomOrLoginClient("Robert Patoulachi");
+        notationDTO2.setScore((double)5);
+
+        NotationDTO notationDTO6 = new NotationDTO();
+        notationDTO6.setCommentaire("Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay");
+        notationDTO6.setNomPrenomOrLoginClient("Robert Patoulachi");
+        notationDTO6.setScore((double)5);
+
+        NotationDTO notationDTO3 = new NotationDTO();
+        notationDTO3.setCommentaire("Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay");
+        notationDTO3.setNomPrenomOrLoginClient("Robert Patoulachi");
+        notationDTO3.setScore((double)5);
+
+        NotationDTO notationDTO4 = new NotationDTO();
+        notationDTO4.setCommentaire("Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay");
+        notationDTO4.setNomPrenomOrLoginClient("Robert Patoulachi");
+        notationDTO4.setScore((double)1);
+
+        NotationDTO notationDTO5 = new NotationDTO();
+        notationDTO5.setCommentaire("Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulayy");
+        notationDTO5.setNomPrenomOrLoginClient("Robert Patoulachi");
+        notationDTO5.setScore((double)1);
+
+        entrepriseDTO.getNotationsDTO().add(notationDTO);
+        entrepriseDTO.getNotationsDTO().add(notationDTO2);
+        entrepriseDTO.getNotationsDTO().add(notationDTO3);
+        entrepriseDTO.getNotationsDTO().add(notationDTO4);
+        entrepriseDTO.getNotationsDTO().add(notationDTO5);
+        entrepriseDTO.getNotationsDTO().add(notationDTO6);
     }
 
     private void initInformationsGenerales() {
@@ -189,5 +223,32 @@ public class Entreprise extends MasterPage {
         SmartLinkLabel mail = new SmartLinkLabel("mail", entrepriseDTO.getArtisan().getEmail());
 
         add(adresse, telephone, mail);
+    }
+
+    private void initAvisContainer(){
+        PageableListView<NotationDTO> notationDTOListView = new PageableListView<NotationDTO>("avisClientContainer", entrepriseDTO.getNotationsDTO(), 2) {
+            @Override
+            protected void populateItem(ListItem<NotationDTO> item) {
+                RaterCastor rater = new RaterCastor("rater",  item.getModelObject(), false);
+                item.add(rater);
+            }
+        };
+
+        CastorAjaxPagingNavigator pagerAvis = new CastorAjaxPagingNavigator("pagerAvis", notationDTOListView);
+
+        RaterStarsCastor moyenneRater = new RaterStarsCastor("moyenneRater");
+        moyenneRater.setIsReadOnly(true);
+
+        Double moyenneAvis = 0.0;
+        int nbAvis = 0;
+        for(NotationDTO notationDTO : entrepriseDTO.getNotationsDTO()){
+            moyenneAvis += notationDTO.getScore();
+            nbAvis++;
+        }
+
+        moyenneAvis = moyenneAvis / nbAvis;
+        moyenneRater.setNumberOfStars(moyenneAvis.intValue());
+
+        add(notationDTOListView, pagerAvis, moyenneRater);
     }
 }
