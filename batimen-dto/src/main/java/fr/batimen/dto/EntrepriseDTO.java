@@ -48,6 +48,8 @@ public class EntrepriseDTO extends AbstractDTO {
 
     private List<NotationDTO> notationsDTO = new ArrayList<>();
 
+    private boolean isVerified;
+
     /**
      * @return the dateCreation
      */
@@ -157,11 +159,19 @@ public class EntrepriseDTO extends AbstractDTO {
         this.notationsDTO = notationsDTO;
     }
 
+    public boolean isVerified() {
+        return isVerified;
+    }
+
+    public void setIsVerified(boolean isVerified) {
+        this.isVerified = isVerified;
+    }
+
     /*
-             * (non-Javadoc)
-             *
-             * @see java.lang.Object#hashCode()
-             */
+                 * (non-Javadoc)
+                 *
+                 * @see java.lang.Object#hashCode()
+                 */
     @Override
     public int hashCode() {
         return Objects.hashCode(Objects.hash(this.getSiret(), this.getNomComplet()));
@@ -200,6 +210,8 @@ public class EntrepriseDTO extends AbstractDTO {
         sb.append(", specialite='").append(specialite).append('\'');
         sb.append(", artisan=").append(artisan);
         sb.append(", adresseEntreprise=").append(adresseEntreprise);
+        sb.append(", notationsDTO=").append(notationsDTO);
+        sb.append(", isVerified=").append(isVerified);
         sb.append('}');
         return sb.toString();
     }
