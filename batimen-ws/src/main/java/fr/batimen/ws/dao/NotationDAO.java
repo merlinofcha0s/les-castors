@@ -1,22 +1,15 @@
 package fr.batimen.ws.dao;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
-import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
-
+import fr.batimen.core.constant.QueryJPQL;
+import fr.batimen.ws.entity.Notation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.batimen.core.constant.QueryJPQL;
-import fr.batimen.ws.entity.Notation;
+import javax.ejb.*;
+import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Classe d'accés aux données pour les notations.
@@ -59,6 +52,33 @@ public class NotationDAO extends AbstractDAO<Notation> {
                 LOGGER.warn("Pas de résultat sur la requète de notation", nre);
             }
             return new ArrayList<Object[]>();
+        }
+
+        return notations;
+    }
+
+    /**
+     * Recupere les notations pour une entreprise
+     *
+     * @param siret
+     *            le siret de l'entreprise partenaire
+     * @return les notations des entreprises.
+     */
+    @TransactionAttribute(TransactionAttributeType.MANDATORY)
+    public List<Notation> getNotationByEntrepriseSiret(String siret) {
+        List<Notation> notations = null;
+
+        try {
+            TypedQuery<Notation> query = entityManager.createNamedQuery(QueryJPQL.NOTATION_BY_ENTREPRISE_SIRET,
+                    Notation.class);
+            query.setParameter(QueryJPQL.PARAM_ENTREPRISE_SIRET, siret);
+
+            notations = query.getResultList();
+        } catch (NoResultException nre) {
+            if (LOGGER.isWarnEnabled()) {
+                LOGGER.warn("Pas de résultat sur la requète de notation", nre);
+            }
+            return new ArrayList<>();
         }
 
         return notations;

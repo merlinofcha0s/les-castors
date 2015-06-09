@@ -27,14 +27,15 @@ import fr.batimen.core.constant.QueryJPQL;
 /**
  * Entité Notation : Symbolise la notation en base de données. Permet de noté le
  * travail effectué par l'artisan.
- * 
+ *
  * @author Casaucau Cyril
- * 
  */
 @Entity
 @Table(name = "Notation")
-@NamedQueries(value = { @NamedQuery(name = QueryJPQL.NOTATION_BY_CLIENT_LOGIN,
-        query = "SELECT n, n.annonce.entrepriseSelectionnee.nomComplet FROM Notation AS n WHERE n.annonce.demandeur.login = :login AND n.annonce.etatAnnonce != 4 ORDER BY n.dateNotation DESC") })
+@NamedQueries(value = {@NamedQuery(name = QueryJPQL.NOTATION_BY_CLIENT_LOGIN,
+        query = "SELECT n, n.annonce.entrepriseSelectionnee.nomComplet FROM Notation AS n WHERE n.annonce.demandeur.login = :login AND n.annonce.etatAnnonce != 4 ORDER BY n.dateNotation DESC"),
+        @NamedQuery(name = QueryJPQL.NOTATION_BY_ENTREPRISE_SIRET,
+                query = "SELECT n FROM Notation AS n WHERE n.artisan.entreprise.siret = :siret")})
 public class Notation extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = -1038954593364210382L;
@@ -65,8 +66,7 @@ public class Notation extends AbstractEntity implements Serializable {
     }
 
     /**
-     * @param id
-     *            the id to set
+     * @param id the id to set
      */
     public void setId(Long id) {
         this.id = id;
@@ -80,8 +80,7 @@ public class Notation extends AbstractEntity implements Serializable {
     }
 
     /**
-     * @param score
-     *            the score to set
+     * @param score the score to set
      */
     public void setScore(Double score) {
         this.score = score;
@@ -95,8 +94,7 @@ public class Notation extends AbstractEntity implements Serializable {
     }
 
     /**
-     * @param commentaire
-     *            the commentaire to set
+     * @param commentaire the commentaire to set
      */
     public void setCommentaire(String commentaire) {
         this.commentaire = commentaire;
@@ -110,8 +108,7 @@ public class Notation extends AbstractEntity implements Serializable {
     }
 
     /**
-     * @param annonce
-     *            the annonce to set
+     * @param annonce the annonce to set
      */
     public void setAnnonce(Annonce annonce) {
         this.annonce = annonce;
@@ -125,8 +122,7 @@ public class Notation extends AbstractEntity implements Serializable {
     }
 
     /**
-     * @param artisan
-     *            the artisan to set
+     * @param artisan the artisan to set
      */
     public void setArtisan(Artisan artisan) {
         this.artisan = artisan;
@@ -140,8 +136,7 @@ public class Notation extends AbstractEntity implements Serializable {
     }
 
     /**
-     * @param dateNotation
-     *            the dateNotation to set
+     * @param dateNotation the dateNotation to set
      */
     public void setDateNotation(Date dateNotation) {
         this.dateNotation = dateNotation;

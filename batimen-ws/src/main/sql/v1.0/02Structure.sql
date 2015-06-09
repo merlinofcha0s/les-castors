@@ -61,6 +61,7 @@ create table Annonce (
         statutJuridique int4 not null,
         siret varchar(14) not null,
         dateCreation date not null,
+        isVerifier boolean not null,
         adresse_id int8,
         paiement_id int8,
         primary key (id)

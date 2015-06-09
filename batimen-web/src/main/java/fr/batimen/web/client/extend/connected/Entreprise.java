@@ -63,7 +63,7 @@ public class Entreprise extends MasterPage {
     }
 
     private void initComposants() {
-        Profil profil = new Profil("profil", entrepriseDTO.isVerified());
+        Profil profil = new Profil("profil", entrepriseDTO.isVerifier());
         ContactezNous contactezNous = new ContactezNous("contactezNous");
         Commentaire commentaire = new Commentaire("commentaire");
 

@@ -1,23 +1,22 @@
 package fr.batimen.ws.service;
 
-import java.util.Date;
-
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
-import javax.inject.Inject;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import fr.batimen.core.constant.CodeRetourService;
+import fr.batimen.dto.NotationDTO;
 import fr.batimen.ws.dao.NotationDAO;
 import fr.batimen.ws.entity.Annonce;
 import fr.batimen.ws.entity.Artisan;
+import fr.batimen.ws.entity.Client;
 import fr.batimen.ws.entity.Notation;
+import fr.batimen.ws.utils.ClientUtils;
+import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.ejb.*;
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Classe de gestion des notes
@@ -65,6 +64,28 @@ public class NotationService {
         } else {
             return CodeRetourService.RETOUR_KO;
         }
+    }
 
+    @TransactionAttribute(TransactionAttributeType.MANDATORY)
+    public List<NotationDTO> getNotationBySiret(String siret){
+        List<NotationDTO> notationsDTO = new ArrayList<>();
+
+        List<Notation> notations = notationDAO.getNotationByEntrepriseSiret(siret);
+
+        ModelMapper mapper = new ModelMapper();
+
+        for(Notation notation : notations){
+            NotationDTO notationDTO = mapper.map(notation, NotationDTO.class);
+            notationDTO.setNomEntreprise(notation.getArtisan().getEntreprise().getNomComplet());
+
+            Client client = notation.getAnnonce().getDemandeur();
+            StringBuilder nomClient = new StringBuilder();
+            ClientUtils.chooseNomClient(client.getNom(), client.getPrenom(), client.getLogin(), nomClient);
+
+            notationDTO.setNomPrenomOrLoginClient(nomClient.toString());
+
+            notationsDTO.add(notationDTO);
+        }
+        return notationsDTO;
     }
 }

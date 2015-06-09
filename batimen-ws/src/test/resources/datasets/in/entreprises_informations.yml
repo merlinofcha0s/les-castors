@@ -45,6 +45,7 @@ entreprise:
     specialite: brique
     nbemployees: 10
     adresse_id: 1001
+    isVerifier: true
   - id: 1004
     nomComplet: Pebronne enterprise choisi
     statutJuridique: 0
@@ -53,6 +54,7 @@ entreprise:
     specialite: brique
     nbemployees: 20
     adresse_id: 1002
+    isVerifier: false
 permission:
   - typecompte: 3
     artisan_fk: 1003
@@ -65,3 +67,19 @@ categoriemetier:
   - id: 1002
     categoriemetier: 0
     entreprise_fk: 1004
+notation:
+  - id: 1020
+    score: 3
+    commentaire: Bon Travail
+    dateNotation: 2014-03-23 22:00:00.0
+    artisan_fk: 1003
+  - id: 1021
+    score: 5
+    commentaire: Excellent
+    dateNotation: 2014-04-23 21:00:00.0
+    artisan_fk: 1003
+  - id: 1023
+    score: 5
+    commentaire: Excellent
+    dateNotation: 2014-05-23 21:00:00.0
+    artisan_fk: 1003

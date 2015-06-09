@@ -1,20 +1,17 @@
 package fr.batimen.ws.client.service;
 
-import java.io.Serializable;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
+import fr.batimen.core.constant.Constant;
+import fr.batimen.core.constant.WsPath;
 import fr.batimen.dto.EntrepriseDTO;
-import fr.batimen.dto.aggregate.ModificationEntrepriseDTO;
+import fr.batimen.dto.aggregate.CreationPartenaireDTO;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
+import fr.batimen.ws.client.WsConnector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.batimen.core.constant.Constant;
-import fr.batimen.core.constant.WsPath;
-import fr.batimen.dto.aggregate.CreationPartenaireDTO;
-import fr.batimen.ws.client.WsConnector;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.Serializable;
 
 /**
  * Classe d'appel du webservice permettant la gestion des artisans.
@@ -65,7 +62,7 @@ public class ArtisanServiceREST implements Serializable {
         }
 
         String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_PARTENAIRE_SERVICE_PATH,
-                WsPath.GESTION_PARTENAIRE_SERVICE_GET_ENTREPISE_INFORMATION, login);
+                WsPath.GESTION_PARTENAIRE_SERVICE_GET_ENTREPISE_INFORMATION_BY_LOGIN, login);
 
         EntrepriseDTO entrepriseDTO = DeserializeJsonHelper.deserializeDTO(objectInJSON, EntrepriseDTO.class);
 
@@ -97,5 +94,22 @@ public class ArtisanServiceREST implements Serializable {
         }
 
         return codeRetour;
+    }
+
+    public EntrepriseDTO getEntrepriseInformationBySiret(String siret){
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Début appel service nouveau partenaire + deserialization");
+        }
+
+        String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_PARTENAIRE_SERVICE_PATH,
+                WsPath.GESTION_PARTENAIRE_SERVICE_GET_ENTREPISE_INFORMATION_BY_SIRET, siret);
+
+        EntrepriseDTO entrepriseDTO = DeserializeJsonHelper.deserializeDTO(objectInJSON, EntrepriseDTO.class);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Fin appel service nouveau partenaire + deserialization");
+        }
+
+        return entrepriseDTO;
     }
 }

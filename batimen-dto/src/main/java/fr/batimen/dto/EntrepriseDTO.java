@@ -48,7 +48,7 @@ public class EntrepriseDTO extends AbstractDTO {
 
     private List<NotationDTO> notationsDTO = new ArrayList<>();
 
-    private boolean isVerified;
+    private Boolean isVerifier;
 
     /**
      * @return the dateCreation
@@ -159,12 +159,12 @@ public class EntrepriseDTO extends AbstractDTO {
         this.notationsDTO = notationsDTO;
     }
 
-    public boolean isVerified() {
-        return isVerified;
+    public Boolean getIsVerifier() {
+        return isVerifier;
     }
 
-    public void setIsVerified(boolean isVerified) {
-        this.isVerified = isVerified;
+    public void setIsVerified(Boolean isVerified) {
+        this.isVerifier = isVerified;
     }
 
     /*
@@ -211,7 +211,7 @@ public class EntrepriseDTO extends AbstractDTO {
         sb.append(", artisan=").append(artisan);
         sb.append(", adresseEntreprise=").append(adresseEntreprise);
         sb.append(", notationsDTO=").append(notationsDTO);
-        sb.append(", isVerified=").append(isVerified);
+        sb.append(", isVerified=").append(isVerifier);
         sb.append('}');
         return sb.toString();
     }

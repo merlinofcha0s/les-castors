@@ -63,6 +63,8 @@ public class Entreprise extends AbstractEntity implements Serializable {
     private String logo;
     @Column(length = 50, nullable = true)
     private String specialite;
+    @Column(nullable = false)
+    private Boolean isVerifier;
     @OneToOne(mappedBy = "entreprise", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @LazyToOne(LazyToOneOption.NO_PROXY)
     private Artisan artisan;
@@ -277,11 +279,19 @@ public class Entreprise extends AbstractEntity implements Serializable {
         this.annonceEntrepriseSelecionnee = annonceEntrepriseSelecionnee;
     }
 
+    public Boolean getIsVerifier() {
+        return isVerifier;
+    }
+
+    public void setIsVerifier(Boolean isVerifier) {
+        this.isVerifier = isVerifier;
+    }
+
     /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#hashCode()
-     */
+         * (non-Javadoc)
+         *
+         * @see java.lang.Object#hashCode()
+         */
     @Override
     public int hashCode() {
         return Objects.hashCode(Objects.hash(this.nomComplet, this.statutJuridique, this.nbEmployees));
