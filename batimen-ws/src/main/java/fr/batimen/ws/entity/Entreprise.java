@@ -61,7 +61,7 @@ public class Entreprise extends AbstractEntity implements Serializable {
     private Integer nbEmployees;
     @Column(length = 255, nullable = true)
     private String logo;
-    @Column(length = 50, nullable = true)
+    @Column(length = 25, nullable = true)
     private String specialite;
     @Column(nullable = false)
     private Boolean isVerifier;
@@ -77,7 +77,7 @@ public class Entreprise extends AbstractEntity implements Serializable {
             targetEntity = Annonce.class,
             cascade = CascadeType.REMOVE,
             fetch = FetchType.LAZY)
-    private Set<Annonce> annonceEntrepriseSelecionnee = new HashSet<Annonce>();
+    private Set<Annonce> annonceEntrepriseSelectionnee = new HashSet<Annonce>();
     @OneToMany(mappedBy = "entreprise",
             targetEntity = CategorieMetier.class,
             cascade = CascadeType.REMOVE,
@@ -267,16 +267,16 @@ public class Entreprise extends AbstractEntity implements Serializable {
     /**
      * @return the annonceEntrepriseSelecionnee
      */
-    public Set<Annonce> getAnnonceEntrepriseSelecionnee() {
-        return annonceEntrepriseSelecionnee;
+    public Set<Annonce> getAnnonceEntrepriseSelectionnee() {
+        return annonceEntrepriseSelectionnee;
     }
 
     /**
      * @param annonceEntrepriseSelecionnee
      *            the annonceEntrepriseSelecionnee to set
      */
-    public void setAnnonceEntrepriseSelecionnee(Set<Annonce> annonceEntrepriseSelecionnee) {
-        this.annonceEntrepriseSelecionnee = annonceEntrepriseSelecionnee;
+    public void setAnnonceEntrepriseSelectionnee(Set<Annonce> annonceEntrepriseSelecionnee) {
+        this.annonceEntrepriseSelectionnee = annonceEntrepriseSelecionnee;
     }
 
     public Boolean getIsVerifier() {

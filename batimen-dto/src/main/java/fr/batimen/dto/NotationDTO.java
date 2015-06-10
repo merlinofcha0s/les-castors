@@ -3,6 +3,7 @@ package fr.batimen.dto;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import java.util.Date;
 import java.util.Objects;
 
 import static fr.batimen.dto.constant.ValidatorConstant.NOTATION_MAX_COMMENTAIRE;
@@ -21,6 +22,7 @@ public class NotationDTO extends AbstractDTO {
     private String nomEntreprise;
     @NotNull
     private String nomPrenomOrLoginClient;
+    private Date dateNotation;
 
     /**
      * @return the score
@@ -73,6 +75,14 @@ public class NotationDTO extends AbstractDTO {
 
     public void setNomPrenomOrLoginClient(String nomPrenomOrLoginClient) {
         this.nomPrenomOrLoginClient = nomPrenomOrLoginClient;
+    }
+
+    public Date getDateNotation() {
+        return dateNotation;
+    }
+
+    public void setDateNotation(Date dateNotation) {
+        this.dateNotation = dateNotation;
     }
 
     @Override

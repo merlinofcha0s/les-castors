@@ -52,6 +52,8 @@ public class EntrepriseDTO extends AbstractDTO {
 
     private Double moyenneAvis;
 
+    private Integer nbAnnonce;
+
     /**
      * @return the dateCreation
      */
@@ -176,12 +178,21 @@ public class EntrepriseDTO extends AbstractDTO {
     public void setMoyenneAvis(Double moyenneAvis) {
         this.moyenneAvis = moyenneAvis;
     }
+    
+
+    public Integer getNbAnnonce() {
+        return nbAnnonce;
+    }
+
+    public void setNbAnnonce(Integer nbAnnonce) {
+        this.nbAnnonce = nbAnnonce;
+    }
 
     /*
-                     * (non-Javadoc)
-                     *
-                     * @see java.lang.Object#hashCode()
-                     */
+                         * (non-Javadoc)
+                         *
+                         * @see java.lang.Object#hashCode()
+                         */
     @Override
     public int hashCode() {
         return Objects.hashCode(Objects.hash(this.getSiret(), this.getNomComplet()));

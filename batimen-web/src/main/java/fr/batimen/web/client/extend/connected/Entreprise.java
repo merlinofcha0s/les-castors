@@ -1,11 +1,14 @@
 package fr.batimen.web.client.extend.connected;
 
-import fr.batimen.dto.*;
+import fr.batimen.dto.CategorieMetierDTO;
+import fr.batimen.dto.EntrepriseDTO;
+import fr.batimen.dto.NotationDTO;
 import fr.batimen.dto.enums.StatutJuridique;
 import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.web.app.constants.ParamsConstant;
 import fr.batimen.web.client.component.*;
 import fr.batimen.web.client.master.MasterPage;
+import fr.batimen.ws.client.service.ArtisanServiceREST;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.extensions.markup.html.basic.SmartLinkLabel;
 import org.apache.wicket.markup.head.CssContentHeaderItem;
@@ -18,14 +21,18 @@ import org.apache.wicket.markup.html.list.PageableListView;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
+import javax.inject.Inject;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  * Created by Casaucau on 02/06/2015.
  */
 public class Entreprise extends MasterPage {
 
+    @Inject
+    private ArtisanServiceREST artisanServiceREST;
     //SIRET
     private String idEntreprise;
 
@@ -38,6 +45,7 @@ public class Entreprise extends MasterPage {
     private Model<StatutJuridique> statutJuridiqueModel;
     private Model<Integer> nombreEmployesModel;
     private Model<String> dateCreationModel;
+    private Model<Integer> nbAnnonceRemporteModel;
 
     public Entreprise() {
         super("", "", "Entreprise partenaire", true, "img/bg_title1.jpg");
@@ -71,71 +79,17 @@ public class Entreprise extends MasterPage {
     }
 
     private void loadEntrepriseData() {
-        entrepriseDTO = new EntrepriseDTO();
-        entrepriseDTO.setDateCreation(new Date());
-        entrepriseDTO.setSiret("73282932000074");
-        entrepriseDTO.setStatutJuridique(StatutJuridique.SARL);
-        entrepriseDTO.setNomComplet("Entreprise de toto");
-        entrepriseDTO.setNbEmployees(10);
-        entrepriseDTO.setSpecialite("Peinture sur bois");
+        entrepriseDTO = artisanServiceREST.getEntrepriseInformationBySiret(idEntreprise);
 
-        entrepriseDTO.getCategoriesMetier().add(CategorieLoader.getCategorieDecorationMaconnerie());
-        entrepriseDTO.getCategoriesMetier().add(CategorieLoader.getCategoriePlomberie());
+        //Trie des avis par date
+        Comparator<NotationDTO> avisDTOComparator = new Comparator<NotationDTO>() {
+            @Override
+            public int compare(NotationDTO o1, NotationDTO o2) {
+                return o2.getDateNotation().compareTo(o1.getDateNotation());
+            }
+        };
 
-        AdresseDTO adresseDTO = new AdresseDTO();
-        adresseDTO.setAdresse("250 chemin de toto");
-        adresseDTO.setComplementAdresse("Residence de toto");
-        adresseDTO.setDepartement(06);
-        adresseDTO.setCodePostal("06800");
-        adresseDTO.setVille("Toto ville");
-
-        entrepriseDTO.setAdresseEntreprise(adresseDTO);
-
-        ClientDTO client = new ClientDTO();
-        client.setEmail("toto@entreprise.com");
-        client.setNumeroTel("0615124585");
-
-        entrepriseDTO.setArtisan(client);
-
-        NotationDTO notationDTO = new NotationDTO();
-        notationDTO.setCommentaire("Bon travaux, artisan sérieux, Bon travaux, artisan sérieux, Bon travaux, artisan sérieux, Bon travaux, artisan sérieux, Bon travaux, artisan sérieux, Bon travaux, artisan sérieux");
-        notationDTO.setNomPrenomOrLoginClient("Robert Patoulachi");
-        notationDTO.setScore((double)4);
-
-        NotationDTO notationDTO2 = new NotationDTO();
-        notationDTO2.setCommentaire("Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay");
-        notationDTO2.setNomPrenomOrLoginClient("Robert Patoulachi");
-        notationDTO2.setScore((double)5);
-
-        NotationDTO notationDTO6 = new NotationDTO();
-        notationDTO6.setCommentaire("Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay");
-        notationDTO6.setNomPrenomOrLoginClient("Robert Patoulachi");
-        notationDTO6.setScore((double)5);
-
-        NotationDTO notationDTO3 = new NotationDTO();
-        notationDTO3.setCommentaire("Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay");
-        notationDTO3.setNomPrenomOrLoginClient("Robert Patoulachi");
-        notationDTO3.setScore((double)5);
-
-        NotationDTO notationDTO4 = new NotationDTO();
-        notationDTO4.setCommentaire("Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay");
-        notationDTO4.setNomPrenomOrLoginClient("Robert Patoulachi");
-        notationDTO4.setScore((double)1);
-
-        NotationDTO notationDTO5 = new NotationDTO();
-        notationDTO5.setCommentaire("Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulay, Mega boulayy");
-        notationDTO5.setNomPrenomOrLoginClient("Robert Patoulachi");
-        notationDTO5.setScore((double)1);
-
-        entrepriseDTO.getNotationsDTO().add(notationDTO);
-        entrepriseDTO.getNotationsDTO().add(notationDTO2);
-        entrepriseDTO.getNotationsDTO().add(notationDTO3);
-        entrepriseDTO.getNotationsDTO().add(notationDTO4);
-        entrepriseDTO.getNotationsDTO().add(notationDTO5);
-        entrepriseDTO.getNotationsDTO().add(notationDTO6);
-
-        entrepriseDTO.setIsVerified(true);
-        entrepriseDTO.setMoyenneAvis(Double.valueOf("4.0"));
+        Collections.sort(entrepriseDTO.getNotationsDTO(), avisDTOComparator);
     }
 
     private void initInformationsGenerales() {
@@ -144,8 +98,9 @@ public class Entreprise extends MasterPage {
         Label statutJuridique = new Label("statutJuridique", statutJuridiqueModel);
         Label nombreEmployes = new Label("nombreEmployes", nombreEmployesModel);
         Label dateCreation = new Label("dateCreation", dateCreationModel);
+        Label nbAnnonceRemporte = new Label("nbAnnonceRemporte", nbAnnonceRemporteModel);
 
-        add(specialite, siret, statutJuridique, nombreEmployes, dateCreation);
+        add(specialite, siret, statutJuridique, nombreEmployes, dateCreation, nbAnnonceRemporte);
     }
 
     private void initModelInformationsGenerales() {
@@ -156,6 +111,7 @@ public class Entreprise extends MasterPage {
         statutJuridiqueModel = new Model<>();
         nombreEmployesModel = new Model<>();
         dateCreationModel = new Model<>();
+        nbAnnonceRemporteModel = new Model<>();
 
         if (entrepriseDTO.getSpecialite() == null || entrepriseDTO.getSpecialite().isEmpty()) {
             specialiteModel.setObject("non renseignée");
@@ -172,6 +128,7 @@ public class Entreprise extends MasterPage {
         siretModel.setObject(entrepriseDTO.getSiret());
         statutJuridiqueModel.setObject(entrepriseDTO.getStatutJuridique());
         nombreEmployesModel.setObject(entrepriseDTO.getNbEmployees());
+        nbAnnonceRemporteModel.setObject(entrepriseDTO.getNbAnnonce());
     }
 
     private void initCategorieEntreprise() {

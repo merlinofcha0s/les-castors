@@ -6,6 +6,8 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
+import java.text.SimpleDateFormat;
+
 /**
  * Composant qui affiche l'avis + commentaire d'un artisan
  *
@@ -35,10 +37,14 @@ public class RaterCastor extends Panel {
         } else {
             nomEntrepriseOrClientModel.setObject(notationDTO.getNomPrenomOrLoginClient());
         }
+
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+        Label dateAvis = new Label("dateAvis", new Model<>(sdf.format(notationDTO.getDateNotation())));
         Label nomEntrepriseOrClient = new Label("nomEntreprise", nomEntrepriseOrClientModel);
         Label commentaireClient = new Label("commentaireClient", notationDTO.getCommentaire());
 
-        add(raterCastor, nomEntrepriseOrClient, commentaireClient);
+        add(raterCastor, nomEntrepriseOrClient, commentaireClient, dateAvis);
     }
 
 

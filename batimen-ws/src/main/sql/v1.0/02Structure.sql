@@ -57,7 +57,7 @@ create table Annonce (
         logo varchar(255),
         nbEmployees int4,
         nomComplet varchar(26) not null,
-        specialite varchar(50),
+        specialite varchar(25),
         statutJuridique int4 not null,
         siret varchar(14) not null,
         dateCreation date not null,

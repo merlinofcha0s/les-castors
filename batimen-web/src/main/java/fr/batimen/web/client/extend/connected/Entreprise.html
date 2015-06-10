@@ -5,14 +5,36 @@
         <div wicket:id="profil"></div>
         <div class="span7">
             <h1 class="headInModule titleEntreprise">Entreprise de toto</h1>
-            <h5><i class="icon-Star icon-specialite"></i>Spécialité : <span
-                    wicket:id="specialite">la peinture sur bois</span></h5>
+            <div class="containerInformationsEntrepriseGeneral">
+                <div class="bg_title">
+                    <h2 class="headInModule">Catégorie(s) métier(s)</h2>
+                </div>
+                <div id="containerActivite" class="fuelux offset4">
+                    <span wicket:id="categorieMetier" class="icon-Lightning font-glyph-entreprise categorie-entreprise"
+                          data-toggle="tooltip"
+                          data-original-title="Electricité" data-placement="top" title="Electricité"></span>
+                </div>
+            </div>
             <div class="containerInformationsEntrepriseGeneral">
                 <div class="bg_title">
                     <h2 class="headInModule">Informations générales</h2>
                 </div>
                 <div>
                     <div>
+                        <div class="containerGlyphFontAwesome">
+                            <span class="fa fa-briefcase glyphEntreprise"></span>
+                        </div>
+                        <div class="labelEntreprise informations-importante-entreprise-font-awesome">Nombre d'annonces remportées :</div>
+                        <div class="informationEntreprise informations-importante-entreprise-font-awesome" wicket:id="nbAnnonceRemporte">0</div>
+                    </div>
+                    <div class="containerInformationsEntreprise">
+                        <div class="containerGlyph">
+                            <span class="icon-Star glyphEntreprise"></span>
+                        </div>
+                        <div class="labelEntreprise informations-importante-entreprise">Spécialité :</div>
+                        <div class="informationEntreprise informations-importante-entreprise" wicket:id="specialite">la peinture sur bois</div>
+                    </div>
+                    <div class="containerInformationsEntreprise">
                         <div class="containerGlyph">
                             <span class="icon-Profile glyphEntreprise"></span>
                         </div>
@@ -42,16 +64,7 @@
                     </div>
                 </div>
             </div>
-            <div class="containerInformationsEntrepriseGeneral">
-                <div class="bg_title">
-                    <h2 class="headInModule">Catégorie(s) métier(s)</h2>
-                </div>
-                <div id="containerActivite" class="fuelux offset4">
-                    <span wicket:id="categorieMetier" class="icon-Lightning font-glyph-entreprise categorie-entreprise"
-                          data-toggle="tooltip"
-                          data-original-title="Electricité" data-placement="top" title="Electricité"></span>
-                </div>
-            </div>
+
             <div class="containerInformationsEntrepriseGeneral">
                 <div class="bg_title">
                     <h2 class="headInModule">Avis clients</h2>

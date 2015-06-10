@@ -116,6 +116,7 @@ annonce:
     demandeur_fk: 1001
     adressechantier_id: 1003
     notationannonce_id: 1020
+    entreprise_selectionnee_fk: 1003
   - id: 1001
     datecreation: 2014-03-23 22:00:00.0
     delaiintervention: 0
@@ -129,3 +130,4 @@ annonce:
     demandeur_fk: 1001
     adressechantier_id: 1004
     notationannonce_id: 1021
+    entreprise_selectionnee_fk: 1003

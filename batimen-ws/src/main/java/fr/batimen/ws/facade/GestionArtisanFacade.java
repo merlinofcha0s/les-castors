@@ -229,6 +229,7 @@ public class GestionArtisanFacade {
         EntrepriseDTO entrepriseDTO = entrepriseService.rempliEntrepriseInformation(entreprise);
         entrepriseDTO.getNotationsDTO().addAll(notationService.getNotationBySiret(siretEscaped));
 
+        //Stats
         Double moyenneAvis = 0.0;
         int nbAvis = 0;
         for(NotationDTO notationDTO : entrepriseDTO.getNotationsDTO()){
@@ -239,6 +240,7 @@ public class GestionArtisanFacade {
         moyenneAvis = moyenneAvis / nbAvis;
 
         entrepriseDTO.setMoyenneAvis(moyenneAvis);
+        entrepriseDTO.setNbAnnonce(entreprise.getAnnonceEntrepriseSelectionnee().size());
 
         return entrepriseDTO;
     }
