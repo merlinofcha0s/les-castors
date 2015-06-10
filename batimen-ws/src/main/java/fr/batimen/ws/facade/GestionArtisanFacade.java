@@ -8,6 +8,7 @@ import fr.batimen.core.exception.BackendException;
 import fr.batimen.core.exception.EmailException;
 import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.EntrepriseDTO;
+import fr.batimen.dto.NotationDTO;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
@@ -227,6 +228,18 @@ public class GestionArtisanFacade {
         Entreprise entreprise = entrepriseDAO.getEntrepriseBySiret(DeserializeJsonHelper.parseString(siret));
         EntrepriseDTO entrepriseDTO = entrepriseService.rempliEntrepriseInformation(entreprise);
         entrepriseDTO.getNotationsDTO().addAll(notationService.getNotationBySiret(siretEscaped));
+
+        Double moyenneAvis = 0.0;
+        int nbAvis = 0;
+        for(NotationDTO notationDTO : entrepriseDTO.getNotationsDTO()){
+            moyenneAvis += notationDTO.getScore();
+            nbAvis++;
+        }
+
+        moyenneAvis = moyenneAvis / nbAvis;
+
+        entrepriseDTO.setMoyenneAvis(moyenneAvis);
+
         return entrepriseDTO;
     }
 }

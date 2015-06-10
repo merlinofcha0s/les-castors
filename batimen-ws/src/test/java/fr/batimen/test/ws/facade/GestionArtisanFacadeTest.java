@@ -209,5 +209,7 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
 
         assertTrue(entrepriseDTO.getIsVerifier());
         assertTrue(entrepriseDTO.getNotationsDTO().size() != 0);
+
+        assertEquals(Double.valueOf("4.0"), entrepriseDTO.getMoyenneAvis());
     }
 }

@@ -63,7 +63,7 @@ public class Entreprise extends MasterPage {
     }
 
     private void initComposants() {
-        Profil profil = new Profil("profil", entrepriseDTO.isVerifier());
+        Profil profil = new Profil("profil", entrepriseDTO.getIsVerifier());
         ContactezNous contactezNous = new ContactezNous("contactezNous");
         Commentaire commentaire = new Commentaire("commentaire");
 
@@ -134,7 +134,8 @@ public class Entreprise extends MasterPage {
         entrepriseDTO.getNotationsDTO().add(notationDTO5);
         entrepriseDTO.getNotationsDTO().add(notationDTO6);
 
-        entrepriseDTO.setIsVerified(false);
+        entrepriseDTO.setIsVerified(true);
+        entrepriseDTO.setMoyenneAvis(Double.valueOf("4.0"));
     }
 
     private void initInformationsGenerales() {
@@ -241,15 +242,7 @@ public class Entreprise extends MasterPage {
         RaterStarsCastor moyenneRater = new RaterStarsCastor("moyenneRater");
         moyenneRater.setIsReadOnly(true);
 
-        Double moyenneAvis = 0.0;
-        int nbAvis = 0;
-        for(NotationDTO notationDTO : entrepriseDTO.getNotationsDTO()){
-            moyenneAvis += notationDTO.getScore();
-            nbAvis++;
-        }
-
-        moyenneAvis = moyenneAvis / nbAvis;
-        moyenneRater.setNumberOfStars(moyenneAvis.intValue());
+        moyenneRater.setNumberOfStars(entrepriseDTO.getMoyenneAvis().intValue());
 
         add(notationDTOListView, pagerAvis, moyenneRater);
     }

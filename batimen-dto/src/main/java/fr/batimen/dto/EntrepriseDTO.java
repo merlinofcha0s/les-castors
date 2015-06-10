@@ -50,6 +50,8 @@ public class EntrepriseDTO extends AbstractDTO {
 
     private Boolean isVerifier;
 
+    private Double moyenneAvis;
+
     /**
      * @return the dateCreation
      */
@@ -167,11 +169,19 @@ public class EntrepriseDTO extends AbstractDTO {
         this.isVerifier = isVerified;
     }
 
+    public Double getMoyenneAvis() {
+        return moyenneAvis;
+    }
+
+    public void setMoyenneAvis(Double moyenneAvis) {
+        this.moyenneAvis = moyenneAvis;
+    }
+
     /*
-                 * (non-Javadoc)
-                 *
-                 * @see java.lang.Object#hashCode()
-                 */
+                     * (non-Javadoc)
+                     *
+                     * @see java.lang.Object#hashCode()
+                     */
     @Override
     public int hashCode() {
         return Objects.hashCode(Objects.hash(this.getSiret(), this.getNomComplet()));
