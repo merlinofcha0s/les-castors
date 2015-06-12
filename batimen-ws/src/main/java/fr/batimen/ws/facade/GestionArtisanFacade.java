@@ -227,7 +227,7 @@ public class GestionArtisanFacade {
         String siretEscaped = DeserializeJsonHelper.parseString(siret);
         Entreprise entreprise = entrepriseDAO.getEntrepriseBySiret(DeserializeJsonHelper.parseString(siret));
         EntrepriseDTO entrepriseDTO = entrepriseService.rempliEntrepriseInformation(entreprise);
-        entrepriseDTO.getNotationsDTO().addAll(notationService.getNotationBySiret(siretEscaped));
+        entrepriseDTO.getNotationsDTO().addAll(notationService.getNotationBySiret(siretEscaped, 2));
 
         //Stats
         Double moyenneAvis = 0.0;
@@ -243,5 +243,19 @@ public class GestionArtisanFacade {
         entrepriseDTO.setNbAnnonce(entreprise.getAnnonceEntrepriseSelectionnee().size());
 
         return entrepriseDTO;
+    }
+
+    /**
+     * Permet de récuperer tous les avis d'une entreprise par son SIRETs
+     *
+     * @param siret Le siret de l'entreprise
+     * @return Les informations de l'entreprise.
+     */
+    @POST
+    @Path(WsPath.GESTION_PARTENAIRE_SERVICE_GET_NOTATION_BY_SIRET)
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public List<NotationDTO> getEntrepriseNotationBySiret(String siret) {
+        String siretEscaped = DeserializeJsonHelper.parseString(siret);
+        return notationService.getNotationBySiret(siretEscaped, 0);
     }
 }

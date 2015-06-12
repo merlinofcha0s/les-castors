@@ -2,10 +2,7 @@ package fr.batimen.test.ws.facade;
 
 import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.security.HashHelper;
-import fr.batimen.dto.AdresseDTO;
-import fr.batimen.dto.CategorieMetierDTO;
-import fr.batimen.dto.EntrepriseDTO;
-import fr.batimen.dto.PermissionDTO;
+import fr.batimen.dto.*;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
 import fr.batimen.dto.enums.Civilite;
 import fr.batimen.dto.enums.StatutJuridique;
@@ -208,9 +205,20 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
         assertEquals("106 chemin du pébron", entrepriseDTO.getAdresseEntreprise().getAdresse());
 
         assertTrue(entrepriseDTO.getIsVerifier());
-        assertTrue(entrepriseDTO.getNotationsDTO().size() != 0);
+        assertEquals(2, entrepriseDTO.getNotationsDTO().size());
 
         assertEquals(Double.valueOf("4.0"), entrepriseDTO.getMoyenneAvis());
-        assertEquals(Integer.valueOf(2), entrepriseDTO.getNbAnnonce());
+        assertEquals(Integer.valueOf(3), entrepriseDTO.getNbAnnonce());
+    }
+
+    /**
+     * Cas de test : L'utilisateur veut voir plus d'avis concernant l'entreprise.
+     *
+     */
+    @Test
+    @UsingDataSet("datasets/in/entreprises_informations.yml")
+    public void getNotationBySiretNominal(){
+        List<NotationDTO> notations = artisanServiceREST.getEntrepriseNotationBySiret("43394298400017");
+        assertEquals(3, notations.size());
     }
 }

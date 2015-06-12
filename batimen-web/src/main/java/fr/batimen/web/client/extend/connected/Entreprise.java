@@ -10,14 +10,17 @@ import fr.batimen.web.client.component.*;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.ws.client.service.ArtisanServiceREST;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.extensions.markup.html.basic.SmartLinkLabel;
 import org.apache.wicket.markup.head.CssContentHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
-import org.apache.wicket.markup.html.list.PageableListView;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
@@ -25,6 +28,7 @@ import javax.inject.Inject;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 /**
  * Created by Casaucau on 02/06/2015.
@@ -46,6 +50,10 @@ public class Entreprise extends MasterPage {
     private Model<Integer> nombreEmployesModel;
     private Model<String> dateCreationModel;
     private Model<Integer> nbAnnonceRemporteModel;
+
+    private boolean hasClickPlusDAvis = false;
+
+    private Comparator<NotationDTO> avisDTOComparator;
 
     public Entreprise() {
         super("", "", "Entreprise partenaire", true, "img/bg_title1.jpg");
@@ -82,7 +90,7 @@ public class Entreprise extends MasterPage {
         entrepriseDTO = artisanServiceREST.getEntrepriseInformationBySiret(idEntreprise);
 
         //Trie des avis par date
-        Comparator<NotationDTO> avisDTOComparator = new Comparator<NotationDTO>() {
+        avisDTOComparator = new Comparator<NotationDTO>() {
             @Override
             public int compare(NotationDTO o1, NotationDTO o2) {
                 return o2.getDateNotation().compareTo(o1.getDateNotation());
@@ -186,7 +194,17 @@ public class Entreprise extends MasterPage {
     }
 
     private void initAvisContainer(){
-        PageableListView<NotationDTO> notationDTOListView = new PageableListView<NotationDTO>("avisClientContainer", entrepriseDTO.getNotationsDTO(), 2) {
+        final WebMarkupContainer containerAvisClientListView = new WebMarkupContainer("containerAvisClientListView");
+
+        final LoadableDetachableModel<List<NotationDTO>> avisClientListViewModel = new LoadableDetachableModel<List<NotationDTO>>() {
+
+            @Override
+            protected List<NotationDTO> load() {
+                return entrepriseDTO.getNotationsDTO();
+            }
+        };
+
+        final ListView<NotationDTO> avisClientListView = new ListView<NotationDTO>("avisClientListView", avisClientListViewModel) {
             @Override
             protected void populateItem(ListItem<NotationDTO> item) {
                 RaterCastor rater = new RaterCastor("rater",  item.getModelObject(), false);
@@ -194,13 +212,34 @@ public class Entreprise extends MasterPage {
             }
         };
 
-        CastorAjaxPagingNavigator pagerAvis = new CastorAjaxPagingNavigator("pagerAvis", notationDTOListView);
+        containerAvisClientListView.add(avisClientListView);
+        containerAvisClientListView.setOutputMarkupId(true);
+        containerAvisClientListView.setMarkupId("containerAvisClientListView");
+
+        final AjaxLink plusDAvis = new AjaxLink("plusDAvis") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                entrepriseDTO.setNotationsDTO(artisanServiceREST.getEntrepriseNotationBySiret(idEntreprise));
+                hasClickPlusDAvis = true;
+                Collections.sort(entrepriseDTO.getNotationsDTO(), avisDTOComparator);
+                avisClientListViewModel.setObject(entrepriseDTO.getNotationsDTO());
+
+                target.add(containerAvisClientListView, this);
+            }
+
+            @Override
+            public boolean isVisible() {
+                return !hasClickPlusDAvis;
+            }
+        };
+
+        plusDAvis.setOutputMarkupId(true);
 
         RaterStarsCastor moyenneRater = new RaterStarsCastor("moyenneRater");
         moyenneRater.setIsReadOnly(true);
 
         moyenneRater.setNumberOfStars(entrepriseDTO.getMoyenneAvis().intValue());
 
-        add(notationDTOListView, pagerAvis, moyenneRater);
+        add(containerAvisClientListView, moyenneRater, plusDAvis);
     }
 }

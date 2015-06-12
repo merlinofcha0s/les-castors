@@ -6,3 +6,6 @@ values (100006, '260 chemin de la testation' , '06600', 'Residence du testant', 
 
 insert into Adresse (id, adresse , codepostal, complementadresse, ville, departement) 
 values (100007, '260 chemin de roberta' , '06500', 'Residence du robert', 'Robert City', 06);
+
+insert into Adresse (id, adresse , codepostal, complementadresse, ville, departement)
+values (100008, '260 chemin de la testation' , '06500', 'Residence du robert', 'Robert City', 06);

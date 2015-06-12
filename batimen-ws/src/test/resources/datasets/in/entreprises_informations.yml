@@ -48,6 +48,12 @@ adresse:
     complementadresse: Res des artisans
     ville: Nice
     departement: 6
+  - adresse: 2410 avenue de l'artisan
+    id: 1005
+    codepostal: "06500"
+    complementadresse: Res des artisans
+    ville: YOLO City
+    departement: 6
 entreprise:
   - id: 1003
     nomComplet: Pebronne enterprise
@@ -92,6 +98,11 @@ notation:
     commentaire: Bon Travail
     dateNotation: 2014-04-23 22:00:00.0
     artisan_fk: 1003
+  - id: 1022
+    score: 5
+    commentaire: Bon Travail
+    dateNotation: 2014-04-23 22:00:00.0
+    artisan_fk: 1003
 client:
   - id: 1001
     dateinscription: "2014-01-10 00:00:00"
@@ -130,4 +141,18 @@ annonce:
     demandeur_fk: 1001
     adressechantier_id: 1004
     notationannonce_id: 1021
+    entreprise_selectionnee_fk: 1003
+  - id: 1002
+    datecreation: 2014-04-23 22:00:00.0
+    delaiintervention: 0
+    description: Peinture d'un mur lol xD
+    etatannonce: 6
+    categoriemetier: 0
+    souscategoriemetier: Installation électrique
+    nbconsultation: 0
+    typecontact: 0
+    typeTravaux: 0
+    demandeur_fk: 1001
+    adressechantier_id: 1005
+    notationannonce_id: 1022
     entreprise_selectionnee_fk: 1003

@@ -67,10 +67,10 @@ public class NotationService {
     }
 
     @TransactionAttribute(TransactionAttributeType.MANDATORY)
-    public List<NotationDTO> getNotationBySiret(String siret){
+    public List<NotationDTO> getNotationBySiret(String siret, int maxResult){
         List<NotationDTO> notationsDTO = new ArrayList<>();
 
-        List<Notation> notations = notationDAO.getNotationByEntrepriseSiret(siret);
+        List<Notation> notations = notationDAO.getNotationByEntrepriseSiret(siret, maxResult);
 
         ModelMapper mapper = new ModelMapper();
 

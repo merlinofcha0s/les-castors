@@ -1,8 +1,8 @@
 package fr.batimen.ws.client.service;
 
+import com.google.gson.reflect.TypeToken;
 import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.constant.WsPath;
-import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.ImageDTO;
 import fr.batimen.dto.aggregate.*;
@@ -302,7 +302,8 @@ public class AnnonceServiceREST implements Serializable {
         String objectInJSON = wsConnector.sendRequestWithFile(WsPath.GESTION_ANNONCE_SERVICE_PATH,
                 WsPath.GESTION_ANNONCE_SERVICE_AJOUT_PHOTO, ajoutPhotoDTO.getImages(), ajoutPhotoDTO);
 
-        List<ImageDTO> imageDTOs = DeserializeJsonHelper.deserializeImagesDTOList(objectInJSON);
+        TypeToken<List<ImageDTO>> tokenImage = new TypeToken<List<ImageDTO>>(){};
+        List<ImageDTO> imageDTOs = DeserializeJsonHelper.deserializeDTOList(objectInJSON, tokenImage);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Fin appel service d'ajout de photo  pour une annonce.");
@@ -318,7 +319,8 @@ public class AnnonceServiceREST implements Serializable {
         String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_ANNONCE_SERVICE_PATH,
                 WsPath.GESTION_ANNONCE_SERVICE_RECUPERATION_PHOTO, demandeAnnonceDTO);
 
-        List<ImageDTO> imageDTOs = DeserializeJsonHelper.deserializeImagesDTOList(objectInJSON);
+        TypeToken<List<ImageDTO>> tokenImage = new TypeToken<List<ImageDTO>>(){};
+        List<ImageDTO> imageDTOs = DeserializeJsonHelper.deserializeDTOList(objectInJSON, tokenImage);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Fin appel service de recuperation des photos d'une annonce.");
@@ -334,7 +336,8 @@ public class AnnonceServiceREST implements Serializable {
         String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_ANNONCE_SERVICE_PATH,
                 WsPath.GESTION_ANNONCE_SERVICE_SUPPRESSION_PHOTO, suppressionPhotoDTO);
 
-        List<ImageDTO> imageDTOs = DeserializeJsonHelper.deserializeImagesDTOList(objectInJSON);
+        TypeToken<List<ImageDTO>> tokenImage = new TypeToken<List<ImageDTO>>(){};
+        List<ImageDTO> imageDTOs = DeserializeJsonHelper.deserializeDTOList(objectInJSON, tokenImage);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Fin appel service de recuperation d'une photo d'une annonce.");

@@ -1,8 +1,10 @@
 package fr.batimen.ws.client.service;
 
+import com.google.gson.reflect.TypeToken;
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.WsPath;
 import fr.batimen.dto.EntrepriseDTO;
+import fr.batimen.dto.NotationDTO;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 import fr.batimen.ws.client.WsConnector;
@@ -12,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Classe d'appel du webservice permettant la gestion des artisans.
@@ -58,7 +61,7 @@ public class ArtisanServiceREST implements Serializable {
 
     public EntrepriseDTO getEntrepriseInformationByArtisanLogin(String login){
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Début appel service nouveau partenaire + deserialization");
+            LOGGER.debug("Début appel service entreprise information par artisan login");
         }
 
         String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_PARTENAIRE_SERVICE_PATH,
@@ -67,7 +70,7 @@ public class ArtisanServiceREST implements Serializable {
         EntrepriseDTO entrepriseDTO = DeserializeJsonHelper.deserializeDTO(objectInJSON, EntrepriseDTO.class);
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Fin appel service nouveau partenaire + deserialization");
+            LOGGER.debug("Fin appel service entreprise information par artisan login + deserialization");
         }
 
         return entrepriseDTO;
@@ -81,7 +84,7 @@ public class ArtisanServiceREST implements Serializable {
      */
     public Integer saveEntrepriseInformation(EntrepriseDTO entrepriseDTO){
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Début appel service nouveau partenaire + deserialization");
+            LOGGER.debug("Début appel service sauvegarde entreprise information + deserialization");
         }
 
         String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_PARTENAIRE_SERVICE_PATH,
@@ -90,7 +93,7 @@ public class ArtisanServiceREST implements Serializable {
         Integer codeRetour = Integer.valueOf(objectInJSON);
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Fin appel service nouveau partenaire + deserialization");
+            LOGGER.debug("Fin appel service sauvegarde entreprise information + deserialization");
         }
 
         return codeRetour;
@@ -98,7 +101,7 @@ public class ArtisanServiceREST implements Serializable {
 
     public EntrepriseDTO getEntrepriseInformationBySiret(String siret){
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Début appel service nouveau partenaire + deserialization");
+            LOGGER.debug("Début appel service get entreprise information par siret + deserialization");
         }
 
         String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_PARTENAIRE_SERVICE_PATH,
@@ -107,9 +110,27 @@ public class ArtisanServiceREST implements Serializable {
         EntrepriseDTO entrepriseDTO = DeserializeJsonHelper.deserializeDTO(objectInJSON, EntrepriseDTO.class);
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Fin appel service nouveau partenaire + deserialization");
+            LOGGER.debug("Fin appel service entreprise information par siret + deserialization");
         }
 
         return entrepriseDTO;
+    }
+
+    public List<NotationDTO> getEntrepriseNotationBySiret(String siret){
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Début appel service entreprise notation par SIRET + deserialization");
+        }
+
+        String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_PARTENAIRE_SERVICE_PATH,
+                WsPath.GESTION_PARTENAIRE_SERVICE_GET_NOTATION_BY_SIRET, siret);
+
+        TypeToken<List<NotationDTO>> tokenAvis = new TypeToken<List<NotationDTO>>(){};
+        List<NotationDTO> notationDTOs = DeserializeJsonHelper.deserializeDTOList(objectInJSON, tokenAvis);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Fin appel service entreprise notation par SIRET + deserialization");
+        }
+
+        return notationDTOs;
     }
 }

@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * Classe d'accés aux données pour les notations.
- * 
+ *
  * @author Casaucau Cyril
  */
 @Stateless(name = "NotationDAO")
@@ -26,11 +26,9 @@ public class NotationDAO extends AbstractDAO<Notation> {
     /**
      * Recupere les notations pour un client via ces annonces par ordre
      * decroissant ainsi que le nom complet des entreprises correspondantes.
-     * 
-     * @param login
-     *            le login du client
-     * @param limitToThreeNotation
-     *            limite la requete aux 3 derniers avis
+     *
+     * @param login                le login du client
+     * @param limitToThreeNotation limite la requete aux 3 derniers avis
      * @return les notations et les noms complets associés des entreprises
      */
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
@@ -59,19 +57,24 @@ public class NotationDAO extends AbstractDAO<Notation> {
 
     /**
      * Recupere les notations pour une entreprise
+     * <p/>
+     * Si on ne veut pas limiter les resultats, mettre maxResult à zéro.
      *
-     * @param siret
-     *            le siret de l'entreprise partenaire
+     * @param siret le siret de l'entreprise partenaire
      * @return les notations des entreprises.
      */
     @TransactionAttribute(TransactionAttributeType.MANDATORY)
-    public List<Notation> getNotationByEntrepriseSiret(String siret) {
+    public List<Notation> getNotationByEntrepriseSiret(String siret, int maxResult) {
         List<Notation> notations = null;
 
         try {
             TypedQuery<Notation> query = entityManager.createNamedQuery(QueryJPQL.NOTATION_BY_ENTREPRISE_SIRET,
                     Notation.class);
             query.setParameter(QueryJPQL.PARAM_ENTREPRISE_SIRET, siret);
+
+            if (maxResult != 0) {
+                query.setMaxResults(maxResult);
+            }
 
             notations = query.getResultList();
         } catch (NoResultException nre) {

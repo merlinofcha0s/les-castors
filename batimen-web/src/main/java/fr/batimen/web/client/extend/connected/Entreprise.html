@@ -25,7 +25,8 @@
                             <span class="fa fa-briefcase glyphEntreprise"></span>
                         </div>
                         <div class="labelEntreprise informations-importante-entreprise-font-awesome">Nombre d'annonces remportées :</div>
-                        <div class="informationEntreprise informations-importante-entreprise-font-awesome" wicket:id="nbAnnonceRemporte">0</div>
+                        <div class="informationEntreprise informations-importante-entreprise-font-awesome"
+                             wicket:id="nbAnnonceRemporte">0</div>
                     </div>
                     <div class="containerInformationsEntreprise">
                         <div class="containerGlyph">
@@ -79,11 +80,15 @@
                 <div class="bg_title">
                     <h4 class="headInModule">Détails des avis</h4>
                 </div>
-             <div wicket:id="avisClientContainer">
-                <div wicket:id="rater"></div>
-            </div>
+                <div wicket:id="containerAvisClientListView">
+                     <div wicket:id="avisClientListView">
+                         <div wicket:id="rater"></div>
+                     </div>
+                </div>
                 <div id="clearAvis"></div>
-                <div id="pagerAvis" wicket:id="pagerAvis"></div>
+                <div class="span3 offset4">
+                    <a class="btn btn-info" id="btnPlusDAvisEntreprise" wicket:id="plusDAvis">Afficher plus d'avis</a>
+                </div>
             </div>
         </div>
         <div class="span3">
