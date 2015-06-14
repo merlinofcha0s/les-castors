@@ -4,6 +4,7 @@ import com.ninja_squad.dbsetup.operation.Operation;
 import fr.batimen.dto.enums.StatutNotification;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.enums.TypeNotification;
+import fr.batimen.dto.helper.CategorieLoader;
 
 import static com.ninja_squad.dbsetup.Operations.insertInto;
 
@@ -32,8 +33,8 @@ public class ModifierMonProfilDataset {
                     "0614125698", "2014-01-10", true, "lolmdr07", 200009).build();
 
     public static final Operation INSERT_ENTREPRISE_DATA = insertInto("entreprise")
-            .columns("id", "nomcomplet", "statutjuridique", "siret", "datecreation", "adresse_id")
-            .values(200009, "Entreprise de toto", 0, "43394298400017", "2014-03-23", 200005).build();
+            .columns("id", "nomcomplet", "statutjuridique", "siret", "datecreation", "adresse_id", "isverifier")
+            .values(200009, "Entreprise de toto", 0, "43394298400017", "2014-03-23", 200005, true).build();
 
     public static final Operation INSERT_NOTIFICATION_DATA = insertInto("notification")
             .columns("id", "dateNotification", "typeNotification", "pourquinotification", "statutnotification",
@@ -55,4 +56,9 @@ public class ModifierMonProfilDataset {
             .values(TypeCompte.ARTISAN, 200008).build();
     public static final Operation INSERT_ANNONCE_ARTISAN = insertInto("annonce_artisan")
             .columns("annonce_id", "artisans_id").values(200011, 200008).build();
+
+    public static final Operation INSERT_CATEGORIE_ENTREPRISE = insertInto("categorieMetier")
+            .columns("id", "categorieMetier", "entreprise_fk").values(200000, CategorieLoader.ELECTRICITE_CODE, 200009).build();
+
+
 }

@@ -21,7 +21,6 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.LoadableDetachableModel;
-import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import javax.inject.Inject;
@@ -44,12 +43,12 @@ public class Entreprise extends MasterPage {
 
     private EntrepriseDTO entrepriseDTO;
 
-    private Model<String> specialiteModel;
-    private Model<String> siretModel;
-    private Model<StatutJuridique> statutJuridiqueModel;
-    private Model<Integer> nombreEmployesModel;
-    private Model<String> dateCreationModel;
-    private Model<Integer> nbAnnonceRemporteModel;
+    private LoadableDetachableModel<String> specialiteModel;
+    private LoadableDetachableModel<String> siretModel;
+    private LoadableDetachableModel<StatutJuridique> statutJuridiqueModel;
+    private LoadableDetachableModel<Integer> nombreEmployesModel;
+    private LoadableDetachableModel<String> dateCreationModel;
+    private LoadableDetachableModel<Integer> nbAnnonceRemporteModel;
 
     private boolean hasClickPlusDAvis = false;
 
@@ -102,41 +101,75 @@ public class Entreprise extends MasterPage {
 
     private void initInformationsGenerales() {
         Label specialite = new Label("specialite", specialiteModel);
+        specialite.setMarkupId(specialite.getId());
         Label siret = new Label("siret", siretModel);
+        siret.setMarkupId(siret.getId());
         Label statutJuridique = new Label("statutJuridique", statutJuridiqueModel);
+        statutJuridique.setMarkupId(statutJuridique.getId());
         Label nombreEmployes = new Label("nombreEmployes", nombreEmployesModel);
+        nombreEmployes.setMarkupId(nombreEmployes.getId());
         Label dateCreation = new Label("dateCreation", dateCreationModel);
+        dateCreation.setMarkupId(dateCreation.getId());
         Label nbAnnonceRemporte = new Label("nbAnnonceRemporte", nbAnnonceRemporteModel);
+        nbAnnonceRemporte.setMarkupId(nbAnnonceRemporte.getId());
 
         add(specialite, siret, statutJuridique, nombreEmployes, dateCreation, nbAnnonceRemporte);
     }
 
     private void initModelInformationsGenerales() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-        specialiteModel = new Model<>();
-        siretModel = new Model<>();
-        statutJuridiqueModel = new Model<>();
-        nombreEmployesModel = new Model<>();
-        dateCreationModel = new Model<>();
-        nbAnnonceRemporteModel = new Model<>();
+        specialiteModel = new LoadableDetachableModel<String>() {
+            @Override
+            protected String load() {
+                if (entrepriseDTO.getSpecialite() == null || entrepriseDTO.getSpecialite().isEmpty()) {
+                   return "non renseignée";
+                } else {
+                    return entrepriseDTO.getSpecialite();
+                }
+            }
+        };
+        siretModel = new LoadableDetachableModel<String>() {
+            @Override
+            protected String load() {
+                return entrepriseDTO.getSiret();
+            }
+        };
 
-        if (entrepriseDTO.getSpecialite() == null || entrepriseDTO.getSpecialite().isEmpty()) {
-            specialiteModel.setObject("non renseignée");
-        } else {
-            specialiteModel.setObject(entrepriseDTO.getSpecialite());
-        }
 
-        if (entrepriseDTO.getDateCreation() == null) {
-            dateCreationModel.setObject("non renseignée");
-        } else {
-            dateCreationModel.setObject(sdf.format(entrepriseDTO.getDateCreation()));
-        }
+        statutJuridiqueModel = new LoadableDetachableModel<StatutJuridique>() {
+            @Override
+            protected StatutJuridique load() {
+                return entrepriseDTO.getStatutJuridique();
+            }
+        };
 
-        siretModel.setObject(entrepriseDTO.getSiret());
-        statutJuridiqueModel.setObject(entrepriseDTO.getStatutJuridique());
-        nombreEmployesModel.setObject(entrepriseDTO.getNbEmployees());
-        nbAnnonceRemporteModel.setObject(entrepriseDTO.getNbAnnonce());
+
+        nombreEmployesModel = new LoadableDetachableModel<Integer>() {
+            @Override
+            protected Integer load() {
+                return entrepriseDTO.getNbEmployees();
+            }
+        };
+
+        dateCreationModel = new LoadableDetachableModel<String>() {
+            @Override
+            protected String load() {
+                if (entrepriseDTO.getDateCreation() == null) {
+                    return "non renseignée";
+                } else {
+                    return sdf.format(entrepriseDTO.getDateCreation());
+                }
+            }
+        };
+
+        nbAnnonceRemporteModel = new LoadableDetachableModel<Integer>() {
+            @Override
+            protected Integer load() {
+                return entrepriseDTO.getNbAnnonce();
+            }
+        };
+
     }
 
     private void initCategorieEntreprise() {

@@ -32,6 +32,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
@@ -85,10 +86,10 @@ public class Annonce extends MasterPage {
     private Label etatAnnonce;
     private SmartLinkLabel email;
 
-    private Model<String> telephoneValue;
-    private Model<String> emailValue;
-    private Model<String> nomEntrepriseSelectionnee;
-    private Model<String> etatAnnonceValue;
+    private LoadableDetachableModel<String> telephoneValue;
+    private LoadableDetachableModel<String> emailValue;
+    private LoadableDetachableModel<String> nomEntrepriseSelectionnee;
+    private LoadableDetachableModel<String> etatAnnonceValue;
 
     private ListView<EntrepriseDTO> listViewEntrepriseInscrite;
 
@@ -326,7 +327,12 @@ public class Annonce extends MasterPage {
         Label dateCreation = new Label("dateCreation", sdf.format(annonceAffichageDTO.getAnnonce().getDateCreation()));
         Label nbConsultation = new Label("nbConsultation", annonceAffichageDTO.getAnnonce().getNbConsultation());
 
-        etatAnnonceValue = new Model<String>(annonceAffichageDTO.getAnnonce().getEtatAnnonce().getType());
+        etatAnnonceValue = new LoadableDetachableModel<String>() {
+            @Override
+            protected String load() {
+                return annonceAffichageDTO.getAnnonce().getEtatAnnonce().getType();
+            }
+        };
 
         etatAnnonce = new Label("etatAnnonce", etatAnnonceValue);
         etatAnnonce.setMarkupId("etatAnnonce");
@@ -477,12 +483,17 @@ public class Annonce extends MasterPage {
         containerEntrepriseSelectionnee.setOutputMarkupId(true);
         containerEntrepriseSelectionnee.setMarkupId("containerEntrepriseSelectionnee");
 
-        if (annonceAffichageDTO.getEntrepriseSelectionnee() != null) {
-            nomEntrepriseSelectionnee = new Model<String>(annonceAffichageDTO.getEntrepriseSelectionnee()
-                    .getNomComplet());
-        } else {
-            nomEntrepriseSelectionnee = new Model<String>("");
-        }
+        nomEntrepriseSelectionnee = new LoadableDetachableModel<String>() {
+            @Override
+            protected String load() {
+                if (annonceAffichageDTO.getEntrepriseSelectionnee() != null) {
+                    return annonceAffichageDTO.getEntrepriseSelectionnee()
+                            .getNomComplet();
+                } else {
+                    return "";
+                }
+            }
+        };
 
         Label entrepriseSelectionnee = new Label("entrepriseSelectionnee", nomEntrepriseSelectionnee);
 
@@ -634,13 +645,13 @@ public class Annonce extends MasterPage {
 
         Label adresse = new Label("adresse", adresseComplete.toString());
 
-        telephone = new Label("telephone");
+        initModelPhoneAndEmailContact();
+
+        telephone = new Label("telephone", telephoneValue);
         containerTelContact.add(telephone);
 
-        email = new SmartLinkLabel("email");
+        email = new SmartLinkLabel("email", emailValue);
         containerEmailContact.add(email);
-
-        initModelPhoneAndEmailContact();
 
         containerContact.add(adresse, containerEmailContact, containerTelContact);
         containerContactMaster.add(containerContact);
@@ -651,16 +662,27 @@ public class Annonce extends MasterPage {
         // Tout dépends si c'est un artisan qui envoi les données => le
         // webservice renvoi le téléphone et l'adresse mail.
         // Sinon c'est que c'est le client
-        if (roleUtils.checkRoles(TypeCompte.ARTISAN) || roleUtils.checkRoles(TypeCompte.ADMINISTRATEUR)) {
-            telephoneValue = new Model<>(annonceAffichageDTO.getTelephoneClient());
-            emailValue = new Model<>(annonceAffichageDTO.getEmailClient());
-        } else {
-            telephoneValue = new Model<>(userConnected.getNumeroTel());
-            emailValue = new Model<>(userConnected.getEmail());
-        }
+        telephoneValue = new LoadableDetachableModel<String>() {
+            @Override
+            protected String load() {
+                if (roleUtils.checkRoles(TypeCompte.ARTISAN) || roleUtils.checkRoles(TypeCompte.ADMINISTRATEUR)) {
+                    return annonceAffichageDTO.getTelephoneClient();
+                } else {
+                    return userConnected.getNumeroTel();
+                }
+            }
+        };
 
-        telephone.setDefaultModel(telephoneValue);
-        email.setDefaultModel(emailValue);
+        emailValue = new LoadableDetachableModel<String>() {
+            @Override
+            protected String load() {
+                if (roleUtils.checkRoles(TypeCompte.ARTISAN) || roleUtils.checkRoles(TypeCompte.ADMINISTRATEUR)) {
+                    return annonceAffichageDTO.getEmailClient();
+                } else {
+                    return userConnected.getEmail();
+                }
+            }
+        };
     }
 
     private void updateNbConsultation() {

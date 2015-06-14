@@ -1,11 +1,11 @@
 package fr.batimen.web.selenium.dataset;
 
-import static com.ninja_squad.dbsetup.Operations.insertInto;
-
 import com.ninja_squad.dbsetup.operation.Operation;
 import fr.batimen.dto.enums.StatutNotification;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.enums.TypeNotification;
+
+import static com.ninja_squad.dbsetup.Operations.insertInto;
 
 /**
  * Dataset qui symbolise l'ensemble des données pour l'affichage d'annonces et
@@ -40,8 +40,8 @@ public class MesAnnoncesDataset {
 
     public static final Operation INSERT_NOTIFICATION_DATA = insertInto("notification")
             .columns("id", "dateNotification", "typeNotification", "pourquinotification", "statutnotification",
-                    "id_artisan", "id_client", "id_annonce")
-            .values(200006, "2014-02-10", 0, 4, 0, 200008, 100001, 200010)
+                    "id_artisan", "id_client", "id_annonce", "isverifier")
+            .values(200006, "2014-02-10", 0, 4, 0, 200008, 100001, 200010, false)
             .values(200007, "2014-02-10", TypeNotification.A_CHOISI_ENTREPRISE, TypeCompte.ARTISAN, StatutNotification.VU, 200008, 100001, 200011).build();
 
     public static final Operation INSERT_ADRESSE_DATA = insertInto("adresse")

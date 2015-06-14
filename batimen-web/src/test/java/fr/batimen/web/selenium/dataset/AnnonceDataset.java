@@ -1,18 +1,10 @@
 package fr.batimen.web.selenium.dataset;
 
-import static com.ninja_squad.dbsetup.Operations.insertInto;
-
 import com.ninja_squad.dbsetup.operation.Operation;
-
-import fr.batimen.dto.enums.Civilite;
-import fr.batimen.dto.enums.DelaiIntervention;
-import fr.batimen.dto.enums.EtatAnnonce;
-import fr.batimen.dto.enums.StatutJuridique;
-import fr.batimen.dto.enums.TypeCompte;
-import fr.batimen.dto.enums.TypeContact;
-import fr.batimen.dto.enums.TypeNotification;
-import fr.batimen.dto.enums.TypeTravaux;
+import fr.batimen.dto.enums.*;
 import fr.batimen.dto.helper.CategorieLoader;
+
+import static com.ninja_squad.dbsetup.Operations.insertInto;
 
 public class AnnonceDataset {
 
@@ -46,8 +38,8 @@ public class AnnonceDataset {
                     "2014-01-10", true, "lolmdr07", 200009).build();
 
     public static final Operation INSERT_ENTREPRISE_DATA = insertInto("entreprise")
-            .columns("id", "nomcomplet", "statutjuridique", "siret", "datecreation", "adresse_id")
-            .values(200009, "Entreprise de toto", StatutJuridique.SARL, "43394298400017", "2014-03-23", 200006).build();
+            .columns("id", "nomcomplet", "statutjuridique", "siret", "datecreation", "adresse_id", "isverifier")
+            .values(200009, "Entreprise de toto", StatutJuridique.SARL, "43394298400017", "2014-03-23", 200006, true).build();
 
     public static final Operation INSERT_NOTIFICATION_DATA = insertInto("notification")
             .columns("id", "dateNotification", "typeNotification", "pourquinotification", "statutnotification",
