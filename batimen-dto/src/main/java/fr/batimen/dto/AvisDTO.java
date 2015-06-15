@@ -9,7 +9,7 @@ import java.util.Objects;
 import static fr.batimen.dto.constant.ValidatorConstant.NOTATION_MAX_COMMENTAIRE;
 import static fr.batimen.dto.constant.ValidatorConstant.NOTATION_MIN_COMMENTAIRE;
 
-public class NotationDTO extends AbstractDTO {
+public class AvisDTO extends AbstractDTO {
 
     private static final long serialVersionUID = 2210249579834795935L;
 
@@ -22,7 +22,7 @@ public class NotationDTO extends AbstractDTO {
     private String nomEntreprise;
     @NotNull
     private String nomPrenomOrLoginClient;
-    private Date dateNotation;
+    private Date dateAvis;
 
     /**
      * @return the score
@@ -77,19 +77,19 @@ public class NotationDTO extends AbstractDTO {
         this.nomPrenomOrLoginClient = nomPrenomOrLoginClient;
     }
 
-    public Date getDateNotation() {
-        return dateNotation;
+    public Date getDateAvis() {
+        return dateAvis;
     }
 
-    public void setDateNotation(Date dateNotation) {
-        this.dateNotation = dateNotation;
+    public void setDateAvis(Date dateAvis) {
+        this.dateAvis = dateAvis;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        NotationDTO that = (NotationDTO) o;
+        AvisDTO that = (AvisDTO) o;
         return Objects.equals(score, that.score) &&
                 Objects.equals(commentaire, that.commentaire) &&
                 Objects.equals(nomEntreprise, that.nomEntreprise) &&
@@ -103,7 +103,7 @@ public class NotationDTO extends AbstractDTO {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("NotationDTO{");
+        final StringBuilder sb = new StringBuilder("AvisDTO{");
         sb.append("score=").append(score);
         sb.append(", commentaire='").append(commentaire).append('\'');
         sb.append(", nomEntreprise='").append(nomEntreprise).append('\'');

@@ -218,7 +218,7 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
     @Test
     @UsingDataSet("datasets/in/entreprises_informations.yml")
     public void getNotationBySiretNominal(){
-        List<NotationDTO> notations = artisanServiceREST.getEntrepriseNotationBySiret("43394298400017");
+        List<AvisDTO> notations = artisanServiceREST.getEntrepriseNotationBySiret("43394298400017");
         assertEquals(3, notations.size());
     }
 }

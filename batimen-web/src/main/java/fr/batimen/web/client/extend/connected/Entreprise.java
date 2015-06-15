@@ -2,7 +2,7 @@ package fr.batimen.web.client.extend.connected;
 
 import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.EntrepriseDTO;
-import fr.batimen.dto.NotationDTO;
+import fr.batimen.dto.AvisDTO;
 import fr.batimen.dto.enums.StatutJuridique;
 import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.web.app.constants.ParamsConstant;
@@ -52,7 +52,7 @@ public class Entreprise extends MasterPage {
 
     private boolean hasClickPlusDAvis = false;
 
-    private Comparator<NotationDTO> avisDTOComparator;
+    private Comparator<AvisDTO> avisDTOComparator;
 
     public Entreprise() {
         super("", "", "Entreprise partenaire", true, "img/bg_title1.jpg");
@@ -89,10 +89,10 @@ public class Entreprise extends MasterPage {
         entrepriseDTO = artisanServiceREST.getEntrepriseInformationBySiret(idEntreprise);
 
         //Trie des avis par date
-        avisDTOComparator = new Comparator<NotationDTO>() {
+        avisDTOComparator = new Comparator<AvisDTO>() {
             @Override
-            public int compare(NotationDTO o1, NotationDTO o2) {
-                return o2.getDateNotation().compareTo(o1.getDateNotation());
+            public int compare(AvisDTO o1, AvisDTO o2) {
+                return o2.getDateAvis().compareTo(o1.getDateAvis());
             }
         };
 
@@ -229,17 +229,17 @@ public class Entreprise extends MasterPage {
     private void initAvisContainer(){
         final WebMarkupContainer containerAvisClientListView = new WebMarkupContainer("containerAvisClientListView");
 
-        final LoadableDetachableModel<List<NotationDTO>> avisClientListViewModel = new LoadableDetachableModel<List<NotationDTO>>() {
+        final LoadableDetachableModel<List<AvisDTO>> avisClientListViewModel = new LoadableDetachableModel<List<AvisDTO>>() {
 
             @Override
-            protected List<NotationDTO> load() {
+            protected List<AvisDTO> load() {
                 return entrepriseDTO.getNotationsDTO();
             }
         };
 
-        final ListView<NotationDTO> avisClientListView = new ListView<NotationDTO>("avisClientListView", avisClientListViewModel) {
+        final ListView<AvisDTO> avisClientListView = new ListView<AvisDTO>("avisClientListView", avisClientListViewModel) {
             @Override
-            protected void populateItem(ListItem<NotationDTO> item) {
+            protected void populateItem(ListItem<AvisDTO> item) {
                 RaterCastor rater = new RaterCastor("rater",  item.getModelObject(), false);
                 item.add(rater);
             }

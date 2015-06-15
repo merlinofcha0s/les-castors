@@ -24,7 +24,7 @@ create table Annonce (
         selHashID varchar(255),
         adresseChantier_id int8,
         demandeur_fk int8,
-        notationAnnonce_id int8,
+        avis_id int8,
         entreprise_selectionnee_fk int8,
         primary key (id)
     );
@@ -67,11 +67,11 @@ create table Annonce (
         primary key (id)
     );
     
-    create table Notation (
+    create table Avis (
         id  bigserial not null,
         commentaire varchar(500) not null,
         score float8 not null,
-        dateNotation timestamp not null,
+        dateAvis timestamp not null,
         artisan_fk int8,
         primary key (id)
     );
@@ -142,9 +142,9 @@ create table Annonce (
         references Client;
 
     alter table Annonce 
-        add constraint annonce_notation 
-        foreign key (notationAnnonce_id) 
-        references Notation ON DELETE CASCADE;
+        add constraint annonce_avis
+        foreign key (avis_id)
+        references Avis ON DELETE CASCADE;
         
     alter table Annonce 
         add constraint annonce_entreprise
@@ -171,8 +171,8 @@ create table Annonce (
         foreign key (paiement_id) 
         references Paiement ON DELETE CASCADE;
 
-    alter table Notation 
-        add constraint notation_artisan
+    alter table Avis
+        add constraint avis_artisan
         foreign key (artisan_fk) 
         references Artisan;
 

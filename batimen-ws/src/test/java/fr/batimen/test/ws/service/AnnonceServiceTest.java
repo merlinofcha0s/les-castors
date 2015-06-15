@@ -1,9 +1,9 @@
 package fr.batimen.test.ws.service;
 
 import fr.batimen.core.constant.CodeRetourService;
+import fr.batimen.dto.AvisDTO;
 import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.ImageDTO;
-import fr.batimen.dto.NotationDTO;
 import fr.batimen.dto.NotificationDTO;
 import fr.batimen.dto.aggregate.*;
 import fr.batimen.dto.enums.*;
@@ -138,7 +138,7 @@ public class AnnonceServiceTest {
     }
 
     public NoterArtisanDTO createNotationDTO(String loginDemandeur) {
-        NotationDTO notationDTO = new NotationDTO();
+        AvisDTO notationDTO = new AvisDTO();
         notationDTO.setScore((double) 4);
         notationDTO.setCommentaire("Bon travaux");
         notationDTO.setNomEntreprise("Pebronne enterprise");

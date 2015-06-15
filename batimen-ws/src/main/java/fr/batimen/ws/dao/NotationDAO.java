@@ -1,7 +1,7 @@
 package fr.batimen.ws.dao;
 
 import fr.batimen.core.constant.QueryJPQL;
-import fr.batimen.ws.entity.Notation;
+import fr.batimen.ws.entity.Avis;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +19,7 @@ import java.util.List;
 @Stateless(name = "NotationDAO")
 @LocalBean
 @TransactionManagement(TransactionManagementType.CONTAINER)
-public class NotationDAO extends AbstractDAO<Notation> {
+public class NotationDAO extends AbstractDAO<Avis> {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(NotationDAO.class);
 
@@ -64,12 +64,12 @@ public class NotationDAO extends AbstractDAO<Notation> {
      * @return les notations des entreprises.
      */
     @TransactionAttribute(TransactionAttributeType.MANDATORY)
-    public List<Notation> getNotationByEntrepriseSiret(String siret, int maxResult) {
-        List<Notation> notations = null;
+    public List<Avis> getNotationByEntrepriseSiret(String siret, int maxResult) {
+        List<Avis> notations = null;
 
         try {
-            TypedQuery<Notation> query = entityManager.createNamedQuery(QueryJPQL.NOTATION_BY_ENTREPRISE_SIRET,
-                    Notation.class);
+            TypedQuery<Avis> query = entityManager.createNamedQuery(QueryJPQL.NOTATION_BY_ENTREPRISE_SIRET,
+                    Avis.class);
             query.setParameter(QueryJPQL.PARAM_ENTREPRISE_SIRET, siret);
 
             if (maxResult != 0) {

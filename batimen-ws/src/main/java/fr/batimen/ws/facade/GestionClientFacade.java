@@ -1,6 +1,5 @@
 package fr.batimen.ws.facade;
 
-import java.lang.reflect.Type;
 import java.util.List;
 
 import javax.annotation.security.RolesAllowed;
@@ -12,30 +11,23 @@ import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
-import javax.management.relation.Role;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 
-import fr.batimen.dto.DemandeMesAnnoncesDTO;
-import fr.batimen.ws.utils.RolesUtils;
+import fr.batimen.dto.AvisDTO;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.WsPath;
-import fr.batimen.dto.AnnonceDTO;
-import fr.batimen.dto.NotationDTO;
-import fr.batimen.dto.NotificationDTO;
-import fr.batimen.dto.aggregate.MesAnnoncesDTO;
 import fr.batimen.dto.aggregate.MonProfilDTO;
-import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 import fr.batimen.ws.dao.AnnonceDAO;
 import fr.batimen.ws.dao.NotationDAO;
-import fr.batimen.ws.entity.Notation;
+import fr.batimen.ws.entity.Avis;
 import fr.batimen.ws.helper.JsonHelper;
 import fr.batimen.ws.interceptor.BatimenInterceptor;
 import fr.batimen.ws.service.NotificationService;
@@ -98,9 +90,9 @@ public class GestionClientFacade {
         ModelMapper mapper = new ModelMapper();
         for (Object[] notation : notations) {
             // On crée la DTO
-            NotationDTO notationDTO = new NotationDTO();
+            AvisDTO notationDTO = new AvisDTO();
             // On cast object en entity
-            Notation notationCasted = (Notation) notation[0];
+            Avis notationCasted = (Avis) notation[0];
             // on le passe dans le mapper pour extraire les infos dans la DTO
             mapper.map(notationCasted, notationDTO);
             // On charge le nom de l'entreprise concernant cette notation

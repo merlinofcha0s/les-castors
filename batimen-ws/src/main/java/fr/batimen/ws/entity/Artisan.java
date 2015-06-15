@@ -57,8 +57,8 @@ public class Artisan extends AbstractUser implements Serializable {
     @Column(nullable = false)
     protected Civilite civilite;
 
-    @OneToMany(mappedBy = "artisan", targetEntity = Notation.class, cascade = CascadeType.REMOVE)
-    private List<Notation> scoreGlobal = new ArrayList<>();
+    @OneToMany(mappedBy = "artisan", targetEntity = Avis.class, cascade = CascadeType.REMOVE)
+    private List<Avis> scoreGlobal = new ArrayList<>();
     @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @LazyToOne(LazyToOneOption.NO_PROXY)
     private Entreprise entreprise;
@@ -93,7 +93,7 @@ public class Artisan extends AbstractUser implements Serializable {
     /**
      * @return the scoreGlobal
      */
-    public List<Notation> getScoreGlobal() {
+    public List<Avis> getScoreGlobal() {
         return scoreGlobal;
     }
 
@@ -101,7 +101,7 @@ public class Artisan extends AbstractUser implements Serializable {
      * @param scoreGlobal
      *            the scoreGlobal to set
      */
-    public void setScoreGlobal(List<Notation> scoreGlobal) {
+    public void setScoreGlobal(List<Avis> scoreGlobal) {
         this.scoreGlobal = scoreGlobal;
     }
 

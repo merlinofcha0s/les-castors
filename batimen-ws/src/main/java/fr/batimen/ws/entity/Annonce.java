@@ -111,7 +111,7 @@ public class Annonce extends AbstractEntity implements Serializable {
     private Client demandeur;
     @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @LazyToOne(LazyToOneOption.NO_PROXY)
-    private Notation notationAnnonce;
+    private Avis avis;
     @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @LazyToOne(LazyToOneOption.NO_PROXY)
     private Adresse adresseChantier;
@@ -260,16 +260,16 @@ public class Annonce extends AbstractEntity implements Serializable {
     /**
      * @return the notationAnnonce
      */
-    public Notation getNotationAnnonce() {
-        return notationAnnonce;
+    public Avis getAvisAnnonce() {
+        return avis;
     }
 
     /**
      * @param notationAnnonce
      *            the notationAnnonce to set
      */
-    public void setNotationAnnonce(Notation notationAnnonce) {
-        this.notationAnnonce = notationAnnonce;
+    public void setAvisAnnonce(Avis notationAnnonce) {
+        this.avis = notationAnnonce;
     }
 
     /**

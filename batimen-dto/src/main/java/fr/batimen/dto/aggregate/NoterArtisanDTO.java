@@ -10,14 +10,14 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import fr.batimen.dto.AbstractDTO;
-import fr.batimen.dto.NotationDTO;
+import fr.batimen.dto.AvisDTO;
 
 public class NoterArtisanDTO extends AbstractDTO {
 
     private static final long serialVersionUID = 1830194401199647981L;
 
     @Valid
-    private NotationDTO notation;
+    private AvisDTO notation;
     @NotNull
     private String hashID;
     @NotNull
@@ -30,7 +30,7 @@ public class NoterArtisanDTO extends AbstractDTO {
     /**
      * @return the notation
      */
-    public NotationDTO getNotation() {
+    public AvisDTO getNotation() {
         return notation;
     }
 
@@ -59,7 +59,7 @@ public class NoterArtisanDTO extends AbstractDTO {
      * @param notation
      *            the notation to set
      */
-    public void setNotation(NotationDTO notation) {
+    public void setNotation(AvisDTO notation) {
         this.notation = notation;
     }
 

@@ -25,18 +25,18 @@ import org.hibernate.annotations.LazyToOneOption;
 import fr.batimen.core.constant.QueryJPQL;
 
 /**
- * Entité Notation : Symbolise la notation en base de données. Permet de noté le
+ * Entité Avis : Symbolise la notation en base de données. Permet de noté le
  * travail effectué par l'artisan.
  *
  * @author Casaucau Cyril
  */
 @Entity
-@Table(name = "Notation")
+@Table(name = "Avis")
 @NamedQueries(value = {@NamedQuery(name = QueryJPQL.NOTATION_BY_CLIENT_LOGIN,
-        query = "SELECT n, n.annonce.entrepriseSelectionnee.nomComplet FROM Notation AS n WHERE n.annonce.demandeur.login = :login AND n.annonce.etatAnnonce != 4 ORDER BY n.dateNotation DESC"),
+        query = "SELECT n, n.annonce.entrepriseSelectionnee.nomComplet FROM Avis AS n WHERE n.annonce.demandeur.login = :login AND n.annonce.etatAnnonce != 4 ORDER BY n.dateAvis DESC"),
         @NamedQuery(name = QueryJPQL.NOTATION_BY_ENTREPRISE_SIRET,
-                query = "SELECT n FROM Notation AS n WHERE n.artisan.entreprise.siret = :siret")})
-public class Notation extends AbstractEntity implements Serializable {
+                query = "SELECT n FROM Avis AS n WHERE n.artisan.entreprise.siret = :siret")})
+public class Avis extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = -1038954593364210382L;
 
@@ -49,9 +49,9 @@ public class Notation extends AbstractEntity implements Serializable {
     private String commentaire;
     @Column
     @Temporal(TemporalType.TIMESTAMP)
-    private Date dateNotation;
-    @OneToOne(mappedBy = "notationAnnonce", fetch = FetchType.LAZY)
-    @JoinColumn(name = "notationannonce_id")
+    private Date dateAvis;
+    @OneToOne(mappedBy = "avis", fetch = FetchType.LAZY)
+    @JoinColumn(name = "avisannonce_id")
     @LazyToOne(LazyToOneOption.NO_PROXY)
     private Annonce annonce;
     @ManyToOne(fetch = FetchType.LAZY)
@@ -131,15 +131,15 @@ public class Notation extends AbstractEntity implements Serializable {
     /**
      * @return the dateNotation
      */
-    public Date getDateNotation() {
-        return dateNotation;
+    public Date getDateAvis() {
+        return dateAvis;
     }
 
     /**
      * @param dateNotation the dateNotation to set
      */
-    public void setDateNotation(Date dateNotation) {
-        this.dateNotation = dateNotation;
+    public void setDateAvis(Date dateNotation) {
+        this.dateAvis = dateNotation;
     }
 
     /*
@@ -163,8 +163,8 @@ public class Notation extends AbstractEntity implements Serializable {
             return true;
         }
 
-        if (object instanceof Notation) {
-            Notation other = (Notation) object;
+        if (object instanceof Avis) {
+            Avis other = (Avis) object;
             return Objects.equals(this.score, other.score) && Objects.equals(this.commentaire, other.commentaire);
         }
         return false;

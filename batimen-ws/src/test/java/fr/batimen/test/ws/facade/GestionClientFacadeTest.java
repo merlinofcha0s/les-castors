@@ -6,7 +6,7 @@ import org.jboss.arquillian.persistence.UsingDataSet;
 import org.junit.Assert;
 import org.junit.Test;
 
-import fr.batimen.dto.NotationDTO;
+import fr.batimen.dto.AvisDTO;
 import fr.batimen.dto.aggregate.MonProfilDTO;
 import fr.batimen.test.ws.AbstractBatimenWsTest;
 import fr.batimen.ws.client.service.ClientServiceREST;
@@ -33,7 +33,7 @@ public class GestionClientFacadeTest extends AbstractBatimenWsTest {
 
         Assert.assertEquals(2, monProfilDTO.getNotations().size());
 
-        for (NotationDTO notation : monProfilDTO.getNotations()) {
+        for (AvisDTO notation : monProfilDTO.getNotations()) {
             if (notation.getScore().equals(Double.valueOf("3")) && notation.getCommentaire().equals("Bon Travail")
                     && notation.getNomEntreprise().equals("Pebronne enterprise")) {
                 isDataCorrectForNotation1 = Boolean.TRUE;

@@ -1,7 +1,7 @@
 package fr.batimen.web.client.component;
 
 
-import fr.batimen.dto.NotationDTO;
+import fr.batimen.dto.AvisDTO;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
@@ -15,10 +15,10 @@ import java.text.SimpleDateFormat;
  */
 public class RaterCastor extends Panel {
 
-    private NotationDTO notationDTO;
+    private AvisDTO notationDTO;
     private boolean isPageForClient;
 
-    public RaterCastor(String id, NotationDTO notationDTO, boolean isPageForClient) {
+    public RaterCastor(String id, AvisDTO notationDTO, boolean isPageForClient) {
         super(id);
         this.notationDTO = notationDTO;
         this.isPageForClient = isPageForClient;
@@ -40,7 +40,7 @@ public class RaterCastor extends Panel {
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-        Label dateAvis = new Label("dateAvis", new Model<>(sdf.format(notationDTO.getDateNotation())));
+        Label dateAvis = new Label("dateAvis", new Model<>(sdf.format(notationDTO.getDateAvis())));
         Label nomEntrepriseOrClient = new Label("nomEntreprise", nomEntrepriseOrClientModel);
         Label commentaireClient = new Label("commentaireClient", notationDTO.getCommentaire());
 

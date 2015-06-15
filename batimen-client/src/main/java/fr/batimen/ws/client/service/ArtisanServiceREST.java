@@ -3,8 +3,8 @@ package fr.batimen.ws.client.service;
 import com.google.gson.reflect.TypeToken;
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.WsPath;
+import fr.batimen.dto.AvisDTO;
 import fr.batimen.dto.EntrepriseDTO;
-import fr.batimen.dto.NotationDTO;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 import fr.batimen.ws.client.WsConnector;
@@ -116,7 +116,7 @@ public class ArtisanServiceREST implements Serializable {
         return entrepriseDTO;
     }
 
-    public List<NotationDTO> getEntrepriseNotationBySiret(String siret){
+    public List<AvisDTO> getEntrepriseNotationBySiret(String siret){
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Début appel service entreprise notation par SIRET + deserialization");
         }
@@ -124,8 +124,8 @@ public class ArtisanServiceREST implements Serializable {
         String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_PARTENAIRE_SERVICE_PATH,
                 WsPath.GESTION_PARTENAIRE_SERVICE_GET_NOTATION_BY_SIRET, siret);
 
-        TypeToken<List<NotationDTO>> tokenAvis = new TypeToken<List<NotationDTO>>(){};
-        List<NotationDTO> notationDTOs = DeserializeJsonHelper.deserializeDTOList(objectInJSON, tokenAvis);
+        TypeToken<List<AvisDTO>> tokenAvis = new TypeToken<List<AvisDTO>>(){};
+        List<AvisDTO> notationDTOs = DeserializeJsonHelper.deserializeDTOList(objectInJSON, tokenAvis);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Fin appel service entreprise notation par SIRET + deserialization");

@@ -8,7 +8,7 @@ import fr.batimen.core.exception.BackendException;
 import fr.batimen.core.exception.EmailException;
 import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.EntrepriseDTO;
-import fr.batimen.dto.NotationDTO;
+import fr.batimen.dto.AvisDTO;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
@@ -232,7 +232,7 @@ public class GestionArtisanFacade {
         //Stats
         Double moyenneAvis = 0.0;
         int nbAvis = 0;
-        for(NotationDTO notationDTO : entrepriseDTO.getNotationsDTO()){
+        for(AvisDTO notationDTO : entrepriseDTO.getNotationsDTO()){
             moyenneAvis += notationDTO.getScore();
             nbAvis++;
         }
@@ -254,7 +254,7 @@ public class GestionArtisanFacade {
     @POST
     @Path(WsPath.GESTION_PARTENAIRE_SERVICE_GET_NOTATION_BY_SIRET)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public List<NotationDTO> getEntrepriseNotationBySiret(String siret) {
+    public List<AvisDTO> getEntrepriseNotationBySiret(String siret) {
         String siretEscaped = DeserializeJsonHelper.parseString(siret);
         return notationService.getNotationBySiret(siretEscaped, 0);
     }

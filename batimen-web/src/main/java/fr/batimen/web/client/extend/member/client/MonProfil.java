@@ -1,7 +1,7 @@
 package fr.batimen.web.client.extend.member.client;
 
 import fr.batimen.dto.ClientDTO;
-import fr.batimen.dto.NotationDTO;
+import fr.batimen.dto.AvisDTO;
 import fr.batimen.dto.aggregate.MonProfilDTO;
 import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.client.component.*;
@@ -91,12 +91,12 @@ public class MonProfil extends MasterPage {
 
     private void initRepeaterAvis() {
 
-        ListView<NotationDTO> listViewNotation = new ListView<NotationDTO>("listNotation", monProfilDTO.getNotations()) {
+        ListView<AvisDTO> listViewNotation = new ListView<AvisDTO>("listNotation", monProfilDTO.getNotations()) {
 
             private static final long serialVersionUID = 1L;
 
             @Override
-            protected void populateItem(ListItem<NotationDTO> item) {
+            protected void populateItem(ListItem<AvisDTO> item) {
                 RaterCastor rater = new RaterCastor("rater",  item.getModelObject(), true);
                 item.add(rater);
             }

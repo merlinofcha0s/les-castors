@@ -319,13 +319,38 @@ public class Annonce extends MasterPage {
             categorie.add(new AttributeModifier("class", "labelAnnonce-icon8"));
         }
 
-        Label sousCategorie = new Label("sousCategorie", annonceAffichageDTO.getAnnonce().getSousCategorieMetier());
-        Label typeTravaux = new Label("typeTravaux", annonceAffichageDTO.getAnnonce().getTypeTravaux().getType());
-        Label delaiIntervention = new Label("delaiIntervention", annonceAffichageDTO.getAnnonce()
-                .getDelaiIntervention().getType());
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        Label dateCreation = new Label("dateCreation", sdf.format(annonceAffichageDTO.getAnnonce().getDateCreation()));
-        Label nbConsultation = new Label("nbConsultation", annonceAffichageDTO.getAnnonce().getNbConsultation());
+        Label sousCategorie = new Label("sousCategorie", new LoadableDetachableModel<String>() {
+            @Override
+            protected String load() {
+                return annonceAffichageDTO.getAnnonce().getSousCategorieMetier();
+            }
+        });
+        Label typeTravaux = new Label("typeTravaux", new LoadableDetachableModel<String>() {
+            @Override
+            protected String load() {
+                return annonceAffichageDTO.getAnnonce().getTypeTravaux().getType();
+            }
+        });
+        Label delaiIntervention = new Label("delaiIntervention", new LoadableDetachableModel<String>() {
+            @Override
+            protected String load() {
+                return  annonceAffichageDTO.getAnnonce().getDelaiIntervention().getType();
+            }
+        });
+        final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+        Label dateCreation = new Label("dateCreation", new LoadableDetachableModel<String>() {
+            @Override
+            protected String load() {
+                return sdf.format(annonceAffichageDTO.getAnnonce().getDateCreation());
+            }
+        });
+        Label nbConsultation = new Label("nbConsultation", new LoadableDetachableModel<Integer>() {
+            @Override
+            protected Integer load() {
+                return annonceAffichageDTO.getAnnonce().getNbConsultation();
+            }
+        });
 
         etatAnnonceValue = new LoadableDetachableModel<String>() {
             @Override
@@ -376,7 +401,12 @@ public class Annonce extends MasterPage {
             protected void populateItem(ListItem<EntrepriseDTO> itemEntreprise) {
                 final EntrepriseDTO entreprise = itemEntreprise.getModelObject();
 
-                final Model<String> nomEntrepriseModelForLbl = new Model<String>(entreprise.getNomComplet());
+                final LoadableDetachableModel<String> nomEntrepriseModelForLbl = new LoadableDetachableModel<String>() {
+                    @Override
+                    protected String load() {
+                        return entreprise.getNomComplet();
+                    }
+                };
 
                 Label labelEntreprise = new Label("labelEntreprise", nomEntrepriseModelForLbl);
 
@@ -394,7 +424,7 @@ public class Annonce extends MasterPage {
 
                 voirProfilEntreprise.setOutputMarkupId(true);
 
-                LinkLabel downloadDevis = new LinkLabel("downloadDevis", new Model<String>("Devis indisponible")) {
+                LinkLabel downloadDevis = new LinkLabel("downloadDevis", new Model<>("Devis indisponible")) {
 
                     private static final long serialVersionUID = 1L;
 
@@ -877,7 +907,7 @@ public class Annonce extends MasterPage {
         if (event.getPayload() instanceof NoterArtisanEventClose) {
             NoterArtisanEventClose noterArtisanEventClose = (NoterArtisanEventClose) event.getPayload();
 
-            NotationDTO notationDTO = new NotationDTO();
+            AvisDTO notationDTO = new AvisDTO();
             notationDTO.setNomEntreprise(annonceAffichageDTO.getEntrepriseSelectionnee().getNomComplet());
             notationDTO.setCommentaire(noterArtisanEventClose.getCommentaireNotation());
             notationDTO.setScore(noterArtisanEventClose.getNbEtoiles());

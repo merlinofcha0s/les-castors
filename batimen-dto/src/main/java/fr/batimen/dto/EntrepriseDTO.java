@@ -46,7 +46,7 @@ public class EntrepriseDTO extends AbstractDTO {
 
     private AdresseDTO adresseEntreprise;
 
-    private List<NotationDTO> notationsDTO = new ArrayList<>();
+    private List<AvisDTO> notationsDTO = new ArrayList<>();
 
     private Boolean isVerifier;
 
@@ -155,11 +155,11 @@ public class EntrepriseDTO extends AbstractDTO {
         this.adresseEntreprise = adresseEntreprise;
     }
 
-    public List<NotationDTO> getNotationsDTO() {
+    public List<AvisDTO> getNotationsDTO() {
         return notationsDTO;
     }
 
-    public void setNotationsDTO(List<NotationDTO> notationsDTO) {
+    public void setNotationsDTO(List<AvisDTO> notationsDTO) {
         this.notationsDTO = notationsDTO;
     }
 
