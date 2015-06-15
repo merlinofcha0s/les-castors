@@ -44,6 +44,7 @@ entreprise:
     siret: 43394298400017
     specialite: brique
     nbemployees: 20
+    isverifier: false
     adresse_id: 1001
   - id: 1004
     nomComplet: Pebronne enterprise choisi
@@ -52,6 +53,7 @@ entreprise:
     siret: 43394298400020
     specialite: brique
     nbemployees: 20
+    isverifier: false
     adresse_id: 1002
 permission:
   - typecompte: 3

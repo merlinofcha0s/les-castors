@@ -56,6 +56,7 @@ entreprise:
     siret: 43394298400017
     specialite: brique
     nbemployees: 10
+    isverifier: true
     adresse_id: 101
 adresse:
   - adresse: 106 chemin de lentreprise

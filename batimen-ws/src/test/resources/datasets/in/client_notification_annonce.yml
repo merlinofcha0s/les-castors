@@ -118,6 +118,7 @@ entreprise:
     siret: 43394298400017
     specialite: brique
     nbemployees: 10
+    isverifier: true
     adresse_id: 101
 annonce_artisan:
   - annonce_id: 1006

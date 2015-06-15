@@ -73,6 +73,7 @@ entreprise:
     siret: 43394298400017
     specialite: brique
     nbemployees: 10
+    isverifier: true
     adresse_id: 101
   - id: 1004
     nomComplet: Pebronne enterprise choisi
@@ -81,6 +82,7 @@ entreprise:
     siret: 43394298400020
     specialite: brique
     nbemployees: 20
+    isverifier: true
     adresse_id: 104
   - id: 1005
     nomComplet: Entreprise de Robert
@@ -89,6 +91,7 @@ entreprise:
     siret: 43394298400025
     specialite: brique
     nbemployees: 20
+    isverifier: true
     adresse_id: 105
 adresse:
   - adresse: 106 chemin de lentreprise
@@ -138,7 +141,7 @@ annonce:
     demandeur_fk: 1001
     adressechantier_id: 102
     entreprise_selectionnee_fk: 1003
-    avisannonce_id: 1030
+    avis_id: 1030
   - id: 1021
     datecreation: 2014-03-30 22:00:00.0
     datemaj: 2014-04-24 22:00:00.0
@@ -154,7 +157,7 @@ annonce:
     selHashID: 5Whe5wlRCzzUhgFfRHFkIbtxRMyGrS1eaUntnp9SxEY=
     demandeur_fk: 1001
     adressechantier_id: 103
-    avisannonce_id: 1031
+    avis_id: 1031
 annonce_artisan:
    - annonce_id: 1020
      artisans_id: 1003

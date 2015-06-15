@@ -1,13 +1,14 @@
 package fr.batimen.web.client.extend.connected;
 
+import fr.batimen.dto.AvisDTO;
 import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.EntrepriseDTO;
-import fr.batimen.dto.AvisDTO;
 import fr.batimen.dto.enums.StatutJuridique;
 import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.web.app.constants.ParamsConstant;
 import fr.batimen.web.client.component.*;
 import fr.batimen.web.client.master.MasterPage;
+import fr.batimen.web.comparator.AvisComparatorParDate;
 import fr.batimen.ws.client.service.ArtisanServiceREST;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -26,7 +27,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import javax.inject.Inject;
 import java.text.SimpleDateFormat;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -51,8 +51,6 @@ public class Entreprise extends MasterPage {
     private LoadableDetachableModel<Integer> nbAnnonceRemporteModel;
 
     private boolean hasClickPlusDAvis = false;
-
-    private Comparator<AvisDTO> avisDTOComparator;
 
     public Entreprise() {
         super("", "", "Entreprise partenaire", true, "img/bg_title1.jpg");
@@ -88,15 +86,7 @@ public class Entreprise extends MasterPage {
     private void loadEntrepriseData() {
         entrepriseDTO = artisanServiceREST.getEntrepriseInformationBySiret(idEntreprise);
 
-        //Trie des avis par date
-        avisDTOComparator = new Comparator<AvisDTO>() {
-            @Override
-            public int compare(AvisDTO o1, AvisDTO o2) {
-                return o2.getDateAvis().compareTo(o1.getDateAvis());
-            }
-        };
-
-        Collections.sort(entrepriseDTO.getNotationsDTO(), avisDTOComparator);
+        Collections.sort(entrepriseDTO.getNotationsDTO(), new AvisComparatorParDate());
     }
 
     private void initInformationsGenerales() {
@@ -254,7 +244,7 @@ public class Entreprise extends MasterPage {
             public void onClick(AjaxRequestTarget target) {
                 entrepriseDTO.setNotationsDTO(artisanServiceREST.getEntrepriseNotationBySiret(idEntreprise));
                 hasClickPlusDAvis = true;
-                Collections.sort(entrepriseDTO.getNotationsDTO(), avisDTOComparator);
+                Collections.sort(entrepriseDTO.getNotationsDTO(), new AvisComparatorParDate());
                 avisClientListViewModel.setObject(entrepriseDTO.getNotationsDTO());
 
                 target.add(containerAvisClientListView, this);

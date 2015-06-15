@@ -28,8 +28,9 @@ public class EntrepriseService {
     public EntrepriseDTO rempliEntrepriseInformation(Entreprise entreprise){
         if(entreprise.getId() != null){
             ModelMapper mapper = new ModelMapper();
-            mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.LOOSE);
+            mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
             EntrepriseDTO entrepriseDTO = mapper.map(entreprise, EntrepriseDTO.class);
+            entrepriseDTO.setIsVerified(entreprise.getIsVerifier());
 
             for(CategorieMetier categorieMetier : entreprise.getCategoriesMetier()){
                 entrepriseDTO.getCategoriesMetier().add(CategorieLoader.getCategorieByCode(categorieMetier.getCategorieMetier()));
