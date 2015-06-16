@@ -133,6 +133,7 @@ public class GestionArtisanFacade {
         }
 
         nouvelleEntreprise.setAdresse(nouvelleAdresse);
+        nouvelleEntreprise.setIsVerifier(false);
 
         nouveauArtisan.setEntreprise(nouvelleEntreprise);
         artisanDAO.saveArtisan(nouveauArtisan);

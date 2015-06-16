@@ -2,7 +2,6 @@ package fr.batimen.test.ws.facade;
 
 
 import fr.batimen.core.constant.CodeRetourService;
-import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.ImageDTO;
 import fr.batimen.dto.NotificationDTO;
@@ -545,7 +544,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @ShouldMatchDataSet(value = "datasets/out/notation_artisan_par_client_et_admin.yml", excludeColumns = {"id",
             "datemaj", "datecreation", "datenotation", "datenotification"})
     public void testNotationArtisanParClient() {
-        NoterArtisanDTO noterArtisanDTO = annonceServiceTest.createNotationDTO("pebronne");
+        AvisArtisanDTO noterArtisanDTO = annonceServiceTest.createNotationDTO("pebronne");
 
         Integer codeRetour = annonceServiceREST.noterUnArtisan(noterArtisanDTO);
         Assert.assertEquals(CodeRetourService.RETOUR_OK, codeRetour);
@@ -560,7 +559,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @ShouldMatchDataSet(value = "datasets/out/notation_artisan_par_client_et_admin.yml", excludeColumns = {"id",
             "datemaj", "datecreation", "datenotation", "datenotification"})
     public void testNotationArtisanParAdmin() {
-        NoterArtisanDTO noterArtisanDTO = annonceServiceTest.createNotationDTO("admin");
+        AvisArtisanDTO noterArtisanDTO = annonceServiceTest.createNotationDTO("admin");
 
         Integer codeRetour = annonceServiceREST.noterUnArtisan(noterArtisanDTO);
         Assert.assertEquals(CodeRetourService.RETOUR_OK, codeRetour);

@@ -608,7 +608,7 @@ public class GestionAnnonceFacade {
     @POST
     @Path(WsPath.GESTION_ANNONCE_SERVICE_NOTER_UN_ARTISAN)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public Integer noterUnArtisan(NoterArtisanDTO noterArtisanDTO) {
+    public Integer noterUnArtisan(AvisArtisanDTO noterArtisanDTO) {
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("+-------------------------------------------------------------+");

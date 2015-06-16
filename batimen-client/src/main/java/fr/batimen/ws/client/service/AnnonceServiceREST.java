@@ -246,7 +246,7 @@ public class AnnonceServiceREST implements Serializable {
      * @param noterArtisanDTO Objet permettant de valider la note de l'artisan
      * @return {@link CodeRetourService}
      */
-    public Integer noterUnArtisan(NoterArtisanDTO noterArtisanDTO) {
+    public Integer noterUnArtisan(AvisArtisanDTO noterArtisanDTO) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Début appel service de notation d'un artisan.....");
         }

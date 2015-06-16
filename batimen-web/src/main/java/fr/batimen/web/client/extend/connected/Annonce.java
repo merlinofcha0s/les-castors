@@ -912,7 +912,7 @@ public class Annonce extends MasterPage {
             notationDTO.setCommentaire(noterArtisanEventClose.getCommentaireNotation());
             notationDTO.setScore(noterArtisanEventClose.getNbEtoiles());
 
-            NoterArtisanDTO noterArtisanDTO = new NoterArtisanDTO();
+            AvisArtisanDTO noterArtisanDTO = new AvisArtisanDTO();
             noterArtisanDTO.setHashID(idAnnonce);
             noterArtisanDTO.setLoginArtisan(annonceAffichageDTO.getEntrepriseSelectionnee().getArtisan().getLogin());
             noterArtisanDTO.setLoginDemandeur(userConnected.getLogin());

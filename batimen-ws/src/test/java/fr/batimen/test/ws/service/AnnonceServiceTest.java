@@ -137,20 +137,21 @@ public class AnnonceServiceTest {
         Assert.assertEquals(codeRetourServiceAttendu, codeRetourOK);
     }
 
-    public NoterArtisanDTO createNotationDTO(String loginDemandeur) {
-        AvisDTO notationDTO = new AvisDTO();
-        notationDTO.setScore((double) 4);
-        notationDTO.setCommentaire("Bon travaux");
-        notationDTO.setNomEntreprise("Pebronne enterprise");
+    public AvisArtisanDTO createNotationDTO(String loginDemandeur) {
+        AvisDTO avisDTO = new AvisDTO();
+        avisDTO.setScore((double) 4);
+        avisDTO.setCommentaire("Bon travaux");
+        avisDTO.setNomEntreprise("Pebronne enterprise");
+        avisDTO.setNomPrenomOrLoginClient("pebronne");
 
-        NoterArtisanDTO noterArtisanDTO = new NoterArtisanDTO();
-        noterArtisanDTO.setNotation(notationDTO);
-        noterArtisanDTO
+        AvisArtisanDTO avisArtisanDTO = new AvisArtisanDTO();
+        avisArtisanDTO.setNotation(avisDTO);
+        avisArtisanDTO
                 .setHashID("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
-        noterArtisanDTO.setLoginArtisan("pebronneArtisanne");
-        noterArtisanDTO.setLoginDemandeur(loginDemandeur);
+        avisArtisanDTO.setLoginArtisan("pebronneArtisanne");
+        avisArtisanDTO.setLoginDemandeur(loginDemandeur);
 
-        return noterArtisanDTO;
+        return avisArtisanDTO;
     }
 
     public Annonce testDesinscriptionArtisan(String loginDemandeur) {

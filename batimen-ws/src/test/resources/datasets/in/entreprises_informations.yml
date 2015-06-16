@@ -63,7 +63,7 @@ entreprise:
     specialite: brique
     nbemployees: 10
     adresse_id: 1001
-    isVerifier: true
+    isVerifier: false
   - id: 1004
     nomComplet: Pebronne enterprise choisi
     statutJuridique: 0

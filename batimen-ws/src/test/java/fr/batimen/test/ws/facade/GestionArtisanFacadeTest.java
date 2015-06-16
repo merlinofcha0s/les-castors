@@ -139,11 +139,11 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
         entrepriseDTO.getCategoriesMetier().add(CategorieLoader.getCategorieDecorationMaconnerie());
 
         AdresseDTO adresseDTO = new AdresseDTO();
-        adresseDTO.setAdresse("106 chemin de la modification");
-        adresseDTO.setComplementAdresse("Res de la modif");
-        adresseDTO.setCodePostal("06600");
+        adresseDTO.setAdresse("2410 avenue de l'artisan");
+        adresseDTO.setComplementAdresse("Res des artisans");
+        adresseDTO.setCodePostal("06500");
         adresseDTO.setDepartement(6);
-        adresseDTO.setVille("Antibes");
+        adresseDTO.setVille("YOLO City");
 
         entrepriseDTO.setAdresseEntreprise(adresseDTO);
 

@@ -12,7 +12,7 @@ import javax.validation.constraints.Size;
 import fr.batimen.dto.AbstractDTO;
 import fr.batimen.dto.AvisDTO;
 
-public class NoterArtisanDTO extends AbstractDTO {
+public class AvisArtisanDTO extends AbstractDTO {
 
     private static final long serialVersionUID = 1830194401199647981L;
 
@@ -93,8 +93,8 @@ public class NoterArtisanDTO extends AbstractDTO {
             return true;
         }
 
-        if (object instanceof NoterArtisanDTO) {
-            NoterArtisanDTO other = (NoterArtisanDTO) object;
+        if (object instanceof AvisArtisanDTO) {
+            AvisArtisanDTO other = (AvisArtisanDTO) object;
             return Objects.equals(this.notation.getScore(), other.notation.getScore())
                     && Objects.equals(this.notation.getCommentaire(), other.notation.getCommentaire())
                     && Objects.equals(this.hashID, other.hashID)
