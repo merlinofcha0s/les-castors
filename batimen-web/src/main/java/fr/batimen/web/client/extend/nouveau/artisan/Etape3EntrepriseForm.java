@@ -71,6 +71,12 @@ public class Etape3EntrepriseForm extends Form<CreationPartenaireDTO> {
         final CreationPartenaireDTO nouveauPartenaire = model.getObject();
         final List<CategorieMetierDTO> categorieSelectionnees = nouveauPartenaire.getEntreprise().getCategoriesMetier();
 
+        TextField<String> specialite = new TextField<String>("entreprise.specialite");
+        specialite.setMarkupId("specialite");
+        specialite.add(StringValidator.lengthBetween(ValidatorConstant.ENTREPRISE_SPECIALITE_MIN,
+                ValidatorConstant.ENTREPRISE_SPECIALITE_MAX));
+        specialite.add(new ErrorHighlightBehavior());
+
         TextField<String> nomComplet = new TextField<String>("entreprise.nomComplet");
         nomComplet.setRequired(true);
         nomComplet.setMarkupId("nomComplet");
@@ -229,6 +235,6 @@ public class Etape3EntrepriseForm extends Form<CreationPartenaireDTO> {
         terminerInscriptionPartenaire.add(validateEtape3Partenaire);
 
         add(nomComplet, statutJuridique, nbEmployes, dateCreation, siret, logo, adresse, complementAdresse,
-                codePostalField, villeField, departementField, terminerInscriptionPartenaire, containerEtapePrecedenteNouveauArtisan3);
+                codePostalField, villeField, departementField, terminerInscriptionPartenaire, containerEtapePrecedenteNouveauArtisan3, specialite);
     }
 }

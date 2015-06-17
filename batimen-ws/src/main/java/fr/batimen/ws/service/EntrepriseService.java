@@ -31,6 +31,7 @@ public class EntrepriseService {
             mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STANDARD);
             EntrepriseDTO entrepriseDTO = mapper.map(entreprise, EntrepriseDTO.class);
             entrepriseDTO.setIsVerified(entreprise.getIsVerifier());
+            entrepriseDTO.setSpecialite(entreprise.getSpecialite());
 
             for(CategorieMetier categorieMetier : entreprise.getCategoriesMetier()){
                 entrepriseDTO.getCategoriesMetier().add(CategorieLoader.getCategorieByCode(categorieMetier.getCategorieMetier()));

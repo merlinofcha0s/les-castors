@@ -203,6 +203,7 @@ public class GestionArtisanFacade {
             }
             entrepriseAMettreAJour.setNbEmployees(entrepriseDTO.getNbEmployees());
             entrepriseAMettreAJour.setDateCreation(entrepriseDTO.getDateCreation());
+            entrepriseAMettreAJour.setSpecialite(entrepriseDTO.getSpecialite());
             ModelMapper mapper = new ModelMapper();
             mapper.map(entrepriseDTO.getAdresseEntreprise(), entrepriseAMettreAJour.getAdresse());
 
