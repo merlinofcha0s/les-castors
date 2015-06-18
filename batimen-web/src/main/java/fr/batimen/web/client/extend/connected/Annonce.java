@@ -911,6 +911,7 @@ public class Annonce extends MasterPage {
             notationDTO.setNomEntreprise(annonceAffichageDTO.getEntrepriseSelectionnee().getNomComplet());
             notationDTO.setCommentaire(noterArtisanEventClose.getCommentaireNotation());
             notationDTO.setScore(noterArtisanEventClose.getNbEtoiles());
+            notationDTO.setNomPrenomOrLoginClient(userConnected.getLogin());
 
             AvisArtisanDTO noterArtisanDTO = new AvisArtisanDTO();
             noterArtisanDTO.setHashID(idAnnonce);

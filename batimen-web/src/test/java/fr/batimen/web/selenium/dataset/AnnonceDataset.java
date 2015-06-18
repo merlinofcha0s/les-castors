@@ -12,7 +12,7 @@ public class AnnonceDataset {
             .columns("id", "datecreation", "datemaj", "delaiintervention", "description", "etatannonce",
                     "categoriemetier", "souscategoriemetier", "nbconsultation", "typecontact", "hashID", "selHashID",
                     "typeTravaux", "adressechantier_id", "demandeur_fk", "entreprise_selectionnee_fk",
-                    "notationannonce_id")
+                    "avis_id")
             .values(200010, "2014-01-10", "2014-01-10", DelaiIntervention.LE_PLUS_RAPIDEMENT_POSSIBLE,
                     "Construction compliqué qui necessite des connaissance en geologie", EtatAnnonce.ACTIVE,
                     CategorieLoader.ELECTRICITE_CODE, "Installation électrique", 0, TypeContact.EMAIL, "toto", "tata",
@@ -55,8 +55,8 @@ public class AnnonceDataset {
             .values(200015, "270 chemin du mdr", "08800", "Residence du mdr", "Test mdr", 8)
             .values(200016, "280 chemin du lolmdrxD", "09800", "Residence du lolmdrxD", "Test lolmdrxD", 9).build();
 
-    public static final Operation INSERT_NOTATION_DATA = insertInto("notation")
-            .columns("id", "commentaire", "dateNotation", "score", "artisan_fk")
+    public static final Operation INSERT_AVIS_DATA = insertInto("avis")
+            .columns("id", "commentaire", "dateavis", "score", "artisan_fk")
             .values(200012, "Ké buenos, Artisan très sympatique, travail bien fait", "2014-03-23 22:00:00.0", 4, 200008)
             .values(200013, "Artisan moins sympatique", "2014-12-01 22:00:00.0", 3, 200008).build();
 

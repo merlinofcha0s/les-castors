@@ -1,19 +1,16 @@
 package fr.batimen.web.selenium.client;
 
-import static com.ninja_squad.dbsetup.Operations.sequenceOf;
-import static fr.batimen.web.selenium.dataset.ModifierMonProfilDataset.*;
-import static fr.batimen.web.selenium.dataset.ModifierMonProfilDataset.INSERT_ANNONCE_ARTISAN;
-import static org.junit.Assert.assertTrue;
-
+import com.ninja_squad.dbsetup.DbSetup;
+import com.ninja_squad.dbsetup.operation.Operation;
+import fr.batimen.web.selenium.common.AbstractITTest;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.ninja_squad.dbsetup.DbSetup;
-import com.ninja_squad.dbsetup.operation.Operation;
-
-import fr.batimen.web.selenium.common.AbstractITTest;
+import static com.ninja_squad.dbsetup.Operations.sequenceOf;
+import static fr.batimen.web.selenium.dataset.ModifierMonProfilDataset.*;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Test d'intégration pour la page de modification d'un profil utilisateur <br/>
@@ -28,7 +25,7 @@ public class TestModifierMonProfil extends AbstractITTest {
     public void prepareDB() throws Exception {
         Operation operation = sequenceOf(DELETE_ALL, INSERT_USER_DATA, INSERT_USER_PERMISSION,
                 INSERT_ADRESSE_DATA, INSERT_ENTREPRISE_DATA,
-                INSERT_ARTISAN_DATA, INSERT_ARTISAN_PERMISSION, INSERT_NOTATION_DATA,
+                INSERT_ARTISAN_DATA, INSERT_ARTISAN_PERMISSION, INSERT_AVIS_DATA,
                 INSERT_ANNONCE_DATA, INSERT_NOTIFICATION_DATA, INSERT_ANNONCE_ARTISAN);
         DbSetup dbSetup = new DbSetup(getDriverManagerDestination(), operation);
         dbSetup.launch();

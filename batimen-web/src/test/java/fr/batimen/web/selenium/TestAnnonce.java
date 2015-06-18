@@ -1,21 +1,11 @@
 package fr.batimen.web.selenium;
 
-import static com.ninja_squad.dbsetup.Operations.sequenceOf;
-import static fr.batimen.web.selenium.dataset.AnnonceDataset.INSERT_ADRESSE_DATA;
-import static fr.batimen.web.selenium.dataset.AnnonceDataset.INSERT_ANNONCE_ARTISAN;
-import static fr.batimen.web.selenium.dataset.AnnonceDataset.INSERT_ANNONCE_DATA;
-import static fr.batimen.web.selenium.dataset.AnnonceDataset.INSERT_ANNONCE_IMAGE;
-import static fr.batimen.web.selenium.dataset.AnnonceDataset.INSERT_ARTISAN_DATA;
-import static fr.batimen.web.selenium.dataset.AnnonceDataset.INSERT_ARTISAN_PERMISSION;
-import static fr.batimen.web.selenium.dataset.AnnonceDataset.INSERT_ENTREPRISE_DATA;
-import static fr.batimen.web.selenium.dataset.AnnonceDataset.INSERT_NOTATION_DATA;
-import static fr.batimen.web.selenium.dataset.AnnonceDataset.INSERT_NOTIFICATION_DATA;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import java.util.concurrent.TimeUnit;
-
+import com.ninja_squad.dbsetup.DbSetup;
+import com.ninja_squad.dbsetup.operation.Operation;
+import fr.batimen.core.constant.UrlPage;
+import fr.batimen.dto.enums.EtatAnnonce;
+import fr.batimen.dto.enums.TypeCompte;
+import fr.batimen.web.selenium.common.AbstractITTest;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -24,13 +14,11 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.ninja_squad.dbsetup.DbSetup;
-import com.ninja_squad.dbsetup.operation.Operation;
+import java.util.concurrent.TimeUnit;
 
-import fr.batimen.core.constant.UrlPage;
-import fr.batimen.dto.enums.EtatAnnonce;
-import fr.batimen.dto.enums.TypeCompte;
-import fr.batimen.web.selenium.common.AbstractITTest;
+import static com.ninja_squad.dbsetup.Operations.sequenceOf;
+import static fr.batimen.web.selenium.dataset.AnnonceDataset.*;
+import static org.junit.Assert.*;
 
 /**
  * Test d'intégration pour la page d'affichage d'une annonce.
@@ -43,7 +31,7 @@ public class TestAnnonce extends AbstractITTest {
     @Override
     public void prepareDB() throws Exception {
         Operation operation = sequenceOf(DELETE_ALL, INSERT_USER_DATA, INSERT_USER_PERMISSION, INSERT_ADRESSE_DATA,
-                INSERT_ENTREPRISE_DATA, INSERT_ARTISAN_DATA, INSERT_ARTISAN_PERMISSION, INSERT_NOTATION_DATA,
+                INSERT_ENTREPRISE_DATA, INSERT_ARTISAN_DATA, INSERT_ARTISAN_PERMISSION, INSERT_AVIS_DATA,
                 INSERT_ANNONCE_DATA, INSERT_NOTIFICATION_DATA, INSERT_ANNONCE_ARTISAN, INSERT_ANNONCE_IMAGE);
         DbSetup dbSetup = new DbSetup(getDriverManagerDestination(), operation);
         dbSetup.launch();
