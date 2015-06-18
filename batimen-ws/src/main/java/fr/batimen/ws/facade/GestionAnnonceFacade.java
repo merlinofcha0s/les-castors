@@ -608,14 +608,14 @@ public class GestionAnnonceFacade {
     @POST
     @Path(WsPath.GESTION_ANNONCE_SERVICE_NOTER_UN_ARTISAN)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public Integer noterUnArtisan(NoterArtisanDTO noterArtisanDTO) {
+    public Integer noterUnArtisan(AvisArtisanDTO noterArtisanDTO) {
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("+-------------------------------------------------------------+");
             LOGGER.debug("| Hash ID : {}", noterArtisanDTO.getHashID());
             LOGGER.debug("| Artisan : {}", noterArtisanDTO.getLoginArtisan());
             LOGGER.debug("| Demandeur : {}", noterArtisanDTO.getLoginDemandeur());
-            LOGGER.debug("| Notation : {}", noterArtisanDTO.getNotation().getScore());
+            LOGGER.debug("| Avis : {}", noterArtisanDTO.getNotation().getScore());
             LOGGER.debug("| Commentaire : {}", noterArtisanDTO.getNotation().getCommentaire());
             LOGGER.debug("| Nom Entreprise : {}", noterArtisanDTO.getNotation().getNomEntreprise());
             LOGGER.debug("+-------------------------------------------------------------+");
@@ -636,7 +636,7 @@ public class GestionAnnonceFacade {
                 LOGGER.error("| Hash ID : {}", noterArtisanDTO.getHashID());
                 LOGGER.error("| Artisan : {}", noterArtisanDTO.getLoginArtisan());
                 LOGGER.error("| Demandeur : {}", noterArtisanDTO.getLoginDemandeur());
-                LOGGER.error("| Notation : {}", noterArtisanDTO.getNotation().getScore());
+                LOGGER.error("| Avis : {}", noterArtisanDTO.getNotation().getScore());
                 LOGGER.error("| Commentaire : {}", noterArtisanDTO.getNotation().getCommentaire());
                 LOGGER.error("| Nom Entreprise : {}", noterArtisanDTO.getNotation().getNomEntreprise());
                 LOGGER.error("+-------------------------------------------------------------+");

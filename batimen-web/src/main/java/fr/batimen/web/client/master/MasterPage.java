@@ -1,9 +1,18 @@
 package fr.batimen.web.client.master;
 
+import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.web.app.constants.FeedbackMessageLevel;
+import fr.batimen.web.client.behaviour.LoginDialogBehaviour;
+import fr.batimen.web.client.component.BatimenFeedbackPanel;
+import fr.batimen.web.client.component.LinkLabel;
+import fr.batimen.web.client.component.WaiterModal;
 import fr.batimen.web.client.event.*;
+import fr.batimen.web.client.extend.Accueil;
+import fr.batimen.web.client.extend.member.client.MesAnnonces;
+import fr.batimen.web.client.extend.nouveau.artisan.NouveauArtisan;
+import fr.batimen.web.client.extend.nouveau.devis.NouveauDevis;
+import fr.batimen.web.client.modal.AuthentificationModal;
 import org.apache.shiro.SecurityUtils;
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
@@ -22,22 +31,8 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.http.ClientProperties;
 import org.apache.wicket.protocol.http.WebSession;
-import org.apache.wicket.request.Url;
-import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import fr.batimen.dto.enums.TypeCompte;
-import fr.batimen.web.client.behaviour.LoginDialogBehaviour;
-import fr.batimen.web.client.component.BatimenFeedbackPanel;
-import fr.batimen.web.client.component.LinkLabel;
-import fr.batimen.web.client.component.WaiterModal;
-import fr.batimen.web.client.extend.Accueil;
-import fr.batimen.web.client.extend.member.client.MesAnnonces;
-import fr.batimen.web.client.extend.nouveau.artisan.NouveauArtisan;
-import fr.batimen.web.client.extend.nouveau.devis.NouveauDevis;
-import fr.batimen.web.client.modal.AuthentificationModal;
 
 /**
  * Page principal de l'application dans laquelle tous les autres panels seront
@@ -155,25 +150,27 @@ public abstract class MasterPage extends WebPage {
 
         htmlTag.add(containerTitleHeader);
 
-        Label titleHeader = new Label("titleHeader", new Model<String>(title));
+        Label titleHeader = new Label("titleHeader", new Model<>(title));
         containerTitleHeader.add(titleHeader);
 
         // On prends l'url complete de la page d'accueil avec l'image de fonds
-        StringBuilder generatedAdresseForImage = new StringBuilder(RequestCycle.get().getUrlRenderer()
+        /*StringBuilder generatedAdresseForImage = new StringBuilder();
+        generatedAdresseForImage.append(RequestCycle.get().getUrlRenderer()
                 .renderFullUrl(Url.parse(urlFor(Accueil.class, new PageParameters()).toString())));
         generatedAdresseForImage.append("/");
         generatedAdresseForImage.append(adresseImgBackGround);
 
         // On efface 'accueil' pour que le chemin vers l'image soit correct
         generatedAdresseForImage.delete(generatedAdresseForImage.indexOf("accueil"),
-                generatedAdresseForImage.indexOf("accueil") + 8);
+                generatedAdresseForImage.indexOf("accueil") + 8);*/
 
         // On charge l'image de fond du titre qui a été passé en parametre
-        StringBuilder bgImageAdresseCSS = new StringBuilder("background:url(");
+        /*StringBuilder bgImageAdresseCSS = new StringBuilder();
+        bgImageAdresseCSS.append("background:url(");
         bgImageAdresseCSS.append(generatedAdresseForImage.toString());
         bgImageAdresseCSS.append(") no-repeat center top;");
 
-        containerTitleHeader.add(new AttributeModifier("style", bgImageAdresseCSS.toString()));
+        containerTitleHeader.add(new AttributeModifier("style", bgImageAdresseCSS.toString()));*/
     }
 
     private void initComponentConnexion() {

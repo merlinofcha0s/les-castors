@@ -86,17 +86,4 @@ public class NotificationDAO extends AbstractDAO<Notification> {
             return new ArrayList<>();
         }
     }
-
-    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public void createNotificationEntrepriseChoisiParClient(Annonce annonce) {
-        Notification notification = new Notification();
-        notification.setAnnonce(annonce);
-        notification.setArtisanNotifier(annonce.getEntrepriseSelectionnee().getArtisan());
-        notification.setClientNotifier(annonce.getDemandeur());
-        notification.setDateNotification(new Date());
-        notification.setPourQuiNotification(TypeCompte.ARTISAN);
-        notification.setStatutNotification(StatutNotification.PAS_VUE);
-        notification.setTypeNotification(TypeNotification.A_CHOISI_ENTREPRISE);
-        entityManager.persist(notification);
-    }
 }

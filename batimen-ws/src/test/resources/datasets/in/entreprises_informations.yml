@@ -36,6 +36,24 @@ adresse:
     complementadresse: Res des artisans
     ville: Nice
     departement: 6
+  - adresse: 2410 avenue de l'artisan
+    id: 1003
+    codepostal: "06700"
+    complementadresse: Res des artisans
+    ville: Nice
+    departement: 6
+  - adresse: 2410 avenue de l'artisan
+    id: 1004
+    codepostal: "06700"
+    complementadresse: Res des artisans
+    ville: Nice
+    departement: 6
+  - adresse: 2410 avenue de l'artisan
+    id: 1005
+    codepostal: "06500"
+    complementadresse: Res des artisans
+    ville: YOLO City
+    departement: 6
 entreprise:
   - id: 1003
     nomComplet: Pebronne enterprise
@@ -45,6 +63,7 @@ entreprise:
     specialite: brique
     nbemployees: 10
     adresse_id: 1001
+    isVerifier: false
   - id: 1004
     nomComplet: Pebronne enterprise choisi
     statutJuridique: 0
@@ -53,11 +72,14 @@ entreprise:
     specialite: brique
     nbemployees: 20
     adresse_id: 1002
+    isVerifier: false
 permission:
   - typecompte: 3
     artisan_fk: 1003
   - typecompte: 3
     artisan_fk: 1004
+  - typecompte: 4
+    client_fk: 1001
 categoriemetier:
   - id: 1001
     categoriemetier: 0
@@ -65,3 +87,72 @@ categoriemetier:
   - id: 1002
     categoriemetier: 0
     entreprise_fk: 1004
+avis:
+  - id: 1020
+    score: 3
+    commentaire: Bon Travail
+    dateAvis: 2014-03-23 22:00:00.0
+    artisan_fk: 1003
+  - id: 1021
+    score: 5
+    commentaire: Bon Travail
+    dateAvis: 2014-04-23 22:00:00.0
+    artisan_fk: 1003
+  - id: 1022
+    score: 5
+    commentaire: Bon Travail
+    dateAvis: 2014-04-23 22:00:00.0
+    artisan_fk: 1003
+client:
+  - id: 1001
+    dateinscription: "2014-01-10 00:00:00"
+    email: lol@lol.com
+    password: $s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=
+    login: pebronne
+    nom: De la Pebronne
+    numerotel: "0615125645"
+    prenom: Pebron
+    isActive: true
+annonce:
+  - id: 1000
+    datecreation: 2014-03-23 22:00:00.0
+    delaiintervention: 0
+    description: Peinture d'un mur
+    etatannonce: 6
+    categoriemetier: 0
+    souscategoriemetier: Installation électrique
+    nbconsultation: 0
+    typecontact: 0
+    typeTravaux: 0
+    demandeur_fk: 1001
+    adressechantier_id: 1003
+    avis_id: 1020
+    entreprise_selectionnee_fk: 1003
+  - id: 1001
+    datecreation: 2014-03-23 22:00:00.0
+    delaiintervention: 0
+    description: Peinture d'un mur lol
+    etatannonce: 6
+    categoriemetier: 0
+    souscategoriemetier: Installation électrique
+    nbconsultation: 0
+    typecontact: 0
+    typeTravaux: 0
+    demandeur_fk: 1001
+    adressechantier_id: 1004
+    avis_id: 1021
+    entreprise_selectionnee_fk: 1003
+  - id: 1002
+    datecreation: 2014-04-23 22:00:00.0
+    delaiintervention: 0
+    description: Peinture d'un mur lol xD
+    etatannonce: 6
+    categoriemetier: 0
+    souscategoriemetier: Installation électrique
+    nbconsultation: 0
+    typecontact: 0
+    typeTravaux: 0
+    demandeur_fk: 1001
+    adressechantier_id: 1005
+    avis_id: 1022
+    entreprise_selectionnee_fk: 1003

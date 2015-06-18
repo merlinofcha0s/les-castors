@@ -1,24 +1,19 @@
 package fr.batimen.dto;
 
-import static fr.batimen.dto.constant.ValidatorConstant.ENTREPRISE_NOM_COMPLET_MAX;
-import static fr.batimen.dto.constant.ValidatorConstant.ENTREPRISE_SIRET_REGEXP;
-import static fr.batimen.dto.constant.ValidatorConstant.ENTREPRISE_SPECIALITE_MAX;
-import static fr.batimen.dto.constant.ValidatorConstant.ENTREPRISE_SPECIALITE_MIN;
+import fr.batimen.dto.constant.ValidatorConstant;
+import fr.batimen.dto.enums.StatutJuridique;
+import org.modelmapper.ModelMapper;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Past;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
-
-import fr.batimen.dto.constant.ValidatorConstant;
-import fr.batimen.dto.enums.StatutJuridique;
-import org.modelmapper.ModelMapper;
+import static fr.batimen.dto.constant.ValidatorConstant.*;
 
 public class EntrepriseDTO extends AbstractDTO {
 
@@ -50,6 +45,14 @@ public class EntrepriseDTO extends AbstractDTO {
     private ClientDTO artisan;
 
     private AdresseDTO adresseEntreprise;
+
+    private List<AvisDTO> notationsDTO = new ArrayList<>();
+
+    private Boolean isVerifier;
+
+    private Double moyenneAvis;
+
+    private Integer nbAnnonce;
 
     /**
      * @return the dateCreation
@@ -152,11 +155,44 @@ public class EntrepriseDTO extends AbstractDTO {
         this.adresseEntreprise = adresseEntreprise;
     }
 
+    public List<AvisDTO> getNotationsDTO() {
+        return notationsDTO;
+    }
+
+    public void setNotationsDTO(List<AvisDTO> notationsDTO) {
+        this.notationsDTO = notationsDTO;
+    }
+
+    public Boolean getIsVerifier() {
+        return isVerifier;
+    }
+
+    public void setIsVerified(Boolean isVerified) {
+        this.isVerifier = isVerified;
+    }
+
+    public Double getMoyenneAvis() {
+        return moyenneAvis;
+    }
+
+    public void setMoyenneAvis(Double moyenneAvis) {
+        this.moyenneAvis = moyenneAvis;
+    }
+    
+
+    public Integer getNbAnnonce() {
+        return nbAnnonce;
+    }
+
+    public void setNbAnnonce(Integer nbAnnonce) {
+        this.nbAnnonce = nbAnnonce;
+    }
+
     /*
-         * (non-Javadoc)
-         *
-         * @see java.lang.Object#hashCode()
-         */
+                         * (non-Javadoc)
+                         *
+                         * @see java.lang.Object#hashCode()
+                         */
     @Override
     public int hashCode() {
         return Objects.hashCode(Objects.hash(this.getSiret(), this.getNomComplet()));
@@ -195,6 +231,8 @@ public class EntrepriseDTO extends AbstractDTO {
         sb.append(", specialite='").append(specialite).append('\'');
         sb.append(", artisan=").append(artisan);
         sb.append(", adresseEntreprise=").append(adresseEntreprise);
+        sb.append(", notationsDTO=").append(notationsDTO);
+        sb.append(", isVerified=").append(isVerifier);
         sb.append('}');
         return sb.toString();
     }

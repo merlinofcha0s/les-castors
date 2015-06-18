@@ -101,6 +101,7 @@ entreprise:
     siret: 43394298400017
     specialite: brique
     nbemployees: 10
+    isverifier: true
     adresse_id: 101
   - id: 1004
     nomComplet: Pebronne enterprise choisi
@@ -109,6 +110,7 @@ entreprise:
     siret: 43394298400020
     specialite: brique
     nbemployees: 20
+    isverifier: true
     adresse_id: 104
   - id: 1005
     nomComplet: Entreprise de Robert
@@ -117,6 +119,7 @@ entreprise:
     siret: 43394298400025
     specialite: brique
     nbemployees: 20
+    isverifier: true
     adresse_id: 105
   - id: 1006
     nomComplet: Entreprise de Jean
@@ -125,6 +128,7 @@ entreprise:
     siret: 43394298400030
     specialite: mdr
     nbemployees: 25
+    isverifier: false
     adresse_id: 106
   - id: 1007
     nomComplet: Entreprise de Nicolas
@@ -133,6 +137,7 @@ entreprise:
     siret: 43394298400040
     specialite: xD
     nbemployees: 15
+    isverifier: false
     adresse_id: 107
 adresse:
   - adresse: 106 chemin de lentreprise

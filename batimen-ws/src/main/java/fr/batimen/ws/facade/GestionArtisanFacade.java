@@ -6,13 +6,11 @@ import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.WsPath;
 import fr.batimen.core.exception.BackendException;
 import fr.batimen.core.exception.EmailException;
-import fr.batimen.dto.AdresseDTO;
 import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.EntrepriseDTO;
+import fr.batimen.dto.AvisDTO;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
-import fr.batimen.dto.aggregate.ModificationEntrepriseDTO;
 import fr.batimen.dto.enums.TypeCompte;
-import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 import fr.batimen.ws.dao.*;
 import fr.batimen.ws.entity.*;
@@ -21,6 +19,8 @@ import fr.batimen.ws.helper.JsonHelper;
 import fr.batimen.ws.interceptor.BatimenInterceptor;
 import fr.batimen.ws.service.ArtisanService;
 import fr.batimen.ws.service.EmailService;
+import fr.batimen.ws.service.EntrepriseService;
+import fr.batimen.ws.service.NotationService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +29,6 @@ import javax.annotation.security.RolesAllowed;
 import javax.ejb.*;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
-import javax.swing.*;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -75,6 +74,12 @@ public class GestionArtisanFacade {
 
     @Inject
     private ArtisanService artisanService;
+
+    @Inject
+    private EntrepriseService entrepriseService;
+
+    @Inject
+    private NotationService notationService;
 
     /**
      * Service de création d'un nouveau partenaire Artisan
@@ -128,6 +133,7 @@ public class GestionArtisanFacade {
         }
 
         nouvelleEntreprise.setAdresse(nouvelleAdresse);
+        nouvelleEntreprise.setIsVerifier(false);
 
         nouveauArtisan.setEntreprise(nouvelleEntreprise);
         artisanDAO.saveArtisan(nouveauArtisan);
@@ -166,25 +172,11 @@ public class GestionArtisanFacade {
      * @return Les informations de l'entreprise.
      */
     @POST
-    @Path(WsPath.GESTION_PARTENAIRE_SERVICE_GET_ENTREPISE_INFORMATION)
+    @Path(WsPath.GESTION_PARTENAIRE_SERVICE_GET_ENTREPISE_INFORMATION_BY_LOGIN)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public EntrepriseDTO getEntrepriseInformationByArtisanLogin(String login) {
         Entreprise entreprise = entrepriseDAO.getEntrepriseByArtisan(DeserializeJsonHelper.parseString(login));
-
-        if(entreprise.getId() != null){
-            ModelMapper mapper = new ModelMapper();
-            EntrepriseDTO entrepriseDTO = mapper.map(entreprise, EntrepriseDTO.class);
-
-            for(CategorieMetier categorieMetier : entreprise.getCategoriesMetier()){
-                entrepriseDTO.getCategoriesMetier().add(CategorieLoader.getCategorieByCode(categorieMetier.getCategorieMetier()));
-            }
-
-            AdresseDTO adresseEntreprise = mapper.map(entreprise.getAdresse(), AdresseDTO.class);
-            entrepriseDTO.setAdresseEntreprise(adresseEntreprise);
-            return entrepriseDTO;
-        }else{
-            return new EntrepriseDTO();
-        }
+        return entrepriseService.rempliEntrepriseInformation(entreprise);
     }
 
     /**
@@ -197,7 +189,7 @@ public class GestionArtisanFacade {
     @Path(WsPath.GESTION_PARTENAIRE_SERVICE_SAVE_ENTREPRISE_INFORMATION)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public Integer saveEntrepriseInformation(EntrepriseDTO entrepriseDTO) {
-        if(LOGGER.isDebugEnabled()){
+        if (LOGGER.isDebugEnabled()) {
             LOGGER.debug(entrepriseDTO.toString());
         }
 
@@ -205,12 +197,13 @@ public class GestionArtisanFacade {
                 , entrepriseDTO.getStatutJuridique(), entrepriseDTO.getSiret()
                 , entrepriseDTO.getAdresseEntreprise().getDepartement());
 
-        if(entrepriseAMettreAJour != null){
-            if(LOGGER.isDebugEnabled()){
+        if (entrepriseAMettreAJour != null) {
+            if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("L'entreprise a été trouvée, on effectue les modifs demandé par l'utilisateur.");
             }
             entrepriseAMettreAJour.setNbEmployees(entrepriseDTO.getNbEmployees());
             entrepriseAMettreAJour.setDateCreation(entrepriseDTO.getDateCreation());
+            entrepriseAMettreAJour.setSpecialite(entrepriseDTO.getSpecialite());
             ModelMapper mapper = new ModelMapper();
             mapper.map(entrepriseDTO.getAdresseEntreprise(), entrepriseAMettreAJour.getAdresse());
 
@@ -218,8 +211,53 @@ public class GestionArtisanFacade {
             entrepriseDAO.update(entrepriseAMettreAJour);
             adresseDAO.update(entrepriseAMettreAJour.getAdresse());
             return CodeRetourService.RETOUR_OK;
-        }else{
+        } else {
             return CodeRetourService.RETOUR_KO;
         }
+    }
+
+    /**
+     * Permet de récuperer les informations d'une entreprise (Infos + adresse)
+     *
+     * @param siret Le siret de l'entreprise
+     * @return Les informations de l'entreprise.
+     */
+    @POST
+    @Path(WsPath.GESTION_PARTENAIRE_SERVICE_GET_ENTREPISE_INFORMATION_BY_SIRET)
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public EntrepriseDTO getEntrepriseInformationBySiret(String siret) {
+        String siretEscaped = DeserializeJsonHelper.parseString(siret);
+        Entreprise entreprise = entrepriseDAO.getEntrepriseBySiret(DeserializeJsonHelper.parseString(siret));
+        EntrepriseDTO entrepriseDTO = entrepriseService.rempliEntrepriseInformation(entreprise);
+        entrepriseDTO.getNotationsDTO().addAll(notationService.getNotationBySiret(siretEscaped, 2));
+
+        //Stats
+        Double moyenneAvis = 0.0;
+        int nbAvis = 0;
+        for(AvisDTO notationDTO : entrepriseDTO.getNotationsDTO()){
+            moyenneAvis += notationDTO.getScore();
+            nbAvis++;
+        }
+
+        moyenneAvis = moyenneAvis / nbAvis;
+
+        entrepriseDTO.setMoyenneAvis(moyenneAvis);
+        entrepriseDTO.setNbAnnonce(entreprise.getAnnonceEntrepriseSelectionnee().size());
+
+        return entrepriseDTO;
+    }
+
+    /**
+     * Permet de récuperer tous les avis d'une entreprise par son SIRETs
+     *
+     * @param siret Le siret de l'entreprise
+     * @return Les informations de l'entreprise.
+     */
+    @POST
+    @Path(WsPath.GESTION_PARTENAIRE_SERVICE_GET_NOTATION_BY_SIRET)
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public List<AvisDTO> getEntrepriseNotationBySiret(String siret) {
+        String siretEscaped = DeserializeJsonHelper.parseString(siret);
+        return notationService.getNotationBySiret(siretEscaped, 0);
     }
 }

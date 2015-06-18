@@ -1,18 +1,8 @@
 package fr.batimen.ws.service;
 
-import java.io.IOException;
-import java.util.*;
-
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
-import javax.inject.Inject;
-
 import com.microtripit.mandrillapp.lutung.model.MandrillApiError;
 import com.microtripit.mandrillapp.lutung.view.MandrillMessage;
 import com.microtripit.mandrillapp.lutung.view.MandrillMessage.MergeVar;
-
 import fr.batimen.core.constant.EmailConstant;
 import fr.batimen.core.exception.EmailException;
 import fr.batimen.dto.ContactMailDTO;
@@ -22,6 +12,15 @@ import fr.batimen.ws.dao.EmailDAO;
 import fr.batimen.ws.entity.Annonce;
 import fr.batimen.ws.entity.Notification;
 import fr.batimen.ws.enums.PropertiesFileWS;
+import fr.batimen.ws.utils.ClientUtils;
+
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
+import javax.inject.Inject;
+import java.io.IOException;
+import java.util.*;
 
 /**
  * Classe de gestion d'envoi de mail.
@@ -57,7 +56,7 @@ public class EmailService {
         // On construit les recepteurs
         Map<String, String> recipients = new HashMap<String, String>();
 
-        getNomDestinataire(nouvelleAnnonce.getDemandeur().getNom(), nouvelleAnnonce.getDemandeur().getPrenom(),
+        ClientUtils.chooseNomClient(nouvelleAnnonce.getDemandeur().getNom(), nouvelleAnnonce.getDemandeur().getPrenom(),
                 nouvelleAnnonce.getDemandeur().getLogin(), nomDestinataire);
         recipients.put(nomDestinataire.toString(), nouvelleAnnonce.getDemandeur().getEmail());
 
@@ -102,7 +101,7 @@ public class EmailService {
         // On construit les recepteurs
         Map<String, String> recipients = new HashMap<String, String>();
 
-        getNomDestinataire(nom, prenom, login, nomDestinataire);
+        ClientUtils.chooseNomClient(nom, prenom, login, nomDestinataire);
         recipients.put(nomDestinataire.toString(), email);
 
         // On charge les recepteurs
@@ -221,24 +220,6 @@ public class EmailService {
     }
 
     /**
-     * Util method to generate destinatary name
-     *
-     * @param nom
-     * @param prenom
-     * @param login
-     * @param nomDestinataire
-     */
-    private void getNomDestinataire(String nom, String prenom, String login, StringBuilder nomDestinataire) {
-        if (nom != null && prenom != null && !nom.isEmpty() && !prenom.isEmpty()) {
-            nomDestinataire.append(nom);
-            nomDestinataire.append(" ");
-            nomDestinataire.append(prenom);
-        } else {
-            nomDestinataire.append(login);
-        }
-    }
-
-    /**
      * Suivant le type de notification on rajoute le contenu qui sera remplacé dans l'email template
      * <p/>
      * Deux type de tags sont présents ceux qui remplacent une balise via mc:edit (templateContent) et ceux qui remplacent un tag du type *|TOTO|* (mergedVars) dans le template
@@ -249,10 +230,10 @@ public class EmailService {
      */
     private Map<String, String> generateAndSaveContentForNotificationMail(Notification notification, MandrillMessage notificationMail) {
         StringBuilder nomClient = new StringBuilder();
-        getNomDestinataire(notification.getClientNotifier().getNom(), notification.getClientNotifier().getPrenom(), notification.getClientNotifier().getLogin(), nomClient);
+        ClientUtils.chooseNomClient(notification.getClientNotifier().getNom(), notification.getClientNotifier().getPrenom(), notification.getClientNotifier().getLogin(), nomClient);
 
         StringBuilder nomArtisan = new StringBuilder();
-        getNomDestinataire(notification.getArtisanNotifier().getNom(), notification.getArtisanNotifier().getPrenom(), notification.getArtisanNotifier().getLogin(), nomArtisan);
+        ClientUtils.chooseNomClient(notification.getArtisanNotifier().getNom(), notification.getArtisanNotifier().getPrenom(), notification.getArtisanNotifier().getLogin(), nomArtisan);
 
         Properties urlProperties = PropertiesFileWS.URL.getProperties();
         String urlFrontend = urlProperties.getProperty("url.frontend.web");

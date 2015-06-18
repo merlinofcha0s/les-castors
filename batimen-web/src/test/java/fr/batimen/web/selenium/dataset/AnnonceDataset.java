@@ -1,18 +1,10 @@
 package fr.batimen.web.selenium.dataset;
 
-import static com.ninja_squad.dbsetup.Operations.insertInto;
-
 import com.ninja_squad.dbsetup.operation.Operation;
-
-import fr.batimen.dto.enums.Civilite;
-import fr.batimen.dto.enums.DelaiIntervention;
-import fr.batimen.dto.enums.EtatAnnonce;
-import fr.batimen.dto.enums.StatutJuridique;
-import fr.batimen.dto.enums.TypeCompte;
-import fr.batimen.dto.enums.TypeContact;
-import fr.batimen.dto.enums.TypeNotification;
-import fr.batimen.dto.enums.TypeTravaux;
+import fr.batimen.dto.enums.*;
 import fr.batimen.dto.helper.CategorieLoader;
+
+import static com.ninja_squad.dbsetup.Operations.insertInto;
 
 public class AnnonceDataset {
 
@@ -20,7 +12,7 @@ public class AnnonceDataset {
             .columns("id", "datecreation", "datemaj", "delaiintervention", "description", "etatannonce",
                     "categoriemetier", "souscategoriemetier", "nbconsultation", "typecontact", "hashID", "selHashID",
                     "typeTravaux", "adressechantier_id", "demandeur_fk", "entreprise_selectionnee_fk",
-                    "notationannonce_id")
+                    "avis_id")
             .values(200010, "2014-01-10", "2014-01-10", DelaiIntervention.LE_PLUS_RAPIDEMENT_POSSIBLE,
                     "Construction compliqué qui necessite des connaissance en geologie", EtatAnnonce.ACTIVE,
                     CategorieLoader.ELECTRICITE_CODE, "Installation électrique", 0, TypeContact.EMAIL, "toto", "tata",
@@ -46,8 +38,8 @@ public class AnnonceDataset {
                     "2014-01-10", true, "lolmdr07", 200009).build();
 
     public static final Operation INSERT_ENTREPRISE_DATA = insertInto("entreprise")
-            .columns("id", "nomcomplet", "statutjuridique", "siret", "datecreation", "adresse_id")
-            .values(200009, "Entreprise de toto", StatutJuridique.SARL, "43394298400017", "2014-03-23", 200006).build();
+            .columns("id", "nomcomplet", "statutjuridique", "siret", "datecreation", "adresse_id", "isverifier")
+            .values(200009, "Entreprise de toto", StatutJuridique.SARL, "43394298400017", "2014-03-23", 200006, true).build();
 
     public static final Operation INSERT_NOTIFICATION_DATA = insertInto("notification")
             .columns("id", "dateNotification", "typeNotification", "pourquinotification", "statutnotification",
@@ -63,8 +55,8 @@ public class AnnonceDataset {
             .values(200015, "270 chemin du mdr", "08800", "Residence du mdr", "Test mdr", 8)
             .values(200016, "280 chemin du lolmdrxD", "09800", "Residence du lolmdrxD", "Test lolmdrxD", 9).build();
 
-    public static final Operation INSERT_NOTATION_DATA = insertInto("notation")
-            .columns("id", "commentaire", "dateNotation", "score", "artisan_fk")
+    public static final Operation INSERT_AVIS_DATA = insertInto("avis")
+            .columns("id", "commentaire", "dateavis", "score", "artisan_fk")
             .values(200012, "Ké buenos, Artisan très sympatique, travail bien fait", "2014-03-23 22:00:00.0", 4, 200008)
             .values(200013, "Artisan moins sympatique", "2014-12-01 22:00:00.0", 3, 200008).build();
 

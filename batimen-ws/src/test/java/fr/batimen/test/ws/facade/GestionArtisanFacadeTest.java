@@ -1,22 +1,8 @@
 package fr.batimen.test.ws.facade;
 
-import java.util.*;
-
-import javax.inject.Inject;
-
-import fr.batimen.dto.AdresseDTO;
-import fr.batimen.dto.EntrepriseDTO;
-import fr.batimen.dto.aggregate.MesAnnoncesDTO;
-import fr.batimen.dto.aggregate.ModificationEntrepriseDTO;
-import org.jboss.arquillian.persistence.ShouldMatchDataSet;
-import org.jboss.arquillian.persistence.UsingDataSet;
-import org.junit.Assert;
-import org.junit.Test;
-
 import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.security.HashHelper;
-import fr.batimen.dto.CategorieMetierDTO;
-import fr.batimen.dto.PermissionDTO;
+import fr.batimen.dto.*;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
 import fr.batimen.dto.enums.Civilite;
 import fr.batimen.dto.enums.StatutJuridique;
@@ -30,6 +16,12 @@ import fr.batimen.ws.entity.Adresse;
 import fr.batimen.ws.entity.Artisan;
 import fr.batimen.ws.entity.Entreprise;
 import fr.batimen.ws.entity.Permission;
+import org.jboss.arquillian.persistence.ShouldMatchDataSet;
+import org.jboss.arquillian.persistence.UsingDataSet;
+import org.junit.Test;
+
+import javax.inject.Inject;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -147,11 +139,11 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
         entrepriseDTO.getCategoriesMetier().add(CategorieLoader.getCategorieDecorationMaconnerie());
 
         AdresseDTO adresseDTO = new AdresseDTO();
-        adresseDTO.setAdresse("106 chemin de la modification");
-        adresseDTO.setComplementAdresse("Res de la modif");
-        adresseDTO.setCodePostal("06600");
+        adresseDTO.setAdresse("2410 avenue de l'artisan");
+        adresseDTO.setComplementAdresse("Res des artisans");
+        adresseDTO.setCodePostal("06500");
         adresseDTO.setDepartement(6);
-        adresseDTO.setVille("Antibes");
+        adresseDTO.setVille("YOLO City");
 
         entrepriseDTO.setAdresseEntreprise(adresseDTO);
 
@@ -193,5 +185,40 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
         Integer codeRetour = artisanServiceREST.saveEntrepriseInformation(entrepriseDTO);
         assertNotNull(codeRetour);
         assertEquals(CodeRetourService.RETOUR_KO, codeRetour);
+    }
+
+    /**
+     * Cas de test : L'utilisateur récupère les informations d'une entreprise dans un but de consultation
+     *
+     */
+    @Test
+    @UsingDataSet("datasets/in/entreprises_informations.yml")
+    public void getEntrepriseInformationBySiretNominal(){
+        EntrepriseDTO entrepriseDTO = artisanServiceREST.getEntrepriseInformationBySiret("43394298400017");
+
+        assertNotNull(entrepriseDTO);
+
+        assertEquals("Pebronne enterprise", entrepriseDTO.getNomComplet());
+        assertTrue(!entrepriseDTO.getCategoriesMetier().isEmpty());
+
+        assertNotNull(entrepriseDTO.getAdresseEntreprise());
+        assertEquals("106 chemin du pébron", entrepriseDTO.getAdresseEntreprise().getAdresse());
+
+        assertTrue(entrepriseDTO.getIsVerifier());
+        assertEquals(2, entrepriseDTO.getNotationsDTO().size());
+
+        assertEquals(Double.valueOf("4.0"), entrepriseDTO.getMoyenneAvis());
+        assertEquals(Integer.valueOf(3), entrepriseDTO.getNbAnnonce());
+    }
+
+    /**
+     * Cas de test : L'utilisateur veut voir plus d'avis concernant l'entreprise.
+     *
+     */
+    @Test
+    @UsingDataSet("datasets/in/entreprises_informations.yml")
+    public void getNotationBySiretNominal(){
+        List<AvisDTO> notations = artisanServiceREST.getEntrepriseNotationBySiret("43394298400017");
+        assertEquals(3, notations.size());
     }
 }

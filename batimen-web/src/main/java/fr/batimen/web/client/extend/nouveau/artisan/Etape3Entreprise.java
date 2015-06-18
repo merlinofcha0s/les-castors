@@ -65,7 +65,7 @@ public class Etape3Entreprise extends Panel {
         containerActivite.setOutputMarkupId(true);
         containerActivite.setMarkupId("containerActivite");
 
-        initActiviteSelection(nouveauPartenaire);
+        initActiviteSelection();
 
         this.add(titreModificationEntreprise, etape3EntrepriseForm, containerActivite);
     }
@@ -79,7 +79,7 @@ public class Etape3Entreprise extends Panel {
         response.render(CssContentHeaderItem.forUrl("//www.fuelcdn.com/fuelux/2.6.1/css/fuelux-responsive.css"));
     }
 
-    private void initActiviteSelection(CreationPartenaireDTO nouveauPartenaire) {
+    private void initActiviteSelection() {
 
         final WebMarkupContainer iElectricite = new WebMarkupContainer("iElectricite");
         final WebMarkupContainer containerElectricite = new WebMarkupContainer("containerElectricite");

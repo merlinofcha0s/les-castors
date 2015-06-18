@@ -32,6 +32,7 @@ import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
+import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
@@ -85,10 +86,10 @@ public class Annonce extends MasterPage {
     private Label etatAnnonce;
     private SmartLinkLabel email;
 
-    private Model<String> telephoneValue;
-    private Model<String> emailValue;
-    private Model<String> nomEntrepriseSelectionnee;
-    private Model<String> etatAnnonceValue;
+    private LoadableDetachableModel<String> telephoneValue;
+    private LoadableDetachableModel<String> emailValue;
+    private LoadableDetachableModel<String> nomEntrepriseSelectionnee;
+    private LoadableDetachableModel<String> etatAnnonceValue;
 
     private ListView<EntrepriseDTO> listViewEntrepriseInscrite;
 
@@ -146,7 +147,7 @@ public class Annonce extends MasterPage {
     }
 
     private void initComposants() {
-        Profil profil = new Profil("profil");
+        Profil profil = new Profil("profil", false);
 
         ContactezNous contactezNous = new ContactezNous("contactezNous");
         Commentaire commentaire = new Commentaire("commentaire");
@@ -318,15 +319,45 @@ public class Annonce extends MasterPage {
             categorie.add(new AttributeModifier("class", "labelAnnonce-icon8"));
         }
 
-        Label sousCategorie = new Label("sousCategorie", annonceAffichageDTO.getAnnonce().getSousCategorieMetier());
-        Label typeTravaux = new Label("typeTravaux", annonceAffichageDTO.getAnnonce().getTypeTravaux().getType());
-        Label delaiIntervention = new Label("delaiIntervention", annonceAffichageDTO.getAnnonce()
-                .getDelaiIntervention().getType());
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        Label dateCreation = new Label("dateCreation", sdf.format(annonceAffichageDTO.getAnnonce().getDateCreation()));
-        Label nbConsultation = new Label("nbConsultation", annonceAffichageDTO.getAnnonce().getNbConsultation());
+        Label sousCategorie = new Label("sousCategorie", new LoadableDetachableModel<String>() {
+            @Override
+            protected String load() {
+                return annonceAffichageDTO.getAnnonce().getSousCategorieMetier();
+            }
+        });
+        Label typeTravaux = new Label("typeTravaux", new LoadableDetachableModel<String>() {
+            @Override
+            protected String load() {
+                return annonceAffichageDTO.getAnnonce().getTypeTravaux().getType();
+            }
+        });
+        Label delaiIntervention = new Label("delaiIntervention", new LoadableDetachableModel<String>() {
+            @Override
+            protected String load() {
+                return  annonceAffichageDTO.getAnnonce().getDelaiIntervention().getType();
+            }
+        });
+        final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-        etatAnnonceValue = new Model<String>(annonceAffichageDTO.getAnnonce().getEtatAnnonce().getType());
+        Label dateCreation = new Label("dateCreation", new LoadableDetachableModel<String>() {
+            @Override
+            protected String load() {
+                return sdf.format(annonceAffichageDTO.getAnnonce().getDateCreation());
+            }
+        });
+        Label nbConsultation = new Label("nbConsultation", new LoadableDetachableModel<Integer>() {
+            @Override
+            protected Integer load() {
+                return annonceAffichageDTO.getAnnonce().getNbConsultation();
+            }
+        });
+
+        etatAnnonceValue = new LoadableDetachableModel<String>() {
+            @Override
+            protected String load() {
+                return annonceAffichageDTO.getAnnonce().getEtatAnnonce().getType();
+            }
+        };
 
         etatAnnonce = new Label("etatAnnonce", etatAnnonceValue);
         etatAnnonce.setMarkupId("etatAnnonce");
@@ -370,33 +401,36 @@ public class Annonce extends MasterPage {
             protected void populateItem(ListItem<EntrepriseDTO> itemEntreprise) {
                 final EntrepriseDTO entreprise = itemEntreprise.getModelObject();
 
-                final Model<String> nomEntrepriseModelForLbl = new Model<String>(entreprise.getNomComplet());
+                final LoadableDetachableModel<String> nomEntrepriseModelForLbl = new LoadableDetachableModel<String>() {
+                    @Override
+                    protected String load() {
+                        return entreprise.getNomComplet();
+                    }
+                };
 
                 Label labelEntreprise = new Label("labelEntreprise", nomEntrepriseModelForLbl);
 
-                LinkLabel voirProfilEntreprise = new LinkLabel("voirProfilEntreprise", new Model<String>("Voir profil")) {
+                LinkLabel voirProfilEntreprise = new LinkLabel("voirProfilEntreprise", new Model<>("Voir profil")) {
 
                     private static final long serialVersionUID = 1L;
 
                     @Override
                     public void onClick() {
-                        // URLEncoder.encode(notification.getArtisanNotifier().getEntreprise().getNomComplet(),
-                        // "UTF-8")
-                        // TODO A Completer quand la page entreprise sera prete
+                        PageParameters params = new PageParameters();
+                        params.add(ParamsConstant.ID_ENTREPRISE_PARAM, entreprise.getSiret());
+                        this.setResponsePage(Entreprise.class, params);
                     }
                 };
 
                 voirProfilEntreprise.setOutputMarkupId(true);
 
-                LinkLabel downloadDevis = new LinkLabel("downloadDevis", new Model<String>("Devis indisponible")) {
+                LinkLabel downloadDevis = new LinkLabel("downloadDevis", new Model<>("Devis indisponible")) {
 
                     private static final long serialVersionUID = 1L;
 
                     @Override
                     public void onClick() {
-                        // URLEncoder.encode(notification.getArtisanNotifier().getEntreprise().getNomComplet(),
-                        // "UTF-8")
-                        // TODO A Completer quand la page entreprise sera prete
+                        // TODO A Completer quand la gestion des pdfs sera prete
                     }
                 };
 
@@ -479,25 +513,30 @@ public class Annonce extends MasterPage {
         containerEntrepriseSelectionnee.setOutputMarkupId(true);
         containerEntrepriseSelectionnee.setMarkupId("containerEntrepriseSelectionnee");
 
-        if (annonceAffichageDTO.getEntrepriseSelectionnee() != null) {
-            nomEntrepriseSelectionnee = new Model<String>(annonceAffichageDTO.getEntrepriseSelectionnee()
-                    .getNomComplet());
-        } else {
-            nomEntrepriseSelectionnee = new Model<String>("");
-        }
+        nomEntrepriseSelectionnee = new LoadableDetachableModel<String>() {
+            @Override
+            protected String load() {
+                if (annonceAffichageDTO.getEntrepriseSelectionnee() != null) {
+                    return annonceAffichageDTO.getEntrepriseSelectionnee()
+                            .getNomComplet();
+                } else {
+                    return "";
+                }
+            }
+        };
 
         Label entrepriseSelectionnee = new Label("entrepriseSelectionnee", nomEntrepriseSelectionnee);
 
         LinkLabel voirProfilEntrepriseEntrepriseSelectionnee = new LinkLabel("voirProfilEntrepriseSelectionnee",
-                new Model<String>("Voir profil")) {
+                new Model<>("Voir profil")) {
 
             private static final long serialVersionUID = 1L;
 
             @Override
             public void onClick() {
-                // URLEncoder.encode(notification.getArtisanNotifier().getEntreprise().getNomComplet(),
-                // "UTF-8")
-                // TODO A Completer quand la page entreprise sera prete
+                PageParameters params = new PageParameters();
+                params.add(ParamsConstant.ID_ENTREPRISE_PARAM, annonceAffichageDTO.getEntrepriseSelectionnee().getSiret());
+                this.setResponsePage(Entreprise.class, params);
             }
         };
 
@@ -636,13 +675,13 @@ public class Annonce extends MasterPage {
 
         Label adresse = new Label("adresse", adresseComplete.toString());
 
-        telephone = new Label("telephone");
+        initModelPhoneAndEmailContact();
+
+        telephone = new Label("telephone", telephoneValue);
         containerTelContact.add(telephone);
 
-        email = new SmartLinkLabel("email");
+        email = new SmartLinkLabel("email", emailValue);
         containerEmailContact.add(email);
-
-        initModelPhoneAndEmailContact();
 
         containerContact.add(adresse, containerEmailContact, containerTelContact);
         containerContactMaster.add(containerContact);
@@ -653,16 +692,27 @@ public class Annonce extends MasterPage {
         // Tout dépends si c'est un artisan qui envoi les données => le
         // webservice renvoi le téléphone et l'adresse mail.
         // Sinon c'est que c'est le client
-        if (roleUtils.checkRoles(TypeCompte.ARTISAN) || roleUtils.checkRoles(TypeCompte.ADMINISTRATEUR)) {
-            telephoneValue = new Model<>(annonceAffichageDTO.getTelephoneClient());
-            emailValue = new Model<>(annonceAffichageDTO.getEmailClient());
-        } else {
-            telephoneValue = new Model<>(userConnected.getNumeroTel());
-            emailValue = new Model<>(userConnected.getEmail());
-        }
+        telephoneValue = new LoadableDetachableModel<String>() {
+            @Override
+            protected String load() {
+                if (roleUtils.checkRoles(TypeCompte.ARTISAN) || roleUtils.checkRoles(TypeCompte.ADMINISTRATEUR)) {
+                    return annonceAffichageDTO.getTelephoneClient();
+                } else {
+                    return userConnected.getNumeroTel();
+                }
+            }
+        };
 
-        telephone.setDefaultModel(telephoneValue);
-        email.setDefaultModel(emailValue);
+        emailValue = new LoadableDetachableModel<String>() {
+            @Override
+            protected String load() {
+                if (roleUtils.checkRoles(TypeCompte.ARTISAN) || roleUtils.checkRoles(TypeCompte.ADMINISTRATEUR)) {
+                    return annonceAffichageDTO.getEmailClient();
+                } else {
+                    return userConnected.getEmail();
+                }
+            }
+        };
     }
 
     private void updateNbConsultation() {
@@ -857,12 +907,13 @@ public class Annonce extends MasterPage {
         if (event.getPayload() instanceof NoterArtisanEventClose) {
             NoterArtisanEventClose noterArtisanEventClose = (NoterArtisanEventClose) event.getPayload();
 
-            NotationDTO notationDTO = new NotationDTO();
+            AvisDTO notationDTO = new AvisDTO();
             notationDTO.setNomEntreprise(annonceAffichageDTO.getEntrepriseSelectionnee().getNomComplet());
             notationDTO.setCommentaire(noterArtisanEventClose.getCommentaireNotation());
             notationDTO.setScore(noterArtisanEventClose.getNbEtoiles());
+            notationDTO.setNomPrenomOrLoginClient(userConnected.getLogin());
 
-            NoterArtisanDTO noterArtisanDTO = new NoterArtisanDTO();
+            AvisArtisanDTO noterArtisanDTO = new AvisArtisanDTO();
             noterArtisanDTO.setHashID(idAnnonce);
             noterArtisanDTO.setLoginArtisan(annonceAffichageDTO.getEntrepriseSelectionnee().getArtisan().getLogin());
             noterArtisanDTO.setLoginDemandeur(userConnected.getLogin());

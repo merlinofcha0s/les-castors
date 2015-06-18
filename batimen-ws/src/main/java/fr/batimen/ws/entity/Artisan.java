@@ -57,8 +57,8 @@ public class Artisan extends AbstractUser implements Serializable {
     @Column(nullable = false)
     protected Civilite civilite;
 
-    @OneToMany(mappedBy = "artisan", targetEntity = Notation.class, cascade = CascadeType.REMOVE)
-    private List<Notation> scoreGlobal = new ArrayList<Notation>();
+    @OneToMany(mappedBy = "artisan", targetEntity = Avis.class, cascade = CascadeType.REMOVE)
+    private List<Avis> scoreGlobal = new ArrayList<>();
     @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @LazyToOne(LazyToOneOption.NO_PROXY)
     private Entreprise entreprise;
@@ -66,14 +66,14 @@ public class Artisan extends AbstractUser implements Serializable {
             targetEntity = Permission.class,
             cascade = CascadeType.REMOVE,
             fetch = FetchType.EAGER)
-    private Set<Permission> permissions = new HashSet<Permission>();
+    private Set<Permission> permissions = new HashSet<>();
     @OneToMany(mappedBy = "artisanNotifier",
             targetEntity = Notification.class,
             cascade = CascadeType.REMOVE,
             fetch = FetchType.LAZY)
-    private final Set<Notification> notifications = new HashSet<Notification>();
+    private final Set<Notification> notifications = new HashSet<>();
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "artisans", targetEntity = Annonce.class)
-    private final Set<Annonce> annonces = new HashSet<Annonce>();
+    private final Set<Annonce> annonces = new HashSet<>();
 
     /**
      * @return the id
@@ -93,7 +93,7 @@ public class Artisan extends AbstractUser implements Serializable {
     /**
      * @return the scoreGlobal
      */
-    public List<Notation> getScoreGlobal() {
+    public List<Avis> getScoreGlobal() {
         return scoreGlobal;
     }
 
@@ -101,7 +101,7 @@ public class Artisan extends AbstractUser implements Serializable {
      * @param scoreGlobal
      *            the scoreGlobal to set
      */
-    public void setScoreGlobal(List<Notation> scoreGlobal) {
+    public void setScoreGlobal(List<Avis> scoreGlobal) {
         this.scoreGlobal = scoreGlobal;
     }
 

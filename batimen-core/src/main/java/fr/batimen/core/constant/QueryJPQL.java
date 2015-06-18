@@ -87,6 +87,7 @@ public class QueryJPQL {
 
     // Entity notation
     public static final String NOTATION_BY_CLIENT_LOGIN = "notationByClientLogin";
+    public static final String NOTATION_BY_ENTREPRISE_SIRET = "notationByEntrepriseSiret";
 
     // Entity adresse
     public static final String ADRESSE_BY_NOM_COMPLET_ENTREPRISE = "adresseByNomCompletEntreprise";

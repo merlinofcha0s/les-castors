@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Objects;
 
 import fr.batimen.dto.AbstractDTO;
-import fr.batimen.dto.NotationDTO;
+import fr.batimen.dto.AvisDTO;
 
 /**
  * Objet de transfert a destination de la page de mon profil (coté client)
@@ -19,7 +19,7 @@ public class MonProfilDTO extends AbstractDTO {
 
     private String nomPrenomLogin;
     private Long nbAnnonce;
-    private List<NotationDTO> notations = new ArrayList<NotationDTO>();
+    private List<AvisDTO> notations = new ArrayList<AvisDTO>();
 
     /**
      * @return the nomPrenomLogin
@@ -38,7 +38,7 @@ public class MonProfilDTO extends AbstractDTO {
     /**
      * @return the notations
      */
-    public List<NotationDTO> getNotations() {
+    public List<AvisDTO> getNotations() {
         return notations;
     }
 
@@ -62,7 +62,7 @@ public class MonProfilDTO extends AbstractDTO {
      * @param notations
      *            the notations to set
      */
-    public void setNotations(List<NotationDTO> notations) {
+    public void setNotations(List<AvisDTO> notations) {
         this.notations = notations;
     }
 

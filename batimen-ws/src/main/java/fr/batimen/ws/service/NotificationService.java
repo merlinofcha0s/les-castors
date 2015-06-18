@@ -91,6 +91,7 @@ public class NotificationService {
                 notificationDTO.setClientLogin(String.valueOf(notification[5]));
                 notificationDTO.setNomEntreprise(String.valueOf(notification[6]));
                 notificationDTO.setHashIDAnnonce(String.valueOf(notification[7]));
+                notificationDTO.setSiret(String.valueOf(notification[8]));
 
                 notificationsDTO.add(notificationDTO);
             }

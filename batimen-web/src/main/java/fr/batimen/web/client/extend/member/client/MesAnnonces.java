@@ -1,14 +1,22 @@
 package fr.batimen.web.client.extend.member.client;
 
-import java.text.SimpleDateFormat;
-import java.util.List;
-
-import javax.inject.Inject;
-
+import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.DemandeMesAnnoncesDTO;
+import fr.batimen.dto.NotificationDTO;
+import fr.batimen.dto.aggregate.MesAnnoncesDTO;
 import fr.batimen.dto.enums.TypeCompte;
+import fr.batimen.dto.helper.CategorieLoader;
+import fr.batimen.web.app.constants.FeedbackMessageLevel;
 import fr.batimen.web.app.constants.ParamsConstant;
+import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.app.security.RolesUtils;
+import fr.batimen.web.client.component.Commentaire;
+import fr.batimen.web.client.component.ContactezNous;
+import fr.batimen.web.client.component.LinkLabel;
+import fr.batimen.web.client.component.Profil;
+import fr.batimen.web.client.extend.connected.Annonce;
+import fr.batimen.web.client.extend.connected.Entreprise;
+import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.ws.client.service.UtilisateurServiceREST;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
@@ -22,18 +30,9 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.batimen.dto.AnnonceDTO;
-import fr.batimen.dto.NotificationDTO;
-import fr.batimen.dto.aggregate.MesAnnoncesDTO;
-import fr.batimen.dto.helper.CategorieLoader;
-import fr.batimen.web.app.constants.FeedbackMessageLevel;
-import fr.batimen.web.app.security.Authentication;
-import fr.batimen.web.client.component.Commentaire;
-import fr.batimen.web.client.component.ContactezNous;
-import fr.batimen.web.client.component.LinkLabel;
-import fr.batimen.web.client.component.Profil;
-import fr.batimen.web.client.extend.connected.Annonce;
-import fr.batimen.web.client.master.MasterPage;
+import javax.inject.Inject;
+import java.text.SimpleDateFormat;
+import java.util.List;
 
 /**
  * Page ou l'utilisateur pourra consulter son compte ainsi que l'avancement de
@@ -90,7 +89,7 @@ public final class MesAnnonces extends MasterPage {
             LOGGER.debug("Init des composants statiques");
         }
 
-        Profil profil = new Profil("profil");
+        Profil profil = new Profil("profil", false);
         ContactezNous contactezNous = new ContactezNous("contactezNous");
         Commentaire commentaire = new Commentaire("commentaire");
 
@@ -171,7 +170,7 @@ public final class MesAnnonces extends MasterPage {
         }
 
         //Pas afficher si c'est un artisan
-        Label nbDevisHeader = new Label("nbDevisHeader", "Nb devis"){
+        Label nbDevisHeader = new Label("nbDevisHeader", "Nb devis") {
 
             @Override
             public boolean isVisible() {
@@ -211,7 +210,7 @@ public final class MesAnnonces extends MasterPage {
                 sizeCSSProgressBar.append(annonce.getEtatAnnonce().getPercentage()).append(";");
                 progressBar.add(new AttributeModifier("style", sizeCSSProgressBar.toString()));
 
-                Label nbDevis = new Label("nbDevis", annonce.getNbDevis()){
+                Label nbDevis = new Label("nbDevis", annonce.getNbDevis()) {
 
                     @Override
                     public boolean isVisible() {
@@ -275,9 +274,9 @@ public final class MesAnnonces extends MasterPage {
 
     private void onclickParQuiLink(NotificationDTO notificationDTO) {
         if (notificationDTO.getTypeNotification().getParQui().equals(TypeCompte.ARTISAN)) {
-            // URLEncoder.encode(notification.getArtisanNotifier().getEntreprise().getNomComplet(),
-            // "UTF-8")
-            // TODO A Completer quand la page entreprise sera prete
+            PageParameters params = new PageParameters();
+            params.add(ParamsConstant.ID_ENTREPRISE_PARAM, notificationDTO.getSiret());
+            this.setResponsePage(Entreprise.class, params);
         } else if (notificationDTO.getTypeNotification().getParQui().equals(TypeCompte.CLIENT)) {
             PageParameters parameters = new PageParameters();
             parameters.add("login", notificationDTO.getClientLogin());
@@ -301,7 +300,9 @@ public final class MesAnnonces extends MasterPage {
             params.add(ParamsConstant.ID_ANNONCE_PARAM, notificationDTO.getHashIDAnnonce());
             this.setResponsePage(Annonce.class, params);
         } else if (notificationDTO.getTypeNotification().getParQui().equals(TypeCompte.CLIENT)) {
-            // TODO A Completer quand la page entreprise sera prete
+            PageParameters params = new PageParameters();
+            params.add(ParamsConstant.ID_ENTREPRISE_PARAM, notificationDTO.getSiret());
+            this.setResponsePage(Entreprise.class, params);
         }
     }
 

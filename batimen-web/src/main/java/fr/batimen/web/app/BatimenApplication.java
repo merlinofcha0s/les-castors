@@ -6,6 +6,7 @@ import javax.enterprise.inject.spi.BeanManager;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import fr.batimen.web.client.extend.connected.Entreprise;
 import fr.batimen.web.client.extend.member.client.ModifierAnnonce;
 import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
@@ -134,6 +135,7 @@ public class BatimenApplication extends AuthenticatedWebApplication {
         mount(new MountedMapper(UrlPage.MON_PROFIL_URL, MonProfil.class, new UrlPathPageParametersEncoder()));
         mountPage(UrlPage.ANNONCE, Annonce.class);
         mount(new MountedMapper(UrlPage.MODIFIER_MON_ANNONCE, ModifierAnnonce.class, new UrlPathPageParametersEncoder()));
+        mountPage(UrlPage.ENTREPRISE, Entreprise.class);
         // Page d'erreur
         mountPage("/interdit", AccesInterdit.class);
         mountPage("/expiree", Expiree.class);

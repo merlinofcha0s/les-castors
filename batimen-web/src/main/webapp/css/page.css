@@ -1,5 +1,8 @@
 @CHARSET "UTF-8";
 
+
+
+
 #connexion {
     float: left;
     padding-left: 670px;
@@ -596,6 +599,16 @@ table tr td .error {
     margin-top: 10px;
 }
 
+#container-entreprise-verifier{
+    margin-top: 40px;
+    text-align: center;
+}
+
+#container-entreprise-verifier div{
+    margin-top: 9px;
+}
+
+
 .raterContainer div div {
     font-size: 20px;
     width: 24px;
@@ -604,13 +617,14 @@ table tr td .error {
 
 .avisRater {
     float: left;
-    padding-right: 10px;
+    padding-right: 5px;
 }
 
-#avisClientContainer {
+.avisClientContainer {
     width: 265px;
     float: left;
     margin-right: 30px;
+    padding-bottom: 10px;
 }
 
 .commentaireRater {
@@ -623,6 +637,11 @@ table tr td .error {
     clear: both;
     padding-top: 11px;
     font-weight: bold;
+}
+
+.dateAvis {
+    font-weight: bold;
+    margin-top: 2px;
 }
 
 #travauxEffectuesContainer {
@@ -835,4 +854,122 @@ table tr td .error {
 
 #votreAvisInteresse{
     padding-top: 10px;
+}
+
+/*Profil entreprise*/
+.containerInformationsEntreprise {
+    padding-top: 10px;
+}
+
+.containerInformationsEntrepriseGeneral{
+    padding-top: 10px;
+    padding-bottom: 15px;
+}
+
+.glyphEntreprise {
+    font-size: 26px;
+}
+
+.labelEntreprise {
+    padding-left: 20px;
+    float: left;
+    padding-right: 5px;
+    padding-top: 7px;
+}
+
+.glyphEntreprise {
+    font-size: 26px;
+}
+
+.labelAnnonceEntreprise {
+    padding-left: 10px;
+    float: left;
+    padding-right: 5px;
+    padding-top: 15px;
+}
+
+.informationEntreprise {
+    padding-left: 20px;
+    padding-top: 7px;
+}
+
+.titleEntreprise{
+    padding-bottom: 5px;
+}
+
+.categorie-entreprise{
+    padding-left: 5px;
+    font-size: 30px;
+    width: 35px;
+}
+
+.icons-8-entreprise{
+    vertical-align: top;
+}
+
+.icon-specialite{
+    font-size: 21px;
+    padding-right: 15px;
+}
+
+.nomClient {
+    clear: both;
+    padding-top: 11px;
+    font-weight: bold;
+}
+
+.pagination-castor ul li::before{
+    content:"";
+    display: none;
+}
+#clearAvis{
+    clear: both;
+}
+
+#pagerAvis{
+    text-align: center;
+}
+
+.pagination-castor ul li, .pagination-castor ol li{
+    padding: 0 0 0 0px;
+}
+
+#container-moyenne{
+    padding-bottom: 25px;
+}
+
+#container-moyenne div{
+    font-weight: bold;
+}
+
+.informations-importante-entreprise{
+    font-size: 16px;
+    line-height: 18px;
+    font-family: "Open Sans", sans-serif;
+    color: #666666;
+    text-decoration: none;
+}
+
+.informations-importante-entreprise-font-awesome{
+    font-size: 16px;
+    line-height: 18px;
+    font-family: "Open Sans", sans-serif;
+    color: #666666;
+    text-decoration: none;
+    padding-top: 3px;
+}
+
+.containerGlyphFontAwesome {
+    float: left;
+    width: 15px;
+}
+
+.labelPageEntreprise {
+    padding-top: 15px;
+    padding-left: 10px;
+    display: inline-block;
+}
+
+#btnPlusDAvisEntreprise{
+    margin-top: 10px;
 }

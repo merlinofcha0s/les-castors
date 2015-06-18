@@ -1,15 +1,8 @@
 package fr.batimen.web.selenium.common;
 
-import static com.ninja_squad.dbsetup.Operations.deleteAllFrom;
-import static com.ninja_squad.dbsetup.Operations.insertInto;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-
-import java.util.NoSuchElementException;
-import java.util.Properties;
-import java.util.concurrent.TimeUnit;
-
+import com.ninja_squad.dbsetup.destination.DriverManagerDestination;
+import com.ninja_squad.dbsetup.operation.Operation;
+import fr.batimen.web.utils.PropertiesUtils;
 import org.junit.After;
 import org.junit.Before;
 import org.openqa.selenium.*;
@@ -21,10 +14,13 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ninja_squad.dbsetup.destination.DriverManagerDestination;
-import com.ninja_squad.dbsetup.operation.Operation;
+import java.util.NoSuchElementException;
+import java.util.Properties;
+import java.util.concurrent.TimeUnit;
 
-import fr.batimen.web.utils.PropertiesUtils;
+import static com.ninja_squad.dbsetup.Operations.deleteAllFrom;
+import static com.ninja_squad.dbsetup.Operations.insertInto;
+import static org.junit.Assert.*;
 
 /**
  * 
@@ -58,7 +54,7 @@ public abstract class AbstractITTest {
 
     // DBSetup
     public static final Operation DELETE_ALL = deleteAllFrom("notification", "annonce_artisan", "annonce",
-            "permission", "notation", "artisan", "categoriemetier", "entreprise", "adresse", "client");
+            "permission", "avis", "artisan", "categoriemetier", "entreprise", "adresse", "client");
     public static final Operation INSERT_USER_DATA = insertInto("client")
             .columns("id", "email", "nom", "prenom", "login", "password", "numeroTel", "dateInscription", "isActive",
                     "cleactivation")

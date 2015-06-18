@@ -72,11 +72,10 @@ public class NouveauArtisan extends MasterPage {
     public NouveauArtisan(CreationPartenaireDTO nouveauPartenaire) {
         super("Nouveau devis", "devis batiment renovation", "Nouveau devis", true, "img/bg_title1.jpg");
         this.nouveauPartenaire = nouveauPartenaire;
-        //propertyModelNouvelleAnnonce = new CompoundPropertyModel<>(nouvelleAnnonce);
         initPage();
     }
 
-    private void initPage() {
+    private final void initPage() {
         etapeEncours = Etape.ETAPE_1;
 
         masterContainer = new WebMarkupContainer("masterContainer");
