@@ -130,6 +130,7 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
         entrepriseDTO.setStatutJuridique(StatutJuridique.SARL);
         entrepriseDTO.setSiret("43394298400017");
         entrepriseDTO.setNbEmployees(20);
+        entrepriseDTO.setSpecialite("brique");
 
         Calendar cal = Calendar.getInstance();
         cal.set(2014, 03, 23, 22, 00, 00);
@@ -204,7 +205,7 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
         assertNotNull(entrepriseDTO.getAdresseEntreprise());
         assertEquals("106 chemin du pébron", entrepriseDTO.getAdresseEntreprise().getAdresse());
 
-        assertTrue(entrepriseDTO.getIsVerifier());
+        assertFalse(entrepriseDTO.getIsVerifier());
         assertEquals(2, entrepriseDTO.getNotationsDTO().size());
 
         assertEquals(Double.valueOf("4.0"), entrepriseDTO.getMoyenneAvis());
