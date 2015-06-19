@@ -46,6 +46,16 @@
     padding-top: 20px;
 }
 
+#code-postal-text{
+    vertical-align: super;
+    margin-right: 10px;
+}
+
+#carte-france-container{
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
 #formEtape3 {
     margin-top: 18px;
 }

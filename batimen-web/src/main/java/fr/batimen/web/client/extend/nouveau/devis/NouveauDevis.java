@@ -247,7 +247,7 @@ public class NouveauDevis extends MasterPage {
         containerConfirmation.add(confirmation1, confirmation2, contactezNous, retourAccueil);
 
         List<String> etapes = new ArrayList<String>();
-        etapes.add("Sélectionner un departement");
+        etapes.add("Renseigner le code postal");
         etapes.add("Sélectionner la catégorie");
         etapes.add("Renseigner les caracteristiques de l'annonce");
         etapes.add("Inscription / Connexion");
