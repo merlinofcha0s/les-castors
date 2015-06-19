@@ -8,7 +8,6 @@ import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.web.app.constants.Etape;
 import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.client.component.ContactezNous;
-import fr.batimen.web.client.component.MapFrance;
 import fr.batimen.web.client.component.NavigationWizard;
 import fr.batimen.web.client.event.CastorWizardEvent;
 import fr.batimen.web.client.event.Event;
@@ -67,7 +66,8 @@ public class NouveauDevis extends MasterPage {
     private WebMarkupContainer containerGeneral;
 
     // Composants étape 1
-    private MapFrance carteFrance;
+    //private MapFrance carteFrance;
+    private Etape1 etape1;
 
     // Composants étape 2
     private Etape2Categorie etape2Categorie;
@@ -119,10 +119,21 @@ public class NouveauDevis extends MasterPage {
         containerGeneral.setOutputMarkupId(true);
 
         // Etape 1 : selection du departement avec la carte de la france
-        carteFrance = new MapFrance("mapFrance") {
+        /*carteFrance = new MapFrance("mapFrance") {
 
             private static final long serialVersionUID = -7657021021902246878L;
 
+            @Override
+            public boolean isVisible() {
+                if (etapeEncours.equals(Etape.ETAPE_1)) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        };*/
+
+        etape1 = new Etape1("etape1"){
             @Override
             public boolean isVisible() {
                 if (etapeEncours.equals(Etape.ETAPE_1)) {
@@ -252,7 +263,7 @@ public class NouveauDevis extends MasterPage {
 
         ContactezNous contactezNousComposant = new ContactezNous("contactezNous");
 
-        containerGeneral.add(carteFrance, etape2Categorie, containerQualification, containerInscription,
+        containerGeneral.add(/*carteFrance*/etape1, etape2Categorie, containerQualification, containerInscription,
                 containerConfirmation, navigationWizard);
 
         add(containerGeneral, contactezNousComposant);

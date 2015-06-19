@@ -1124,15 +1124,15 @@ img.alignnone {
 }
 
 .contentarea ul li:before {
-	content: '\25cf';
-	padding-right: 0px;
-	position: absolute;
-	left: 0px;
-	top: 0px;
-	line-height: 20px;
-	font-family: Arial, Helvetica, sans-serif;
-	color: #666666;
-}
+	 content: '\25cf';
+	 padding-right: 0px;
+	 position: absolute;
+	 left: 0px;
+	 top: 0px;
+	 line-height: 20px;
+	 font-family: Arial, Helvetica, sans-serif;
+	 color: #666666;
+ }
 
 .contentarea ol {
 	counter-reset: li;
