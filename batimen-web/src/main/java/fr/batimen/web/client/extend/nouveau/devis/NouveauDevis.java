@@ -17,6 +17,7 @@ import fr.batimen.web.client.extend.Accueil;
 import fr.batimen.web.client.extend.Contact;
 import fr.batimen.web.client.extend.nouveau.devis.event.CategorieEvent;
 import fr.batimen.web.client.extend.nouveau.devis.event.ChangementEtapeClientEvent;
+import fr.batimen.web.client.extend.nouveau.devis.event.LocalisationEvent;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.ws.client.service.AnnonceServiceREST;
 import org.apache.shiro.SecurityUtils;
@@ -474,6 +475,18 @@ public class NouveauDevis extends MasterPage {
             setResponsePage(new NouveauDevis(nouvelleAnnonce));
         }
 
+        if (event.getPayload() instanceof LocalisationEvent) {
+            LocalisationEvent localisationEvent = (LocalisationEvent) event.getPayload();
+            nouvelleAnnonce.setCodePostal(localisationEvent.getLocalisationDTO().getCodePostal());
+            nouvelleAnnonce.setDepartement(Integer.valueOf(localisationEvent.getLocalisationDTO().getDepartement()));
+            nouvelleAnnonce.setVille(localisationEvent.getLocalisationDTO().getCommune());
+
+            if (feedBackPanelGeneral.hasFeedbackMessage()) {
+                feedBackPanelGeneral.getFeedbackMessages().clear();
+            }
+
+            setResponsePage(new NouveauDevis(nouvelleAnnonce));
+        }
     }
 
     private Integer creationAnnonce() {
