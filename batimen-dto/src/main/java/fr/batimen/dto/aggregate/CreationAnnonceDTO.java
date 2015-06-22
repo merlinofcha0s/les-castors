@@ -1,32 +1,18 @@
 package fr.batimen.dto.aggregate;
 
-import static fr.batimen.dto.constant.ValidatorConstant.ADRESSE_MAX;
-import static fr.batimen.dto.constant.ValidatorConstant.ADRESSE_MIN;
-import static fr.batimen.dto.constant.ValidatorConstant.ANNONCE_DESCRIPTION_MAX;
-import static fr.batimen.dto.constant.ValidatorConstant.ANNONCE_DESCRIPTION_MIN;
-import static fr.batimen.dto.constant.ValidatorConstant.CODE_POSTAL_REGEX;
-import static fr.batimen.dto.constant.ValidatorConstant.COMPLEMENT_ADRESSE_MAX;
-import static fr.batimen.dto.constant.ValidatorConstant.VILLE_MAX;
+import fr.batimen.dto.*;
+import fr.batimen.dto.enums.DelaiIntervention;
+import fr.batimen.dto.enums.TypeContact;
+import fr.batimen.dto.enums.TypeTravaux;
 
+import javax.validation.Valid;
+import javax.validation.constraints.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
-
-import fr.batimen.dto.AbstractDTO;
-import fr.batimen.dto.CategorieMetierDTO;
-import fr.batimen.dto.ClientDTO;
-import fr.batimen.dto.SousCategorieMetierDTO;
-import fr.batimen.dto.enums.DelaiIntervention;
-import fr.batimen.dto.enums.TypeContact;
-import fr.batimen.dto.enums.TypeTravaux;
+import static fr.batimen.dto.constant.ValidatorConstant.*;
 
 /**
  * Objet d'échange permettant la creation d'annonce.
@@ -79,6 +65,8 @@ public class CreationAnnonceDTO extends AbstractDTO {
     private ClientDTO client = new ClientDTO();
 
     private Boolean isSignedUp = false;
+
+    private final transient List<String> villesPossbles = new ArrayList<>();
 
     public String getDescription() {
         return description;
@@ -254,11 +242,15 @@ public class CreationAnnonceDTO extends AbstractDTO {
         this.client = client;
     }
 
+    public List<String> getVillesPossbles() {
+        return villesPossbles;
+    }
+
     /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#hashCode()
-     */
+             * (non-Javadoc)
+             *
+             * @see java.lang.Object#hashCode()
+             */
     @Override
     public int hashCode() {
         return Objects.hashCode(Objects.hash(this.description, this.codePostal, this.ville));

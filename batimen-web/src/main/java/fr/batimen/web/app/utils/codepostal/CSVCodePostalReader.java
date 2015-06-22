@@ -1,5 +1,6 @@
 package fr.batimen.web.app.utils.codepostal;
 
+import fr.batimen.dto.LocalisationDTO;
 import org.apache.wicket.protocol.http.WebApplication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -4,6 +4,7 @@ import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.exception.FrontEndException;
 import fr.batimen.core.security.HashHelper;
 import fr.batimen.dto.ClientDTO;
+import fr.batimen.dto.LocalisationDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.web.app.constants.Etape;
 import fr.batimen.web.app.security.Authentication;
@@ -477,10 +478,13 @@ public class NouveauDevis extends MasterPage {
 
         if (event.getPayload() instanceof LocalisationEvent) {
             LocalisationEvent localisationEvent = (LocalisationEvent) event.getPayload();
-            if(localisationEvent.getLocalisationDTOMemeCodePostal().size() <= 1){
+            if(localisationEvent.getLocalisationDTOMemeCodePostal().size() != 0){
                 nouvelleAnnonce.setCodePostal(localisationEvent.getLocalisationDTOMemeCodePostal().get(0).getCodePostal());
                 nouvelleAnnonce.setDepartement(Integer.valueOf(localisationEvent.getLocalisationDTOMemeCodePostal().get(0).getDepartement()));
-                nouvelleAnnonce.setVille(localisationEvent.getLocalisationDTOMemeCodePostal().get(0).getCommune());
+            }
+
+            for(LocalisationDTO localisationDTO : localisationEvent.getLocalisationDTOMemeCodePostal()){
+                nouvelleAnnonce.getVillesPossbles().add(localisationDTO.getCommune());
             }
 
             nouvelleAnnonce.setNumeroEtape(2);

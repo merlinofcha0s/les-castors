@@ -1,6 +1,6 @@
 package fr.batimen.web.client.extend.nouveau.devis.event;
 
-import fr.batimen.web.app.utils.codepostal.LocalisationDTO;
+import fr.batimen.dto.LocalisationDTO;
 import fr.batimen.web.client.event.AbstractEvent;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 

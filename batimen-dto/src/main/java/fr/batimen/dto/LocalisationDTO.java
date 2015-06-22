@@ -1,4 +1,4 @@
-package fr.batimen.web.app.utils.codepostal;
+package fr.batimen.dto;
 
 import java.io.Serializable;
 import java.util.Objects;
