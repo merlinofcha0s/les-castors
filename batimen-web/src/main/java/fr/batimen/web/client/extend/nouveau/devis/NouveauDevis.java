@@ -477,9 +477,13 @@ public class NouveauDevis extends MasterPage {
 
         if (event.getPayload() instanceof LocalisationEvent) {
             LocalisationEvent localisationEvent = (LocalisationEvent) event.getPayload();
-            nouvelleAnnonce.setCodePostal(localisationEvent.getLocalisationDTO().getCodePostal());
-            nouvelleAnnonce.setDepartement(Integer.valueOf(localisationEvent.getLocalisationDTO().getDepartement()));
-            nouvelleAnnonce.setVille(localisationEvent.getLocalisationDTO().getCommune());
+            if(localisationEvent.getLocalisationDTOMemeCodePostal().size() <= 1){
+                nouvelleAnnonce.setCodePostal(localisationEvent.getLocalisationDTOMemeCodePostal().get(0).getCodePostal());
+                nouvelleAnnonce.setDepartement(Integer.valueOf(localisationEvent.getLocalisationDTOMemeCodePostal().get(0).getDepartement()));
+                nouvelleAnnonce.setVille(localisationEvent.getLocalisationDTOMemeCodePostal().get(0).getCommune());
+            }
+
+            nouvelleAnnonce.setNumeroEtape(2);
 
             if (feedBackPanelGeneral.hasFeedbackMessage()) {
                 feedBackPanelGeneral.getFeedbackMessages().clear();

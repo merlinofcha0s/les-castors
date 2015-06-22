@@ -10,9 +10,7 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Casaucau on 21/06/2015.
@@ -22,7 +20,7 @@ public class CSVCodePostalReader implements Serializable{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CSVCodePostalReader.class);
 
-    private final Map<String, LocalisationDTO> localisationDTOs = new LinkedHashMap<>();
+    private final Map<String, List<LocalisationDTO>> localisationDTOs = new LinkedHashMap<>();
 
     public CSVCodePostalReader() {
 
@@ -33,19 +31,30 @@ public class CSVCodePostalReader implements Serializable{
             List<String> lines = Files.readAllLines(codePostalFile.toPath(),
                     StandardCharsets.UTF_8);
             for(String line: lines){
-                LocalisationDTO localisationDTO = new LocalisationDTO();
                 String[] csvLine = line.split(";");
-                localisationDTO.setDepartement(csvLine[1]);
-                localisationDTO.setCommune(csvLine[2]);
-                localisationDTO.setDepartement(csvLine[1].substring(0, 3));
-                localisationDTOs.put(csvLine[1], localisationDTO);
+                String codePostal = csvLine[1];
+                String commune = csvLine[2];
+                String departement = csvLine[1].substring(0, 2);
+
+                LocalisationDTO localisationDTO = new LocalisationDTO();
+                localisationDTO.setCodePostal(codePostal);
+                localisationDTO.setCommune(commune);
+                localisationDTO.setDepartement(departement);
+
+                if(localisationDTOs.containsKey(codePostal)){
+                    localisationDTOs.get(codePostal).add(localisationDTO);
+                } else {
+                    List<LocalisationDTO> memeCodePostalList = new LinkedList<>();
+                    memeCodePostalList.add(localisationDTO);
+                    localisationDTOs.put(codePostal, memeCodePostalList);
+                }
             }
         } catch (IOException e) {
             LOGGER.error("Problème de lecture avec le fichier de code postal", e);
         }
     }
 
-    public Map<String, LocalisationDTO> getLocalisationDTOs() {
+    public Map<String, List<LocalisationDTO>> getLocalisationDTOs() {
         return localisationDTOs;
     }
 }

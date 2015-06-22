@@ -7,6 +7,7 @@ import fr.batimen.web.app.utils.codepostal.LocalisationDTO;
 import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
+import fr.batimen.web.client.extend.nouveau.devis.event.LocalisationEvent;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.event.Broadcast;
@@ -19,6 +20,7 @@ import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.validator.PatternValidator;
 
 import javax.inject.Inject;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -49,12 +51,13 @@ public class Etape1 extends Panel {
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 super.onSubmit(target, form);
 
-                Map<String, LocalisationDTO> localisationDTOMap = csvCodePostalReader.getLocalisationDTOs();
+                Map<String, List<LocalisationDTO>> localisationDTOMap = csvCodePostalReader.getLocalisationDTOs();
 
                 if(localisationDTOMap.containsKey(codePostal.getDefaultModelObject())){
                     //TODO Faire passer dans le filtre avant de vraiment fire l'event
                     //TODO : penser au filtre par département (fichier properties avec les numéros de département)
-                    target.getPage().send(target.getPage(), Broadcast.BREADTH, localisationDTOMap.get(codePostal.getDefaultModelObject()));
+                    LocalisationEvent localisationEvent = new LocalisationEvent(target, localisationDTOMap.get(codePostal.getDefaultModelObject()));
+                    target.getPage().send(target.getPage(), Broadcast.BREADTH, localisationEvent);
                 }else{
                     target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Nous n'avons pas pu trouver votre code postal, veuillez réessayer ultérieurement ou contactez nous", FeedbackMessageLevel.ERROR));
                 }
