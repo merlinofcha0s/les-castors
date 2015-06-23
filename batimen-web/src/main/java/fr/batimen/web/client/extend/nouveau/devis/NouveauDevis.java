@@ -484,6 +484,7 @@ public class NouveauDevis extends MasterPage {
             }
 
             for(LocalisationDTO localisationDTO : localisationEvent.getLocalisationDTOMemeCodePostal()){
+                nouvelleAnnonce.getVillesPossbles().clear();
                 nouvelleAnnonce.getVillesPossbles().add(localisationDTO.getCommune());
             }
 

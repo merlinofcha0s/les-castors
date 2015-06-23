@@ -25,6 +25,9 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.event.IEvent;
+import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.*;
@@ -68,6 +71,36 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
     private TelephonePresentValidator telephonePresentValidator;
 
     private boolean forModification = false;
+
+    private StringBuilder sourceTypeAhead;
+
+    @Override
+    protected void onComponentTag(ComponentTag tag) {
+        super.onComponentTag(tag);
+        buildSourceTypeAhead();
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        buildSourceTypeAhead();
+        response.render(OnDomReadyHeaderItem.forScript(sourceTypeAhead.toString()));
+    }
+
+    private void buildSourceTypeAhead() {
+        sourceTypeAhead = new StringBuilder("$('#villeField').typeahead({ source: [");
+
+        boolean firstTime = true;
+
+        for (String ville : nouvelleAnnonce.getVillesPossbles()) {
+            if (firstTime) {
+                firstTime = false;
+                sourceTypeAhead.append("'").append(ville).append("'");
+            } else {
+                sourceTypeAhead.append(",'").append(ville).append("'");
+            }
+        }
+        sourceTypeAhead.append("]});");
+    }
 
     /**
      * Constructeur utile pour la modification d'une annonce.
@@ -273,11 +306,11 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                if(forModification){
+                if (forModification) {
                     PageParameters params = new PageParameters();
                     params.add(ParamsConstant.ID_ANNONCE_PARAM, idAnnonce);
                     this.setResponsePage(Annonce.class, params);
-                }else{
+                } else {
                     NouveauUtils.sendEventForPreviousStep(target, Etape.ETAPE_3.ordinal() + 1);
                 }
             }

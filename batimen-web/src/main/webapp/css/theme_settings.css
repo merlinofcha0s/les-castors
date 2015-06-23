@@ -98,7 +98,7 @@ h6,h6 span,h6 a {
 	margin-bottom: 7px !important;
 }
 
-#annonce-etape-1 ul li:before{
+#villeTypeAhead ul li:before{
     content: '';
     padding-right: 0px;
     position: absolute;
@@ -109,7 +109,7 @@ h6,h6 span,h6 a {
     color: #666666;
 }
 
-#annonce-etape-1 ul li, #annonce-etape-1 ol li {
+#villeTypeAhead ul li, #villeTypeAhead ol li {
     line-height: 20px;
     margin: 0 0 0 0px;
     padding: 0 0 0 0px;
@@ -117,10 +117,10 @@ h6,h6 span,h6 a {
     color: #666666;
 }
 
-#annonce-etape-1 ul, #annonce-etape-1 ol {
+#villeTypeAhead ul, #villeTypeAhead ol {
     padding: 0 0 5px 0px;
 }
 
-#annonce-etape-1 a strong {
+#villeTypeAhead a strong {
     color: #000000;
 }
