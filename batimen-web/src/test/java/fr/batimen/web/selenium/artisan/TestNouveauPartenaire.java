@@ -1,9 +1,9 @@
 package fr.batimen.web.selenium.artisan;
 
-import static com.ninja_squad.dbsetup.Operations.sequenceOf;
-import static org.junit.Assert.assertTrue;
-
-import org.junit.Assert;
+import com.ninja_squad.dbsetup.DbSetup;
+import com.ninja_squad.dbsetup.operation.Operation;
+import fr.batimen.web.selenium.common.AbstractITTest;
+import fr.batimen.web.utils.UtilsSelenium;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
@@ -12,11 +12,8 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.ninja_squad.dbsetup.DbSetup;
-import com.ninja_squad.dbsetup.operation.Operation;
-
-import fr.batimen.web.selenium.common.AbstractITTest;
-import fr.batimen.web.utils.UtilsSelenium;
+import static com.ninja_squad.dbsetup.Operations.sequenceOf;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Classe de cas de test concernant l'inscription d'un nouveau partenaire
@@ -45,7 +42,7 @@ public class TestNouveauPartenaire extends AbstractITTest {
         driver.get(appUrl + nouveauPartenaireURL);
 
         // On selectionne un departement
-        UtilsSelenium.selectionDepartement(driver);
+        UtilsSelenium.etape1(driver);
         if (browser.equals("ie")) {
             Thread.sleep(1000);
         }
@@ -72,7 +69,7 @@ public class TestNouveauPartenaire extends AbstractITTest {
         driver.get(appUrl + nouveauPartenaireURL);
 
         // On selectionne un departement
-        UtilsSelenium.selectionDepartement(driver);
+        UtilsSelenium.etape1(driver);
         etape2();
 
         WebElement etapeButionNouveauArtisan = new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX).until(ExpectedConditions
@@ -158,5 +155,7 @@ public class TestNouveauPartenaire extends AbstractITTest {
         assertTrue(checkConditionConfirmation1);
         assertTrue(checkConditionConfirmation2);
     }
+
+
 
 }

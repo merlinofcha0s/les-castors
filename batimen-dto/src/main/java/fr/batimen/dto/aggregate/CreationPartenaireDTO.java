@@ -1,13 +1,14 @@
 package fr.batimen.dto.aggregate;
 
-import java.util.Objects;
-
-import javax.validation.Valid;
-
 import fr.batimen.dto.AbstractDTO;
 import fr.batimen.dto.AdresseDTO;
 import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.EntrepriseDTO;
+
+import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class CreationPartenaireDTO extends AbstractDTO {
 
@@ -23,6 +24,8 @@ public class CreationPartenaireDTO extends AbstractDTO {
     private final AdresseDTO adresse = new AdresseDTO();
 
     private int numeroEtape;
+
+    private final List<String> villesPossbles = new ArrayList<>();
 
     /**
      * @return the artisan
@@ -55,20 +58,21 @@ public class CreationPartenaireDTO extends AbstractDTO {
     }
 
     /**
-     * @param numeroEtape
-     *            the numeroEtape to set
+     * @param numeroEtape the numeroEtape to set
      */
     public void setNumeroEtape(int numeroEtape) {
         this.numeroEtape = numeroEtape;
     }
 
-
+    public List<String> getVillesPossbles() {
+        return villesPossbles;
+    }
 
     /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#hashCode()
-     */
+         * (non-Javadoc)
+         *
+         * @see java.lang.Object#hashCode()
+         */
     @Override
     public int hashCode() {
         return Objects.hashCode(Objects.hash(this.entreprise.getSiret(), this.entreprise.getNomComplet(),

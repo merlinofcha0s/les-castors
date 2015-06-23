@@ -1,13 +1,17 @@
 package fr.batimen.web.client.extend.nouveau.artisan;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.inject.Inject;
-
-import fr.batimen.dto.aggregate.CreationAnnonceDTO;
-import org.apache.wicket.ajax.AjaxRequestTarget;
+import fr.batimen.core.exception.FrontEndException;
+import fr.batimen.dto.LocalisationDTO;
+import fr.batimen.dto.aggregate.CreationPartenaireDTO;
+import fr.batimen.web.app.constants.Etape;
+import fr.batimen.web.client.component.ContactezNous;
+import fr.batimen.web.client.component.NavigationWizard;
+import fr.batimen.web.client.event.CastorWizardEvent;
+import fr.batimen.web.client.extend.nouveau.artisan.event.ChangementEtapeEventArtisan;
+import fr.batimen.web.client.extend.nouveau.devis.Etape1;
+import fr.batimen.web.client.extend.nouveau.devis.event.LocalisationEvent;
+import fr.batimen.web.client.master.MasterPage;
+import fr.batimen.ws.client.service.ArtisanServiceREST;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -15,17 +19,9 @@ import org.apache.wicket.model.Model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.batimen.core.exception.FrontEndException;
-import fr.batimen.dto.aggregate.CreationPartenaireDTO;
-import fr.batimen.web.app.constants.Etape;
-import fr.batimen.web.client.component.ContactezNous;
-import fr.batimen.web.client.component.MapFrance;
-import fr.batimen.web.client.component.NavigationWizard;
-import fr.batimen.web.client.event.CastorWizardEvent;
-import fr.batimen.web.client.event.MapFranceEvent;
-import fr.batimen.web.client.extend.nouveau.artisan.event.ChangementEtapeEventArtisan;
-import fr.batimen.web.client.master.MasterPage;
-import fr.batimen.ws.client.service.ArtisanServiceREST;
+import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Page permettant d'enregistré un nouveau partenaire (artisan)
@@ -48,8 +44,8 @@ public class NouveauArtisan extends MasterPage {
 
     // Composants Généraux
     private NavigationWizard navigationWizard;
-    // Composants étape 1
-    private MapFrance carteFrance;
+
+    private Etape1 etape1;
 
     // Composant étape 2
     private Etape2PartenaireForm etape2PartenaireForm;
@@ -85,20 +81,15 @@ public class NouveauArtisan extends MasterPage {
         initNavigationWizard();
 
         // Etape 1 : selection du departement avec la carte de la france
-        carteFrance = new MapFrance("mapFrance") {
-
-            private static final long serialVersionUID = 1L;
-
-            /*
-             * (non-Javadoc)
-             *
-             * @see org.apache.wicket.Component#isVisible()
-             */
+        etape1 = new Etape1("etape1"){
             @Override
             public boolean isVisible() {
-                return etapeEncours.equals(Etape.ETAPE_1);
+                if (etapeEncours.equals(Etape.ETAPE_1)) {
+                    return true;
+                } else {
+                    return false;
+                }
             }
-
         };
 
         // Etape 2 : Informations du dirigeant
@@ -159,7 +150,7 @@ public class NouveauArtisan extends MasterPage {
 
         ContactezNous contactezNous = new ContactezNous("contactezNous");
 
-        masterContainer.add(carteFrance, containerEtape2, etape3Entreprise, etape4Confirmation, contactezNous);
+        masterContainer.add(etape1, containerEtape2, etape3Entreprise, etape4Confirmation, contactezNous);
 
         this.add(masterContainer);
 
@@ -239,27 +230,6 @@ public class NouveauArtisan extends MasterPage {
     @Override
     public void onEvent(IEvent<?> event) {
         super.onEvent(event);
-        if (event.getPayload() instanceof MapFranceEvent) {
-            MapFranceEvent eventMapFrance = (MapFranceEvent) event.getPayload();
-
-            // On récupére le departement qui se trouve dans l'event
-            Integer departementInt = Integer.valueOf(eventMapFrance.getDepartement());
-
-            // On le valide
-            if (departementInt != null && departementInt > 0 && departementInt < 100) {
-                nouveauPartenaire.getAdresse().setDepartement(departementInt);
-                nouveauPartenaire.setNumeroEtape(2);
-            } else {
-                feedBackPanelGeneral.error("Numéro de département incorrecte, veuillez recommencer");
-            }
-
-            if (feedBackPanelGeneral.hasFeedbackMessage()) {
-                feedBackPanelGeneral.getFeedbackMessages().clear();
-            }
-
-            setResponsePage(new NouveauArtisan(nouveauPartenaire));
-        }
-
         // Catch de l'event de changement d'etape
         if (event.getPayload() instanceof ChangementEtapeEventArtisan) {
             ChangementEtapeEventArtisan changementEtapeEvent = (ChangementEtapeEventArtisan) event.getPayload();
@@ -277,6 +247,27 @@ public class NouveauArtisan extends MasterPage {
         if (event.getPayload() instanceof CastorWizardEvent) {
             CastorWizardEvent castorWizardEvent = (CastorWizardEvent) event.getPayload();
             nouveauPartenaire.setNumeroEtape(Integer.valueOf(castorWizardEvent.getStepNumber()));
+
+            if (feedBackPanelGeneral.hasFeedbackMessage()) {
+                feedBackPanelGeneral.getFeedbackMessages().clear();
+            }
+
+            setResponsePage(new NouveauArtisan(nouveauPartenaire));
+        }
+
+        if (event.getPayload() instanceof LocalisationEvent) {
+            LocalisationEvent localisationEvent = (LocalisationEvent) event.getPayload();
+            if(localisationEvent.getLocalisationDTOMemeCodePostal().size() != 0){
+                nouveauPartenaire.getAdresse().setCodePostal(localisationEvent.getLocalisationDTOMemeCodePostal().get(0).getCodePostal());
+                nouveauPartenaire.getAdresse().setDepartement(Integer.valueOf(localisationEvent.getLocalisationDTOMemeCodePostal().get(0).getDepartement()));
+            }
+
+            for(LocalisationDTO localisationDTO : localisationEvent.getLocalisationDTOMemeCodePostal()){
+                nouveauPartenaire.getVillesPossbles().clear();
+                nouveauPartenaire.getVillesPossbles().add(localisationDTO.getCommune());
+            }
+
+            nouveauPartenaire.setNumeroEtape(2);
 
             if (feedBackPanelGeneral.hasFeedbackMessage()) {
                 feedBackPanelGeneral.getFeedbackMessages().clear();

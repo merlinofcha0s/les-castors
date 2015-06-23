@@ -82,6 +82,9 @@ public class Etape1 extends Panel {
                 }
             }
         };
+
+        valideCodePostal.setMarkupId("valideCodePostal");
+
         formCodePostal.add(codePostal, valideCodePostal);
         add(formCodePostal);
     }

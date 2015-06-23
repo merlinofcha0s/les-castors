@@ -66,7 +66,7 @@ public class CreationAnnonceDTO extends AbstractDTO {
 
     private Boolean isSignedUp = false;
 
-    private final transient List<String> villesPossbles = new ArrayList<>();
+    private final List<String> villesPossbles = new ArrayList<>();
 
     public String getDescription() {
         return description;

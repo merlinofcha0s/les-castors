@@ -13,7 +13,6 @@ import fr.batimen.web.client.component.NavigationWizard;
 import fr.batimen.web.client.event.CastorWizardEvent;
 import fr.batimen.web.client.event.Event;
 import fr.batimen.web.client.event.LoginEvent;
-import fr.batimen.web.client.event.MapFranceEvent;
 import fr.batimen.web.client.extend.Accueil;
 import fr.batimen.web.client.extend.Contact;
 import fr.batimen.web.client.extend.nouveau.devis.event.CategorieEvent;
@@ -119,21 +118,6 @@ public class NouveauDevis extends MasterPage {
 
         containerGeneral = new WebMarkupContainer("containerGeneral");
         containerGeneral.setOutputMarkupId(true);
-
-        // Etape 1 : selection du departement avec la carte de la france
-        /*carteFrance = new MapFrance("mapFrance") {
-
-            private static final long serialVersionUID = -7657021021902246878L;
-
-            @Override
-            public boolean isVisible() {
-                if (etapeEncours.equals(Etape.ETAPE_1)) {
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        };*/
 
         etape1 = new Etape1("etape1"){
             @Override
@@ -409,30 +393,6 @@ public class NouveauDevis extends MasterPage {
                 navigationWizard.setStep(etapeEncours.ordinal() + 1);
                 update.getTarget().add(containerGeneral);
             }
-        }
-
-        // Event déclenché par la carte de france, cela permet de recuperer le
-        // département et de passer à l'etape 2
-        if (event.getPayload() instanceof MapFranceEvent) {
-            MapFranceEvent eventMapFrance = (MapFranceEvent) event.getPayload();
-
-            // On récupére le departement qui se trouve dans l'event
-            Integer departementInt = Integer.valueOf(eventMapFrance.getDepartement());
-
-            if (departementInt != null && departementInt > 0 && departementInt < 100) {
-
-                // On l'enregistre dans la DTO
-                nouvelleAnnonce.setDepartement(departementInt);
-                // On prepare le passage à l'etape suivante
-                nouvelleAnnonce.setNumeroEtape(2);
-            } else {
-                feedBackPanelGeneral.error("Numéro de département incorrecte, veuillez recommencer");
-            }
-
-            if (feedBackPanelGeneral.hasFeedbackMessage()) {
-                feedBackPanelGeneral.getFeedbackMessages().clear();
-            }
-            setResponsePage(new NouveauDevis(nouvelleAnnonce));
         }
 
         if (event.getPayload() instanceof CategorieEvent) {

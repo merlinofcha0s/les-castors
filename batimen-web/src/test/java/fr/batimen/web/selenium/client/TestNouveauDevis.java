@@ -1,10 +1,9 @@
 package fr.batimen.web.selenium.client;
 
-import static com.ninja_squad.dbsetup.Operations.sequenceOf;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
+import com.ninja_squad.dbsetup.DbSetup;
+import com.ninja_squad.dbsetup.operation.Operation;
+import fr.batimen.web.selenium.common.AbstractITTest;
+import fr.batimen.web.utils.UtilsSelenium;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -14,11 +13,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.ninja_squad.dbsetup.DbSetup;
-import com.ninja_squad.dbsetup.operation.Operation;
-
-import fr.batimen.web.selenium.common.AbstractITTest;
-import fr.batimen.web.utils.UtilsSelenium;
+import static com.ninja_squad.dbsetup.Operations.sequenceOf;
+import static org.junit.Assert.*;
 
 /**
  * Classe de test selenium pour la creation de nouveau devis par le client
@@ -27,7 +23,7 @@ import fr.batimen.web.utils.UtilsSelenium;
  */
 public class TestNouveauDevis extends AbstractITTest {
 
-    private final String nouveauDevisDepartementURL = "/nouveaudevis/";
+    private final String nouveauDevisURL = "/nouveaudevis/";
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TestNouveauDevis.class);
 
@@ -46,10 +42,10 @@ public class TestNouveauDevis extends AbstractITTest {
      */
     @Test
     public void testCreationNouveauDevisAuthenticatedSucceed() throws InterruptedException {
-        driver.get(appUrl + nouveauDevisDepartementURL);
+        driver.get(appUrl + nouveauDevisURL);
 
         // On passe à l'etape 1
-        UtilsSelenium.selectionDepartement(driver);
+        UtilsSelenium.etape1(driver);
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
@@ -85,9 +81,9 @@ public class TestNouveauDevis extends AbstractITTest {
      */
     @Test
     public void testCreationNouveauDevisNonAuthenticatedSucceed() throws InterruptedException {
-        driver.get(appUrl + nouveauDevisDepartementURL);
+        driver.get(appUrl + nouveauDevisURL);
         // On passe à l'etape 1
-        UtilsSelenium.selectionDepartement(driver);
+        UtilsSelenium.etape1(driver);
         // On remplit l'étape 2
         etape2();
         // On remplit l'étape 3
@@ -125,9 +121,9 @@ public class TestNouveauDevis extends AbstractITTest {
      */
     @Test
     public void testCreationNouveauDevisSubscribeNotAuthenticatedSucceed() throws InterruptedException {
-        driver.get(appUrl + nouveauDevisDepartementURL);
+        driver.get(appUrl + nouveauDevisURL);
         // On selectionne le bon département
-        UtilsSelenium.selectionDepartement(driver);
+        UtilsSelenium.etape1(driver);
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
@@ -157,9 +153,9 @@ public class TestNouveauDevis extends AbstractITTest {
     @Test
     public void testCreationNouveauDevisDuplicate() throws InterruptedException {
         // Premiere saisie de l'annonce.
-        driver.get(appUrl + nouveauDevisDepartementURL);
+        driver.get(appUrl + nouveauDevisURL);
         // On selectionne le bon département
-        UtilsSelenium.selectionDepartement(driver);
+        UtilsSelenium.etape1(driver);
         // On remplit l'étape 2
         etape2();
         Thread.sleep(1000);
@@ -172,8 +168,8 @@ public class TestNouveauDevis extends AbstractITTest {
                 .findElement(By.cssSelector("h5")).getText());
 
         // Deuxieme saisie de l'annonce.
-        driver.get(appUrl + nouveauDevisDepartementURL);
-        UtilsSelenium.selectionDepartement(driver);
+        driver.get(appUrl + nouveauDevisURL);
+        UtilsSelenium.etape1(driver);
         etape2();
         etape3(true);
         Thread.sleep(1000);
@@ -190,9 +186,9 @@ public class TestNouveauDevis extends AbstractITTest {
      */
     @Test
     public void testEtapePrecedente() throws InterruptedException {
-        driver.get(appUrl + nouveauDevisDepartementURL);
+        driver.get(appUrl + nouveauDevisURL);
         // On selectionne le bon département
-        UtilsSelenium.selectionDepartement(driver);
+        UtilsSelenium.etape1(driver);
 
         Thread.sleep(1000);
         // On remplit l'étape 2
@@ -211,7 +207,7 @@ public class TestNouveauDevis extends AbstractITTest {
         Thread.sleep(1000);
 
         // On selectionne le bon département
-        UtilsSelenium.selectionDepartement(driver);
+        UtilsSelenium.etape1(driver);
 
         Thread.sleep(1000);
         // On remplit l'étape 2
@@ -244,14 +240,14 @@ public class TestNouveauDevis extends AbstractITTest {
      */
     @Test
     public void testContactTelMaisPasTelPasRenseigne() throws InterruptedException {
-        driver.get(appUrl + nouveauDevisDepartementURL);
+        driver.get(appUrl + nouveauDevisURL);
         // On selectionne le bon département
-        UtilsSelenium.selectionDepartement(driver);
+        UtilsSelenium.etape1(driver);
 
         Thread.sleep(1000);
         // On remplit l'étape 2
         etape2();
-
+        Thread.sleep(1000);
         connexionApplication("xavier", BON_MOT_DE_PASSE, Boolean.TRUE);
         // On remplit l'étape 3
         etape3(true);
