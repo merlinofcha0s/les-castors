@@ -1,18 +1,18 @@
 package fr.batimen.web.enums;
 
-import java.io.IOException;
-import java.util.Properties;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+import java.util.Properties;
+
 public enum PropertiesFileWeb {
 
-    APP("app.properties");
+    APP("app.properties"), DEPARTEMENT_ALLOWED("departement_allowed.properties");
 
     private final Logger logger = LoggerFactory.getLogger(PropertiesFileWeb.class);
 
-    private PropertiesFileWeb(String propertiesFileName) {
+    PropertiesFileWeb(String propertiesFileName) {
 
         this.properties = new Properties();
         try {

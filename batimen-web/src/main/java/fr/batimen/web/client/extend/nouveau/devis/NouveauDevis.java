@@ -4,20 +4,20 @@ import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.exception.FrontEndException;
 import fr.batimen.core.security.HashHelper;
 import fr.batimen.dto.ClientDTO;
+import fr.batimen.dto.LocalisationDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.web.app.constants.Etape;
 import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.client.component.ContactezNous;
-import fr.batimen.web.client.component.MapFrance;
 import fr.batimen.web.client.component.NavigationWizard;
 import fr.batimen.web.client.event.CastorWizardEvent;
 import fr.batimen.web.client.event.Event;
 import fr.batimen.web.client.event.LoginEvent;
-import fr.batimen.web.client.event.MapFranceEvent;
 import fr.batimen.web.client.extend.Accueil;
 import fr.batimen.web.client.extend.Contact;
 import fr.batimen.web.client.extend.nouveau.devis.event.CategorieEvent;
 import fr.batimen.web.client.extend.nouveau.devis.event.ChangementEtapeClientEvent;
+import fr.batimen.web.client.extend.nouveau.devis.event.LocalisationEvent;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.ws.client.service.AnnonceServiceREST;
 import org.apache.shiro.SecurityUtils;
@@ -67,7 +67,8 @@ public class NouveauDevis extends MasterPage {
     private WebMarkupContainer containerGeneral;
 
     // Composants étape 1
-    private MapFrance carteFrance;
+    //private MapFrance carteFrance;
+    private Etape1 etape1;
 
     // Composants étape 2
     private Etape2Categorie etape2Categorie;
@@ -118,11 +119,7 @@ public class NouveauDevis extends MasterPage {
         containerGeneral = new WebMarkupContainer("containerGeneral");
         containerGeneral.setOutputMarkupId(true);
 
-        // Etape 1 : selection du departement avec la carte de la france
-        carteFrance = new MapFrance("mapFrance") {
-
-            private static final long serialVersionUID = -7657021021902246878L;
-
+        etape1 = new Etape1("etape1"){
             @Override
             public boolean isVisible() {
                 if (etapeEncours.equals(Etape.ETAPE_1)) {
@@ -236,7 +233,7 @@ public class NouveauDevis extends MasterPage {
         containerConfirmation.add(confirmation1, confirmation2, contactezNous, retourAccueil);
 
         List<String> etapes = new ArrayList<String>();
-        etapes.add("Sélectionner un departement");
+        etapes.add("Renseigner le code postal");
         etapes.add("Sélectionner la catégorie");
         etapes.add("Renseigner les caracteristiques de l'annonce");
         etapes.add("Inscription / Connexion");
@@ -252,7 +249,7 @@ public class NouveauDevis extends MasterPage {
 
         ContactezNous contactezNousComposant = new ContactezNous("contactezNous");
 
-        containerGeneral.add(carteFrance, etape2Categorie, containerQualification, containerInscription,
+        containerGeneral.add(/*carteFrance*/etape1, etape2Categorie, containerQualification, containerInscription,
                 containerConfirmation, navigationWizard);
 
         add(containerGeneral, contactezNousComposant);
@@ -398,30 +395,6 @@ public class NouveauDevis extends MasterPage {
             }
         }
 
-        // Event déclenché par la carte de france, cela permet de recuperer le
-        // département et de passer à l'etape 2
-        if (event.getPayload() instanceof MapFranceEvent) {
-            MapFranceEvent eventMapFrance = (MapFranceEvent) event.getPayload();
-
-            // On récupére le departement qui se trouve dans l'event
-            Integer departementInt = Integer.valueOf(eventMapFrance.getDepartement());
-
-            if (departementInt != null && departementInt > 0 && departementInt < 100) {
-
-                // On l'enregistre dans la DTO
-                nouvelleAnnonce.setDepartement(departementInt);
-                // On prepare le passage à l'etape suivante
-                nouvelleAnnonce.setNumeroEtape(2);
-            } else {
-                feedBackPanelGeneral.error("Numéro de département incorrecte, veuillez recommencer");
-            }
-
-            if (feedBackPanelGeneral.hasFeedbackMessage()) {
-                feedBackPanelGeneral.getFeedbackMessages().clear();
-            }
-            setResponsePage(new NouveauDevis(nouvelleAnnonce));
-        }
-
         if (event.getPayload() instanceof CategorieEvent) {
             CategorieEvent eventCategorie = (CategorieEvent) event.getPayload();
             // On recupere la catégorie métier
@@ -463,6 +436,26 @@ public class NouveauDevis extends MasterPage {
             setResponsePage(new NouveauDevis(nouvelleAnnonce));
         }
 
+        if (event.getPayload() instanceof LocalisationEvent) {
+            LocalisationEvent localisationEvent = (LocalisationEvent) event.getPayload();
+            if(localisationEvent.getLocalisationDTOMemeCodePostal().size() != 0){
+                nouvelleAnnonce.setCodePostal(localisationEvent.getLocalisationDTOMemeCodePostal().get(0).getCodePostal());
+                nouvelleAnnonce.setDepartement(Integer.valueOf(localisationEvent.getLocalisationDTOMemeCodePostal().get(0).getDepartement()));
+            }
+
+            for(LocalisationDTO localisationDTO : localisationEvent.getLocalisationDTOMemeCodePostal()){
+                nouvelleAnnonce.getVillesPossbles().clear();
+                nouvelleAnnonce.getVillesPossbles().add(localisationDTO.getCommune());
+            }
+
+            nouvelleAnnonce.setNumeroEtape(2);
+
+            if (feedBackPanelGeneral.hasFeedbackMessage()) {
+                feedBackPanelGeneral.getFeedbackMessages().clear();
+            }
+
+            setResponsePage(new NouveauDevis(nouvelleAnnonce));
+        }
     }
 
     private Integer creationAnnonce() {

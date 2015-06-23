@@ -176,12 +176,12 @@ public abstract class AbstractITTest {
 
     protected void connexionApplication(String username, String password, Boolean isVerifLinkMonCompte) {
         WebElement checkConditionAnnoncePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
-                .until(ExpectedConditions.presenceOfElementLocated((By.id("connexionlbl"))));
+                .until(ExpectedConditions.elementToBeClickable((By.id("connexionlbl"))));
         assertNotNull(checkConditionAnnoncePresent);
         driver.findElement(By.id("connexionlbl")).click();
-        Boolean checkCondition = (new WebDriverWait(driver, TEMPS_ATTENTE_AJAX)).until(ExpectedConditions
-                .textToBePresentInElementLocated(By.id("myModalLabel"), "Connexion à l'espace client / artisan"));
-        assertTrue(checkCondition);
+        WebElement checkCondition = (new WebDriverWait(driver, TEMPS_ATTENTE_AJAX)).until(ExpectedConditions
+                .visibilityOfElementLocated(By.id("myModalLabel")));
+        assertNotNull(checkCondition);
         driver.findElement(By.id("loginModal")).click();
         driver.findElement(By.id("loginModal")).clear();
         driver.findElement(By.id("loginModal")).sendKeys(username);

@@ -97,3 +97,30 @@ h6,h6 span,h6 a {
 	color: #ffffff;
 	margin-bottom: 7px !important;
 }
+
+#villeTypeAhead ul li:before{
+    content: '';
+    padding-right: 0px;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    line-height: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #666666;
+}
+
+#villeTypeAhead ul li, #villeTypeAhead ol li {
+    line-height: 20px;
+    margin: 0 0 0 0px;
+    padding: 0 0 0 0px;
+    position: relative;
+    color: #666666;
+}
+
+#villeTypeAhead ul, #villeTypeAhead ol {
+    padding: 0 0 5px 0px;
+}
+
+#villeTypeAhead a strong {
+    color: #000000;
+}
