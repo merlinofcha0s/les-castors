@@ -98,7 +98,7 @@ public class TestNouveauPartenaire extends AbstractITTest {
         driver.findElement(By.id("numeroTelField")).clear();
         driver.findElement(By.id("numeroTelField")).sendKeys("0493854578");
         driver.findElement(By.id("emailField")).clear();
-        driver.findElement(By.id("emailField")).sendKeys("xavier.dupont@entreprise.com");
+        driver.findElement(By.id("emailField")).sendKeys("artisan.castor@outlook.fr");
         driver.findElement(By.id("logintField")).clear();
         driver.findElement(By.id("logintField")).sendKeys("xavier06");
         driver.findElement(By.id("password")).clear();

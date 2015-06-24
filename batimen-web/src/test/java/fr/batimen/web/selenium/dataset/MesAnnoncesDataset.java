@@ -30,7 +30,7 @@ public class MesAnnoncesDataset {
     public static final Operation INSERT_ARTISAN_DATA = insertInto("artisan")
             .columns("civilite", "email", "nom", "prenom", "login", "password", "id", "numeroTel", "dateInscription",
                     "isActive", "cleActivation", "entreprise_id")
-            .values(0, "pebronArtisan@batimen.fr", "PebronArtisan", "Toto", "pebron",
+            .values(0, "artisan.castor@outlook.fr", "PebronArtisan", "Toto", "pebron",
                     "$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=", 200008,
                     "0614125698", "2014-01-10", true, "lolmdr07", 200009).build();
 
