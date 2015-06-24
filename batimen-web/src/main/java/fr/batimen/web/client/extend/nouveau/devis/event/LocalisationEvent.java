@@ -7,7 +7,9 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import java.util.List;
 
 /**
- * Created by Casaucau on 21/06/2015.
+ * Event wicket qui declenche l'envoi de la DTO conternant les informations de localisation.
+ *
+ * @author Casaucau Cyril
  */
 public class LocalisationEvent extends AbstractEvent {
 

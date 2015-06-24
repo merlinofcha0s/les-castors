@@ -1,4 +1,4 @@
-package fr.batimen.web.client.extend.nouveau.devis;
+package fr.batimen.web.client.extend.nouveau.communs;
 
 import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.web.app.constants.FeedbackMessageLevel;
@@ -8,6 +8,7 @@ import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.web.client.extend.nouveau.devis.event.LocalisationEvent;
+import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.web.enums.PropertiesFileWeb;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
@@ -27,6 +28,8 @@ import java.util.Properties;
 
 /**
  * Permet à l'utilisateur de saisir son code postal et d'en déduire la ville et le département.
+ *
+ * @author Casaucau Cyril
  */
 public class Etape1 extends Panel {
 
@@ -80,6 +83,11 @@ public class Etape1 extends Panel {
                 }else{
                     target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Nous n'avons pas pu trouver votre code postal, veuillez réessayer ultérieurement ou contactez nous", FeedbackMessageLevel.ERROR));
                 }
+            }
+
+            @Override
+            protected void onError(AjaxRequestTarget target, Form<?> form) {
+                MasterPage.triggerEventFeedBackPanel(target, "", FeedbackMessageLevel.ERROR);
             }
         };
 

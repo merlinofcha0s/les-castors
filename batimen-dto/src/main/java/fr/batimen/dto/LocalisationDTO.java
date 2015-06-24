@@ -4,7 +4,9 @@ import java.io.Serializable;
 import java.util.Objects;
 
 /**
- * Created by Casaucau on 21/06/2015.
+ * DTO contenant les informations de localisation du client / artisan / etc
+ *
+ * @author Casaucau Cyril
  */
 public class LocalisationDTO implements Serializable{
 

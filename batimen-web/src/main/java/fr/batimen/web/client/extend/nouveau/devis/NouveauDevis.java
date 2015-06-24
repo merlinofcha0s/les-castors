@@ -15,6 +15,7 @@ import fr.batimen.web.client.event.Event;
 import fr.batimen.web.client.event.LoginEvent;
 import fr.batimen.web.client.extend.Accueil;
 import fr.batimen.web.client.extend.Contact;
+import fr.batimen.web.client.extend.nouveau.communs.Etape1;
 import fr.batimen.web.client.extend.nouveau.devis.event.CategorieEvent;
 import fr.batimen.web.client.extend.nouveau.devis.event.ChangementEtapeClientEvent;
 import fr.batimen.web.client.extend.nouveau.devis.event.LocalisationEvent;
@@ -467,7 +468,6 @@ public class NouveauDevis extends MasterPage {
         } else {
             return annonceService.creationAnnonceAvecImage(nouvelleAnnonce);
         }
-
     }
 
     private void loggerAnnonce(CreationAnnonceDTO nouvelleAnnonce) {
