@@ -8,7 +8,7 @@ import fr.batimen.web.client.component.ContactezNous;
 import fr.batimen.web.client.component.NavigationWizard;
 import fr.batimen.web.client.event.CastorWizardEvent;
 import fr.batimen.web.client.extend.nouveau.artisan.event.ChangementEtapeEventArtisan;
-import fr.batimen.web.client.extend.nouveau.devis.Etape1;
+import fr.batimen.web.client.extend.nouveau.communs.Etape1;
 import fr.batimen.web.client.extend.nouveau.devis.event.LocalisationEvent;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.ws.client.service.ArtisanServiceREST;

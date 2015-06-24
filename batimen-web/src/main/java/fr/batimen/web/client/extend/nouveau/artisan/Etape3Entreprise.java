@@ -1,7 +1,10 @@
 package fr.batimen.web.client.extend.nouveau.artisan;
 
-import java.util.List;
-
+import fr.batimen.dto.CategorieMetierDTO;
+import fr.batimen.dto.aggregate.CreationPartenaireDTO;
+import fr.batimen.dto.helper.CategorieLoader;
+import fr.batimen.web.client.component.BatimenToolTip;
+import fr.batimen.web.client.extend.nouveau.artisan.event.UncheckedEvent;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
@@ -17,12 +20,7 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
-import fr.batimen.dto.CategorieMetierDTO;
-import fr.batimen.dto.aggregate.CreationPartenaireDTO;
-import fr.batimen.dto.helper.CategorieLoader;
-import fr.batimen.web.client.component.BatimenToolTip;
-import fr.batimen.web.client.extend.nouveau.artisan.event.UncheckedEvent;
-import org.apache.wicket.request.resource.CssResourceReference;
+import java.util.List;
 
 /**
  * Etape 3 de l'inscription d'un nouvel artisan : Informations sur l'entreprise
@@ -144,7 +142,6 @@ public class Etape3Entreprise extends Panel {
                     }
                 }
             }
-
         };
 
         checkBoxPlomberie.setMarkupId("plomberieSelect");

@@ -1,7 +1,6 @@
 package fr.batimen.web.app.utils.codepostal;
 
 import fr.batimen.dto.LocalisationDTO;
-import org.apache.wicket.protocol.http.WebApplication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,10 +10,15 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 /**
- * Created by Casaucau on 21/06/2015.
+ * Parse et classe la ville et le departement par code postal d'apres un fichier csv
+ *
+ * @author Casaucau Cyril
  */
 @Singleton
 public class CSVCodePostalReader implements Serializable{
@@ -25,10 +29,19 @@ public class CSVCodePostalReader implements Serializable{
 
     public CSVCodePostalReader() {
 
-        File codePostalFile = new File(WebApplication.get().getServletContext().getRealPath(File.pathSeparator).split(";")[0] + "WEB-INF/codePostal.txt");
+        if(LOGGER.isDebugEnabled()){
+            LOGGER.debug("Chargement du fichier csv contenant les informations de localisation");
+        }
+
+        ClassLoader classLoader = getClass().getClassLoader();
+        File codePostalFile = new File(classLoader.getResource("codePostal.txt").getFile());
         LOGGER.error(codePostalFile.getAbsolutePath());
 
         try {
+            if(LOGGER.isDebugEnabled()){
+                LOGGER.debug("Lecture du fichier : ");
+                LOGGER.debug(codePostalFile.getAbsolutePath());
+            }
             List<String> lines = Files.readAllLines(codePostalFile.toPath(),
                     StandardCharsets.UTF_8);
             for(String line: lines){

@@ -9,9 +9,6 @@
 	<appender name="log-file-by-day"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>${LOGS_FOLDER}/batimen_web.log</file>
-		<filter class="ch.qos.logback.classic.filter.ThresholdFilter">
-			<level>${logs.lvl}</level>
-		</filter>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<fileNamePattern>${LOGS_TO_COLLECT_FOLDER}/batimen_web.%d{yyyyMMdd}.log</fileNamePattern>
 		</rollingPolicy>
