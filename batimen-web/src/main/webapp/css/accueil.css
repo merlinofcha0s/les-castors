@@ -110,10 +110,11 @@
     line-height: 70px;
 }
 
-.chantier_premium{
-    background-image: url("../img/chantier_temoin_axel.jpg");
-    background-repeat: no-repeat;
-    background-size: 100% auto;
-
+.module_normal_padding{
+    margin-bottom: 0px !important;
 }
 
+.module_line{
+    margin-bottom: 0px !important;
+    margin-top: 0px;
+}
