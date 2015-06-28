@@ -1,5 +1,7 @@
 package fr.batimen.web.client.extend;
 
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.link.Link;
 
 import fr.batimen.web.client.component.ContactezNous;
@@ -23,6 +25,12 @@ public class Accueil extends MasterPage {
         ContactezNous contactezNous = new ContactezNous("contactezNous");
         this.add(contactezNous);
         initLinks();
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.render(CssHeaderItem.forUrl("//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"));
     }
 
     private void initLinks() {
