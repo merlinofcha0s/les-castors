@@ -130,4 +130,14 @@
 
 #artisan_chantier_premium_blockquote i{
     font-size: 24px;
+    color: #000000;
+    vertical-align: sub;
+}
+
+.commentcamarche{
+    padding-bottom: 15px;
+}
+
+.contactez_suivez_nous{
+    padding-top: 10px;
 }
