@@ -16,6 +16,7 @@ import fr.batimen.web.client.event.*;
 import fr.batimen.web.client.extend.error.AccesInterdit;
 import fr.batimen.web.client.extend.error.NonTrouvee;
 import fr.batimen.web.client.extend.member.client.ModifierAnnonce;
+import fr.batimen.web.client.extend.member.client.util.PhotoUtils;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.web.client.modal.*;
 import fr.batimen.ws.client.service.AnnonceServiceREST;
@@ -57,6 +58,9 @@ public class Annonce extends MasterPage {
 
     @Inject
     private Authentication authentication;
+
+    @Inject
+    private PhotoUtils photoUtils;
 
     private String idAnnonce;
     private WebMarkupContainer containerEnteprisesInscrites;
@@ -933,6 +937,10 @@ public class Annonce extends MasterPage {
 
             noterArtisanEventClose.getTarget()
                     .add(feedBackPanelGeneral, etatAnnonce, notationAnnonceParClientContainer);
+        }
+
+        if(event.getPayload() instanceof SuppressionPhotoEvent){
+            photoUtils.suppressionPhoto(event, authentication.getCurrentUserInfo().getLogin(), idAnnonce);
         }
     }
 

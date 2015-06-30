@@ -18,7 +18,9 @@ import fr.batimen.web.client.component.ContactezNous;
 import fr.batimen.web.client.component.PhotosContainer;
 import fr.batimen.web.client.component.Profil;
 import fr.batimen.web.client.event.ModificationAnnonceEvent;
+import fr.batimen.web.client.event.SuppressionPhotoEvent;
 import fr.batimen.web.client.extend.connected.Annonce;
+import fr.batimen.web.client.extend.member.client.util.PhotoUtils;
 import fr.batimen.web.client.extend.nouveau.devis.Etape3AnnonceForm;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.ws.client.service.AnnonceServiceREST;
@@ -51,6 +53,9 @@ public class ModifierAnnonce extends MasterPage {
 
     @Inject
     private Authentication authentication;
+
+    @Inject
+    private PhotoUtils photoUtils;
 
     private Etape3AnnonceForm etape3AnnonceForm;
 
@@ -182,6 +187,10 @@ public class ModifierAnnonce extends MasterPage {
             }
 
             modificationAnnonceEvent.getTarget().add(feedBackPanelGeneral);
+        }
+
+        if(event.getPayload() instanceof SuppressionPhotoEvent){
+            photoUtils.suppressionPhoto(event, authentication.getCurrentUserInfo().getLogin(), idAnnonce);
         }
     }
 }

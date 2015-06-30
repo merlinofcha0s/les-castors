@@ -9,6 +9,7 @@ import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.client.behaviour.FileFieldValidatorAndLoaderBehaviour;
 import fr.batimen.web.client.event.ClearFeedbackPanelEvent;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
+import fr.batimen.web.client.event.SuppressionPhotoEvent;
 import fr.batimen.ws.client.service.AnnonceServiceREST;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -135,22 +136,8 @@ public class PhotosContainer extends Panel {
                 AjaxLink<Void> supprimerImage = new AjaxLink<Void>("supprimerImage") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        String loginDemandeur = authentication.getCurrentUserInfo().getLogin();
-
-                        SuppressionPhotoDTO suppressionPhotoDTO = new SuppressionPhotoDTO();
-                        suppressionPhotoDTO.setHashID(idAnnonce);
-                        suppressionPhotoDTO.setLoginDemandeur(loginDemandeur);
-                        suppressionPhotoDTO.setImageASupprimer(item.getModelObject());
-
-                        int sizeBefore = images.size();
-                        images = annonceServiceREST.suppressionPhoto(suppressionPhotoDTO);
-
+                        target.getPage().send(target.getPage(), Broadcast.BREADTH, new SuppressionPhotoEvent(target, item.getModelObject(), images.size()));
                         updatePhotoContainer(target);
-                        if (sizeBefore != images.size()) {
-                            target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Suppression effectuée !", FeedbackMessageLevel.SUCCESS));
-                        } else {
-                            target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Problème durant la suppression de la photo sur le serveur, veuillez réessayer ultérieurement", FeedbackMessageLevel.ERROR));
-                        }
                     }
 
                     @Override
