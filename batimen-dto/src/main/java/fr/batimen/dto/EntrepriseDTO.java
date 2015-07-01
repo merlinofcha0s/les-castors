@@ -54,6 +54,8 @@ public class EntrepriseDTO extends AbstractDTO {
 
     private Integer nbAnnonce;
 
+    private final List<ImageDTO> photosChantiersTemoins = new ArrayList<>();
+
     /**
      * @return the dateCreation
      */
@@ -188,11 +190,16 @@ public class EntrepriseDTO extends AbstractDTO {
         this.nbAnnonce = nbAnnonce;
     }
 
+    public List<ImageDTO> getPhotosChantiersTemoins() {
+        return photosChantiersTemoins;
+    }
+
+
     /*
-                         * (non-Javadoc)
-                         *
-                         * @see java.lang.Object#hashCode()
-                         */
+                             * (non-Javadoc)
+                             *
+                             * @see java.lang.Object#hashCode()
+                             */
     @Override
     public int hashCode() {
         return Objects.hashCode(Objects.hash(this.getSiret(), this.getNomComplet()));

@@ -107,6 +107,15 @@ public class PhotosContainer extends Panel {
             }
         };
 
+        Label titleContainerNoPhoto = new Label("titleContainerNoPhoto", title) {
+
+            @Override
+            protected void onComponentTag(ComponentTag tag) {
+                super.onComponentTag(tag);
+                tag.setName(baliseTypeTitle);
+            }
+        };
+
         imagesView = new ListView<ImageDTO>("imagesView", images) {
 
             private static final long serialVersionUID = 1L;
@@ -173,7 +182,7 @@ public class PhotosContainer extends Panel {
         aucunePhotoContainer.setOutputMarkupId(true);
 
         Label aucunePhoto = new Label("aucunePhoto", "Aucune photo du chantier pour le moment :(");
-        aucunePhotoContainer.add(aucunePhoto);
+        aucunePhotoContainer.add(aucunePhoto, titleContainerNoPhoto);
 
         transparentMarkupForPhotosAjax = new WebMarkupContainer("transparentMarkupForPhotosAjax");
         transparentMarkupForPhotosAjax.setOutputMarkupId(true);
