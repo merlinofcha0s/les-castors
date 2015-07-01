@@ -1,222 +1,228 @@
-create table Adresse (
-        id  bigserial not null,
-        adresse varchar(255) not null,
-        codePostal varchar(5) not null,
-        complementAdresse varchar(255),
-        ville varchar(45) not null,
-        departement int4 not null,
-        primary key (id)
-    );
-    
-create table Annonce (
-        id  bigserial not null,
-        dateCreation timestamp,
-        dateMAJ timestamp,
-        delaiIntervention int4 not null,
-        description varchar(500) not null,
-        etatAnnonce int4 not null,
-        typeTravaux int4 not null,
-        categorieMetier int2 not null,
-        sousCategorieMetier varchar(40) not null,
-        nbConsultation int4 not null,
-        typeContact int4 not null,
-        hashID varchar(255),
-        selHashID varchar(255),
-        adresseChantier_id int8,
-        demandeur_fk int8,
-        avis_id int8,
-        entreprise_selectionnee_fk int8,
-        primary key (id)
-    );
-    
-    create table Artisan (
-        id  bigserial not null,
-        civilite int4 not null,
-        dateInscription timestamp not null,
-        email varchar(128) not null,
-        login varchar(25) not null,
-        nom varchar(20) not null,
-        numeroTel varchar(10) not null,
-        password varchar(80) not null,
-        prenom varchar(20) not null,
-        cleActivation varchar(255),
-        isActive boolean not null,
-        entreprise_id int8,
-        primary key (id)
-    );
-    
-    create table CategorieMetier (
-        id  bigserial not null,
-        categorieMetier int2 not null,
-        entreprise_fk int8,
-        primary key (id)
-    );
-    
-    create table Entreprise (
-        id  bigserial not null,
-        logo varchar(255),
-        nbEmployees int4,
-        nomComplet varchar(26) not null,
-        specialite varchar(25),
-        statutJuridique int4 not null,
-        siret varchar(14) not null,
-        dateCreation date not null,
-        isVerifier boolean not null,
-        adresse_id int8,
-        paiement_id int8,
-        primary key (id)
-    );
-    
-    create table Avis (
-        id  bigserial not null,
-        commentaire varchar(500) not null,
-        score float8 not null,
-        dateAvis timestamp not null,
-        artisan_fk int8,
-        primary key (id)
-    );
-    
-    create table Paiement (
-        id  bigserial not null,
-        codeSecurite varchar(255) not null,
-        dateExpiration date not null,
-        numeroCarte varchar(255) not null,
-        adresseFacturation_id int8,
-        primary key (id)
-    );
-    
-     create table Client (
-        id  bigserial not null,
-        dateInscription timestamp not null,
-        email varchar(128) not null,
-        login varchar(25) not null,
-        nom varchar(20),
-        numeroTel varchar(10),
-        password varchar(80) not null,
-        prenom varchar(20),
-        isActive boolean not null,
-        cleActivation varchar(255),
-        primary key (id)
-    );
-    
-    create table Permission (
-        id  bigserial not null,
-        typeCompte int4 not null,
-        client_fk int8,
-        artisan_fk int8,
-        primary key (id)
-    );
-    
-    create table annonce_artisan (
-        Annonce_id int8 not null,
-        artisans_id int8 not null
-    );
-    
-    create table Notification (
-        id  bigserial not null,
-        dateNotification timestamp not null,
-        typeNotification int4 not null,
-        pourQuiNotification int4 not null,
-        statutNotification int4 not null,
-        id_artisan int8,
-        id_client int8,
-        id_annonce int8,
-        primary key (id)
-    );
-    
-    create table Image (
-        id  bigserial not null,
-        url varchar(255) not null,
-        id_annonce int8,
-        primary key (id)
-    );
-    
-    alter table Annonce 
-        add constraint annonce_adresse
-        foreign key (adresseChantier_id) 
-        references Adresse ON DELETE CASCADE;
+CREATE TABLE Adresse (
+  id                BIGSERIAL    NOT NULL,
+  adresse           VARCHAR(255) NOT NULL,
+  codePostal        VARCHAR(5)   NOT NULL,
+  complementAdresse VARCHAR(255),
+  ville             VARCHAR(45)  NOT NULL,
+  departement       INT4         NOT NULL,
+  PRIMARY KEY (id)
+);
 
-    alter table Annonce 
-        add constraint annonce_client 
-        foreign key (demandeur_fk) 
-        references Client;
+CREATE TABLE Annonce (
+  id                         BIGSERIAL    NOT NULL,
+  dateCreation               TIMESTAMP,
+  dateMAJ                    TIMESTAMP,
+  delaiIntervention          INT4         NOT NULL,
+  description                VARCHAR(500) NOT NULL,
+  etatAnnonce                INT4         NOT NULL,
+  typeTravaux                INT4         NOT NULL,
+  categorieMetier            INT2         NOT NULL,
+  sousCategorieMetier        VARCHAR(40)  NOT NULL,
+  nbConsultation             INT4         NOT NULL,
+  typeContact                INT4         NOT NULL,
+  hashID                     VARCHAR(255),
+  selHashID                  VARCHAR(255),
+  adresseChantier_id         INT8,
+  demandeur_fk               INT8,
+  avis_id                    INT8,
+  entreprise_selectionnee_fk INT8,
+  PRIMARY KEY (id)
+);
 
-    alter table Annonce 
-        add constraint annonce_avis
-        foreign key (avis_id)
-        references Avis ON DELETE CASCADE;
-        
-    alter table Annonce 
-        add constraint annonce_entreprise
-        foreign key (entreprise_selectionnee_fk) 
-        references Entreprise;
+CREATE TABLE Artisan (
+  id              BIGSERIAL    NOT NULL,
+  civilite        INT4         NOT NULL,
+  dateInscription TIMESTAMP    NOT NULL,
+  email           VARCHAR(128) NOT NULL,
+  login           VARCHAR(25)  NOT NULL,
+  nom             VARCHAR(20)  NOT NULL,
+  numeroTel       VARCHAR(10)  NOT NULL,
+  password        VARCHAR(80)  NOT NULL,
+  prenom          VARCHAR(20)  NOT NULL,
+  cleActivation   VARCHAR(255),
+  isActive        BOOLEAN      NOT NULL,
+  entreprise_id   INT8,
+  PRIMARY KEY (id)
+);
 
-    alter table Artisan 
-        add constraint artisan_entreprise 
-        foreign key (entreprise_id) 
-        references Entreprise ON DELETE CASCADE;
+CREATE TABLE CategorieMetier (
+  id              BIGSERIAL NOT NULL,
+  categorieMetier INT2      NOT NULL,
+  entreprise_fk   INT8,
+  PRIMARY KEY (id)
+);
 
-    alter table CategorieMetier 
-        add constraint categorie_metier_entreprise 
-        foreign key (entreprise_fk) 
-        references Entreprise;
+CREATE TABLE Entreprise (
+  id              BIGSERIAL   NOT NULL,
+  logo            VARCHAR(255),
+  nbEmployees     INT4,
+  nomComplet      VARCHAR(26) NOT NULL,
+  specialite      VARCHAR(25),
+  statutJuridique INT4        NOT NULL,
+  siret           VARCHAR(14) NOT NULL,
+  dateCreation    DATE        NOT NULL,
+  isVerifier      BOOLEAN     NOT NULL,
+  adresse_id      INT8,
+  paiement_id     INT8,
+  PRIMARY KEY (id)
+);
 
-    alter table Entreprise 
-        add constraint entreprise_adresse
-        foreign key (adresse_id) 
-        references Adresse ON DELETE CASCADE;
+CREATE TABLE Avis (
+  id          BIGSERIAL    NOT NULL,
+  commentaire VARCHAR(500) NOT NULL,
+  score       FLOAT8       NOT NULL,
+  dateAvis    TIMESTAMP    NOT NULL,
+  artisan_fk  INT8,
+  PRIMARY KEY (id)
+);
 
-    alter table Entreprise 
-        add constraint entreprise_paiement 
-        foreign key (paiement_id) 
-        references Paiement ON DELETE CASCADE;
+CREATE TABLE Paiement (
+  id                    BIGSERIAL    NOT NULL,
+  codeSecurite          VARCHAR(255) NOT NULL,
+  dateExpiration        DATE         NOT NULL,
+  numeroCarte           VARCHAR(255) NOT NULL,
+  adresseFacturation_id INT8,
+  PRIMARY KEY (id)
+);
 
-    alter table Avis
-        add constraint avis_artisan
-        foreign key (artisan_fk) 
-        references Artisan;
+CREATE TABLE Client (
+  id              BIGSERIAL    NOT NULL,
+  dateInscription TIMESTAMP    NOT NULL,
+  email           VARCHAR(128) NOT NULL,
+  login           VARCHAR(25)  NOT NULL,
+  nom             VARCHAR(20),
+  numeroTel       VARCHAR(10),
+  password        VARCHAR(80)  NOT NULL,
+  prenom          VARCHAR(20),
+  isActive        BOOLEAN      NOT NULL,
+  cleActivation   VARCHAR(255),
+  PRIMARY KEY (id)
+);
 
-    alter table Paiement 
-        add constraint paiement_adresse 
-        foreign key (adresseFacturation_id) 
-        references Adresse ON DELETE CASCADE;
-        
-    alter table Permission
-        add constraint artisan_permission 
-        foreign key (artisan_fk) 
-        references Artisan;
-        
-    alter table Permission
-        add constraint client_permission 
-        foreign key (client_fk) 
-        references Client;
-        
-    alter table annonce_artisan 
-        add constraint annonce_artisan 
-        foreign key (artisans_id) 
-        references Artisan;
-        
-    alter table annonce_artisan 
-        add constraint artisan_annonce 
-        foreign key (Annonce_id) 
-        references Annonce;
-        
-    alter table Notification 
-        add constraint notification_artisan2
-        foreign key (id_artisan) 
-        references Artisan;
-        
-    alter table Notification 
-        add constraint notification_client
-        foreign key (id_client) 
-        references Client;
-        
-    alter table Notification 
-        add constraint notification_annonce
-        foreign key (id_annonce) 
-        references Annonce ON DELETE CASCADE;
-        
-    alter table Image
-        add constraint image_annonce
-        foreign key (id_annonce)
-        references Annonce ON DELETE CASCADE;
+CREATE TABLE Permission (
+  id         BIGSERIAL NOT NULL,
+  typeCompte INT4      NOT NULL,
+  client_fk  INT8,
+  artisan_fk INT8,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE annonce_artisan (
+  Annonce_id  INT8 NOT NULL,
+  artisans_id INT8 NOT NULL
+);
+
+CREATE TABLE Notification (
+  id                  BIGSERIAL NOT NULL,
+  dateNotification    TIMESTAMP NOT NULL,
+  typeNotification    INT4      NOT NULL,
+  pourQuiNotification INT4      NOT NULL,
+  statutNotification  INT4      NOT NULL,
+  id_artisan          INT8,
+  id_client           INT8,
+  id_annonce          INT8,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE Image (
+  id            BIGSERIAL    NOT NULL,
+  url           VARCHAR(255) NOT NULL,
+  id_annonce    INT8,
+  id_entreprise INT8,
+  PRIMARY KEY (id)
+);
+
+ALTER TABLE Annonce
+ADD CONSTRAINT annonce_adresse
+FOREIGN KEY (adresseChantier_id)
+REFERENCES Adresse ON DELETE CASCADE;
+
+ALTER TABLE Annonce
+ADD CONSTRAINT annonce_client
+FOREIGN KEY (demandeur_fk)
+REFERENCES Client;
+
+ALTER TABLE Annonce
+ADD CONSTRAINT annonce_avis
+FOREIGN KEY (avis_id)
+REFERENCES Avis ON DELETE CASCADE;
+
+ALTER TABLE Annonce
+ADD CONSTRAINT annonce_entreprise
+FOREIGN KEY (entreprise_selectionnee_fk)
+REFERENCES Entreprise;
+
+ALTER TABLE Artisan
+ADD CONSTRAINT artisan_entreprise
+FOREIGN KEY (entreprise_id)
+REFERENCES Entreprise ON DELETE CASCADE;
+
+ALTER TABLE CategorieMetier
+ADD CONSTRAINT categorie_metier_entreprise
+FOREIGN KEY (entreprise_fk)
+REFERENCES Entreprise;
+
+ALTER TABLE Entreprise
+ADD CONSTRAINT entreprise_adresse
+FOREIGN KEY (adresse_id)
+REFERENCES Adresse ON DELETE CASCADE;
+
+ALTER TABLE Entreprise
+ADD CONSTRAINT entreprise_paiement
+FOREIGN KEY (paiement_id)
+REFERENCES Paiement ON DELETE CASCADE;
+
+ALTER TABLE Avis
+ADD CONSTRAINT avis_artisan
+FOREIGN KEY (artisan_fk)
+REFERENCES Artisan;
+
+ALTER TABLE Paiement
+ADD CONSTRAINT paiement_adresse
+FOREIGN KEY (adresseFacturation_id)
+REFERENCES Adresse ON DELETE CASCADE;
+
+ALTER TABLE Permission
+ADD CONSTRAINT artisan_permission
+FOREIGN KEY (artisan_fk)
+REFERENCES Artisan;
+
+ALTER TABLE Permission
+ADD CONSTRAINT client_permission
+FOREIGN KEY (client_fk)
+REFERENCES Client;
+
+ALTER TABLE annonce_artisan
+ADD CONSTRAINT annonce_artisan
+FOREIGN KEY (artisans_id)
+REFERENCES Artisan;
+
+ALTER TABLE annonce_artisan
+ADD CONSTRAINT artisan_annonce
+FOREIGN KEY (Annonce_id)
+REFERENCES Annonce;
+
+ALTER TABLE Notification
+ADD CONSTRAINT notification_artisan2
+FOREIGN KEY (id_artisan)
+REFERENCES Artisan;
+
+ALTER TABLE Notification
+ADD CONSTRAINT notification_client
+FOREIGN KEY (id_client)
+REFERENCES Client;
+
+ALTER TABLE Notification
+ADD CONSTRAINT notification_annonce
+FOREIGN KEY (id_annonce)
+REFERENCES Annonce ON DELETE CASCADE;
+
+ALTER TABLE Image
+ADD CONSTRAINT image_annonce
+FOREIGN KEY (id_annonce)
+REFERENCES Annonce ON DELETE CASCADE;
+
+ALTER TABLE Image
+ADD CONSTRAINT image_entreprise
+FOREIGN KEY (id_entreprise)
+REFERENCES Entreprise ON DELETE CASCADE;

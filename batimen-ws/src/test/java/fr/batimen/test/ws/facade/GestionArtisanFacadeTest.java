@@ -105,8 +105,13 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
         assertNotNull(entrepriseDTO);
         assertEquals("Pebronne enterprise", entrepriseDTO.getNomComplet());
         assertTrue(!entrepriseDTO.getCategoriesMetier().isEmpty());
+
         assertNotNull(entrepriseDTO.getAdresseEntreprise());
         assertEquals("106 chemin du pébron", entrepriseDTO.getAdresseEntreprise().getAdresse());
+
+        assertNotNull(entrepriseDTO.getPhotosChantiersTemoins());
+        assertFalse(entrepriseDTO.getPhotosChantiersTemoins().isEmpty());
+
     }
 
     @Test
@@ -210,6 +215,9 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
 
         assertEquals(Double.valueOf("4.0"), entrepriseDTO.getMoyenneAvis());
         assertEquals(Integer.valueOf(3), entrepriseDTO.getNbAnnonce());
+
+        assertNotNull(entrepriseDTO.getPhotosChantiersTemoins());
+        assertFalse(entrepriseDTO.getPhotosChantiersTemoins().isEmpty());
     }
 
     /**

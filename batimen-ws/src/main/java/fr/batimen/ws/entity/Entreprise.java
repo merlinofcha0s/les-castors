@@ -83,6 +83,11 @@ public class Entreprise extends AbstractEntity implements Serializable {
             cascade = CascadeType.REMOVE,
             fetch = FetchType.LAZY)
     private Set<CategorieMetier> categoriesMetier = new HashSet<CategorieMetier>();
+    @OneToMany(mappedBy = "entreprise",
+            targetEntity = Image.class,
+            cascade = CascadeType.REMOVE,
+            fetch = FetchType.LAZY)
+    private Set<Image> imagesChantierTemoin = new HashSet<Image>();
 
     /**
      * @return the id
@@ -287,11 +292,19 @@ public class Entreprise extends AbstractEntity implements Serializable {
         this.isVerifier = isVerifier;
     }
 
+    public Set<Image> getImagesChantierTemoin() {
+        return imagesChantierTemoin;
+    }
+
+    public void setImagesChantierTemoin(Set<Image> imagesChantierTemoin) {
+        this.imagesChantierTemoin = imagesChantierTemoin;
+    }
+
     /*
-         * (non-Javadoc)
-         *
-         * @see java.lang.Object#hashCode()
-         */
+             * (non-Javadoc)
+             *
+             * @see java.lang.Object#hashCode()
+             */
     @Override
     public int hashCode() {
         return Objects.hashCode(Objects.hash(this.nomComplet, this.statutJuridique, this.nbEmployees));

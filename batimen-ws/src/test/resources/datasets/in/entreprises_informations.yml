@@ -156,3 +156,7 @@ annonce:
     adressechantier_id: 1005
     avis_id: 1022
     entreprise_selectionnee_fk: 1003
+image:
+  - id: 1000
+    url: http://lol.com
+    id_entreprise: 1003

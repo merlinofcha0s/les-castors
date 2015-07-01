@@ -9,6 +9,7 @@ import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.app.security.RolesUtils;
 import fr.batimen.web.client.component.Commentaire;
 import fr.batimen.web.client.component.ContactezNous;
+import fr.batimen.web.client.component.PhotosContainer;
 import fr.batimen.web.client.component.Profil;
 import fr.batimen.web.client.extend.nouveau.artisan.Etape3Entreprise;
 import fr.batimen.web.client.extend.nouveau.devis.Etape4InscriptionForm;
@@ -37,6 +38,8 @@ public class ModifierMonProfil extends MasterPage {
     @Inject
     private RolesUtils rolesUtils;
 
+    private EntrepriseDTO entreprise;
+
     private CompoundPropertyModel<CreationAnnonceDTO> propertyModelNouvelleAnnonce;
     private CompoundPropertyModel<CreationPartenaireDTO> propertyModelNouveauPartenaire;
 
@@ -62,7 +65,14 @@ public class ModifierMonProfil extends MasterPage {
 
         Etape3Entreprise entrepriseModif = new Etape3Entreprise("etape3InformationsEntreprise",
                 propertyModelNouveauPartenaire, propertyModelNouveauPartenaire.getObject()
-                , true){
+                , true) {
+            @Override
+            public boolean isVisible() {
+                return rolesUtils.checkRoles(TypeCompte.ARTISAN);
+            }
+        };
+
+        PhotosContainer photoChantierTemoin = new PhotosContainer("photoChantierTemoin", entreprise.getPhotosChantiersTemoins(), "Vos photos de chantiers témoins", "h5", true) {
             @Override
             public boolean isVisible() {
                 return rolesUtils.checkRoles(TypeCompte.ARTISAN);
@@ -72,7 +82,7 @@ public class ModifierMonProfil extends MasterPage {
         ContactezNous contactezNous = new ContactezNous("contactezNous");
         Commentaire commentaire = new Commentaire("commentaire");
 
-        this.add(profil, inscriptionForm, entrepriseModif, contactezNous, commentaire);
+        this.add(profil, inscriptionForm, entrepriseModif, photoChantierTemoin, contactezNous, commentaire);
     }
 
     private void initData() {
@@ -90,8 +100,8 @@ public class ModifierMonProfil extends MasterPage {
         creationAnnonceDTO.setClient(client);
         propertyModelNouvelleAnnonce = new CompoundPropertyModel<>(creationAnnonceDTO);
 
-        if(rolesUtils.checkRoles(TypeCompte.ARTISAN)){
-            EntrepriseDTO entreprise = EntrepriseDTO.copy(authentication.getEntrepriseUserInfo());
+        if (rolesUtils.checkRoles(TypeCompte.ARTISAN)) {
+            entreprise = EntrepriseDTO.copy(authentication.getEntrepriseUserInfo());
             ModelMapper mapper = new ModelMapper();
             mapper.map(entreprise, creationPartenaireDTO.getEntreprise());
             mapper.map(entreprise.getAdresseEntreprise(), creationPartenaireDTO.getAdresse());

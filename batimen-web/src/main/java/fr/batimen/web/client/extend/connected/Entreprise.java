@@ -3,7 +3,6 @@ package fr.batimen.web.client.extend.connected;
 import fr.batimen.dto.AvisDTO;
 import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.EntrepriseDTO;
-import fr.batimen.dto.ImageDTO;
 import fr.batimen.dto.enums.StatutJuridique;
 import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.web.app.constants.ParamsConstant;
@@ -27,7 +26,6 @@ import org.apache.wicket.request.mapper.parameter.PageParameters;
 
 import javax.inject.Inject;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -220,7 +218,7 @@ public class Entreprise extends MasterPage {
     }
 
     private void initPhotoChantierTemoinContainer(){
-        PhotosContainer photosChantierTemoin = new PhotosContainer("photoChantierTemoin", new ArrayList<ImageDTO>(), "Chantiers témoins", "h2", false){
+        PhotosContainer photosChantierTemoin = new PhotosContainer("photoChantierTemoin", entrepriseDTO.getPhotosChantiersTemoins(), "Chantiers témoins", "h2", false){
             @Override
             public boolean isVisible() {
                 return !entrepriseDTO.getPhotosChantiersTemoins().isEmpty();

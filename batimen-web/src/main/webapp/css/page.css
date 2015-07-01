@@ -913,6 +913,10 @@ table tr td .error {
     vertical-align: top;
 }
 
+#photoChantierTemoin{
+    padding-top: 15px;
+}
+
 .icon-specialite{
     font-size: 21px;
     padding-right: 15px;
