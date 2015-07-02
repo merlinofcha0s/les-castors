@@ -199,6 +199,15 @@ public class PhotosContainer extends Panel {
             }
         };
 
+        Label titleContainerAddPhoto = new Label("titleContainerAddPhoto", "Ajouter des photos") {
+
+            @Override
+            protected void onComponentTag(ComponentTag tag) {
+                super.onComponentTag(tag);
+                tag.setName(baliseTypeTitle);
+            }
+        };
+
         Form<AjoutPhotoDTO> addPhotoForm = new Form<AjoutPhotoDTO>("addPhotoForm");
 
         final FileUploadField photoField = new FileUploadField("photoField");
@@ -224,7 +233,7 @@ public class PhotosContainer extends Panel {
         envoyerPhotos.setMarkupId("envoyerPhotos");
 
         addPhotoForm.add(photoField, envoyerPhotos);
-        ajoutPhotoContainer.add(addPhotoForm);
+        ajoutPhotoContainer.add(addPhotoForm, titleContainerAddPhoto);
 
         add(ajoutPhotoContainer);
     }

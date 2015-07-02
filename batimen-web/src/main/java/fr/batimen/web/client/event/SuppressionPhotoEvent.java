@@ -14,18 +14,18 @@ public class SuppressionPhotoEvent  extends AbstractEvent {
     private final int nbImagesAvant;
     private List<ImageDTO> images;
     private String login;
-    private String idAnnonce;
+    private String id;
 
     AjaxRequestTarget target;
 
-    public SuppressionPhotoEvent(AjaxRequestTarget target, ImageDTO imageASupprimer, int nbImagesAvant, List<ImageDTO> images, String idAnnonce, String login) {
+    public SuppressionPhotoEvent(AjaxRequestTarget target, ImageDTO imageASupprimer, int nbImagesAvant, List<ImageDTO> images, String id, String login) {
         super(target);
         this.target = target;
         this.imageASupprimer = imageASupprimer;
         this.nbImagesAvant = nbImagesAvant;
         this.images = images;
         this.login = login;
-        this.idAnnonce = idAnnonce;
+        this.id = id;
     }
 
     public ImageDTO getImageASupprimer() {
@@ -40,8 +40,8 @@ public class SuppressionPhotoEvent  extends AbstractEvent {
         return images;
     }
 
-    public String getIdAnnonce() {
-        return idAnnonce;
+    public String getId() {
+        return id;
     }
 
     public String getLogin() {

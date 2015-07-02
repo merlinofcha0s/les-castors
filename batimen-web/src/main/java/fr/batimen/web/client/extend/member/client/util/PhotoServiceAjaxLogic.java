@@ -28,28 +28,55 @@ import java.util.List;
 /**
  * Created by Casaucau on 30/06/2015.
  */
-@Named("photoUtils")
+@Named("photoServiceAjaxLogic")
 public class PhotoServiceAjaxLogic implements Serializable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PhotoServiceAjaxLogic.class);
 
+    private static final String CHANTIER_TEMOIN_PHOTO_SERVICE = "photoChantierTemoinService";
+    private static final String ANNONCE_PHOTO = "annoncePhoto";
+
     @Inject
     private AnnonceServiceREST annonceServiceREST;
 
-    public void suppressionPhoto(IEvent<?> event) {
+    public void suppressionPhotoAnnonce(IEvent<?> event) {
         SuppressionPhotoEvent suppressionPhotoEvent = ((SuppressionPhotoEvent) event.getPayload());
+        suppressionPhoto(suppressionPhotoEvent, ANNONCE_PHOTO);
+    }
+
+    public void ajoutPhotoAnnonce(IEvent<?> event) {
+        AjoutPhotoEvent ajoutPhotoEvent = ((AjoutPhotoEvent) event.getPayload());
+        ajoutPhoto(ajoutPhotoEvent, ANNONCE_PHOTO);
+    }
+
+    public void suppressionPhotoChantierTemoin(IEvent<?> event) {
+        SuppressionPhotoEvent suppressionPhotoEvent = ((SuppressionPhotoEvent) event.getPayload());
+        suppressionPhoto(suppressionPhotoEvent, CHANTIER_TEMOIN_PHOTO_SERVICE);
+    }
+
+    public void ajoutPhotoChantierTemoin(IEvent<?> event) {
+        AjoutPhotoEvent ajoutPhotoEvent = ((AjoutPhotoEvent) event.getPayload());
+        ajoutPhoto(ajoutPhotoEvent, CHANTIER_TEMOIN_PHOTO_SERVICE);
+    }
+
+    private void suppressionPhoto(SuppressionPhotoEvent suppressionPhotoEvent, String serviceName){
         AjaxRequestTarget target = suppressionPhotoEvent.getTarget();
         List<ImageDTO> imageDTOs = suppressionPhotoEvent.getImages();
         String loginDemandeur = suppressionPhotoEvent.getLogin();
-        String idAnnonce = suppressionPhotoEvent.getIdAnnonce();
+        String id = suppressionPhotoEvent.getId();
 
         SuppressionPhotoDTO suppressionPhotoDTO = new SuppressionPhotoDTO();
-        suppressionPhotoDTO.setHashID(idAnnonce);
+        suppressionPhotoDTO.setHashID(id);
         suppressionPhotoDTO.setLoginDemandeur(loginDemandeur);
         suppressionPhotoDTO.setImageASupprimer(suppressionPhotoEvent.getImageASupprimer());
 
         imageDTOs.clear();
-        imageDTOs.addAll(annonceServiceREST.suppressionPhoto(suppressionPhotoDTO));
+        switch (serviceName){
+            case ANNONCE_PHOTO : imageDTOs.addAll(annonceServiceREST.suppressionPhoto(suppressionPhotoDTO));
+                break;
+            case CHANTIER_TEMOIN_PHOTO_SERVICE : //TODO Appel du service de suppression de photo chantier témoin
+                break;
+        }
 
         if (suppressionPhotoEvent.getNbImagesAvant() != imageDTOs.size()) {
             target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Suppression effectuée !", FeedbackMessageLevel.SUCCESS));
@@ -58,12 +85,11 @@ public class PhotoServiceAjaxLogic implements Serializable {
         }
     }
 
-    public void ajoutPhoto(IEvent<?> event) {
-        AjoutPhotoEvent ajoutPhotoEvent = ((AjoutPhotoEvent) event.getPayload());
+    private void ajoutPhoto(AjoutPhotoEvent ajoutPhotoEvent, String serviceName) {
         AjaxRequestTarget target = ajoutPhotoEvent.getTarget();
 
         String loginDemandeur = ajoutPhotoEvent.getLoginDemandeur();
-        String idAnnonce = ajoutPhotoEvent.getIdAnnonce();
+        String id = ajoutPhotoEvent.getId();
         FileUploadField photoField = ajoutPhotoEvent.getPhotoField();
         FileFieldValidatorAndLoaderBehaviour fileFieldValidatorBehaviour = ajoutPhotoEvent.getFileFieldValidatorBehaviour();
         List<ImageDTO> images = ajoutPhotoEvent.getImageDTOs();
@@ -82,13 +108,17 @@ public class PhotoServiceAjaxLogic implements Serializable {
         if (!fileFieldValidatorBehaviour.isValidationOK()) {
             target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Validation erronnée de vos photos, veuillez corriger", FeedbackMessageLevel.ERROR));
         } else {
-
             //Ajout des photos
-            ajoutImageDTO.setHashID(idAnnonce);
+            ajoutImageDTO.setHashID(id);
             ajoutImageDTO.setLoginDemandeur(loginDemandeur);
             int sizeBefore = ajoutPhotoEvent.getNbImages();
             images.clear();
-            images.addAll(annonceServiceREST.ajouterPhoto(ajoutImageDTO));
+            switch (serviceName){
+                case ANNONCE_PHOTO : images.addAll(annonceServiceREST.ajouterPhoto(ajoutImageDTO));
+                    break;
+                case CHANTIER_TEMOIN_PHOTO_SERVICE : //TODO Appel du service d'ajout de photo chantier témoin
+                    break;
+            }
 
             if (sizeBefore == images.size()) {
                 StringBuilder sbErrorTropPhoto = new StringBuilder("Vous dépassez le nombre de photos autorisées par annonce, veuillez en supprimer avant d'en rajouter ! (Pour rappel la limite est de ");

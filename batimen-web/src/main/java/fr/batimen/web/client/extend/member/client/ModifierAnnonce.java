@@ -56,7 +56,7 @@ public class ModifierAnnonce extends MasterPage {
     private Authentication authentication;
 
     @Inject
-    private PhotoServiceAjaxLogic photoUtils;
+    private PhotoServiceAjaxLogic photoServiceAjaxLogic;
 
     private Etape3AnnonceForm etape3AnnonceForm;
 
@@ -192,12 +192,12 @@ public class ModifierAnnonce extends MasterPage {
         }
 
         if (event.getPayload() instanceof SuppressionPhotoEvent) {
-            photoUtils.suppressionPhoto(event);
+            photoServiceAjaxLogic.suppressionPhotoAnnonce(event);
             photosContainer.updatePhotoContainer(((SuppressionPhotoEvent) event.getPayload()).getTarget());
         }
 
         if (event.getPayload() instanceof AjoutPhotoEvent) {
-            photoUtils.ajoutPhoto(event);
+            photoServiceAjaxLogic.ajoutPhotoAnnonce(event);
             photosContainer.updatePhotoContainer(((AjoutPhotoEvent) event.getPayload()).getTarget());
         }
     }

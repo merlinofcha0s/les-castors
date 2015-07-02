@@ -13,7 +13,7 @@ import java.util.List;
 public class AjoutPhotoEvent extends AbstractEvent {
 
     private String loginDemandeur;
-    private String idAnnonce;
+    private String id;
     private FileUploadField photoField;
     private FileFieldValidatorAndLoaderBehaviour fileFieldValidatorBehaviour;
     private List<ImageDTO> imageDTOs;
@@ -23,7 +23,7 @@ public class AjoutPhotoEvent extends AbstractEvent {
             , FileFieldValidatorAndLoaderBehaviour fileFieldValidatorBehaviour, List<ImageDTO> imageDTOs, int nbImages) {
         super(target);
         this.loginDemandeur = loginDemandeur;
-        this.idAnnonce = idAnnonce;
+        this.id = idAnnonce;
         this.photoField = photoField;
         this.fileFieldValidatorBehaviour = fileFieldValidatorBehaviour;
         this.imageDTOs = imageDTOs;
@@ -34,8 +34,8 @@ public class AjoutPhotoEvent extends AbstractEvent {
         return loginDemandeur;
     }
 
-    public String getIdAnnonce() {
-        return idAnnonce;
+    public String getId() {
+        return id;
     }
 
     public FileUploadField getPhotoField() {
