@@ -78,7 +78,7 @@ public class AnnonceServiceTest {
 
         SuppressionPhotoDTO suppressionPhotoDTO = new SuppressionPhotoDTO();
         suppressionPhotoDTO.setLoginDemandeur(loginDemandeur);
-        suppressionPhotoDTO.setHashID(hashID);
+        suppressionPhotoDTO.setId(hashID);
         suppressionPhotoDTO.setImageASupprimer(imageDTO);
 
         List<ImageDTO> imageDTOs = annonceServiceREST.suppressionPhoto(suppressionPhotoDTO);
@@ -91,7 +91,7 @@ public class AnnonceServiceTest {
 
     public List<ImageDTO> testGetPhoto(String login) {
         DemandeAnnonceDTO demandeAnnonceDTO = new DemandeAnnonceDTO();
-        demandeAnnonceDTO.setHashID("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
+        demandeAnnonceDTO.setId("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
         demandeAnnonceDTO.setLoginDemandeur(login);
 
         return annonceServiceREST.getPhotos(demandeAnnonceDTO);
@@ -104,7 +104,7 @@ public class AnnonceServiceTest {
 
         AjoutPhotoDTO ajoutPhotoDTO = new AjoutPhotoDTO();
         ajoutPhotoDTO.setLoginDemandeur(login);
-        ajoutPhotoDTO.setHashID("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
+        ajoutPhotoDTO.setId("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
         ajoutPhotoDTO.getImages().add(file);
 
         List<ImageDTO> imageDTOs = annonceServiceREST.ajouterPhoto(ajoutPhotoDTO);
@@ -123,7 +123,7 @@ public class AnnonceServiceTest {
 
         ModificationAnnonceDTO modificationAnnonceDTO = new ModificationAnnonceDTO();
         modificationAnnonceDTO.setAnnonce(annonceAffichage.getAnnonce());
-        modificationAnnonceDTO.getAnnonce().setHashID(demandeAnnonceDTO.getHashID());
+        modificationAnnonceDTO.getAnnonce().setHashID(demandeAnnonceDTO.getId());
         modificationAnnonceDTO.setAdresse(annonceAffichage.getAdresse());
         modificationAnnonceDTO.setLoginDemandeur(loginDemandeur);
 
@@ -157,7 +157,7 @@ public class AnnonceServiceTest {
     public Annonce testDesinscriptionArtisan(String loginDemandeur) {
         DesinscriptionAnnonceDTO desinscriptionAnnonceDTO = new DesinscriptionAnnonceDTO();
         desinscriptionAnnonceDTO
-                .setHashID("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
+                .setId("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
         desinscriptionAnnonceDTO.setLoginDemandeur(loginDemandeur);
         desinscriptionAnnonceDTO.setLoginArtisan("pebronneArtisanne");
 
@@ -175,7 +175,7 @@ public class AnnonceServiceTest {
 
     public DemandeAnnonceDTO initAndGetDemandeAnnonceDTO(String hash, String loginDemandeur, TypeCompte typeCompte) {
         DemandeAnnonceDTO demandeAnnonceDTO = new DemandeAnnonceDTO();
-        demandeAnnonceDTO.setHashID(hash);
+        demandeAnnonceDTO.setId(hash);
         demandeAnnonceDTO.setLoginDemandeur(loginDemandeur);
         demandeAnnonceDTO.setTypeCompteDemandeur(typeCompte);
         return demandeAnnonceDTO;
@@ -203,7 +203,7 @@ public class AnnonceServiceTest {
 
     public DemandeAnnonceDTO createDemandeAnnonceDTO(String hashID, String login, TypeCompte typeCompte) {
         DemandeAnnonceDTO demandeAnnonceDTO = new DemandeAnnonceDTO();
-        demandeAnnonceDTO.setHashID(hashID);
+        demandeAnnonceDTO.setId(hashID);
         demandeAnnonceDTO.setLoginDemandeur(login);
         demandeAnnonceDTO.setTypeCompteDemandeur(typeCompte);
         return demandeAnnonceDTO;

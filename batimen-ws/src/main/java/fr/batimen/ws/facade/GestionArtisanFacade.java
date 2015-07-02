@@ -1,6 +1,9 @@
 package fr.batimen.ws.facade;
 
 import com.microtripit.mandrillapp.lutung.model.MandrillApiError;
+import com.sun.jersey.core.header.FormDataContentDisposition;
+import com.sun.jersey.multipart.FormDataBodyPart;
+import com.sun.jersey.multipart.FormDataParam;
 import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.WsPath;
@@ -9,6 +12,8 @@ import fr.batimen.core.exception.EmailException;
 import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.EntrepriseDTO;
 import fr.batimen.dto.AvisDTO;
+import fr.batimen.dto.ImageDTO;
+import fr.batimen.dto.aggregate.AjoutPhotoDTO;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
@@ -17,10 +22,8 @@ import fr.batimen.ws.entity.*;
 import fr.batimen.ws.enums.PropertiesFileWS;
 import fr.batimen.ws.helper.JsonHelper;
 import fr.batimen.ws.interceptor.BatimenInterceptor;
-import fr.batimen.ws.service.ArtisanService;
-import fr.batimen.ws.service.EmailService;
-import fr.batimen.ws.service.EntrepriseService;
-import fr.batimen.ws.service.NotationService;
+import fr.batimen.ws.service.*;
+import fr.batimen.ws.utils.FluxUtils;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +36,10 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -80,6 +86,9 @@ public class GestionArtisanFacade {
 
     @Inject
     private NotationService notationService;
+
+    @Inject
+    private PhotoService photoService;
 
     /**
      * Service de création d'un nouveau partenaire Artisan
@@ -234,7 +243,7 @@ public class GestionArtisanFacade {
         //Stats
         Double moyenneAvis = 0.0;
         int nbAvis = 0;
-        for(AvisDTO notationDTO : entrepriseDTO.getNotationsDTO()){
+        for (AvisDTO notationDTO : entrepriseDTO.getNotationsDTO()) {
             moyenneAvis += notationDTO.getScore();
             nbAvis++;
         }
@@ -259,5 +268,56 @@ public class GestionArtisanFacade {
     public List<AvisDTO> getEntrepriseNotationBySiret(String siret) {
         String siretEscaped = DeserializeJsonHelper.parseString(siret);
         return notationService.getNotationBySiret(siretEscaped, 0);
+    }
+
+    /**
+     * Service qui permet à un artisan de pouvoir ajouter / rajouter des photos de chantier témoin<br/>
+     * <p/>
+     * Mode multipart, en plus du JSON la request contient des photos.
+     *
+     * @param content     L'objet provenant du frontend qui permet l'ajout de photo
+     * @param files       Liste contenant l'ensemble des photos.
+     * @param filesDetail Liste contenant les metadata des photos du client.
+     * @return La liste des images appartenant à l'utilisateur contenu dans cloudinary.
+     */
+    @POST
+    @Path(WsPath.GESTION_PARTENAIRE_SERVICE_AJOUT_PHOTO_CHANTIER_TEMOIN)
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public List<ImageDTO> ajouterPhoto(@FormDataParam("content") final InputStream content,
+                                       @FormDataParam("files") final List<FormDataBodyPart> files,
+                                       @FormDataParam("files") final List<FormDataContentDisposition> filesDetail) {
+
+        AjoutPhotoDTO ajoutPhotoDTO = DeserializeJsonHelper.deserializeDTO(
+                FluxUtils.getJsonByInputStream(content), AjoutPhotoDTO.class);
+
+        if (LOGGER.isDebugEnabled()) {
+            for (FormDataContentDisposition fileDetail : filesDetail) {
+                LOGGER.debug("Details fichier : {}", fileDetail);
+            }
+        }
+
+        Entreprise entrepriseAjoutPhotos = entrepriseDAO.getEntrepriseBySiret(ajoutPhotoDTO.getId());
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Chargement de l'entreprise en cours, grace à la DTO en entrée : {}", ajoutPhotoDTO.toString());
+        }
+
+        if (entrepriseAjoutPhotos == null) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Impossible de trouver l'entreprise avec le compte demandé, Détails : {}", ajoutPhotoDTO.toString());
+            }
+            return new ArrayList<>();
+        }
+
+        List<String> urlsPhoto = photoService.transformAndSendToCloud(files, entrepriseAjoutPhotos.getImagesChantierTemoin());
+
+        if (!urlsPhoto.isEmpty()) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Persistance des urls des images");
+            }
+            photoService.persistPhoto(entrepriseAjoutPhotos, urlsPhoto);
+        }
+        return photoService.imageToImageDTO(entrepriseAjoutPhotos.getImagesChantierTemoin());
     }
 }

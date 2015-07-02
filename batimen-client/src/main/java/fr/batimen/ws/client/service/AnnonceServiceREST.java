@@ -8,6 +8,7 @@ import fr.batimen.dto.ImageDTO;
 import fr.batimen.dto.aggregate.*;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 import fr.batimen.ws.client.WsConnector;
+import fr.batimen.ws.client.service.commons.CommonService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,6 +31,9 @@ public class AnnonceServiceREST implements Serializable {
 
     @Inject
     private WsConnector wsConnector;
+
+    @Inject
+    private CommonService commonsService;
 
     /**
      * Appel le webservice pour creer l'annonce.
@@ -295,20 +299,8 @@ public class AnnonceServiceREST implements Serializable {
      * @return {@link CodeRetourService}
      */
     public List<ImageDTO> ajouterPhoto(AjoutPhotoDTO ajoutPhotoDTO) {
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Début appel service d'ajout de photo pour une annonce.....");
-        }
-
-        String objectInJSON = wsConnector.sendRequestWithFile(WsPath.GESTION_ANNONCE_SERVICE_PATH,
-                WsPath.GESTION_ANNONCE_SERVICE_AJOUT_PHOTO, ajoutPhotoDTO.getImages(), ajoutPhotoDTO);
-
-        TypeToken<List<ImageDTO>> tokenImage = new TypeToken<List<ImageDTO>>(){};
-        List<ImageDTO> imageDTOs = DeserializeJsonHelper.deserializeDTOList(objectInJSON, tokenImage);
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Fin appel service d'ajout de photo  pour une annonce.");
-        }
-        return imageDTOs;
+        return commonsService.ajouterPhoto(ajoutPhotoDTO, WsPath.GESTION_ANNONCE_SERVICE_PATH,
+                WsPath.GESTION_ANNONCE_SERVICE_AJOUT_PHOTO);
     }
 
     public List<ImageDTO> getPhotos(DemandeAnnonceDTO demandeAnnonceDTO) {

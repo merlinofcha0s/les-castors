@@ -34,19 +34,19 @@ public class PhotoServiceAjaxLogic implements Serializable {
     private static final Logger LOGGER = LoggerFactory.getLogger(PhotoServiceAjaxLogic.class);
 
     private static final String CHANTIER_TEMOIN_PHOTO_SERVICE = "photoChantierTemoinService";
-    private static final String ANNONCE_PHOTO = "annoncePhoto";
+    private static final String ANNONCE_PHOTO_SERVICE = "annoncePhotoService";
 
     @Inject
     private AnnonceServiceREST annonceServiceREST;
 
     public void suppressionPhotoAnnonce(IEvent<?> event) {
         SuppressionPhotoEvent suppressionPhotoEvent = ((SuppressionPhotoEvent) event.getPayload());
-        suppressionPhoto(suppressionPhotoEvent, ANNONCE_PHOTO);
+        suppressionPhoto(suppressionPhotoEvent, ANNONCE_PHOTO_SERVICE);
     }
 
     public void ajoutPhotoAnnonce(IEvent<?> event) {
         AjoutPhotoEvent ajoutPhotoEvent = ((AjoutPhotoEvent) event.getPayload());
-        ajoutPhoto(ajoutPhotoEvent, ANNONCE_PHOTO);
+        ajoutPhoto(ajoutPhotoEvent, ANNONCE_PHOTO_SERVICE);
     }
 
     public void suppressionPhotoChantierTemoin(IEvent<?> event) {
@@ -66,13 +66,13 @@ public class PhotoServiceAjaxLogic implements Serializable {
         String id = suppressionPhotoEvent.getId();
 
         SuppressionPhotoDTO suppressionPhotoDTO = new SuppressionPhotoDTO();
-        suppressionPhotoDTO.setHashID(id);
+        suppressionPhotoDTO.setId(id);
         suppressionPhotoDTO.setLoginDemandeur(loginDemandeur);
         suppressionPhotoDTO.setImageASupprimer(suppressionPhotoEvent.getImageASupprimer());
 
         imageDTOs.clear();
         switch (serviceName){
-            case ANNONCE_PHOTO : imageDTOs.addAll(annonceServiceREST.suppressionPhoto(suppressionPhotoDTO));
+            case ANNONCE_PHOTO_SERVICE: imageDTOs.addAll(annonceServiceREST.suppressionPhoto(suppressionPhotoDTO));
                 break;
             case CHANTIER_TEMOIN_PHOTO_SERVICE : //TODO Appel du service de suppression de photo chantier témoin
                 break;
@@ -109,12 +109,12 @@ public class PhotoServiceAjaxLogic implements Serializable {
             target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Validation erronnée de vos photos, veuillez corriger", FeedbackMessageLevel.ERROR));
         } else {
             //Ajout des photos
-            ajoutImageDTO.setHashID(id);
+            ajoutImageDTO.setId(id);
             ajoutImageDTO.setLoginDemandeur(loginDemandeur);
             int sizeBefore = ajoutPhotoEvent.getNbImages();
             images.clear();
             switch (serviceName){
-                case ANNONCE_PHOTO : images.addAll(annonceServiceREST.ajouterPhoto(ajoutImageDTO));
+                case ANNONCE_PHOTO_SERVICE: images.addAll(annonceServiceREST.ajouterPhoto(ajoutImageDTO));
                     break;
                 case CHANTIER_TEMOIN_PHOTO_SERVICE : //TODO Appel du service d'ajout de photo chantier témoin
                     break;

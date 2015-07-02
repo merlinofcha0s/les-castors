@@ -47,6 +47,7 @@ public class WsPath {
     public static final String GESTION_PARTENAIRE_SERVICE_SAVE_ENTREPRISE_INFORMATION = "saveEntrepriseInformation";
     public static final String GESTION_PARTENAIRE_SERVICE_GET_ENTREPISE_INFORMATION_BY_SIRET = "getEntrepriseInformationBySiret";
     public static final String GESTION_PARTENAIRE_SERVICE_GET_NOTATION_BY_SIRET = "getEntrepriseNotationBySiret";
+    public static final String GESTION_PARTENAIRE_SERVICE_AJOUT_PHOTO_CHANTIER_TEMOIN = "ajoutPhotoChantierTemoin";
 
     // Path Envoi mail de contact
     public static final String MAIL_SERVICE_PATH = "mailService";

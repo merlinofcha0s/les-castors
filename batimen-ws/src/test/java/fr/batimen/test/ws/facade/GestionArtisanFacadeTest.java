@@ -3,6 +3,7 @@ package fr.batimen.test.ws.facade;
 import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.security.HashHelper;
 import fr.batimen.dto.*;
+import fr.batimen.dto.aggregate.AjoutPhotoDTO;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
 import fr.batimen.dto.enums.Civilite;
 import fr.batimen.dto.enums.StatutJuridique;
@@ -18,9 +19,11 @@ import fr.batimen.ws.entity.Entreprise;
 import fr.batimen.ws.entity.Permission;
 import org.jboss.arquillian.persistence.ShouldMatchDataSet;
 import org.jboss.arquillian.persistence.UsingDataSet;
+import org.junit.Assert;
 import org.junit.Test;
 
 import javax.inject.Inject;
+import java.io.File;
 import java.util.*;
 
 import static org.junit.Assert.*;
@@ -229,5 +232,31 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
     public void getNotationBySiretNominal(){
         List<AvisDTO> notations = artisanServiceREST.getEntrepriseNotationBySiret("43394298400017");
         assertEquals(3, notations.size());
+    }
+
+    /**
+     * Cas de test : L'artisan cherche a rajouter des photos de chantier témoin
+     *
+     */
+    @Test
+    @UsingDataSet("datasets/in/entreprises_informations.yml")
+    public void ajoutPhotoChantierTemoinNominal(){
+        testAjoutPhotoChantier("pebronneArtisanne", 2);
+    }
+
+    public void testAjoutPhotoChantier(String login, int nbImageAttendu) {
+        // On recupére la photo dans les ressources de la webapp de test
+        ClassLoader classLoader = getClass().getClassLoader();
+        File file = new File(classLoader.getResource("img/castor.jpg").getFile());
+
+        AjoutPhotoDTO ajoutPhotoDTO = new AjoutPhotoDTO();
+        ajoutPhotoDTO.setLoginDemandeur(login);
+        ajoutPhotoDTO.setId("43394298400017");
+        ajoutPhotoDTO.getImages().add(file);
+
+        List<ImageDTO> imageDTOs = artisanServiceREST.ajouterPhotosChantierTemoin(ajoutPhotoDTO);
+
+        Assert.assertNotNull(imageDTOs);
+        Assert.assertEquals(nbImageAttendu, imageDTOs.size());
     }
 }
