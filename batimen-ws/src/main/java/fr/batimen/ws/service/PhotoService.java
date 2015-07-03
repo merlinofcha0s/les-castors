@@ -211,4 +211,25 @@ public class PhotoService {
         }
         return sendPhotoToCloud(photos);
     }
+
+    /**
+     * Récupère les images d'une annonces
+     * <p/>
+     * Check les droits du demandeur et dans le cas d'un artisan verifie qu'il possede bien l'entreprise.
+     *
+     * @param rolesDemandeur Le role du demandeur
+     * @param siret         L'identifiant unique de l'entreprise
+     * @param loginDemandeur Le login du demandeur de l'operation
+     * @return L'ensemble des images de l'annonce si pas les droits => null
+     */
+    @TransactionAttribute(TransactionAttributeType.MANDATORY)
+    public List<Image> getImagesBySiretByLoginDemandeur(String rolesDemandeur, String siret, String loginDemandeur) {
+        List<Image> images = null;
+        if (rolesUtils.checkIfClientWithString(rolesDemandeur)) {
+            images = imageDAO.getImageBySiretByArtisan(siret, loginDemandeur);
+        } else if (rolesUtils.checkIfAdminWithString(rolesDemandeur)) {
+            images = imageDAO.getImageBySiret(siret);
+        }
+        return images;
+    }
 }

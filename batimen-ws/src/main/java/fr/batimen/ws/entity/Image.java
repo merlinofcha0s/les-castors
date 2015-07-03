@@ -18,7 +18,11 @@ import javax.persistence.*;
         @NamedQuery(name = QueryJPQL.IMAGE_BY_HASH_ID_AND_LOGIN_CLIENT,
                 query = "SELECT i FROM Image AS i WHERE i.annonce.hashID = :hashID AND i.annonce.demandeur.login = :login"),
         @NamedQuery(name = QueryJPQL.IMAGE_BY_HASH_ID,
-        query = "SELECT i FROM Image AS i WHERE i.annonce.hashID = :hashID")})
+        query = "SELECT i FROM Image AS i WHERE i.annonce.hashID = :hashID"),
+        @NamedQuery(name = QueryJPQL.IMAGE_BY_SIRET,
+                query = "SELECT i FROM Image AS i WHERE i.entreprise.siret = :siret"),
+        @NamedQuery(name = QueryJPQL.IMAGE_BY_SIRET_BY_CLIENT,
+                query = "SELECT i FROM Image AS i WHERE i.entreprise.siret = :siret AND i.entreprise.artisan.login = :login")})
 public class Image extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = 8005599117537733385L;

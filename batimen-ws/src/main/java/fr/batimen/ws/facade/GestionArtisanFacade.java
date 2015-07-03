@@ -287,9 +287,9 @@ public class GestionArtisanFacade {
     @Path(WsPath.GESTION_PARTENAIRE_SERVICE_AJOUT_PHOTO_CHANTIER_TEMOIN)
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public List<ImageDTO> ajouterPhoto(@FormDataParam("content") final InputStream content,
-                                       @FormDataParam("files") final List<FormDataBodyPart> files,
-                                       @FormDataParam("files") final List<FormDataContentDisposition> filesDetail) {
+    public List<ImageDTO> ajouterPhotoChantierTemoin(@FormDataParam("content") final InputStream content,
+                                                     @FormDataParam("files") final List<FormDataBodyPart> files,
+                                                     @FormDataParam("files") final List<FormDataContentDisposition> filesDetail) {
 
         AjoutPhotoDTO ajoutPhotoDTO = DeserializeJsonHelper.deserializeDTO(
                 FluxUtils.getJsonByInputStream(content), AjoutPhotoDTO.class);

@@ -817,7 +817,7 @@ public class GestionAnnonceFacade {
         String rolesDemandeur = utilisateurFacade.get().getUtilisateurRoles(suppressionPhotoDTO.getLoginDemandeur());
         List<Image> images = photoService.getImagesByHashIDByLoginDemandeur(rolesDemandeur, suppressionPhotoDTO.getId(), suppressionPhotoDTO.getLoginDemandeur());
         List<ImageDTO> imageDTOs = new LinkedList<>();
-        //Si c'est images est null ce que l'utilisateur n'a pas les droits
+        //Si cette liste d'images est null c'est que l'utilisateur n'a pas les droits
         if (images == null) {
             return new ArrayList<>();
         }
