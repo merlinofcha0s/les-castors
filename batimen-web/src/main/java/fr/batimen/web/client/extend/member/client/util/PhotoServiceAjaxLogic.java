@@ -5,12 +5,14 @@ import fr.batimen.dto.ImageDTO;
 import fr.batimen.dto.aggregate.AjoutPhotoDTO;
 import fr.batimen.dto.aggregate.SuppressionPhotoDTO;
 import fr.batimen.web.app.constants.FeedbackMessageLevel;
+import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.client.behaviour.FileFieldValidatorAndLoaderBehaviour;
 import fr.batimen.web.client.event.AjoutPhotoEvent;
 import fr.batimen.web.client.event.ClearFeedbackPanelEvent;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.web.client.event.SuppressionPhotoEvent;
 import fr.batimen.ws.client.service.AnnonceServiceREST;
+import fr.batimen.ws.client.service.ArtisanServiceREST;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.event.IEvent;
@@ -39,6 +41,12 @@ public class PhotoServiceAjaxLogic implements Serializable {
     @Inject
     private AnnonceServiceREST annonceServiceREST;
 
+    @Inject
+    private ArtisanServiceREST artisanServiceREST;
+
+    @Inject
+    private Authentication authentication;
+
     public void suppressionPhotoAnnonce(IEvent<?> event) {
         SuppressionPhotoEvent suppressionPhotoEvent = ((SuppressionPhotoEvent) event.getPayload());
         suppressionPhoto(suppressionPhotoEvent, ANNONCE_PHOTO_SERVICE);
@@ -51,11 +59,13 @@ public class PhotoServiceAjaxLogic implements Serializable {
 
     public void suppressionPhotoChantierTemoin(IEvent<?> event) {
         SuppressionPhotoEvent suppressionPhotoEvent = ((SuppressionPhotoEvent) event.getPayload());
+        suppressionPhotoEvent.setId(authentication.getEntrepriseUserInfo().getSiret());
         suppressionPhoto(suppressionPhotoEvent, CHANTIER_TEMOIN_PHOTO_SERVICE);
     }
 
     public void ajoutPhotoChantierTemoin(IEvent<?> event) {
         AjoutPhotoEvent ajoutPhotoEvent = ((AjoutPhotoEvent) event.getPayload());
+        ajoutPhotoEvent.setId(authentication.getEntrepriseUserInfo().getSiret());
         ajoutPhoto(ajoutPhotoEvent, CHANTIER_TEMOIN_PHOTO_SERVICE);
     }
 
@@ -116,7 +126,7 @@ public class PhotoServiceAjaxLogic implements Serializable {
             switch (serviceName){
                 case ANNONCE_PHOTO_SERVICE: images.addAll(annonceServiceREST.ajouterPhoto(ajoutImageDTO));
                     break;
-                case CHANTIER_TEMOIN_PHOTO_SERVICE : //TODO Appel du service d'ajout de photo chantier témoin
+                case CHANTIER_TEMOIN_PHOTO_SERVICE : images.addAll(artisanServiceREST.ajouterPhotosChantierTemoin(ajoutImageDTO));
                     break;
             }
 

@@ -244,6 +244,26 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
         testAjoutPhotoChantier("pebronneArtisanne", 2);
     }
 
+    /**
+     * Cas de test : L'admin cherche a rajouter des photos de chantier témoin sur une entreprise.
+     *
+     */
+    @Test
+    @UsingDataSet("datasets/in/entreprises_informations.yml")
+    public void ajoutPhotoChantierTemoinAdmin(){
+        testAjoutPhotoChantier("admin", 2);
+    }
+
+    /**
+     * Cas de test : L'admin cherche a rajouter des photos de chantier témoin sur une entreprise.
+     *
+     */
+    @Test
+    @UsingDataSet("datasets/in/entreprises_informations.yml")
+    public void ajoutPhotoChantierTemoinAccesRefuse(){
+        testAjoutPhotoChantier("pebronne", 0);
+    }
+
     public void testAjoutPhotoChantier(String login, int nbImageAttendu) {
         // On recupére la photo dans les ressources de la webapp de test
         ClassLoader classLoader = getClass().getClassLoader();

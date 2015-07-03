@@ -47,4 +47,8 @@ public class SuppressionPhotoEvent  extends AbstractEvent {
     public String getLogin() {
         return login;
     }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 }

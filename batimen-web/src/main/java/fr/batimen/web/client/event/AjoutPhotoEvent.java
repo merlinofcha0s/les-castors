@@ -53,4 +53,8 @@ public class AjoutPhotoEvent extends AbstractEvent {
     public int getNbImages() {
         return nbImages;
     }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 }

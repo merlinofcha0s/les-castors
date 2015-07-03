@@ -90,6 +90,9 @@ public class GestionArtisanFacade {
     @Inject
     private PhotoService photoService;
 
+    @Inject
+    private GestionUtilisateurFacade gestionUtilisateurFacade;
+
     /**
      * Service de création d'un nouveau partenaire Artisan
      *
@@ -297,7 +300,8 @@ public class GestionArtisanFacade {
             }
         }
 
-        Entreprise entrepriseAjoutPhotos = entrepriseDAO.getEntrepriseBySiret(ajoutPhotoDTO.getId());
+        String rolesDemandeur = gestionUtilisateurFacade.getUtilisateurRoles(ajoutPhotoDTO.getLoginDemandeur());
+        Entreprise entrepriseAjoutPhotos =  artisanService.loadEntrepriseAndCheckRole(rolesDemandeur, ajoutPhotoDTO.getId(), ajoutPhotoDTO.getLoginDemandeur());
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Chargement de l'entreprise en cours, grace à la DTO en entrée : {}", ajoutPhotoDTO.toString());
