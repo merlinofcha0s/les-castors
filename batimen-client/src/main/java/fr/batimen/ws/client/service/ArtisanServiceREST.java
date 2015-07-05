@@ -8,6 +8,7 @@ import fr.batimen.dto.EntrepriseDTO;
 import fr.batimen.dto.ImageDTO;
 import fr.batimen.dto.aggregate.AjoutPhotoDTO;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
+import fr.batimen.dto.aggregate.SuppressionPhotoDTO;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 import fr.batimen.ws.client.WsConnector;
 import fr.batimen.ws.client.service.commons.CommonService;
@@ -164,5 +165,22 @@ public class ArtisanServiceREST implements Serializable {
     public List<ImageDTO> ajouterPhotosChantierTemoin(AjoutPhotoDTO ajoutPhotoDTO) {
         return commonService.ajouterPhoto(ajoutPhotoDTO, WsPath.GESTION_PARTENAIRE_SERVICE_PATH,
                 WsPath.GESTION_PARTENAIRE_SERVICE_AJOUT_PHOTO_CHANTIER_TEMOIN);
+    }
+
+    public List<ImageDTO> suppressionPhotoChantierTemoin(SuppressionPhotoDTO suppressionPhotoDTO) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Début appel service de suppression d'une photo d'un chantier témoin.....");
+        }
+
+        String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_PARTENAIRE_SERVICE_PATH,
+                WsPath.GESTION_PARTENAIRE_SERVICE_SUPPRESSION_PHOTO_CHANTIER_TEMOIN, suppressionPhotoDTO);
+
+        TypeToken<List<ImageDTO>> tokenImage = new TypeToken<List<ImageDTO>>(){};
+        List<ImageDTO> imageDTOs = DeserializeJsonHelper.deserializeDTOList(objectInJSON, tokenImage);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Fin appel service de recuperation d'une photo d'un chantier témoin.");
+        }
+        return imageDTOs;
     }
 }

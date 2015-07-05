@@ -123,8 +123,8 @@ public class PhotoService {
     /**
      * Persist l'url des images en BDD
      *
-     * @param entreprise   l'entreprise auquel sont rattachées les images
-     * @param imageUrls La liste des urls des images
+     * @param entreprise l'entreprise auquel sont rattachées les images
+     * @param imageUrls  La liste des urls des images
      */
     @TransactionAttribute(TransactionAttributeType.MANDATORY)
     public void persistPhoto(Entreprise entreprise, List<String> imageUrls) {
@@ -182,11 +182,11 @@ public class PhotoService {
      * <p/>
      * Appel également le service qui envoi les photos sur cloudinary
      *
-     * @param files La liste de fichier provenant du form
+     * @param files  La liste de fichier provenant du form
      * @param images La liste des images deja persisté dans la BDD.
      * @return La liste des URLS des images qui se trouvent dans le cloud.
      */
-    public List<String> transformAndSendToCloud(List<FormDataBodyPart> files, Set<Image> images){
+    public List<String> transformAndSendToCloud(List<FormDataBodyPart> files, Set<Image> images) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Calcul du nombre de photos qui peuvent etre uploader avant d'atteindre la limite");
         }
@@ -218,17 +218,30 @@ public class PhotoService {
      * Check les droits du demandeur et dans le cas d'un artisan verifie qu'il possede bien l'entreprise.
      *
      * @param rolesDemandeur Le role du demandeur
-     * @param siret         L'identifiant unique de l'entreprise
+     * @param siret          L'identifiant unique de l'entreprise
      * @param loginDemandeur Le login du demandeur de l'operation
      * @return L'ensemble des images de l'annonce si pas les droits => null
      */
     @TransactionAttribute(TransactionAttributeType.MANDATORY)
     public List<Image> getImagesBySiretByLoginDemandeur(String rolesDemandeur, String siret, String loginDemandeur) {
         List<Image> images = null;
-        if (rolesUtils.checkIfClientWithString(rolesDemandeur)) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Role demandeur : " + rolesDemandeur);
+            LOGGER.debug("SIRET demandeur : " + siret);
+            LOGGER.debug("Login demandeur : " + loginDemandeur);
+        }
+        if (rolesUtils.checkIfArtisanWithString(rolesDemandeur)) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Artisan detecté");
+            }
             images = imageDAO.getImageBySiretByArtisan(siret, loginDemandeur);
         } else if (rolesUtils.checkIfAdminWithString(rolesDemandeur)) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Admin detecté");
+            }
             images = imageDAO.getImageBySiret(siret);
+        } else {
+            LOGGER.error("Pas le bon role pour appeler le service, impossible");
         }
         return images;
     }

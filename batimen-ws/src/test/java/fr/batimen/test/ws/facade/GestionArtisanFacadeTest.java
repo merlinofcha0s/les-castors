@@ -275,7 +275,7 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
     @ShouldMatchDataSet(value = "datasets/out/suppression_photo_chantier_temoin.yml", excludeColumns = {"id",
             "datemaj", "datecreation", "datenotation", "datenotification", "url"})
     public void suppressionPhotoChantierTemoinNominal(){
-        testSuppressionPhoto("pebronne", true);
+        testSuppressionPhoto("pebronneArtisanne", true);
     }
 
     public void testAjoutPhotoChantier(String login, int nbImageAttendu) {
@@ -298,19 +298,15 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
 
         List<Image> images = null;
         String siret = "43394298400017";
-        if (allowed) {
-            testAjoutPhotoChantier(loginDemandeur, 3);
-            //On prends tjr les photos de pebronne pour le cas ou on test avec l'admin
-            images = photoService.getImagesBySiretByLoginDemandeur("partenaire", siret, "pebronne");
-            Assert.assertEquals(3, images.size());
-        }
-
         ImageDTO imageDTO = new ImageDTO();
-
-        if (!allowed) {
-            imageDTO.setUrl("https://res.cloudinary.com/lescastors/image/upload/v1427874120/test/zbeod6tici6yrphpco39.jpg");
-        } else {
+        if (allowed) {
+            testAjoutPhotoChantier(loginDemandeur, 4);
+            //On prends tjr les photos de pebronne pour le cas ou on test avec l'admin
+            images = photoService.getImagesBySiretByLoginDemandeur("partenaire", siret, "pebronneArtisanne");
+            Assert.assertEquals(4, images.size());
             imageDTO.setUrl(images.get(0).getUrl());
+        } else {
+            imageDTO.setUrl("https://res.cloudinary.com/lescastors/image/upload/v1427874120/test/zbeod6tici6yrphpco39.jpg");
         }
 
         SuppressionPhotoDTO suppressionPhotoDTO = new SuppressionPhotoDTO();
@@ -318,10 +314,11 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
         suppressionPhotoDTO.setId(siret);
         suppressionPhotoDTO.setImageASupprimer(imageDTO);
 
-        //List<ImageDTO> imageDTOs = annonceServiceREST.suppressionPhoto(suppressionPhotoDTO);
+        List<ImageDTO> imageDTOs = artisanServiceREST.suppressionPhotoChantierTemoin(suppressionPhotoDTO);
+        Assert.assertEquals(3, imageDTOs.size());
 
         images = photoService.getImagesBySiretByLoginDemandeur("partenaire", siret, "pebronne");
-        Assert.assertEquals(2, images.size());
+        Assert.assertEquals(3, images.size());
 
         return null;
     }

@@ -15,6 +15,7 @@ import fr.batimen.dto.AvisDTO;
 import fr.batimen.dto.ImageDTO;
 import fr.batimen.dto.aggregate.AjoutPhotoDTO;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
+import fr.batimen.dto.aggregate.SuppressionPhotoDTO;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 import fr.batimen.ws.dao.*;
@@ -323,5 +324,19 @@ public class GestionArtisanFacade {
             photoService.persistPhoto(entrepriseAjoutPhotos, urlsPhoto);
         }
         return photoService.imageToImageDTO(entrepriseAjoutPhotos.getImagesChantierTemoin());
+    }
+
+    /**
+     * Suppression d'une photo des chantiers temoin d'une entreprise.
+     *
+     * @param suppressionPhotoDTO L'hash id + le login du demandeur
+     * @return La liste des objets images appartenant à l'annonce.
+     */
+    @POST
+    @Path(WsPath.GESTION_PARTENAIRE_SERVICE_SUPPRESSION_PHOTO_CHANTIER_TEMOIN)
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public List<ImageDTO> suppressionPhotoChantierTemoin(SuppressionPhotoDTO suppressionPhotoDTO) {
+
+        return new ArrayList<>();
     }
 }
