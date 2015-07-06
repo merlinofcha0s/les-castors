@@ -15,6 +15,7 @@
 .contacteznous .contactmethod p {
     font-size: 19px;
     display: inline-block;
+    vertical-align: sub;
 }
 
 .contacteznous .contactmethod:first-child p {

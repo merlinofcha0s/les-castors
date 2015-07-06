@@ -1,8 +1,5 @@
 @CHARSET "UTF-8";
 
-
-
-
 #connexion {
     float: left;
     padding-left: 670px;
@@ -610,14 +607,13 @@ table tr td .error {
 }
 
 #container-entreprise-verifier{
-    margin-top: 40px;
+    margin-top: 60px;
     text-align: center;
 }
 
 #container-entreprise-verifier div{
     margin-top: 9px;
 }
-
 
 .raterContainer div div {
     font-size: 20px;
@@ -872,7 +868,7 @@ table tr td .error {
 }
 
 .containerInformationsEntrepriseGeneral{
-    padding-top: 10px;
+    padding-top: 15px;
     padding-bottom: 15px;
 }
 
@@ -915,6 +911,10 @@ table tr td .error {
 
 .icons-8-entreprise{
     vertical-align: top;
+}
+
+#photoChantierTemoin{
+    padding-top: 15px;
 }
 
 .icon-specialite{
@@ -982,4 +982,8 @@ table tr td .error {
 
 #btnPlusDAvisEntreprise{
     margin-top: 10px;
+}
+
+.contactez_suivez_nous{
+    padding-top: 20px;
 }

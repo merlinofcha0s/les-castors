@@ -1,14 +1,13 @@
 package fr.batimen.dto;
 
-import static fr.batimen.dto.constant.ValidatorConstant.CLIENT_LOGIN_RANGE_MAX;
-import static fr.batimen.dto.constant.ValidatorConstant.CLIENT_LOGIN_RANGE_MIN;
-
-import java.util.Objects;
+import fr.batimen.dto.enums.TypeCompte;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.Objects;
 
-import fr.batimen.dto.enums.TypeCompte;
+import static fr.batimen.dto.constant.ValidatorConstant.CLIENT_LOGIN_RANGE_MAX;
+import static fr.batimen.dto.constant.ValidatorConstant.CLIENT_LOGIN_RANGE_MIN;
 
 public class DemandeAnnonceDTO extends AbstractDTO {
 
@@ -16,7 +15,7 @@ public class DemandeAnnonceDTO extends AbstractDTO {
 
     @NotNull
     @Size(max = 255)
-    protected String hashID;
+    protected String id;
     @NotNull
     @Size(min = CLIENT_LOGIN_RANGE_MIN, max = CLIENT_LOGIN_RANGE_MAX)
     protected String loginDemandeur;
@@ -25,8 +24,8 @@ public class DemandeAnnonceDTO extends AbstractDTO {
     /**
      * @return the hashID
      */
-    public String getHashID() {
-        return hashID;
+    public String getId() {
+        return id;
     }
 
     /**
@@ -44,11 +43,11 @@ public class DemandeAnnonceDTO extends AbstractDTO {
     }
 
     /**
-     * @param hashID
+     * @param id
      *            the hashID to set
      */
-    public void setHashID(String hashID) {
-        this.hashID = hashID;
+    public void setId(String id) {
+        this.id = id;
     }
 
     /**
@@ -75,7 +74,7 @@ public class DemandeAnnonceDTO extends AbstractDTO {
     @Override
     public int hashCode() {
         return Objects
-                .hashCode(Objects.hash(this.getHashID(), this.getLoginDemandeur(), this.getTypeCompteDemandeur()));
+                .hashCode(Objects.hash(this.getId(), this.getLoginDemandeur(), this.getTypeCompteDemandeur()));
     }
 
     /*
@@ -92,7 +91,7 @@ public class DemandeAnnonceDTO extends AbstractDTO {
 
         if (object instanceof DemandeAnnonceDTO) {
             DemandeAnnonceDTO other = (DemandeAnnonceDTO) object;
-            return Objects.equals(this.getHashID(), other.getHashID())
+            return Objects.equals(this.getId(), other.getId())
                     && Objects.equals(this.getLoginDemandeur(), other.getLoginDemandeur())
                     && Objects.equals(this.getTypeCompteDemandeur(), other.getTypeCompteDemandeur());
         }
@@ -102,7 +101,7 @@ public class DemandeAnnonceDTO extends AbstractDTO {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("DemandeAnnonceDTO{");
-        sb.append("hashID='").append(hashID).append('\'');
+        sb.append("hashID='").append(id).append('\'');
         sb.append(", loginDemandeur='").append(loginDemandeur).append('\'');
         sb.append(", typeCompteDemandeur=").append(typeCompteDemandeur);
         sb.append('}');

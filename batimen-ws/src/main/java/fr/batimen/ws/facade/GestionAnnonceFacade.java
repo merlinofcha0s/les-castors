@@ -1,39 +1,9 @@
 package fr.batimen.ws.facade;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.*;
-
-import javax.annotation.security.RolesAllowed;
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
-import javax.inject.Inject;
-import javax.inject.Provider;
-import javax.interceptor.Interceptors;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
-import fr.batimen.core.enums.PropertiesFileGeneral;
-import fr.batimen.dto.ImageDTO;
-import fr.batimen.dto.aggregate.*;
-import fr.batimen.ws.mapper.AnnonceMap;
-import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.microtripit.mandrillapp.lutung.model.MandrillApiError;
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataBodyPart;
 import com.sun.jersey.multipart.FormDataParam;
-
 import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.WsPath;
@@ -41,6 +11,8 @@ import fr.batimen.core.exception.BackendException;
 import fr.batimen.core.exception.DuplicateEntityException;
 import fr.batimen.core.exception.EmailException;
 import fr.batimen.dto.DemandeAnnonceDTO;
+import fr.batimen.dto.ImageDTO;
+import fr.batimen.dto.aggregate.*;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.enums.TypeNotification;
@@ -56,13 +28,28 @@ import fr.batimen.ws.entity.Image;
 import fr.batimen.ws.enums.PropertiesFileWS;
 import fr.batimen.ws.helper.JsonHelper;
 import fr.batimen.ws.interceptor.BatimenInterceptor;
-import fr.batimen.ws.service.AnnonceService;
-import fr.batimen.ws.service.EmailService;
-import fr.batimen.ws.service.NotationService;
-import fr.batimen.ws.service.NotificationService;
-import fr.batimen.ws.service.PhotoService;
+import fr.batimen.ws.mapper.AnnonceMap;
+import fr.batimen.ws.service.*;
 import fr.batimen.ws.utils.FluxUtils;
 import fr.batimen.ws.utils.RolesUtils;
+import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.annotation.security.RolesAllowed;
+import javax.ejb.*;
+import javax.inject.Inject;
+import javax.inject.Provider;
+import javax.interceptor.Interceptors;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.*;
 
 /**
  * Facade REST de gestion des annonces.
@@ -230,7 +217,7 @@ public class GestionAnnonceFacade {
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public AnnonceAffichageDTO getAnnonceByIdForAffichage(DemandeAnnonceDTO demandeAnnonce) {
         String loginDemandeur = demandeAnnonce.getLoginDemandeur();
-        String hashID = demandeAnnonce.getHashID();
+        String hashID = demandeAnnonce.getId();
 
         String rolesDemandeur = utilisateurFacade.get().getUtilisateurRoles(demandeAnnonce.getLoginDemandeur());
         // On crée l'objet qui contiendra les infos
@@ -341,7 +328,7 @@ public class GestionAnnonceFacade {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Suppression à la demande de : " + demandeAnnonce.getLoginDemandeur());
             LOGGER.debug("Récupération du role du demandeur : " + rolesDemandeur);
-            LOGGER.debug("Récupération de l'annonce : " + demandeAnnonce.getHashID());
+            LOGGER.debug("Récupération de l'annonce : " + demandeAnnonce.getId());
         }
 
         Boolean retourDAO = Boolean.FALSE;
@@ -353,9 +340,9 @@ public class GestionAnnonceFacade {
 
             Annonce annonceToUpdate = null;
             if (isAdmin) {
-                annonceToUpdate = annonceDAO.getAnnonceByIDWithTransaction(demandeAnnonce.getHashID(), true);
+                annonceToUpdate = annonceDAO.getAnnonceByIDWithTransaction(demandeAnnonce.getId(), true);
             } else if (isClient) {
-                annonceToUpdate = annonceDAO.getAnnonceByIDWithTransaction(demandeAnnonce.getHashID(), false);
+                annonceToUpdate = annonceDAO.getAnnonceByIDWithTransaction(demandeAnnonce.getId(), false);
             }
 
             if (isClient && !annonceToUpdate.getDemandeur().getLogin().equals(demandeAnnonce.getLoginDemandeur())) {
@@ -391,7 +378,7 @@ public class GestionAnnonceFacade {
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("+------------------------------------------------------------------------------+");
-            LOGGER.debug("| Hash ID : " + demandeAnnonceDTO.getHashID());
+            LOGGER.debug("| Hash ID : " + demandeAnnonceDTO.getId());
             LOGGER.debug("| Login demandeur : " + demandeAnnonceDTO.getLoginDemandeur());
             LOGGER.debug("| Ajout / suppression : " + demandeAnnonceDTO.getAjoutOuSupprimeArtisan());
             LOGGER.debug("| Artisan choisi : " + demandeAnnonceDTO.getLoginArtisanChoisi());
@@ -414,7 +401,7 @@ public class GestionAnnonceFacade {
 
         Annonce annonceToUpdate = null;
 
-        annonceToUpdate = loadAnnonceAndCheckUserClientOrAdminRight(rolesDemandeur, demandeAnnonceDTO.getHashID(), demandeAnnonceDTO.getLoginDemandeur());
+        annonceToUpdate = loadAnnonceAndCheckUserClientOrAdminRight(rolesDemandeur, demandeAnnonceDTO.getId(), demandeAnnonceDTO.getLoginDemandeur());
 
         if (annonceToUpdate != null) {
 
@@ -476,16 +463,16 @@ public class GestionAnnonceFacade {
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("+------------------------------------------------------------------------------+");
-            LOGGER.debug("| Hash ID : " + demandeAnnonceDTO.getHashID());
+            LOGGER.debug("| Hash ID : " + demandeAnnonceDTO.getId());
             LOGGER.debug("| Login demandeur : " + demandeAnnonceDTO.getLoginDemandeur());
             LOGGER.debug("+------------------------------------------------------------------------------+");
         }
 
-        Annonce annonce = annonceDAO.getAnnonceByIDWithTransaction(demandeAnnonceDTO.getHashID(), false);
+        Annonce annonce = annonceDAO.getAnnonceByIDWithTransaction(demandeAnnonceDTO.getId(), false);
 
         if (annonce == null) {
             if (LOGGER.isErrorEnabled()) {
-                LOGGER.error("Impossible de trouver l'annonce avec l'id: " + demandeAnnonceDTO.getHashID());
+                LOGGER.error("Impossible de trouver l'annonce avec l'id: " + demandeAnnonceDTO.getId());
             }
             return CodeRetourService.RETOUR_KO;
         }
@@ -527,7 +514,7 @@ public class GestionAnnonceFacade {
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("+------------------------------------------------------------------------------+");
-            LOGGER.debug("| Hash ID : " + desinscriptionAnnonceDTO.getHashID());
+            LOGGER.debug("| Hash ID : " + desinscriptionAnnonceDTO.getId());
             LOGGER.debug("| Login demandeur : " + desinscriptionAnnonceDTO.getLoginDemandeur());
             LOGGER.debug("| Artisan à desinscrire : " + desinscriptionAnnonceDTO.getLoginArtisan());
             LOGGER.debug("+------------------------------------------------------------------------------+");
@@ -540,7 +527,7 @@ public class GestionAnnonceFacade {
             LOGGER.debug("Role du client récupéré: " + rolesClientDemandeur);
         }
 
-        annonce = loadAnnonceAndCheckUserClientOrAdminRight(rolesClientDemandeur, desinscriptionAnnonceDTO.getHashID(), desinscriptionAnnonceDTO
+        annonce = loadAnnonceAndCheckUserClientOrAdminRight(rolesClientDemandeur, desinscriptionAnnonceDTO.getId(), desinscriptionAnnonceDTO
                 .getLoginDemandeur());
 
         boolean atLeastOneRemoved = false;
@@ -740,7 +727,7 @@ public class GestionAnnonceFacade {
      *                    l'annonce.
      * @param files       Liste contenant l'ensemble des photos.
      * @param filesDetail Liste contenant les metadata des photos du client.
-     * @return {@link CodeRetourService}
+     * @return La liste des images appartenant à l'utilisateur contenu dans cloudinary.
      */
     @POST
     @Path(WsPath.GESTION_ANNONCE_SERVICE_AJOUT_PHOTO)
@@ -760,7 +747,7 @@ public class GestionAnnonceFacade {
         }
 
         Annonce annonceRajouterPhoto = loadAnnonceAndCheckUserClientOrAdminRight(
-                utilisateurFacade.get().getUtilisateurRoles(ajoutPhotoDTO.getLoginDemandeur()), ajoutPhotoDTO.getHashID(), ajoutPhotoDTO.getLoginDemandeur());
+                utilisateurFacade.get().getUtilisateurRoles(ajoutPhotoDTO.getLoginDemandeur()), ajoutPhotoDTO.getId(), ajoutPhotoDTO.getLoginDemandeur());
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Chargement de l'annonce en cours, grace à la DTO en entrée : {}", ajoutPhotoDTO.toString());
@@ -773,37 +760,16 @@ public class GestionAnnonceFacade {
             return new ArrayList<>();
         }
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Calcul du nombre de photos qui peuvent etre uploader avant d'atteindre la limite");
-        }
-        Integer nbPhotosTotale = annonceRajouterPhoto.getImages().size() + files.size();
-        Integer nbPhotosMaxParAnnonce = Integer.valueOf(PropertiesFileGeneral.GENERAL.getProperties().getProperty("gen.max.number.file.annonce"));
+        List<String> urlsPhoto = photoService.transformAndSendToCloud(files, annonceRajouterPhoto.getImages());
 
-        if (nbPhotosTotale > nbPhotosMaxParAnnonce) {
-            if (LOGGER.isErrorEnabled()) {
-                LOGGER.error("Dépassement du nombre de photos autorisées par annonce {}", nbPhotosTotale);
+        if (!urlsPhoto.isEmpty()) {
+            if (LOGGER.isDebugEnabled()) {
+                LOGGER.debug("Persistance des urls des images");
             }
-            return photoService.imageToImageDTO(annonceRajouterPhoto.getImages());
+            photoService.persistPhoto(annonceRajouterPhoto, urlsPhoto);
         }
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Transformation des forms data body parts en files");
-        }
-        List<File> photos = FluxUtils.transformFormDataBodyPartsToFiles(files);
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Envoi des photos vers le service de cloud");
-        }
-        List<String> urlsPhoto = photoService.sendPhotoToCloud(photos);
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Persistance des urls des images");
-        }
-        photoService.persistPhoto(annonceRajouterPhoto, urlsPhoto);
-
         return photoService.imageToImageDTO(annonceRajouterPhoto.getImages());
     }
-
 
     /**
      * Récupération de toutes les photos d'une annonce avec vérificatin des droits
@@ -820,7 +786,7 @@ public class GestionAnnonceFacade {
         }
 
         //Extraction des paramètres
-        String hashID = demandeAnnonceDTO.getHashID();
+        String hashID = demandeAnnonceDTO.getId();
         String loginDemandeur = demandeAnnonceDTO.getLoginDemandeur();
 
         //Calcul du role
@@ -839,49 +805,19 @@ public class GestionAnnonceFacade {
     }
 
     /**
-     * Récupération de toutes les photos d'une annonce avec vérificatin des droits
+     * Suppression d'une photo par un utilisateur
      *
-     * @param suppressionPhotoDTO L'hash id + le login du demandeur
-     * @return La liste des objets images appartenant à l'annonce.
+     * @param suppressionPhotoDTO Les infos permettant de supprimer la photo
+     * @return La liste des objets images appartenant à l'annonce apres suppression de la photo.
      */
     @POST
     @Path(WsPath.GESTION_ANNONCE_SERVICE_SUPPRESSION_PHOTO)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public List<ImageDTO> suppressionPhoto(SuppressionPhotoDTO suppressionPhotoDTO) {
         String rolesDemandeur = utilisateurFacade.get().getUtilisateurRoles(suppressionPhotoDTO.getLoginDemandeur());
-        List<Image> images = photoService.getImagesByHashIDByLoginDemandeur(rolesDemandeur, suppressionPhotoDTO.getHashID(), suppressionPhotoDTO.getLoginDemandeur());
-        List<ImageDTO> imageDTOs = new LinkedList<>();
-        //Si c'est images est null ce que l'utilisateur n'a pas les droits
-        if (images == null) {
-            return new ArrayList<>();
-        }
+        List<Image> images = photoService.getImagesByHashIDByLoginDemandeur(rolesDemandeur, suppressionPhotoDTO.getId(), suppressionPhotoDTO.getLoginDemandeur());
 
-        boolean deleteAtLeastOne = false;
-
-        for (int i = 0; i < images.size(); i++) {
-            Image image = images.get(i);
-
-            if (image.getUrl().equals(suppressionPhotoDTO.getImageASupprimer().getUrl())) {
-                imageDAO.delete(image);
-                images.remove(i);
-                photoService.supprimerPhotoDansCloud(image);
-                deleteAtLeastOne = true;
-            }
-        }
-
-        if (!deleteAtLeastOne) {
-            try {
-                throw new BackendException("Aucune image supprimée, ca ne doit pas arriver");
-            } catch (BackendException e) {
-                if (LOGGER.isErrorEnabled()) {
-                    LOGGER.error("Problème avec le service de suppresson d'image", e);
-                }
-                return imageDTOs;
-            }
-        } else {
-            imageDTOs = photoService.imageToImageDTO(new HashSet<>(images));
-        }
-        return imageDTOs;
+        return photoService.suppressionPhoto(images, suppressionPhotoDTO);
     }
 
     /**

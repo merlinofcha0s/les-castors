@@ -95,5 +95,7 @@ public class QueryJPQL {
     // Entity image
     public static final String IMAGE_BY_HASH_ID_AND_LOGIN_CLIENT = "imageByHashIdAndLoginClient";
     public static final String IMAGE_BY_HASH_ID = "imageByHashId";
+    public static final String IMAGE_BY_SIRET = "imageBySiret";
+    public static final String IMAGE_BY_SIRET_BY_CLIENT = "imageBySiretByClient";
 
 }

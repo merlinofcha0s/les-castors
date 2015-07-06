@@ -359,7 +359,7 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
     public Boolean suppressionAnnonce(DemandeAnnonceDTO demandeAnnonceDTO) {
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Debut de la suppression de l'annonce : " + demandeAnnonceDTO.getHashID());
+            LOGGER.debug("Debut de la suppression de l'annonce : " + demandeAnnonceDTO.getId());
             LOGGER.debug("A la demande de : " + demandeAnnonceDTO.getLoginDemandeur());
             LOGGER.debug("Et qui possede le role : " + demandeAnnonceDTO.getTypeCompteDemandeur());
         }
@@ -372,7 +372,7 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
                 query = entityManager.createNamedQuery(QueryJPQL.ANNONCE_SUPRESS_ANNONCE_FOR_ADMIN);
             }
 
-            query.setParameter(QueryJPQL.PARAM_ANNONCE_ID, demandeAnnonceDTO.getHashID());
+            query.setParameter(QueryJPQL.PARAM_ANNONCE_ID, demandeAnnonceDTO.getId());
             query.setParameter(QueryJPQL.PARAM_ANNONCE_ETAT, EtatAnnonce.SUPPRIMER);
 
             Integer nbUpdated = query.executeUpdate();

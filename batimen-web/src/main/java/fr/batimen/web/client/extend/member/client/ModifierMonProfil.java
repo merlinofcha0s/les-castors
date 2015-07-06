@@ -9,10 +9,15 @@ import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.app.security.RolesUtils;
 import fr.batimen.web.client.component.Commentaire;
 import fr.batimen.web.client.component.ContactezNous;
+import fr.batimen.web.client.component.PhotosContainer;
 import fr.batimen.web.client.component.Profil;
+import fr.batimen.web.client.event.AjoutPhotoEvent;
+import fr.batimen.web.client.event.SuppressionPhotoEvent;
+import fr.batimen.web.client.extend.member.client.util.PhotoServiceAjaxLogic;
 import fr.batimen.web.client.extend.nouveau.artisan.Etape3Entreprise;
 import fr.batimen.web.client.extend.nouveau.devis.Etape4InscriptionForm;
 import fr.batimen.web.client.master.MasterPage;
+import org.apache.wicket.event.IEvent;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -37,8 +42,15 @@ public class ModifierMonProfil extends MasterPage {
     @Inject
     private RolesUtils rolesUtils;
 
+    @Inject
+    private PhotoServiceAjaxLogic photoServiceAjaxLogic;
+
+    private EntrepriseDTO entreprise;
+
     private CompoundPropertyModel<CreationAnnonceDTO> propertyModelNouvelleAnnonce;
     private CompoundPropertyModel<CreationPartenaireDTO> propertyModelNouveauPartenaire;
+
+    private PhotosContainer photoChantierTemoin;
 
     public ModifierMonProfil() {
         super("Modifier mon profil", "lol", "Modifier mon profil", true, "img/bg_title1.jpg");
@@ -62,7 +74,14 @@ public class ModifierMonProfil extends MasterPage {
 
         Etape3Entreprise entrepriseModif = new Etape3Entreprise("etape3InformationsEntreprise",
                 propertyModelNouveauPartenaire, propertyModelNouveauPartenaire.getObject()
-                , true){
+                , true) {
+            @Override
+            public boolean isVisible() {
+                return rolesUtils.checkRoles(TypeCompte.ARTISAN);
+            }
+        };
+
+        photoChantierTemoin = new PhotosContainer("photoChantierTemoin", entreprise.getPhotosChantiersTemoins(), "Vos photos de chantiers témoins", "h5", true) {
             @Override
             public boolean isVisible() {
                 return rolesUtils.checkRoles(TypeCompte.ARTISAN);
@@ -72,7 +91,7 @@ public class ModifierMonProfil extends MasterPage {
         ContactezNous contactezNous = new ContactezNous("contactezNous");
         Commentaire commentaire = new Commentaire("commentaire");
 
-        this.add(profil, inscriptionForm, entrepriseModif, contactezNous, commentaire);
+        this.add(profil, inscriptionForm, entrepriseModif, photoChantierTemoin, contactezNous, commentaire);
     }
 
     private void initData() {
@@ -90,13 +109,30 @@ public class ModifierMonProfil extends MasterPage {
         creationAnnonceDTO.setClient(client);
         propertyModelNouvelleAnnonce = new CompoundPropertyModel<>(creationAnnonceDTO);
 
-        if(rolesUtils.checkRoles(TypeCompte.ARTISAN)){
-            EntrepriseDTO entreprise = EntrepriseDTO.copy(authentication.getEntrepriseUserInfo());
+        if (rolesUtils.checkRoles(TypeCompte.ARTISAN)) {
+            entreprise = EntrepriseDTO.copy(authentication.getEntrepriseUserInfo());
             ModelMapper mapper = new ModelMapper();
             mapper.map(entreprise, creationPartenaireDTO.getEntreprise());
             mapper.map(entreprise.getAdresseEntreprise(), creationPartenaireDTO.getAdresse());
             creationPartenaireDTO.getEntreprise().getCategoriesMetier().addAll(entreprise.getCategoriesMetier());
+        }else{
+            entreprise = new EntrepriseDTO();
         }
         propertyModelNouveauPartenaire = new CompoundPropertyModel<>(creationPartenaireDTO);
+    }
+
+    @Override
+    public void onEvent(IEvent<?> event) {
+        super.onEvent(event);
+
+        if (event.getPayload() instanceof SuppressionPhotoEvent) {
+            photoServiceAjaxLogic.suppressionPhotoChantierTemoin(event);
+            photoChantierTemoin.updatePhotoContainer(((SuppressionPhotoEvent) event.getPayload()).getTarget());
+        }
+
+        if (event.getPayload() instanceof AjoutPhotoEvent) {
+            photoServiceAjaxLogic.ajoutPhotoChantierTemoin(event);
+            photoChantierTemoin.updatePhotoContainer(((AjoutPhotoEvent) event.getPayload()).getTarget());
+        }
     }
 }

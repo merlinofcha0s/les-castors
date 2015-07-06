@@ -17,8 +17,11 @@ import fr.batimen.web.client.component.Commentaire;
 import fr.batimen.web.client.component.ContactezNous;
 import fr.batimen.web.client.component.PhotosContainer;
 import fr.batimen.web.client.component.Profil;
+import fr.batimen.web.client.event.AjoutPhotoEvent;
 import fr.batimen.web.client.event.ModificationAnnonceEvent;
+import fr.batimen.web.client.event.SuppressionPhotoEvent;
 import fr.batimen.web.client.extend.connected.Annonce;
+import fr.batimen.web.client.extend.member.client.util.PhotoServiceAjaxLogic;
 import fr.batimen.web.client.extend.nouveau.devis.Etape3AnnonceForm;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.ws.client.service.AnnonceServiceREST;
@@ -51,6 +54,9 @@ public class ModifierAnnonce extends MasterPage {
 
     @Inject
     private Authentication authentication;
+
+    @Inject
+    private PhotoServiceAjaxLogic photoServiceAjaxLogic;
 
     private Etape3AnnonceForm etape3AnnonceForm;
 
@@ -108,6 +114,7 @@ public class ModifierAnnonce extends MasterPage {
         etape3AnnonceForm = new Etape3AnnonceForm("formQualification", propertyModelModificationAnnonce, sousCategorieMetierDTOList, sousCategorieMetierDTO);
 
         photosContainer = new PhotosContainer("afficheurPhotos", annonceAffichageDTO.getImages(), "Les photos de votre annonce", "h4", true);
+        photosContainer.setOutputMarkupId(true);
 
         ContactezNous contactezNous = new ContactezNous("contactezNous");
         Commentaire commentaire = new Commentaire("commentaire");
@@ -182,6 +189,16 @@ public class ModifierAnnonce extends MasterPage {
             }
 
             modificationAnnonceEvent.getTarget().add(feedBackPanelGeneral);
+        }
+
+        if (event.getPayload() instanceof SuppressionPhotoEvent) {
+            photoServiceAjaxLogic.suppressionPhotoAnnonce(event);
+            photosContainer.updatePhotoContainer(((SuppressionPhotoEvent) event.getPayload()).getTarget());
+        }
+
+        if (event.getPayload() instanceof AjoutPhotoEvent) {
+            photoServiceAjaxLogic.ajoutPhotoAnnonce(event);
+            photosContainer.updatePhotoContainer(((AjoutPhotoEvent) event.getPayload()).getTarget());
         }
     }
 }

@@ -8,5 +8,6 @@ VALUES
    0, 100006, 100001, 100009, 100008);
 INSERT INTO Annonce (id, datecreation, datemaj, delaiintervention, description, etatannonce, categoriemetier, souscategoriemetier, nbconsultation, typecontact, hashID, selHashID, typetravaux, adressechantier_id, demandeur_fk, avis_id, entreprise_selectionnee_fk)
 VALUES
-  (100012, '2015-01-12', '2015-01-15', '0', 'Construction de la paroisse du larchi duchesse', '6', 1, 'Petit travaux', '0', 0, 'lolo', 'tete',
+  (100012, '2015-01-12', '2015-01-15', '0', 'Construction de la paroisse du larchi duchesse', '6', 1, 'Petit travaux',
+   '0', 0, 'lolo', 'tete',
    0, 100008, 100001, 100011, 100007);

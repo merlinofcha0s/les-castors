@@ -252,7 +252,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     public void testSuppressionAnnonceWithValidDemandeur() {
         DemandeAnnonceDTO demandeAnnonceDTO = new DemandeAnnonceDTO();
         demandeAnnonceDTO
-                .setHashID("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
+                .setId("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
         demandeAnnonceDTO.setLoginDemandeur("pebronne");
         demandeAnnonceDTO.setTypeCompteDemandeur(TypeCompte.CLIENT);
 
@@ -279,7 +279,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     public void testSuppressionAnnonceWithInValidDemandeur() {
         DemandeAnnonceDTO demandeAnnonceDTO = new DemandeAnnonceDTO();
         demandeAnnonceDTO
-                .setHashID("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
+                .setId("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
         demandeAnnonceDTO.setLoginDemandeur("pebronnelol");
         demandeAnnonceDTO.setTypeCompteDemandeur(TypeCompte.CLIENT);
 
@@ -304,7 +304,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     public void testSuppressionAnnonceWithAdmin() {
         DemandeAnnonceDTO demandeAnnonceDTO = new DemandeAnnonceDTO();
         demandeAnnonceDTO
-                .setHashID("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
+                .setId("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
         demandeAnnonceDTO.setLoginDemandeur("admin");
         demandeAnnonceDTO.setTypeCompteDemandeur(TypeCompte.ADMINISTRATEUR);
 
@@ -327,7 +327,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @UsingDataSet("datasets/in/annonces_by_id.yml")
     public void testAjoutChoixArtisanForAnnonce() {
         AnnonceSelectEntrepriseDTO demandeAnnonceDTO = new AnnonceSelectEntrepriseDTO();
-        demandeAnnonceDTO.setHashID("lolmdrp");
+        demandeAnnonceDTO.setId("lolmdrp");
         demandeAnnonceDTO.setLoginDemandeur("pebronne");
         demandeAnnonceDTO.setTypeCompteDemandeur(TypeCompte.CLIENT);
         demandeAnnonceDTO.setLoginArtisanChoisi("pebronneChoisi");
@@ -347,7 +347,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @UsingDataSet("datasets/in/annonces_by_id.yml")
     public void testAjoutChoixArtisanByAdminForAnnonce() {
         AnnonceSelectEntrepriseDTO demandeAnnonceDTO = new AnnonceSelectEntrepriseDTO();
-        demandeAnnonceDTO.setHashID("lolmdrp");
+        demandeAnnonceDTO.setId("lolmdrp");
         demandeAnnonceDTO.setLoginDemandeur("admin");
         demandeAnnonceDTO.setTypeCompteDemandeur(TypeCompte.ADMINISTRATEUR);
         demandeAnnonceDTO.setLoginArtisanChoisi("pebronneChoisi");
@@ -369,7 +369,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     public void testAjoutChoixArtisanByNotOwnerNorAdmin() {
         AnnonceSelectEntrepriseDTO demandeAnnonceDTO = new AnnonceSelectEntrepriseDTO();
         demandeAnnonceDTO
-                .setHashID("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
+                .setId("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
         demandeAnnonceDTO.setLoginDemandeur("doe");
         demandeAnnonceDTO.setTypeCompteDemandeur(TypeCompte.CLIENT);
         demandeAnnonceDTO.setLoginArtisanChoisi("pebronneChoisi");

@@ -1,19 +1,5 @@
 package fr.batimen.ws.service;
 
-import java.util.Date;
-
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
-import javax.inject.Inject;
-
-import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.security.HashHelper;
 import fr.batimen.dto.ClientDTO;
@@ -21,6 +7,14 @@ import fr.batimen.ws.dao.ArtisanDAO;
 import fr.batimen.ws.dao.EntrepriseDAO;
 import fr.batimen.ws.entity.Artisan;
 import fr.batimen.ws.entity.Entreprise;
+import fr.batimen.ws.utils.RolesUtils;
+import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.ejb.*;
+import javax.inject.Inject;
+import java.util.Date;
 
 /**
  * Classe de gestion des artisans
@@ -40,6 +34,9 @@ public class ArtisanService {
 
     @Inject
     private EntrepriseDAO entrepriseDAO;
+
+    @Inject
+    private RolesUtils rolesUtils;
 
     /**
      * Active le compte d'un artisan
@@ -114,4 +111,24 @@ public class ArtisanService {
         return nouveauArtisan;
     }
 
+    @TransactionAttribute(TransactionAttributeType.MANDATORY)
+    public Entreprise loadEntrepriseAndCheckRole(String rolesDemandeur, String id, String login){
+        if (rolesUtils.checkIfAdminWithString(rolesDemandeur)) {
+            return entrepriseDAO.getEntrepriseBySiret(id);
+        } else if (rolesUtils.checkIfArtisanWithString(rolesDemandeur)) {
+            Entreprise entreprise = entrepriseDAO.getEntrepriseBySiret(id);
+            if (entreprise != null && entreprise.getArtisan().getLogin().equals(login)) {
+                return entreprise;
+            } else {
+                return null;
+            }
+        } else {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("N'a pas les bons droits pour accéder à ce service !!!");
+                LOGGER.error("Roles : {}", rolesDemandeur);
+                LOGGER.error("Hash ID : {}", id);
+            }
+            return null;
+        }
+    }
 }

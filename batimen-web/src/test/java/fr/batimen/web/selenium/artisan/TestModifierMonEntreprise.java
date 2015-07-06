@@ -3,6 +3,7 @@ package fr.batimen.web.selenium.artisan;
 import com.ninja_squad.dbsetup.DbSetup;
 import com.ninja_squad.dbsetup.operation.Operation;
 import fr.batimen.web.selenium.common.AbstractITTest;
+import fr.batimen.web.utils.UtilsSelenium;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -16,7 +17,7 @@ import static fr.batimen.web.selenium.dataset.ModifierMonProfilDataset.INSERT_AN
 /**
  * Test d'integration de modification des données entreprise de l'artisan
  */
-public class ModifierMonEntreprise extends AbstractITTest {
+public class TestModifierMonEntreprise extends AbstractITTest {
 
     @Override
     public void prepareDB() throws Exception {
@@ -54,5 +55,22 @@ public class ModifierMonEntreprise extends AbstractITTest {
         driver.findElement(By.id("codePostalField")).sendKeys("06600");
         driver.findElement(By.id("villeField")).clear();
         driver.findElement(By.id("villeField")).sendKeys("Antibes city");
+    }
+
+    /**
+     * Cas de test : L'artisan se rend dans son espace clique sur modifier son profil et rajoute une photo chantier témoin.
+     */
+    @Test
+    public void ajouterPhotoChantierTemoin() throws InterruptedException {
+        UtilsSelenium.testAjoutPhotoIT(driver, browser, false);
+    }
+
+    /**
+     * Cas de test : L'artisan se rend dans son espace clique sur modifier son profil et rajoute une photo chantier témoin.
+     */
+    @Test
+    public void supprimerPhotoChantierTemoin() throws InterruptedException {
+        UtilsSelenium.testAjoutPhotoIT(driver, browser, false);
+        UtilsSelenium.suppressionPhotoIT(driver);
     }
 }

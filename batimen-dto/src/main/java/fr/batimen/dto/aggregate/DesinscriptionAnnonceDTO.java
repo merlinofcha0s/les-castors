@@ -40,7 +40,7 @@ public class DesinscriptionAnnonceDTO extends DemandeAnnonceDTO {
      */
     @Override
     public int hashCode() {
-        return Objects.hashCode(Objects.hash(this.getHashID(), this.getLoginDemandeur(), this.getTypeCompteDemandeur(),
+        return Objects.hashCode(Objects.hash(this.getId(), this.getLoginDemandeur(), this.getTypeCompteDemandeur(),
                 this.getLoginArtisan()));
     }
 

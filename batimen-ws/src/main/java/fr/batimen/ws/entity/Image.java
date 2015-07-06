@@ -18,7 +18,11 @@ import javax.persistence.*;
         @NamedQuery(name = QueryJPQL.IMAGE_BY_HASH_ID_AND_LOGIN_CLIENT,
                 query = "SELECT i FROM Image AS i WHERE i.annonce.hashID = :hashID AND i.annonce.demandeur.login = :login"),
         @NamedQuery(name = QueryJPQL.IMAGE_BY_HASH_ID,
-        query = "SELECT i FROM Image AS i WHERE i.annonce.hashID = :hashID")})
+        query = "SELECT i FROM Image AS i WHERE i.annonce.hashID = :hashID"),
+        @NamedQuery(name = QueryJPQL.IMAGE_BY_SIRET,
+                query = "SELECT i FROM Image AS i WHERE i.entreprise.siret = :siret"),
+        @NamedQuery(name = QueryJPQL.IMAGE_BY_SIRET_BY_CLIENT,
+                query = "SELECT i FROM Image AS i WHERE i.entreprise.siret = :siret AND i.entreprise.artisan.login = :login")})
 public class Image extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = 8005599117537733385L;
@@ -31,6 +35,9 @@ public class Image extends AbstractEntity implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_annonce")
     private Annonce annonce;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_entreprise")
+    private Entreprise entreprise;
 
     /**
      * @return the id
@@ -74,11 +81,19 @@ public class Image extends AbstractEntity implements Serializable {
         this.annonce = annonce;
     }
 
+    public Entreprise getEntreprise() {
+        return entreprise;
+    }
+
+    public void setEntreprise(Entreprise entreprise) {
+        this.entreprise = entreprise;
+    }
+
     /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#hashCode()
-     */
+         * (non-Javadoc)
+         *
+         * @see java.lang.Object#hashCode()
+         */
     @Override
     public int hashCode() {
         return Objects.hashCode(Objects.hash(this.url, this.url));

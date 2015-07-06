@@ -39,6 +39,7 @@
     font-size: 1.17em;
     line-height: 1.5em;
     text-align: left;
+    color: #000000;
 }
 
 .artisansqualite a{
@@ -46,7 +47,6 @@
 }
 
 .artisansqualite {
-    padding: 10px;
     text-align: center;
 }
 
@@ -110,3 +110,34 @@
     line-height: 70px;
 }
 
+.module_normal_padding{
+    margin-bottom: 0px !important;
+}
+
+.module_line{
+    margin-bottom: 0px !important;
+    margin-top: 0px;
+}
+
+#h4_artisan_chantier_premium{
+    color: #000000;
+}
+
+#artisan_chantier_premium_blockquote:before{
+    background-image: none;
+    background-color: transparent;
+}
+
+#artisan_chantier_premium_blockquote i{
+    font-size: 24px;
+    color: #000000;
+    vertical-align: sub;
+}
+
+.commentcamarche{
+    padding-bottom: 15px;
+}
+
+.contactez_suivez_nous{
+    padding-top: 10px;
+}

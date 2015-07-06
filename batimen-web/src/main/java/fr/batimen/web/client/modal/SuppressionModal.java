@@ -75,7 +75,7 @@ public class SuppressionModal extends ModalCastor {
                 ClientDTO clientConnected = authentication.getCurrentUserInfo();
 
                 DemandeAnnonceDTO demandeAnnonceDTO = new DemandeAnnonceDTO();
-                demandeAnnonceDTO.setHashID(hashID);
+                demandeAnnonceDTO.setId(hashID);
                 demandeAnnonceDTO.setLoginDemandeur(clientConnected.getLogin());
                 demandeAnnonceDTO.setTypeCompteDemandeur(authentication.getCurrentUserRolePrincipal());
 

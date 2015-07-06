@@ -54,6 +54,8 @@ public class EntrepriseDTO extends AbstractDTO {
 
     private Integer nbAnnonce;
 
+    private final List<ImageDTO> photosChantiersTemoins = new ArrayList<>();
+
     /**
      * @return the dateCreation
      */
@@ -69,16 +71,14 @@ public class EntrepriseDTO extends AbstractDTO {
     }
 
     /**
-     * @param dateCreation
-     *            the dateCreation to set
+     * @param dateCreation the dateCreation to set
      */
     public void setDateCreation(Date dateCreation) {
         this.dateCreation = dateCreation;
     }
 
     /**
-     * @param specialite
-     *            the specialite to set
+     * @param specialite the specialite to set
      */
     public void setSpecialite(String specialite) {
         this.specialite = specialite;
@@ -140,8 +140,7 @@ public class EntrepriseDTO extends AbstractDTO {
     }
 
     /**
-     * @param artisan
-     *            the artisan to set
+     * @param artisan the artisan to set
      */
     public void setArtisan(ClientDTO artisan) {
         this.artisan = artisan;
@@ -178,7 +177,7 @@ public class EntrepriseDTO extends AbstractDTO {
     public void setMoyenneAvis(Double moyenneAvis) {
         this.moyenneAvis = moyenneAvis;
     }
-    
+
 
     public Integer getNbAnnonce() {
         return nbAnnonce;
@@ -188,11 +187,16 @@ public class EntrepriseDTO extends AbstractDTO {
         this.nbAnnonce = nbAnnonce;
     }
 
+    public List<ImageDTO> getPhotosChantiersTemoins() {
+        return photosChantiersTemoins;
+    }
+
+
     /*
-                         * (non-Javadoc)
-                         *
-                         * @see java.lang.Object#hashCode()
-                         */
+                             * (non-Javadoc)
+                             *
+                             * @see java.lang.Object#hashCode()
+                             */
     @Override
     public int hashCode() {
         return Objects.hashCode(Objects.hash(this.getSiret(), this.getNomComplet()));
@@ -239,6 +243,6 @@ public class EntrepriseDTO extends AbstractDTO {
 
     public static EntrepriseDTO copy(EntrepriseDTO entrepriseSource) {
         ModelMapper mapper = new ModelMapper();
-        return  mapper.map(entrepriseSource, EntrepriseDTO.class);
+        return mapper.map(entrepriseSource, EntrepriseDTO.class);
     }
 }

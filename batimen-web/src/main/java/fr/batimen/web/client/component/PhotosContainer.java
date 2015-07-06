@@ -7,8 +7,10 @@ import fr.batimen.dto.aggregate.SuppressionPhotoDTO;
 import fr.batimen.web.app.constants.FeedbackMessageLevel;
 import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.client.behaviour.FileFieldValidatorAndLoaderBehaviour;
+import fr.batimen.web.client.event.AjoutPhotoEvent;
 import fr.batimen.web.client.event.ClearFeedbackPanelEvent;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
+import fr.batimen.web.client.event.SuppressionPhotoEvent;
 import fr.batimen.ws.client.service.AnnonceServiceREST;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -56,8 +58,8 @@ public class PhotosContainer extends Panel {
     private WebMarkupContainer transparentMarkupForPhotosAjax;
     private ListView<ImageDTO> imagesView;
 
-    private static final  String REFRESH_TOOLTIP_ON_SUPPRESS_LINK = "$('.suppress-link').tooltip()";
-    private static final  String REFRESH_PRETTY_PHOTO_ON_PICTURE = "$(\"a[class^='prettyPhoto']\").prettyPhoto();";
+    public static final String REFRESH_TOOLTIP_ON_SUPPRESS_LINK = "$('.suppress-link').tooltip()";
+    public static final String REFRESH_PRETTY_PHOTO_ON_PICTURE = "$(\"a[class^='prettyPhoto']\").prettyPhoto();";
 
     @Inject
     private AnnonceServiceREST annonceServiceREST;
@@ -105,6 +107,15 @@ public class PhotosContainer extends Panel {
             }
         };
 
+        Label titleContainerNoPhoto = new Label("titleContainerNoPhoto", title) {
+
+            @Override
+            protected void onComponentTag(ComponentTag tag) {
+                super.onComponentTag(tag);
+                tag.setName(baliseTypeTitle);
+            }
+        };
+
         imagesView = new ListView<ImageDTO>("imagesView", images) {
 
             private static final long serialVersionUID = 1L;
@@ -135,22 +146,7 @@ public class PhotosContainer extends Panel {
                 AjaxLink<Void> supprimerImage = new AjaxLink<Void>("supprimerImage") {
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        String loginDemandeur = authentication.getCurrentUserInfo().getLogin();
-
-                        SuppressionPhotoDTO suppressionPhotoDTO = new SuppressionPhotoDTO();
-                        suppressionPhotoDTO.setHashID(idAnnonce);
-                        suppressionPhotoDTO.setLoginDemandeur(loginDemandeur);
-                        suppressionPhotoDTO.setImageASupprimer(item.getModelObject());
-
-                        int sizeBefore = images.size();
-                        images = annonceServiceREST.suppressionPhoto(suppressionPhotoDTO);
-
-                        updatePhotoContainer(target);
-                        if (sizeBefore != images.size()) {
-                            target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Suppression effectuée !", FeedbackMessageLevel.SUCCESS));
-                        } else {
-                            target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Problème durant la suppression de la photo sur le serveur, veuillez réessayer ultérieurement", FeedbackMessageLevel.ERROR));
-                        }
+                        target.getPage().send(target.getPage(), Broadcast.BREADTH, new SuppressionPhotoEvent(target, item.getModelObject(), images.size(), images, idAnnonce, authentication.getCurrentUserInfo().getLogin()));
                     }
 
                     @Override
@@ -186,7 +182,7 @@ public class PhotosContainer extends Panel {
         aucunePhotoContainer.setOutputMarkupId(true);
 
         Label aucunePhoto = new Label("aucunePhoto", "Aucune photo du chantier pour le moment :(");
-        aucunePhotoContainer.add(aucunePhoto);
+        aucunePhotoContainer.add(aucunePhoto, titleContainerNoPhoto);
 
         transparentMarkupForPhotosAjax = new WebMarkupContainer("transparentMarkupForPhotosAjax");
         transparentMarkupForPhotosAjax.setOutputMarkupId(true);
@@ -203,6 +199,15 @@ public class PhotosContainer extends Panel {
             }
         };
 
+        Label titleContainerAddPhoto = new Label("titleContainerAddPhoto", "Ajouter des photos") {
+
+            @Override
+            protected void onComponentTag(ComponentTag tag) {
+                super.onComponentTag(tag);
+                tag.setName(baliseTypeTitle);
+            }
+        };
+
         Form<AjoutPhotoDTO> addPhotoForm = new Form<AjoutPhotoDTO>("addPhotoForm");
 
         final FileUploadField photoField = new FileUploadField("photoField");
@@ -215,47 +220,7 @@ public class PhotosContainer extends Panel {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                final AjoutPhotoDTO ajoutImageDTO = new AjoutPhotoDTO();
-                for (FileUpload photo : photoField.getFileUploads()) {
-                    try {
-                        ajoutImageDTO.getImages().add(photo.writeToTempFile());
-                    } catch (IOException e) {
-                        if (LOGGER.isErrorEnabled()) {
-                            LOGGER.error("Problème durant l'écriture de la photo sur le disque", e);
-                        }
-                    }
-                }
-
-                if (!fileFieldValidatorBehaviour.isValidationOK()) {
-                    target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Validation erronnée de vos photos, veuillez corriger", FeedbackMessageLevel.ERROR));
-                } else {
-                    String loginDemandeur = authentication.getCurrentUserInfo().getLogin();
-
-                    //Ajout des photos
-                    ajoutImageDTO.setHashID(idAnnonce);
-                    ajoutImageDTO.setLoginDemandeur(loginDemandeur);
-                    int sizeBefore = images.size();
-                    images = annonceServiceREST.ajouterPhoto(ajoutImageDTO);
-
-                    if (sizeBefore == images.size()) {
-                        StringBuilder sbErrorTropPhoto = new StringBuilder("Vous dépassez le nombre de photos autorisées par annonce, veuillez en supprimer avant d'en rajouter ! (Pour rappel la limite est de ");
-                        sbErrorTropPhoto.append(PropertiesFileGeneral.GENERAL.getProperties().getProperty("gen.max.number.file.annonce")).append(" photos par annonce)");
-                        target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, sbErrorTropPhoto.toString(), FeedbackMessageLevel.ERROR));
-                    } else if (images.isEmpty()) {
-                        target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Problème durant le chargement des photos sur le serveur, veuillez réessayer ultérieurement", FeedbackMessageLevel.ERROR));
-                    } else {
-                        updatePhotoContainer(target);
-
-                        //Mise a jour des champs
-                        ajoutImageDTO.getImages().clear();
-                        photoField.getFileUploads().clear();
-
-                        target.getPage().send(target.getPage(), Broadcast.BREADTH, new ClearFeedbackPanelEvent(target));
-                        target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Photo(s) rajoutée(s) avec succés", FeedbackMessageLevel.SUCCESS));
-                    }
-
-                    target.add(photoField);
-                }
+                this.send(target.getPage(), Broadcast.BREADTH, new AjoutPhotoEvent(target, authentication.getCurrentUserInfo().getLogin(), idAnnonce, photoField, fileFieldValidatorBehaviour, images, images.size()));
             }
 
             @Override
@@ -268,7 +233,7 @@ public class PhotosContainer extends Panel {
         envoyerPhotos.setMarkupId("envoyerPhotos");
 
         addPhotoForm.add(photoField, envoyerPhotos);
-        ajoutPhotoContainer.add(addPhotoForm);
+        ajoutPhotoContainer.add(addPhotoForm, titleContainerAddPhoto);
 
         add(ajoutPhotoContainer);
     }
@@ -277,8 +242,7 @@ public class PhotosContainer extends Panel {
         this.idAnnonce = idAnnonce;
     }
 
-    private void updatePhotoContainer(AjaxRequestTarget target) {
-        imagesView.setList(images);
+    public void updatePhotoContainer(AjaxRequestTarget target) {
         target.add(transparentMarkupForPhotosAjax);
         //Reload de la tooltip sur les liens de suppression
         target.appendJavaScript(REFRESH_TOOLTIP_ON_SUPPRESS_LINK);

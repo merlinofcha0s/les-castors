@@ -66,6 +66,7 @@ public class Entreprise extends MasterPage {
         initCategorieEntreprise();
         initContactEntreprise();
         initAvisContainer();
+        initPhotoChantierTemoinContainer();
     }
 
     @Override
@@ -214,6 +215,16 @@ public class Entreprise extends MasterPage {
         SmartLinkLabel mail = new SmartLinkLabel("mail", entrepriseDTO.getArtisan().getEmail());
 
         add(adresse, telephone, mail);
+    }
+
+    private void initPhotoChantierTemoinContainer(){
+        PhotosContainer photosChantierTemoin = new PhotosContainer("photoChantierTemoin", entrepriseDTO.getPhotosChantiersTemoins(), "Chantiers témoins", "h2", false){
+            @Override
+            public boolean isVisible() {
+                return !entrepriseDTO.getPhotosChantiersTemoins().isEmpty();
+            }
+        };
+        add(photosChantierTemoin);
     }
 
     private void initAvisContainer(){

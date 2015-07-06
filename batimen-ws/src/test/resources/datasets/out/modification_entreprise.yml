@@ -80,6 +80,8 @@ permission:
     artisan_fk: 1004
   - typecompte: 4
     client_fk: 1001
+  - typecompte: 5
+    client_fk: 1002
 categoriemetier:
   - id: 1001
     categoriemetier: 1

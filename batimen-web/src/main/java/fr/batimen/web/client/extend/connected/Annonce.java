@@ -16,6 +16,7 @@ import fr.batimen.web.client.event.*;
 import fr.batimen.web.client.extend.error.AccesInterdit;
 import fr.batimen.web.client.extend.error.NonTrouvee;
 import fr.batimen.web.client.extend.member.client.ModifierAnnonce;
+import fr.batimen.web.client.extend.member.client.util.PhotoServiceAjaxLogic;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.web.client.modal.*;
 import fr.batimen.ws.client.service.AnnonceServiceREST;
@@ -57,6 +58,9 @@ public class Annonce extends MasterPage {
 
     @Inject
     private Authentication authentication;
+
+    @Inject
+    private PhotoServiceAjaxLogic photoUtils;
 
     private String idAnnonce;
     private WebMarkupContainer containerEnteprisesInscrites;
@@ -128,7 +132,7 @@ public class Annonce extends MasterPage {
     private void loadAnnonceInfos(String idAnnonce) {
         userConnected = authentication.getCurrentUserInfo();
         DemandeAnnonceDTO demandeAnnonceDTO = new DemandeAnnonceDTO();
-        demandeAnnonceDTO.setHashID(idAnnonce);
+        demandeAnnonceDTO.setId(idAnnonce);
         demandeAnnonceDTO.setLoginDemandeur(userConnected.getLogin());
 
         for (PermissionDTO permissionDTO : userConnected.getPermissions()) {
@@ -811,7 +815,7 @@ public class Annonce extends MasterPage {
             InscriptionArtisanEvent inscriptionArtisanEvent = (InscriptionArtisanEvent) event.getPayload();
 
             DemandeAnnonceDTO demandeAnnonceDTO = new DemandeAnnonceDTO();
-            demandeAnnonceDTO.setHashID(idAnnonce);
+            demandeAnnonceDTO.setId(idAnnonce);
             demandeAnnonceDTO.setLoginDemandeur(userConnected.getLogin());
             Integer codeRetourInscription = annonceServiceREST.inscriptionUnArtisan(demandeAnnonceDTO);
             if (codeRetourInscription.equals(CodeRetourService.RETOUR_OK)) {
@@ -842,7 +846,7 @@ public class Annonce extends MasterPage {
 
             AnnonceSelectEntrepriseDTO demandeAnnonceSelectionEntreprise = new AnnonceSelectEntrepriseDTO();
             demandeAnnonceSelectionEntreprise.setAjoutOuSupprimeArtisan(AnnonceSelectEntrepriseDTO.AJOUT_ARTISAN);
-            demandeAnnonceSelectionEntreprise.setHashID(idAnnonce);
+            demandeAnnonceSelectionEntreprise.setId(idAnnonce);
             demandeAnnonceSelectionEntreprise.setLoginArtisanChoisi(entreprise.getArtisan().getLogin());
             demandeAnnonceSelectionEntreprise.setLoginDemandeur(annonceAffichageDTO.getAnnonce().getLoginOwner());
             Integer codeRetour = annonceServiceREST.selectOneEnterprise(demandeAnnonceSelectionEntreprise);
@@ -875,7 +879,7 @@ public class Annonce extends MasterPage {
             ClientDTO artisanToSuppress = desinscriptionArtisanAnnonceEvent.getArtisan();
 
             DesinscriptionAnnonceDTO desinscriptionAnnonceDTO = new DesinscriptionAnnonceDTO();
-            desinscriptionAnnonceDTO.setHashID(idAnnonce);
+            desinscriptionAnnonceDTO.setId(idAnnonce);
             desinscriptionAnnonceDTO.setLoginDemandeur(userConnected.getLogin());
             desinscriptionAnnonceDTO.setLoginArtisan(artisanToSuppress.getLogin());
 

@@ -58,7 +58,7 @@ public abstract class AbstractITTest {
     public static final Operation INSERT_USER_DATA = insertInto("client")
             .columns("id", "email", "nom", "prenom", "login", "password", "numeroTel", "dateInscription", "isActive",
                     "cleactivation")
-            .values(100001, "raiden@batimen.fr", "Casaucau", "Cyril", "raiden",
+            .values(100001, "raiden0610@hotmail.fr", "Casaucau", "Cyril", "raiden",
                     "$s0$54040$h99gyX0NNTBvETrAdfjtDw==$fo2obQTG56y7an9qYl3aEO+pv3eH6p4hLzK1xt8EuoY=", "0614125696",
                     "2014-01-08", true, "lolmdr")
             .values(100002, "xaviern@batimen.fr", "Dupont", "Xavier", "xavier",
@@ -182,6 +182,13 @@ public abstract class AbstractITTest {
         WebElement checkCondition = (new WebDriverWait(driver, TEMPS_ATTENTE_AJAX)).until(ExpectedConditions
                 .visibilityOfElementLocated(By.id("myModalLabel")));
         assertNotNull(checkCondition);
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Fail to wait authentication", e);
+            }
+        }
         driver.findElement(By.id("loginModal")).click();
         driver.findElement(By.id("loginModal")).clear();
         driver.findElement(By.id("loginModal")).sendKeys(username);

@@ -3,7 +3,9 @@ package fr.batimen.test.ws.facade;
 import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.security.HashHelper;
 import fr.batimen.dto.*;
+import fr.batimen.dto.aggregate.AjoutPhotoDTO;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
+import fr.batimen.dto.aggregate.SuppressionPhotoDTO;
 import fr.batimen.dto.enums.Civilite;
 import fr.batimen.dto.enums.StatutJuridique;
 import fr.batimen.dto.enums.TypeCompte;
@@ -12,15 +14,15 @@ import fr.batimen.test.ws.AbstractBatimenWsTest;
 import fr.batimen.ws.client.service.ArtisanServiceREST;
 import fr.batimen.ws.dao.ArtisanDAO;
 import fr.batimen.ws.dao.EntrepriseDAO;
-import fr.batimen.ws.entity.Adresse;
-import fr.batimen.ws.entity.Artisan;
-import fr.batimen.ws.entity.Entreprise;
-import fr.batimen.ws.entity.Permission;
+import fr.batimen.ws.entity.*;
+import fr.batimen.ws.service.PhotoService;
 import org.jboss.arquillian.persistence.ShouldMatchDataSet;
 import org.jboss.arquillian.persistence.UsingDataSet;
+import org.junit.Assert;
 import org.junit.Test;
 
 import javax.inject.Inject;
+import java.io.File;
 import java.util.*;
 
 import static org.junit.Assert.*;
@@ -35,6 +37,9 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
 
     @Inject
     private ArtisanServiceREST artisanServiceREST;
+
+    @Inject
+    private PhotoService photoService;
 
     @Test
     public void nouveauPartenaireTestNominal() {
@@ -105,8 +110,13 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
         assertNotNull(entrepriseDTO);
         assertEquals("Pebronne enterprise", entrepriseDTO.getNomComplet());
         assertTrue(!entrepriseDTO.getCategoriesMetier().isEmpty());
+
         assertNotNull(entrepriseDTO.getAdresseEntreprise());
         assertEquals("106 chemin du pébron", entrepriseDTO.getAdresseEntreprise().getAdresse());
+
+        assertNotNull(entrepriseDTO.getPhotosChantiersTemoins());
+        assertFalse(entrepriseDTO.getPhotosChantiersTemoins().isEmpty());
+
     }
 
     @Test
@@ -210,6 +220,9 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
 
         assertEquals(Double.valueOf("4.0"), entrepriseDTO.getMoyenneAvis());
         assertEquals(Integer.valueOf(3), entrepriseDTO.getNbAnnonce());
+
+        assertNotNull(entrepriseDTO.getPhotosChantiersTemoins());
+        assertFalse(entrepriseDTO.getPhotosChantiersTemoins().isEmpty());
     }
 
     /**
@@ -222,4 +235,105 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
         List<AvisDTO> notations = artisanServiceREST.getEntrepriseNotationBySiret("43394298400017");
         assertEquals(3, notations.size());
     }
+
+    /**
+     * Cas de test : L'artisan cherche a rajouter des photos de chantier témoin
+     *
+     */
+    @Test
+    @UsingDataSet("datasets/in/entreprises_informations.yml")
+    public void ajoutPhotoChantierTemoinNominal(){
+        testAjoutPhotoChantier("pebronneArtisanne", 4);
+    }
+
+    /**
+     * Cas de test : L'admin cherche a rajouter des photos de chantier témoin sur une entreprise.
+     *
+     */
+    @Test
+    @UsingDataSet("datasets/in/entreprises_informations.yml")
+    public void ajoutPhotoChantierTemoinAdmin(){
+        testAjoutPhotoChantier("admin", 4);
+    }
+
+    /**
+     * Cas de test : L'admin cherche a rajouter des photos de chantier témoin sur une entreprise.
+     *
+     */
+    @Test
+    @UsingDataSet("datasets/in/entreprises_informations.yml")
+    public void ajoutPhotoChantierTemoinAccesRefuse(){
+        testAjoutPhotoChantier("pebronne", 0);
+    }
+
+    /**
+     * Cas de test : L'artisan cherche a supprimer des photos de chantier témoin sur son entreprise.
+     *
+     */
+    @Test
+    @UsingDataSet("datasets/in/entreprises_informations.yml")
+    @ShouldMatchDataSet(value = "datasets/out/suppression_photo_chantier_temoin.yml", excludeColumns = {"id",
+            "datemaj", "datecreation", "datenotation", "datenotification", "url"})
+    public void suppressionPhotoChantierTemoinNominal(){
+        testSuppressionPhoto("pebronneArtisanne", true);
+    }
+
+    /**
+     * Cas de test : L'admin cherche a supprimer des photos de chantier témoin sur une entreprise.
+     *
+     */
+    @Test
+    @UsingDataSet("datasets/in/entreprises_informations.yml")
+    @ShouldMatchDataSet(value = "datasets/out/suppression_photo_chantier_temoin.yml", excludeColumns = {"id",
+            "datemaj", "datecreation", "datenotation", "datenotification", "url"})
+    public void suppressionPhotoChantierTemoinAdmin(){
+        testSuppressionPhoto("admin", true);
+    }
+
+    public void testAjoutPhotoChantier(String login, int nbImageAttendu) {
+        // On recupére la photo dans les ressources de la webapp de test
+        ClassLoader classLoader = getClass().getClassLoader();
+        File file = new File(classLoader.getResource("img/castor.jpg").getFile());
+
+        AjoutPhotoDTO ajoutPhotoDTO = new AjoutPhotoDTO();
+        ajoutPhotoDTO.setLoginDemandeur(login);
+        ajoutPhotoDTO.setId("43394298400017");
+        ajoutPhotoDTO.getImages().add(file);
+
+        List<ImageDTO> imageDTOs = artisanServiceREST.ajouterPhotosChantierTemoin(ajoutPhotoDTO);
+
+        Assert.assertNotNull(imageDTOs);
+        Assert.assertEquals(nbImageAttendu, imageDTOs.size());
+    }
+
+    public List<ImageDTO> testSuppressionPhoto(String loginDemandeur, boolean allowed) {
+
+        List<Image> images = null;
+        String siret = "43394298400017";
+        ImageDTO imageDTO = new ImageDTO();
+        if (allowed) {
+            testAjoutPhotoChantier(loginDemandeur, 4);
+            //On prends tjr les photos de pebronne pour le cas ou on test avec l'admin
+            images = photoService.getImagesBySiretByLoginDemandeur("partenaire", siret, "pebronneArtisanne");
+            Assert.assertEquals(4, images.size());
+            imageDTO.setUrl(images.get(0).getUrl());
+        } else {
+            imageDTO.setUrl("https://res.cloudinary.com/lescastors/image/upload/v1427874120/test/zbeod6tici6yrphpco39.jpg");
+        }
+
+        SuppressionPhotoDTO suppressionPhotoDTO = new SuppressionPhotoDTO();
+        suppressionPhotoDTO.setLoginDemandeur(loginDemandeur);
+        suppressionPhotoDTO.setId(siret);
+        suppressionPhotoDTO.setImageASupprimer(imageDTO);
+
+        List<ImageDTO> imageDTOs = artisanServiceREST.suppressionPhotoChantierTemoin(suppressionPhotoDTO);
+        Assert.assertEquals(3, imageDTOs.size());
+
+        images = photoService.getImagesBySiretByLoginDemandeur("partenaire", siret, "pebronneArtisanne");
+        Assert.assertEquals(3, images.size());
+
+        return imageDTOs;
+    }
+
+
 }
