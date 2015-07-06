@@ -84,7 +84,7 @@ public class PhotoServiceAjaxLogic implements Serializable {
         switch (serviceName){
             case ANNONCE_PHOTO_SERVICE: imageDTOs.addAll(annonceServiceREST.suppressionPhoto(suppressionPhotoDTO));
                 break;
-            case CHANTIER_TEMOIN_PHOTO_SERVICE : //TODO Appel du service de suppression de photo chantier témoin
+            case CHANTIER_TEMOIN_PHOTO_SERVICE : imageDTOs.addAll(artisanServiceREST.suppressionPhotoChantierTemoin(suppressionPhotoDTO));
                 break;
         }
 

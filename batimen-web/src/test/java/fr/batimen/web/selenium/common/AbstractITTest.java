@@ -182,6 +182,13 @@ public abstract class AbstractITTest {
         WebElement checkCondition = (new WebDriverWait(driver, TEMPS_ATTENTE_AJAX)).until(ExpectedConditions
                 .visibilityOfElementLocated(By.id("myModalLabel")));
         assertNotNull(checkCondition);
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Fail to wait authentication", e);
+            }
+        }
         driver.findElement(By.id("loginModal")).click();
         driver.findElement(By.id("loginModal")).clear();
         driver.findElement(By.id("loginModal")).sendKeys(username);

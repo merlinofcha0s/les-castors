@@ -4,7 +4,9 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.api.ApiResponse;
 import com.sun.jersey.multipart.FormDataBodyPart;
 import fr.batimen.core.enums.PropertiesFileGeneral;
+import fr.batimen.core.exception.BackendException;
 import fr.batimen.dto.ImageDTO;
+import fr.batimen.dto.aggregate.SuppressionPhotoDTO;
 import fr.batimen.ws.dao.ImageDAO;
 import fr.batimen.ws.entity.Annonce;
 import fr.batimen.ws.entity.Entreprise;
@@ -244,5 +246,48 @@ public class PhotoService {
             LOGGER.error("Pas le bon role pour appeler le service, impossible");
         }
         return images;
+    }
+
+    /**
+     * Suppression d'une photo a la fois dans la base de données et dans cloudinary
+     *
+     * @param images la liste des images de l'utilisateurs
+     * @param suppressionPhotoDTO Les infos permettant de supprimer la photo
+     * @return La liste des images apres suppression.
+     */
+    @TransactionAttribute(TransactionAttributeType.MANDATORY)
+    public List<ImageDTO> suppressionPhoto(List<Image> images, SuppressionPhotoDTO suppressionPhotoDTO){
+        List<ImageDTO> imageDTOs = new LinkedList<>();
+        //Si cette liste d'images est null c'est que l'utilisateur n'a pas les droits
+        if (images == null) {
+            return new ArrayList<>();
+        }
+
+        boolean deleteAtLeastOne = false;
+
+        for (int i = 0; i < images.size(); i++) {
+            Image image = images.get(i);
+
+            if (image.getUrl().equals(suppressionPhotoDTO.getImageASupprimer().getUrl())) {
+                imageDAO.delete(image);
+                images.remove(i);
+                supprimerPhotoDansCloud(image);
+                deleteAtLeastOne = true;
+            }
+        }
+
+        if (!deleteAtLeastOne) {
+            try {
+                throw new BackendException("Aucune image supprimée, ca ne doit pas arriver");
+            } catch (BackendException e) {
+                if (LOGGER.isErrorEnabled()) {
+                    LOGGER.error("Problème avec le service de suppresson d'image", e);
+                }
+                return imageDTOs;
+            }
+        } else {
+            imageDTOs = imageToImageDTO(new HashSet<>(images));
+        }
+        return imageDTOs;
     }
 }

@@ -243,7 +243,7 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
     @Test
     @UsingDataSet("datasets/in/entreprises_informations.yml")
     public void ajoutPhotoChantierTemoinNominal(){
-        testAjoutPhotoChantier("pebronneArtisanne", 2);
+        testAjoutPhotoChantier("pebronneArtisanne", 4);
     }
 
     /**
@@ -253,7 +253,7 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
     @Test
     @UsingDataSet("datasets/in/entreprises_informations.yml")
     public void ajoutPhotoChantierTemoinAdmin(){
-        testAjoutPhotoChantier("admin", 2);
+        testAjoutPhotoChantier("admin", 4);
     }
 
     /**
@@ -267,7 +267,7 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
     }
 
     /**
-     * Cas de test : L'admin cherche a rajouter des photos de chantier témoin sur une entreprise.
+     * Cas de test : L'artisan cherche a supprimer des photos de chantier témoin sur son entreprise.
      *
      */
     @Test
@@ -276,6 +276,18 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
             "datemaj", "datecreation", "datenotation", "datenotification", "url"})
     public void suppressionPhotoChantierTemoinNominal(){
         testSuppressionPhoto("pebronneArtisanne", true);
+    }
+
+    /**
+     * Cas de test : L'admin cherche a supprimer des photos de chantier témoin sur une entreprise.
+     *
+     */
+    @Test
+    @UsingDataSet("datasets/in/entreprises_informations.yml")
+    @ShouldMatchDataSet(value = "datasets/out/suppression_photo_chantier_temoin.yml", excludeColumns = {"id",
+            "datemaj", "datecreation", "datenotation", "datenotification", "url"})
+    public void suppressionPhotoChantierTemoinAdmin(){
+        testSuppressionPhoto("admin", true);
     }
 
     public void testAjoutPhotoChantier(String login, int nbImageAttendu) {
@@ -317,10 +329,10 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
         List<ImageDTO> imageDTOs = artisanServiceREST.suppressionPhotoChantierTemoin(suppressionPhotoDTO);
         Assert.assertEquals(3, imageDTOs.size());
 
-        images = photoService.getImagesBySiretByLoginDemandeur("partenaire", siret, "pebronne");
+        images = photoService.getImagesBySiretByLoginDemandeur("partenaire", siret, "pebronneArtisanne");
         Assert.assertEquals(3, images.size());
 
-        return null;
+        return imageDTOs;
     }
 
 

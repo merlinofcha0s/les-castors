@@ -9,9 +9,9 @@ import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.WsPath;
 import fr.batimen.core.exception.BackendException;
 import fr.batimen.core.exception.EmailException;
+import fr.batimen.dto.AvisDTO;
 import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.EntrepriseDTO;
-import fr.batimen.dto.AvisDTO;
 import fr.batimen.dto.ImageDTO;
 import fr.batimen.dto.aggregate.AjoutPhotoDTO;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
@@ -336,7 +336,9 @@ public class GestionArtisanFacade {
     @Path(WsPath.GESTION_PARTENAIRE_SERVICE_SUPPRESSION_PHOTO_CHANTIER_TEMOIN)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public List<ImageDTO> suppressionPhotoChantierTemoin(SuppressionPhotoDTO suppressionPhotoDTO) {
+        String rolesDemandeur = gestionUtilisateurFacade.getUtilisateurRoles(suppressionPhotoDTO.getLoginDemandeur());
+        List<Image> images = photoService.getImagesBySiretByLoginDemandeur(rolesDemandeur, suppressionPhotoDTO.getId(), suppressionPhotoDTO.getLoginDemandeur());
 
-        return new ArrayList<>();
+        return photoService.suppressionPhoto(images, suppressionPhotoDTO);
     }
 }

@@ -115,6 +115,8 @@ public class ModifierMonProfil extends MasterPage {
             mapper.map(entreprise, creationPartenaireDTO.getEntreprise());
             mapper.map(entreprise.getAdresseEntreprise(), creationPartenaireDTO.getAdresse());
             creationPartenaireDTO.getEntreprise().getCategoriesMetier().addAll(entreprise.getCategoriesMetier());
+        }else{
+            entreprise = new EntrepriseDTO();
         }
         propertyModelNouveauPartenaire = new CompoundPropertyModel<>(creationPartenaireDTO);
     }

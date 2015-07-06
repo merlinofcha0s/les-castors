@@ -805,10 +805,10 @@ public class GestionAnnonceFacade {
     }
 
     /**
-     * Récupération de toutes les photos d'une annonce avec vérificatin des droits
+     * Suppression d'une photo par un utilisateur
      *
-     * @param suppressionPhotoDTO L'hash id + le login du demandeur
-     * @return La liste des objets images appartenant à l'annonce.
+     * @param suppressionPhotoDTO Les infos permettant de supprimer la photo
+     * @return La liste des objets images appartenant à l'annonce apres suppression de la photo.
      */
     @POST
     @Path(WsPath.GESTION_ANNONCE_SERVICE_SUPPRESSION_PHOTO)
@@ -816,38 +816,8 @@ public class GestionAnnonceFacade {
     public List<ImageDTO> suppressionPhoto(SuppressionPhotoDTO suppressionPhotoDTO) {
         String rolesDemandeur = utilisateurFacade.get().getUtilisateurRoles(suppressionPhotoDTO.getLoginDemandeur());
         List<Image> images = photoService.getImagesByHashIDByLoginDemandeur(rolesDemandeur, suppressionPhotoDTO.getId(), suppressionPhotoDTO.getLoginDemandeur());
-        List<ImageDTO> imageDTOs = new LinkedList<>();
-        //Si cette liste d'images est null c'est que l'utilisateur n'a pas les droits
-        if (images == null) {
-            return new ArrayList<>();
-        }
 
-        boolean deleteAtLeastOne = false;
-
-        for (int i = 0; i < images.size(); i++) {
-            Image image = images.get(i);
-
-            if (image.getUrl().equals(suppressionPhotoDTO.getImageASupprimer().getUrl())) {
-                imageDAO.delete(image);
-                images.remove(i);
-                photoService.supprimerPhotoDansCloud(image);
-                deleteAtLeastOne = true;
-            }
-        }
-
-        if (!deleteAtLeastOne) {
-            try {
-                throw new BackendException("Aucune image supprimée, ca ne doit pas arriver");
-            } catch (BackendException e) {
-                if (LOGGER.isErrorEnabled()) {
-                    LOGGER.error("Problème avec le service de suppresson d'image", e);
-                }
-                return imageDTOs;
-            }
-        } else {
-            imageDTOs = photoService.imageToImageDTO(new HashSet<>(images));
-        }
-        return imageDTOs;
+        return photoService.suppressionPhoto(images, suppressionPhotoDTO);
     }
 
     /**
