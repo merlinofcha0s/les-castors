@@ -34,28 +34,6 @@ public class Accueil extends MasterPage {
     }
 
     private void initLinks() {
-        Link<String> nouveauDevis = new Link<String>("nouveauDevisLink") {
-
-            private static final long serialVersionUID = -6716952676398723108L;
-
-            @Override
-            public void onClick() {
-                this.setResponsePage(NouveauDevis.class);
-            }
-
-        };
-
-        Link<String> nouveauDevis1 = new Link<String>("nouveauDevisLink1") {
-
-            private static final long serialVersionUID = 1315035411772737764L;
-
-            @Override
-            public void onClick() {
-                this.setResponsePage(NouveauDevis.class);
-            }
-
-        };
-
         Link<String> nouveauDevis2 = new Link<String>("nouveauDevisLink2") {
 
             private static final long serialVersionUID = -9117623557888658144L;
@@ -107,7 +85,7 @@ public class Accueil extends MasterPage {
             }
         };
 
-        this.add(nouveauDevis, nouveauDevis1, nouveauDevis2, rejoignezNousLink,  faireUnDevisSlide1,
+        this.add(nouveauDevis2, rejoignezNousLink,  faireUnDevisSlide1,
                 faireUnDevisSlide2, faireUnDevisSlide3);
     }
 

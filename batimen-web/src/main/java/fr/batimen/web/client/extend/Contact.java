@@ -1,7 +1,14 @@
 package fr.batimen.web.client.extend;
 
-import javax.inject.Inject;
-
+import fr.batimen.core.constant.CodeRetourService;
+import fr.batimen.dto.ContactMailDTO;
+import fr.batimen.dto.constant.ValidatorConstant;
+import fr.batimen.web.app.constants.WebConstants;
+import fr.batimen.web.app.security.Authentication;
+import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
+import fr.batimen.web.client.event.FeedBackPanelEvent;
+import fr.batimen.web.client.master.MasterPage;
+import fr.batimen.ws.client.service.ContactUsServiceREST;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
@@ -13,20 +20,12 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 
-import fr.batimen.core.constant.CodeRetourService;
-import fr.batimen.dto.ContactMailDTO;
-import fr.batimen.dto.constant.ValidatorConstant;
-import fr.batimen.web.app.constants.WebConstants;
-import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
-import fr.batimen.web.client.event.FeedBackPanelEvent;
-import fr.batimen.web.client.master.MasterPage;
-import fr.batimen.ws.client.service.ContactUsServiceREST;
+import javax.inject.Inject;
 
 /**
  * Page de contact qui permettra aux utilisateur de contacter l'équipe
- * 
+ *
  * @author Casaucau Cyril
- * 
  */
 public class Contact extends MasterPage {
 
@@ -34,6 +33,9 @@ public class Contact extends MasterPage {
 
     @Inject
     private ContactUsServiceREST contactUsServiceREST;
+
+    @Inject
+    private Authentication authentication;
 
     /**
      * View Components
@@ -55,27 +57,45 @@ public class Contact extends MasterPage {
      * Component initialization method
      */
     private void initComponents() {
-        ContactMailDTO contactMailDTO = new ContactMailDTO();
-        form = new Form<ContactMailDTO>("contactForm", new CompoundPropertyModel<ContactMailDTO>(contactMailDTO));
+        final ContactMailDTO contactMailDTO = new ContactMailDTO();
+        form = new Form<>("contactForm", new CompoundPropertyModel<>(contactMailDTO));
         form.setOutputMarkupId(true);
 
-        nameField = new TextField<String>("name");
-        nameField.setRequired(true);
+        nameField = new TextField<String>("name") {
+            @Override
+            public boolean isVisible() {
+                return !authentication.isAuthenticated();
+            }
+        };
         nameField.add(new ErrorHighlightBehavior());
         nameField
                 .add(StringValidator.lengthBetween(ValidatorConstant.CLIENT_NOM_MIN, ValidatorConstant.CLIENT_NOM_MAX));
-        emailField = new TextField<String>("email");
-        emailField.setRequired(true);
+
+        emailField = new TextField<String>("email") {
+            @Override
+            public boolean isVisible() {
+                return !authentication.isAuthenticated();
+            }
+        };
+
         emailField.add(EmailAddressValidator.getInstance());
         emailField.add(new ErrorHighlightBehavior());
 
-        subjectField = new TextField<String>("subject");
+        subjectField = new TextField<>("subject");
         subjectField.setRequired(true);
         subjectField.add(new ErrorHighlightBehavior());
 
-        messageField = new TextArea<String>("message");
+        messageField = new TextArea<>("message");
         messageField.setRequired(true);
         messageField.add(new ErrorHighlightBehavior());
+
+        if (authentication.isAuthenticated()) {
+            emailField.setRequired(false);
+            nameField.setRequired(false);
+        } else {
+            emailField.setRequired(true);
+            nameField.setRequired(true);
+        }
 
         // Init du submit button
         submitButton = new AjaxSubmitLink("submitButton") {
@@ -83,12 +103,17 @@ public class Contact extends MasterPage {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                if(authentication.isAuthenticated()){
+                    contactMailDTO.setEmail(authentication.getCurrentUserInfo().getEmail());
+                    contactMailDTO.setName(authentication.getCurrentUserInfo().getLogin());
+                }
+
                 // send shit to server
-                int response = contactUsServiceREST.pushContactMail((ContactMailDTO) getForm().getModelObject());
+                int response = contactUsServiceREST.pushContactMail(contactMailDTO);
                 // finalize
                 if (response == CodeRetourService.RETOUR_OK) {
                     feedBackPanelGeneral
-                            .success("Votre message a été transmis correctement.\nVous obtiendrez une réponse sur votre email de contact indiqué.");
+                            .success("Votre message a été transmis correctement. Nous vous répondrons dans les plus brefs délais.");
                     nameField.setDefaultModelObject("");
                     emailField.setDefaultModelObject("");
                     subjectField.setDefaultModelObject("");
@@ -126,13 +151,8 @@ public class Contact extends MasterPage {
         };
 
         // add components to view
-        form.add(nameField);
-        form.add(emailField);
-        form.add(subjectField);
-        form.add(messageField);
-        form.add(resetButton);
-        form.add(submitButton);
+        form.add(nameField, emailField, subjectField, messageField, resetButton, submitButton);
 
-        this.add(form);
+        add(form);
     }
 }

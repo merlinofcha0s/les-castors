@@ -586,6 +586,11 @@ table tr td .error {
     cursor: pointer;
 }
 
+/* Composant Profil */
+#profil-png{
+    padding-left: 30px;
+}
+
 /* Mon profil */
 #infoPerso {
     padding-bottom: 80px;
