@@ -16,7 +16,6 @@ import fr.batimen.web.client.event.*;
 import fr.batimen.web.client.extend.error.AccesInterdit;
 import fr.batimen.web.client.extend.error.NonTrouvee;
 import fr.batimen.web.client.extend.member.client.ModifierAnnonce;
-import fr.batimen.web.client.extend.member.client.util.PhotoServiceAjaxLogic;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.web.client.modal.*;
 import fr.batimen.ws.client.service.AnnonceServiceREST;
@@ -43,7 +42,7 @@ import javax.inject.Inject;
 import java.text.SimpleDateFormat;
 
 /**
- * TODO : Action qui reste : Modifier , Envoyer devis <br/>
+ * Page d'affichage d'une annonce .
  *
  * @author Casaucau Cyril
  */
@@ -58,9 +57,6 @@ public class Annonce extends MasterPage {
 
     @Inject
     private Authentication authentication;
-
-    @Inject
-    private PhotoServiceAjaxLogic photoUtils;
 
     private String idAnnonce;
     private WebMarkupContainer containerEnteprisesInscrites;
@@ -620,10 +616,10 @@ public class Annonce extends MasterPage {
              */
             @Override
             public boolean isVisible() {
-                return ((roleUtils.checkRoles(TypeCompte.CLIENT) && annonceAffichageDTO.getAnnonce().getLoginOwner()
-                        .equals(userConnected.getLogin()))
-                        || (roleUtils.checkRoles(TypeCompte.ARTISAN) && annonceAffichageDTO.getIsArtisanInscrit()) || (roleUtils
-                        .checkRoles(TypeCompte.ADMINISTRATEUR)));
+                return (roleUtils.checkRoles(TypeCompte.CLIENT) && annonceAffichageDTO.getAnnonce().getLoginOwner()
+                        .equals(userConnected.getLogin())
+                        || roleUtils.checkRoles(TypeCompte.ARTISAN) && annonceAffichageDTO.getIsArtisanInscrit()) || (roleUtils
+                        .checkRoles(TypeCompte.ADMINISTRATEUR));
             }
 
         };
@@ -963,7 +959,7 @@ public class Annonce extends MasterPage {
      * @return true si le lien doit etre affiché
      */
     private boolean afficherInscrireAnnonce() {
-        return (basicCheckForArtisanLink() && !annonceAffichageDTO.getIsArtisanInscrit());
+        return basicCheckForArtisanLink() && !annonceAffichageDTO.getIsArtisanInscrit();
     }
 
     /**
@@ -972,10 +968,6 @@ public class Annonce extends MasterPage {
      * @return true si le lien doit etre affiché
      */
     private boolean afficherEnvoyerDevisAnnonce() {
-        if (basicCheckForArtisanLink() && annonceAffichageDTO.getIsArtisanInscrit()) {
-            return true;
-        } else {
-            return false;
-        }
+        return basicCheckForArtisanLink() && annonceAffichageDTO.getIsArtisanInscrit();
     }
 }

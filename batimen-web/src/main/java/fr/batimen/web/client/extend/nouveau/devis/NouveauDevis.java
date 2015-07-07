@@ -439,7 +439,7 @@ public class NouveauDevis extends MasterPage {
 
         if (event.getPayload() instanceof LocalisationEvent) {
             LocalisationEvent localisationEvent = (LocalisationEvent) event.getPayload();
-            if(localisationEvent.getLocalisationDTOMemeCodePostal().size() != 0){
+            if(!localisationEvent.getLocalisationDTOMemeCodePostal().isEmpty()){
                 nouvelleAnnonce.setCodePostal(localisationEvent.getLocalisationDTOMemeCodePostal().get(0).getCodePostal());
                 nouvelleAnnonce.setDepartement(Integer.valueOf(localisationEvent.getLocalisationDTOMemeCodePostal().get(0).getDepartement()));
             }

@@ -5,6 +5,10 @@ package fr.batimen.ws.utils;
  */
 public class ClientUtils {
 
+    private ClientUtils(){
+
+    }
+
     /**
      * Methode utilitaire permettant de choisir si on doit afficher le nom / prénom ou le login
      *
