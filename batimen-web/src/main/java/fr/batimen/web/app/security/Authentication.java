@@ -1,28 +1,20 @@
 package fr.batimen.web.app.security;
 
-import java.io.Serializable;
-import java.lang.reflect.Type;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
+import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.EntrepriseDTO;
+import fr.batimen.dto.LoginDTO;
+import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.ws.client.service.ArtisanServiceREST;
+import fr.batimen.ws.client.service.UtilisateurServiceREST;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.ExcessiveAttemptsException;
-import org.apache.shiro.authc.IncorrectCredentialsException;
-import org.apache.shiro.authc.LockedAccountException;
-import org.apache.shiro.authc.UnknownAccountException;
-import org.apache.shiro.authc.UsernamePasswordToken;
+import org.apache.shiro.authc.*;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.batimen.dto.ClientDTO;
-import fr.batimen.dto.LoginDTO;
-import fr.batimen.dto.enums.TypeCompte;
-import fr.batimen.ws.client.service.UtilisateurServiceREST;
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.Serializable;
 
 /**
  * Bean permettant la gestion de l'authentification d'un utilisateur
@@ -120,7 +112,13 @@ public class Authentication implements Serializable {
      * @return Les informations de l'entreprise
      */
     public EntrepriseDTO getEntrepriseUserInfo(){
-        return (EntrepriseDTO) SecurityUtils.getSubject().getSession().getAttribute(ENTREPRISE_KEY);
+        EntrepriseDTO entrepriseDTO = (EntrepriseDTO) SecurityUtils.getSubject().getSession().getAttribute(ENTREPRISE_KEY);
+
+        if(entrepriseDTO == null){
+            return new EntrepriseDTO();
+        } else{
+            return entrepriseDTO;
+        }
     }
 
     /**
