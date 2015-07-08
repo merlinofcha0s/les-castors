@@ -48,23 +48,23 @@ public class PhotoServiceAjaxLogic implements Serializable {
     private Authentication authentication;
 
     public void suppressionPhotoAnnonce(IEvent<?> event) {
-        SuppressionPhotoEvent suppressionPhotoEvent = ((SuppressionPhotoEvent) event.getPayload());
+        SuppressionPhotoEvent suppressionPhotoEvent = (SuppressionPhotoEvent) event.getPayload();
         suppressionPhoto(suppressionPhotoEvent, ANNONCE_PHOTO_SERVICE);
     }
 
     public void ajoutPhotoAnnonce(IEvent<?> event) {
-        AjoutPhotoEvent ajoutPhotoEvent = ((AjoutPhotoEvent) event.getPayload());
+        AjoutPhotoEvent ajoutPhotoEvent = (AjoutPhotoEvent) event.getPayload();
         ajoutPhoto(ajoutPhotoEvent, ANNONCE_PHOTO_SERVICE);
     }
 
     public void suppressionPhotoChantierTemoin(IEvent<?> event) {
-        SuppressionPhotoEvent suppressionPhotoEvent = ((SuppressionPhotoEvent) event.getPayload());
+        SuppressionPhotoEvent suppressionPhotoEvent = (SuppressionPhotoEvent) event.getPayload();
         suppressionPhotoEvent.setId(authentication.getEntrepriseUserInfo().getSiret());
         suppressionPhoto(suppressionPhotoEvent, CHANTIER_TEMOIN_PHOTO_SERVICE);
     }
 
     public void ajoutPhotoChantierTemoin(IEvent<?> event) {
-        AjoutPhotoEvent ajoutPhotoEvent = ((AjoutPhotoEvent) event.getPayload());
+        AjoutPhotoEvent ajoutPhotoEvent = (AjoutPhotoEvent) event.getPayload();
         ajoutPhotoEvent.setId(authentication.getEntrepriseUserInfo().getSiret());
         ajoutPhoto(ajoutPhotoEvent, CHANTIER_TEMOIN_PHOTO_SERVICE);
     }

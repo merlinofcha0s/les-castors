@@ -62,9 +62,6 @@ public class PhotosContainer extends Panel {
     public static final String REFRESH_PRETTY_PHOTO_ON_PICTURE = "$(\"a[class^='prettyPhoto']\").prettyPhoto();";
 
     @Inject
-    private AnnonceServiceREST annonceServiceREST;
-
-    @Inject
     private Authentication authentication;
 
     public PhotosContainer(String id, List<ImageDTO> images, String title, String baliseTypeTitle, boolean canAdd) {

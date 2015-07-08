@@ -19,7 +19,6 @@ import fr.batimen.dto.enums.TypeNotification;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 import fr.batimen.ws.dao.AnnonceDAO;
 import fr.batimen.ws.dao.ArtisanDAO;
-import fr.batimen.ws.dao.ImageDAO;
 import fr.batimen.ws.dao.NotificationDAO;
 import fr.batimen.ws.entity.Annonce;
 import fr.batimen.ws.entity.Artisan;
@@ -94,9 +93,6 @@ public class GestionAnnonceFacade {
 
     @Inject
     private PhotoService photoService;
-
-    @Inject
-    private ImageDAO imageDAO;
 
     @Inject
     private NotationService notationService;

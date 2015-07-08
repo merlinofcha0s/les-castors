@@ -16,11 +16,8 @@ public class SuppressionPhotoEvent  extends AbstractEvent {
     private String login;
     private String id;
 
-    AjaxRequestTarget target;
-
     public SuppressionPhotoEvent(AjaxRequestTarget target, ImageDTO imageASupprimer, int nbImagesAvant, List<ImageDTO> images, String id, String login) {
         super(target);
-        this.target = target;
         this.imageASupprimer = imageASupprimer;
         this.nbImagesAvant = nbImagesAvant;
         this.images = images;

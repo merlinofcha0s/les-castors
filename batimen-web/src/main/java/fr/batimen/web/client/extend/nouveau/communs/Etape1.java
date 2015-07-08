@@ -69,7 +69,7 @@ public class Etape1 extends Panel {
 
                     //On compare le departement de l'utilisateur avec ceux du fichier
                     for(String departementAllowed : departementsAllowed){
-                        if(localisationsDTO.size() != 0 && localisationsDTO.get(0).getDepartement().equals(departementAllowed)){
+                        if(!localisationsDTO.isEmpty() && localisationsDTO.get(0).getDepartement().equals(departementAllowed)){
                             departementIsAllowed = true;
                         }
                     }
@@ -95,10 +95,5 @@ public class Etape1 extends Panel {
 
         formCodePostal.add(codePostal, valideCodePostal);
         add(formCodePostal);
-    }
-
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
     }
 }

@@ -1,20 +1,17 @@
 package fr.batimen.ws.service;
 
-import java.util.Map;
-import java.util.Properties;
-
-import javax.inject.Singleton;
-
 import com.cloudinary.Cloudinary;
 import com.cloudinary.api.ApiResponse;
 import com.cloudinary.utils.ObjectUtils;
-
 import fr.batimen.core.exception.BackendException;
 import fr.batimen.ws.entity.Image;
 import fr.batimen.ws.enums.PropertiesFileWS;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.inject.Singleton;
+import java.util.Map;
+import java.util.Properties;
 
 /**
  * Singleton permettant l'appel a cloudinary (cloud de stockage des photos)
@@ -103,7 +100,7 @@ public class CloudinaryService {
                 throw new BackendException("L'image n'a pas été supprimée du cloud");
             } catch (BackendException e) {
                 if (LOGGER.isErrorEnabled()) {
-                    LOGGER.error("L'image n'a pas été supprimée, ne doit pas arriver", idImage.toString(), e);
+                    LOGGER.error("L'image n'a pas été supprimée, ne doit pas arriver", idImage, e);
                 }
             }
             return false;

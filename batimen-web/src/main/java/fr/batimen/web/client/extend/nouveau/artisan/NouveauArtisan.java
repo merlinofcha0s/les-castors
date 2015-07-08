@@ -84,11 +84,7 @@ public class NouveauArtisan extends MasterPage {
         etape1 = new Etape1("etape1"){
             @Override
             public boolean isVisible() {
-                if (etapeEncours.equals(Etape.ETAPE_1)) {
-                    return true;
-                } else {
-                    return false;
-                }
+                return etapeEncours.equals(Etape.ETAPE_1);
             }
         };
 

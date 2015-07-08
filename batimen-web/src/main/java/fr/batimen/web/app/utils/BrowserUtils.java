@@ -11,6 +11,10 @@ import org.apache.wicket.protocol.http.WebSession;
  */
 public class BrowserUtils {
 
+    private BrowserUtils(){
+
+    }
+
     public static boolean isInternetExplorer(WebSession session) {
         ClientProperties clientProperties = session.getClientInfo().getProperties();
         return clientProperties.isBrowserInternetExplorer();
