@@ -15,6 +15,8 @@ import javax.persistence.Table;
 import fr.batimen.core.constant.QueryJPQL;
 import fr.batimen.dto.enums.TypeCompte;
 
+import java.io.Serializable;
+
 /**
  * Entité qui symbolise les permissions utilisateurs.
  * 
@@ -28,7 +30,7 @@ import fr.batimen.dto.enums.TypeCompte;
                 query = "SELECT p FROM Permission AS p WHERE p.client.login IS NOT NULL AND p.client.login = :login"),
         @NamedQuery(name = QueryJPQL.PERMISSION_ARTISAN_BY_LOGIN,
                 query = "SELECT p FROM Permission AS p WHERE p.artisan.login IS NOT NULL AND p.artisan.login = :login") })
-public class Permission extends AbstractEntity {
+public class Permission extends AbstractEntity implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

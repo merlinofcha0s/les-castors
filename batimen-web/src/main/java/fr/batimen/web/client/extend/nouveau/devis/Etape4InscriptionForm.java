@@ -21,7 +21,6 @@ import fr.batimen.web.client.validator.CheckBoxTrueValidator;
 import fr.batimen.web.client.validator.EmailUniquenessValidator;
 import fr.batimen.web.client.validator.LoginUniquenessValidator;
 import fr.batimen.ws.client.service.UtilisateurServiceREST;
-import org.apache.shiro.SecurityUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
