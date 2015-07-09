@@ -48,7 +48,7 @@ public class EntrepriseDTO extends AbstractDTO {
 
     private List<AvisDTO> notationsDTO = new ArrayList<>();
 
-    private Boolean isVerifier;
+    private boolean isVerifier;
 
     private Double moyenneAvis;
 
@@ -162,11 +162,11 @@ public class EntrepriseDTO extends AbstractDTO {
         this.notationsDTO = notationsDTO;
     }
 
-    public Boolean getIsVerifier() {
+    public boolean getIsVerifier() {
         return isVerifier;
     }
 
-    public void setIsVerified(Boolean isVerified) {
+    public void setIsVerified(boolean isVerified) {
         this.isVerifier = isVerified;
     }
 
