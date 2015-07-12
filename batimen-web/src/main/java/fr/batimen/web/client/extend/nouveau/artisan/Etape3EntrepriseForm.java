@@ -98,9 +98,7 @@ public class Etape3EntrepriseForm extends Form<CreationPartenaireDTO> {
 
         // nbDevis.IConverter=Le champs nombre de devis doit contenir un nombre
         // !
-        CastorDatePicker<Date> dateCreation = new CastorDatePicker<Date>("entreprise.dateCreation");
-        dateCreation.setMarkupId("dateCreationField");
-        dateCreation.setDateFormat("dd/mm/yy");
+        CastorDatePicker dateCreation = new CastorDatePicker("entreprise.dateCreation", "entreprisedateCreation");
         dateCreation.add(DateValidator.maximum(new Date(), "dd/MM/yyyy"));
         dateCreation.add(new ErrorHighlightBehavior());
 

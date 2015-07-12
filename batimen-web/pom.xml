@@ -264,12 +264,12 @@
             <artifactId>wicketstuff-html5</artifactId>
             <version>${wicket.version}</version>
         </dependency>
-        <dependency>
+      <!--  <dependency>
             <groupId>org.odlabs.wiquery</groupId>
             <artifactId>wiquery-jquery-ui</artifactId>
             <version>6.13.0</version>
             <scope>compile</scope>
-        </dependency>
+        </dependency> -->
         <!-- AOP -->
         <dependency>
             <groupId>org.aspectj</groupId>

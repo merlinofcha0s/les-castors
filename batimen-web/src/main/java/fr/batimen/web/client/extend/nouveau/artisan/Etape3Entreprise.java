@@ -3,7 +3,6 @@ package fr.batimen.web.client.extend.nouveau.artisan;
 import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
 import fr.batimen.dto.helper.CategorieLoader;
-import fr.batimen.web.client.component.BatimenToolTip;
 import fr.batimen.web.client.extend.nouveau.artisan.event.UncheckedEvent;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -43,7 +42,7 @@ public class Etape3Entreprise extends Panel {
     public Etape3Entreprise(String id, IModel<?> model, final CreationPartenaireDTO nouveauPartenaire, boolean isInModification) {
         this(id, model);
 
-        this.add(BatimenToolTip.getTooltipBehaviour());
+        //this.add(BatimenToolTip.getTooltipBehaviour());
 
         Model<String> titreModificationEntrepriseModel = new Model<>();
 
