@@ -8,28 +8,39 @@ import org.apache.wicket.markup.html.form.TextField;
 
 import java.util.Date;
 
+/**
+ * Datepicker basé sur bootstrap
+ *
+ * @author Casaucau Cyril
+ */
 public class CastorDatePicker extends TextField<Date> {
 
     private static final long serialVersionUID = -5011785809353752263L;
 
-    private String id;
+    private String markupId;
+
+    private StringBuilder initDatePicker;
+
+    private boolean fueluxPresent;
 
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.render(JavaScriptHeaderItem.forUrl("js/bootstrap-datepicker.js"));
-        response.render(CssContentHeaderItem.forUrl("css/datepicker.css"));
-
-        StringBuilder initDatePicker = new StringBuilder("$('#");
-        initDatePicker.append(id).append("').datepicker({format: 'dd/mm/yyyy', weekStart: 1});");
-
+        initDatePicker = new StringBuilder("$('#");
+        initDatePicker.append(markupId).append("').datepicker({format: 'dd/mm/yyyy', weekStart: 1})");
         response.render(OnDomReadyHeaderItem.forScript(initDatePicker));
+
+        if(!fueluxPresent){
+            response.render(JavaScriptHeaderItem.forUrl("js/bootstrap-datepicker.js"));
+            response.render(CssContentHeaderItem.forUrl("css/datepicker.css"));
+        }
     }
 
-    public CastorDatePicker(String id, String markupId) {
+    public CastorDatePicker(String id, String markupId, boolean fueluxPresent) {
         super(id);
-        this.id = markupId;
+        this.markupId = markupId;
+        this.fueluxPresent = fueluxPresent;
+
         setMarkupId(markupId);
     }
-
 }

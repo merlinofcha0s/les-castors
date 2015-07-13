@@ -996,8 +996,14 @@ table tr td .error {
 /* RECHERCHE ANNONCE */
 #plomberie{
     padding-bottom: 7px;
+    padding-left: 15px;
 }
 
 #espace-vert{
     padding-bottom: 6px;
+    padding-left: 13px;
+}
+
+#maconnerie{
+    padding-left: 9px;
 }

@@ -31,7 +31,7 @@
     </scm>
 
     <properties>
-        <wicket.version>6.19.0</wicket.version>
+        <wicket.version>6.20.0</wicket.version>
         <jersey.client.version>1.18.1</jersey.client.version>
         <shiro.version>1.2.3</shiro.version>
         <aspectjrt.version>1.8.5</aspectjrt.version>
@@ -264,12 +264,6 @@
             <artifactId>wicketstuff-html5</artifactId>
             <version>${wicket.version}</version>
         </dependency>
-      <!--  <dependency>
-            <groupId>org.odlabs.wiquery</groupId>
-            <artifactId>wiquery-jquery-ui</artifactId>
-            <version>6.13.0</version>
-            <scope>compile</scope>
-        </dependency> -->
         <!-- AOP -->
         <dependency>
             <groupId>org.aspectj</groupId>
