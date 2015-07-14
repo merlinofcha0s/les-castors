@@ -1,33 +1,27 @@
 package fr.batimen.ws.dao;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
-import javax.inject.Inject;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import fr.batimen.core.constant.QueryJPQL;
 import fr.batimen.core.exception.DuplicateEntityException;
 import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.ws.entity.Annonce;
 import fr.batimen.ws.utils.RolesUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.ejb.*;
+import javax.inject.Inject;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Classe d'accés aux données pour les annonces
- * 
+ *
  * @author Casaucau Cyril
  */
 @Stateless(name = "AnnonceDAO")
@@ -42,9 +36,8 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
 
     /**
      * Récupère les annonces par login de leurs utilsateurs
-     * 
-     * @param login
-     *            le login du client dont on veut recupérer les annonces.
+     *
+     * @param login le login du client dont on veut recupérer les annonces.
      * @return Liste d'annonces appartenant à l'utilisateur.
      */
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
@@ -55,10 +48,10 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
         try {
             TypedQuery<Object[]> query = null;
 
-            if(isArtisan){
+            if (isArtisan) {
                 query = entityManager.createNamedQuery(QueryJPQL.ANNONCE_BY_ARTISAN_LOGIN_FETCH_ARTISAN,
                         Object[].class);
-            }else{
+            } else {
                 query = entityManager.createNamedQuery(QueryJPQL.ANNONCE_BY_DEMANDEUR_LOGIN_FETCH_ARTISAN,
                         Object[].class);
             }
@@ -86,9 +79,8 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
 
     /**
      * Récupère les annonces par login de leurs utilsateurs
-     * 
-     * @param login
-     *            le login du client dont on veut recupérer les annonces.
+     *
+     * @param login le login du client dont on veut recupérer les annonces.
      * @return Liste d'annonces appartenant à l'utilisateur.
      */
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -123,14 +115,11 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
      * Recupere les annonces par titre, description et login : notament utilisé
      * dans la verification de la duplication.
      *
-     * @param titre
-     *            Le titre de l'annonce.
-     * @param description
-     *            La description de l'annonce.
-     * @param login
-     *            Le login du cliebnt
+     * @param titre       Le titre de l'annonce.
+     * @param description La description de l'annonce.
+     * @param login       Le login du cliebnt
      * @return La liste d'annonce qui correspond au titre, description et
-     *         utilsateur present en BDD
+     * utilsateur present en BDD
      */
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public List<Annonce> getAnnonceByTitleAndDescriptionAndLogin(String description, String login) {
@@ -165,11 +154,9 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
     /**
      * Sauvegarde d'une annonce lors de son initialisation, check dans la bdd si
      * elle existe déjà pour un utilisateur donné.
-     * 
-     * @param nouvelleAnnonce
-     *            L'annonce a sauvegarder dans la bdd
-     * @throws DuplicateEntityException
-     *             Exception throw si l'entité existe déjà.
+     *
+     * @param nouvelleAnnonce L'annonce a sauvegarder dans la bdd
+     * @throws DuplicateEntityException Exception throw si l'entité existe déjà.
      */
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void saveAnnonceFirstTime(Annonce nouvelleAnnonce) throws DuplicateEntityException {
@@ -202,9 +189,8 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
 
     /**
      * Calcul le nb d'annonce qu'un client a postés
-     * 
-     * @param login
-     *            le login du client
+     *
+     * @param login le login du client
      * @return Le nb d'annonce
      */
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
@@ -225,9 +211,8 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
 
     /**
      * Récupère les informations d'une annonce dans le but de les afficher.
-     * 
-     * @param login
-     *            le login du client
+     *
+     * @param login le login du client
      * @return Le nb d'annonce
      */
     @TransactionAttribute(TransactionAttributeType.MANDATORY)
@@ -256,9 +241,8 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
 
     /**
      * Charge une annonce grace à son hash ID, ne crée pas de transaction
-     * 
-     * @param login
-     *            le login du client
+     *
+     * @param login le login du client
      * @return Le nb d'annonce
      */
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
@@ -268,9 +252,8 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
 
     /**
      * Charge une annonce grace à son hash ID, crée une transaction
-     * 
-     * @param login
-     *            le login du client
+     *
+     * @param login le login du client
      * @return Le nb d'annonce
      */
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -308,11 +291,9 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
 
     /**
      * Mets a jour le nb de consultation d'une annonce dans la BDD
-     * 
-     * @param nbConsultation
-     *            le nb de consultation deja incrémenté
-     * @param hashID
-     *            L'identifiant unique de l'annonce.
+     *
+     * @param nbConsultation le nb de consultation deja incrémenté
+     * @param hashID         L'identifiant unique de l'annonce.
      * @return True si la mise a jour s'est bien passé .
      */
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -349,10 +330,9 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
      * Supprime une annonce présente en base de données : <br/>
      * Attention ce n'est pas vraiment une supression, on ne fait que desactiver
      * l'annonce en base de données.
-     * 
-     * @param demandeAnnonceDTO
-     *            Objet qui possede les infos pour verifier que l'utilisateur a
-     *            les droits et pour supprimer l'annonce.
+     *
+     * @param demandeAnnonceDTO Objet qui possede les infos pour verifier que l'utilisateur a
+     *                          les droits et pour supprimer l'annonce.
      * @return True si la suppression s'est bien passée.
      */
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -398,13 +378,11 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
      * Cherche en base de données et desactive toutes les annonces qui sont plus
      * petite que la date passée en paramètre et qui ont un nombre d'artisan
      * inscrit égale a la properties du nb max d'artisan <br/>
-     * 
-     * @param todayMinusXDays
-     *            : la date du jour - le nb de jour present dans le fichier de
-     *            properties
-     * @param nbMaxArtisan
-     *            : Nombre max d'artisan pouvant s'inscrire a une annonce (voir
-     *            fichier de properties)
+     *
+     * @param todayMinusXDays : la date du jour - le nb de jour present dans le fichier de
+     *                        properties
+     * @param nbMaxArtisan    : Nombre max d'artisan pouvant s'inscrire a une annonce (voir
+     *                        fichier de properties)
      */
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void desactiveAnnoncePerime(Date todayMinusXDays, Integer nbMaxArtisan) {
@@ -432,11 +410,9 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
 
     /**
      * Recherche une annonce par son id et le login du demandeur <br/>
-     * 
-     * @param hashID
-     *            L'id unique de l'annonce
-     * @param loginDemandeur
-     *            Le login du demandeur (celui qui a poster l'annonce)
+     *
+     * @param hashID         L'id unique de l'annonce
+     * @param loginDemandeur Le login du demandeur (celui qui a poster l'annonce)
      */
     @TransactionAttribute(TransactionAttributeType.MANDATORY)
     public Annonce getAnnonceByIdByLogin(String hashID, String loginDemandeur) {
@@ -463,5 +439,29 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
             }
             return null;
         }
+    }
+
+    @TransactionAttribute(TransactionAttributeType.MANDATORY)
+    public List<Annonce> searchAnnonce(List<Short> categoriesMetier, Date aPartirDu, Integer departement
+            , Integer rangeDebut, Integer rangeFin) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Debut de requete selection annonce par hash et demandeur");
+        }
+
+        CriteriaBuilder criteriaBuilderSearch = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Object> searchCriteria = criteriaBuilderSearch.createQuery();
+        Root<Annonce> from = searchCriteria.from(Annonce.class);
+
+        for(Short categorieMetier : categoriesMetier){
+            searchCriteria.where(criteriaBuilderSearch.equal(from.get("categorieMetier"), categorieMetier));
+        }
+
+        Path<Date> dateCreationPath = from.get("dateCreation");
+        ParameterExpression<Date> param = criteriaBuilderSearch.parameter(Date.class, "dateLimit");
+
+
+        searchCriteria.where(criteriaBuilderSearch.between(criteriaBuilderSearch.("dateCreation"), aPartirDu, criteriaBuilderSearch.currentDate()));
+
+        return null;
     }
 }

@@ -3,6 +3,7 @@ package fr.batimen.ws.client.service;
 import com.google.gson.reflect.TypeToken;
 import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.constant.WsPath;
+import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.ImageDTO;
 import fr.batimen.dto.aggregate.*;
@@ -335,5 +336,29 @@ public class AnnonceServiceREST implements Serializable {
             LOGGER.debug("Fin appel service de recuperation d'une photo d'une annonce.");
         }
         return imageDTOs;
+    }
+
+    /**
+     * Service de recherche d'annonce pour les artisans.
+     *
+     * @param searchAnnonceDTO Objet contenant les criteres de recherche de l'artisan
+     * @return La liste d'annonces correspondantent.
+     */
+    public List<AnnonceDTO> searchAnnonce(SearchAnnonceDTO searchAnnonceDTO) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Début appel service de recherche d'une annonce.....");
+        }
+
+        String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_ANNONCE_SERVICE_PATH,
+                WsPath.GESTION_ANNONCE_SERVICE_RECHERCHE, searchAnnonceDTO);
+
+        TypeToken<List<AnnonceDTO>> tokenAnnonce = new TypeToken<List<AnnonceDTO>>() {
+        };
+        List<AnnonceDTO> annonceDTOs = DeserializeJsonHelper.deserializeDTOList(objectInJSON, tokenAnnonce);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Fin appel service de recherche d'une annonce.");
+        }
+        return annonceDTOs;
     }
 }

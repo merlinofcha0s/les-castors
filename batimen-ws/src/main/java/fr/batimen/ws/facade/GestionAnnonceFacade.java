@@ -10,6 +10,7 @@ import fr.batimen.core.constant.WsPath;
 import fr.batimen.core.exception.BackendException;
 import fr.batimen.core.exception.DuplicateEntityException;
 import fr.batimen.core.exception.EmailException;
+import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.ImageDTO;
 import fr.batimen.dto.aggregate.*;
@@ -814,6 +815,31 @@ public class GestionAnnonceFacade {
         List<Image> images = photoService.getImagesByHashIDByLoginDemandeur(rolesDemandeur, suppressionPhotoDTO.getId(), suppressionPhotoDTO.getLoginDemandeur());
 
         return photoService.suppressionPhoto(images, suppressionPhotoDTO);
+    }
+
+    /**
+     * Service de recherche d'annonce pour les artisans.
+     *
+     * @param searchAnnonceDTO Objet contenant les criteres de recherche de l'artisan
+     * @return La liste d'annonces correspondantent.
+     */
+    @POST
+    @Path(WsPath.GESTION_ANNONCE_SERVICE_RECHERCHE)
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public List<AnnonceDTO> searchAnnonce(SearchAnnonceDTO searchAnnonceDTO) {
+        String rolesDemandeur = utilisateurFacade.get().getUtilisateurRoles(searchAnnonceDTO.getLoginDemandeur());
+        if(!rolesUtils.checkIfArtisanWithString(rolesDemandeur) || rolesUtils.checkIfAdminWithString(rolesDemandeur)){
+            LOGGER.error("Impossible: l'utilisateur ne devrait pas avoir accés à ce service");
+            LOGGER.error("Détails : " + searchAnnonceDTO.toString());
+            return new ArrayList<>();
+        }
+
+
+
+        //TODO Crée un service dao grace au criteria queries
+        //TODO Renvoyer la liste des annonces.
+
+        return new ArrayList<>();
     }
 
     /**
