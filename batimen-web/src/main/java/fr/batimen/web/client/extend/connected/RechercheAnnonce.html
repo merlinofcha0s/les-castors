@@ -5,40 +5,45 @@
         <div wicket:id="profil"></div>
         <div class="span10">
             <div class="bg_title">
-                <h2 class="headInModule">Vos critères</h2>
+                <h2 class="headInModule">Vos critères de recherche
+                    <span id="helper-search" data-toggle="tooltip"
+                       class="fa fa-question-circle"
+                       data-original-title="Remarque : Aucun champs n'est obligatoires : si vous n'entrez pas de département, celui renseigné dans votre compte sera utilisé."
+                       data-placement="top"
+                       title="Remarque : Aucun champs n'est obligatoires : si vous n'entrez pas de département, celui renseigné dans votre compte sera utilisé.">
+		            </span>
+                </h2>
             </div>
-            <div>Aucun champs n'est obligatoire : si vous n'entrez pas département, le departement renseigné dans votre compte sera utilisé.</div>
-            <div></div>
              <form wicket:id="searchForm">
             <div class="row-fluid">
                     <div id="containerActivite" class="fuelux span4">
                         <label class="checkbox-custom checkbox inline" title="Electricité">
-                           <input class="sr-only" type="checkbox" value="option1">
+                           <input class="sr-only" type="checkbox" value="option1" wicket:id="electricite">
                            <i class="checkbox"></i>
                             <span class="checkbox-label icon-Lightning font-glyph-entreprise"></span>
                         </label>
                         <label class="checkbox-custom checkbox inline" id="plomberie" title="Plomberie">
-                            <input class="sr-only" type="checkbox" value="option2"><i class="checkbox"></i>
+                            <input class="sr-only" type="checkbox" value="option2" wicket:id="plomberie"><i class="checkbox"></i>
                             <span class="checkbox-label icons8-plumbing font-glyph-entreprise"></span>
                         </label>
                         <label class="checkbox-custom checkbox inline" id="espace-vert" title="Espaces verts">
-                            <input class="sr-only" type="checkbox" value="option3">
+                            <input class="sr-only" type="checkbox" value="option3" wicket:id="espaceVert">
                             <i class="checkbox"></i>
                             <span class="checkbox-label icons8-garden-shears font-glyph-entreprise">
                         </span></label>
                         <label class="checkbox-custom checkbox inline" id="maconnerie" title="Décoration / Maçonnerie">
-                            <input class="sr-only" type="checkbox" value="option4">
+                            <input class="sr-only" type="checkbox" value="option4" wicket:id="maconnerie">
                             <i class="checkbox"></i>
                             <span class="checkbox-label icon-Tool font-glyph-entreprise"></span>
                         </label>
                     </div>
                 <div class="span4">
                    <label>A partir du :</label>
-                    <input id="rechercheDate" type="text" name="recherche.apartirde" wicket:id="recherche.apartirde"/>
+                    <input id="rechercheDate" type="text" name="recherche.apartirde" wicket:id="aPartirdu"/>
                 </div>
                 <div class="span4">
                     <label>Département :</label>
-                    <input id="rechercheDepartement" type="text" name="recherche.departement"/>
+                    <input id="rechercheDepartement" type="text" name="recherche.departement" wicket:id="departement"/>
                 </div>
 
             </div>
@@ -46,7 +51,7 @@
                       <div class="span4"></div>
                       <div class="span4"></div>
                       <div class="span4">
-                        <a class="btn btn-info" style="float: right;" id="rechercheValider">Rechercher</a>
+                        <a class="btn btn-info" id="rechercheValider" wicket:id="rechercher">Rechercher</a>
                      </div>
                  </div>
              </form>
@@ -57,6 +62,37 @@
         <div class="span10">
             <div class="bg_title">
                 <h2 class="headInModule">Résultats</h2>
+            </div>
+            <table
+                    class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th>Catégorie</th>
+                        <th>Délai d'intervention</th>
+                        <th>Date de création</th>
+                        <th>Type de travaux</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>
+                            <span class="iconsMesDevis icon-Lightning"></span>
+                            <span>Electricité</span>
+                        </td>
+                        <td>Le plus rapidement possible</td>
+                        <td>05/07/2015</td>
+                        <td>Rénovation</td>
+                        <td><a>Voir annonce</a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            <div class="row-fluid">
+                <div class="span4"></div>
+                <div class="span4">
+                    <a class="btn btn-info" id="btnPlusDAvisEntreprise">Afficher plus d'annonce</a>
+                </div>
+                <div class="span4"></div>
             </div>
           </div>
     </div>

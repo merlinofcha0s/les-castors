@@ -41,9 +41,6 @@ public class Etape3Entreprise extends Panel {
 
     public Etape3Entreprise(String id, IModel<?> model, final CreationPartenaireDTO nouveauPartenaire, boolean isInModification) {
         this(id, model);
-
-        //this.add(BatimenToolTip.getTooltipBehaviour());
-
         Model<String> titreModificationEntrepriseModel = new Model<>();
 
         if(isInModification){
