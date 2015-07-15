@@ -11,6 +11,7 @@ import fr.batimen.core.exception.BackendException;
 import fr.batimen.core.exception.DuplicateEntityException;
 import fr.batimen.core.exception.EmailException;
 import fr.batimen.dto.AnnonceDTO;
+import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.ImageDTO;
 import fr.batimen.dto.aggregate.*;
@@ -828,18 +829,30 @@ public class GestionAnnonceFacade {
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public List<AnnonceDTO> searchAnnonce(SearchAnnonceDTO searchAnnonceDTO) {
         String rolesDemandeur = utilisateurFacade.get().getUtilisateurRoles(searchAnnonceDTO.getLoginDemandeur());
-        if(!rolesUtils.checkIfArtisanWithString(rolesDemandeur) || rolesUtils.checkIfAdminWithString(rolesDemandeur)){
+        if (!rolesUtils.checkIfArtisanWithString(rolesDemandeur) || rolesUtils.checkIfAdminWithString(rolesDemandeur)) {
             LOGGER.error("Impossible: l'utilisateur ne devrait pas avoir accés à ce service");
             LOGGER.error("Détails : " + searchAnnonceDTO.toString());
             return new ArrayList<>();
         }
 
+        List<AnnonceDTO> annonceDTOs = new ArrayList<>();
 
+        List<Short> codeCategorieMetier = new ArrayList<>();
 
-        //TODO Crée un service dao grace au criteria queries
-        //TODO Renvoyer la liste des annonces.
+        for (CategorieMetierDTO categorieMetier : searchAnnonceDTO.getCategoriesMetierDTO()) {
+            codeCategorieMetier.add(categorieMetier.getCodeCategorieMetier());
+        }
 
-        return new ArrayList<>();
+        List<Annonce> annonces = annonceDAO.searchAnnonce(codeCategorieMetier, searchAnnonceDTO.getaPartirdu()
+                , searchAnnonceDTO.getDepartement(), searchAnnonceDTO.getRangeDebut(), searchAnnonceDTO.getRangeFin());
+
+        ModelMapper mapper = new ModelMapper();
+
+        for(Annonce annonce : annonces){
+            annonceDTOs.add(mapper.map(annonce, AnnonceDTO.class));
+        }
+
+        return annonceDTOs;
     }
 
     /**

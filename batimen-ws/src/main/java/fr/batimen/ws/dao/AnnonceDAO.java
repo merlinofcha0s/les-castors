@@ -4,7 +4,10 @@ import fr.batimen.core.constant.QueryJPQL;
 import fr.batimen.core.exception.DuplicateEntityException;
 import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
+import fr.batimen.ws.entity.Adresse;
+import fr.batimen.ws.entity.Adresse_;
 import fr.batimen.ws.entity.Annonce;
+import fr.batimen.ws.entity.Annonce_;
 import fr.batimen.ws.utils.RolesUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -449,19 +452,28 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
         }
 
         CriteriaBuilder criteriaBuilderSearch = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Object> searchCriteria = criteriaBuilderSearch.createQuery();
+        CriteriaQuery<Annonce> searchCriteria = criteriaBuilderSearch.createQuery(Annonce.class);
         Root<Annonce> from = searchCriteria.from(Annonce.class);
 
+        Predicate predicates = criteriaBuilderSearch.conjunction();
+        predicates = criteriaBuilderSearch.and(predicates, criteriaBuilderSearch.between(from.get(Annonce_.dateCreation), aPartirDu, new Date()));
+
         for(Short categorieMetier : categoriesMetier){
-            searchCriteria.where(criteriaBuilderSearch.equal(from.get("categorieMetier"), categorieMetier));
+            Predicate categorieRestriction = criteriaBuilderSearch.and(criteriaBuilderSearch.equal(from.get(Annonce_.categorieMetier), categorieMetier));
+            predicates = criteriaBuilderSearch.and(predicates, categorieRestriction);
         }
 
-        Path<Date> dateCreationPath = from.get("dateCreation");
-        ParameterExpression<Date> param = criteriaBuilderSearch.parameter(Date.class, "dateLimit");
+        Join<Annonce, Adresse> adresseJoin = from.join(Annonce_.adresseChantier);
+        Predicate departementRestriction = criteriaBuilderSearch.and(criteriaBuilderSearch.equal(adresseJoin.get(Adresse_.departement), departement));
+        predicates = criteriaBuilderSearch.and(predicates, departementRestriction);
 
+        searchCriteria.where(predicates);
 
-        searchCriteria.where(criteriaBuilderSearch.between(criteriaBuilderSearch.("dateCreation"), aPartirDu, criteriaBuilderSearch.currentDate()));
+        TypedQuery<Annonce> searchQuery = entityManager.createQuery(searchCriteria);
+        searchQuery.setFirstResult(rangeDebut);
+        searchQuery.setMaxResults(rangeFin);
+        List<Annonce> annonces = searchQuery.getResultList();
 
-        return null;
+        return annonces;
     }
 }
