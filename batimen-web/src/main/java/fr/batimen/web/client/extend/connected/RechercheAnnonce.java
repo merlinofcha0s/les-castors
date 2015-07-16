@@ -3,28 +3,30 @@ package fr.batimen.web.client.extend.connected;
 import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.aggregate.SearchAnnonceDTO;
 import fr.batimen.dto.helper.CategorieLoader;
+import fr.batimen.web.app.constants.ParamsConstant;
 import fr.batimen.web.app.security.Authentication;
-import fr.batimen.web.client.component.CastorDatePicker;
-import fr.batimen.web.client.component.Commentaire;
-import fr.batimen.web.client.component.ContactezNous;
-import fr.batimen.web.client.component.Profil;
+import fr.batimen.web.client.component.*;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.ws.client.service.AnnonceServiceREST;
+import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.head.*;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.validation.validator.DateValidator;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Page de recherche des annonce, destinée au Artisan
@@ -41,6 +43,8 @@ public class RechercheAnnonce extends MasterPage {
 
     private CastorDatePicker castorDatePicker;
 
+    private WebMarkupContainer resultatContainer;
+
     private List<AnnonceDTO> annonceDTOList = new ArrayList<>();
 
     private static final String REFRESH_TOOLTIP_HELP_SEARCH = "$('#helper-search').tooltip()";
@@ -50,6 +54,7 @@ public class RechercheAnnonce extends MasterPage {
         super("", "", "Recherche d'annonce", true, "img/bg_title1.jpg");
         initComposants();
         initVosCriteres();
+        initResultat();
     }
 
     public RechercheAnnonce(PageParameters params) {
@@ -84,10 +89,10 @@ public class RechercheAnnonce extends MasterPage {
     private void initVosCriteres() {
         final SearchAnnonceDTO searchAnnonceDTO = new SearchAnnonceDTO();
 
-        final CheckBox electricite = new CheckBox("electricite", new Model<Boolean>());
-        final CheckBox plomberie = new CheckBox("plomberie", new Model<Boolean>());
-        final CheckBox espaceVert = new CheckBox("espaceVert", new Model<Boolean>());
-        final CheckBox maconnerie = new CheckBox("maconnerie", new Model<Boolean>());
+        final CheckBox electricite = new CheckBox("electricite", Model.of(Boolean.FALSE));
+        final CheckBox plomberie = new CheckBox("plomberie", Model.of(Boolean.FALSE));
+        final CheckBox espaceVert = new CheckBox("espaceVert", Model.of(Boolean.FALSE));
+        final CheckBox maconnerie = new CheckBox("maconnerie", Model.of(Boolean.FALSE));
 
         castorDatePicker = new CastorDatePicker("aPartirdu", "rechercheDate", true);
         castorDatePicker.add(DateValidator.maximum(new Date(), "dd/MM/yyyy"));
@@ -98,6 +103,7 @@ public class RechercheAnnonce extends MasterPage {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 annonceDTOList.clear();
+                searchAnnonceDTO.clear();
 
                 if (electricite.getModelObject()) {
                     searchAnnonceDTO.getCategoriesMetierDTO().add(CategorieLoader.getCategorieElectricite());
@@ -108,10 +114,7 @@ public class RechercheAnnonce extends MasterPage {
                 } else if (maconnerie.getModelObject()) {
                     searchAnnonceDTO.getCategoriesMetierDTO().add(CategorieLoader.getCategorieDecorationMaconnerie());
                 } else if (!electricite.getModelObject() && !plomberie.getModelObject() && !espaceVert.getModelObject() && !maconnerie.getModelObject()) {
-                    searchAnnonceDTO.getCategoriesMetierDTO().add(CategorieLoader.getCategorieElectricite());
-                    searchAnnonceDTO.getCategoriesMetierDTO().add(CategorieLoader.getCategoriePlomberie());
-                    searchAnnonceDTO.getCategoriesMetierDTO().add(CategorieLoader.getCategorieEspaceVert());
-                    searchAnnonceDTO.getCategoriesMetierDTO().add(CategorieLoader.getCategorieDecorationMaconnerie());
+                    searchAnnonceDTO.getCategoriesMetierDTO().addAll(CategorieLoader.getAllCategories());
                 }
 
                 searchAnnonceDTO.setLoginDemandeur(authentication.getCurrentUserInfo().getLogin());
@@ -120,8 +123,7 @@ public class RechercheAnnonce extends MasterPage {
                 searchAnnonceDTO.setRangeFin(annonceDTOList.size() + NB_ANNONCE_PAR_PAGE);
 
                 annonceDTOList.addAll(annonceServiceREST.searchAnnonce(searchAnnonceDTO));
-                //TODO Rafraichir la list view
-                //TODO Mettre de detachable model partout dans la list view
+                target.add(resultatContainer);
             }
         };
 
@@ -129,6 +131,48 @@ public class RechercheAnnonce extends MasterPage {
         searchForm.add(electricite, plomberie, espaceVert, maconnerie, castorDatePicker, departement, rechercher);
 
         add(searchForm);
+    }
+
+    private void initResultat() {
+        resultatContainer = new WebMarkupContainer("resultatContainer");
+        resultatContainer.setOutputMarkupId(true);
+
+        ListView<AnnonceDTO> resultat = new ListView<AnnonceDTO>("resultat", annonceDTOList) {
+            @Override
+            protected void populateItem(ListItem<AnnonceDTO> item) {
+                final AnnonceDTO annonce = item.getModelObject();
+                SimpleDateFormat dateCreationFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+                StringBuilder classCssIcon = new StringBuilder("iconsMesDevis");
+                classCssIcon.append(" ").append(CategorieLoader.getIconForCategorie(annonce.getCategorieMetier()));
+
+                WebMarkupContainer iconCategorie = new WebMarkupContainer("iconCategorie");
+                iconCategorie.add(new AttributeModifier("class", classCssIcon.toString()));
+
+                Label categorie = new Label("categorie", CategorieLoader.getCategorieByCode(annonce
+                        .getCategorieMetier()));
+                Label delaiIntervention = new Label("delaiIntervention", annonce.getDelaiIntervention().getText());
+                Label dateCreation = new Label("dateCreation", dateCreationFormat.format(annonce.getDateCreation()));
+                Label typeTravaux = new Label("typeTravaux", annonce.getTypeTravaux().getText());
+
+                LinkLabel voirAnnonce = new LinkLabel("voirAnnonce", new Model<>("Voir annonce")) {
+                    private static final long serialVersionUID = 1L;
+
+                    @Override
+                    public void onClick() {
+                        PageParameters params = new PageParameters();
+                        params.add(ParamsConstant.ID_ANNONCE_PARAM, annonce.getHashID());
+                        this.setResponsePage(Annonce.class, params);
+                    }
+                };
+                voirAnnonce.setOutputMarkupId(true);
+
+                item.add(iconCategorie, categorie, delaiIntervention, dateCreation, typeTravaux, voirAnnonce);
+            }
+        };
+
+        resultatContainer.add(resultat);
+        add(resultatContainer);
     }
 
 }

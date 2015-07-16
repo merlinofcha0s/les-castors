@@ -1,12 +1,10 @@
 package fr.batimen.test.ws.service;
 
 import fr.batimen.core.constant.CodeRetourService;
-import fr.batimen.dto.AvisDTO;
-import fr.batimen.dto.DemandeAnnonceDTO;
-import fr.batimen.dto.ImageDTO;
-import fr.batimen.dto.NotificationDTO;
+import fr.batimen.dto.*;
 import fr.batimen.dto.aggregate.*;
 import fr.batimen.dto.enums.*;
+import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.ws.client.service.AnnonceServiceREST;
 import fr.batimen.ws.dao.AnnonceDAO;
 import fr.batimen.ws.dao.ArtisanDAO;
@@ -24,7 +22,9 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.File;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Classe contenant le code de test quand celui ci est utilisé a plusieurs endroits.
@@ -232,5 +232,22 @@ public class AnnonceServiceTest {
             Assert.assertFalse(annonce.getHashID().isEmpty());
             Assert.assertFalse(annonce.getSelHashID().isEmpty());
         }
+    }
+
+    public void searchAnnonce(String login){
+        SearchAnnonceDTO searchAnnonceDTO = new SearchAnnonceDTO();
+        searchAnnonceDTO.setRangeDebut(0);
+        searchAnnonceDTO.setRangeFin(20);
+        searchAnnonceDTO.setLoginDemandeur(login);
+        searchAnnonceDTO.getCategoriesMetierDTO().add(CategorieLoader.getCategorieElectricite());
+        searchAnnonceDTO.setDepartement(06);
+
+        Calendar cal = Calendar.getInstance(Locale.FRENCH);
+        cal.set(2014, 02, 28);
+        searchAnnonceDTO.setaPartirdu(cal.getTime());
+
+        List<AnnonceDTO> annonceDTOs = annonceServiceREST.searchAnnonce(searchAnnonceDTO);
+        Assert.assertNotNull(annonceDTOs);
+        Assert.assertEquals(2, annonceDTOs.size());
     }
 }

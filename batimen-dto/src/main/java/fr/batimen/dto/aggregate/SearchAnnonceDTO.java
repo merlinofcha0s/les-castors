@@ -3,10 +3,14 @@ package fr.batimen.dto.aggregate;
 import fr.batimen.dto.AbstractDTO;
 import fr.batimen.dto.CategorieMetierDTO;
 
+import javax.validation.Valid;
+import javax.validation.constraints.*;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+
+import static fr.batimen.dto.constant.ValidatorConstant.*;
 
 /**
  * DTO permettant de rechercher des annonces
@@ -15,15 +19,25 @@ import java.util.Objects;
  */
 public class SearchAnnonceDTO extends AbstractDTO {
 
+    @Valid
     private List<CategorieMetierDTO> categoriesMetierDTO = new LinkedList<>();
 
+    @NotNull
+    @Past
     private Date aPartirdu;
 
+    @NotNull
+    @Min(value = DEPARTEMENT_MIN)
+    @Max(value = DEPARTEMENT_MAX)
     private Integer departement;
 
+    @NotNull
+    @Size(min = CLIENT_LOGIN_RANGE_MIN, max = CLIENT_LOGIN_RANGE_MAX)
     private String loginDemandeur;
 
+    @NotNull
     private Integer rangeDebut;
+    @NotNull
     private Integer rangeFin;
 
     public List<CategorieMetierDTO> getCategoriesMetierDTO() {
@@ -72,6 +86,14 @@ public class SearchAnnonceDTO extends AbstractDTO {
 
     public void setRangeFin(Integer rangeFin) {
         this.rangeFin = rangeFin;
+    }
+
+    public void clear(){
+        aPartirdu = new Date();
+        categoriesMetierDTO.clear();
+        departement = 0;
+        rangeDebut = 0;
+        rangeFin = 0;
     }
 
     @Override

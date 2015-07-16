@@ -2,7 +2,6 @@ package fr.batimen.test.ws.facade;
 
 
 import fr.batimen.core.constant.CodeRetourService;
-import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.ImageDTO;
 import fr.batimen.dto.NotificationDTO;
@@ -10,7 +9,6 @@ import fr.batimen.dto.aggregate.*;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.enums.TypeNotification;
-import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.test.ws.AbstractBatimenWsTest;
 import fr.batimen.test.ws.helper.DataHelper;
 import fr.batimen.test.ws.service.AnnonceServiceTest;
@@ -29,9 +27,7 @@ import org.junit.Test;
 
 import javax.inject.Inject;
 import java.io.File;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * @author Casaucau Cyril
@@ -730,25 +726,20 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     }
 
     /**
-     * Cas de test : Un client veut supprimer une des photos liées à son annonce, mais il n'a pas les droits
-     * On lui refuse l'accés
+     * Cas de test : Un artisan veut rechecher une annonce
      */
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
     public void testRechercheAnnonceNominal() {
-        SearchAnnonceDTO searchAnnonceDTO = new SearchAnnonceDTO();
-        searchAnnonceDTO.setRangeDebut(0);
-        searchAnnonceDTO.setRangeFin(20);
-        searchAnnonceDTO.setLoginDemandeur("pebronneArtisanne");
-        searchAnnonceDTO.getCategoriesMetierDTO().add(CategorieLoader.getCategorieElectricite());
-        searchAnnonceDTO.setDepartement(06);
+        annonceServiceTest.searchAnnonce("pebronneArtisanne");
+    }
 
-        Calendar cal = Calendar.getInstance(Locale.FRENCH);
-        cal.set(2014, 02, 28);
-        searchAnnonceDTO.setaPartirdu(cal.getTime());
-
-        List<AnnonceDTO> annonceDTOs = annonceServiceREST.searchAnnonce(searchAnnonceDTO);
-        Assert.assertNotNull(annonceDTOs);
-        Assert.assertEquals(2, annonceDTOs.size());
+    /**
+     * Cas de test : Un admin veut rechecher une annonce
+     */
+    @Test
+    @UsingDataSet("datasets/in/annonces_by_id.yml")
+    public void testRechercheAnnonceParAdmin() {
+        annonceServiceTest.searchAnnonce("admin");
     }
 }

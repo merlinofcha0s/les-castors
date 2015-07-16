@@ -444,38 +444,56 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
         }
     }
 
+    /**
+     * Permet d'effectuer une recherche d'annonce dans la base de données.
+     *
+     * @param categoriesMetier La catégorie de l'annonce
+     * @param aPartirDu A partir de quelle date
+     * @param departement Le departement où se trouve le chantier
+     * @param rangeDebut Pagination de début
+     * @param rangeFin Pagination de fin
+     * @return La liste d'annonces correspondantent
+     */
     @TransactionAttribute(TransactionAttributeType.MANDATORY)
     public List<Annonce> searchAnnonce(List<Short> categoriesMetier, Date aPartirDu, Integer departement
             , Integer rangeDebut, Integer rangeFin) {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Debut de requete selection annonce par hash et demandeur");
+            LOGGER.debug("Debut de requete de recherche d'annonce");
         }
 
         CriteriaBuilder criteriaBuilderSearch = entityManager.getCriteriaBuilder();
         CriteriaQuery<Annonce> searchCriteria = criteriaBuilderSearch.createQuery(Annonce.class);
-        Root<Annonce> from = searchCriteria.from(Annonce.class);
+        Root<Annonce> searchAnnonceRoot = searchCriteria.from(Annonce.class);
 
+        //Prédicat de la date
         Predicate predicates = criteriaBuilderSearch.conjunction();
-        predicates = criteriaBuilderSearch.and(predicates, criteriaBuilderSearch.between(from.get(Annonce_.dateCreation), aPartirDu, new Date()));
+        //Clause pour la date
+        predicates = criteriaBuilderSearch.and(predicates, criteriaBuilderSearch.between(searchAnnonceRoot.get(Annonce_.dateCreation), aPartirDu, new Date()));
 
+        //Predicat pour les catégories
         Predicate predicateCategorieMetier = criteriaBuilderSearch.conjunction();
-
         for(Short categorieMetier : categoriesMetier){
-            Predicate categorieRestriction = criteriaBuilderSearch.and(criteriaBuilderSearch.equal(from.get(Annonce_.categorieMetier), categorieMetier));
+            Predicate categorieRestriction = criteriaBuilderSearch.and(criteriaBuilderSearch.equal(searchAnnonceRoot.get(Annonce_.categorieMetier), categorieMetier));
             predicateCategorieMetier = criteriaBuilderSearch.or(predicateCategorieMetier, categorieRestriction);
         }
 
+        //Fusion des deux predicats
         predicates = criteriaBuilderSearch.and(predicates, predicateCategorieMetier);
 
-        Join<Annonce, Adresse> adresseJoin = from.join(Annonce_.adresseChantier);
+        //Join avec adresse pour comparer le departement
+        Join<Annonce, Adresse> adresseJoin = searchAnnonceRoot.join(Annonce_.adresseChantier);
         Predicate departementRestriction = criteriaBuilderSearch.and(criteriaBuilderSearch.equal(adresseJoin.get(Adresse_.departement), departement));
         predicates = criteriaBuilderSearch.and(predicates, departementRestriction);
 
+        //Ajout des prédicats à la requete
         searchCriteria.where(predicates);
 
+        //Preparation au lancement de la requete
         TypedQuery<Annonce> searchQuery = entityManager.createQuery(searchCriteria);
+        //Gestion de la pagination
         searchQuery.setFirstResult(rangeDebut);
         searchQuery.setMaxResults(rangeFin);
+        //Récuperation des résutats
         List<Annonce> annonces = searchQuery.getResultList();
 
         return annonces;

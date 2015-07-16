@@ -328,13 +328,13 @@ public class Annonce extends MasterPage {
         Label typeTravaux = new Label("typeTravaux", new LoadableDetachableModel<String>() {
             @Override
             protected String load() {
-                return annonceAffichageDTO.getAnnonce().getTypeTravaux().getType();
+                return annonceAffichageDTO.getAnnonce().getTypeTravaux().getText();
             }
         });
         Label delaiIntervention = new Label("delaiIntervention", new LoadableDetachableModel<String>() {
             @Override
             protected String load() {
-                return  annonceAffichageDTO.getAnnonce().getDelaiIntervention().getType();
+                return  annonceAffichageDTO.getAnnonce().getDelaiIntervention().getText();
             }
         });
         final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");

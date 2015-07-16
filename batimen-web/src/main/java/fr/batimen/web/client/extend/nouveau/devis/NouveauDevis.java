@@ -477,7 +477,7 @@ public class NouveauDevis extends MasterPage {
             LOGGER.error("Sous categorie : " + nouvelleAnnonce.getSousCategorie());
             LOGGER.error("Description: " + nouvelleAnnonce.getDescription());
             LOGGER.error("Contact ? : " + nouvelleAnnonce.getTypeContact().getAffichage());
-            LOGGER.error("Intervention  : " + nouvelleAnnonce.getDelaiIntervention().getType());
+            LOGGER.error("Intervention  : " + nouvelleAnnonce.getDelaiIntervention().getText());
             LOGGER.error("Adresse du chantier  : " + nouvelleAnnonce.getAdresse());
             LOGGER.error("Complément du chantier  : " + nouvelleAnnonce.getComplementAdresse());
             LOGGER.error("Code postal  : " + nouvelleAnnonce.getCodePostal());

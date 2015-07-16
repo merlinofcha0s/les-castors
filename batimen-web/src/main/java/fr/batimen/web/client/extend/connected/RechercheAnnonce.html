@@ -63,7 +63,7 @@
             <div class="bg_title">
                 <h2 class="headInModule">Résultats</h2>
             </div>
-            <table
+            <table wicket:id="resultatContainer"
                     class="table table-hover">
                     <thead>
                     <tr>
@@ -75,15 +75,15 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
+                    <tr wicket:id="resultat">
                         <td>
-                            <span class="iconsMesDevis icon-Lightning"></span>
-                            <span>Electricité</span>
+                            <span wicket:id="iconCategorie" class="iconsMesDevis icon-Lightning"></span>
+                            <span wicket:id="categorie">Electricité</span>
                         </td>
-                        <td>Le plus rapidement possible</td>
-                        <td>05/07/2015</td>
-                        <td>Rénovation</td>
-                        <td><a>Voir annonce</a></td>
+                        <td wicket:id="delaiIntervention">Le plus rapidement possible</td>
+                        <td wicket:id="dateCreation">05/07/2015</td>
+                        <td wicket:id="typeTravaux">Rénovation</td>
+                        <td wicket:id="voirAnnonce"><a>Voir annonce</a></td>
                     </tr>
                     </tbody>
                 </table>

@@ -828,15 +828,18 @@ public class GestionAnnonceFacade {
     @Path(WsPath.GESTION_ANNONCE_SERVICE_RECHERCHE)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public List<AnnonceDTO> searchAnnonce(SearchAnnonceDTO searchAnnonceDTO) {
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Recherche d'annonce en cours, Infos en entrée : {}", searchAnnonceDTO);
+        }
+
         String rolesDemandeur = utilisateurFacade.get().getUtilisateurRoles(searchAnnonceDTO.getLoginDemandeur());
-        if (!rolesUtils.checkIfArtisanWithString(rolesDemandeur) || rolesUtils.checkIfAdminWithString(rolesDemandeur)) {
-            LOGGER.error("Impossible: l'utilisateur ne devrait pas avoir accés à ce service");
-            LOGGER.error("Détails : " + searchAnnonceDTO.toString());
+        if (!rolesUtils.checkIfArtisanWithString(rolesDemandeur) && !rolesUtils.checkIfAdminWithString(rolesDemandeur)) {
+            LOGGER.error("Impossible: l'utilisateur ne devrait pas avoir accés à ce service, roledemandeur : {}", rolesDemandeur);
             return new ArrayList<>();
         }
 
         List<AnnonceDTO> annonceDTOs = new ArrayList<>();
-
         List<Short> codeCategorieMetier = new ArrayList<>();
 
         for (CategorieMetierDTO categorieMetier : searchAnnonceDTO.getCategoriesMetierDTO()) {
