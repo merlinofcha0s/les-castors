@@ -744,9 +744,8 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         searchAnnonceDTO.setDepartement(06);
 
         Calendar cal = Calendar.getInstance(Locale.FRENCH);
-        cal.set(2014, 03, 28);
+        cal.set(2014, 02, 28);
         searchAnnonceDTO.setaPartirdu(cal.getTime());
-
 
         List<AnnonceDTO> annonceDTOs = annonceServiceREST.searchAnnonce(searchAnnonceDTO);
         Assert.assertNotNull(annonceDTOs);
