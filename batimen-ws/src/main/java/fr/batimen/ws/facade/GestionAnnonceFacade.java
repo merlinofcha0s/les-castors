@@ -855,6 +855,10 @@ public class GestionAnnonceFacade {
             annonceDTOs.add(mapper.map(annonce, AnnonceDTO.class));
         }
 
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Résultat de la recherche :  {}", annonceDTOs);
+        }
+
         return annonceDTOs;
     }
 

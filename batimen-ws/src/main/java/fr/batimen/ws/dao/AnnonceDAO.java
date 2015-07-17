@@ -470,15 +470,11 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
         //Clause pour la date
         predicates = criteriaBuilderSearch.and(predicates, criteriaBuilderSearch.between(searchAnnonceRoot.get(Annonce_.dateCreation), aPartirDu, new Date()));
 
-        //Predicat pour les catégories
-        Predicate predicateCategorieMetier = criteriaBuilderSearch.conjunction();
-        for(Short categorieMetier : categoriesMetier){
-            Predicate categorieRestriction = criteriaBuilderSearch.and(criteriaBuilderSearch.equal(searchAnnonceRoot.get(Annonce_.categorieMetier), categorieMetier));
-            predicateCategorieMetier = criteriaBuilderSearch.or(predicateCategorieMetier, categorieRestriction);
-        }
+        Expression<Short> categorieExpression = searchAnnonceRoot.get(Annonce_.categorieMetier);
+        Predicate categorieRestriction = categorieExpression.in(categoriesMetier);
 
         //Fusion des deux predicats
-        predicates = criteriaBuilderSearch.and(predicates, predicateCategorieMetier);
+        predicates = criteriaBuilderSearch.and(predicates, categorieRestriction);
 
         //Join avec adresse pour comparer le departement
         Join<Annonce, Adresse> adresseJoin = searchAnnonceRoot.join(Annonce_.adresseChantier);

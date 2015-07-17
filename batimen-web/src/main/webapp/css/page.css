@@ -237,7 +237,6 @@
 #containerActivite {
     padding-top: 15px;
     padding-bottom: 15px;
-    /*padding-left: 480px;*/
 }
 
 #containerPlomberie {
@@ -1018,4 +1017,9 @@ table tr td .error {
 
 #rechercheValider{
     float: right;
+}
+
+#containerActiviteRecherche {
+    padding-top: 30px;
+    padding-bottom: 15px;
 }

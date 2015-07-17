@@ -2,6 +2,7 @@ package fr.batimen.web.client.extend.connected;
 
 import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.aggregate.SearchAnnonceDTO;
+import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.web.app.constants.ParamsConstant;
 import fr.batimen.web.app.security.Authentication;
@@ -10,7 +11,7 @@ import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.ws.client.service.AnnonceServiceREST;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.head.*;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
@@ -23,10 +24,15 @@ import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.apache.wicket.validation.validator.DateValidator;
+import org.apache.wicket.validation.validator.RangeValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Page de recherche des annonce, destinée au Artisan
@@ -34,6 +40,8 @@ import java.util.*;
  * @author Casaucau Cyril
  */
 public class RechercheAnnonce extends MasterPage {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RechercheAnnonce.class);
 
     @Inject
     private Authentication authentication;
@@ -67,7 +75,6 @@ public class RechercheAnnonce extends MasterPage {
         response.render(CssContentHeaderItem.forUrl("css/font_icons8.css"));
         response.render(CssHeaderItem.forUrl("//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"));
 
-        //FuelUX Librairie
         response.render(JavaScriptHeaderItem.forUrl("//www.fuelcdn.com/fuelux/2.6.1/loader.min.js"));
         response.render(CssContentHeaderItem.forUrl("//www.fuelcdn.com/fuelux/2.6.1/css/fuelux.min.css"));
         response.render(CssContentHeaderItem.forUrl("//www.fuelcdn.com/fuelux/2.6.1/css/fuelux-responsive.css"));
@@ -97,33 +104,53 @@ public class RechercheAnnonce extends MasterPage {
         castorDatePicker = new CastorDatePicker("aPartirdu", "rechercheDate", true);
         castorDatePicker.add(DateValidator.maximum(new Date(), "dd/MM/yyyy"));
 
-        TextField<Integer> departement = new TextField<>("departement");
+        final TextField<Integer> departement = new TextField<>("departement");
+        departement.add(RangeValidator.minimum(ValidatorConstant.DEPARTEMENT_MIN));
+        departement.add(RangeValidator.maximum(ValidatorConstant.DEPARTEMENT_MAX));
 
-        AjaxLink<Void> rechercher = new AjaxLink<Void>("rechercher") {
+        AjaxSubmitLink rechercher = new AjaxSubmitLink("rechercher") {
+
             @Override
-            public void onClick(AjaxRequestTarget target) {
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 annonceDTOList.clear();
-                searchAnnonceDTO.clear();
+                searchAnnonceDTO.getCategoriesMetierDTO().clear();
 
-                if (electricite.getModelObject()) {
+                if (electricite.getConvertedInput()) {
                     searchAnnonceDTO.getCategoriesMetierDTO().add(CategorieLoader.getCategorieElectricite());
-                } else if (plomberie.getModelObject()) {
+                }
+                if (plomberie.getConvertedInput()) {
                     searchAnnonceDTO.getCategoriesMetierDTO().add(CategorieLoader.getCategoriePlomberie());
-                } else if (espaceVert.getModelObject()) {
+                }
+                if (espaceVert.getConvertedInput()) {
                     searchAnnonceDTO.getCategoriesMetierDTO().add(CategorieLoader.getCategorieEspaceVert());
-                } else if (maconnerie.getModelObject()) {
+                }
+                if (maconnerie.getConvertedInput()) {
                     searchAnnonceDTO.getCategoriesMetierDTO().add(CategorieLoader.getCategorieDecorationMaconnerie());
-                } else if (!electricite.getModelObject() && !plomberie.getModelObject() && !espaceVert.getModelObject() && !maconnerie.getModelObject()) {
+                }
+                if (!electricite.getConvertedInput() && !plomberie.getModelObject() && !espaceVert.getModelObject() && !maconnerie.getModelObject()) {
                     searchAnnonceDTO.getCategoriesMetierDTO().addAll(CategorieLoader.getAllCategories());
                 }
 
                 searchAnnonceDTO.setLoginDemandeur(authentication.getCurrentUserInfo().getLogin());
+
+                if(searchAnnonceDTO.getDepartement() == null){
+                    searchAnnonceDTO.setDepartement(authentication.getEntrepriseUserInfo().getAdresseEntreprise().getDepartement());
+                }
+
+                if(searchAnnonceDTO.getaPartirdu() == null){
+                    searchAnnonceDTO.setaPartirdu(new Date());
+                }
 
                 searchAnnonceDTO.setRangeDebut(annonceDTOList.size());
                 searchAnnonceDTO.setRangeFin(annonceDTOList.size() + NB_ANNONCE_PAR_PAGE);
 
                 annonceDTOList.addAll(annonceServiceREST.searchAnnonce(searchAnnonceDTO));
                 target.add(resultatContainer);
+            }
+
+            @Override
+            protected void onError(AjaxRequestTarget target, Form<?> form) {
+                super.onError(target, form);
             }
         };
 
@@ -155,7 +182,7 @@ public class RechercheAnnonce extends MasterPage {
                 Label dateCreation = new Label("dateCreation", dateCreationFormat.format(annonce.getDateCreation()));
                 Label typeTravaux = new Label("typeTravaux", annonce.getTypeTravaux().getText());
 
-                LinkLabel voirAnnonce = new LinkLabel("voirAnnonce", new Model<>("Voir annonce")) {
+                LinkLabel voirAnnonce = new LinkLabel("voirAnnonce", new Model<>("Accéder à l'annonce")) {
                     private static final long serialVersionUID = 1L;
 
                     @Override
