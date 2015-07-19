@@ -4,7 +4,6 @@ import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.dto.*;
 import fr.batimen.dto.aggregate.*;
 import fr.batimen.dto.enums.*;
-import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.ws.client.service.AnnonceServiceREST;
 import fr.batimen.ws.dao.AnnonceDAO;
 import fr.batimen.ws.dao.ArtisanDAO;
@@ -234,12 +233,12 @@ public class AnnonceServiceTest {
         }
     }
 
-    public void searchAnnonce(String login){
+    public void searchAnnonce(String login, List<CategorieMetierDTO> categorieToInclude, int numberAnnonceToAssert) {
         SearchAnnonceDTO searchAnnonceDTO = new SearchAnnonceDTO();
         searchAnnonceDTO.setRangeDebut(0);
         searchAnnonceDTO.setRangeFin(20);
         searchAnnonceDTO.setLoginDemandeur(login);
-        searchAnnonceDTO.getCategoriesMetierDTO().add(CategorieLoader.getCategorieElectricite());
+        searchAnnonceDTO.getCategoriesMetierDTO().addAll(categorieToInclude);
         searchAnnonceDTO.setDepartement(06);
 
         Calendar cal = Calendar.getInstance(Locale.FRENCH);
@@ -248,6 +247,6 @@ public class AnnonceServiceTest {
 
         List<AnnonceDTO> annonceDTOs = annonceServiceREST.searchAnnonce(searchAnnonceDTO);
         Assert.assertNotNull(annonceDTOs);
-        Assert.assertEquals(2, annonceDTOs.size());
+        Assert.assertEquals(numberAnnonceToAssert, annonceDTOs.size());
     }
 }

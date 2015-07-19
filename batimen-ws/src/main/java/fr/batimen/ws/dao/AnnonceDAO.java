@@ -465,24 +465,27 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
         CriteriaQuery<Annonce> searchCriteria = criteriaBuilderSearch.createQuery(Annonce.class);
         Root<Annonce> searchAnnonceRoot = searchCriteria.from(Annonce.class);
 
-        //Prédicat de la date
-        Predicate predicates = criteriaBuilderSearch.conjunction();
         //Clause pour la date
-        predicates = criteriaBuilderSearch.and(predicates, criteriaBuilderSearch.between(searchAnnonceRoot.get(Annonce_.dateCreation), aPartirDu, new Date()));
+        Predicate predicates = criteriaBuilderSearch.between(searchAnnonceRoot.get(Annonce_.dateCreation), aPartirDu, new Date());
 
+        //Predicat pour les catégories
         Expression<Short> categorieExpression = searchAnnonceRoot.get(Annonce_.categorieMetier);
-        Predicate categorieRestriction = categorieExpression.in(categoriesMetier);
+        Predicate categoriePredicate = categorieExpression.in(categoriesMetier);
 
-        //Fusion des deux predicats
-        predicates = criteriaBuilderSearch.and(predicates, categorieRestriction);
+        //Predicat pour l'etat de l'annonce
+        Expression<EtatAnnonce> etatAnnonceExpression = searchAnnonceRoot.get(Annonce_.etatAnnonce);
+        Predicate etatAnnoncePredicate = etatAnnonceExpression.in(EtatAnnonce.ACTIVE);
 
         //Join avec adresse pour comparer le departement
         Join<Annonce, Adresse> adresseJoin = searchAnnonceRoot.join(Annonce_.adresseChantier);
-        Predicate departementRestriction = criteriaBuilderSearch.and(criteriaBuilderSearch.equal(adresseJoin.get(Adresse_.departement), departement));
-        predicates = criteriaBuilderSearch.and(predicates, departementRestriction);
+        Predicate departementPredicate = criteriaBuilderSearch.and(criteriaBuilderSearch.equal(adresseJoin.get(Adresse_.departement), departement));
+
+        //Fusion des predicats avec des "ET"
+        predicates = criteriaBuilderSearch.and(predicates, categoriePredicate, etatAnnoncePredicate, departementPredicate);
 
         //Ajout des prédicats à la requete
         searchCriteria.where(predicates);
+        searchCriteria.orderBy(criteriaBuilderSearch.desc(searchAnnonceRoot.get(Annonce_.dateCreation)));
 
         //Preparation au lancement de la requete
         TypedQuery<Annonce> searchQuery = entityManager.createQuery(searchCriteria);

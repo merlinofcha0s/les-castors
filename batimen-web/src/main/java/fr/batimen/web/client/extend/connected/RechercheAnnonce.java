@@ -10,6 +10,7 @@ import fr.batimen.web.client.component.*;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.ws.client.service.AnnonceServiceREST;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.head.*;
@@ -42,21 +43,15 @@ import java.util.List;
 public class RechercheAnnonce extends MasterPage {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RechercheAnnonce.class);
-
-    @Inject
-    private Authentication authentication;
-
-    @Inject
-    private AnnonceServiceREST annonceServiceREST;
-
-    private CastorDatePicker castorDatePicker;
-
-    private WebMarkupContainer resultatContainer;
-
-    private List<AnnonceDTO> annonceDTOList = new ArrayList<>();
-
     private static final String REFRESH_TOOLTIP_HELP_SEARCH = "$('#helper-search').tooltip()";
     private static final Integer NB_ANNONCE_PAR_PAGE = 20;
+    @Inject
+    private Authentication authentication;
+    @Inject
+    private AnnonceServiceREST annonceServiceREST;
+    private CastorDatePicker castorDatePicker;
+    private WebMarkupContainer resultatContainer;
+    private List<AnnonceDTO> annonceDTOList = new ArrayList<>();
 
     public RechercheAnnonce() {
         super("", "", "Recherche d'annonce", true, "img/bg_title1.jpg");
@@ -150,7 +145,7 @@ public class RechercheAnnonce extends MasterPage {
 
             @Override
             protected void onError(AjaxRequestTarget target, Form<?> form) {
-                super.onError(target, form);
+                target.add(feedBackPanelGeneral);
             }
         };
 
@@ -192,6 +187,15 @@ public class RechercheAnnonce extends MasterPage {
                         this.setResponsePage(Annonce.class, params);
                     }
                 };
+
+                item.add(new AjaxEventBehavior("onclick") {
+                    @Override
+                    protected void onEvent(AjaxRequestTarget target) {
+                        PageParameters params = new PageParameters();
+                        params.add(ParamsConstant.ID_ANNONCE_PARAM, annonce.getHashID());
+                        setResponsePage(Annonce.class, params);
+                    }
+                });
                 voirAnnonce.setOutputMarkupId(true);
 
                 item.add(iconCategorie, categorie, delaiIntervention, dateCreation, typeTravaux, voirAnnonce);
