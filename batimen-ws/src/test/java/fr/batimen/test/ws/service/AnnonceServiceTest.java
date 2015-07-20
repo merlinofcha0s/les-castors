@@ -234,7 +234,7 @@ public class AnnonceServiceTest {
     }
 
     public void searchAnnonce(String login, List<CategorieMetierDTO> categorieToInclude, int numberAnnonceToAssert) {
-        SearchAnnonceDTO searchAnnonceDTO = new SearchAnnonceDTO();
+        SearchAnnonceDTOIn searchAnnonceDTO = new SearchAnnonceDTOIn();
         searchAnnonceDTO.setRangeDebut(0);
         searchAnnonceDTO.setRangeFin(20);
         searchAnnonceDTO.setLoginDemandeur(login);
@@ -245,8 +245,8 @@ public class AnnonceServiceTest {
         cal.set(2014, 02, 28);
         searchAnnonceDTO.setaPartirdu(cal.getTime());
 
-        List<AnnonceDTO> annonceDTOs = annonceServiceREST.searchAnnonce(searchAnnonceDTO);
-        Assert.assertNotNull(annonceDTOs);
-        Assert.assertEquals(numberAnnonceToAssert, annonceDTOs.size());
+        SearchAnnonceDTOOut searchAnnonceDTOOut = annonceServiceREST.searchAnnonce(searchAnnonceDTO);
+        Assert.assertNotNull(searchAnnonceDTOOut);
+        Assert.assertEquals(numberAnnonceToAssert, searchAnnonceDTOOut.getAnnonceDTOList().size());
     }
 }

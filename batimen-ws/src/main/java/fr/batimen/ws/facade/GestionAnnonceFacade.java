@@ -821,33 +821,34 @@ public class GestionAnnonceFacade {
     /**
      * Service de recherche d'annonce pour les artisans.
      *
-     * @param searchAnnonceDTO Objet contenant les criteres de recherche de l'artisan
+     * @param searchAnnonceDTOIn Objet contenant les criteres de recherche de l'artisan
      * @return La liste d'annonces correspondantent.
      */
     @POST
     @Path(WsPath.GESTION_ANNONCE_SERVICE_RECHERCHE)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public List<AnnonceDTO> searchAnnonce(SearchAnnonceDTO searchAnnonceDTO) {
+    public SearchAnnonceDTOOut searchAnnonce(SearchAnnonceDTOIn searchAnnonceDTOIn) {
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Recherche d'annonce en cours, Infos en entrée : {}", searchAnnonceDTO);
+            LOGGER.debug("Recherche d'annonce en cours, Infos en entrée : {}", searchAnnonceDTOIn);
         }
 
-        String rolesDemandeur = utilisateurFacade.get().getUtilisateurRoles(searchAnnonceDTO.getLoginDemandeur());
+        String rolesDemandeur = utilisateurFacade.get().getUtilisateurRoles(searchAnnonceDTOIn.getLoginDemandeur());
         if (!rolesUtils.checkIfArtisanWithString(rolesDemandeur) && !rolesUtils.checkIfAdminWithString(rolesDemandeur)) {
             LOGGER.error("Impossible: l'utilisateur ne devrait pas avoir accés à ce service, roledemandeur : {}", rolesDemandeur);
-            return new ArrayList<>();
+            return new SearchAnnonceDTOOut();
         }
 
-        List<AnnonceDTO> annonceDTOs = new ArrayList<>();
+        SearchAnnonceDTOOut searchAnnonceDTOOut = new SearchAnnonceDTOOut();
+        List<AnnonceDTO> annonceDTOs = searchAnnonceDTOOut.getAnnonceDTOList();
         List<Short> codeCategorieMetier = new ArrayList<>();
 
-        for (CategorieMetierDTO categorieMetier : searchAnnonceDTO.getCategoriesMetierDTO()) {
+        for (CategorieMetierDTO categorieMetier : searchAnnonceDTOIn.getCategoriesMetierDTO()) {
             codeCategorieMetier.add(categorieMetier.getCodeCategorieMetier());
         }
 
-        List<Annonce> annonces = annonceDAO.searchAnnonce(codeCategorieMetier, searchAnnonceDTO.getaPartirdu()
-                , searchAnnonceDTO.getDepartement(), searchAnnonceDTO.getRangeDebut(), searchAnnonceDTO.getRangeFin());
+        List<Annonce> annonces = annonceDAO.searchAnnonce(codeCategorieMetier, searchAnnonceDTOIn.getaPartirdu()
+                , searchAnnonceDTOIn.getDepartement(), searchAnnonceDTOIn.getRangeDebut(), searchAnnonceDTOIn.getRangeFin());
 
         ModelMapper mapper = new ModelMapper();
 
@@ -859,7 +860,7 @@ public class GestionAnnonceFacade {
             LOGGER.debug("Résultat de la recherche :  {}", annonceDTOs);
         }
 
-        return annonceDTOs;
+        return searchAnnonceDTOOut;
     }
 
     /**

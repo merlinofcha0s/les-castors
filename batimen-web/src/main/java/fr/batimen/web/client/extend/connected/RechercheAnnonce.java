@@ -1,7 +1,7 @@
 package fr.batimen.web.client.extend.connected;
 
 import fr.batimen.dto.AnnonceDTO;
-import fr.batimen.dto.aggregate.SearchAnnonceDTO;
+import fr.batimen.dto.aggregate.SearchAnnonceDTOIn;
 import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.web.app.constants.ParamsConstant;
@@ -12,6 +12,7 @@ import fr.batimen.ws.client.service.AnnonceServiceREST;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.markup.head.*;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -45,6 +46,7 @@ public class RechercheAnnonce extends MasterPage {
     private static final Logger LOGGER = LoggerFactory.getLogger(RechercheAnnonce.class);
     private static final String REFRESH_TOOLTIP_HELP_SEARCH = "$('#helper-search').tooltip()";
     private static final Integer NB_ANNONCE_PAR_PAGE = 20;
+    final SearchAnnonceDTOIn searchAnnonceDTO = new SearchAnnonceDTOIn();
     @Inject
     private Authentication authentication;
     @Inject
@@ -89,8 +91,6 @@ public class RechercheAnnonce extends MasterPage {
     }
 
     private void initVosCriteres() {
-        final SearchAnnonceDTO searchAnnonceDTO = new SearchAnnonceDTO();
-
         final CheckBox electricite = new CheckBox("electricite", Model.of(Boolean.FALSE));
         final CheckBox plomberie = new CheckBox("plomberie", Model.of(Boolean.FALSE));
         final CheckBox espaceVert = new CheckBox("espaceVert", Model.of(Boolean.FALSE));
@@ -202,8 +202,19 @@ public class RechercheAnnonce extends MasterPage {
             }
         };
 
+        AjaxLink<Void> afficherPlus = new AjaxLink<Void>("afficherPlus") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                searchAnnonceDTO.setRangeDebut(annonceDTOList.size());
+                searchAnnonceDTO.setRangeFin(annonceDTOList.size() + NB_ANNONCE_PAR_PAGE);
+
+                annonceDTOList.addAll(annonceServiceREST.searchAnnonce(searchAnnonceDTO));
+                target.add(resultatContainer);
+            }
+        };
+
         resultatContainer.add(resultat);
-        add(resultatContainer);
+        add(resultatContainer, afficherPlus);
     }
 
 }

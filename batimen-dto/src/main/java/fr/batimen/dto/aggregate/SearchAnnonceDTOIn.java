@@ -17,7 +17,7 @@ import static fr.batimen.dto.constant.ValidatorConstant.*;
  *
  * @author Casaucau Cyril
  */
-public class SearchAnnonceDTO extends AbstractDTO {
+public class SearchAnnonceDTOIn extends AbstractDTO {
 
     @Valid
     private List<CategorieMetierDTO> categoriesMetierDTO = new LinkedList<>();
@@ -100,7 +100,7 @@ public class SearchAnnonceDTO extends AbstractDTO {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        SearchAnnonceDTO that = (SearchAnnonceDTO) o;
+        SearchAnnonceDTOIn that = (SearchAnnonceDTOIn) o;
         return Objects.equals(categoriesMetierDTO, that.categoriesMetierDTO) &&
                 Objects.equals(aPartirdu, that.aPartirdu) &&
                 Objects.equals(departement, that.departement) &&
@@ -116,7 +116,7 @@ public class SearchAnnonceDTO extends AbstractDTO {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("SearchAnnonceDTO{");
+        final StringBuilder sb = new StringBuilder("SearchAnnonceDTOIn{");
         sb.append("categoriesMetierDTO=").append(categoriesMetierDTO);
         sb.append(", aPartirdu=").append(aPartirdu);
         sb.append(", departement=").append(departement);

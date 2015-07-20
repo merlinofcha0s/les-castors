@@ -462,7 +462,48 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
         }
 
         CriteriaBuilder criteriaBuilderSearch = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Annonce> searchCriteria = criteriaBuilderSearch.createQuery(Annonce.class);
+        CriteriaQuery<Annonce> searchCriteria = createSearchCriteria(criteriaBuilderSearch.createQuery(Annonce.class), categoriesMetier, aPartirDu, departement, false);
+
+        //Preparation au lancement de la requete
+        TypedQuery<Annonce> searchQuery = entityManager.createQuery(searchCriteria);
+        //Gestion de la pagination
+        searchQuery.setFirstResult(rangeDebut);
+        searchQuery.setMaxResults(rangeFin);
+        //Récuperation des résutats
+        return searchQuery.getResultList();
+    }
+
+    /**
+     * Permet de compter le nombre de résultat total pour une demande de recherche
+     *
+     * @param categoriesMetier La catégorie de l'annonce
+     * @param aPartirDu        A partir de quelle date
+     * @param departement      Le departement où se trouve le chantier
+     * @param rangeDebut       Pagination de début
+     * @param rangeFin         Pagination de fin
+     * @return La liste d'annonces correspondantent
+     */
+    @TransactionAttribute(TransactionAttributeType.MANDATORY)
+    public Long countSearchAnnonce(List<Short> categoriesMetier, Date aPartirDu, Integer departement
+            , Integer rangeDebut, Integer rangeFin) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Debut de requete de recherche d'annonce");
+        }
+
+        CriteriaBuilder criteriaBuilderSearch = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> searchCriteria = createSearchCriteria(criteriaBuilderSearch.createQuery(Long.class), categoriesMetier, aPartirDu, departement, false);
+
+        //Preparation au lancement de la requete
+        TypedQuery<Long> searchQuery = entityManager.createQuery(searchCriteria);
+        //Gestion de la pagination
+        searchQuery.setFirstResult(rangeDebut);
+        searchQuery.setMaxResults(rangeFin);
+        //Récuperation des résutats
+        return searchQuery.getSingleResult();
+    }
+
+    private <T> CriteriaQuery<T> createSearchCriteria(CriteriaQuery<T> searchCriteria, List<Short> categoriesMetier, Date aPartirDu, Integer departement, boolean countNumberAnnonceOnly) {
+        CriteriaBuilder criteriaBuilderSearch = entityManager.getCriteriaBuilder();
         Root<Annonce> searchAnnonceRoot = searchCriteria.from(Annonce.class);
 
         //Clause pour la date
@@ -487,14 +528,8 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
         searchCriteria.where(predicates);
         searchCriteria.orderBy(criteriaBuilderSearch.desc(searchAnnonceRoot.get(Annonce_.dateCreation)));
 
-        //Preparation au lancement de la requete
-        TypedQuery<Annonce> searchQuery = entityManager.createQuery(searchCriteria);
-        //Gestion de la pagination
-        searchQuery.setFirstResult(rangeDebut);
-        searchQuery.setMaxResults(rangeFin);
-        //Récuperation des résutats
-        List<Annonce> annonces = searchQuery.getResultList();
-
-        return annonces;
+        return searchCriteria;
     }
+
+
 }
