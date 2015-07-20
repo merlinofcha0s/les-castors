@@ -16,7 +16,7 @@ public class SearchAnnonceDTOOut extends AbstractDTO {
 
     private List<AnnonceDTO> annonceDTOList = new ArrayList<>();
 
-    private int nbTotalResultat;
+    private long nbTotalResultat;
 
     public List<AnnonceDTO> getAnnonceDTOList() {
         return annonceDTOList;
@@ -26,11 +26,11 @@ public class SearchAnnonceDTOOut extends AbstractDTO {
         this.annonceDTOList = annonceDTOList;
     }
 
-    public int getNbTotalResultat() {
+    public long getNbTotalResultat() {
         return nbTotalResultat;
     }
 
-    public void setNbTotalResultat(int nbTotalResultat) {
+    public void setNbTotalResultat(long nbTotalResultat) {
         this.nbTotalResultat = nbTotalResultat;
     }
 

@@ -840,7 +840,6 @@ public class GestionAnnonceFacade {
         }
 
         SearchAnnonceDTOOut searchAnnonceDTOOut = new SearchAnnonceDTOOut();
-        List<AnnonceDTO> annonceDTOs = searchAnnonceDTOOut.getAnnonceDTOList();
         List<Short> codeCategorieMetier = new ArrayList<>();
 
         for (CategorieMetierDTO categorieMetier : searchAnnonceDTOIn.getCategoriesMetierDTO()) {
@@ -850,14 +849,19 @@ public class GestionAnnonceFacade {
         List<Annonce> annonces = annonceDAO.searchAnnonce(codeCategorieMetier, searchAnnonceDTOIn.getaPartirdu()
                 , searchAnnonceDTOIn.getDepartement(), searchAnnonceDTOIn.getRangeDebut(), searchAnnonceDTOIn.getRangeFin());
 
+        long nbAnnonceTotale = annonceDAO.countSearchAnnonce(codeCategorieMetier, searchAnnonceDTOIn.getaPartirdu()
+                , searchAnnonceDTOIn.getDepartement(), searchAnnonceDTOIn.getRangeDebut(), searchAnnonceDTOIn.getRangeFin());
+
+        searchAnnonceDTOOut.setNbTotalResultat(nbAnnonceTotale);
+
         ModelMapper mapper = new ModelMapper();
 
         for(Annonce annonce : annonces){
-            annonceDTOs.add(mapper.map(annonce, AnnonceDTO.class));
+            searchAnnonceDTOOut.getAnnonceDTOList().add(mapper.map(annonce, AnnonceDTO.class));
         }
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Résultat de la recherche :  {}", annonceDTOs);
+            LOGGER.debug("Résultat de la recherche :  {}", searchAnnonceDTOOut.getAnnonceDTOList());
         }
 
         return searchAnnonceDTOOut;

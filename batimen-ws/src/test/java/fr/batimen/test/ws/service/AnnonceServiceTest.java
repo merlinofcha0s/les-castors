@@ -248,5 +248,6 @@ public class AnnonceServiceTest {
         SearchAnnonceDTOOut searchAnnonceDTOOut = annonceServiceREST.searchAnnonce(searchAnnonceDTO);
         Assert.assertNotNull(searchAnnonceDTOOut);
         Assert.assertEquals(numberAnnonceToAssert, searchAnnonceDTOOut.getAnnonceDTOList().size());
+        Assert.assertEquals(numberAnnonceToAssert, searchAnnonceDTOOut.getNbTotalResultat());
     }
 }

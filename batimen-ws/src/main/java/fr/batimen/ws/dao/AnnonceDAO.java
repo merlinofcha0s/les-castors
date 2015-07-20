@@ -462,7 +462,11 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
         }
 
         CriteriaBuilder criteriaBuilderSearch = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Annonce> searchCriteria = createSearchCriteria(criteriaBuilderSearch.createQuery(Annonce.class), categoriesMetier, aPartirDu, departement, false);
+        CriteriaQuery<Annonce> searchCriteria = criteriaBuilderSearch.createQuery(Annonce.class);
+        Root<Annonce> searchAnnonceRoot = searchCriteria.from(Annonce.class);
+
+        //Ajout des prédicats à la requete
+        searchCriteria.where(createSearchPredicate(searchAnnonceRoot, categoriesMetier, aPartirDu, departement));
 
         //Preparation au lancement de la requete
         TypedQuery<Annonce> searchQuery = entityManager.createQuery(searchCriteria);
@@ -491,20 +495,22 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
         }
 
         CriteriaBuilder criteriaBuilderSearch = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Long> searchCriteria = createSearchCriteria(criteriaBuilderSearch.createQuery(Long.class), categoriesMetier, aPartirDu, departement, false);
+        CriteriaQuery<Long> searchCriteria = criteriaBuilderSearch.createQuery(Long.class);
+        Root<Annonce> searchAnnonceRoot = searchCriteria.from(Annonce.class);
+        //On lui dit de compter les annonces.
+        searchCriteria.select(criteriaBuilderSearch.count(searchAnnonceRoot));
+
+        //Ajout des prédicats à la requete
+        searchCriteria.where(createSearchPredicate(searchAnnonceRoot, categoriesMetier, aPartirDu, departement));
 
         //Preparation au lancement de la requete
         TypedQuery<Long> searchQuery = entityManager.createQuery(searchCriteria);
-        //Gestion de la pagination
-        searchQuery.setFirstResult(rangeDebut);
-        searchQuery.setMaxResults(rangeFin);
         //Récuperation des résutats
         return searchQuery.getSingleResult();
     }
 
-    private <T> CriteriaQuery<T> createSearchCriteria(CriteriaQuery<T> searchCriteria, List<Short> categoriesMetier, Date aPartirDu, Integer departement, boolean countNumberAnnonceOnly) {
+    private Predicate createSearchPredicate(Root<Annonce> searchAnnonceRoot, List<Short> categoriesMetier, Date aPartirDu, Integer departement) {
         CriteriaBuilder criteriaBuilderSearch = entityManager.getCriteriaBuilder();
-        Root<Annonce> searchAnnonceRoot = searchCriteria.from(Annonce.class);
 
         //Clause pour la date
         Predicate predicates = criteriaBuilderSearch.between(searchAnnonceRoot.get(Annonce_.dateCreation), aPartirDu, new Date());
@@ -524,11 +530,7 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
         //Fusion des predicats avec des "ET"
         predicates = criteriaBuilderSearch.and(predicates, categoriePredicate, etatAnnoncePredicate, departementPredicate);
 
-        //Ajout des prédicats à la requete
-        searchCriteria.where(predicates);
-        searchCriteria.orderBy(criteriaBuilderSearch.desc(searchAnnonceRoot.get(Annonce_.dateCreation)));
-
-        return searchCriteria;
+        return predicates;
     }
 
 

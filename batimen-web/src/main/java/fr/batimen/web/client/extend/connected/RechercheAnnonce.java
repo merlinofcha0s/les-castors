@@ -2,6 +2,7 @@ package fr.batimen.web.client.extend.connected;
 
 import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.aggregate.SearchAnnonceDTOIn;
+import fr.batimen.dto.aggregate.SearchAnnonceDTOOut;
 import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.web.app.constants.ParamsConstant;
@@ -44,16 +45,20 @@ import java.util.List;
 public class RechercheAnnonce extends MasterPage {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RechercheAnnonce.class);
+
     private static final String REFRESH_TOOLTIP_HELP_SEARCH = "$('#helper-search').tooltip()";
     private static final Integer NB_ANNONCE_PAR_PAGE = 20;
-    final SearchAnnonceDTOIn searchAnnonceDTO = new SearchAnnonceDTOIn();
+    private final SearchAnnonceDTOIn searchAnnonceDTO = new SearchAnnonceDTOIn();
     @Inject
     private Authentication authentication;
     @Inject
     private AnnonceServiceREST annonceServiceREST;
     private CastorDatePicker castorDatePicker;
     private WebMarkupContainer resultatContainer;
+    private WebMarkupContainer containerPlusAnnonce;
     private List<AnnonceDTO> annonceDTOList = new ArrayList<>();
+    private long nbTotaleAnnonceRecherche;
+    private Label infoNbAnnonce;
 
     public RechercheAnnonce() {
         super("", "", "Recherche d'annonce", true, "img/bg_title1.jpg");
@@ -128,19 +133,26 @@ public class RechercheAnnonce extends MasterPage {
 
                 searchAnnonceDTO.setLoginDemandeur(authentication.getCurrentUserInfo().getLogin());
 
-                if(searchAnnonceDTO.getDepartement() == null){
+                if (searchAnnonceDTO.getDepartement() == null) {
                     searchAnnonceDTO.setDepartement(authentication.getEntrepriseUserInfo().getAdresseEntreprise().getDepartement());
                 }
 
-                if(searchAnnonceDTO.getaPartirdu() == null){
+                if (searchAnnonceDTO.getaPartirdu() == null) {
                     searchAnnonceDTO.setaPartirdu(new Date());
                 }
 
                 searchAnnonceDTO.setRangeDebut(annonceDTOList.size());
                 searchAnnonceDTO.setRangeFin(annonceDTOList.size() + NB_ANNONCE_PAR_PAGE);
 
-                annonceDTOList.addAll(annonceServiceREST.searchAnnonce(searchAnnonceDTO));
-                target.add(resultatContainer);
+                SearchAnnonceDTOOut searchAnnonceDTOOut = annonceServiceREST.searchAnnonce(searchAnnonceDTO);
+
+                nbTotaleAnnonceRecherche = searchAnnonceDTOOut.getNbTotalResultat();
+
+                annonceDTOList.addAll(searchAnnonceDTOOut.getAnnonceDTOList());
+
+                updateModelInfoNbAnnonce();
+
+                target.add(resultatContainer, containerPlusAnnonce);
             }
 
             @Override
@@ -208,13 +220,39 @@ public class RechercheAnnonce extends MasterPage {
                 searchAnnonceDTO.setRangeDebut(annonceDTOList.size());
                 searchAnnonceDTO.setRangeFin(annonceDTOList.size() + NB_ANNONCE_PAR_PAGE);
 
-                annonceDTOList.addAll(annonceServiceREST.searchAnnonce(searchAnnonceDTO));
-                target.add(resultatContainer);
+                SearchAnnonceDTOOut searchAnnonceDTOOut = annonceServiceREST.searchAnnonce(searchAnnonceDTO);
+                annonceDTOList.addAll(searchAnnonceDTOOut.getAnnonceDTOList());
+
+                updateModelInfoNbAnnonce();
+                target.add(resultatContainer, containerPlusAnnonce);
             }
         };
 
+
+        infoNbAnnonce = new Label("infoNbAnnonce", new Model<>()) {
+            @Override
+            public boolean isVisible() {
+                return !annonceDTOList.isEmpty();
+            }
+        };
+
+        updateModelInfoNbAnnonce();
+        infoNbAnnonce.setOutputMarkupId(true);
+        infoNbAnnonce.setMarkupId("infoNbAnnonce");
+
+        containerPlusAnnonce = new WebMarkupContainer("containerPlusAnnonce");
+        containerPlusAnnonce.setOutputMarkupId(true);
+        containerPlusAnnonce.setMarkupId("containerPlusAnnonce");
+
+        containerPlusAnnonce.add(afficherPlus, infoNbAnnonce);
+
         resultatContainer.add(resultat);
-        add(resultatContainer, afficherPlus);
+        add(resultatContainer, containerPlusAnnonce);
     }
 
+    private void updateModelInfoNbAnnonce() {
+        StringBuilder infoNbAnnonceValeur = new StringBuilder();
+        infoNbAnnonceValeur.append(annonceDTOList.size()).append(" annonces affichées sur ").append(nbTotaleAnnonceRecherche);
+        infoNbAnnonce.setDefaultModelObject(infoNbAnnonceValeur.toString());
+    }
 }
