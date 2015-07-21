@@ -47,7 +47,7 @@ public class RechercheAnnonce extends MasterPage {
     private static final Logger LOGGER = LoggerFactory.getLogger(RechercheAnnonce.class);
 
     private static final String REFRESH_TOOLTIP_HELP_SEARCH = "$('#helper-search').tooltip()";
-    private static final Integer NB_ANNONCE_PAR_PAGE = 20;
+    private static final Integer NB_ANNONCE_PAR_PAGE = 2;
     private final SearchAnnonceDTOIn searchAnnonceDTO = new SearchAnnonceDTOIn();
     @Inject
     private Authentication authentication;
@@ -142,7 +142,7 @@ public class RechercheAnnonce extends MasterPage {
                 }
 
                 searchAnnonceDTO.setRangeDebut(annonceDTOList.size());
-                searchAnnonceDTO.setRangeFin(annonceDTOList.size() + NB_ANNONCE_PAR_PAGE);
+                searchAnnonceDTO.setRangeFin(NB_ANNONCE_PAR_PAGE);
 
                 SearchAnnonceDTOOut searchAnnonceDTOOut = annonceServiceREST.searchAnnonce(searchAnnonceDTO);
 
@@ -218,13 +218,18 @@ public class RechercheAnnonce extends MasterPage {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 searchAnnonceDTO.setRangeDebut(annonceDTOList.size());
-                searchAnnonceDTO.setRangeFin(annonceDTOList.size() + NB_ANNONCE_PAR_PAGE);
+                searchAnnonceDTO.setRangeFin(NB_ANNONCE_PAR_PAGE);
 
                 SearchAnnonceDTOOut searchAnnonceDTOOut = annonceServiceREST.searchAnnonce(searchAnnonceDTO);
                 annonceDTOList.addAll(searchAnnonceDTOOut.getAnnonceDTOList());
 
                 updateModelInfoNbAnnonce();
                 target.add(resultatContainer, containerPlusAnnonce);
+            }
+
+            @Override
+            public boolean isVisible() {
+                return annonceDTOList.size() != nbTotaleAnnonceRecherche || (!annonceDTOList.isEmpty() && annonceDTOList.size() != nbTotaleAnnonceRecherche);
             }
         };
 

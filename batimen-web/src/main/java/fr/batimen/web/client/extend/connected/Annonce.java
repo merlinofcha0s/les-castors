@@ -282,7 +282,6 @@ public class Annonce extends MasterPage {
 
             @Override
             public void onClick() {
-                // TODO A implementer
             }
 
         };
@@ -430,7 +429,6 @@ public class Annonce extends MasterPage {
 
                     @Override
                     public void onClick() {
-                        // TODO A Completer quand la gestion des pdfs sera prete
                     }
                 };
 
@@ -549,9 +547,6 @@ public class Annonce extends MasterPage {
 
             @Override
             public void onClick() {
-                // URLEncoder.encode(notification.getArtisanNotifier().getEntreprise().getNomComplet(),
-                // "UTF-8")
-                // TODO A Completer quand la page entreprise sera prete
             }
         };
 

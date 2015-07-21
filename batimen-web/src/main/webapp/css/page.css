@@ -1023,3 +1023,7 @@ table tr td .error {
     padding-top: 30px;
     padding-bottom: 15px;
 }
+
+#infoNbAnnonce {
+    float: right;
+}

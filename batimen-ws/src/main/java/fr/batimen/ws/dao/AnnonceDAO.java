@@ -467,6 +467,7 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
 
         //Ajout des prédicats à la requete
         searchCriteria.where(createSearchPredicate(searchAnnonceRoot, categoriesMetier, aPartirDu, departement));
+        searchCriteria.orderBy(criteriaBuilderSearch.desc(searchAnnonceRoot.get(Annonce_.dateCreation)));
 
         //Preparation au lancement de la requete
         TypedQuery<Annonce> searchQuery = entityManager.createQuery(searchCriteria);
