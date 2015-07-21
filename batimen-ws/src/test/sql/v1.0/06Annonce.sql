@@ -29,7 +29,7 @@ VALUES
 INSERT INTO Annonce (id, datecreation, datemaj, delaiintervention, description, etatannonce, categoriemetier, souscategoriemetier, nbconsultation, typecontact, hashID, selHashID, typetravaux, adressechantier_id, demandeur_fk, avis_id, entreprise_selectionnee_fk)
 VALUES
   (100015, '2015-01-25', '2015-01-30', '0', 'Construction des carreaux de la salle de bain', '0', 1, 'Installation',
-   '0', 0, 'lolofdfdsfsdfdshghghghghg', 'tete',
+   '0', 0, 'lolofdfdsfsddsdssdsffdshghghghghg', 'tete',
    0, 100011, 100001, NULL, NULL);
 
 INSERT INTO Annonce (id, datecreation, datemaj, delaiintervention, description, etatannonce, categoriemetier, souscategoriemetier, nbconsultation, typecontact, hashID, selHashID, typetravaux, adressechantier_id, demandeur_fk, avis_id, entreprise_selectionnee_fk)
@@ -41,11 +41,11 @@ VALUES
 INSERT INTO Annonce (id, datecreation, datemaj, delaiintervention, description, etatannonce, categoriemetier, souscategoriemetier, nbconsultation, typecontact, hashID, selHashID, typetravaux, adressechantier_id, demandeur_fk, avis_id, entreprise_selectionnee_fk)
 VALUES
   (100017, '2015-06-25', '2015-06-30', '0', 'Mise en place du lavabo', '0', 1, 'Installation',
-   '0', 0, 'lolofdfdsfsdffdfsdfsdvvcxvg', 'tete',
+   '0', 0, 'lolofdfdsfsdffdffdfvccxsqqqaasdfsdvvcxvg', 'tete',
    0, 100013, 100001, NULL, NULL);
 
 INSERT INTO Annonce (id, datecreation, datemaj, delaiintervention, description, etatannonce, categoriemetier, souscategoriemetier, nbconsultation, typecontact, hashID, selHashID, typetravaux, adressechantier_id, demandeur_fk, avis_id, entreprise_selectionnee_fk)
 VALUES
   (100018, '2015-06-26', '2015-06-29', '0', 'Mise en place de la douche', '0', 1, 'Installation',
-   '0', 0, 'lolofdfdsfsdffdfsdfsdvvcxvg', 'tete',
+   '0', 0, 'loloffvcvcvcvcvcxvg', 'tete',
    0, 100014, 100001, NULL, NULL);
