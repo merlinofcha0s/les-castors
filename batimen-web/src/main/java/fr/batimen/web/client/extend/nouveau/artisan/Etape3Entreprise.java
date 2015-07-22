@@ -1,67 +1,191 @@
 package fr.batimen.web.client.extend.nouveau.artisan;
 
+import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
 import fr.batimen.dto.helper.CategorieLoader;
-import fr.batimen.web.client.extend.nouveau.artisan.event.UncheckedEvent;
-import org.apache.wicket.AttributeModifier;
+import fr.batimen.web.app.constants.Etape;
+import fr.batimen.web.app.constants.FeedbackMessageLevel;
+import fr.batimen.web.app.security.Authentication;
+import fr.batimen.web.client.event.FeedBackPanelEvent;
+import fr.batimen.web.client.extend.nouveau.artisan.event.ChangementEtapeEventArtisan;
+import fr.batimen.web.client.extend.nouveau.devis.NouveauUtils;
+import fr.batimen.web.client.master.MasterPage;
+import fr.batimen.ws.client.service.ArtisanServiceREST;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.markup.html.form.AjaxCheckBox;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.event.Broadcast;
-import org.apache.wicket.event.IEvent;
+import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.CssContentHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
+import javax.inject.Inject;
 import java.util.List;
 
 /**
  * Etape 3 de l'inscription d'un nouvel artisan : Informations sur l'entreprise
- * 
+ *
  * @author Casaucau Cyril
- * 
  */
 public class Etape3Entreprise extends Panel {
 
     private static final long serialVersionUID = -4959756477938900372L;
 
     private Etape3EntrepriseForm etape3EntrepriseForm;
+    private Form<CreationPartenaireDTO> etape3FormGeneral;
     private List<CategorieMetierDTO> categoriesSelectionnees;
     private WebMarkupContainer containerActivite;
+
+    @Inject
+    private Authentication authentication;
+
+    @Inject
+    private ArtisanServiceREST artisanServiceREST;
 
     public Etape3Entreprise(String id, IModel<?> model) {
         super(id, model);
     }
 
-    public Etape3Entreprise(String id, IModel<?> model, final CreationPartenaireDTO nouveauPartenaire, boolean isInModification) {
+    public Etape3Entreprise(String id, IModel<?> model, final CreationPartenaireDTO nouveauPartenaire, final boolean isInModification) {
         this(id, model);
         Model<String> titreModificationEntrepriseModel = new Model<>();
 
-        if(isInModification){
+        if (isInModification) {
             titreModificationEntrepriseModel.setObject("Modifier mon entreprise");
-        }else{
+        } else {
             titreModificationEntrepriseModel.setObject("Renseignez les informations de l'entreprise");
         }
 
         Label titreModificationEntreprise = new Label("titreModificationEntreprise", titreModificationEntrepriseModel);
 
+        final CheckBox electricite = new CheckBox("electricite", Model.of(Boolean.FALSE));
+        final CheckBox plomberie = new CheckBox("plomberie", Model.of(Boolean.FALSE));
+        final CheckBox espaceVert = new CheckBox("espaceVert", Model.of(Boolean.FALSE));
+        final CheckBox maconnerie = new CheckBox("decorationMaconnerie", Model.of(Boolean.FALSE));
+
         categoriesSelectionnees = nouveauPartenaire.getEntreprise().getCategoriesMetier();
 
-        etape3EntrepriseForm = new Etape3EntrepriseForm("etape3EntrepriseForm",
-                new CompoundPropertyModel<>(nouveauPartenaire), isInModification);
+        etape3FormGeneral = new Form<CreationPartenaireDTO>("etape3FormGeneral", new CompoundPropertyModel<>(nouveauPartenaire)) {
+            @Override
+            public boolean isRootForm() {
+                return true;
+            }
+
+            @Override
+            public boolean wantSubmitOnNestedFormSubmit() {
+                return true;
+            }
+        };
+
+        final AjaxLink<Void> etapePrecedenteNouveauArtisan3 = new AjaxLink<Void>("etapePrecedenteNouveauArtisan3") {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                NouveauUtils.sendEventForPreviousStep(target, Etape.ETAPE_3.ordinal() + 1);
+            }
+        };
+
+        etapePrecedenteNouveauArtisan3.setOutputMarkupId(true);
+        etapePrecedenteNouveauArtisan3.setMarkupId("etapePrecedenteNouveauArtisan3");
+
+        WebMarkupContainer containerEtapePrecedenteNouveauArtisan3 = new WebMarkupContainer("containerEtapePrecedenteNouveauArtisan3") {
+            @Override
+            public boolean isVisible() {
+                return !isInModification;
+            }
+        };
+
+        containerEtapePrecedenteNouveauArtisan3.add(etapePrecedenteNouveauArtisan3);
+
+        AjaxSubmitLink validateEtape3Partenaire = new AjaxSubmitLink("validateEtape3Partenaire") {
+
+            private static final long serialVersionUID = 4945314422581299777L;
+
+            @Override
+            protected void onError(AjaxRequestTarget target, Form<?> form) {
+                target.add(getForm());
+                this.send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target));
+            }
+
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                if (isInModification) {
+                    nouveauPartenaire.getEntreprise().setAdresseEntreprise(nouveauPartenaire.getAdresse());
+                    Integer codeRetour = artisanServiceREST.saveEntrepriseInformation(nouveauPartenaire.getEntreprise());
+                    if (codeRetour.equals(CodeRetourService.RETOUR_OK)) {
+                        authentication.setEntrepriseUserInfo(nouveauPartenaire.getEntreprise());
+                        MasterPage.triggerEventFeedBackPanel(target, "Profil mis à jour avec succés", FeedbackMessageLevel.SUCCESS);
+                    } else {
+                        MasterPage.triggerEventFeedBackPanel(target, "Problème durant l'appel au service de mise à jour, veuillez réessayer ultérieurement ", FeedbackMessageLevel.ERROR);
+                    }
+
+                } else {
+                    if (electricite.getConvertedInput()) {
+                        categoriesSelectionnees.add(CategorieLoader.getCategorieElectricite());
+                    }
+                    if (plomberie.getConvertedInput()) {
+                        categoriesSelectionnees.add(CategorieLoader.getCategoriePlomberie());
+                    }
+                    if (espaceVert.getConvertedInput()) {
+                        categoriesSelectionnees.add(CategorieLoader.getCategorieEspaceVert());
+                    }
+                    if (maconnerie.getConvertedInput()) {
+                        categoriesSelectionnees.add(CategorieLoader.getCategorieDecorationMaconnerie());
+                    }
+
+                    nouveauPartenaire.setNumeroEtape(4);
+                    ChangementEtapeEventArtisan changementEtapeEvent = new ChangementEtapeEventArtisan(target,
+                            nouveauPartenaire);
+                    this.send(target.getPage(), Broadcast.EXACT, changementEtapeEvent);
+                }
+            }
+        };
+
+        validateEtape3Partenaire.setMarkupId("validateEtape3Partenaire");
+
+        WebMarkupContainer terminerInscriptionPartenaire = new WebMarkupContainer("terminerInscriptionPartenaire") {
+            @Override
+            protected void onComponentTag(ComponentTag tag) {
+                super.onComponentTag(tag);
+                if (isInModification) {
+                    StringBuilder classCSS = new StringBuilder(tag.getAttribute("class"));
+                    classCSS.append(" offset3");
+                    tag.remove("class");
+                    tag.put("class", classCSS.toString());
+                } else {
+                    StringBuilder classCSS = new StringBuilder(tag.getAttribute("class"));
+                    classCSS.append(" nouveauPartenaire-btn");
+                    tag.remove("class");
+                    tag.put("class", classCSS.toString());
+                }
+            }
+        };
+
+        terminerInscriptionPartenaire.add(validateEtape3Partenaire);
+
         containerActivite = new WebMarkupContainer("containerActivite");
         containerActivite.setOutputMarkupId(true);
         containerActivite.setMarkupId("containerActivite");
 
-        initActiviteSelection();
+        containerActivite.add(electricite, plomberie, espaceVert, maconnerie);
 
-        this.add(titreModificationEntreprise, etape3EntrepriseForm, containerActivite);
+        etape3EntrepriseForm = new Etape3EntrepriseForm("etape3EntrepriseForm",
+                new CompoundPropertyModel<>(nouveauPartenaire), isInModification);
+
+        etape3FormGeneral.add(containerActivite, etape3EntrepriseForm, terminerInscriptionPartenaire, containerEtapePrecedenteNouveauArtisan3);
+        add(titreModificationEntreprise, etape3FormGeneral);
     }
 
     @Override
@@ -71,221 +195,5 @@ public class Etape3Entreprise extends Panel {
         response.render(JavaScriptHeaderItem.forUrl("//www.fuelcdn.com/fuelux/2.6.1/loader.min.js"));
         response.render(CssContentHeaderItem.forUrl("//www.fuelcdn.com/fuelux/2.6.1/css/fuelux.min.css"));
         response.render(CssContentHeaderItem.forUrl("//www.fuelcdn.com/fuelux/2.6.1/css/fuelux-responsive.css"));
-    }
-
-    private void initActiviteSelection() {
-
-        final WebMarkupContainer iElectricite = new WebMarkupContainer("iElectricite");
-        final WebMarkupContainer containerElectricite = new WebMarkupContainer("containerElectricite");
-        final AjaxCheckBox checkBoxElectricite = new AjaxCheckBox("electricite", new Model<Boolean>()) {
-
-            private static final long serialVersionUID = 8274255006449725507L;
-
-            @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-                if (this.getModelObject()) {
-                    categoriesSelectionnees.add(CategorieLoader.getCategorieElectricite());
-                    checked(containerElectricite, iElectricite, this);
-                } else {
-                    categoriesSelectionnees.remove(CategorieLoader.getCategorieElectricite());
-                    unChecked(containerElectricite, iElectricite, this);
-                    sendUncheckedAllCheckBox(target);
-                }
-                target.add(containerActivite);
-            }
-
-            @Override
-            protected void onConfigure() {
-                for(CategorieMetierDTO categorieMetierDTO : categoriesSelectionnees){
-                    if(categorieMetierDTO.getCodeCategorieMetier().equals(CategorieLoader.ELECTRICITE_CODE)){
-                        checked(containerElectricite, iElectricite, this);
-                    }
-                }
-            }
-        };
-
-        checkBoxElectricite.setMarkupId("electriciteCheck");
-        containerElectricite.setOutputMarkupId(true);
-        containerElectricite.setMarkupId("containerElectricite");
-        containerElectricite.add(checkBoxElectricite);
-        containerElectricite.add(iElectricite);
-        containerActivite.add(containerElectricite);
-
-        final WebMarkupContainer iPlomberie = new WebMarkupContainer("iPlomberie");
-        final WebMarkupContainer containerPlomberie = new WebMarkupContainer("containerPlomberie");
-        final AjaxCheckBox checkBoxPlomberie = new AjaxCheckBox("plomberie", new Model<Boolean>()) {
-
-            private static final long serialVersionUID = -4711312112702359439L;
-
-            @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-                if (this.getModelObject()) {
-                    categoriesSelectionnees.add(CategorieLoader.getCategoriePlomberie());
-                    checked(containerPlomberie, iPlomberie, this);
-                } else {
-                    categoriesSelectionnees.remove(CategorieLoader.getCategoriePlomberie());
-                    unChecked(containerPlomberie, iPlomberie, this);
-                    sendUncheckedAllCheckBox(target);
-                }
-                target.add(containerActivite);
-            }
-
-            @Override
-            protected void onConfigure() {
-                for(CategorieMetierDTO categorieMetierDTO : categoriesSelectionnees){
-                    if(categorieMetierDTO.getCodeCategorieMetier().equals(CategorieLoader.PLOMBERIE_CODE)){
-                        checked(containerPlomberie, iPlomberie, this);
-                    }
-                }
-            }
-        };
-
-        checkBoxPlomberie.setMarkupId("plomberieSelect");
-        containerPlomberie.setOutputMarkupId(true);
-        containerPlomberie.setMarkupId("containerPlomberie");
-        containerPlomberie.add(checkBoxPlomberie);
-        containerPlomberie.add(iPlomberie);
-        containerActivite.add(containerPlomberie);
-
-        final WebMarkupContainer containerEspaceVert = new WebMarkupContainer("containerEspaceVert");
-        final WebMarkupContainer iEspaceVert = new WebMarkupContainer("iEspaceVert");
-        final AjaxCheckBox checkBoxEspaceVert = new AjaxCheckBox("espaceVert", new Model<Boolean>()) {
-
-            private static final long serialVersionUID = -1839696014719001158L;
-
-            @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-                if (this.getModelObject()) {
-                    categoriesSelectionnees.add(CategorieLoader.getCategorieEspaceVert());
-                    checked(containerEspaceVert, iEspaceVert, this);
-                } else {
-                    categoriesSelectionnees.remove(CategorieLoader.getCategorieEspaceVert());
-                    unChecked(containerEspaceVert, iEspaceVert, this);
-                    sendUncheckedAllCheckBox(target);
-                }
-                target.add(containerActivite);
-            }
-
-            @Override
-            protected void onConfigure() {
-                for(CategorieMetierDTO categorieMetierDTO : categoriesSelectionnees){
-                    if(categorieMetierDTO.getCodeCategorieMetier().equals(CategorieLoader.ESPACE_VERT_CODE)){
-                        checked(containerEspaceVert, iEspaceVert, this);
-                    }
-                }
-            }
-        };
-
-        checkBoxEspaceVert.setMarkupId("espaceVertCheck");
-        containerEspaceVert.setOutputMarkupId(true);
-        containerEspaceVert.setMarkupId("containerEspaceVert");
-        containerEspaceVert.add(checkBoxEspaceVert);
-        containerEspaceVert.add(iEspaceVert);
-        containerActivite.add(containerEspaceVert);
-
-        final WebMarkupContainer containerDecorationMaconnerie = new WebMarkupContainer("containerDecorationMaconnerie");
-        final WebMarkupContainer iDecorationMaconnerie = new WebMarkupContainer("iDecorationMaconnerie");
-        final AjaxCheckBox checkBoxDecorationMaconnerie = new AjaxCheckBox("decorationMaconnerie", new Model<Boolean>()) {
-
-            private static final long serialVersionUID = -4193158638385896517L;
-
-            @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-                if (this.getModelObject()) {
-                    categoriesSelectionnees.add(CategorieLoader.getCategorieDecorationMaconnerie());
-                    checked(containerDecorationMaconnerie, iDecorationMaconnerie, this);
-                } else {
-                    categoriesSelectionnees.remove(CategorieLoader.getCategorieDecorationMaconnerie());
-                    unChecked(containerDecorationMaconnerie, iDecorationMaconnerie, this);
-                    sendUncheckedAllCheckBox(target);
-                }
-                target.add(containerActivite);
-            }
-
-            @Override
-            protected void onConfigure() {
-                for(CategorieMetierDTO categorieMetierDTO : categoriesSelectionnees){
-                    if(categorieMetierDTO.getCodeCategorieMetier().equals(CategorieLoader.DECORATION_MACONNERIE_CODE)){
-                        checked(containerDecorationMaconnerie, iDecorationMaconnerie, this);
-                    }
-                }
-            }
-        };
-
-        checkBoxDecorationMaconnerie.setMarkupId("decorationMaconnerieCheck");
-        containerDecorationMaconnerie.setOutputMarkupId(true);
-        containerDecorationMaconnerie.setMarkupId("containerDecorationMaconnerie");
-        containerDecorationMaconnerie.add(checkBoxDecorationMaconnerie);
-        containerDecorationMaconnerie.add(iDecorationMaconnerie);
-        containerActivite.add(containerDecorationMaconnerie);
-
-        final WebMarkupContainer containerToutesLesActivites = new WebMarkupContainer("containerToutesLesActivites");
-        containerToutesLesActivites.setOutputMarkupId(true);
-
-        final WebMarkupContainer iToutesActivite = new WebMarkupContainer("iToutesLesActivites");
-        final AjaxCheckBox checkBoxTouteslesActivites = new AjaxCheckBox("touteslesActivites", new Model<Boolean>()) {
-
-            private static final long serialVersionUID = 7283874612963022578L;
-
-            @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-                if (this.getModelObject()) {
-                    categoriesSelectionnees.addAll(CategorieLoader.getAllCategories());
-                    checked(containerElectricite, iElectricite, checkBoxElectricite);
-                    checked(containerToutesLesActivites, iToutesActivite, this);
-                    checked(containerPlomberie, iPlomberie, checkBoxPlomberie);
-                    checked(containerEspaceVert, iEspaceVert, checkBoxEspaceVert);
-                    checked(containerDecorationMaconnerie, iDecorationMaconnerie, checkBoxDecorationMaconnerie);
-                } else {
-                    categoriesSelectionnees.removeAll(CategorieLoader.getAllCategories());
-                    unChecked(containerElectricite, iElectricite, checkBoxElectricite);
-                    unChecked(containerToutesLesActivites, iToutesActivite, this);
-                    unChecked(containerPlomberie, iPlomberie, checkBoxPlomberie);
-                    unChecked(containerEspaceVert, iEspaceVert, checkBoxEspaceVert);
-                    unChecked(containerDecorationMaconnerie, iDecorationMaconnerie, checkBoxDecorationMaconnerie);
-
-                }
-                target.add(containerActivite);
-            }
-
-            /*
-             * (non-Javadoc)
-             * 
-             * @see
-             * org.apache.wicket.Component#onEvent(org.apache.wicket.event.IEvent
-             * )
-             */
-            @Override
-            public void onEvent(IEvent<?> event) {
-                super.onEvent(event);
-                if (event.getPayload() instanceof UncheckedEvent) {
-                    this.setModelObject(Boolean.FALSE);
-                    unChecked(containerToutesLesActivites, iToutesActivite, this);
-                }
-            }
-
-        };
-        checkBoxTouteslesActivites.setMarkupId("toutesLesActivitesCheck");
-        containerToutesLesActivites.setMarkupId("checkBoxTouteslesActivites");
-        containerToutesLesActivites.add(checkBoxTouteslesActivites);
-        containerToutesLesActivites.add(iToutesActivite);
-        containerActivite.add(containerToutesLesActivites);
-    }
-
-    private void unChecked(WebMarkupContainer containerPrincipal, WebMarkupContainer iCheck, AjaxCheckBox checkBox) {
-        containerPrincipal.add(new AttributeModifier("class", "checkbox-custom checkbox inline"));
-        iCheck.add(new AttributeModifier("class", "checkbox"));
-        checkBox.setModelObject(Boolean.FALSE);
-    }
-
-    private void checked(WebMarkupContainer containerPrincipal, WebMarkupContainer iCheck, AjaxCheckBox checkBox) {
-        containerPrincipal.add(new AttributeModifier("class", "checkbox-custom checkbox inline checked"));
-        iCheck.add(new AttributeModifier("class", "checkbox checked"));
-        checkBox.setModelObject(Boolean.TRUE);
-    }
-
-    private void sendUncheckedAllCheckBox(AjaxRequestTarget target) {
-        UncheckedEvent uncheckedEvent = new UncheckedEvent(target);
-        this.send(target.getPage(), Broadcast.BREADTH, uncheckedEvent);
     }
 }

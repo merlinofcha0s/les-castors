@@ -6,7 +6,6 @@ import fr.batimen.web.selenium.common.AbstractITTest;
 import fr.batimen.web.utils.UtilsSelenium;
 import org.junit.Test;
 import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
@@ -111,25 +110,18 @@ public class TestNouveauPartenaire extends AbstractITTest {
     private void etape3() throws InterruptedException {
         // Etape 3
         (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX)).until(ExpectedConditions
-                .elementToBeClickable(By.xpath("//label[@id='containerElectricite']/span")));
+                .visibilityOfElementLocated(By.id("electricite")));
 
-        WebElement electricite = driver.findElement(By.xpath("//label[@id='containerElectricite']/span"));
-        electricite.sendKeys(Keys.CONTROL);
-        electricite.click();
+        driver.findElement(By.id("electricite")).click();
+        driver.findElement(By.id("plomberie")).click();
 
-        Thread.sleep(1000);
-        // Etape 4 confirmation
-        (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX)).until(ExpectedConditions
-                .elementToBeClickable(By.xpath("//label[@id='containerDecorationMaconnerie']/span")));
-        driver.findElement(By.xpath("//label[@id='containerDecorationMaconnerie']/span")).click();
         driver.findElement(By.id("nomComplet")).clear();
         driver.findElement(By.id("nomComplet")).sendKeys("Xav Entreprise");
         new Select(driver.findElement(By.id("statutJuridique"))).selectByVisibleText("SARL");
         driver.findElement(By.id("nbEmployeField")).clear();
         driver.findElement(By.id("nbEmployeField")).sendKeys("5");
-        driver.findElement(By.id("dateCreationField")).click();
-        driver.findElement(By.id("dateCreationField")).click();
-        driver.findElement(By.linkText("1")).click();
+        driver.findElement(By.id("entreprisedateCreation")).clear();
+        driver.findElement(By.id("entreprisedateCreation")).sendKeys("01/05/2013");
         driver.findElement(By.id("siretField")).clear();
         driver.findElement(By.id("siretField")).sendKeys("43394298400017");
         driver.findElement(By.id("adresseField")).clear();

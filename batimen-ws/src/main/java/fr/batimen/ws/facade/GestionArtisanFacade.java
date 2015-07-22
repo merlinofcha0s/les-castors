@@ -104,6 +104,12 @@ public class GestionArtisanFacade {
     @Path(WsPath.GESTION_PARTENAIRE_SERVICE_CREATION_PARTENAIRE)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public Integer creationArtisan(CreationPartenaireDTO nouveauPartenaireDTO) {
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Paramétres en entrée de la creation d'artisan : {}", nouveauPartenaireDTO);
+        }
+
+
         ModelMapper mapper = new ModelMapper();
 
         Artisan artisanExiste = artisanService.checkArtisanExiste(nouveauPartenaireDTO.getArtisan().getEmail());
