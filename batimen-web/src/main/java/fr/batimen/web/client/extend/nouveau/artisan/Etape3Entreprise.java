@@ -165,10 +165,15 @@ public class Etape3Entreprise extends Panel {
                     tag.remove("class");
                     tag.put("class", classCSS.toString());
                 } else {
-                    StringBuilder classCSS = new StringBuilder(tag.getAttribute("class"));
-                    classCSS.append(" nouveauPartenaire-btn");
-                    tag.remove("class");
-                    tag.put("class", classCSS.toString());
+                    if (tag.getAttribute("class") != null) {
+                        StringBuilder classCSS = new StringBuilder(tag.getAttribute("class"));
+                        classCSS.append(" nouveauPartenaire-btn");
+                        tag.remove("class");
+                        tag.put("class", classCSS.toString());
+                    } else {
+                        tag.put("class", "nouveauPartenaire-btn");
+                    }
+
                 }
             }
         };

@@ -71,6 +71,10 @@
     font-size: 1.1em;
 }
 
+#tableFormEtape3Entreprise {
+    margin: auto;
+}
+
 .tableBatimen th {
     padding-bottom: 20px;
     text-align: left;
@@ -231,12 +235,13 @@
 
 #formEntrepriseEtape3 {
     padding-top: 21px;
-    padding-left: 91px;
+    margin: inherit;
 }
 
 #containerActivite {
     padding-top: 15px;
     padding-bottom: 15px;
+    text-align: center;
 }
 
 #containerPlomberie {
