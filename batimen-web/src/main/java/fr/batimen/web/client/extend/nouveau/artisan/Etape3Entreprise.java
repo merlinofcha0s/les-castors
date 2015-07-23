@@ -20,9 +20,12 @@ import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.CssContentHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
+import org.apache.wicket.markup.html.form.CheckGroup;
+import org.apache.wicket.markup.html.form.CheckGroupSelector;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -30,6 +33,7 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import javax.inject.Inject;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -41,10 +45,12 @@ public class Etape3Entreprise extends Panel {
 
     private static final long serialVersionUID = -4959756477938900372L;
 
+    private static final String LOAD_TOOLTIP_CATEGORIE = "$('.checkbox-tooltip').tooltip()";
+
     private Etape3EntrepriseForm etape3EntrepriseForm;
     private Form<CreationPartenaireDTO> etape3FormGeneral;
     private List<CategorieMetierDTO> categoriesSelectionnees;
-    private WebMarkupContainer containerActivite;
+    private CheckGroup<Boolean> containerActivite;
 
     @Inject
     private Authentication authentication;
@@ -68,10 +74,24 @@ public class Etape3Entreprise extends Panel {
 
         Label titreModificationEntreprise = new Label("titreModificationEntreprise", titreModificationEntrepriseModel);
 
+        containerActivite = new CheckGroup("allCategoriesCheck", Arrays.asList(false, false, false, false, false));
+
         final CheckBox electricite = new CheckBox("electricite", Model.of(Boolean.FALSE));
         final CheckBox plomberie = new CheckBox("plomberie", Model.of(Boolean.FALSE));
         final CheckBox espaceVert = new CheckBox("espaceVert", Model.of(Boolean.FALSE));
         final CheckBox maconnerie = new CheckBox("decorationMaconnerie", Model.of(Boolean.FALSE));
+
+        containerActivite.add(electricite, plomberie, espaceVert, maconnerie);
+
+        containerActivite.add(new CheckGroupSelector("multiCategories") {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            protected boolean wantAutomaticUpdate() {
+                return true;
+            }
+        });
+
 
         categoriesSelectionnees = nouveauPartenaire.getEntreprise().getCategoriesMetier();
 
@@ -179,12 +199,8 @@ public class Etape3Entreprise extends Panel {
         };
 
         terminerInscriptionPartenaire.add(validateEtape3Partenaire);
-
-        containerActivite = new WebMarkupContainer("containerActivite");
         containerActivite.setOutputMarkupId(true);
         containerActivite.setMarkupId("containerActivite");
-
-        containerActivite.add(electricite, plomberie, espaceVert, maconnerie);
 
         etape3EntrepriseForm = new Etape3EntrepriseForm("etape3EntrepriseForm",
                 new CompoundPropertyModel<>(nouveauPartenaire), isInModification);
@@ -200,5 +216,6 @@ public class Etape3Entreprise extends Panel {
         response.render(JavaScriptHeaderItem.forUrl("//www.fuelcdn.com/fuelux/2.6.1/loader.min.js"));
         response.render(CssContentHeaderItem.forUrl("//www.fuelcdn.com/fuelux/2.6.1/css/fuelux.min.css"));
         response.render(CssContentHeaderItem.forUrl("//www.fuelcdn.com/fuelux/2.6.1/css/fuelux-responsive.css"));
+        response.render(OnDomReadyHeaderItem.forScript(LOAD_TOOLTIP_CATEGORIE));
     }
 }

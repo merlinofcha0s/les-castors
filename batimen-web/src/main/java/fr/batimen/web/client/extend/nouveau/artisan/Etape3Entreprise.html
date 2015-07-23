@@ -15,9 +15,13 @@
                     wicket:id="containerActivite"
                     id="containerActivite"
                     class="fuelux span6">
+                <div class="span3"></div>
+                <div data-toggle="tooltip" title="Electricité" class="checkbox-tooltip non-icon8 span1"
+                     data-original-title="Electricité" data-placement="top">
                 <label
                         class="checkbox-custom checkbox inline"
-                        title="Electricité" id="electricite">
+                        id="electricite"
+                        >
                     <input
                             class="sr-only"
                             wicket:id="electricite"
@@ -26,6 +30,9 @@
                         class="checkbox"></i><span
                         class="checkbox-label icon-Lightning font-glyph-entreprise"></span>
                 </label>
+                    </div>
+                 <div data-toggle="tooltip" title="Plomberie" class="checkbox-tooltip span1"
+                      data-original-title="Plomberie" data-placement="top">
                 <label
                         class="checkbox-custom checkbox inline"
                         title="Plomberie" id="plomberie">
@@ -37,8 +44,11 @@
                         class="checkbox"></i><span
                         class="checkbox-label icons8-plumbing font-glyph-entreprise"></span>
             </label>
+                     </div>
+                 <div data-toggle="tooltip" title="Espaces verts" class="checkbox-tooltip span1"
+                      data-original-title="Espaces verts" data-placement="top">
                 <label
-                        class="checkbox-custom checkbox inline"
+                        class="checkbox-custom checkbox inline checkbox-tooltip"
                         title="Espaces verts" id="espaceVert">
                 <input
                         class="sr-only"
@@ -47,26 +57,36 @@
                         value="option3"><i
                         class="checkbox"></i><span
                         class="checkbox-label icons8-garden-shears font-glyph-entreprise"></span>
-            </label> <label
-                    class="checkbox-custom checkbox inline"
-                    title="Décoration / Maçonnerie" id="decorationMaconnerie">
+            </label>
+                     </div>
+                 <div data-toggle="tooltip" title="Décoration / Maçonnerie" class="checkbox-tooltip non-icon8 span1"
+                      data-original-title="Décoration / Maçonnerie" data-placement="top">
+                <label
+                        class="checkbox-custom checkbox inline"
+                        title="Décoration / Maçonnerie" id="decorationMaconnerie">
                 <input
                         class="sr-only"
                         wicket:id="decorationMaconnerie"
                         type="checkbox"
                         value="option4"><i
-                    class="checkbox"></i><span
-                    class="checkbox-label icon-Tool font-glyph-entreprise"></span>
-            </label> <label
-                    class="checkbox-custom checkbox inline"
-                    title="Toutes les activités">
+                        class="checkbox"></i><span
+                        class="checkbox-label icon-Tool font-glyph-entreprise"></span>
+            </label>
+                     </div>
+<div data-toggle="tooltip" title="Multi Activités" class="checkbox-tooltip non-icon8 span1"
+     data-original-title="Multi Activités" data-placement="top">
+                <label
+                        class="checkbox-custom checkbox inline">
                 <input
                         class="sr-only"
                         type="checkbox"
-                        value="option7"><i
-                    class="checkbox"></i><span
-                    class="checkbox-label icon-CheckMark font-glyph-entreprise"></span>
+                        value="option7" wicket:id="multiCategories">
+                    <i class="checkbox"></i><span
+                        class="checkbox-label icon-CheckMark font-glyph-entreprise"></span>
             </label>
+    </div>
+                <div class="span1"></div>
+                <div class="span3"></div>
             </div>
                      <div class="span3"></div>
                     </div>
@@ -198,9 +218,10 @@
                     <div class="span3"></div>
                     <div class="span6">
                         <div class="span12">
-                            <div class="span6" wicket:id="containerEtapePrecedenteNouveauArtisan3">
+                            <div class="span6" id="containerEtapePrecedenteNouveauArtisan3"
+                                 wicket:id="containerEtapePrecedenteNouveauArtisan3">
                                 <a class="btn btn-info" wicket:id="etapePrecedenteNouveauArtisan3"
-                                    id="etapePrecedenteNouveauArtisan3">Etape précédente</a>
+                                   id="etapePrecedenteNouveauArtisan3">Etape précédente</a>
                             </div>
                             <div class="span6">
                                 <div id="terminerInscriptionPartenaire" wicket:id="terminerInscriptionPartenaire">

@@ -104,6 +104,10 @@
     margin-left: 177px;
 }
 
+#containerEtapePrecedenteNouveauArtisan3 {
+    padding-left: 81px;
+}
+
 .imgHelp {
     vertical-align: sub;
 }
@@ -273,6 +277,7 @@
 #terminerInscriptionPartenaire {
     padding-top: 20px;
     margin-bottom: 30px;
+    padding-left: 88px;
 }
 
 .nouveauPartenaire-btn {
@@ -291,6 +296,30 @@
 
 #etapePrecedenteNouveauArtisan3 {
     margin-top: 20px;
+}
+
+#espaceVert {
+    vertical-align: top;
+}
+
+#electricite {
+    margin-right: 6px;
+}
+
+#plomberie {
+    margin-right: 2px;
+}
+
+#decorationMaconnerie {
+    margin-right: 5px;
+}
+
+.checkbox-tooltip {
+    float: left;
+}
+
+.non-icon8 {
+    padding-top: 7px;
 }
 
 /* Composant Wicket */
