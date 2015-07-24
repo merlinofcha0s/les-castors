@@ -9,6 +9,7 @@ import fr.batimen.web.app.constants.FeedbackMessageLevel;
 import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.web.client.extend.nouveau.artisan.event.ChangementEtapeEventArtisan;
+import fr.batimen.web.client.extend.nouveau.communs.JSCommun;
 import fr.batimen.web.client.extend.nouveau.devis.NouveauUtils;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.ws.client.service.ArtisanServiceREST;
@@ -24,8 +25,6 @@ import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
-import org.apache.wicket.markup.html.form.CheckGroup;
-import org.apache.wicket.markup.html.form.CheckGroupSelector;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.CompoundPropertyModel;
@@ -33,7 +32,6 @@ import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
 
 import javax.inject.Inject;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -45,12 +43,11 @@ public class Etape3Entreprise extends Panel {
 
     private static final long serialVersionUID = -4959756477938900372L;
 
-    private static final String LOAD_TOOLTIP_CATEGORIE = "$('.checkbox-tooltip').tooltip()";
-
     private Etape3EntrepriseForm etape3EntrepriseForm;
     private Form<CreationPartenaireDTO> etape3FormGeneral;
     private List<CategorieMetierDTO> categoriesSelectionnees;
-    private CheckGroup<Boolean> containerActivite;
+    private WebMarkupContainer containerActivite;
+    private CreationPartenaireDTO nouveauPartenaire;
 
     @Inject
     private Authentication authentication;
@@ -64,6 +61,7 @@ public class Etape3Entreprise extends Panel {
 
     public Etape3Entreprise(String id, IModel<?> model, final CreationPartenaireDTO nouveauPartenaire, final boolean isInModification) {
         this(id, model);
+        this.nouveauPartenaire = nouveauPartenaire;
         Model<String> titreModificationEntrepriseModel = new Model<>();
 
         if (isInModification) {
@@ -74,24 +72,11 @@ public class Etape3Entreprise extends Panel {
 
         Label titreModificationEntreprise = new Label("titreModificationEntreprise", titreModificationEntrepriseModel);
 
-        containerActivite = new CheckGroup("allCategoriesCheck", Arrays.asList(false, false, false, false, false));
-
         final CheckBox electricite = new CheckBox("electricite", Model.of(Boolean.FALSE));
         final CheckBox plomberie = new CheckBox("plomberie", Model.of(Boolean.FALSE));
         final CheckBox espaceVert = new CheckBox("espaceVert", Model.of(Boolean.FALSE));
         final CheckBox maconnerie = new CheckBox("decorationMaconnerie", Model.of(Boolean.FALSE));
-
-        containerActivite.add(electricite, plomberie, espaceVert, maconnerie);
-
-        containerActivite.add(new CheckGroupSelector("multiCategories") {
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            protected boolean wantAutomaticUpdate() {
-                return true;
-            }
-        });
-
+        final CheckBox multiCategories = new CheckBox("multiCategories", Model.of(Boolean.FALSE));
 
         categoriesSelectionnees = nouveauPartenaire.getEntreprise().getCategoriesMetier();
 
@@ -199,12 +184,14 @@ public class Etape3Entreprise extends Panel {
         };
 
         terminerInscriptionPartenaire.add(validateEtape3Partenaire);
+        containerActivite = new WebMarkupContainer("containerActivite");
         containerActivite.setOutputMarkupId(true);
         containerActivite.setMarkupId("containerActivite");
 
         etape3EntrepriseForm = new Etape3EntrepriseForm("etape3EntrepriseForm",
                 new CompoundPropertyModel<>(nouveauPartenaire), isInModification);
 
+        containerActivite.add(electricite, plomberie, espaceVert, maconnerie, multiCategories);
         etape3FormGeneral.add(containerActivite, etape3EntrepriseForm, terminerInscriptionPartenaire, containerEtapePrecedenteNouveauArtisan3);
         add(titreModificationEntreprise, etape3FormGeneral);
     }
@@ -216,6 +203,20 @@ public class Etape3Entreprise extends Panel {
         response.render(JavaScriptHeaderItem.forUrl("//www.fuelcdn.com/fuelux/2.6.1/loader.min.js"));
         response.render(CssContentHeaderItem.forUrl("//www.fuelcdn.com/fuelux/2.6.1/css/fuelux.min.css"));
         response.render(CssContentHeaderItem.forUrl("//www.fuelcdn.com/fuelux/2.6.1/css/fuelux-responsive.css"));
-        response.render(OnDomReadyHeaderItem.forScript(LOAD_TOOLTIP_CATEGORIE));
+
+        response.render(OnDomReadyHeaderItem.forScript("$('.checkbox-tooltip').tooltip()"));
+        StringBuilder INIT_MULTI_CATEGORIE_CHECKBOX = new StringBuilder();
+        INIT_MULTI_CATEGORIE_CHECKBOX.append("$(function () {");
+        INIT_MULTI_CATEGORIE_CHECKBOX.append("$('#multiCategories').on('click', function () {");
+        INIT_MULTI_CATEGORIE_CHECKBOX.append("if ($(this).prop('checked')) {");
+        INIT_MULTI_CATEGORIE_CHECKBOX.append("$('.sr-only').checkbox('check');");
+        INIT_MULTI_CATEGORIE_CHECKBOX.append("} else {");
+        INIT_MULTI_CATEGORIE_CHECKBOX.append("$('.sr-only').checkbox('uncheck');");
+        INIT_MULTI_CATEGORIE_CHECKBOX.append(" }");
+        INIT_MULTI_CATEGORIE_CHECKBOX.append("});");
+        INIT_MULTI_CATEGORIE_CHECKBOX.append("});");
+
+        response.render(OnDomReadyHeaderItem.forScript(INIT_MULTI_CATEGORIE_CHECKBOX.toString()));
+        response.render(OnDomReadyHeaderItem.forScript(JSCommun.buildSourceTypeAhead(nouveauPartenaire.getVillesPossbles(), "#villeField")));
     }
 }

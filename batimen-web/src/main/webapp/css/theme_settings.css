@@ -98,7 +98,7 @@ h6,h6 span,h6 a {
 	margin-bottom: 7px !important;
 }
 
-#villeTypeAhead ul li:before{
+.typeahead li:before {
     content: '';
     padding-right: 0px;
     position: absolute;
@@ -109,7 +109,7 @@ h6,h6 span,h6 a {
     color: #666666;
 }
 
-#villeTypeAhead ul li, #villeTypeAhead ol li {
+.typeahead li, .typeahead ol li {
     line-height: 20px;
     margin: 0 0 0 0px;
     padding: 0 0 0 0px;
@@ -117,10 +117,10 @@ h6,h6 span,h6 a {
     color: #666666;
 }
 
-#villeTypeAhead ul, #villeTypeAhead ol {
+.typeahead .typeahead ol {
     padding: 0 0 5px 0px;
 }
 
-#villeTypeAhead a strong {
+.typeahead a strong {
     color: #000000;
 }
