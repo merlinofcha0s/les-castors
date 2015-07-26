@@ -80,7 +80,7 @@ public class Etape3EntrepriseForm extends Form<CreationPartenaireDTO> {
         TextField<String> siret = new TextField<String>("entreprise.siret");
         siret.setRequired(true);
         siret.setMarkupId("siretField");
-        siret.add(new PatternValidator(ValidatorConstant.ENTREPRISE_SIRET_REGEXP));
+        //siret.add(new PatternValidator(ValidatorConstant.ENTREPRISE_SIRET_REGEXP));
         siret.add(new SiretValidator());
         siret.add(new ErrorHighlightBehavior());
         siret.add(new RequiredBorderBehaviour());

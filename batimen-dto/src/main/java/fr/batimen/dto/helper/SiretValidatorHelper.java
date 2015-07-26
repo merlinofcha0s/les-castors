@@ -9,13 +9,15 @@ package fr.batimen.dto.helper;
  */
 public class SiretValidatorHelper {
 
+    public final static int SIRET_LENGTH = 14;
+
     private SiretValidatorHelper() {
 
     }
 
-    public static boolean isSiretValide(String siretToValidate) {
+    public static boolean isSiretLuhnValide(String siretToValidate) {
 
-        if (!siretToValidate.isEmpty()) {
+        if (!siretToValidate.isEmpty() && siretToValidate.length() == SIRET_LENGTH) {
             int total = 0;
             int digit = 0;
 

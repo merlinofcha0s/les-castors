@@ -126,6 +126,9 @@ public class Etape3Entreprise extends Panel {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                String siretTrimed = nouveauPartenaire.getEntreprise().getSiret().trim();
+                nouveauPartenaire.getEntreprise().setSiret(siretTrimed);
+
                 if (isInModification) {
                     nouveauPartenaire.getEntreprise().setAdresseEntreprise(nouveauPartenaire.getAdresse());
                     Integer codeRetour = artisanServiceREST.saveEntrepriseInformation(nouveauPartenaire.getEntreprise());
