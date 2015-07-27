@@ -25,6 +25,7 @@ public class CSVCodePostalReader implements Serializable{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CSVCodePostalReader.class);
 
+    //Triée par code postal
     private final Map<String, List<LocalisationDTO>> localisationDTOs = new LinkedHashMap<>();
 
     public CSVCodePostalReader() {

@@ -13,6 +13,7 @@ import fr.batimen.web.client.extend.nouveau.communs.JSCommun;
 import fr.batimen.web.client.extend.nouveau.devis.NouveauUtils;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.ws.client.service.ArtisanServiceREST;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
@@ -48,6 +49,7 @@ public class Etape3Entreprise extends Panel {
     private List<CategorieMetierDTO> categoriesSelectionnees;
     private WebMarkupContainer containerActivite;
     private CreationPartenaireDTO nouveauPartenaire;
+    private String initVilleTypeAhead;
 
     @Inject
     private Authentication authentication;
@@ -121,12 +123,13 @@ public class Etape3Entreprise extends Panel {
             @Override
             protected void onError(AjaxRequestTarget target, Form<?> form) {
                 target.add(getForm());
+                target.appendJavaScript(initVilleTypeAhead);
                 this.send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target));
             }
 
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                String siretTrimed = nouveauPartenaire.getEntreprise().getSiret().trim();
+                String siretTrimed = StringUtils.deleteWhitespace(nouveauPartenaire.getEntreprise().getSiret());
                 nouveauPartenaire.getEntreprise().setSiret(siretTrimed);
 
                 if (isInModification) {
@@ -168,10 +171,12 @@ public class Etape3Entreprise extends Panel {
             protected void onComponentTag(ComponentTag tag) {
                 super.onComponentTag(tag);
                 if (isInModification) {
-                    StringBuilder classCSS = new StringBuilder(tag.getAttribute("class"));
-                    classCSS.append(" offset3");
-                    tag.remove("class");
-                    tag.put("class", classCSS.toString());
+                    if (tag.getAttribute("class") != null) {
+                        StringBuilder classCSS = new StringBuilder(tag.getAttribute("class"));
+                        classCSS.append(" offset3");
+                        tag.remove("class");
+                        tag.put("class", classCSS.toString());
+                    }
                 } else {
                     if (tag.getAttribute("class") != null) {
                         StringBuilder classCSS = new StringBuilder(tag.getAttribute("class"));
@@ -219,7 +224,9 @@ public class Etape3Entreprise extends Panel {
         INIT_MULTI_CATEGORIE_CHECKBOX.append("});");
         INIT_MULTI_CATEGORIE_CHECKBOX.append("});");
 
+        initVilleTypeAhead = JSCommun.buildSourceTypeAhead(nouveauPartenaire.getVillesPossbles(), "#villeField");
+
         response.render(OnDomReadyHeaderItem.forScript(INIT_MULTI_CATEGORIE_CHECKBOX.toString()));
-        response.render(OnDomReadyHeaderItem.forScript(JSCommun.buildSourceTypeAhead(nouveauPartenaire.getVillesPossbles(), "#villeField")));
+        response.render(OnDomReadyHeaderItem.forScript(initVilleTypeAhead));
     }
 }

@@ -1,6 +1,9 @@
 package fr.batimen.dto.aggregate;
 
-import fr.batimen.dto.*;
+import fr.batimen.dto.AbstractDTO;
+import fr.batimen.dto.CategorieMetierDTO;
+import fr.batimen.dto.ClientDTO;
+import fr.batimen.dto.SousCategorieMetierDTO;
 import fr.batimen.dto.enums.DelaiIntervention;
 import fr.batimen.dto.enums.TypeContact;
 import fr.batimen.dto.enums.TypeTravaux;
@@ -23,7 +26,7 @@ import static fr.batimen.dto.constant.ValidatorConstant.*;
 public class CreationAnnonceDTO extends AbstractDTO {
 
     private static final long serialVersionUID = -7316855280979589583L;
-
+    private final List<String> villesPossbles = new ArrayList<>();
     // Annonce
     @Valid
     @NotNull
@@ -59,14 +62,10 @@ public class CreationAnnonceDTO extends AbstractDTO {
     private Integer departement;
     @NotNull
     private TypeTravaux typeTravaux;
-
     // Inscription
     @Valid
     private ClientDTO client = new ClientDTO();
-
     private Boolean isSignedUp = false;
-
-    private final List<String> villesPossbles = new ArrayList<>();
 
     public String getDescription() {
         return description;
@@ -170,6 +169,14 @@ public class CreationAnnonceDTO extends AbstractDTO {
     }
 
     /**
+     * @param client
+     *            the client to set
+     */
+    public void setClient(ClientDTO client) {
+        this.client = client;
+    }
+
+    /**
      * @return the isSignedUp
      */
     public Boolean getIsSignedUp() {
@@ -210,7 +217,7 @@ public class CreationAnnonceDTO extends AbstractDTO {
     }
 
     /**
-     * 
+     *
      * @param sousCategorie
      *            the sousCategorie to set
      */
@@ -232,14 +239,6 @@ public class CreationAnnonceDTO extends AbstractDTO {
      */
     public void setTypeTravaux(TypeTravaux typeTravaux) {
         this.typeTravaux = typeTravaux;
-    }
-
-    /**
-     * @param client
-     *            the client to set
-     */
-    public void setClient(ClientDTO client) {
-        this.client = client;
     }
 
     public List<String> getVillesPossbles() {
@@ -273,5 +272,28 @@ public class CreationAnnonceDTO extends AbstractDTO {
                     && Objects.equals(this.codePostal, other.codePostal) && Objects.equals(this.ville, other.ville);
         }
         return false;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("CreationAnnonceDTO{");
+        sb.append("categorieMetier=").append(categorieMetier);
+        sb.append(", sousCategorie=").append(sousCategorie);
+        sb.append(", description='").append(description).append('\'');
+        sb.append(", typeContact=").append(typeContact);
+        sb.append(", delaiIntervention=").append(delaiIntervention);
+        sb.append(", photos=").append(photos);
+        sb.append(", adresse='").append(adresse).append('\'');
+        sb.append(", complementAdresse='").append(complementAdresse).append('\'');
+        sb.append(", codePostal='").append(codePostal).append('\'');
+        sb.append(", ville='").append(ville).append('\'');
+        sb.append(", numeroEtape=").append(numeroEtape);
+        sb.append(", departement=").append(departement);
+        sb.append(", typeTravaux=").append(typeTravaux);
+        sb.append(", client=").append(client);
+        sb.append(", isSignedUp=").append(isSignedUp);
+        sb.append(", villesPossbles=").append(villesPossbles);
+        sb.append('}');
+        return sb.toString();
     }
 }

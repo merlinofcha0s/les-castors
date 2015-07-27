@@ -900,6 +900,14 @@ table tr td .error {
     padding-top: 10px;
 }
 
+.non-icon8-modif {
+    padding-top: 6px;
+}
+
+.checkbox-tooltip-modif.span1 {
+    margin-left: 20px;
+}
+
 /*Profil entreprise*/
 .containerInformationsEntreprise {
     padding-top: 10px;

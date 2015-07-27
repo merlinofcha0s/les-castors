@@ -120,7 +120,7 @@ public class NouveauDevis extends MasterPage {
         containerGeneral = new WebMarkupContainer("containerGeneral");
         containerGeneral.setOutputMarkupId(true);
 
-        etape1 = new Etape1("etape1"){
+        etape1 = new Etape1("etape1") {
             @Override
             public boolean isVisible() {
                 if (etapeEncours.equals(Etape.ETAPE_1)) {
@@ -295,7 +295,7 @@ public class NouveauDevis extends MasterPage {
                 || codeRetour.equals(CodeRetourService.ANNONCE_RETOUR_DUPLICATE)) {
             if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("Erreur pendant le chargement de l'annonce");
-                loggerAnnonce(nouvelleAnnonce);
+                LOGGER.error("Détails: {}", nouvelleAnnonce.toString());
             }
             confirmation1
                     .setDefaultModelObject("Problème pendant l'enregistrement de l'annonce, veuillez nous excuser pour la gène occasionnée.");
@@ -439,12 +439,12 @@ public class NouveauDevis extends MasterPage {
 
         if (event.getPayload() instanceof LocalisationEvent) {
             LocalisationEvent localisationEvent = (LocalisationEvent) event.getPayload();
-            if(!localisationEvent.getLocalisationDTOMemeCodePostal().isEmpty()){
+            if (!localisationEvent.getLocalisationDTOMemeCodePostal().isEmpty()) {
                 nouvelleAnnonce.setCodePostal(localisationEvent.getLocalisationDTOMemeCodePostal().get(0).getCodePostal());
                 nouvelleAnnonce.setDepartement(Integer.valueOf(localisationEvent.getLocalisationDTOMemeCodePostal().get(0).getDepartement()));
             }
 
-            for(LocalisationDTO localisationDTO : localisationEvent.getLocalisationDTOMemeCodePostal()){
+            for (LocalisationDTO localisationDTO : localisationEvent.getLocalisationDTOMemeCodePostal()) {
                 nouvelleAnnonce.getVillesPossbles().clear();
                 nouvelleAnnonce.getVillesPossbles().add(localisationDTO.getCommune());
             }
@@ -467,38 +467,6 @@ public class NouveauDevis extends MasterPage {
             return annonceService.creationAnnonce(nouvelleAnnonce);
         } else {
             return annonceService.creationAnnonceAvecImage(nouvelleAnnonce);
-        }
-    }
-
-    private void loggerAnnonce(CreationAnnonceDTO nouvelleAnnonce) {
-        if (LOGGER.isErrorEnabled()) {
-            LOGGER.error("+--------------------------------Annonce ------------------------------------------+");
-            LOGGER.error("Categorie : " + nouvelleAnnonce.getCategorieMetier());
-            LOGGER.error("Sous categorie : " + nouvelleAnnonce.getSousCategorie());
-            LOGGER.error("Description: " + nouvelleAnnonce.getDescription());
-            LOGGER.error("Contact ? : " + nouvelleAnnonce.getTypeContact().getAffichage());
-            LOGGER.error("Intervention  : " + nouvelleAnnonce.getDelaiIntervention().getText());
-            LOGGER.error("Adresse du chantier  : " + nouvelleAnnonce.getAdresse());
-            LOGGER.error("Complément du chantier  : " + nouvelleAnnonce.getComplementAdresse());
-            LOGGER.error("Code postal  : " + nouvelleAnnonce.getCodePostal());
-            LOGGER.error("Ville  : " + nouvelleAnnonce.getVille());
-            LOGGER.error("+--------------------------------Info Demandeur ------------------------------------------+");
-            if (!nouvelleAnnonce.getIsSignedUp()) {
-                LOGGER.error("Nom  : " + nouvelleAnnonce.getClient().getNom());
-                LOGGER.error("Prénom  : " + nouvelleAnnonce.getClient().getPrenom());
-                LOGGER.error("Numéro de téléphone  : " + nouvelleAnnonce.getClient().getNumeroTel());
-                LOGGER.error("Adresse mail : " + nouvelleAnnonce.getClient().getEmail());
-                LOGGER.error("Identifiant: " + nouvelleAnnonce.getClient().getLogin());
-            } else {
-                ClientDTO client = authentication.getCurrentUserInfo();
-                LOGGER.error("Ce client est deja enregistrer dans la BDD");
-                LOGGER.error("Nom  : " + client.getNom());
-                LOGGER.error("Prénom  : " + client.getPrenom());
-                LOGGER.error("Numéro de téléphone  : " + client.getNumeroTel());
-                LOGGER.error("Adresse mail : " + client.getEmail());
-                LOGGER.error("Identifiant: " + client.getLogin());
-            }
-            LOGGER.error("+-------------------------------- Fin annonce ------------------------------------------+");
         }
     }
 }

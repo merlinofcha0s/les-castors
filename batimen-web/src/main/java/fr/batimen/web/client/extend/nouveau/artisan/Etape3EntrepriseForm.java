@@ -8,6 +8,7 @@ import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.batimen.web.client.component.CastorDatePicker;
 import fr.batimen.web.client.validator.SiretValidator;
+import fr.batimen.web.client.validator.VilleValidator;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
@@ -20,6 +21,7 @@ import org.apache.wicket.validation.validator.StringValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -35,6 +37,9 @@ public class Etape3EntrepriseForm extends Form<CreationPartenaireDTO> {
     private static final long serialVersionUID = 7654913676022607009L;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Etape3EntrepriseForm.class);
+
+    @Inject
+    private VilleValidator villeValidator;
 
     public Etape3EntrepriseForm(final String id, final IModel<CreationPartenaireDTO> model, final boolean isInModification) {
         super(id, model);
@@ -75,12 +80,13 @@ public class Etape3EntrepriseForm extends Form<CreationPartenaireDTO> {
         // !
         CastorDatePicker dateCreation = new CastorDatePicker("entreprise.dateCreation", "entreprisedateCreation", false);
         dateCreation.add(DateValidator.maximum(new Date(), "dd/MM/yyyy"));
+        dateCreation.setRequired(true);
+        dateCreation.add(new RequiredBorderBehaviour());
         dateCreation.add(new ErrorHighlightBehavior());
 
         TextField<String> siret = new TextField<String>("entreprise.siret");
         siret.setRequired(true);
         siret.setMarkupId("siretField");
-        //siret.add(new PatternValidator(ValidatorConstant.ENTREPRISE_SIRET_REGEXP));
         siret.add(new SiretValidator());
         siret.add(new ErrorHighlightBehavior());
         siret.add(new RequiredBorderBehaviour());
@@ -113,6 +119,8 @@ public class Etape3EntrepriseForm extends Form<CreationPartenaireDTO> {
         villeField.add(StringValidator.maximumLength(ValidatorConstant.VILLE_MAX));
         villeField.add(new ErrorHighlightBehavior());
         villeField.add(new RequiredBorderBehaviour());
+        villeValidator.setCodepostalField(codePostalField);
+        villeField.add(villeValidator);
 
         TextField<Integer> departementField = new TextField<>("adresse.departement");
         departementField.setRequired(true);

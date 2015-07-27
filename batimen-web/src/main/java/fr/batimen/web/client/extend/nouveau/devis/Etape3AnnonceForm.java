@@ -21,6 +21,7 @@ import fr.batimen.web.client.extend.nouveau.communs.JSCommun;
 import fr.batimen.web.client.extend.nouveau.devis.event.CategorieEvent;
 import fr.batimen.web.client.extend.nouveau.devis.event.ChangementEtapeClientEvent;
 import fr.batimen.web.client.validator.TelephonePresentValidator;
+import fr.batimen.web.client.validator.VilleValidator;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
@@ -70,6 +71,9 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
 
     @Inject
     private TelephonePresentValidator telephonePresentValidator;
+
+    @Inject
+    private VilleValidator villeValidator;
 
     private boolean forModification = false;
 
@@ -209,6 +213,8 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
         villeField.add(StringValidator.maximumLength(ValidatorConstant.VILLE_MAX));
         villeField.add(new ErrorHighlightBehavior());
         villeField.add(new RequiredBorderBehaviour());
+        villeValidator.setCodepostalField(codePostalField);
+        villeField.add(villeValidator);
 
         AjaxSubmitLink validateQualification = new AjaxSubmitLink("validateQualification") {
 
