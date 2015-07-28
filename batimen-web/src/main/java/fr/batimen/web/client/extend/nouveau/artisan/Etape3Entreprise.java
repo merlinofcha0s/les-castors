@@ -2,11 +2,13 @@ package fr.batimen.web.client.extend.nouveau.artisan;
 
 import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.dto.CategorieMetierDTO;
+import fr.batimen.dto.LocalisationDTO;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
 import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.web.app.constants.Etape;
 import fr.batimen.web.app.constants.FeedbackMessageLevel;
 import fr.batimen.web.app.security.Authentication;
+import fr.batimen.web.app.utils.codepostal.CSVCodePostalReader;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.web.client.extend.nouveau.artisan.event.ChangementEtapeEventArtisan;
 import fr.batimen.web.client.extend.nouveau.communs.JSCommun;
@@ -57,6 +59,9 @@ public class Etape3Entreprise extends Panel {
     @Inject
     private ArtisanServiceREST artisanServiceREST;
 
+    @Inject
+    private CSVCodePostalReader csvCodePostalReader;
+
     public Etape3Entreprise(String id, IModel<?> model) {
         super(id, model);
     }
@@ -68,6 +73,10 @@ public class Etape3Entreprise extends Panel {
 
         if (isInModification) {
             titreModificationEntrepriseModel.setObject("Modifier mon entreprise");
+            List<LocalisationDTO> localisationDTOs = csvCodePostalReader.getLocalisationDTOs().get(nouveauPartenaire.getAdresse().getCodePostal());
+            for (LocalisationDTO localisationDTO : localisationDTOs) {
+                nouveauPartenaire.getVillesPossbles().add(localisationDTO.getCommune());
+            }
         } else {
             titreModificationEntrepriseModel.setObject("Renseignez les informations de l'entreprise");
         }
@@ -79,6 +88,48 @@ public class Etape3Entreprise extends Panel {
         final CheckBox espaceVert = new CheckBox("espaceVert", Model.of(Boolean.FALSE));
         final CheckBox maconnerie = new CheckBox("decorationMaconnerie", Model.of(Boolean.FALSE));
         final CheckBox multiCategories = new CheckBox("multiCategories", Model.of(Boolean.FALSE));
+
+        WebMarkupContainer electriciteContainer = new WebMarkupContainer("eletriciteContainer") {
+            @Override
+            protected void onComponentTag(ComponentTag tag) {
+                super.onComponentTag(tag);
+                getCSSClassForCategorie(tag, isInModification);
+            }
+        };
+        WebMarkupContainer plomberieContainer = new WebMarkupContainer("plomberieContainer") {
+            @Override
+            protected void onComponentTag(ComponentTag tag) {
+                super.onComponentTag(tag);
+                getCSSClassForCategorie(tag, isInModification);
+            }
+        };
+        WebMarkupContainer espaceVertContainer = new WebMarkupContainer("espaceVertContainer") {
+            @Override
+            protected void onComponentTag(ComponentTag tag) {
+                super.onComponentTag(tag);
+                getCSSClassForCategorie(tag, isInModification);
+            }
+        };
+        WebMarkupContainer maconnerieContainer = new WebMarkupContainer("maconnerieContainer") {
+            @Override
+            protected void onComponentTag(ComponentTag tag) {
+                super.onComponentTag(tag);
+                getCSSClassForCategorie(tag, isInModification);
+            }
+        };
+        WebMarkupContainer multicategorieContainer = new WebMarkupContainer("multicategorieContainer") {
+            @Override
+            protected void onComponentTag(ComponentTag tag) {
+                super.onComponentTag(tag);
+                getCSSClassForCategorie(tag, isInModification);
+            }
+        };
+
+        electriciteContainer.add(electricite);
+        plomberieContainer.add(plomberie);
+        espaceVertContainer.add(espaceVert);
+        maconnerieContainer.add(maconnerie);
+        multicategorieContainer.add(multiCategories);
 
         categoriesSelectionnees = nouveauPartenaire.getEntreprise().getCategoriesMetier();
 
@@ -191,6 +242,16 @@ public class Etape3Entreprise extends Panel {
             }
         };
 
+        Label validateEtape3Name = new Label("validateEtape3Name", Model.of(""));
+
+        if (isInModification) {
+            validateEtape3Name.setDefaultModelObject("Sauvegarder");
+        } else {
+            validateEtape3Name.setDefaultModelObject("Terminer");
+        }
+
+        validateEtape3Partenaire.add(validateEtape3Name);
+
         terminerInscriptionPartenaire.add(validateEtape3Partenaire);
         containerActivite = new WebMarkupContainer("containerActivite");
         containerActivite.setOutputMarkupId(true);
@@ -199,7 +260,7 @@ public class Etape3Entreprise extends Panel {
         etape3EntrepriseForm = new Etape3EntrepriseForm("etape3EntrepriseForm",
                 new CompoundPropertyModel<>(nouveauPartenaire), isInModification);
 
-        containerActivite.add(electricite, plomberie, espaceVert, maconnerie, multiCategories);
+        containerActivite.add(electriciteContainer, plomberieContainer, espaceVertContainer, maconnerieContainer, multicategorieContainer);
         etape3FormGeneral.add(containerActivite, etape3EntrepriseForm, terminerInscriptionPartenaire, containerEtapePrecedenteNouveauArtisan3);
         add(titreModificationEntreprise, etape3FormGeneral);
     }
@@ -228,5 +289,20 @@ public class Etape3Entreprise extends Panel {
 
         response.render(OnDomReadyHeaderItem.forScript(INIT_MULTI_CATEGORIE_CHECKBOX.toString()));
         response.render(OnDomReadyHeaderItem.forScript(initVilleTypeAhead));
+    }
+
+    private void getCSSClassForCategorie(ComponentTag tag, boolean isInModification) {
+        if (isInModification) {
+            String classCss = tag.getAttribute("class");
+
+            if (classCss.contains("checkbox-tooltip")) {
+                classCss = StringUtils.replace(classCss, "checkbox-tooltip", "checkbox-tooltip-modif");
+            }
+            if (classCss.contains("non-icon8")) {
+                classCss = StringUtils.replace(classCss, "non-icon8", "non-icon8-modif");
+            }
+
+            tag.put("class", classCss);
+        }
     }
 }

@@ -17,7 +17,7 @@
                     class="fuelux span6">
                 <div class="span3"></div>
                 <div data-toggle="tooltip" title="Electricité" class="checkbox-tooltip non-icon8 span1"
-                     data-original-title="Electricité" data-placement="top">
+                     data-original-title="Electricité" data-placement="top" wicket:id="eletriciteContainer">
                 <label
                         class="checkbox-custom checkbox inline"
                         id="electricite"
@@ -32,7 +32,7 @@
                 </label>
                     </div>
                  <div data-toggle="tooltip" title="Plomberie" class="checkbox-tooltip span1"
-                      data-original-title="Plomberie" data-placement="top">
+                      data-original-title="Plomberie" data-placement="top" wicket:id="plomberieContainer">
                 <label
                         class="checkbox-custom checkbox inline"
                         title="Plomberie" id="plomberie">
@@ -46,7 +46,7 @@
             </label>
                      </div>
                  <div data-toggle="tooltip" title="Espaces verts" class="checkbox-tooltip span1"
-                      data-original-title="Espaces verts" data-placement="top">
+                      data-original-title="Espaces verts" data-placement="top" wicket:id="espaceVertContainer">
                 <label
                         class="checkbox-custom checkbox inline"
                         title="Espaces verts" id="espaceVert">
@@ -60,7 +60,8 @@
             </label>
                      </div>
                  <div data-toggle="tooltip" title="Décoration / Maçonnerie" class="checkbox-tooltip non-icon8 span1"
-                      data-original-title="Décoration / Maçonnerie" data-placement="top">
+                      data-original-title="Décoration / Maçonnerie" data-placement="top"
+                      wicket:id="maconnerieContainer">
                 <label
                         class="checkbox-custom checkbox inline"
                         title="Décoration / Maçonnerie" id="decorationMaconnerie">
@@ -74,7 +75,7 @@
             </label>
                      </div>
 <div data-toggle="tooltip" title="Multi Activités" class="checkbox-tooltip non-icon8 span1"
-     data-original-title="Multi Activités" data-placement="top">
+     data-original-title="Multi Activités" data-placement="top" wicket:id="multicategorieContainer">
                 <label
                         class="checkbox-custom checkbox inline">
                 <input
@@ -195,7 +196,7 @@
                                     type="text"
                                     name="villeField"
                                     id="villeField"
-                                    value=""/></td>
+                                    value="" autocomplete="off"/></td>
                         </tr>
                         <tr>
                             <th>Département :</th>
@@ -225,7 +226,9 @@
                             </div>
                             <div class="span6">
                                 <div id="terminerInscriptionPartenaire" wicket:id="terminerInscriptionPartenaire">
-                                    <a class="btn btn-info" wicket:id="validateEtape3Partenaire">Terminer</a>
+                                    <a class="btn btn-info" wicket:id="validateEtape3Partenaire">
+                                        <wicket:container wicket:id="validateEtape3Name">Terminer</wicket:container>
+                                    </a>
                                 </div>
                             </div>
                         </div>
