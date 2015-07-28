@@ -57,6 +57,12 @@
     margin-top: 18px;
 }
 
+#formEtape4-nouveau-devis {
+    float: left;
+    margin-top: 45px;
+    margin-left: 15px;
+}
+
 #formEtape4 {
     float: left;
     margin-top: 45px;
@@ -97,15 +103,6 @@
 
 #validateQualification {
     margin-left: 4px;
-}
-
-#validateInscription {
-    float: none;
-    margin-left: 177px;
-}
-
-#containerEtapePrecedenteNouveauArtisan3 {
-    padding-left: 81px;
 }
 
 .imgHelp {
@@ -180,8 +177,11 @@
 
 #terminerAnnonce {
     margin-bottom: 30px;
-    margin-left: 19px;
     margin-top: 25px;
+}
+
+#terminerAnnonce-modif {
+    margin-top: 10px;
 }
 
 #etapePrecedenteCat3 {
@@ -200,6 +200,10 @@
 #descriptionModificationField {
     width: 430px;
     height: 170px;
+}
+
+#containerEtapePrecedenteNouveauArtisan3-nouveau-partenaire {
+    padding-left: 73px;
 }
 
 /* Activation compte */
@@ -239,7 +243,6 @@
 
 #formEntrepriseEtape3 {
     padding-top: 21px;
-    margin: inherit;
 }
 
 #containerActivite {
@@ -277,7 +280,12 @@
 #terminerInscriptionPartenaire {
     padding-top: 20px;
     margin-bottom: 30px;
-    padding-left: 88px;
+}
+
+#terminerInscriptionPartenaire-nouveau {
+    padding-top: 20px;
+    margin-bottom: 30px;
+    margin-left: 69px;
 }
 
 .nouveauPartenaire-btn {

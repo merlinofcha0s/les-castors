@@ -77,7 +77,12 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
     public Etape4InscriptionForm(String id, IModel<CreationAnnonceDTO> model, final Boolean forModification) {
         super(id, model);
 
-        this.setMarkupId("formEtape4");
+        if (forModification) {
+            this.setMarkupId("formEtape4");
+        } else {
+            this.setMarkupId("formEtape4-nouveau-devis");
+        }
+
 
         nouvelleAnnonce = model.getObject();
 

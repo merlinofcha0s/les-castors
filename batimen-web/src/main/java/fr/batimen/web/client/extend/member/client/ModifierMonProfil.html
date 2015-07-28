@@ -7,7 +7,8 @@
                     <div class="bg_title">
                         <h4 class="headInModule">Modifier mon profil</h4>
                     </div>
-                    <div class="offset3">
+                    <div class="span3"></div>
+                    <div class="span6">
                         <form wicket:id="formInscription">
                             <table class="tableBatimen">
                                 <tr>
@@ -91,16 +92,26 @@
                                             wicket:id="cguConfirmation"/></td>
                                 </tr>
                             </table>
-                            <div id="terminerAnnonce">
-                                <a class="btn btn-info" wicket:id="validateInscription">
-                                    <wicket:container wicket:id="validateInscriptionLabel">Terminer</wicket:container>
-                                </a>
+                            <div class="row-fluid">
+                                <div class="span6" id="champsObligatoire">
+                                    <span class='required'>*</span> : champs obligatoires
+                                </div>
+                                <div class="span3"></div>
+                                <div class="span3"></div>
                             </div>
-                            <div id="champsObligatoire">
-                                <span class='required'>*</span> : champs obligatoires
+                            <div class="row-fluid">
+                                <div class="span4"></div>
+                                <div class="span4" id="terminerAnnonce-modif">
+                                    <a class="btn btn-info" wicket:id="validateInscription">
+                                        <wicket:container
+                                                wicket:id="validateInscriptionLabel">Terminer</wicket:container>
+                                    </a>
+                                </div>
+                                <div class="span4"></div>
                             </div>
                         </form>
                     </div>
+                    <div class="span3"></div>
                 </div>
             </div>
         </div>

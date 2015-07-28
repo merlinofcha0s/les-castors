@@ -153,6 +153,11 @@ public class Etape3Entreprise extends Panel {
             public void onClick(AjaxRequestTarget target) {
                 NouveauUtils.sendEventForPreviousStep(target, Etape.ETAPE_3.ordinal() + 1);
             }
+
+            @Override
+            public boolean isVisible() {
+                return !isInModification;
+            }
         };
 
         etapePrecedenteNouveauArtisan3.setOutputMarkupId(true);
@@ -160,10 +165,19 @@ public class Etape3Entreprise extends Panel {
 
         WebMarkupContainer containerEtapePrecedenteNouveauArtisan3 = new WebMarkupContainer("containerEtapePrecedenteNouveauArtisan3") {
             @Override
-            public boolean isVisible() {
-                return !isInModification;
+            protected void onComponentTag(ComponentTag tag) {
+                super.onComponentTag(tag);
+                if (isInModification) {
+                    tag.remove("class");
+                    tag.put("class", "span4");
+                }
             }
         };
+
+        if (!isInModification) {
+            containerEtapePrecedenteNouveauArtisan3.setOutputMarkupId(true);
+            containerEtapePrecedenteNouveauArtisan3.setMarkupId("containerEtapePrecedenteNouveauArtisan3-nouveau-partenaire");
+        }
 
         containerEtapePrecedenteNouveauArtisan3.add(etapePrecedenteNouveauArtisan3);
 
@@ -241,6 +255,11 @@ public class Etape3Entreprise extends Panel {
                 }
             }
         };
+
+        if (!isInModification) {
+            terminerInscriptionPartenaire.setOutputMarkupId(true);
+            terminerInscriptionPartenaire.setMarkupId("terminerInscriptionPartenaire-nouveau");
+        }
 
         Label validateEtape3Name = new Label("validateEtape3Name", Model.of(""));
 
