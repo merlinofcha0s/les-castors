@@ -51,7 +51,11 @@ public class Etape3Entreprise extends Panel {
     private List<CategorieMetierDTO> categoriesSelectionnees;
     private WebMarkupContainer containerActivite;
     private CreationPartenaireDTO nouveauPartenaire;
-    private String initVilleTypeAhead;
+    private String INIT_VILLE_TYPE_AHEAD;
+    private StringBuilder INIT_MULTI_CATEGORIE_CHECKBOX;
+    private StringBuilder INIT_TOOLTIP_CATEGORIE;
+    private boolean isInModification;
+    private String classCSSTooltip;
 
     @Inject
     private Authentication authentication;
@@ -69,6 +73,7 @@ public class Etape3Entreprise extends Panel {
     public Etape3Entreprise(String id, IModel<?> model, final CreationPartenaireDTO nouveauPartenaire, final boolean isInModification) {
         this(id, model);
         this.nouveauPartenaire = nouveauPartenaire;
+        this.isInModification = isInModification;
         Model<String> titreModificationEntrepriseModel = new Model<>();
 
         if (isInModification) {
@@ -77,7 +82,9 @@ public class Etape3Entreprise extends Panel {
             for (LocalisationDTO localisationDTO : localisationDTOs) {
                 nouveauPartenaire.getVillesPossbles().add(localisationDTO.getCommune());
             }
+            classCSSTooltip = "checkbox-tooltip-modif";
         } else {
+            classCSSTooltip = "checkbox-tooltip";
             titreModificationEntrepriseModel.setObject("Renseignez les informations de l'entreprise");
         }
 
@@ -188,7 +195,7 @@ public class Etape3Entreprise extends Panel {
             @Override
             protected void onError(AjaxRequestTarget target, Form<?> form) {
                 target.add(getForm());
-                target.appendJavaScript(initVilleTypeAhead);
+                refreshJS(target);
                 this.send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target));
             }
 
@@ -224,6 +231,7 @@ public class Etape3Entreprise extends Panel {
                     nouveauPartenaire.setNumeroEtape(4);
                     ChangementEtapeEventArtisan changementEtapeEvent = new ChangementEtapeEventArtisan(target,
                             nouveauPartenaire);
+                    refreshJS(target);
                     this.send(target.getPage(), Broadcast.EXACT, changementEtapeEvent);
                 }
             }
@@ -256,14 +264,11 @@ public class Etape3Entreprise extends Panel {
             }
         };
 
+        Label validateEtape3Name = new Label("validateEtape3Name", Model.of(""));
+
         if (!isInModification) {
             terminerInscriptionPartenaire.setOutputMarkupId(true);
             terminerInscriptionPartenaire.setMarkupId("terminerInscriptionPartenaire-nouveau");
-        }
-
-        Label validateEtape3Name = new Label("validateEtape3Name", Model.of(""));
-
-        if (isInModification) {
             validateEtape3Name.setDefaultModelObject("Sauvegarder");
         } else {
             validateEtape3Name.setDefaultModelObject("Terminer");
@@ -292,8 +297,11 @@ public class Etape3Entreprise extends Panel {
         response.render(CssContentHeaderItem.forUrl("//www.fuelcdn.com/fuelux/2.6.1/css/fuelux.min.css"));
         response.render(CssContentHeaderItem.forUrl("//www.fuelcdn.com/fuelux/2.6.1/css/fuelux-responsive.css"));
 
-        response.render(OnDomReadyHeaderItem.forScript("$('.checkbox-tooltip').tooltip()"));
-        StringBuilder INIT_MULTI_CATEGORIE_CHECKBOX = new StringBuilder();
+        INIT_TOOLTIP_CATEGORIE = new StringBuilder();
+        INIT_TOOLTIP_CATEGORIE.append("$('.").append(classCSSTooltip).append("').tooltip()");
+
+
+        INIT_MULTI_CATEGORIE_CHECKBOX = new StringBuilder();
         INIT_MULTI_CATEGORIE_CHECKBOX.append("$(function () {");
         INIT_MULTI_CATEGORIE_CHECKBOX.append("$('#multiCategories').on('click', function () {");
         INIT_MULTI_CATEGORIE_CHECKBOX.append("if ($(this).prop('checked')) {");
@@ -304,10 +312,11 @@ public class Etape3Entreprise extends Panel {
         INIT_MULTI_CATEGORIE_CHECKBOX.append("});");
         INIT_MULTI_CATEGORIE_CHECKBOX.append("});");
 
-        initVilleTypeAhead = JSCommun.buildSourceTypeAhead(nouveauPartenaire.getVillesPossbles(), "#villeField");
+        INIT_VILLE_TYPE_AHEAD = JSCommun.buildSourceTypeAhead(nouveauPartenaire.getVillesPossbles(), "#villeField");
 
+        response.render(OnDomReadyHeaderItem.forScript(INIT_TOOLTIP_CATEGORIE.toString()));
         response.render(OnDomReadyHeaderItem.forScript(INIT_MULTI_CATEGORIE_CHECKBOX.toString()));
-        response.render(OnDomReadyHeaderItem.forScript(initVilleTypeAhead));
+        response.render(OnDomReadyHeaderItem.forScript(INIT_VILLE_TYPE_AHEAD));
     }
 
     private void getCSSClassForCategorie(ComponentTag tag, boolean isInModification) {
@@ -323,5 +332,12 @@ public class Etape3Entreprise extends Panel {
 
             tag.put("class", classCss);
         }
+    }
+
+    private void refreshJS(AjaxRequestTarget target) {
+        target.appendJavaScript(INIT_VILLE_TYPE_AHEAD);
+        target.appendJavaScript(INIT_MULTI_CATEGORIE_CHECKBOX);
+        target.appendJavaScript("$('.checkbox').checkbox()");
+        target.appendJavaScript(INIT_TOOLTIP_CATEGORIE);
     }
 }
