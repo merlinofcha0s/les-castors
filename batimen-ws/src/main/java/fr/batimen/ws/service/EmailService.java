@@ -67,7 +67,7 @@ public class EmailService {
                 CategorieLoader.getCategorieByCode(nouvelleAnnonce.getCategorieMetier()).getName());
         templateContent.put(EmailConstant.TAG_EMAIL_SOUS_CATEGORIE_METIER, nouvelleAnnonce.getSousCategorieMetier());
         templateContent.put(EmailConstant.TAG_EMAIL_DELAI_INTERVENTION, nouvelleAnnonce.getDelaiIntervention()
-                .getType());
+                .getText());
         templateContent.put(EmailConstant.TAG_EMAIL_TYPE_CONTACT, nouvelleAnnonce.getTypeContact().getAffichage());
 
         // On charge les recepteurs

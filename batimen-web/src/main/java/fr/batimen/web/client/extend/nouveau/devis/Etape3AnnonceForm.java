@@ -17,9 +17,11 @@ import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.web.client.event.ModificationAnnonceEvent;
 import fr.batimen.web.client.extend.connected.Annonce;
+import fr.batimen.web.client.extend.nouveau.communs.JSCommun;
 import fr.batimen.web.client.extend.nouveau.devis.event.CategorieEvent;
 import fr.batimen.web.client.extend.nouveau.devis.event.ChangementEtapeClientEvent;
 import fr.batimen.web.client.validator.TelephonePresentValidator;
+import fr.batimen.web.client.validator.VilleValidator;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
@@ -43,7 +45,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -66,41 +67,15 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
     private FileFieldValidatorAndLoaderBehaviour fileFieldValidatorBehaviour;
     private DropDownChoice<SousCategorieMetierDTO> sousCategorieSelect;
     private String idAnnonce;
+    private String initVilleTypeAhead;
 
     @Inject
     private TelephonePresentValidator telephonePresentValidator;
 
+    @Inject
+    private VilleValidator villeValidator;
+
     private boolean forModification = false;
-
-    private StringBuilder sourceTypeAhead;
-
-    @Override
-    protected void onComponentTag(ComponentTag tag) {
-        super.onComponentTag(tag);
-        buildSourceTypeAhead();
-    }
-
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        buildSourceTypeAhead();
-        response.render(OnDomReadyHeaderItem.forScript(sourceTypeAhead.toString()));
-    }
-
-    private void buildSourceTypeAhead() {
-        sourceTypeAhead = new StringBuilder("$('#villeField').typeahead({ source: [");
-
-        boolean firstTime = true;
-
-        for (String ville : nouvelleAnnonce.getVillesPossbles()) {
-            if (firstTime) {
-                firstTime = false;
-                sourceTypeAhead.append("'").append(ville).append("'");
-            } else {
-                sourceTypeAhead.append(",'").append(ville).append("'");
-            }
-        }
-        sourceTypeAhead.append("]});");
-    }
 
     /**
      * Constructeur utile pour la modification d'une annonce.
@@ -238,6 +213,8 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
         villeField.add(StringValidator.maximumLength(ValidatorConstant.VILLE_MAX));
         villeField.add(new ErrorHighlightBehavior());
         villeField.add(new RequiredBorderBehaviour());
+        villeValidator.setCodepostalField(codePostalField);
+        villeField.add(villeValidator);
 
         AjaxSubmitLink validateQualification = new AjaxSubmitLink("validateQualification") {
 
@@ -322,6 +299,18 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
         this.add(sousCategorieSelect, descriptionDevisField, typeContactField, delaiInterventionField,
                 adresseField, adresseComplementField, codePostalField, villeField, validateQualification, typeTravaux,
                 etapePrecedente3, containerPhoto);
+    }
+
+    @Override
+    protected void onComponentTag(ComponentTag tag) {
+        super.onComponentTag(tag);
+        initVilleTypeAhead = JSCommun.buildSourceTypeAhead(nouvelleAnnonce.getVillesPossbles(), "#villeField");
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        initVilleTypeAhead = JSCommun.buildSourceTypeAhead(nouvelleAnnonce.getVillesPossbles(), "#villeField");
+        response.render(OnDomReadyHeaderItem.forScript(initVilleTypeAhead));
     }
 
     public void setIdAnnonce(String idAnnonce) {

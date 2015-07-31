@@ -2,13 +2,13 @@ package fr.batimen.dto.enums;
 
 public enum Civilite {
 
-    MONSIEUR("Monsieur"), MADAME("Madame"), MADEMOISELLE("Mademoiselle");
+    MONSIEUR("Monsieur"), MADAME("Madame");
+
+    private String affichage;
 
     private Civilite(String affichage) {
         this.affichage = affichage;
     }
-
-    private String affichage;
 
     public String getAffichage() {
         return affichage;

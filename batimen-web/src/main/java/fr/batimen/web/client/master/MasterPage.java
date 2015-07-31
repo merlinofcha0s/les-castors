@@ -8,6 +8,7 @@ import fr.batimen.web.client.component.LinkLabel;
 import fr.batimen.web.client.component.WaiterModal;
 import fr.batimen.web.client.event.*;
 import fr.batimen.web.client.extend.Accueil;
+import fr.batimen.web.client.extend.connected.RechercheAnnonce;
 import fr.batimen.web.client.extend.member.client.MesAnnonces;
 import fr.batimen.web.client.extend.nouveau.artisan.NouveauArtisan;
 import fr.batimen.web.client.extend.nouveau.devis.NouveauDevis;
@@ -45,21 +46,16 @@ public abstract class MasterPage extends WebPage {
     // Général
     private static final long serialVersionUID = 6955108821767948992L;
     private static final Logger LOGGER = LoggerFactory.getLogger(MasterPage.class);
-    private String metaDescription = "";
-    private String metaKeywords = "";
-
     // Controle le tag HTML
     private final TransparentWebMarkupContainer htmlTag;
-
     // Feedback panel général
     protected BatimenFeedbackPanel feedBackPanelGeneral;
-
-    private AuthentificationModal authentificationPanel;
-
-    private Label connexionlbl;
-
     // waiter modal can be accessed from every child view
     protected WaiterModal waiterModal;
+    private String metaDescription = "";
+    private String metaKeywords = "";
+    private AuthentificationModal authentificationPanel;
+    private Label connexionlbl;
     private LoginDialogBehaviour loginDialogBehaviour;
 
     /**
@@ -122,6 +118,13 @@ public abstract class MasterPage extends WebPage {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Instantiation de la master page.....OK");
         }
+    }
+
+    public static void triggerEventFeedBackPanel(AjaxRequestTarget target, String message, FeedbackMessageLevel levelMessage) {
+        FeedBackPanelEvent feedbackPanelEvent = new FeedBackPanelEvent(target);
+        feedbackPanelEvent.setMessage(message);
+        feedbackPanelEvent.setMessageLevel(levelMessage);
+        target.getPage().send(target.getPage(), Broadcast.EXACT, feedbackPanelEvent);
     }
 
     private String getJSForClickListenerOnConnexion(CharSequence callbackString) {
@@ -219,7 +222,7 @@ public abstract class MasterPage extends WebPage {
 
             /*
              * (non-Javadoc)
-             * 
+             *
              * @see org.apache.wicket.Component#isVisible()
              */
             @Override
@@ -259,7 +262,7 @@ public abstract class MasterPage extends WebPage {
 
             /*
              * (non-Javadoc)
-             * 
+             *
              * @see org.apache.wicket.Component#isVisible()
              */
             @Override
@@ -282,7 +285,7 @@ public abstract class MasterPage extends WebPage {
 
             /*
              * (non-Javadoc)
-             * 
+             *
              * @see org.apache.wicket.Component#isVisible()
              */
             @Override
@@ -309,11 +312,44 @@ public abstract class MasterPage extends WebPage {
 
         menuConnected.add(logout);
 
-        menu.add(devenirPartenaireContainer);
-        menu.add(demandeDevisContainer);
-        menu.add(menuConnected);
+        final LinkLabel rechercheAnnonce = new LinkLabel("rechercheAnnonce", new Model<>("Rechercher des annonces")) {
 
-        this.add(menu);
+            private static final long serialVersionUID = 3349463856140732172L;
+
+            @Override
+            public void onClick() {
+                this.setResponsePage(RechercheAnnonce.class);
+            }
+
+        };
+
+        rechercheAnnonce.setMarkupId("rechercheAnnonce");
+
+        WebMarkupContainer rechercheAnnonceContainer = new WebMarkupContainer("rechercheAnnonceContainer") {
+
+            private static final long serialVersionUID = 3345463156840732172L;
+
+            /*
+             * (non-Javadoc)
+             *
+             * @see org.apache.wicket.Component#isVisible()
+             */
+            @Override
+            public boolean isVisible() {
+                if (SecurityUtils.getSubject().isAuthenticated() && (SecurityUtils.getSubject().hasRole(TypeCompte.ARTISAN.getRole()) || SecurityUtils.getSubject().hasRole(TypeCompte.ADMINISTRATEUR.getRole()))) {
+                    return Boolean.TRUE;
+                } else {
+                    return Boolean.FALSE;
+                }
+            }
+        };
+
+        rechercheAnnonceContainer.setOutputMarkupId(true);
+        rechercheAnnonceContainer.add(rechercheAnnonce);
+
+        menu.add(devenirPartenaireContainer, demandeDevisContainer, menuConnected, rechercheAnnonceContainer);
+
+        add(menu);
 
     }
 
@@ -352,7 +388,7 @@ public abstract class MasterPage extends WebPage {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see
      * org.apache.wicket.Component#renderHead(org.apache.wicket.markup.head.
      * IHeaderResponse)
@@ -423,7 +459,7 @@ public abstract class MasterPage extends WebPage {
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see org.apache.wicket.Component#onEvent(org.apache.wicket.event.IEvent)
      */
     @Override
@@ -468,13 +504,6 @@ public abstract class MasterPage extends WebPage {
             update.getTarget().add(feedBackPanelGeneral);
         }
 
-    }
-
-    public static void triggerEventFeedBackPanel(AjaxRequestTarget target, String message, FeedbackMessageLevel levelMessage) {
-        FeedBackPanelEvent feedbackPanelEvent = new FeedBackPanelEvent(target);
-        feedbackPanelEvent.setMessage(message);
-        feedbackPanelEvent.setMessageLevel(levelMessage);
-        target.getPage().send(target.getPage(), Broadcast.EXACT, feedbackPanelEvent);
     }
 
 }

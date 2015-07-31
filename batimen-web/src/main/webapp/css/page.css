@@ -57,6 +57,12 @@
     margin-top: 18px;
 }
 
+#formEtape4-nouveau-devis {
+    float: left;
+    margin-top: 45px;
+    margin-left: 15px;
+}
+
 #formEtape4 {
     float: left;
     margin-top: 45px;
@@ -69,6 +75,10 @@
     margin-right: 140px;
     font-weight: bold;
     font-size: 1.1em;
+}
+
+#tableFormEtape3Entreprise {
+    margin: auto;
 }
 
 .tableBatimen th {
@@ -93,11 +103,6 @@
 
 #validateQualification {
     margin-left: 4px;
-}
-
-#validateInscription {
-    float: none;
-    margin-left: 177px;
 }
 
 .imgHelp {
@@ -172,8 +177,11 @@
 
 #terminerAnnonce {
     margin-bottom: 30px;
-    margin-left: 19px;
     margin-top: 25px;
+}
+
+#terminerAnnonce-modif {
+    margin-top: 10px;
 }
 
 #etapePrecedenteCat3 {
@@ -192,6 +200,10 @@
 #descriptionModificationField {
     width: 430px;
     height: 170px;
+}
+
+#containerEtapePrecedenteNouveauArtisan3-nouveau-partenaire {
+    padding-left: 73px;
 }
 
 /* Activation compte */
@@ -230,14 +242,13 @@
 }
 
 #formEntrepriseEtape3 {
-    /*padding-left: 350px;*/
     padding-top: 21px;
 }
 
 #containerActivite {
     padding-top: 15px;
     padding-bottom: 15px;
-    /*padding-left: 480px;*/
+    text-align: center;
 }
 
 #containerPlomberie {
@@ -271,6 +282,12 @@
     margin-bottom: 30px;
 }
 
+#terminerInscriptionPartenaire-nouveau {
+    padding-top: 20px;
+    margin-bottom: 30px;
+    margin-left: 71px;
+}
+
 .nouveauPartenaire-btn {
     padding-top: 20px;
     margin-bottom: 30px;
@@ -287,6 +304,30 @@
 
 #etapePrecedenteNouveauArtisan3 {
     margin-top: 20px;
+}
+
+#espaceVert {
+    vertical-align: top;
+}
+
+#electricite {
+    margin-right: 6px;
+}
+
+#plomberie {
+    margin-right: 2px;
+}
+
+#decorationMaconnerie {
+    margin-right: 5px;
+}
+
+.checkbox-tooltip {
+    float: left;
+}
+
+.non-icon8 {
+    padding-top: 7px;
 }
 
 /* Composant Wicket */
@@ -867,6 +908,14 @@ table tr td .error {
     padding-top: 10px;
 }
 
+.non-icon8-modif {
+    padding-top: 6px;
+}
+
+.checkbox-tooltip-modif.span1 {
+    margin-left: 20px;
+}
+
 /*Profil entreprise*/
 .containerInformationsEntreprise {
     padding-top: 10px;
@@ -991,4 +1040,40 @@ table tr td .error {
 
 .contactez_suivez_nous{
     padding-top: 20px;
+}
+
+/* RECHERCHE ANNONCE */
+#plomberie{
+    padding-bottom: 7px;
+    padding-left: 15px;
+}
+
+#espace-vert{
+    padding-bottom: 6px;
+    padding-left: 13px;
+}
+
+#maconnerie{
+    padding-left: 9px;
+}
+
+.headInModule .tooltip{
+    text-transform: none !important;
+}
+
+#helper-search{
+    font-family: 'FontAwesome' !important;
+}
+
+#rechercheValider{
+    float: right;
+}
+
+#containerActiviteRecherche {
+    padding-top: 30px;
+    padding-bottom: 15px;
+}
+
+#infoNbAnnonce {
+    float: right;
 }

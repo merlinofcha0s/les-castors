@@ -11,7 +11,7 @@ public enum DelaiIntervention {
 
 	private String affichage;
 
-	public String getType() {
+	public String getText() {
 		return affichage;
 	}
 

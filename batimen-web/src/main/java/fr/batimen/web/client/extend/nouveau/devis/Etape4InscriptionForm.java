@@ -26,6 +26,7 @@ import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.PasswordTextField;
@@ -51,20 +52,9 @@ import javax.inject.Inject;
 public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
 
     private static final long serialVersionUID = 2500892594731116597L;
-
-    @Inject
-    private UtilisateurServiceREST utilisateurServiceREST;
-
-    @Inject
-    private Authentication authentication;
-
-    @Inject
-    private RolesUtils rolesUtils;
-
     private static final Logger LOGGER = LoggerFactory.getLogger(Etape4InscriptionForm.class);
-
+    private static final String ID_VALIDATE_INSCRIPTION = "validateInscription";
     private final CreationAnnonceDTO nouvelleAnnonce;
-
     private final PasswordTextField passwordField;
     private final PasswordTextField confirmPassword;
     private final PasswordTextField oldPasswordField;
@@ -73,16 +63,26 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
     private final TextField<String> numeroTelField;
     private final TextField<String> emailField;
     private final TextField<String> loginField;
+    public boolean addedRequiredBehaviour;
+    @Inject
+    private UtilisateurServiceREST utilisateurServiceREST;
+    @Inject
+    private Authentication authentication;
+    @Inject
+    private RolesUtils rolesUtils;
     private AjaxSubmitLink validateInscription;
-    private static final String ID_VALIDATE_INSCRIPTION = "validateInscription";
     private WebMarkupContainer cguContainer;
     private CheckBox cguConfirm;
-    public boolean addedRequiredBehaviour;
 
     public Etape4InscriptionForm(String id, IModel<CreationAnnonceDTO> model, final Boolean forModification) {
         super(id, model);
 
-        this.setMarkupId("formEtape4");
+        if (forModification) {
+            this.setMarkupId("formEtape4");
+        } else {
+            this.setMarkupId("formEtape4-nouveau-devis");
+        }
+
 
         nouvelleAnnonce = model.getObject();
 
@@ -281,6 +281,15 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
 
         };
         validateInscription.setMarkupId(ID_VALIDATE_INSCRIPTION);
+        Label validateInscriptionLabel = new Label("validateInscriptionLabel", Model.of(""));
+
+        if (forModification) {
+            validateInscriptionLabel.setDefaultModelObject("Sauvegarder");
+        } else {
+            validateInscriptionLabel.setDefaultModelObject("Terminer");
+        }
+
+        validateInscription.add(validateInscriptionLabel);
 
         this.add(nomField, prenomField, numeroTelField, emailField, loginField, passwordField, confirmPassword,
                 oldPasswordContainer, cguContainer, validateInscription, etapePrecedente4);

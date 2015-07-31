@@ -41,7 +41,6 @@ import java.util.List;
  * <p/>
  * Created by Casaucau on 17/04/2015.
  * <p/>
- * TODO : L'annonce doit etre active, en attente, ou quotas max sinon refus d'accés à la page
  *
  * @author Casaucau Cyril
  */

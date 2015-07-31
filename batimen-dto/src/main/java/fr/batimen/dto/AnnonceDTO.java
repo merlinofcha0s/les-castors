@@ -1,18 +1,17 @@
 package fr.batimen.dto;
 
-import static fr.batimen.dto.constant.ValidatorConstant.ANNONCE_DESCRIPTION_MAX;
-import static fr.batimen.dto.constant.ValidatorConstant.ANNONCE_DESCRIPTION_MIN;
-
-import java.util.Date;
-import java.util.Objects;
-
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-
 import fr.batimen.dto.enums.DelaiIntervention;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.TypeContact;
 import fr.batimen.dto.enums.TypeTravaux;
+
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.util.Date;
+import java.util.Objects;
+
+import static fr.batimen.dto.constant.ValidatorConstant.ANNONCE_DESCRIPTION_MAX;
+import static fr.batimen.dto.constant.ValidatorConstant.ANNONCE_DESCRIPTION_MIN;
 
 /**
  * DTO de l'annonce
@@ -57,6 +56,14 @@ public class AnnonceDTO extends AbstractDTO {
     }
 
     /**
+     * @param description
+     *            the description to set
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    /**
      * @return the hashID
      */
     public String getHashID() {
@@ -79,68 +86,18 @@ public class AnnonceDTO extends AbstractDTO {
     }
 
     /**
-     * @return the delaiIntervention
-     */
-    public DelaiIntervention getDelaiIntervention() {
-        return delaiIntervention;
-    }
-
-    /**
-     * @return the dateCreation
-     */
-    public Date getDateCreation() {
-        return dateCreation;
-    }
-
-    /**
-     * @return the dateMAJ
-     */
-    public Date getDateMAJ() {
-        return dateMAJ;
-    }
-
-    /**
-     * @return the nbConsultation
-     */
-    public Integer getNbConsultation() {
-        return nbConsultation;
-    }
-
-    /**
-     * @return the categorieMetier
-     */
-    public Short getCategorieMetier() {
-        return categorieMetier;
-    }
-
-    /**
-     * @return the sousCategorieMetier
-     */
-    public String getSousCategorieMetier() {
-        return sousCategorieMetier;
-    }
-
-    /**
-     * @return the etatAnnonce
-     */
-    public EtatAnnonce getEtatAnnonce() {
-        return etatAnnonce;
-    }
-
-    /**
-     * @param description
-     *            the description to set
-     */
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    /**
      * @param typeContact
      *            the typeContact to set
      */
     public void setTypeContact(TypeContact typeContact) {
         this.typeContact = typeContact;
+    }
+
+    /**
+     * @return the delaiIntervention
+     */
+    public DelaiIntervention getDelaiIntervention() {
+        return delaiIntervention;
     }
 
     /**
@@ -152,11 +109,25 @@ public class AnnonceDTO extends AbstractDTO {
     }
 
     /**
+     * @return the dateCreation
+     */
+    public Date getDateCreation() {
+        return dateCreation;
+    }
+
+    /**
      * @param dateCreation
      *            the dateCreation to set
      */
     public void setDateCreation(Date dateCreation) {
         this.dateCreation = dateCreation;
+    }
+
+    /**
+     * @return the dateMAJ
+     */
+    public Date getDateMAJ() {
+        return dateMAJ;
     }
 
     /**
@@ -168,11 +139,25 @@ public class AnnonceDTO extends AbstractDTO {
     }
 
     /**
+     * @return the nbConsultation
+     */
+    public Integer getNbConsultation() {
+        return nbConsultation;
+    }
+
+    /**
      * @param nbConsultation
      *            the nbConsultation to set
      */
     public void setNbConsultation(Integer nbConsultation) {
         this.nbConsultation = nbConsultation;
+    }
+
+    /**
+     * @return the categorieMetier
+     */
+    public Short getCategorieMetier() {
+        return categorieMetier;
     }
 
     /**
@@ -184,11 +169,25 @@ public class AnnonceDTO extends AbstractDTO {
     }
 
     /**
+     * @return the sousCategorieMetier
+     */
+    public String getSousCategorieMetier() {
+        return sousCategorieMetier;
+    }
+
+    /**
      * @param sousCategorieMetier
      *            the sousCategorieMetier to set
      */
     public void setSousCategorieMetier(String sousCategorieMetier) {
         this.sousCategorieMetier = sousCategorieMetier;
+    }
+
+    /**
+     * @return the etatAnnonce
+     */
+    public EtatAnnonce getEtatAnnonce() {
+        return etatAnnonce;
     }
 
     /**

@@ -1,13 +1,27 @@
 package fr.batimen.web.app;
 
-import java.util.Properties;
-
-import javax.enterprise.inject.spi.BeanManager;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-
+import fr.batimen.core.constant.UrlPage;
+import fr.batimen.web.client.extend.Accueil;
+import fr.batimen.web.client.extend.CGU;
+import fr.batimen.web.client.extend.Contact;
+import fr.batimen.web.client.extend.QuiSommeNous;
+import fr.batimen.web.client.extend.activation.Activation;
+import fr.batimen.web.client.extend.authentification.Authentification;
+import fr.batimen.web.client.extend.connected.Annonce;
 import fr.batimen.web.client.extend.connected.Entreprise;
+import fr.batimen.web.client.extend.connected.RechercheAnnonce;
+import fr.batimen.web.client.extend.error.AccesInterdit;
+import fr.batimen.web.client.extend.error.ErreurInterne;
+import fr.batimen.web.client.extend.error.Expiree;
+import fr.batimen.web.client.extend.error.NonTrouvee;
+import fr.batimen.web.client.extend.member.client.MesAnnonces;
 import fr.batimen.web.client.extend.member.client.ModifierAnnonce;
+import fr.batimen.web.client.extend.member.client.ModifierMonProfil;
+import fr.batimen.web.client.extend.member.client.MonProfil;
+import fr.batimen.web.client.extend.nouveau.artisan.NouveauArtisan;
+import fr.batimen.web.client.extend.nouveau.devis.NouveauDevis;
+import fr.batimen.web.client.session.BatimenSession;
+import fr.batimen.web.enums.PropertiesFileWeb;
 import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
@@ -20,31 +34,15 @@ import org.apache.wicket.request.Response;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.mapper.parameter.UrlPathPageParametersEncoder;
 import org.apache.wicket.request.resource.UrlResourceReference;
-import org.odlabs.wiquery.ui.themes.WiQueryCoreThemeResourceReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import fr.batimen.core.constant.UrlPage;
-import fr.batimen.web.client.extend.Accueil;
-import fr.batimen.web.client.extend.CGU;
-import fr.batimen.web.client.extend.Contact;
-import fr.batimen.web.client.extend.QuiSommeNous;
-import fr.batimen.web.client.extend.activation.Activation;
-import fr.batimen.web.client.extend.authentification.Authentification;
-import fr.batimen.web.client.extend.connected.Annonce;
-import fr.batimen.web.client.extend.error.AccesInterdit;
-import fr.batimen.web.client.extend.error.ErreurInterne;
-import fr.batimen.web.client.extend.error.Expiree;
-import fr.batimen.web.client.extend.error.NonTrouvee;
-import fr.batimen.web.client.extend.member.client.MesAnnonces;
-import fr.batimen.web.client.extend.member.client.ModifierMonProfil;
-import fr.batimen.web.client.extend.member.client.MonProfil;
-import fr.batimen.web.client.extend.nouveau.artisan.NouveauArtisan;
-import fr.batimen.web.client.extend.nouveau.devis.NouveauDevis;
-import fr.batimen.web.client.session.BatimenSession;
-import fr.batimen.web.enums.PropertiesFileWeb;
 import org.wicketstuff.javaee.injection.JavaEEComponentInjector;
 import org.wicketstuff.javaee.naming.global.ModuleJndiNamingStrategy;
+
+import javax.enterprise.inject.spi.BeanManager;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import java.util.Properties;
 
 /**
  * Classe principale de l'application
@@ -118,8 +116,8 @@ public class BatimenApplication extends AuthenticatedWebApplication {
         getJavaScriptLibrarySettings().setJQueryReference(
                 new UrlResourceReference(Url.parse("//code.jquery.com/jquery-1.11.2.min.js")));
         // Chargement de Jquery-ui avec le theme Smoothness
-        addResourceReplacement(WiQueryCoreThemeResourceReference.get(), new WiQueryCoreThemeResourceReference(
-                "smoothness"));
+        /*addResourceReplacement(WiQueryCoreThemeResourceReference.get(), new WiQueryCoreThemeResourceReference(
+                "smoothness"));*/
 
         // Cfg urls des pages principales
         mountPage(UrlPage.ACCUEIL_URL, Accueil.class);
@@ -136,6 +134,7 @@ public class BatimenApplication extends AuthenticatedWebApplication {
         mountPage(UrlPage.ANNONCE, Annonce.class);
         mount(new MountedMapper(UrlPage.MODIFIER_MON_ANNONCE, ModifierAnnonce.class, new UrlPathPageParametersEncoder()));
         mountPage(UrlPage.ENTREPRISE, Entreprise.class);
+        mountPage(UrlPage.RECHERCHE_ANNONCE, RechercheAnnonce.class);
         // Page d'erreur
         mountPage("/interdit", AccesInterdit.class);
         mountPage("/expiree", Expiree.class);

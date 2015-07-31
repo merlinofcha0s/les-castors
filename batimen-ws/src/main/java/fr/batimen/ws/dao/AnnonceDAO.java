@@ -1,33 +1,30 @@
 package fr.batimen.ws.dao;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
-import javax.inject.Inject;
-import javax.persistence.NoResultException;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import fr.batimen.core.constant.QueryJPQL;
 import fr.batimen.core.exception.DuplicateEntityException;
 import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
+import fr.batimen.ws.entity.Adresse;
+import fr.batimen.ws.entity.Adresse_;
 import fr.batimen.ws.entity.Annonce;
+import fr.batimen.ws.entity.Annonce_;
 import fr.batimen.ws.utils.RolesUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.ejb.*;
+import javax.inject.Inject;
+import javax.persistence.NoResultException;
+import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Classe d'accés aux données pour les annonces
- * 
+ *
  * @author Casaucau Cyril
  */
 @Stateless(name = "AnnonceDAO")
@@ -42,9 +39,8 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
 
     /**
      * Récupère les annonces par login de leurs utilsateurs
-     * 
-     * @param login
-     *            le login du client dont on veut recupérer les annonces.
+     *
+     * @param login le login du client dont on veut recupérer les annonces.
      * @return Liste d'annonces appartenant à l'utilisateur.
      */
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
@@ -55,10 +51,10 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
         try {
             TypedQuery<Object[]> query = null;
 
-            if(isArtisan){
+            if (isArtisan) {
                 query = entityManager.createNamedQuery(QueryJPQL.ANNONCE_BY_ARTISAN_LOGIN_FETCH_ARTISAN,
                         Object[].class);
-            }else{
+            } else {
                 query = entityManager.createNamedQuery(QueryJPQL.ANNONCE_BY_DEMANDEUR_LOGIN_FETCH_ARTISAN,
                         Object[].class);
             }
@@ -86,9 +82,8 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
 
     /**
      * Récupère les annonces par login de leurs utilsateurs
-     * 
-     * @param login
-     *            le login du client dont on veut recupérer les annonces.
+     *
+     * @param login le login du client dont on veut recupérer les annonces.
      * @return Liste d'annonces appartenant à l'utilisateur.
      */
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -123,14 +118,11 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
      * Recupere les annonces par titre, description et login : notament utilisé
      * dans la verification de la duplication.
      *
-     * @param titre
-     *            Le titre de l'annonce.
-     * @param description
-     *            La description de l'annonce.
-     * @param login
-     *            Le login du cliebnt
+     * @param titre       Le titre de l'annonce.
+     * @param description La description de l'annonce.
+     * @param login       Le login du cliebnt
      * @return La liste d'annonce qui correspond au titre, description et
-     *         utilsateur present en BDD
+     * utilsateur present en BDD
      */
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
     public List<Annonce> getAnnonceByTitleAndDescriptionAndLogin(String description, String login) {
@@ -165,11 +157,9 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
     /**
      * Sauvegarde d'une annonce lors de son initialisation, check dans la bdd si
      * elle existe déjà pour un utilisateur donné.
-     * 
-     * @param nouvelleAnnonce
-     *            L'annonce a sauvegarder dans la bdd
-     * @throws DuplicateEntityException
-     *             Exception throw si l'entité existe déjà.
+     *
+     * @param nouvelleAnnonce L'annonce a sauvegarder dans la bdd
+     * @throws DuplicateEntityException Exception throw si l'entité existe déjà.
      */
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public void saveAnnonceFirstTime(Annonce nouvelleAnnonce) throws DuplicateEntityException {
@@ -202,9 +192,8 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
 
     /**
      * Calcul le nb d'annonce qu'un client a postés
-     * 
-     * @param login
-     *            le login du client
+     *
+     * @param login le login du client
      * @return Le nb d'annonce
      */
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
@@ -225,9 +214,8 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
 
     /**
      * Récupère les informations d'une annonce dans le but de les afficher.
-     * 
-     * @param login
-     *            le login du client
+     *
+     * @param login le login du client
      * @return Le nb d'annonce
      */
     @TransactionAttribute(TransactionAttributeType.MANDATORY)
@@ -256,9 +244,8 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
 
     /**
      * Charge une annonce grace à son hash ID, ne crée pas de transaction
-     * 
-     * @param login
-     *            le login du client
+     *
+     * @param login le login du client
      * @return Le nb d'annonce
      */
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
@@ -268,9 +255,8 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
 
     /**
      * Charge une annonce grace à son hash ID, crée une transaction
-     * 
-     * @param login
-     *            le login du client
+     *
+     * @param login le login du client
      * @return Le nb d'annonce
      */
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -308,11 +294,9 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
 
     /**
      * Mets a jour le nb de consultation d'une annonce dans la BDD
-     * 
-     * @param nbConsultation
-     *            le nb de consultation deja incrémenté
-     * @param hashID
-     *            L'identifiant unique de l'annonce.
+     *
+     * @param nbConsultation le nb de consultation deja incrémenté
+     * @param hashID         L'identifiant unique de l'annonce.
      * @return True si la mise a jour s'est bien passé .
      */
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -349,10 +333,9 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
      * Supprime une annonce présente en base de données : <br/>
      * Attention ce n'est pas vraiment une supression, on ne fait que desactiver
      * l'annonce en base de données.
-     * 
-     * @param demandeAnnonceDTO
-     *            Objet qui possede les infos pour verifier que l'utilisateur a
-     *            les droits et pour supprimer l'annonce.
+     *
+     * @param demandeAnnonceDTO Objet qui possede les infos pour verifier que l'utilisateur a
+     *                          les droits et pour supprimer l'annonce.
      * @return True si la suppression s'est bien passée.
      */
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -398,13 +381,11 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
      * Cherche en base de données et desactive toutes les annonces qui sont plus
      * petite que la date passée en paramètre et qui ont un nombre d'artisan
      * inscrit égale a la properties du nb max d'artisan <br/>
-     * 
-     * @param todayMinusXDays
-     *            : la date du jour - le nb de jour present dans le fichier de
-     *            properties
-     * @param nbMaxArtisan
-     *            : Nombre max d'artisan pouvant s'inscrire a une annonce (voir
-     *            fichier de properties)
+     *
+     * @param todayMinusXDays : la date du jour - le nb de jour present dans le fichier de
+     *                        properties
+     * @param nbMaxArtisan    : Nombre max d'artisan pouvant s'inscrire a une annonce (voir
+     *                        fichier de properties)
      */
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void desactiveAnnoncePerime(Date todayMinusXDays, Integer nbMaxArtisan) {
@@ -432,11 +413,9 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
 
     /**
      * Recherche une annonce par son id et le login du demandeur <br/>
-     * 
-     * @param hashID
-     *            L'id unique de l'annonce
-     * @param loginDemandeur
-     *            Le login du demandeur (celui qui a poster l'annonce)
+     *
+     * @param hashID         L'id unique de l'annonce
+     * @param loginDemandeur Le login du demandeur (celui qui a poster l'annonce)
      */
     @TransactionAttribute(TransactionAttributeType.MANDATORY)
     public Annonce getAnnonceByIdByLogin(String hashID, String loginDemandeur) {
@@ -464,4 +443,96 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
             return null;
         }
     }
+
+    /**
+     * Permet d'effectuer une recherche d'annonce dans la base de données.
+     *
+     * @param categoriesMetier La catégorie de l'annonce
+     * @param aPartirDu A partir de quelle date
+     * @param departement Le departement où se trouve le chantier
+     * @param rangeDebut Pagination de début
+     * @param rangeFin Pagination de fin
+     * @return La liste d'annonces correspondantent
+     */
+    @TransactionAttribute(TransactionAttributeType.MANDATORY)
+    public List<Annonce> searchAnnonce(List<Short> categoriesMetier, Date aPartirDu, Integer departement
+            , Integer rangeDebut, Integer rangeFin) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Debut de requete de recherche d'annonce");
+        }
+
+        CriteriaBuilder criteriaBuilderSearch = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Annonce> searchCriteria = criteriaBuilderSearch.createQuery(Annonce.class);
+        Root<Annonce> searchAnnonceRoot = searchCriteria.from(Annonce.class);
+
+        //Ajout des prédicats à la requete
+        searchCriteria.where(createSearchPredicate(searchAnnonceRoot, categoriesMetier, aPartirDu, departement));
+        searchCriteria.orderBy(criteriaBuilderSearch.desc(searchAnnonceRoot.get(Annonce_.dateCreation)));
+
+        //Preparation au lancement de la requete
+        TypedQuery<Annonce> searchQuery = entityManager.createQuery(searchCriteria);
+        //Gestion de la pagination
+        searchQuery.setFirstResult(rangeDebut);
+        searchQuery.setMaxResults(rangeFin);
+        //Récuperation des résutats
+        return searchQuery.getResultList();
+    }
+
+    /**
+     * Permet de compter le nombre de résultat total pour une demande de recherche
+     *
+     * @param categoriesMetier La catégorie de l'annonce
+     * @param aPartirDu        A partir de quelle date
+     * @param departement      Le departement où se trouve le chantier
+     * @param rangeDebut       Pagination de début
+     * @param rangeFin         Pagination de fin
+     * @return La liste d'annonces correspondantent
+     */
+    @TransactionAttribute(TransactionAttributeType.MANDATORY)
+    public Long countSearchAnnonce(List<Short> categoriesMetier, Date aPartirDu, Integer departement
+            , Integer rangeDebut, Integer rangeFin) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Debut de requete de recherche d'annonce");
+        }
+
+        CriteriaBuilder criteriaBuilderSearch = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Long> searchCriteria = criteriaBuilderSearch.createQuery(Long.class);
+        Root<Annonce> searchAnnonceRoot = searchCriteria.from(Annonce.class);
+        //On lui dit de compter les annonces.
+        searchCriteria.select(criteriaBuilderSearch.count(searchAnnonceRoot));
+
+        //Ajout des prédicats à la requete
+        searchCriteria.where(createSearchPredicate(searchAnnonceRoot, categoriesMetier, aPartirDu, departement));
+
+        //Preparation au lancement de la requete
+        TypedQuery<Long> searchQuery = entityManager.createQuery(searchCriteria);
+        //Récuperation des résutats
+        return searchQuery.getSingleResult();
+    }
+
+    private Predicate createSearchPredicate(Root<Annonce> searchAnnonceRoot, List<Short> categoriesMetier, Date aPartirDu, Integer departement) {
+        CriteriaBuilder criteriaBuilderSearch = entityManager.getCriteriaBuilder();
+
+        //Clause pour la date
+        Predicate predicates = criteriaBuilderSearch.between(searchAnnonceRoot.get(Annonce_.dateCreation), aPartirDu, new Date());
+
+        //Predicat pour les catégories
+        Expression<Short> categorieExpression = searchAnnonceRoot.get(Annonce_.categorieMetier);
+        Predicate categoriePredicate = categorieExpression.in(categoriesMetier);
+
+        //Predicat pour l'etat de l'annonce
+        Expression<EtatAnnonce> etatAnnonceExpression = searchAnnonceRoot.get(Annonce_.etatAnnonce);
+        Predicate etatAnnoncePredicate = etatAnnonceExpression.in(EtatAnnonce.ACTIVE);
+
+        //Join avec adresse pour comparer le departement
+        Join<Annonce, Adresse> adresseJoin = searchAnnonceRoot.join(Annonce_.adresseChantier);
+        Predicate departementPredicate = criteriaBuilderSearch.and(criteriaBuilderSearch.equal(adresseJoin.get(Adresse_.departement), departement));
+
+        //Fusion des predicats avec des "ET"
+        predicates = criteriaBuilderSearch.and(predicates, categoriePredicate, etatAnnoncePredicate, departementPredicate);
+
+        return predicates;
+    }
+
+
 }

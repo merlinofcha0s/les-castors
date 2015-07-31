@@ -4,6 +4,7 @@ import com.ninja_squad.dbsetup.DbSetup;
 import com.ninja_squad.dbsetup.operation.Operation;
 import fr.batimen.web.selenium.common.AbstractITTest;
 import fr.batimen.web.utils.UtilsSelenium;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -12,7 +13,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import static com.ninja_squad.dbsetup.Operations.sequenceOf;
 import static fr.batimen.web.selenium.dataset.ModifierMonProfilDataset.*;
-import static fr.batimen.web.selenium.dataset.ModifierMonProfilDataset.INSERT_ANNONCE_ARTISAN;
 
 /**
  * Test d'integration de modification des données entreprise de l'artisan
@@ -43,18 +43,28 @@ public class TestModifierMonEntreprise extends AbstractITTest {
     @Test
     public void modifierInformationMonEntreprise() throws InterruptedException {
         (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX)).until(ExpectedConditions
-                .elementToBeClickable(By.xpath("//label[@id='containerDecorationMaconnerie']/span")));
-        driver.findElement(By.xpath("//label[@id='containerDecorationMaconnerie']/span")).click();
+                .elementToBeClickable(By.id("electricite")));
+        driver.findElement(By.id("electricite")).click();
 
         driver.findElement(By.id("nbEmployeField")).clear();
         driver.findElement(By.id("nbEmployeField")).sendKeys("20");
-        driver.findElement(By.id("dateCreationField")).click();
-        if(!browser.equals("ie"))
-        driver.findElement(By.linkText("29")).click();
+        driver.findElement(By.id("entreprisedateCreation")).click();
+        //if(!browser.equals("ie"))
+        //driver.findElement(By.linkText("29")).click();
         driver.findElement(By.id("codePostalField")).clear();
-        driver.findElement(By.id("codePostalField")).sendKeys("06600");
+        driver.findElement(By.id("codePostalField")).sendKeys("06700");
         driver.findElement(By.id("villeField")).clear();
-        driver.findElement(By.id("villeField")).sendKeys("Antibes city");
+        driver.findElement(By.id("villeField")).sendKeys("ST LAURENT DU VAR");
+
+        driver.findElement(By.id("validateEtape3Partenaire")).click();
+
+
+        Boolean checkConditionModificationInformation = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("span.box_type4"),
+                        "Profil mis à jour avec succés"));
+
+        Assert.assertTrue(checkConditionModificationInformation);
+
     }
 
     /**

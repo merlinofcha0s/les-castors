@@ -10,6 +10,8 @@ import fr.batimen.core.constant.WsPath;
 import fr.batimen.core.exception.BackendException;
 import fr.batimen.core.exception.DuplicateEntityException;
 import fr.batimen.core.exception.EmailException;
+import fr.batimen.dto.AnnonceDTO;
+import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.ImageDTO;
 import fr.batimen.dto.aggregate.*;
@@ -814,6 +816,55 @@ public class GestionAnnonceFacade {
         List<Image> images = photoService.getImagesByHashIDByLoginDemandeur(rolesDemandeur, suppressionPhotoDTO.getId(), suppressionPhotoDTO.getLoginDemandeur());
 
         return photoService.suppressionPhoto(images, suppressionPhotoDTO);
+    }
+
+    /**
+     * Service de recherche d'annonce pour les artisans.
+     *
+     * @param searchAnnonceDTOIn Objet contenant les criteres de recherche de l'artisan
+     * @return La liste d'annonces correspondantent.
+     */
+    @POST
+    @Path(WsPath.GESTION_ANNONCE_SERVICE_RECHERCHE)
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public SearchAnnonceDTOOut searchAnnonce(SearchAnnonceDTOIn searchAnnonceDTOIn) {
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Recherche d'annonce en cours, Infos en entrée : {}", searchAnnonceDTOIn);
+        }
+
+        String rolesDemandeur = utilisateurFacade.get().getUtilisateurRoles(searchAnnonceDTOIn.getLoginDemandeur());
+        if (!rolesUtils.checkIfArtisanWithString(rolesDemandeur) && !rolesUtils.checkIfAdminWithString(rolesDemandeur)) {
+            LOGGER.error("Impossible: l'utilisateur ne devrait pas avoir accés à ce service, roledemandeur : {}", rolesDemandeur);
+            return new SearchAnnonceDTOOut();
+        }
+
+        SearchAnnonceDTOOut searchAnnonceDTOOut = new SearchAnnonceDTOOut();
+        List<Short> codeCategorieMetier = new ArrayList<>();
+
+        for (CategorieMetierDTO categorieMetier : searchAnnonceDTOIn.getCategoriesMetierDTO()) {
+            codeCategorieMetier.add(categorieMetier.getCodeCategorieMetier());
+        }
+
+        List<Annonce> annonces = annonceDAO.searchAnnonce(codeCategorieMetier, searchAnnonceDTOIn.getaPartirdu()
+                , searchAnnonceDTOIn.getDepartement(), searchAnnonceDTOIn.getRangeDebut(), searchAnnonceDTOIn.getRangeFin());
+
+        long nbAnnonceTotale = annonceDAO.countSearchAnnonce(codeCategorieMetier, searchAnnonceDTOIn.getaPartirdu()
+                , searchAnnonceDTOIn.getDepartement(), searchAnnonceDTOIn.getRangeDebut(), searchAnnonceDTOIn.getRangeFin());
+
+        searchAnnonceDTOOut.setNbTotalResultat(nbAnnonceTotale);
+
+        ModelMapper mapper = new ModelMapper();
+
+        for(Annonce annonce : annonces){
+            searchAnnonceDTOOut.getAnnonceDTOList().add(mapper.map(annonce, AnnonceDTO.class));
+        }
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Résultat de la recherche :  {}", searchAnnonceDTOOut.getAnnonceDTOList());
+        }
+
+        return searchAnnonceDTOOut;
     }
 
     /**

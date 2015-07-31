@@ -6,7 +6,12 @@ import fr.batimen.dto.helper.CategorieLoader;
 
 import static com.ninja_squad.dbsetup.Operations.insertInto;
 
-public class AnnonceDataset {
+/**
+ * Jeu d'essai pour la recherche
+ *
+ * @author Casaucau Cyril
+ */
+public class RechercheDataset {
 
     public static final Operation INSERT_ANNONCE_DATA = insertInto("annonce")
             .columns("id", "datecreation", "datemaj", "delaiintervention", "description", "etatannonce",
@@ -20,15 +25,23 @@ public class AnnonceDataset {
             .values(200011, "2014-01-10", "2014-01-10", DelaiIntervention.LE_PLUS_RAPIDEMENT_POSSIBLE,
                     "Construction compliqué qui necessite des connaissance en geologie", EtatAnnonce.ACTIVE,
                     CategorieLoader.ELECTRICITE_CODE, "Installation électrique", 0, TypeContact.EMAIL, "lolmdr",
-                    "tata", TypeTravaux.NEUF, 200014, 100001, 200009, 200013)
-            .values(200012, "2014-01-10", "2014-01-10", DelaiIntervention.LE_PLUS_RAPIDEMENT_POSSIBLE,
-                    "Construction compliqué qui necessite des connaissance en geologie", EtatAnnonce.ACTIVE,
-                    CategorieLoader.ELECTRICITE_CODE, "Installation électrique", 0, TypeContact.EMAIL, "lolxd", "titi",
+                    "tata", TypeTravaux.NEUF, 200014, 100001, null, null)
+            .values(200012, "2014-05-11", "2014-06-10", DelaiIntervention.LE_PLUS_RAPIDEMENT_POSSIBLE,
+                    "Installation d'une baignoire", EtatAnnonce.ACTIVE,
+                    CategorieLoader.PLOMBERIE_CODE, "Installation", 0, TypeContact.EMAIL, "lolxd", "titi",
                     TypeTravaux.NEUF, 200015, 100001, null, null)
             .values(200013, "2014-01-10", "2014-01-10", DelaiIntervention.LE_PLUS_RAPIDEMENT_POSSIBLE,
-                    "Construction compliqué qui necessite des connaissance en geologie", EtatAnnonce.DONNER_AVIS,
+                    "Construction compliqué qui necessite des connaissance en geologie", EtatAnnonce.ACTIVE,
                     CategorieLoader.ELECTRICITE_CODE, "Installation électrique", 0, TypeContact.EMAIL, "lolmdrxD",
-                    "titi", TypeTravaux.NEUF, 200016, 100001, 200009, null).build();
+                    "titi", TypeTravaux.NEUF, 200016, 100001, null, null)
+            .values(200015, "2014-05-15", "2014-06-20", DelaiIntervention.LE_PLUS_RAPIDEMENT_POSSIBLE,
+                    "Construction compliqué qui necessite des connaissance en geologie", EtatAnnonce.ACTIVE,
+                    CategorieLoader.PLOMBERIE_CODE, "Installation", 0, TypeContact.EMAIL, "lolmdrxDdsqdqsdqsdqsdsd",
+                    "titi", TypeTravaux.NEUF, 200017, 100001, null, null)
+            .values(200016, "2014-07-20", "2014-07-22", DelaiIntervention.LE_PLUS_RAPIDEMENT_POSSIBLE,
+                    "Construction compliqué qui necessite des connaissance en geologie", EtatAnnonce.ACTIVE,
+                    CategorieLoader.PLOMBERIE_CODE, "Installation", 0, TypeContact.EMAIL, "lolmdrxDdsqfddsfvcvxcxwqs",
+                    "titi", TypeTravaux.NEUF, 200018, 100001, null, null).build();
 
     public static final Operation INSERT_ARTISAN_DATA = insertInto("artisan")
             .columns("id", "civilite", "email", "nom", "prenom", "login", "password", "numeroTel", "dateInscription",
@@ -49,11 +62,13 @@ public class AnnonceDataset {
 
     public static final Operation INSERT_ADRESSE_DATA = insertInto("adresse")
             .columns("id", "adresse", "codepostal", "complementadresse", "ville", "departement")
-            .values(200005, "254 chemin du test", "06700", "Residence du test", "ST LAURENT DU VAR", 06)
-            .values(200006, "260 chemin des lol", "06700", "Residence des lol", "ST LAURENT DU VAR", 07)
-            .values(200014, "254 chemin du test", "06700", "Residence du test", "ST LAURENT DU VAR", 06)
-            .values(200015, "270 chemin du mdr", "06700", "Residence du mdr", "ST LAURENT DU VAR", 8)
-            .values(200016, "280 chemin du lolmdrxD", "06700", "Residence du lolmdrxD", "ST LAURENT DU VAR", 9).build();
+            .values(200005, "254 chemin du test", "06600", "Residence du test", "Test City", 06)
+            .values(200006, "260 chemin des lol", "06500", "Residence des lol", "Test lol", 06)
+            .values(200014, "254 chemin du test", "06600", "Residence du test", "Test City", 06)
+            .values(200015, "270 chemin du mdr", "06800", "Residence du mdr", "Test mdr", 06)
+            .values(200016, "280 chemin du lolmdrxD", "06800", "Residence du lolmdrxD", "Test lolmdrxD", 06)
+            .values(200017, "300 chemin du lolmdrxD", "06900", "Residence du lolmdrxD", "Test lolmdrxD", 06)
+            .values(200018, "310 chemin du lolmdrxD", "06500", "Residence du lolmdrxD", "Test lolmdrxD", 06).build();
 
     public static final Operation INSERT_AVIS_DATA = insertInto("avis")
             .columns("id", "commentaire", "dateavis", "score", "artisan_fk")
@@ -72,4 +87,5 @@ public class AnnonceDataset {
             .values(10001,
                     "http://res.cloudinary.com/lescastors/image/upload/q_27/v1430908935/test/srwdbvzwlvhxoytsheha.jpg",
                     200011).build();
+
 }

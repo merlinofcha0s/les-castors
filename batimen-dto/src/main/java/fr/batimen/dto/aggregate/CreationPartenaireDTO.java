@@ -22,10 +22,8 @@ public class CreationPartenaireDTO extends AbstractDTO {
 
     @Valid
     private final AdresseDTO adresse = new AdresseDTO();
-
-    private int numeroEtape;
-
     private final List<String> villesPossbles = new ArrayList<>();
+    private int numeroEtape;
 
     /**
      * @return the artisan
@@ -99,5 +97,17 @@ public class CreationPartenaireDTO extends AbstractDTO {
                     && Objects.equals(this.artisan.getEmail(), other.artisan.getEmail());
         }
         return false;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("CreationPartenaireDTO{");
+        sb.append("artisan=").append(artisan);
+        sb.append(", entreprise=").append(entreprise);
+        sb.append(", adresse=").append(adresse);
+        sb.append(", numeroEtape=").append(numeroEtape);
+        sb.append(", villesPossbles=").append(villesPossbles);
+        sb.append('}');
+        return sb.toString();
     }
 }

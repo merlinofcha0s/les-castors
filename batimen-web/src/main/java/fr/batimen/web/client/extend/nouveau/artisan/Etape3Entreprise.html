@@ -8,73 +8,97 @@
             <div class="bg_title">
                 <h5 class="headInModule">Les activités de votre entreprise</h5>
             </div>
+            <form wicket:id="etape3FormGeneral">
+                <div class="row-fluid">
+                    <div class="span3"></div>
             <div
                     wicket:id="containerActivite"
                     id="containerActivite"
-                    class="fuelux offset4">
+                    class="fuelux span6">
+                <div class="span3"></div>
+                <div data-toggle="tooltip" title="Electricité" class="checkbox-tooltip non-icon8 span1"
+                     data-original-title="Electricité" data-placement="top" wicket:id="eletriciteContainer">
                 <label
                         class="checkbox-custom checkbox inline"
-                        title="Electricité"
-                        wicket:id="containerElectricite"> <input
-                        class="sr-only"
-                        wicket:id="electricite"
-                        type="checkbox"
-                        value="option1"><i
-                        class="checkbox"
-                        wicket:id="iElectricite"></i><span
+                        id="electricite"
+                        >
+                    <input
+                            class="sr-only"
+                            wicket:id="electricite"
+                            type="checkbox"
+                            value="option1"><i
+                        class="checkbox"></i><span
                         class="checkbox-label icon-Lightning font-glyph-entreprise"></span>
-                </label> <label
-                    class="checkbox-custom checkbox inline"
-                    title="Plomberie"
-                    wicket:id="containerPlomberie"> <input
-                    class="sr-only"
-                    wicket:id="plomberie"
-                    type="checkbox"
-                    value="option2"><i
-                    class="checkbox"
-                    wicket:id="iPlomberie"></i><span
-                    class="checkbox-label icons8-plumbing font-glyph-entreprise"></span>
-            </label> <label
-                    class="checkbox-custom checkbox inline"
-                    title="Espaces verts"
-                    wicket:id="containerEspaceVert"> <input
-                    class="sr-only"
-                    wicket:id="espaceVert"
-                    type="checkbox"
-                    value="option3"><i
-                    class="checkbox"
-                    wicket:id="iEspaceVert"></i><span
-                    class="checkbox-label icons8-garden-shears font-glyph-entreprise"></span>
-            </label> <label
-                    class="checkbox-custom checkbox inline"
-                    title="Décoration / Maçonnerie"
-                    wicket:id="containerDecorationMaconnerie"> <input
-                    class="sr-only"
-                    wicket:id="decorationMaconnerie"
-                    type="checkbox"
-                    value="option4"><i
-                    class="checkbox"
-                    wicket:id="iDecorationMaconnerie"></i><span
-                    class="checkbox-label icon-Tool font-glyph-entreprise"></span>
-            </label> <label
-                    class="checkbox-custom checkbox inline"
-                    title="Toutes les activités"
-                    wicket:id="containerToutesLesActivites"> <input
-                    class="sr-only"
-                    wicket:id="touteslesActivites"
-                    type="checkbox"
-                    value="option7"><i
-                    class="checkbox"
-                    wicket:id="iToutesLesActivites"></i><span
-                    class="checkbox-label icon-CheckMark font-glyph-entreprise"></span>
+                </label>
+                    </div>
+                 <div data-toggle="tooltip" title="Plomberie" class="checkbox-tooltip span1"
+                      data-original-title="Plomberie" data-placement="top" wicket:id="plomberieContainer">
+                <label
+                        class="checkbox-custom checkbox inline"
+                        title="Plomberie" id="plomberie">
+                <input
+                        class="sr-only"
+                        wicket:id="plomberie"
+                        type="checkbox"
+                        value="option2"><i
+                        class="checkbox"></i><span
+                        class="checkbox-label icons8-plumbing font-glyph-entreprise"></span>
             </label>
+                     </div>
+                 <div data-toggle="tooltip" title="Espaces verts" class="checkbox-tooltip span1"
+                      data-original-title="Espaces verts" data-placement="top" wicket:id="espaceVertContainer">
+                <label
+                        class="checkbox-custom checkbox inline"
+                        title="Espaces verts" id="espaceVert">
+                <input
+                        class="sr-only"
+                        wicket:id="espaceVert"
+                        type="checkbox"
+                        value="option3"><i
+                        class="checkbox"></i><span
+                        class="checkbox-label icons8-garden-shears font-glyph-entreprise"></span>
+            </label>
+                     </div>
+                 <div data-toggle="tooltip" title="Décoration / Maçonnerie" class="checkbox-tooltip non-icon8 span1"
+                      data-original-title="Décoration / Maçonnerie" data-placement="top"
+                      wicket:id="maconnerieContainer">
+                <label
+                        class="checkbox-custom checkbox inline"
+                        title="Décoration / Maçonnerie" id="decorationMaconnerie">
+                <input
+                        class="sr-only"
+                        wicket:id="decorationMaconnerie"
+                        type="checkbox"
+                        value="option4"><i
+                        class="checkbox"></i><span
+                        class="checkbox-label icon-Tool font-glyph-entreprise"></span>
+            </label>
+                     </div>
+<div data-toggle="tooltip" title="Multi Activités" class="checkbox-tooltip non-icon8 span1"
+     data-original-title="Multi Activités" data-placement="top" wicket:id="multicategorieContainer">
+                <label
+                        class="checkbox-custom checkbox inline">
+                <input
+                        class="sr-only"
+                        type="checkbox"
+                        value="option7" wicket:id="multiCategories" id="multiCategories">
+                    <i class="checkbox"></i><span
+                        class="checkbox-label icon-CheckMark font-glyph-entreprise"></span>
+            </label>
+    </div>
+                <div class="span1"></div>
+                <div class="span3"></div>
             </div>
+                     <div class="span3"></div>
+                    </div>
             <div class="bg_title">
                 <h5 class="headInModule">Les informations de votre entreprise</h5>
             </div>
-            <div class="offset3">
+                <div class="row-fluid">
+                    <div class="span3"></div>
+            <div class="span6">
                 <form wicket:id="etape3EntrepriseForm">
-                    <table class="tableBatimen">
+                    <table class="tableBatimen" id="tableFormEtape3Entreprise">
                          <tr>
                             <th>Spécialité :</th>
                             <td><input
@@ -172,7 +196,7 @@
                                     type="text"
                                     name="villeField"
                                     id="villeField"
-                                    value=""/></td>
+                                    value="" autocomplete="off"/></td>
                         </tr>
                         <tr>
                             <th>Département :</th>
@@ -184,24 +208,34 @@
                                     value=""/></td>
                         </tr>
                     </table>
-                    <div class="row-fluid">
-                        <div class="span4" wicket:id="containerEtapePrecedenteNouveauArtisan3">
-                            <a
-                                    class="btn btn-info"
-                                    wicket:id="etapePrecedenteNouveauArtisan3"
-                                    id="etapePrecedenteNouveauArtisan3">Etape précédente</a>
-                        </div>
-                        <div id="terminerInscriptionPartenaire" class="span4" wicket:id="terminerInscriptionPartenaire">
-                            <a
-                                    class="btn btn-info"
-                                    wicket:id="validateEtape3Partenaire">Terminer</a>
-                        </div>
-                    </div>
                     <div id="champsObligatoireNouveauPartenaire">
                         <span class='required'>*</span> : champs obligatoires
                     </div>
                 </form>
             </div>
+                    <div class="span3"></div>
+                    </div>
+                <div class="row-fluid">
+                    <div class="span3"></div>
+                    <div class="span6">
+                        <div class="span12">
+                            <div class="span6" id="containerEtapePrecedenteNouveauArtisan3"
+                                 wicket:id="containerEtapePrecedenteNouveauArtisan3">
+                                <a class="btn btn-info" wicket:id="etapePrecedenteNouveauArtisan3"
+                                   id="etapePrecedenteNouveauArtisan3">Etape précédente</a>
+                            </div>
+                            <div class="span6">
+                                <div id="terminerInscriptionPartenaire" wicket:id="terminerInscriptionPartenaire">
+                                    <a class="btn btn-info" wicket:id="validateEtape3Partenaire">
+                                        <wicket:container wicket:id="validateEtape3Name">Terminer</wicket:container>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="span3"></div>
+                    </div>
+                </form>
         </div>
     </div>
 </wicket:panel>

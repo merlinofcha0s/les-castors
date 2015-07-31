@@ -108,7 +108,7 @@
                                             type="text"
                                             name="villeField"
                                             id="villeField"
-                                            value="" autocomplete="off"/></td>
+                                            value="" autocomplete="off" data-provide="typeahead"/></td>
                                 </tr>
                                 <tr wicket:id="containerPhoto">
                                     <th wicket:id="lblPhoto">Souhaitez-vous ajouter des photos à votre devis ?</th>
@@ -230,16 +230,21 @@
                                         wicket:id="cguConfirmation"/></td>
                             </tr>
                         </table>
-                        <div id="terminerAnnonce">
-                            <a
-                                    class="btn btn-info"
-                                    wicket:id="etapePrecedente4">Etape précédente</a> <a
-                                class="btn btn-info"
-                                wicket:id="validateInscription">Terminer</a>
-                        </div>
-                        <div id="champsObligatoire">
+                         <div id="champsObligatoire">
                             <span class='required'>*</span> : champs obligatoires
                         </div>
+                        <div id="terminerAnnonce" class="row-fluid">
+                            <div class="span6">
+                                <a class="btn btn-info" wicket:id="etapePrecedente4">Etape précédente</a>
+                            </div>
+                            <div class="span3"></div>
+                            <div class="span3">
+                                <a class="btn btn-info" wicket:id="validateInscription">
+                                <wicket:container wicket:id="validateInscriptionLabel">Terminer</wicket:container>
+                                </a>
+                            </div>
+                        </div>
+
                     </form>
                     <div id="dejaInscrit">
                         Vous possédez déjà un compte ? <a

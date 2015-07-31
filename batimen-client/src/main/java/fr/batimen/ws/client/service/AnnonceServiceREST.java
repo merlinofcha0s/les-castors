@@ -336,4 +336,26 @@ public class AnnonceServiceREST implements Serializable {
         }
         return imageDTOs;
     }
+
+    /**
+     * Service de recherche d'annonce pour les artisans.
+     *
+     * @param searchAnnonceDTOIn Objet contenant les criteres de recherche de l'artisan
+     * @return La liste d'annonces correspondantent.
+     */
+    public SearchAnnonceDTOOut searchAnnonce(SearchAnnonceDTOIn searchAnnonceDTOIn) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Début appel service de recherche d'une annonce.....");
+        }
+
+        String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_ANNONCE_SERVICE_PATH,
+                WsPath.GESTION_ANNONCE_SERVICE_RECHERCHE, searchAnnonceDTOIn);
+
+        SearchAnnonceDTOOut searchAnnonceDTOOut = DeserializeJsonHelper.deserializeDTO(objectInJSON, SearchAnnonceDTOOut.class);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Fin appel service de recherche d'une annonce.");
+        }
+        return searchAnnonceDTOOut;
+    }
 }

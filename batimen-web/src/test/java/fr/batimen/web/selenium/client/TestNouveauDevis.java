@@ -23,9 +23,8 @@ import static org.junit.Assert.*;
  */
 public class TestNouveauDevis extends AbstractITTest {
 
-    private final String nouveauDevisURL = "/nouveaudevis/";
-
     private static final Logger LOGGER = LoggerFactory.getLogger(TestNouveauDevis.class);
+    private final String nouveauDevisURL = "/nouveaudevis/";
 
     @Override
     public void prepareDB() throws Exception {
@@ -279,9 +278,9 @@ public class TestNouveauDevis extends AbstractITTest {
         driver.findElement(By.id("adresseComplementField")).clear();
         driver.findElement(By.id("adresseComplementField")).sendKeys("complement du test");
         driver.findElement(By.id("codePostalField")).clear();
-        driver.findElement(By.id("codePostalField")).sendKeys("04200");
+        driver.findElement(By.id("codePostalField")).sendKeys("06700");
         driver.findElement(By.id("villeField")).clear();
-        driver.findElement(By.id("villeField")).sendKeys("selenium city");
+        driver.findElement(By.id("villeField")).sendKeys("ST LAURENT DU VAR");
         driver.findElement(By.id("validateQualification")).click();
 
         if (!isAlreadyAuthenticate) {

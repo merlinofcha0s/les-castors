@@ -2,6 +2,7 @@ package fr.batimen.test.ws.facade;
 
 
 import fr.batimen.core.constant.CodeRetourService;
+import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.ImageDTO;
 import fr.batimen.dto.NotificationDTO;
@@ -9,6 +10,7 @@ import fr.batimen.dto.aggregate.*;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.enums.TypeNotification;
+import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.test.ws.AbstractBatimenWsTest;
 import fr.batimen.test.ws.helper.DataHelper;
 import fr.batimen.test.ws.service.AnnonceServiceTest;
@@ -27,6 +29,7 @@ import org.junit.Test;
 
 import javax.inject.Inject;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -723,5 +726,39 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         List<ImageDTO> imageDTOs = annonceServiceTest.testSuppressionPhoto("bertrand", false);
         Assert.assertNotNull(imageDTOs);
         Assert.assertEquals(0, imageDTOs.size());
+    }
+
+    /**
+     * Cas de test : Un artisan veut rechecher des annonces
+     */
+    @Test
+    @UsingDataSet("datasets/in/search_annonce.yml")
+    public void testRechercheAnnonceNominal() {
+        List<CategorieMetierDTO> categorieMetierDTOs = new ArrayList<>();
+        categorieMetierDTOs.add(CategorieLoader.getCategorieElectricite());
+        annonceServiceTest.searchAnnonce("pebronneArtisanne", categorieMetierDTOs, 2);
+    }
+
+    /**
+     * Cas de test : Un admin veut rechecher des annonces
+     */
+    @Test
+    @UsingDataSet("datasets/in/search_annonce.yml")
+    public void testRechercheAnnonceParAdmin() {
+        List<CategorieMetierDTO> categorieMetierDTOs = new ArrayList<>();
+        categorieMetierDTOs.add(CategorieLoader.getCategorieElectricite());
+        annonceServiceTest.searchAnnonce("admin", categorieMetierDTOs, 2);
+    }
+
+    /**
+     * Cas de test : Un admin veut rechecher des annonces dans plusieurs catégories
+     */
+    @Test
+    @UsingDataSet("datasets/in/search_annonce.yml")
+    public void testRechercheAnnonceParArtisanParPlusieursCategories() {
+        List<CategorieMetierDTO> categorieMetierDTOs = new ArrayList<>();
+        categorieMetierDTOs.add(CategorieLoader.getCategorieElectricite());
+        categorieMetierDTOs.add(CategorieLoader.getCategoriePlomberie());
+        annonceServiceTest.searchAnnonce("admin", categorieMetierDTOs, 3);
     }
 }
