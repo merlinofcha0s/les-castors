@@ -18,6 +18,7 @@ import fr.batimen.web.client.extend.nouveau.artisan.Etape3Entreprise;
 import fr.batimen.web.client.extend.nouveau.devis.Etape4InscriptionForm;
 import fr.batimen.web.client.master.MasterPage;
 import org.apache.wicket.event.IEvent;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
@@ -74,12 +75,7 @@ public class ModifierMonProfil extends MasterPage {
 
         Etape3Entreprise entrepriseModif = new Etape3Entreprise("etape3InformationsEntreprise",
                 propertyModelNouveauPartenaire, propertyModelNouveauPartenaire.getObject()
-                , true) {
-            @Override
-            public boolean isVisible() {
-                return rolesUtils.checkRoles(TypeCompte.ARTISAN);
-            }
-        };
+                , true);
 
         photoChantierTemoin = new PhotosContainer("photoChantierTemoin", entreprise.getPhotosChantiersTemoins(), "Vos photos de chantiers témoins", "h5", true) {
             @Override
@@ -88,10 +84,19 @@ public class ModifierMonProfil extends MasterPage {
             }
         };
 
+        WebMarkupContainer containerEntreprise = new WebMarkupContainer("containerEntreprise") {
+            @Override
+            public boolean isVisible() {
+                return rolesUtils.checkRoles(TypeCompte.ARTISAN);
+            }
+        };
+
+        containerEntreprise.add(entrepriseModif, photoChantierTemoin);
+
         ContactezNous contactezNous = new ContactezNous("contactezNous");
         Commentaire commentaire = new Commentaire("commentaire");
 
-        this.add(profil, inscriptionForm, entrepriseModif, photoChantierTemoin, contactezNous, commentaire);
+        this.add(profil, inscriptionForm, containerEntreprise, contactezNous, commentaire);
     }
 
     private void initData() {

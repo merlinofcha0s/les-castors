@@ -44,8 +44,8 @@ public class ModifierMonProfilDataset {
 
     public static final Operation INSERT_ADRESSE_DATA = insertInto("adresse")
             .columns("id", "adresse", "codepostal", "complementadresse", "ville", "departement")
-            .values(200005, "254 chemin du test", "06600", "Residence du test", "Test City", 06)
-            .values(200014, "254 chemin du test", "06600", "Residence du test", "Test City", 06).build();
+            .values(200005, "254 chemin du test", "06700", "Residence du test", "ST LAURENT DU VAR", 06)
+            .values(200014, "254 chemin du test", "06700", "Residence du test", "ST LAURENT DU VAR", 06).build();
 
     public static final Operation INSERT_AVIS_DATA = insertInto("avis")
             .columns("id", "commentaire", "dateavis", "score", "artisan_fk")

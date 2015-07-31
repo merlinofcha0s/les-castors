@@ -49,11 +49,11 @@ public class AnnonceDataset {
 
     public static final Operation INSERT_ADRESSE_DATA = insertInto("adresse")
             .columns("id", "adresse", "codepostal", "complementadresse", "ville", "departement")
-            .values(200005, "254 chemin du test", "06600", "Residence du test", "Test City", 06)
-            .values(200006, "260 chemin des lol", "06500", "Residence des lol", "Test lol", 07)
-            .values(200014, "254 chemin du test", "06600", "Residence du test", "Test City", 06)
-            .values(200015, "270 chemin du mdr", "08800", "Residence du mdr", "Test mdr", 8)
-            .values(200016, "280 chemin du lolmdrxD", "09800", "Residence du lolmdrxD", "Test lolmdrxD", 9).build();
+            .values(200005, "254 chemin du test", "06700", "Residence du test", "ST LAURENT DU VAR", 06)
+            .values(200006, "260 chemin des lol", "06700", "Residence des lol", "ST LAURENT DU VAR", 07)
+            .values(200014, "254 chemin du test", "06700", "Residence du test", "ST LAURENT DU VAR", 06)
+            .values(200015, "270 chemin du mdr", "06700", "Residence du mdr", "ST LAURENT DU VAR", 8)
+            .values(200016, "280 chemin du lolmdrxD", "06700", "Residence du lolmdrxD", "ST LAURENT DU VAR", 9).build();
 
     public static final Operation INSERT_AVIS_DATA = insertInto("avis")
             .columns("id", "commentaire", "dateavis", "score", "artisan_fk")

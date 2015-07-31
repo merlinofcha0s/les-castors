@@ -127,9 +127,9 @@ public class TestNouveauPartenaire extends AbstractITTest {
         driver.findElement(By.id("adresseField")).clear();
         driver.findElement(By.id("adresseField")).sendKeys("450 chemin du xav");
         driver.findElement(By.id("codePostalField")).clear();
-        driver.findElement(By.id("codePostalField")).sendKeys("06800");
+        driver.findElement(By.id("codePostalField")).sendKeys("06700");
         driver.findElement(By.id("villeField")).clear();
-        driver.findElement(By.id("villeField")).sendKeys("Xavier City");
+        driver.findElement(By.id("villeField")).sendKeys("ST LAURENT DU VAR");
 
         driver.findElement(By.id("validateEtape3Partenaire")).click();
     }

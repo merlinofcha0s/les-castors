@@ -59,6 +59,10 @@ public class TestRechercheAnnonce extends AbstractITTest {
 
         Assert.assertTrue(checkConditionAnnonceRechercheOK);
 
+        if (browser.equals("ie")) {
+            Thread.sleep(1000);
+        }
+
         driver.findElement(By.id("btnPlusDAvisEntreprise")).click();
 
         Boolean checkConditionAnnonceRechercheOKPlusDeResultat = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))

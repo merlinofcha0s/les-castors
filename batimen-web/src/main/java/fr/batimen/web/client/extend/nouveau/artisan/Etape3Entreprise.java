@@ -4,10 +4,12 @@ import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.LocalisationDTO;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
+import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.web.app.constants.Etape;
 import fr.batimen.web.app.constants.FeedbackMessageLevel;
 import fr.batimen.web.app.security.Authentication;
+import fr.batimen.web.app.security.RolesUtils;
 import fr.batimen.web.app.utils.codepostal.CSVCodePostalReader;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.web.client.extend.nouveau.artisan.event.ChangementEtapeEventArtisan;
@@ -66,6 +68,8 @@ public class Etape3Entreprise extends Panel {
     @Inject
     private CSVCodePostalReader csvCodePostalReader;
 
+    private RolesUtils rolesUtils;
+
     public Etape3Entreprise(String id, IModel<?> model) {
         super(id, model);
     }
@@ -76,25 +80,34 @@ public class Etape3Entreprise extends Panel {
         this.isInModification = isInModification;
         Model<String> titreModificationEntrepriseModel = new Model<>();
 
-        if (isInModification) {
-            titreModificationEntrepriseModel.setObject("Modifier mon entreprise");
-            List<LocalisationDTO> localisationDTOs = csvCodePostalReader.getLocalisationDTOs().get(nouveauPartenaire.getAdresse().getCodePostal());
-            for (LocalisationDTO localisationDTO : localisationDTOs) {
-                nouveauPartenaire.getVillesPossbles().add(localisationDTO.getCommune());
+        rolesUtils = new RolesUtils();
+
+        if (rolesUtils.checkRoles(TypeCompte.ARTISAN)) {
+            if (isInModification) {
+                titreModificationEntrepriseModel.setObject("Modifier mon entreprise");
+                List<LocalisationDTO> localisationDTOs = csvCodePostalReader.getLocalisationDTOs().get(nouveauPartenaire.getAdresse().getCodePostal());
+                for (LocalisationDTO localisationDTO : localisationDTOs) {
+                    nouveauPartenaire.getVillesPossbles().add(localisationDTO.getCommune());
+                }
+                classCSSTooltip = "checkbox-tooltip-modif";
+            } else {
+                classCSSTooltip = "checkbox-tooltip";
+                titreModificationEntrepriseModel.setObject("Renseignez les informations de l'entreprise");
             }
-            classCSSTooltip = "checkbox-tooltip-modif";
-        } else {
-            classCSSTooltip = "checkbox-tooltip";
-            titreModificationEntrepriseModel.setObject("Renseignez les informations de l'entreprise");
         }
 
         Label titreModificationEntreprise = new Label("titreModificationEntreprise", titreModificationEntrepriseModel);
 
         final CheckBox electricite = new CheckBox("electricite", Model.of(Boolean.FALSE));
+        electricite.setMarkupId("electricite");
         final CheckBox plomberie = new CheckBox("plomberie", Model.of(Boolean.FALSE));
+        plomberie.setMarkupId("plomberie");
         final CheckBox espaceVert = new CheckBox("espaceVert", Model.of(Boolean.FALSE));
+        espaceVert.setMarkupId("espaceVert");
         final CheckBox maconnerie = new CheckBox("decorationMaconnerie", Model.of(Boolean.FALSE));
+        maconnerie.setMarkupId("decorationMaconnerie");
         final CheckBox multiCategories = new CheckBox("multiCategories", Model.of(Boolean.FALSE));
+        multiCategories.setMarkupId("multiCategorie");
 
         WebMarkupContainer electriciteContainer = new WebMarkupContainer("eletriciteContainer") {
             @Override
@@ -269,9 +282,9 @@ public class Etape3Entreprise extends Panel {
         if (!isInModification) {
             terminerInscriptionPartenaire.setOutputMarkupId(true);
             terminerInscriptionPartenaire.setMarkupId("terminerInscriptionPartenaire-nouveau");
-            validateEtape3Name.setDefaultModelObject("Sauvegarder");
-        } else {
             validateEtape3Name.setDefaultModelObject("Terminer");
+        } else {
+            validateEtape3Name.setDefaultModelObject("Sauvegarder");
         }
 
         validateEtape3Partenaire.add(validateEtape3Name);
@@ -339,5 +352,10 @@ public class Etape3Entreprise extends Panel {
         target.appendJavaScript(INIT_MULTI_CATEGORIE_CHECKBOX);
         target.appendJavaScript("$('.checkbox').checkbox()");
         target.appendJavaScript(INIT_TOOLTIP_CATEGORIE);
+    }
+
+    @Override
+    public boolean isVisible() {
+        return rolesUtils.checkRoles(TypeCompte.ARTISAN);
     }
 }
