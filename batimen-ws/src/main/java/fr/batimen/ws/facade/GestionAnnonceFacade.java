@@ -1,9 +1,6 @@
 package fr.batimen.ws.facade;
 
 import com.microtripit.mandrillapp.lutung.model.MandrillApiError;
-import com.sun.jersey.core.header.FormDataContentDisposition;
-import com.sun.jersey.multipart.FormDataBodyPart;
-import com.sun.jersey.multipart.FormDataParam;
 import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.WsPath;
@@ -18,7 +15,6 @@ import fr.batimen.dto.aggregate.*;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.enums.TypeNotification;
-import fr.batimen.dto.helper.DeserializeJsonHelper;
 import fr.batimen.ws.dao.AnnonceDAO;
 import fr.batimen.ws.dao.ArtisanDAO;
 import fr.batimen.ws.dao.NotificationDAO;
@@ -31,13 +27,11 @@ import fr.batimen.ws.helper.JsonHelper;
 import fr.batimen.ws.interceptor.BatimenInterceptor;
 import fr.batimen.ws.mapper.AnnonceMap;
 import fr.batimen.ws.service.*;
-import fr.batimen.ws.utils.FluxUtils;
 import fr.batimen.ws.utils.RolesUtils;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.security.RolesAllowed;
 import javax.ejb.*;
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -46,10 +40,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.*;
 
 /**
@@ -60,7 +51,7 @@ import java.util.*;
 @Stateless(name = "GestionAnnonceFacade")
 @LocalBean
 @Path(WsPath.GESTION_ANNONCE_SERVICE_PATH)
-@RolesAllowed(Constant.USERS_ROLE)
+//@RolesAllowed(Constant.USERS_ROLE)
 @Produces(JsonHelper.JSON_MEDIA_TYPE_AND_UTF_8_CHARSET)
 @Consumes(JsonHelper.JSON_MEDIA_TYPE_AND_UTF_8_CHARSET)
 @Interceptors(value = {BatimenInterceptor.class})
@@ -174,18 +165,18 @@ public class GestionAnnonceFacade {
      * Constant
      * @see Constant
      */
-    @POST
+    /*@POST
     @Path(WsPath.GESTION_ANNONCE_SERVICE_CREATION_ANNONCE_AVEC_IMAGES)
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public Integer creationAnnonceAvecImage(@FormDataParam("content") final InputStream content,
-                                            @FormDataParam("files") final List<FormDataBodyPart> files,
-                                            @FormDataParam("files") final List<FormDataContentDisposition> filesDetail) {
+    public Integer creationAnnonceAvecImage(/*@FormDataParam("content")final InputStream content,
+                                            /*@FormDataParam("files") final List<FormDataBodyPart> files,
+                                            /*@FormDataParam("files") final List<FormDataContentDisposition> filesDetail) {
 
         CreationAnnonceDTO nouvelleAnnonceDTO = DeserializeJsonHelper.deserializeDTO(
                 FluxUtils.getJsonByInputStream(content), CreationAnnonceDTO.class);
 
-        if (LOGGER.isDebugEnabled()) {
+       /* if (LOGGER.isDebugEnabled()) {
             for (FormDataContentDisposition fileDetail : filesDetail) {
                 LOGGER.debug("Details fichier : " + fileDetail);
             }
@@ -198,7 +189,7 @@ public class GestionAnnonceFacade {
         creationAnnonce(nouvelleAnnonceDTO);
 
         return CodeRetourService.RETOUR_OK;
-    }
+    }*/
 
     /**
      * Permet de récuperer une annonce dans le but de l'afficher <br/>
@@ -727,7 +718,7 @@ public class GestionAnnonceFacade {
      * @param filesDetail Liste contenant les metadata des photos du client.
      * @return La liste des images appartenant à l'utilisateur contenu dans cloudinary.
      */
-    @POST
+    /*@POST
     @Path(WsPath.GESTION_ANNONCE_SERVICE_AJOUT_PHOTO)
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
@@ -767,7 +758,7 @@ public class GestionAnnonceFacade {
             photoService.persistPhoto(annonceRajouterPhoto, urlsPhoto);
         }
         return photoService.imageToImageDTO(annonceRajouterPhoto.getImages());
-    }
+    }*/
 
     /**
      * Récupération de toutes les photos d'une annonce avec vérificatin des droits

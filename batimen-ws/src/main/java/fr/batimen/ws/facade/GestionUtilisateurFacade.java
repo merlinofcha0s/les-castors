@@ -1,48 +1,38 @@
 package fr.batimen.ws.facade;
 
-import java.util.Date;
-import java.util.List;
-
-import javax.annotation.security.RolesAllowed;
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
-import javax.inject.Inject;
-import javax.inject.Provider;
-import javax.interceptor.Interceptors;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-
+import fr.batimen.core.constant.CodeRetourService;
+import fr.batimen.core.constant.Constant;
+import fr.batimen.core.constant.WsPath;
 import fr.batimen.dto.*;
 import fr.batimen.dto.aggregate.MesAnnoncesDTO;
 import fr.batimen.dto.enums.TypeCompte;
+import fr.batimen.dto.helper.DeserializeJsonHelper;
+import fr.batimen.ws.dao.ArtisanDAO;
+import fr.batimen.ws.dao.ClientDAO;
+import fr.batimen.ws.dao.PermissionDAO;
 import fr.batimen.ws.entity.AbstractUser;
+import fr.batimen.ws.entity.Artisan;
+import fr.batimen.ws.entity.Client;
+import fr.batimen.ws.entity.Permission;
+import fr.batimen.ws.helper.JsonHelper;
+import fr.batimen.ws.interceptor.BatimenInterceptor;
 import fr.batimen.ws.service.AnnonceService;
+import fr.batimen.ws.service.ArtisanService;
+import fr.batimen.ws.service.ClientService;
 import fr.batimen.ws.service.NotificationService;
 import fr.batimen.ws.utils.RolesUtils;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.batimen.core.constant.CodeRetourService;
-import fr.batimen.core.constant.Constant;
-import fr.batimen.core.constant.WsPath;
-import fr.batimen.dto.helper.DeserializeJsonHelper;
-import fr.batimen.ws.dao.ArtisanDAO;
-import fr.batimen.ws.dao.ClientDAO;
-import fr.batimen.ws.dao.PermissionDAO;
-import fr.batimen.ws.entity.Artisan;
-import fr.batimen.ws.entity.Client;
-import fr.batimen.ws.entity.Permission;
-import fr.batimen.ws.helper.JsonHelper;
-import fr.batimen.ws.interceptor.BatimenInterceptor;
-import fr.batimen.ws.service.ArtisanService;
-import fr.batimen.ws.service.ClientService;
+import javax.ejb.*;
+import javax.inject.Inject;
+import javax.interceptor.Interceptors;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import java.util.List;
 
 /**
  * Facade REST de gestion des utilisateurs
@@ -53,7 +43,7 @@ import fr.batimen.ws.service.ClientService;
 @Stateless(name = "GestionUtilisateurFacade")
 @LocalBean
 @Path(WsPath.GESTION_UTILISATEUR_SERVICE_PATH)
-@RolesAllowed(Constant.USERS_ROLE)
+//@RolesAllowed(Constant.USERS_ROLE)
 @Produces(JsonHelper.JSON_MEDIA_TYPE_AND_UTF_8_CHARSET)
 @Consumes(JsonHelper.JSON_MEDIA_TYPE_AND_UTF_8_CHARSET)
 @Interceptors(value = { BatimenInterceptor.class })

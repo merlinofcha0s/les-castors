@@ -1,9 +1,6 @@
 package fr.batimen.ws.facade;
 
 import com.microtripit.mandrillapp.lutung.model.MandrillApiError;
-import com.sun.jersey.core.header.FormDataContentDisposition;
-import com.sun.jersey.multipart.FormDataBodyPart;
-import com.sun.jersey.multipart.FormDataParam;
 import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.WsPath;
@@ -13,7 +10,6 @@ import fr.batimen.dto.AvisDTO;
 import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.EntrepriseDTO;
 import fr.batimen.dto.ImageDTO;
-import fr.batimen.dto.aggregate.AjoutPhotoDTO;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
 import fr.batimen.dto.aggregate.SuppressionPhotoDTO;
 import fr.batimen.dto.enums.TypeCompte;
@@ -24,12 +20,10 @@ import fr.batimen.ws.enums.PropertiesFileWS;
 import fr.batimen.ws.helper.JsonHelper;
 import fr.batimen.ws.interceptor.BatimenInterceptor;
 import fr.batimen.ws.service.*;
-import fr.batimen.ws.utils.FluxUtils;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.security.RolesAllowed;
 import javax.ejb.*;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
@@ -39,8 +33,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 
@@ -52,9 +44,9 @@ import java.util.Properties;
 @Stateless(name = "GestionArtisanFacade")
 @LocalBean
 @Path(WsPath.GESTION_PARTENAIRE_SERVICE_PATH)
-@RolesAllowed(Constant.USERS_ROLE)
+//@RolesAllowed(Constant.USERS_ROLE)
 @Produces(JsonHelper.JSON_MEDIA_TYPE_AND_UTF_8_CHARSET)
-@Consumes(JsonHelper.JSON_MEDIA_TYPE_AND_UTF_8_CHARSET)
+@Consumes(MediaType.APPLICATION_JSON)
 @Interceptors(value = {BatimenInterceptor.class})
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class GestionArtisanFacade {
@@ -292,7 +284,7 @@ public class GestionArtisanFacade {
      * @param filesDetail Liste contenant les metadata des photos du client.
      * @return La liste des images appartenant à l'utilisateur contenu dans cloudinary.
      */
-    @POST
+    /*@POST
     @Path(WsPath.GESTION_PARTENAIRE_SERVICE_AJOUT_PHOTO_CHANTIER_TEMOIN)
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
@@ -332,7 +324,7 @@ public class GestionArtisanFacade {
             photoService.persistPhoto(entrepriseAjoutPhotos, urlsPhoto);
         }
         return photoService.imageToImageDTO(entrepriseAjoutPhotos.getImagesChantierTemoin());
-    }
+    }*/
 
     /**
      * Suppression d'une photo des chantiers temoin d'une entreprise.

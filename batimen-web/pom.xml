@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>fr.batimen.app</groupId>
         <artifactId>batimen-module</artifactId>
-        <version>0.4.0-SNAPSHOT</version>
+        <version>0.5.0-SNAPSHOT</version>
         <relativePath>../batimen-module</relativePath>
     </parent>
 
@@ -211,16 +211,17 @@
         <!-- JEE -->
         <dependency>
             <groupId>org.jboss.spec</groupId>
-            <artifactId>jboss-javaee-6.0</artifactId>
+            <artifactId>jboss-javaee-7.0</artifactId>
+            <version>1.0.3.Final</version>
             <scope>provided</scope>
             <type>pom</type>
             <!-- Exclus à cause de selenium (version trop vieille) -->
-            <exclusions>
-                <exclusion>
-                    <artifactId>xml-apis</artifactId>
-                    <groupId>xml-apis</groupId>
-                </exclusion>
-            </exclusions>
+            <!--  <exclusions>
+                 <exclusion>
+                     <artifactId>xml-apis</artifactId>
+                     <groupId>xml-apis</groupId>
+                 </exclusion>
+             </exclusions> -->
         </dependency>
         <dependency>
             <groupId>com.sun.jersey</groupId>
