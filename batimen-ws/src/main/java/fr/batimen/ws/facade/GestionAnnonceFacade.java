@@ -32,6 +32,7 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.*;
 import javax.inject.Inject;
 import javax.inject.Provider;
@@ -51,7 +52,7 @@ import java.util.*;
 @Stateless(name = "GestionAnnonceFacade")
 @LocalBean
 @Path(WsPath.GESTION_ANNONCE_SERVICE_PATH)
-//@RolesAllowed(Constant.USERS_ROLE)
+@RolesAllowed(Constant.USERS_ROLE)
 @Produces(JsonHelper.JSON_MEDIA_TYPE_AND_UTF_8_CHARSET)
 @Consumes(JsonHelper.JSON_MEDIA_TYPE_AND_UTF_8_CHARSET)
 @Interceptors(value = {BatimenInterceptor.class})
@@ -499,8 +500,6 @@ public class GestionAnnonceFacade {
     @Path(WsPath.GESTION_ANNONCE_SERVICE_DESINSCRIPTION_UN_ARTISAN)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public Integer desinscriptionUnArtisan(DesinscriptionAnnonceDTO desinscriptionAnnonceDTO) {
-        Annonce annonce = null;
-
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("+------------------------------------------------------------------------------+");
             LOGGER.debug("| Hash ID : " + desinscriptionAnnonceDTO.getId());
@@ -516,10 +515,11 @@ public class GestionAnnonceFacade {
             LOGGER.debug("Role du client récupéré: " + rolesClientDemandeur);
         }
 
-        annonce = loadAnnonceAndCheckUserClientOrAdminRight(rolesClientDemandeur, desinscriptionAnnonceDTO.getId(), desinscriptionAnnonceDTO
+        final Annonce annonce = loadAnnonceAndCheckUserClientOrAdminRight(rolesClientDemandeur, desinscriptionAnnonceDTO.getId(), desinscriptionAnnonceDTO
                 .getLoginDemandeur());
 
-        boolean atLeastOneRemoved = false;
+        int nbArtisansAvant;
+        int nbArtisansApres;
 
         if (annonce != null) {
 
@@ -530,29 +530,14 @@ public class GestionAnnonceFacade {
 
             }
 
-            for (Iterator<Artisan> itArtisan = artisans.iterator(); itArtisan.hasNext(); ) {
+            nbArtisansAvant = artisans.size();
+            artisans.removeIf(artisan -> artisan.getLogin().equals(desinscriptionAnnonceDTO.getLoginArtisan()));
+            nbArtisansApres = artisans.size();
 
-                Artisan artisanADesinscrire = itArtisan.next();
-
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("+-------------------------------------------------------------+");
-                    LOGGER.debug("| Login : " + artisanADesinscrire.getLogin());
-                    LOGGER.debug("| Email : " + artisanADesinscrire.getEmail());
-                    LOGGER.debug("+-------------------------------------------------------------+");
-                }
-
-                if (artisanADesinscrire.getLogin().equals(desinscriptionAnnonceDTO.getLoginArtisan())) {
-                    artisans.remove(artisanADesinscrire);
-                    if (LOGGER.isDebugEnabled()) {
-                        LOGGER.debug("Artisan trouvée");
-                    }
-                    atLeastOneRemoved = true;
-
-                    if (annonce.getEtatAnnonce().equals(EtatAnnonce.QUOTA_MAX_ATTEINT)) {
-                        annonce.setEtatAnnonce(EtatAnnonce.ACTIVE);
-                    }
-                }
+            if (nbArtisansAvant != nbArtisansApres && annonce.getEtatAnnonce().equals(EtatAnnonce.QUOTA_MAX_ATTEINT)) {
+                annonce.setEtatAnnonce(EtatAnnonce.ACTIVE);
             }
+
         } else {
             if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("Annonce inexistante");
@@ -560,7 +545,7 @@ public class GestionAnnonceFacade {
             return CodeRetourService.RETOUR_KO;
         }
 
-        if (atLeastOneRemoved) {
+        if (nbArtisansAvant != nbArtisansApres) {
             return CodeRetourService.RETOUR_OK;
         } else {
             if (LOGGER.isErrorEnabled()) {

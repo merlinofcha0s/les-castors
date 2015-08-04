@@ -44,14 +44,12 @@ import java.util.Properties;
 public class WsConnector implements Serializable {
 
     private static final long serialVersionUID = 4898933306261359715L;
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(WsConnector.class);
     private String ipServeur;
     private String portServeur;
     private String nomWs;
     private String nomWsTest;
-    private boolean isTest = false;
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(WsConnector.class);
+    private boolean isTest;
 
     public WsConnector() {
         getWsProperties();

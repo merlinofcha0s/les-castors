@@ -24,6 +24,7 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.*;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
@@ -44,7 +45,7 @@ import java.util.Properties;
 @Stateless(name = "GestionArtisanFacade")
 @LocalBean
 @Path(WsPath.GESTION_PARTENAIRE_SERVICE_PATH)
-//@RolesAllowed(Constant.USERS_ROLE)
+@RolesAllowed(Constant.USERS_ROLE)
 @Produces(JsonHelper.JSON_MEDIA_TYPE_AND_UTF_8_CHARSET)
 @Consumes(MediaType.APPLICATION_JSON)
 @Interceptors(value = {BatimenInterceptor.class})

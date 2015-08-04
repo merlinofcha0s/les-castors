@@ -1,22 +1,7 @@
 package fr.batimen.test.ws.service;
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
-
-import javax.inject.Inject;
-
-import fr.batimen.dto.NotificationDTO;
-import fr.batimen.ws.entity.Notification;
-import org.jboss.arquillian.persistence.UsingDataSet;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-
 import com.microtripit.mandrillapp.lutung.model.MandrillApiError;
 import com.microtripit.mandrillapp.lutung.view.MandrillMessage;
-
 import fr.batimen.core.exception.EmailException;
 import fr.batimen.dto.ContactMailDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
@@ -27,6 +12,16 @@ import fr.batimen.ws.dao.EmailDAO;
 import fr.batimen.ws.entity.Client;
 import fr.batimen.ws.enums.PropertiesFileWS;
 import fr.batimen.ws.service.EmailService;
+import org.jboss.arquillian.persistence.UsingDataSet;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import javax.inject.Inject;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 public class EmailServiceTest extends AbstractBatimenWsTest {
 

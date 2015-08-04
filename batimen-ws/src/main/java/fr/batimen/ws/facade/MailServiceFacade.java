@@ -2,6 +2,7 @@ package fr.batimen.ws.facade;
 
 import com.microtripit.mandrillapp.lutung.model.MandrillApiError;
 import fr.batimen.core.constant.CodeRetourService;
+import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.WsPath;
 import fr.batimen.core.exception.EmailException;
 import fr.batimen.dto.ContactMailDTO;
@@ -11,6 +12,7 @@ import fr.batimen.ws.service.EmailService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.*;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
@@ -29,7 +31,7 @@ import java.io.IOException;
 @Stateless(name = "MailServiceFacade")
 @LocalBean
 @Path(WsPath.MAIL_SERVICE_PATH)
-//@RolesAllowed(Constant.USERS_ROLE)
+@RolesAllowed(Constant.USERS_ROLE)
 @Produces(JsonHelper.JSON_MEDIA_TYPE_AND_UTF_8_CHARSET)
 @Consumes(JsonHelper.JSON_MEDIA_TYPE_AND_UTF_8_CHARSET)
 @Interceptors(value = { BatimenInterceptor.class })

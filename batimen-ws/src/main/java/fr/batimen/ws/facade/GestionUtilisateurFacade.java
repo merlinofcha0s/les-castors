@@ -25,6 +25,7 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.security.RolesAllowed;
 import javax.ejb.*;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
@@ -43,7 +44,7 @@ import java.util.List;
 @Stateless(name = "GestionUtilisateurFacade")
 @LocalBean
 @Path(WsPath.GESTION_UTILISATEUR_SERVICE_PATH)
-//@RolesAllowed(Constant.USERS_ROLE)
+@RolesAllowed(Constant.USERS_ROLE)
 @Produces(JsonHelper.JSON_MEDIA_TYPE_AND_UTF_8_CHARSET)
 @Consumes(JsonHelper.JSON_MEDIA_TYPE_AND_UTF_8_CHARSET)
 @Interceptors(value = { BatimenInterceptor.class })
@@ -86,7 +87,7 @@ public class GestionUtilisateurFacade {
      */
     @POST
     @Path(WsPath.GESTION_UTILISATEUR_SERVICE_LOGIN)
-    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public ClientDTO login(LoginDTO toLogin) {
         ModelMapper modelMapper = new ModelMapper();
         Client client = clientDAO.getClientByLoginName(toLogin.getLogin());
