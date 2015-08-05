@@ -15,6 +15,7 @@ import fr.batimen.dto.aggregate.*;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.enums.TypeNotification;
+import fr.batimen.dto.helper.DeserializeJsonHelper;
 import fr.batimen.ws.dao.AnnonceDAO;
 import fr.batimen.ws.dao.ArtisanDAO;
 import fr.batimen.ws.dao.NotificationDAO;
@@ -27,6 +28,7 @@ import fr.batimen.ws.helper.JsonHelper;
 import fr.batimen.ws.interceptor.BatimenInterceptor;
 import fr.batimen.ws.mapper.AnnonceMap;
 import fr.batimen.ws.service.*;
+import fr.batimen.ws.utils.FluxUtils;
 import fr.batimen.ws.utils.RolesUtils;
 import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
@@ -44,7 +46,9 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 /**
@@ -158,7 +162,7 @@ public class GestionAnnonceFacade {
     /**
      * Permet la creation d'une nouvelle annonce par le client ainsi que le
      * compte de ce dernier <br/>
-     * <p/>
+     * <p>
      * Mode multipart, en plus de JSON la request contient des photos.
      *
      * @param content     L'objet provenant du frontend qui permet la creation de
@@ -173,28 +177,32 @@ public class GestionAnnonceFacade {
     @Path(WsPath.GESTION_ANNONCE_SERVICE_CREATION_ANNONCE_AVEC_IMAGES)
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public Integer creationAnnonceAvecImage(MultipartFormDataInput input) {
+    public Integer creationAnnonceAvecImage(MultipartFormDataInput formInputRaw) {
 
-        Map<String, List<InputPart>> formDataAnnonceRaw = input.getFormDataMap();
+        Map<String, List<InputPart>> formDataAnnonceRaw = formInputRaw.getFormDataMap();
 
+        List<InputPart> contents = formDataAnnonceRaw.getOrDefault("content", new ArrayList<>());
+        List<InputPart> files = formDataAnnonceRaw.getOrDefault("files", new ArrayList<>());
 
-       /* CreationAnnonceDTO nouvelleAnnonceDTO = DeserializeJsonHelper.deserializeDTO(
-                FluxUtils.getJsonByInputStream(content), CreationAnnonceDTO.class);
+        CreationAnnonceDTO nouvelleAnnonceDTO = null;
 
-        /*if (LOGGER.isDebugEnabled()) {
-            for (FormDataContentDisposition fileDetail : filesDetail) {
-                LOGGER.debug("Details fichier : " + fileDetail);
+        //Transformation de la partie JSON (Données de l'annonce).
+        for (InputPart content : contents) {
+            try {
+                nouvelleAnnonceDTO = DeserializeJsonHelper.deserializeDTO(
+                        FluxUtils.getJsonByInputStream(content.getBody(InputStream.class, null)), CreationAnnonceDTO.class);
+            } catch (IOException e) {
+                LOGGER.error("Erreur pendant la récuperation de l'input stream en JSON contenant les données de l'annonce", e);
             }
         }
 
-        List<File> photos = FluxUtils.transformFormDataBodyPartsToFiles(files);
 
+        List<File> photos = FluxUtils.transformInputPartsToFiles(files);
         nouvelleAnnonceDTO.getPhotos().addAll(photos);
-
-        creationAnnonce(nouvelleAnnonceDTO);*/
-
+        creationAnnonce(nouvelleAnnonceDTO);
         return CodeRetourService.RETOUR_OK;
     }
+
 
     /**
      * Permet de récuperer une annonce dans le but de l'afficher <br/>
@@ -358,7 +366,7 @@ public class GestionAnnonceFacade {
 
     /**
      * Selection d'une entreprise par un particulier ou un admin <br/>
-     * <p/>
+     * <p>
      * Si c'est un client, il doit posseder l'annonce, sinon le demandeur doit
      * etre admin.
      *
@@ -494,7 +502,7 @@ public class GestionAnnonceFacade {
     /**
      * Service qui permet à un client de ne pas accepter un artisan à son
      * annonce <br/>
-     * <p/>
+     * <p>
      * Réactive l'annonce si elle etait en quotas max atteint.
      *
      * @param desinscriptionAnnonceDTO Objet permettant de faire la demande de desinscription
@@ -562,9 +570,9 @@ public class GestionAnnonceFacade {
 
     /**
      * Service qui permet à un client de noter un artisan<br/>
-     * <p/>
+     * <p>
      * Fait passer l'annonce en état terminer
-     * <p/>
+     * <p>
      * Génére une notification à destination de l'artisan
      *
      * @param noterArtisanDTO Objet permettant de valider la note de l'artisan
@@ -648,7 +656,7 @@ public class GestionAnnonceFacade {
 
     /**
      * Service qui permet à un client de pouvoir modifier son annonce<br/>
-     * <p/>
+     * <p>
      * Génére une notification à destination des artisans inscrits
      *
      * @param modificationAnnonceDTO Objet permettant de récuperer les informations qui ont été modifiée par le client
@@ -695,32 +703,34 @@ public class GestionAnnonceFacade {
 
     /**
      * Service qui permet à un client de pouvoir ajouter / rajouter des photos à son annonce<br/>
-     * <p/>
+     * <p>
      * Génére une notification à destination des artisans inscrits
-     * <p/>
-     * <p/>
+     * <p>
+     * <p>
      * Mode multipart, en plus du JSON la request contient des photos.
      *
-     * @param content     L'objet provenant du frontend qui permet la creation de
-     *                    l'annonce.
-     * @param files       Liste contenant l'ensemble des photos.
-     * @param filesDetail Liste contenant les metadata des photos du client.
+     * @param formInputRaw     L'objet contenant les données JSON et les fichiers photos
      * @return La liste des images appartenant à l'utilisateur contenu dans cloudinary.
      */
-    /*@POST
+    @POST
     @Path(WsPath.GESTION_ANNONCE_SERVICE_AJOUT_PHOTO)
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public List<ImageDTO> ajouterPhoto(@FormDataParam("content") final InputStream content,
-                                       @FormDataParam("files") final List<FormDataBodyPart> files,
-                                       @FormDataParam("files") final List<FormDataContentDisposition> filesDetail) {
+    public List<ImageDTO> ajouterPhoto(MultipartFormDataInput formInputRaw) {
 
-        AjoutPhotoDTO ajoutPhotoDTO = DeserializeJsonHelper.deserializeDTO(
-                FluxUtils.getJsonByInputStream(content), AjoutPhotoDTO.class);
+        Map<String, List<InputPart>> formDataAnnonceRaw = formInputRaw.getFormDataMap();
 
-        if (LOGGER.isDebugEnabled()) {
-            for (FormDataContentDisposition fileDetail : filesDetail) {
-                LOGGER.debug("Details fichier : {}", fileDetail);
+        List<InputPart> contents = formDataAnnonceRaw.getOrDefault("content", new ArrayList<>());
+        List<InputPart> files = formDataAnnonceRaw.getOrDefault("files", new ArrayList<>());
+
+        AjoutPhotoDTO ajoutPhotoDTO = null;
+        //Transformation de la partie JSON (Données de l'annonce).
+        for (InputPart content : contents) {
+            try {
+                ajoutPhotoDTO = DeserializeJsonHelper.deserializeDTO(
+                        FluxUtils.getJsonByInputStream(content.getBody(InputStream.class, null)), AjoutPhotoDTO.class);
+            } catch (IOException e) {
+                LOGGER.error("Erreur pendant la récuperation de l'input stream en JSON contenant les données de l'annonce", e);
             }
         }
 
@@ -747,7 +757,7 @@ public class GestionAnnonceFacade {
             photoService.persistPhoto(annonceRajouterPhoto, urlsPhoto);
         }
         return photoService.imageToImageDTO(annonceRajouterPhoto.getImages());
-    }*/
+    }
 
     /**
      * Récupération de toutes les photos d'une annonce avec vérificatin des droits
@@ -836,7 +846,7 @@ public class GestionAnnonceFacade {
 
         ModelMapper mapper = new ModelMapper();
 
-        for(Annonce annonce : annonces){
+        for (Annonce annonce : annonces) {
             searchAnnonceDTOOut.getAnnonceDTOList().add(mapper.map(annonce, AnnonceDTO.class));
         }
 
@@ -849,7 +859,7 @@ public class GestionAnnonceFacade {
 
     /**
      * Verifie les droits d'un demandeur par rapport a son role.
-     * <p/>
+     * <p>
      * Dans le cas d'un client, on verifie si ce dernier est bien le detenteur de l'annonce.
      *
      * @param rolesClientDemandeur role du demandeur
