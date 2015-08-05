@@ -2,7 +2,10 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="3.0"
 		 xmlns="http://java.sun.com/xml/ns/javaee"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
-        <security-constraint>
+
+    <display-name>batimen-ws</display-name>
+
+    <security-constraint>
             <display-name>BatimenSec</display-name>
             <web-resource-collection>
                 <web-resource-name>BatimenSec</web-resource-name>

@@ -4,7 +4,6 @@
 
     <display-name>batimen-web</display-name>
 
-
     <listener>
         <listener-class>fr.batimen.web.app.security.ShiroCastorListener</listener-class>
     </listener>
