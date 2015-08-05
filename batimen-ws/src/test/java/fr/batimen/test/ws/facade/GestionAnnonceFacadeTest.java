@@ -21,6 +21,7 @@ import fr.batimen.ws.dao.ClientDAO;
 import fr.batimen.ws.entity.Annonce;
 import fr.batimen.ws.entity.Artisan;
 import fr.batimen.ws.service.NotificationService;
+import org.apache.commons.io.FileUtils;
 import org.jboss.arquillian.persistence.ShouldMatchDataSet;
 import org.jboss.arquillian.persistence.UsingDataSet;
 import org.junit.Assert;
@@ -29,6 +30,8 @@ import org.junit.Test;
 
 import javax.inject.Inject;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -106,13 +109,17 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @UsingDataSet("datasets/in/client_creation_annonce.yml")
     @ShouldMatchDataSet(value = "datasets/out/creation_annonce_is_signed_in.yml", excludeColumns = {"id", "datemaj",
             "datecreation"})
-    public void testCreationAnnonceIsSignedInWithImage() {
+    public void testCreationAnnonceIsSignedInWithImage() throws IOException {
         creationAnnonceDTO.setIsSignedUp(true);
 
         // On recupére la photo dans les ressources de la webapp de test
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("img/castor.jpg").getFile());
-        creationAnnonceDTO.getPhotos().add(file);
+        InputStream castorImageInputStream = this.getClass().getClassLoader().getResourceAsStream("img/castor.jpg");
+
+        File castorFile = new File("castorCopy.jpg");
+        // String absolutPath = castorFile.getAbsolutePath();
+        //String canonicalPath = castorFile.getCanonicalPath();
+        FileUtils.copyInputStreamToFile(castorImageInputStream, castorFile);
+        creationAnnonceDTO.getPhotos().add(castorFile);
 
         Integer codeRetour = annonceServiceREST.creationAnnonceAvecImage(creationAnnonceDTO);
         Assert.assertEquals(CodeRetourService.RETOUR_OK, codeRetour);
@@ -608,7 +615,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @UsingDataSet("datasets/in/annonces_by_id.yml")
     @ShouldMatchDataSet(value = "datasets/out/ajout_photo_annonce.yml", excludeColumns = {"id",
             "datemaj", "datecreation", "datenotation", "datenotification", "url"})
-    public void testAjoutPhotoParClient() {
+    public void testAjoutPhotoParClient() throws IOException {
         annonceServiceTest.testAjoutPhoto("pebronne", 2);
     }
 
@@ -619,7 +626,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @UsingDataSet("datasets/in/annonce_limite_photo.yml")
     @ShouldMatchDataSet(value = "datasets/in/annonce_limite_photo.yml", excludeColumns = {"id",
             "datemaj", "datecreation", "datenotation", "datenotification", "url"})
-    public void testAjoutPhotoParClientTropDePhoto() {
+    public void testAjoutPhotoParClientTropDePhoto() throws IOException {
         annonceServiceTest.testAjoutPhoto("pebronne", 5);
     }
 
@@ -630,7 +637,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @UsingDataSet("datasets/in/annonces_by_id.yml")
     @ShouldMatchDataSet(value = "datasets/out/ajout_photo_annonce.yml", excludeColumns = {"id",
             "datemaj", "datecreation", "datenotation", "datenotification", "url"})
-    public void testAjoutPhotoParAdmin() {
+    public void testAjoutPhotoParAdmin() throws IOException {
         annonceServiceTest.testAjoutPhoto("admin", 2);
     }
 
@@ -641,7 +648,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @UsingDataSet("datasets/in/annonces_by_id.yml")
     @ShouldMatchDataSet(value = "datasets/in/annonces_by_id.yml", excludeColumns = {"id",
             "datemaj", "datecreation", "datenotation", "datenotification", "url"})
-    public void testAjoutPhotoClientNotAllowed() {
+    public void testAjoutPhotoClientNotAllowed() throws IOException {
         annonceServiceTest.testAjoutPhoto("bertrand", 0);
     }
 
@@ -695,7 +702,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @UsingDataSet("datasets/in/annonce_suppression_img.yml")
     @ShouldMatchDataSet(value = "datasets/in/annonce_suppression_img.yml", excludeColumns = {"id",
             "datemaj", "datecreation", "datenotation", "datenotification", "url"})
-    public void testSuppressPhotoAnnonceByClient() {
+    public void testSuppressPhotoAnnonceByClient() throws IOException {
         List<ImageDTO> imageDTOs = annonceServiceTest.testSuppressionPhoto("pebronne", true);
         Assert.assertNotNull(imageDTOs);
         Assert.assertEquals(2, imageDTOs.size());
@@ -708,7 +715,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @UsingDataSet("datasets/in/annonce_suppression_img.yml")
     @ShouldMatchDataSet(value = "datasets/in/annonce_suppression_img.yml", excludeColumns = {"id",
             "datemaj", "datecreation", "datenotation", "datenotification", "url"})
-    public void testSuppressPhotoAnnonceByAdmin() {
+    public void testSuppressPhotoAnnonceByAdmin() throws IOException {
         List<ImageDTO> imageDTOs = annonceServiceTest.testSuppressionPhoto("admin", true);
         Assert.assertNotNull(imageDTOs);
         Assert.assertEquals(2, imageDTOs.size());
@@ -722,7 +729,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @UsingDataSet("datasets/in/annonce_suppression_img.yml")
     @ShouldMatchDataSet(value = "datasets/in/annonce_suppression_img.yml", excludeColumns = {"id",
             "datemaj", "datecreation", "datenotation", "datenotification", "url"})
-    public void testSuppressPhotoAnnonceByClientNotAllowed() {
+    public void testSuppressPhotoAnnonceByClientNotAllowed() throws IOException {
         List<ImageDTO> imageDTOs = annonceServiceTest.testSuppressionPhoto("bertrand", false);
         Assert.assertNotNull(imageDTOs);
         Assert.assertEquals(0, imageDTOs.size());

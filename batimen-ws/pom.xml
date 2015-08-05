@@ -277,6 +277,11 @@
             <artifactId>resteasy-client</artifactId>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-multipart-provider</artifactId>
+            <scope>provided</scope>
+        </dependency>
 
         <dependency>
             <groupId>commons-io</groupId>

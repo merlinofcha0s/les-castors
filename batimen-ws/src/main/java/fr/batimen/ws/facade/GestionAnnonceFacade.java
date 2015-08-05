@@ -28,6 +28,8 @@ import fr.batimen.ws.interceptor.BatimenInterceptor;
 import fr.batimen.ws.mapper.AnnonceMap;
 import fr.batimen.ws.service.*;
 import fr.batimen.ws.utils.RolesUtils;
+import org.jboss.resteasy.plugins.providers.multipart.InputPart;
+import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,6 +43,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.util.*;
 
@@ -166,18 +169,19 @@ public class GestionAnnonceFacade {
      * Constant
      * @see Constant
      */
-    /*@POST
+    @POST
     @Path(WsPath.GESTION_ANNONCE_SERVICE_CREATION_ANNONCE_AVEC_IMAGES)
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public Integer creationAnnonceAvecImage(/*@FormDataParam("content")final InputStream content,
-                                            /*@FormDataParam("files") final List<FormDataBodyPart> files,
-                                            /*@FormDataParam("files") final List<FormDataContentDisposition> filesDetail) {
+    public Integer creationAnnonceAvecImage(MultipartFormDataInput input) {
 
-        CreationAnnonceDTO nouvelleAnnonceDTO = DeserializeJsonHelper.deserializeDTO(
+        Map<String, List<InputPart>> formDataAnnonceRaw = input.getFormDataMap();
+
+
+       /* CreationAnnonceDTO nouvelleAnnonceDTO = DeserializeJsonHelper.deserializeDTO(
                 FluxUtils.getJsonByInputStream(content), CreationAnnonceDTO.class);
 
-       /* if (LOGGER.isDebugEnabled()) {
+        /*if (LOGGER.isDebugEnabled()) {
             for (FormDataContentDisposition fileDetail : filesDetail) {
                 LOGGER.debug("Details fichier : " + fileDetail);
             }
@@ -187,10 +191,10 @@ public class GestionAnnonceFacade {
 
         nouvelleAnnonceDTO.getPhotos().addAll(photos);
 
-        creationAnnonce(nouvelleAnnonceDTO);
+        creationAnnonce(nouvelleAnnonceDTO);*/
 
         return CodeRetourService.RETOUR_OK;
-    }*/
+    }
 
     /**
      * Permet de récuperer une annonce dans le but de l'afficher <br/>

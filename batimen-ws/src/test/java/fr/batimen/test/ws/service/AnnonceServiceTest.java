@@ -13,6 +13,7 @@ import fr.batimen.ws.entity.Client;
 import fr.batimen.ws.entity.Image;
 import fr.batimen.ws.service.NotificationService;
 import fr.batimen.ws.service.PhotoService;
+import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 
 import javax.ejb.TransactionAttribute;
@@ -21,6 +22,8 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
@@ -56,7 +59,7 @@ public class AnnonceServiceTest {
     @Inject
     private PhotoService photoService;
 
-    public List<ImageDTO> testSuppressionPhoto(String loginDemandeur, boolean allowed) {
+    public List<ImageDTO> testSuppressionPhoto(String loginDemandeur, boolean allowed) throws IOException {
 
         List<Image> images = null;
         String hashID = "88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21";
@@ -96,15 +99,19 @@ public class AnnonceServiceTest {
         return annonceServiceREST.getPhotos(demandeAnnonceDTO);
     }
 
-    public void testAjoutPhoto(String login, int nbImageAttendu) {
+    public void testAjoutPhoto(String login, int nbImageAttendu) throws IOException {
         // On recupére la photo dans les ressources de la webapp de test
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("img/castor.jpg").getFile());
+        InputStream castorImageInputStream = this.getClass().getClassLoader().getResourceAsStream("img/castor.jpg");
+
+        File castorFile = new File("castorCopy.jpg");
+        // String absolutPath = castorFile.getAbsolutePath();
+        //String canonicalPath = castorFile.getCanonicalPath();
+        FileUtils.copyInputStreamToFile(castorImageInputStream, castorFile);
 
         AjoutPhotoDTO ajoutPhotoDTO = new AjoutPhotoDTO();
         ajoutPhotoDTO.setLoginDemandeur(login);
         ajoutPhotoDTO.setId("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21");
-        ajoutPhotoDTO.getImages().add(file);
+        ajoutPhotoDTO.getImages().add(castorFile);
 
         List<ImageDTO> imageDTOs = annonceServiceREST.ajouterPhoto(ajoutPhotoDTO);
 
