@@ -212,16 +212,9 @@
         <dependency>
             <groupId>org.jboss.spec</groupId>
             <artifactId>jboss-javaee-7.0</artifactId>
-            <version>1.0.3.Final</version>
+            <version>${java.spec.version}</version>
             <scope>provided</scope>
             <type>pom</type>
-            <!-- Exclus à cause de selenium (version trop vieille) -->
-            <!--  <exclusions>
-                 <exclusion>
-                     <artifactId>xml-apis</artifactId>
-                     <groupId>xml-apis</groupId>
-                 </exclusion>
-             </exclusions> -->
         </dependency>
         <dependency>
             <groupId>com.sun.jersey</groupId>

@@ -10,6 +10,7 @@ import fr.batimen.dto.AvisDTO;
 import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.EntrepriseDTO;
 import fr.batimen.dto.ImageDTO;
+import fr.batimen.dto.aggregate.AjoutPhotoDTO;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
 import fr.batimen.dto.aggregate.SuppressionPhotoDTO;
 import fr.batimen.dto.enums.TypeCompte;
@@ -20,6 +21,9 @@ import fr.batimen.ws.enums.PropertiesFileWS;
 import fr.batimen.ws.helper.JsonHelper;
 import fr.batimen.ws.interceptor.BatimenInterceptor;
 import fr.batimen.ws.service.*;
+import fr.batimen.ws.utils.FluxUtils;
+import org.jboss.resteasy.plugins.providers.multipart.InputPart;
+import org.jboss.resteasy.plugins.providers.multipart.MultipartFormDataInput;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +38,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -280,25 +287,28 @@ public class GestionArtisanFacade {
      * <p/>
      * Mode multipart, en plus du JSON la request contient des photos.
      *
-     * @param content     L'objet provenant du frontend qui permet l'ajout de photo
-     * @param files       Liste contenant l'ensemble des photos.
-     * @param filesDetail Liste contenant les metadata des photos du client.
+     * @param formInputRaw     L'objet provenant du frontend qui permet l'ajout de photo
      * @return La liste des images appartenant à l'utilisateur contenu dans cloudinary.
      */
-    /*@POST
+    @POST
     @Path(WsPath.GESTION_PARTENAIRE_SERVICE_AJOUT_PHOTO_CHANTIER_TEMOIN)
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public List<ImageDTO> ajouterPhotoChantierTemoin(@FormDataParam("content") final InputStream content,
-                                                     @FormDataParam("files") final List<FormDataBodyPart> files,
-                                                     @FormDataParam("files") final List<FormDataContentDisposition> filesDetail) {
+    public List<ImageDTO> ajouterPhotoChantierTemoin(MultipartFormDataInput formInputRaw) {
 
-        AjoutPhotoDTO ajoutPhotoDTO = DeserializeJsonHelper.deserializeDTO(
-                FluxUtils.getJsonByInputStream(content), AjoutPhotoDTO.class);
+        Map<String, List<InputPart>> formDataAnnonceRaw = formInputRaw.getFormDataMap();
 
-        if (LOGGER.isDebugEnabled()) {
-            for (FormDataContentDisposition fileDetail : filesDetail) {
-                LOGGER.debug("Details fichier : {}", fileDetail);
+        List<InputPart> contents = formDataAnnonceRaw.getOrDefault("content", new ArrayList<>());
+        List<InputPart> files = formDataAnnonceRaw.getOrDefault("files", new ArrayList<>());
+
+        AjoutPhotoDTO ajoutPhotoDTO = null;
+        //Transformation de la partie JSON (Données de l'annonce).
+        for (InputPart content : contents) {
+            try {
+                ajoutPhotoDTO = DeserializeJsonHelper.deserializeDTO(
+                        FluxUtils.getJsonByInputStream(content.getBody(InputStream.class, null)), AjoutPhotoDTO.class);
+            } catch (IOException e) {
+                LOGGER.error("Erreur pendant la récuperation de l'input stream en JSON contenant les données de l'annonce", e);
             }
         }
 
@@ -325,7 +335,7 @@ public class GestionArtisanFacade {
             photoService.persistPhoto(entrepriseAjoutPhotos, urlsPhoto);
         }
         return photoService.imageToImageDTO(entrepriseAjoutPhotos.getImagesChantierTemoin());
-    }*/
+    }
 
     /**
      * Suppression d'une photo des chantiers temoin d'une entreprise.

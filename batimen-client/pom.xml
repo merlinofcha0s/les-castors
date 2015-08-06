@@ -52,7 +52,7 @@
 		<dependency>
 			<groupId>org.jboss.spec</groupId>
 			<artifactId>jboss-javaee-7.0</artifactId>
-			<version>1.0.3.Final</version>
+			<version>${java.spec.version}</version>
 			<scope>provided</scope>
 			<type>pom</type>
 		</dependency>

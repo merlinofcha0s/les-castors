@@ -1,6 +1,7 @@
 package fr.batimen.web.app.utils.codepostal;
 
 import fr.batimen.dto.LocalisationDTO;
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,8 +36,14 @@ public class CSVCodePostalReader implements Serializable{
         }
 
         ClassLoader classLoader = getClass().getClassLoader();
-        File codePostalFile = new File(classLoader.getResource("codePostal.txt").getFile());
-        LOGGER.error(codePostalFile.getAbsolutePath());
+
+        File codePostalFile = new File("codePostal.txt");
+        try {
+            FileUtils.copyInputStreamToFile(classLoader.getResourceAsStream("codePostal.txt"), codePostalFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+            LOGGER.error(codePostalFile.getAbsolutePath());
+        }
 
         try {
             if(LOGGER.isDebugEnabled()){

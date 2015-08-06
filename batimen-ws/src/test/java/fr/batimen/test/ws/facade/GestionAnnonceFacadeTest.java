@@ -116,8 +116,6 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         InputStream castorImageInputStream = this.getClass().getClassLoader().getResourceAsStream("img/castor.jpg");
 
         File castorFile = new File("castorCopy.jpg");
-        // String absolutPath = castorFile.getAbsolutePath();
-        //String canonicalPath = castorFile.getCanonicalPath();
         FileUtils.copyInputStreamToFile(castorImageInputStream, castorFile);
         creationAnnonceDTO.getPhotos().add(castorFile);
 

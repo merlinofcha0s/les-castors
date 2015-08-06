@@ -165,10 +165,7 @@ public class GestionAnnonceFacade {
      * <p>
      * Mode multipart, en plus de JSON la request contient des photos.
      *
-     * @param content     L'objet provenant du frontend qui permet la creation de
-     *                    l'annonce.
-     * @param files       Liste contenant l'ensemble des photos.
-     * @param filesDetail Liste contenant les metadata des photos du client.
+     * @param formInputRaw L'objet multipart qui contient a la fois les données de l'annonce et les photos
      * @return CODE_SERVICE_RETOUR_KO ou CODE_SERVICE_RETOUR_OK voir la classe
      * Constant
      * @see Constant
@@ -709,7 +706,7 @@ public class GestionAnnonceFacade {
      * <p>
      * Mode multipart, en plus du JSON la request contient des photos.
      *
-     * @param formInputRaw     L'objet contenant les données JSON et les fichiers photos
+     * @param formInputRaw L'objet contenant les données JSON et les fichiers photos
      * @return La liste des images appartenant à l'utilisateur contenu dans cloudinary.
      */
     @POST
