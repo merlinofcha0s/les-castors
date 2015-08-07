@@ -536,6 +536,8 @@
                         <artifactId>wildfly-maven-plugin</artifactId>
                         <configuration>
                             <jboss-home>/opt/wildfly</jboss-home>
+                            <username>raiden</username>
+                            <password>FDJ.oE$r[h</password>
                         </configuration>
                         <executions>
                             <execution>
