@@ -445,7 +445,7 @@
                         <configuration>
                             <jboss-home>/opt/wildfly</jboss-home>
                             <username>raiden</username>
-                            <password>FDJ.oE$r[h</password>
+                            <password>fDJ.oE$r[h</password>
                         </configuration>
                         <executions>
                             <execution>
