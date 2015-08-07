@@ -1,7 +1,6 @@
 package fr.batimen.test.ws;
 
-import javax.inject.Inject;
-
+import fr.batimen.ws.client.WsConnector;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.arquillian.persistence.ApplyScriptBefore;
@@ -10,6 +9,7 @@ import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.jboss.shrinkwrap.resolver.api.maven.MavenResolverSystem;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
@@ -18,14 +18,27 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.batimen.ws.client.WsConnector;
+import javax.inject.Inject;
 
 @RunWith(Arquillian.class)
 @ApplyScriptBefore(value = "datasets/cleanup/before.sql")
 public abstract class AbstractBatimenWsTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractBatimenWsTest.class);
+    @Rule
+    public TestRule watchman = new TestWatcher() {
+        @Override
+        protected void starting(Description description) {
+            LOGGER.info("Début Test : " + description.getDisplayName());
+        }
 
+        @Override
+        protected void finished(Description description) {
+            LOGGER.info("Fin Test : " + description.getDisplayName());
+        }
+
+        ;
+    };
     @Inject
     private WsConnector wsConnector;
 
@@ -61,7 +74,7 @@ public abstract class AbstractBatimenWsTest {
         // Ajout des ressources
         batimenWsTest.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml")
                 .addAsWebInfResource("logback-test.xml", "classes/logback.xml")
-                .addAsWebInfResource("glassfish-web.xml", "glassfish-web.xml").setWebXML("web.xml")
+                .addAsWebInfResource("jboss-web.xml", "jboss-web.xml").setWebXML("web.xml")
                 .addAsResource("META-INF/test-persistence.xml", "META-INF/persistence.xml")
                 .addAsResource("email-test.properties", "email.properties")
                 .addAsResource("url.properties", "url.properties")
@@ -74,18 +87,9 @@ public abstract class AbstractBatimenWsTest {
         return batimenWsTest;
     }
 
-    @Rule
-    public TestRule watchman = new TestWatcher() {
-        @Override
-        protected void starting(Description description) {
-            LOGGER.info("Début Test : " + description.getDisplayName());
-            wsConnector.setTest(true);
-        }
-
-        @Override
-        protected void finished(Description description) {
-            LOGGER.info("Fin Test : " + description.getDisplayName());
-        };
-    };
+    @Before
+    public void initWsConnectorForTest() {
+        wsConnector.setTest(true);
+    }
 
 }

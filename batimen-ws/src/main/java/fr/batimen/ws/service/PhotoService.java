@@ -2,7 +2,6 @@ package fr.batimen.ws.service;
 
 import com.cloudinary.Cloudinary;
 import com.cloudinary.api.ApiResponse;
-import com.sun.jersey.multipart.FormDataBodyPart;
 import fr.batimen.core.enums.PropertiesFileGeneral;
 import fr.batimen.core.exception.BackendException;
 import fr.batimen.dto.ImageDTO;
@@ -13,6 +12,7 @@ import fr.batimen.ws.entity.Entreprise;
 import fr.batimen.ws.entity.Image;
 import fr.batimen.ws.utils.FluxUtils;
 import fr.batimen.ws.utils.RolesUtils;
+import org.jboss.resteasy.plugins.providers.multipart.InputPart;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -188,7 +188,7 @@ public class PhotoService {
      * @param images La liste des images deja persisté dans la BDD.
      * @return La liste des URLS des images qui se trouvent dans le cloud.
      */
-    public List<String> transformAndSendToCloud(List<FormDataBodyPart> files, Set<Image> images) {
+    public List<String> transformAndSendToCloud(List<InputPart> files, Set<Image> images) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Calcul du nombre de photos qui peuvent etre uploader avant d'atteindre la limite");
         }
@@ -206,7 +206,7 @@ public class PhotoService {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Transformation des forms data body parts en files");
         }
-        List<File> photos = FluxUtils.transformFormDataBodyPartsToFiles(files);
+        List<File> photos = FluxUtils.transformInputPartsToFiles(files);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Envoi des photos vers le service de cloud");

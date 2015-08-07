@@ -8,7 +8,7 @@
     <parent>
         <groupId>fr.batimen.app</groupId>
         <artifactId>batimen-module</artifactId>
-        <version>0.4.0-SNAPSHOT</version>
+        <version>0.5.0-SNAPSHOT</version>
         <relativePath>../batimen-module</relativePath>
     </parent>
 
@@ -18,7 +18,8 @@
     <packaging>war</packaging>
 
     <properties>
-        <hibernate.version>4.2.18.Final</hibernate.version>
+        <hibernate.version>4.3.7.Final</hibernate.version>
+        <quartz.version>2.2.1</quartz.version>
 
         <!-- Propriétés de la BDD pour les tests -->
         <database.address>127.0.0.1</database.address>
@@ -38,21 +39,21 @@
         <logs.test.lvl>DEBUG</logs.test.lvl>
 
         <!-- Config Hibernate -->
-        <jdbc.jndi>jdbc/__BatimenPG</jdbc.jndi>
+        <jdbc.jndi>java:jboss/CastorPG</jdbc.jndi>
         <hibernate.show_sql>true</hibernate.show_sql>
         <hibernate.format_sql>true</hibernate.format_sql>
         <hibernate.use_sql_comments>true</hibernate.use_sql_comments>
         <hibernate.generate_statistics>true</hibernate.generate_statistics>
 
         <!-- Config Arquillian -->
-        <glassfish.location>D:\dev\glassfish3wp</glassfish.location>
-        <glassfish.adminHost>localhost</glassfish.adminHost>
+        <jboss.home>D:\dev\wildfly-8.2.1.Final</jboss.home>
+        <!--<glassfish.adminHost>localhost</glassfish.adminHost>
         <glassfish.adminPort>4848</glassfish.adminPort>
         <glassfish.adminHttps>false</glassfish.adminHttps>
         <glassfish.adminUser></glassfish.adminUser>
         <glassfish.adminPassword></glassfish.adminPassword>
         <glassfish.domain>domain1</glassfish.domain>
-        <glassfish.debug>false</glassfish.debug>
+        <glassfish.debug>false</glassfish.debug> -->
 
         <!-- Email -->
         <mandrill.api.key>OOBiT-ollMvq7_JaMjyDOQ</mandrill.api.key>
@@ -111,16 +112,13 @@
                                 <include>**/*.xml</include>
                             </includes>
                         </resource>
-                        <!-- <resource> <directory>${basedir}/src/main/resources/META-INF</directory>
-                            <filtering>true</filtering> <targetPath>META-INF</targetPath> <includes>
-                            <include>**/*.xml</include> </includes> </resource> -->
                     </webResources>
                 </configuration>
             </plugin>
             <!-- Pour les tests unitaires (Junit) -->
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.17</version>
+                <version>2.18.1</version>
                 <configuration>
                     <skipTests>false</skipTests>
                     <testFailureIgnore>true</testFailureIgnore>
@@ -212,7 +210,7 @@
             <plugin>
                 <groupId>org.hibernate.orm.tooling</groupId>
                 <artifactId>hibernate-enhance-maven-plugin</artifactId>
-                <version>4.2.18.Final</version>
+                <version>4.3.10.Final</version>
                 <executions>
                     <execution>
                         <phase>compile</phase>
@@ -260,37 +258,33 @@
     </build>
 
     <dependencies>
-        <!-- Code -->
         <dependency>
             <groupId>org.jboss.spec</groupId>
-            <artifactId>jboss-javaee-6.0</artifactId>
-            <scope>provided</scope>
+            <artifactId>jboss-javaee-7.0</artifactId>
+            <version>${java.spec.version}</version>
             <type>pom</type>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jaxrs</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-client</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-multipart-provider</artifactId>
+            <scope>provided</scope>
         </dependency>
 
-        <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-server</artifactId>
-            <version>${jersey.version}</version>
-            <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-servlet</artifactId>
-            <version>${jersey.version}</version>
-            <scope>compile</scope>
-        </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.4</version>
-            <scope>compile</scope>
-        </dependency>
-        <!-- Scope Compile car sinon glassfish ne voit pas les providers -->
-        <dependency>
-            <groupId>com.sun.jersey</groupId>
-            <artifactId>jersey-json</artifactId>
-            <version>${jersey.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -302,7 +296,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-jpamodelgen</artifactId>
-            <version>1.3.0.Final</version>
+            <version>${hibernate.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
@@ -332,6 +326,7 @@
             <groupId>com.cloudinary</groupId>
             <artifactId>cloudinary-http42</artifactId>
             <version>1.2.0</version>
+            <scope>compile</scope>
         </dependency>
 
         <!-- Security -->
@@ -345,13 +340,13 @@
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
             <artifactId>quartz</artifactId>
-            <version>2.2.1</version>
+            <version>${quartz.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
             <artifactId>quartz-jobs</artifactId>
-            <version>2.2.1</version>
+            <version>${quartz.version}</version>
             <scope>compile</scope>
         </dependency>
 
@@ -376,22 +371,26 @@
             <groupId>org.slf4j</groupId>
             <artifactId>log4j-over-slf4j</artifactId>
             <version>${slf4j.version}</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>jcl-over-slf4j</artifactId>
             <version>${slf4j.version}</version>
+            <scope>compile</scope>
         </dependency>
         <!-- Dependence intra projet -->
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>batimen-dto</artifactId>
             <version>${project.version}</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>batimen-core</artifactId>
             <version>${project.version}</version>
+            <scope>compile</scope>
         </dependency>
 
         <!-- Test Arquillian -->
@@ -418,16 +417,10 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>org.jboss.arquillian.container</groupId>
-            <artifactId>arquillian-glassfish-managed-3.1</artifactId>
-            <version>1.0.0.CR4</version>
+            <groupId>org.wildfly</groupId>
+            <artifactId>wildfly-arquillian-container-managed</artifactId>
+            <version>8.2.1.Final</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.glassfish.main.extras</groupId>
-            <artifactId>glassfish-embedded-all</artifactId>
-            <version>3.1.2.2</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.jboss.shrinkwrap.resolver</groupId>
@@ -445,6 +438,12 @@
             <artifactId>batimen-client</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jackson-jaxrs</artifactId>
+                    <groupId>org.codehaus.jackson</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 
@@ -459,7 +458,7 @@
             <dependency>
                 <groupId>org.jboss.arquillian</groupId>
                 <artifactId>arquillian-bom</artifactId>
-                <version>1.1.5.Final</version>
+                <version>1.1.8.Final</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
@@ -500,17 +499,18 @@
                 <hibernate.generate_statistics>false</hibernate.generate_statistics>
 
                 <!-- Config Arquillian -->
-                <glassfish.location>/usr/share/glassfish3</glassfish.location>
+                <jboss.home>/opt/wildfly</jboss.home>
+                <!-- <glassfish.location>/usr/share/glassfish3</glassfish.location>
                 <glassfish.adminHost>127.0.0.1</glassfish.adminHost>
                 <glassfish.adminPort>4747</glassfish.adminPort>
                 <glassfish.adminHttps>false</glassfish.adminHttps>
                 <glassfish.adminUser>admin</glassfish.adminUser>
                 <glassfish.adminPassword>OIOIUenoBueno</glassfish.adminPassword>
-                <glassfish.domain>batimendomain</glassfish.domain>
+                <glassfish.domain>batimendomain</glassfish.domain> -->
 
                 <!-- Email -->
                 <mandrill.api.key>AqM7U8jIxFR7GURuupcsIA</mandrill.api.key>
-               <!-- <mandrill.api.key>OOBiT-ollMvq7_JaMjyDOQ</mandrill.api.key> -->
+                <!-- <mandrill.api.key>OOBiT-ollMvq7_JaMjyDOQ</mandrill.api.key> -->
                 <email.active>true</email.active>
 
                 <!-- URL du frontend -->
@@ -532,29 +532,14 @@
                 </resources>
                 <plugins>
                     <plugin>
-                        <groupId>org.glassfish.maven.plugin</groupId>
-                        <artifactId>maven-glassfish-plugin</artifactId>
-                        <version>2.1</version>
+                        <groupId>org.wildfly.plugins</groupId>
+                        <artifactId>wildfly-maven-plugin</artifactId>
                         <configuration>
-                            <user>admin</user>
-                            <adminPassword>OIOIUenoBueno</adminPassword>
-                            <glassfishDirectory>/usr/share/glassfish3</glassfishDirectory>
-                            <components>
-                                <component>
-                                    <name>${project.artifactId}</name>
-                                    <artifact>${project.build.directory}/${project.artifactId}.war</artifact>
-                                </component>
-                            </components>
-                            <domain>
-                                <name>batimendomain</name>
-                                <adminPort>4747</adminPort>
-                                <httpPort>6060</httpPort>
-                                <httpsPort>6161</httpsPort>
-                            </domain>
+                            <jboss-home>/opt/wildfly</jboss-home>
                         </configuration>
                         <executions>
                             <execution>
-                                <id>deploy-ws</id>
+                                <id>deploy-ws-on-wildfly</id>
                                 <phase>pre-integration-test</phase>
                                 <goals>
                                     <goal>redeploy</goal>
@@ -562,6 +547,37 @@
                             </execution>
                         </executions>
                     </plugin>
+                    <!--   <plugin>
+                          <groupId>org.glassfish.maven.plugin</groupId>
+                          <artifactId>maven-glassfish-plugin</artifactId>
+                          <version>2.1</version>
+                          <configuration>
+                              <user>admin</user>
+                              <adminPassword>OIOIUenoBueno</adminPassword>
+                              <glassfishDirectory>/usr/share/glassfish3</glassfishDirectory>
+                              <components>
+                                  <component>
+                                      <name>${project.artifactId}</name>
+                                      <artifact>${project.build.directory}/${project.artifactId}.war</artifact>
+                                  </component>
+                              </components>
+                              <domain>
+                                  <name>batimendomain</name>
+                                  <adminPort>4747</adminPort>
+                                  <httpPort>6060</httpPort>
+                                  <httpsPort>6161</httpsPort>
+                              </domain>
+                          </configuration>
+                          <executions>
+                              <execution>
+                                  <id>deploy-ws</id>
+                                  <phase>pre-integration-test</phase>
+                                  <goals>
+                                      <goal>redeploy</goal>
+                                  </goals>
+                              </execution>
+                          </executions>
+                      </plugin> -->
                     <plugin>
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>

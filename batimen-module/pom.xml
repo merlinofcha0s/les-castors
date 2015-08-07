@@ -1,13 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>fr.batimen.app</groupId>
 	<artifactId>batimen-module</artifactId>
 	<description>Projet principal de Batimen</description>
-	<version>0.4.0-SNAPSHOT</version>
+	<version>0.5.0-SNAPSHOT</version>
 	<packaging>pom</packaging>
+
+	<prerequisites>
+		<maven>3.2.0</maven>
+	</prerequisites>
 
 	<name>batimen-module</name>
 
@@ -31,6 +35,7 @@
 		<jersey.version>1.18.1</jersey.version>
 		<slf4j.version>1.7.12</slf4j.version>
 		<jacoco.version>0.7.4.201502262128</jacoco.version>
+		<java.spec.version>1.0.3.Final</java.spec.version>
 		<!-- Sonar -->
 		<sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
 		<sonar.junit.reportsPath>${basedir}/target/surefire-reports</sonar.junit.reportsPath>
@@ -63,8 +68,8 @@
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.1</version>
 					<configuration>
-						<source>1.7</source>
-						<target>1.7</target>
+						<source>1.8</source>
+						<target>1.8</target>
 						<optimize>true</optimize>
 						<encoding>UTF-8</encoding>
 					</configuration>
@@ -107,33 +112,6 @@
 					</configuration>
 				</plugin>
 
-
-				<!--This plugin's configuration is used to store Eclipse m2e settings 
-					only. It has no influence on the Maven build itself. -->
-				<plugin>
-					<groupId>org.eclipse.m2e</groupId>
-					<artifactId>lifecycle-mapping</artifactId>
-					<version>1.0.0</version>
-					<configuration>
-						<lifecycleMappingMetadata>
-							<pluginExecutions>
-								<pluginExecution>
-									<pluginExecutionFilter>
-										<groupId>org.apache.maven.plugins</groupId>
-										<artifactId>maven-dependency-plugin</artifactId>
-										<versionRange>[2.1,)</versionRange>
-										<goals>
-											<goal>copy</goal>
-										</goals>
-									</pluginExecutionFilter>
-									<action>
-										<ignore></ignore>
-									</action>
-								</pluginExecution>
-							</pluginExecutions>
-						</lifecycleMappingMetadata>
-					</configuration>
-				</plugin>
 				<!-- Eclipse Plugin Settings -->
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
@@ -143,6 +121,11 @@
 						<downloadSources>true</downloadSources>
 						<downloadJavadocs>true</downloadJavadocs>
 					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.wildfly.plugins</groupId>
+					<artifactId>wildfly-maven-plugin</artifactId>
+					<version>1.1.0.Alpha2</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
@@ -171,9 +154,17 @@
 		<dependencies>
 			<dependency>
 				<groupId>org.jboss.spec</groupId>
-				<artifactId>jboss-javaee-6.0</artifactId>
+				<artifactId>jboss-javaee-7.0</artifactId>
+				<version>${java.spec.version}</version>
 				<type>pom</type>
-				<version>3.0.3.Final</version>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.resteasy</groupId>
+				<artifactId>resteasy-bom</artifactId>
+				<version>3.0.10.Final</version>
+				<type>pom</type>
+				<scope>import</scope>
 			</dependency>
 			<dependency>
 				<groupId>ch.qos.logback</groupId>

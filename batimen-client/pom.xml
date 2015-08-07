@@ -1,13 +1,14 @@
 <?xml version="1.0"?>
 <project
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+		xmlns="http://maven.apache.org/POM/4.0.0">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
 		<groupId>fr.batimen.app</groupId>
 		<artifactId>batimen-module</artifactId>
-		<version>0.4.0-SNAPSHOT</version>
+		<version>0.5.0-SNAPSHOT</version>
 		<relativePath>../batimen-module</relativePath>
 	</parent>
 
@@ -18,12 +19,14 @@
 	<properties>
 		<!-- Adresse du WS -->
 		<ws.ip>127.0.0.1</ws.ip>
-		<ws.port>8181</ws.port>
+		<ws.port>8443</ws.port>
 		<ws.name>batimen-ws</ws.name>
 
 		<!-- Utilisé pour activer la verification du certificat du serveur obligatoirement 
 			mettre a true en prod -->
 		<ws.isprod>false</ws.isprod>
+        <ws.user.login>batimenuser</ws.user.login>
+        <ws.user.password>Lolmdr06</ws.user.password>
 	</properties>
 
 	<build>
@@ -50,7 +53,8 @@
 		<!-- JEE -->
 		<dependency>
 			<groupId>org.jboss.spec</groupId>
-			<artifactId>jboss-javaee-6.0</artifactId>
+			<artifactId>jboss-javaee-7.0</artifactId>
+			<version>${java.spec.version}</version>
 			<scope>provided</scope>
 			<type>pom</type>
 		</dependency>
@@ -130,6 +134,9 @@
 				<!-- Utilisé pour activer la verification du certificat du serveur obligatoirement 
 					mettre a true en prod -->
 				<ws.isprod>false</ws.isprod>
+                <!-- Accés WS -->
+                <ws.user.login>castoruser</ws.user.login>
+                <ws.user.password>KWIT4A{3*U</ws.user.password>
 			</properties>
 		</profile>
 	</profiles>

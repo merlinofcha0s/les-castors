@@ -44,14 +44,14 @@ import java.util.Properties;
 public class WsConnector implements Serializable {
 
     private static final long serialVersionUID = 4898933306261359715L;
-
+    private static final Logger LOGGER = LoggerFactory.getLogger(WsConnector.class);
     private String ipServeur;
     private String portServeur;
     private String nomWs;
     private String nomWsTest;
-    private boolean isTest = false;
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(WsConnector.class);
+    private boolean isTest;
+    private String userWs;
+    private String passwordWs;
 
     public WsConnector() {
         getWsProperties();
@@ -136,7 +136,7 @@ public class WsConnector implements Serializable {
         Client client = Client.create(clientConfig);
         client.setFollowRedirects(true);
         // Authentification du client
-        client.addFilter(new HTTPBasicAuthFilter(Constant.BATIMEN_USERS_WS, Constant.BATIMEN_PWD_WS));
+        client.addFilter(new HTTPBasicAuthFilter(userWs, passwordWs));
         client.setConnectTimeout(Constant.CONNECT_TIMEOUT);
 
         return client.resource(adresseService.toString());
@@ -153,6 +153,8 @@ public class WsConnector implements Serializable {
         portServeur = wsProperties.getProperty("ws.port");
         nomWs = wsProperties.getProperty("ws.name");
         nomWsTest = wsProperties.getProperty("ws.name.test.arquillian");
+        userWs = wsProperties.getProperty("ws.user.login");
+        passwordWs = wsProperties.getProperty("ws.user.password");
     }
 
     /**
