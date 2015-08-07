@@ -538,7 +538,8 @@
                             <jboss-home>/opt/wildfly</jboss-home>
                             <username>raiden</username>
                             <password>fDJ.oE$r[h</password>
-                            <artifact>${project.artifactId}</artifact>
+                            <filename>${project.artifactId}.war</filename>
+                            <artifactId>${project.artifactId}</artifactId>
                         </configuration>
                         <executions>
                             <execution>
