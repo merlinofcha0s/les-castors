@@ -49,8 +49,6 @@ public class TestModifierMonEntreprise extends AbstractITTest {
         driver.findElement(By.id("nbEmployeField")).clear();
         driver.findElement(By.id("nbEmployeField")).sendKeys("20");
         driver.findElement(By.id("entreprisedateCreation")).click();
-        //if(!browser.equals("ie"))
-        //driver.findElement(By.linkText("29")).click();
         driver.findElement(By.id("codePostalField")).clear();
         driver.findElement(By.id("codePostalField")).sendKeys("06700");
         driver.findElement(By.id("villeField")).clear();

@@ -25,6 +25,8 @@
 		<!-- Utilisé pour activer la verification du certificat du serveur obligatoirement 
 			mettre a true en prod -->
 		<ws.isprod>false</ws.isprod>
+        <ws.user.login>batimenuser</ws.user.login>
+        <ws.user.password>Lolmdr06</ws.user.password>
 	</properties>
 
 	<build>
@@ -132,6 +134,9 @@
 				<!-- Utilisé pour activer la verification du certificat du serveur obligatoirement 
 					mettre a true en prod -->
 				<ws.isprod>false</ws.isprod>
+                <!-- Accés WS -->
+                <ws.user.login>castoruser</ws.user.login>
+                <ws.user.password>KWIT4A{3*U</ws.user.password>
 			</properties>
 		</profile>
 	</profiles>

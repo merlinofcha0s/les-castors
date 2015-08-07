@@ -46,8 +46,8 @@
         <hibernate.generate_statistics>true</hibernate.generate_statistics>
 
         <!-- Config Arquillian -->
-        <!-- <glassfish.location>D:\dev\glassfish3wp</glassfish.location>
-        <glassfish.adminHost>localhost</glassfish.adminHost>
+        <jboss.home>D:\dev\wildfly-8.2.1.Final</jboss.home>
+        <!--<glassfish.adminHost>localhost</glassfish.adminHost>
         <glassfish.adminPort>4848</glassfish.adminPort>
         <glassfish.adminHttps>false</glassfish.adminHttps>
         <glassfish.adminUser></glassfish.adminUser>
@@ -112,9 +112,6 @@
                                 <include>**/*.xml</include>
                             </includes>
                         </resource>
-                        <!-- <resource> <directory>${basedir}/src/main/resources/META-INF</directory>
-                            <filtering>true</filtering> <targetPath>META-INF</targetPath> <includes>
-                            <include>**/*.xml</include> </includes> </resource> -->
                     </webResources>
                 </configuration>
             </plugin>
@@ -502,6 +499,7 @@
                 <hibernate.generate_statistics>false</hibernate.generate_statistics>
 
                 <!-- Config Arquillian -->
+                <jboss.home>/opt/wildfly</jboss.home>
                 <!-- <glassfish.location>/usr/share/glassfish3</glassfish.location>
                 <glassfish.adminHost>127.0.0.1</glassfish.adminHost>
                 <glassfish.adminPort>4747</glassfish.adminPort>
@@ -534,29 +532,14 @@
                 </resources>
                 <plugins>
                     <plugin>
-                        <groupId>org.glassfish.maven.plugin</groupId>
-                        <artifactId>maven-glassfish-plugin</artifactId>
-                        <version>2.1</version>
+                        <groupId>org.wildfly.plugins</groupId>
+                        <artifactId>wildfly-maven-plugin</artifactId>
                         <configuration>
-                            <user>admin</user>
-                            <adminPassword>OIOIUenoBueno</adminPassword>
-                            <glassfishDirectory>/usr/share/glassfish3</glassfishDirectory>
-                            <components>
-                                <component>
-                                    <name>${project.artifactId}</name>
-                                    <artifact>${project.build.directory}/${project.artifactId}.war</artifact>
-                                </component>
-                            </components>
-                            <domain>
-                                <name>batimendomain</name>
-                                <adminPort>4747</adminPort>
-                                <httpPort>6060</httpPort>
-                                <httpsPort>6161</httpsPort>
-                            </domain>
+                            <jboss-home>/opt/wildfly</jboss-home>
                         </configuration>
                         <executions>
                             <execution>
-                                <id>deploy-ws</id>
+                                <id>deploy-ws-on-wildfly</id>
                                 <phase>pre-integration-test</phase>
                                 <goals>
                                     <goal>redeploy</goal>
@@ -564,6 +547,37 @@
                             </execution>
                         </executions>
                     </plugin>
+                    <!--   <plugin>
+                          <groupId>org.glassfish.maven.plugin</groupId>
+                          <artifactId>maven-glassfish-plugin</artifactId>
+                          <version>2.1</version>
+                          <configuration>
+                              <user>admin</user>
+                              <adminPassword>OIOIUenoBueno</adminPassword>
+                              <glassfishDirectory>/usr/share/glassfish3</glassfishDirectory>
+                              <components>
+                                  <component>
+                                      <name>${project.artifactId}</name>
+                                      <artifact>${project.build.directory}/${project.artifactId}.war</artifact>
+                                  </component>
+                              </components>
+                              <domain>
+                                  <name>batimendomain</name>
+                                  <adminPort>4747</adminPort>
+                                  <httpPort>6060</httpPort>
+                                  <httpsPort>6161</httpsPort>
+                              </domain>
+                          </configuration>
+                          <executions>
+                              <execution>
+                                  <id>deploy-ws</id>
+                                  <phase>pre-integration-test</phase>
+                                  <goals>
+                                      <goal>redeploy</goal>
+                                  </goals>
+                              </execution>
+                          </executions>
+                      </plugin> -->
                     <plugin>
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>

@@ -50,6 +50,8 @@ public class WsConnector implements Serializable {
     private String nomWs;
     private String nomWsTest;
     private boolean isTest;
+    private String userWs;
+    private String passwordWs;
 
     public WsConnector() {
         getWsProperties();
@@ -134,7 +136,7 @@ public class WsConnector implements Serializable {
         Client client = Client.create(clientConfig);
         client.setFollowRedirects(true);
         // Authentification du client
-        client.addFilter(new HTTPBasicAuthFilter(Constant.BATIMEN_USERS_WS, Constant.BATIMEN_PWD_WS));
+        client.addFilter(new HTTPBasicAuthFilter(userWs, passwordWs));
         client.setConnectTimeout(Constant.CONNECT_TIMEOUT);
 
         return client.resource(adresseService.toString());
@@ -151,6 +153,8 @@ public class WsConnector implements Serializable {
         portServeur = wsProperties.getProperty("ws.port");
         nomWs = wsProperties.getProperty("ws.name");
         nomWsTest = wsProperties.getProperty("ws.name.test.arquillian");
+        userWs = wsProperties.getProperty("ws.user.login");
+        passwordWs = wsProperties.getProperty("ws.user.password");
     }
 
     /**
