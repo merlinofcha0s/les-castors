@@ -36,9 +36,8 @@ import java.util.Properties;
 /**
  * Classe qui permet de préparer les requètes qui seront envoyées pour
  * interroger le webservice
- * 
+ *
  * @author Casaucau Cyril
- * 
  */
 @Singleton
 public class WsConnector implements Serializable {
@@ -64,7 +63,7 @@ public class WsConnector implements Serializable {
     /**
      * Configure et initialise les differents composants permettant de
      * comuniquer en SSL avec le webservice
-     * 
+     *
      * @return Le ClientConfig avec le SSL correctement configurer
      */
     private ClientConfig configSSL() {
@@ -155,17 +154,22 @@ public class WsConnector implements Serializable {
         nomWsTest = wsProperties.getProperty("ws.name.test.arquillian");
         userWs = wsProperties.getProperty("ws.user.login");
         passwordWs = wsProperties.getProperty("ws.user.password");
+
+
+        LOGGER.error("User : " + userWs);
+        LOGGER.error("ipServeur : " + ipServeur);
+        LOGGER.error("portServeur : " + portServeur);
+        LOGGER.error("nomWs : " + nomWs);
+        LOGGER.error("nomWsTest : " + nomWsTest);
+
     }
 
     /**
      * Permet de requeter le Webservice, toutes les requetes passent en POST
-     * 
-     * @param controller
-     *            Le controlleur que l'on veut interroger (voir WsPath)
-     * @param method
-     *            La methode que l'on veut interroger (voir WsPath)
-     * @param object
-     *            l'objet que l'on veut transmettre au WS
+     *
+     * @param controller Le controlleur que l'on veut interroger (voir WsPath)
+     * @param method     La methode que l'on veut interroger (voir WsPath)
+     * @param object     l'objet que l'on veut transmettre au WS
      * @return Une chaine de caractere encodée JSON
      */
     public String sendRequestJSON(String controller, String method, Object object) {
@@ -190,15 +194,11 @@ public class WsConnector implements Serializable {
      * Permet de requeter le Webservice, en mode mutlipart (POST)<br/>
      * Utile quand on veut envoyer un fichier en plus du flux de données en une
      * seule requete
-     * 
-     * @param controller
-     *            Nom du controleur
-     * @param method
-     *            Nom de la méthode
-     * @param files
-     *            Listes des fichiers à envoyer
-     * @param object
-     *            Le flux
+     *
+     * @param controller Nom du controleur
+     * @param method     Nom de la méthode
+     * @param files      Listes des fichiers à envoyer
+     * @param object     Le flux
      * @return JSON
      */
     public String sendRequestWithFile(String controller, String method, List<File> files, Object object) {
@@ -256,8 +256,7 @@ public class WsConnector implements Serializable {
     }
 
     /**
-     * @param isTest
-     *            the isTest to set
+     * @param isTest the isTest to set
      */
     public void setTest(boolean isTest) {
         this.isTest = isTest;
