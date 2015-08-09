@@ -391,7 +391,7 @@
 
                 <!-- Infos Web App -->
                 <app.ip>127.0.0.1</app.ip>
-                <app.port>6161</app.port>
+                <app.port>8443</app.port>
                 <app.name>batimen-web</app.name>
                 <app.browser.target>firefox</app.browser.target>
                 <app.address.chrome.driver>/var/lib/chrome-driver/chromedriver</app.address.chrome.driver>
@@ -459,37 +459,6 @@
                             </execution>
                         </executions>
                     </plugin>
-                    <!-- <plugin>
-                         <groupId>org.glassfish.maven.plugin</groupId>
-                         <artifactId>maven-glassfish-plugin</artifactId>
-                         <version>2.1</version>
-                         <configuration>
-                             <user>admin</user>
-                             <adminPassword>OIOIUenoBueno</adminPassword>
-                             <glassfishDirectory>/usr/share/glassfish3</glassfishDirectory>
-                             <components>
-                                 <component>
-                                     <name>${project.artifactId}</name>
-                                     <artifact>${project.build.directory}/${project.artifactId}.war</artifact>
-                                 </component>
-                             </components>
-                             <domain>
-                                 <name>batimendomain</name>
-                                 <adminPort>4747</adminPort>
-                                 <httpPort>6060</httpPort>
-                                 <httpsPort>6161</httpsPort>
-                             </domain>
-                         </configuration>
-                         <executions>
-                             <execution>
-                                 <id>deploy-web-app</id>
-                                 <phase>pre-integration-test</phase>
-                                 <goals>
-                                     <goal>redeploy</goal>
-                                 </goals>
-                             </execution>
-                         </executions>
-                     </plugin>-->
                     <plugin>
                         <groupId>org.jacoco</groupId>
                         <artifactId>jacoco-maven-plugin</artifactId>
