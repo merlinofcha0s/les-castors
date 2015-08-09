@@ -154,14 +154,6 @@ public class WsConnector implements Serializable {
         nomWsTest = wsProperties.getProperty("ws.name.test.arquillian");
         userWs = wsProperties.getProperty("ws.user.login");
         passwordWs = wsProperties.getProperty("ws.user.password");
-
-
-        LOGGER.error("User : " + userWs);
-        LOGGER.error("ipServeur : " + ipServeur);
-        LOGGER.error("portServeur : " + portServeur);
-        LOGGER.error("nomWs : " + nomWs);
-        LOGGER.error("nomWsTest : " + nomWsTest);
-
     }
 
     /**
