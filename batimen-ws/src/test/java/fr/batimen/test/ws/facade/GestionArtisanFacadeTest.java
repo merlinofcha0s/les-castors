@@ -15,6 +15,7 @@ import fr.batimen.ws.client.service.ArtisanServiceREST;
 import fr.batimen.ws.dao.ArtisanDAO;
 import fr.batimen.ws.dao.EntrepriseDAO;
 import fr.batimen.ws.entity.*;
+import fr.batimen.ws.enums.PropertiesFileWS;
 import fr.batimen.ws.service.PhotoService;
 import org.jboss.arquillian.persistence.ShouldMatchDataSet;
 import org.jboss.arquillian.persistence.UsingDataSet;
@@ -292,13 +293,15 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
 
     public void testAjoutPhotoChantier(String login, int nbImageAttendu) {
         // On recupére la photo dans les ressources de la webapp de test
-        ClassLoader classLoader = getClass().getClassLoader();
-        File file = new File(classLoader.getResource("img/castor.jpg").getFile());
+        Properties seleniumProperties = PropertiesFileWS.IMAGE.getProperties();
+        StringBuilder adresseToImg = new StringBuilder(seleniumProperties.getProperty("app.temp.img.dir.test"));
+        adresseToImg.append("castor.jpg");
+        File castorFile = new File(adresseToImg.toString());
 
         AjoutPhotoDTO ajoutPhotoDTO = new AjoutPhotoDTO();
         ajoutPhotoDTO.setLoginDemandeur(login);
         ajoutPhotoDTO.setId("43394298400017");
-        ajoutPhotoDTO.getImages().add(file);
+        ajoutPhotoDTO.getImages().add(castorFile);
 
         List<ImageDTO> imageDTOs = artisanServiceREST.ajouterPhotosChantierTemoin(ajoutPhotoDTO);
 

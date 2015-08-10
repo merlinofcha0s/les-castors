@@ -81,8 +81,7 @@ public abstract class AbstractBatimenWsTest {
                 .addAsResource("castor.properties", "castor.properties")
                 .addAsResource("jobs.properties", "jobs.properties")
                 .addAsResource("quartz.properties", "quartz.properties")
-                .addAsResource("image.properties", "image.properties")
-                .addAsResource("img/castor.jpg", "img/castor.jpg");
+                .addAsResource("image.properties", "image.properties");
 
         return batimenWsTest;
     }

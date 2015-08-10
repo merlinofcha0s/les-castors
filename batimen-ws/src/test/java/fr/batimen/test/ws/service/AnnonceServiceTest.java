@@ -11,9 +11,9 @@ import fr.batimen.ws.dao.ClientDAO;
 import fr.batimen.ws.entity.Annonce;
 import fr.batimen.ws.entity.Client;
 import fr.batimen.ws.entity.Image;
+import fr.batimen.ws.enums.PropertiesFileWS;
 import fr.batimen.ws.service.NotificationService;
 import fr.batimen.ws.service.PhotoService;
-import org.apache.commons.io.FileUtils;
 import org.junit.Assert;
 
 import javax.ejb.TransactionAttribute;
@@ -23,10 +23,10 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
+import java.util.Properties;
 
 /**
  * Classe contenant le code de test quand celui ci est utilisé a plusieurs endroits.
@@ -100,13 +100,12 @@ public class AnnonceServiceTest {
     }
 
     public void testAjoutPhoto(String login, int nbImageAttendu) throws IOException {
-        // On recupére la photo dans les ressources de la webapp de test
-        InputStream castorImageInputStream = this.getClass().getClassLoader().getResourceAsStream("img/castor.jpg");
 
-        File castorFile = new File("castorCopy.jpg");
-        // String absolutPath = castorFile.getAbsolutePath();
-        //String canonicalPath = castorFile.getCanonicalPath();
-        FileUtils.copyInputStreamToFile(castorImageInputStream, castorFile);
+        // On recupére la photo dans les ressources de la webapp de test
+        Properties seleniumProperties = PropertiesFileWS.IMAGE.getProperties();
+        StringBuilder adresseToImg = new StringBuilder(seleniumProperties.getProperty("app.temp.img.dir.test"));
+        adresseToImg.append("castor.jpg");
+        File castorFile = new File(adresseToImg.toString());
 
         AjoutPhotoDTO ajoutPhotoDTO = new AjoutPhotoDTO();
         ajoutPhotoDTO.setLoginDemandeur(login);

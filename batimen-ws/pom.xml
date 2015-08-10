@@ -47,13 +47,6 @@
 
         <!-- Config Arquillian -->
         <jboss.home>D:\dev\wildfly-8.2.1.Final</jboss.home>
-        <!--<glassfish.adminHost>localhost</glassfish.adminHost>
-        <glassfish.adminPort>4848</glassfish.adminPort>
-        <glassfish.adminHttps>false</glassfish.adminHttps>
-        <glassfish.adminUser></glassfish.adminUser>
-        <glassfish.adminPassword></glassfish.adminPassword>
-        <glassfish.domain>domain1</glassfish.domain>
-        <glassfish.debug>false</glassfish.debug> -->
 
         <!-- Email -->
         <mandrill.api.key>OOBiT-ollMvq7_JaMjyDOQ</mandrill.api.key>
@@ -68,6 +61,7 @@
         <prop.image.cloudinary.api_key>445898463279963</prop.image.cloudinary.api_key>
         <prop.image.cloudinary.api_secret>av_FudaoLvP0Oz5VPqspL8_WPpA</prop.image.cloudinary.api_secret>
         <prop.image.is.test>true</prop.image.is.test>
+        <app.temp.img.dir.test>D:/dev/temp/img/</app.temp.img.dir.test>
     </properties>
 
     <issueManagement>
@@ -500,14 +494,6 @@
 
                 <!-- Config Arquillian -->
                 <jboss.home>/opt/wildfly</jboss.home>
-                <!-- <glassfish.location>/usr/share/glassfish3</glassfish.location>
-                <glassfish.adminHost>127.0.0.1</glassfish.adminHost>
-                <glassfish.adminPort>4747</glassfish.adminPort>
-                <glassfish.adminHttps>false</glassfish.adminHttps>
-                <glassfish.adminUser>admin</glassfish.adminUser>
-                <glassfish.adminPassword>OIOIUenoBueno</glassfish.adminPassword>
-                <glassfish.domain>batimendomain</glassfish.domain> -->
-
                 <!-- Email -->
                 <mandrill.api.key>AqM7U8jIxFR7GURuupcsIA</mandrill.api.key>
                 <!-- <mandrill.api.key>OOBiT-ollMvq7_JaMjyDOQ</mandrill.api.key> -->
@@ -519,6 +505,9 @@
                 <!-- Gestion des images -->
                 <prop.temp.img.dir>/usr/share/castor-temp/img/</prop.temp.img.dir>
                 <prop.image.is.test>false</prop.image.is.test>
+
+                <!-- Gestion des images pour les tests -->
+                <app.temp.img.dir.test>/usr/share/castor-temp/img-test/</app.temp.img.dir.test>
             </properties>
             <build>
                 <resources>

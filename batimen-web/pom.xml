@@ -48,6 +48,7 @@
         <app.browser.target>firefox</app.browser.target>
         <app.address.chrome.driver>C:/selenium/chromedriver.exe</app.address.chrome.driver>
         <app.address.ie.driver>C:/selenium/IEDriverServer.exe</app.address.ie.driver>
+        <app.temp.img.dir.test>D:/dev/temp/img/</app.temp.img.dir.test>
 
         <!-- Logs -->
         <logs.address>c:/logs/log-batimen</logs.address>
@@ -395,6 +396,7 @@
                 <app.name>batimen-web</app.name>
                 <app.browser.target>firefox</app.browser.target>
                 <app.address.chrome.driver>/var/lib/chrome-driver/chromedriver</app.address.chrome.driver>
+                <app.temp.img.dir.test>/usr/share/castor-temp/img-test/</app.temp.img.dir.test>
 
                 <!-- Logs -->
                 <logs.address>/usr/share/log-batimen</logs.address>

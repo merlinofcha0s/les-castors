@@ -1,6 +1,5 @@
 package fr.batimen.web.utils;
 
-import fr.batimen.web.selenium.client.TestModificationAnnonce;
 import fr.batimen.web.selenium.common.AbstractITTest;
 import org.junit.Assert;
 import org.openqa.selenium.By;
@@ -10,6 +9,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
+import java.util.Properties;
 
 /**
  * Created by Casaucau on 23/06/2015.
@@ -30,8 +30,10 @@ public class UtilsSelenium {
         }
 
 
-        ClassLoader classLoader = TestModificationAnnonce.class.getClassLoader();
-        File file = new File(classLoader.getResource("img/castor.jpg").getFile());
+        Properties seleniumProperties = PropertiesUtils.loadPropertiesFile("selenium.properties");
+        StringBuilder adresseToImg = new StringBuilder(seleniumProperties.getProperty("app.temp.img.dir.test"));
+        adresseToImg.append("castor.jpg");
+        File file = new File(adresseToImg.toString());
 
         WebElement photoField = driver.findElement(By.id("photoField"));
         photoField.sendKeys(file.getAbsolutePath());
