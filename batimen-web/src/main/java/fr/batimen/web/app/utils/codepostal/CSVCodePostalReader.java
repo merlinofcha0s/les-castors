@@ -41,8 +41,7 @@ public class CSVCodePostalReader implements Serializable{
         try {
             FileUtils.copyInputStreamToFile(classLoader.getResourceAsStream("codePostal.txt"), codePostalFile);
         } catch (IOException e) {
-            e.printStackTrace();
-            LOGGER.error(codePostalFile.getAbsolutePath());
+            LOGGER.error(codePostalFile.getAbsolutePath(), e);
         }
 
         try {

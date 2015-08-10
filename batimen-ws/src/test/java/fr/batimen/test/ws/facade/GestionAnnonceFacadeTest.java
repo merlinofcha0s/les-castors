@@ -20,8 +20,8 @@ import fr.batimen.ws.dao.ArtisanDAO;
 import fr.batimen.ws.dao.ClientDAO;
 import fr.batimen.ws.entity.Annonce;
 import fr.batimen.ws.entity.Artisan;
+import fr.batimen.ws.enums.PropertiesFileWS;
 import fr.batimen.ws.service.NotificationService;
-import org.apache.commons.io.FileUtils;
 import org.jboss.arquillian.persistence.ShouldMatchDataSet;
 import org.jboss.arquillian.persistence.UsingDataSet;
 import org.junit.Assert;
@@ -31,9 +31,9 @@ import org.junit.Test;
 import javax.inject.Inject;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 /**
  * @author Casaucau Cyril
@@ -112,11 +112,10 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     public void testCreationAnnonceIsSignedInWithImage() throws IOException {
         creationAnnonceDTO.setIsSignedUp(true);
 
-        // On recupére la photo dans les ressources de la webapp de test
-        InputStream castorImageInputStream = this.getClass().getClassLoader().getResourceAsStream("img/castor.jpg");
-
-        File castorFile = new File("castorCopy.jpg");
-        FileUtils.copyInputStreamToFile(castorImageInputStream, castorFile);
+        Properties seleniumProperties = PropertiesFileWS.IMAGE.getProperties();
+        StringBuilder adresseToImg = new StringBuilder(seleniumProperties.getProperty("app.temp.img.dir.test"));
+        adresseToImg.append("castor.jpg");
+        File castorFile = new File(adresseToImg.toString());
         creationAnnonceDTO.getPhotos().add(castorFile);
 
         Integer codeRetour = annonceServiceREST.creationAnnonceAvecImage(creationAnnonceDTO);
