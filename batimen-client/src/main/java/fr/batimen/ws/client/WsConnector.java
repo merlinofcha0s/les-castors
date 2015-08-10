@@ -183,7 +183,7 @@ public class WsConnector implements Serializable {
     }
 
     /**
-     * Permet de requeter le Webservice, en mode mutlipart (POST)<br/>
+     * Permet de requeter le Webservice, en mode mutlipart (POST)
      * Utile quand on veut envoyer un fichier en plus du flux de données en une
      * seule requete
      *

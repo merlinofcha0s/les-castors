@@ -86,6 +86,7 @@ public class DeserializeJsonHelper {
      *
      * @param json la string json contenant la liste d'objet
      * @param <T>  Le type generics de l'objet qui doit étendre abstract DTO
+     * @param <V>  Le type de list generic
      * @return la liste créée à partir du JSON.
      */
     public static <V extends List<T>, T> List<T> deserializeDTOList(String json, TypeToken<V> token) {

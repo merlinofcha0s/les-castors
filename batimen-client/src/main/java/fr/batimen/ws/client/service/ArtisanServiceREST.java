@@ -154,8 +154,8 @@ public class ArtisanServiceREST implements Serializable {
 
 
     /**
-     * Service qui permet à un artisan de pouvoir ajouter / rajouter des photos de chantier témoin<br/>
-     * <p/>
+     * Service qui permet à un artisan de pouvoir ajouter / rajouter des photos de chantier témoin
+     * 
      * Mode multipart, en plus du JSON la request contient des photos.
      *
      * @param ajoutPhotoDTO Les photos a envoyer in da cloud

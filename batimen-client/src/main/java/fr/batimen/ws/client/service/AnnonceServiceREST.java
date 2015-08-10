@@ -62,8 +62,8 @@ public class AnnonceServiceREST implements Serializable {
     }
 
     /**
-     * Appel le webservice pour creer l'annonce. <br/>
-     * <p/>
+     * Appel le webservice pour creer l'annonce.
+     * <p>
      * Contient des images, l'appel au web service est fait en mode multipart
      *
      * @param nouvelleAnnonce l'objet a envoyé au webservice pour qu'il puisse créer
@@ -91,7 +91,7 @@ public class AnnonceServiceREST implements Serializable {
     }
 
     /**
-     * Permet de récuperer une annonce dans le but de l'afficher <br/>
+     * Permet de récuperer une annonce dans le but de l'afficher 
      * Récupère également les informations sur les artisans et les entreprise
      * inscrites a cette annonce
      *
@@ -243,8 +243,8 @@ public class AnnonceServiceREST implements Serializable {
     }
 
     /**
-     * Service qui permet à un client de noter un artisan<br/>
-     * <p/>
+     * Service qui permet à un client de noter un artisan
+     * <p>
      * Fais passer l'annonce en mode terminer
      *
      * @param noterArtisanDTO Objet permettant de valider la note de l'artisan
@@ -267,8 +267,8 @@ public class AnnonceServiceREST implements Serializable {
     }
 
     /**
-     * Service qui permet à un client de pouvoir modifier son annonce<br/>
-     * <p/>
+     * Service qui permet à un client de pouvoir modifier son annonce
+     * <p>
      * Génére une notification à destination des artisans inscrits
      *
      * @param modificationAnnonceDTO Objet permettant de récuperer les informations qui ont été modifiée par le client
@@ -291,8 +291,8 @@ public class AnnonceServiceREST implements Serializable {
     }
 
     /**
-     * Service qui permet à un client de pouvoir ajouter / rajouter des photos à son annonce<br/>
-     * <p/>
+     * Service qui permet à un client de pouvoir ajouter / rajouter des photos à son annonce
+     * <p>
      * Génére une notification à destination des artisans inscrits
      *
      * @param ajoutPhotoDTO Objet permettant de récuperer les photos et informations qui ont été transmise par le client
@@ -311,7 +311,8 @@ public class AnnonceServiceREST implements Serializable {
         String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_ANNONCE_SERVICE_PATH,
                 WsPath.GESTION_ANNONCE_SERVICE_RECUPERATION_PHOTO, demandeAnnonceDTO);
 
-        TypeToken<List<ImageDTO>> tokenImage = new TypeToken<List<ImageDTO>>(){};
+        TypeToken<List<ImageDTO>> tokenImage = new TypeToken<List<ImageDTO>>() {
+        };
         List<ImageDTO> imageDTOs = DeserializeJsonHelper.deserializeDTOList(objectInJSON, tokenImage);
 
         if (LOGGER.isDebugEnabled()) {
@@ -328,7 +329,8 @@ public class AnnonceServiceREST implements Serializable {
         String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_ANNONCE_SERVICE_PATH,
                 WsPath.GESTION_ANNONCE_SERVICE_SUPPRESSION_PHOTO, suppressionPhotoDTO);
 
-        TypeToken<List<ImageDTO>> tokenImage = new TypeToken<List<ImageDTO>>(){};
+        TypeToken<List<ImageDTO>> tokenImage = new TypeToken<List<ImageDTO>>() {
+        };
         List<ImageDTO> imageDTOs = DeserializeJsonHelper.deserializeDTOList(objectInJSON, tokenImage);
 
         if (LOGGER.isDebugEnabled()) {

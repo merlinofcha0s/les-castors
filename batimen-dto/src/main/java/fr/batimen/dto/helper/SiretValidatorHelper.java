@@ -4,7 +4,7 @@ package fr.batimen.dto.helper;
 /**
  * Verifie que la forme du SIRET soit correct
  *
- * @see https://fr.wikipedia.org/wiki/Formule_de_Luhn
+ * @see "https://fr.wikipedia.org/wiki/Formule_de_Luhn"
  *
  */
 public class SiretValidatorHelper {

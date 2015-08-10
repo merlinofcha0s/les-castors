@@ -1,16 +1,14 @@
 package fr.batimen.ws.client.service;
 
-import java.io.Serializable;
-
-import javax.inject.Inject;
-import javax.inject.Named;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import fr.batimen.core.constant.WsPath;
 import fr.batimen.dto.ContactMailDTO;
 import fr.batimen.ws.client.WsConnector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.Serializable;
 
 /**
  * Connecteur pour appeler le service de contact par mail
@@ -30,8 +28,8 @@ public class ContactUsServiceREST implements Serializable {
 
     /**
      * Webservice Client, in charge of pushing a contact email to the mail WS
-     * 
-     * @param contactMail
+     *
+     * @param contactMail Objet contenant les données de contact
      * @return server operation code
      */
     public int pushContactMail(ContactMailDTO contactMail) {
