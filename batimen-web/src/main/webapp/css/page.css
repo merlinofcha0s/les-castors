@@ -1077,3 +1077,30 @@ table tr td .error {
 #infoNbAnnonce {
     float: right;
 }
+
+.typeahead li:before {
+    content: '';
+    padding-right: 0px;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    line-height: 20px;
+    font-family: Arial, Helvetica, sans-serif;
+    color: #666666;
+}
+
+.typeahead li, .typeahead ol li {
+    line-height: 20px;
+    margin: 0 0 0 0px;
+    padding: 0 0 0 0px;
+    position: relative;
+    color: #666666;
+}
+
+.typeahead .typeahead ol {
+    padding: 0 0 5px 0px;
+}
+
+.typeahead a strong {
+    color: #000000;
+}

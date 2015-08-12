@@ -1,15 +1,13 @@
 package fr.batimen.ws.dao;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import fr.batimen.ws.facade.GestionAnnonceFacade;
 
 /**
  * Classe abstraite pour l'ensemble des classes DAO
@@ -19,10 +17,9 @@ import fr.batimen.ws.facade.GestionAnnonceFacade;
  */
 public class AbstractDAO<T> {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractDAO.class);
     @PersistenceContext
     protected EntityManager entityManager;
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(GestionAnnonceFacade.class);
 
     public AbstractDAO() {
     }

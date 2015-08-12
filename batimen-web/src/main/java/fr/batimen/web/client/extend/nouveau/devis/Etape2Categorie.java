@@ -1,14 +1,18 @@
 package fr.batimen.web.client.extend.nouveau.devis;
 
+import fr.batimen.dto.CategorieDTO;
+import fr.batimen.dto.CategorieMetierDTO;
+import fr.batimen.dto.helper.CategorieIniter;
+import fr.batimen.dto.helper.CategorieLoader;
+import fr.batimen.web.app.constants.Etape;
+import fr.batimen.web.client.extend.nouveau.devis.event.CategorieEvent;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.panel.Panel;
 
-import fr.batimen.dto.CategorieMetierDTO;
-import fr.batimen.dto.helper.CategorieLoader;
-import fr.batimen.web.app.constants.Etape;
-import fr.batimen.web.client.extend.nouveau.devis.event.CategorieEvent;
+import javax.inject.Inject;
+import java.util.List;
 
 /**
  * Panel de l'Etape 2 de la creation d'annonce. Permet à l'utilisateur de
@@ -20,6 +24,9 @@ import fr.batimen.web.client.extend.nouveau.devis.event.CategorieEvent;
 public class Etape2Categorie extends Panel {
 
     private static final long serialVersionUID = -3950302126805043243L;
+
+    @Inject
+    private CategorieIniter categorieIniter;
 
     public Etape2Categorie(String id) {
         super(id);
@@ -101,6 +108,8 @@ public class Etape2Categorie extends Panel {
 
         decorationMaconnerieLink.setOutputMarkupId(true);
         decorationMaconnerieLink.setMarkupId("decorationMaconnerie");
+
+        List<CategorieDTO> categorieDTOList = categorieIniter.getAllCategories();
 
         add(electriciteLink, plomberieLink, espacesVertLink, decorationMaconnerieLink, etapePrecedente2);
     }

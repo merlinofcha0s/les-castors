@@ -1,10 +1,10 @@
 package fr.batimen.dto.helper;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.SousCategorieMetierDTO;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Chargeur de catégorie, initialise et donne les differentes categorie / sous
@@ -15,16 +15,16 @@ import fr.batimen.dto.SousCategorieMetierDTO;
  */
 public class CategorieLoader {
 
+    public static final Short ELECTRICITE_CODE = 0;
+    public static final Short PLOMBERIE_CODE = 1;
+    public static final Short ESPACE_VERT_CODE = 2;
+    public static final Short DECORATION_MACONNERIE_CODE = 3;
+    public static final Short MENUISERIE_CODE = 4;
     private static CategorieMetierDTO electricite;
     private static CategorieMetierDTO plomberie;
     private static CategorieMetierDTO espaceVert;
     private static CategorieMetierDTO decorationMaconnerie;
     private static CategorieMetierDTO toutesCategories;
-
-    public static final Short ELECTRICITE_CODE = 0;
-    public static final Short PLOMBERIE_CODE = 1;
-    public static final Short ESPACE_VERT_CODE = 2;
-    public static final Short DECORATION_MACONNERIE_CODE = 3;
 
     private CategorieLoader() {
 

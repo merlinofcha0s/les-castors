@@ -1,18 +1,19 @@
 package fr.batimen.ws.client.enums;
 
-import java.io.IOException;
-import java.util.Properties;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.Properties;
 
 public enum PropertiesFileWsClient {
 
     WS("ws.properties");
 
     private final Logger logger = LoggerFactory.getLogger(PropertiesFileWsClient.class);
+    private Properties properties;
 
-    private PropertiesFileWsClient(String propertiesFileName) {
+    PropertiesFileWsClient(String propertiesFileName) {
 
         this.properties = new Properties();
         try {
@@ -23,8 +24,6 @@ public enum PropertiesFileWsClient {
             }
         }
     }
-
-    private Properties properties;
 
     public Properties getProperties() {
         return properties;
