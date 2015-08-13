@@ -5,10 +5,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Singleton;
-import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.Serializable;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
@@ -17,6 +17,10 @@ import java.util.stream.Stream;
 
 /**
  * Classe qui va lire le contenu du fichier des catégories et qui le trasforme en liste
+ *
+ * <p>
+ *     Le fichier est de la forme motclé;categorie1;categorie2;etc
+ * </p>
  *
  * @author Casaucau Cyril
  */
@@ -53,16 +57,15 @@ public class CategorieIniter implements Serializable {
     private List<CategorieDTO> allCategories;
 
     public CategorieIniter() {
+
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("----------------------------- Début init du fichier des catégories --------------------------");
         }
-        try {
-            String adresseFichier = CategorieIniter.class.getClassLoader().getResource("mot-cles-categories.csv").getFile();
-            Stream<String> lines = Files.lines(Paths.get(adresseFichier));
-            allCategories = lines.map(mapToCategorie).collect(Collectors.toList());
-        } catch (IOException e) {
-            LOGGER.error("Erreur de lecture du ficher contenant les catégories", e);
-        }
+
+        InputStream inputStreamCategories = CategorieIniter.class.getClassLoader().getResourceAsStream("mot-cles-categories.csv");
+        BufferedReader readerCategories = new BufferedReader(new InputStreamReader(inputStreamCategories));
+        Stream<String> lines = readerCategories.lines();
+        allCategories = lines.map(mapToCategorie).collect(Collectors.toList());
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("----------------------------- Fin init du fichier des catégories --------------------------");

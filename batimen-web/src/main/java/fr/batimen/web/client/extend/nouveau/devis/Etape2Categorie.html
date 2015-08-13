@@ -2,93 +2,49 @@
 	<div class="row-fluid">
 		<div class="span12 module_cont module_text_area module_small_padding">
 			<div class="bg_title">
-				<h4 class="headInModule">Selectionnez la catégorie de vos travaux</h4>
+				<h4 class="headInModule">Indiquer les catégories de vos travaux</h4>
 			</div>
-			<div class="featured_slider">
-				<div
-					class="carouselslider featured_posts items4"
-					data-count="4"
-					id="sliderUp">
-					<ul class="item_list">
-						<li>
-							<div
-								class="item categorie"
-								wicket:id="electricite">
-								<div class="img_block wrapped_img">
-									<img
-										src="img/categories/electricite.jpg"
-										alt="">
-									<div class="carousel_fadder"></div>
-								</div>
-								<div class="carousel_body">
-									<div class="carousel_title">
-										<h6>Electricité</h6>
-										<span class="glypheEtape2 icon-Lightning"></span>
-									</div>
-								</div>
-							</div>
-						</li>
-						<li>
-							<div
-								class="item categorie"
-								wicket:id="plomberie">
-								<div class="img_block wrapped_img">
-									<img
-										src="img/categories/plomberie.jpg"
-										alt="">
-									<div class="carousel_fadder"></div>
-								</div>
-								<div class="carousel_body">
-									<div class="carousel_title">
-										<h6>Plomberie</h6>
-										<span class="glypheEtape2 icons8-plumbing"></span>
-									</div>
-								</div>
-							</div>
-						</li>
-						<li>
-							<div
-								class="item categorie"
-								wicket:id="espaceVert">
-								<div class="img_block wrapped_img">
-									<img
-										src="img/categories/espace_vert.jpg"
-										alt="">
-									<div class="carousel_fadder"></div>
-								</div>
-								<div class="carousel_body">
-									<div class="carousel_title">
-										<h6>Espaces verts</h6>
-										<span class="glypheEtape2 icons8-garden-shears"></span>
-									</div>
-								</div>
-							</div>
-						</li>
-						<li>
-							<div
-								class="item categorie"
-								wicket:id="decorationMaconnerie">
-								<div class="img_block wrapped_img">
-									<img
-										src="img/categories/maconnerie.jpg"
-										alt="">
-									<div class="carousel_fadder"></div>
-								</div>
-								<div class="carousel_body">
-									<div class="carousel_title">
-										<h6>Décoration / Maçonnerie</h6>
-										<span class="glypheEtape2 icon-Tool"></span>
-									</div>
-								</div>
-							</div>
-						</li>
-					</ul>
-				</div>
-				<div class="clear"></div>
-				<a
-					class="btn btn-info"
-					wicket:id="etapePrecedente2">Etape précédente</a>
-			</div>
+			<div class="row-fluid">
+                <form class="form-horizontal">
+                    <div class="span3"></div>
+		            <div class="span6">
+                        <div class="control-group">
+                            <label class="control-label" for="motcle">Mot clé :</label>
+                            <div class="controls">
+			                    <input id="motcle" type="text" placeholder="Ex: Salle de bain"/>
+                            </div>
+                        </div>
+		            </div>
+                    <div class="span3"></div>
+                 </form>
+	        </div>
+            <div class="row-fluid">
+                <div class="span3"></div>
+                <div class="span6 label-center">
+                    <span class="label label-info label-mot-cle">
+                        <span class="icon-Cross label-cross"></span>
+                        Salle de bain
+                    </span>
+                    <span class="label label-info label-mot-cle">
+                         <span class="icon-Cross label-cross"></span>
+                        Papier peint Tapisserie Toile de verre
+                    </span>
+                    <span class="label label-info label-mot-cle">
+                         <span class="icon-Cross label-cross"></span>
+                        Salle de bain
+                    </span>
+                    <span class="label label-info label-mot-cle">
+                         <span class="icon-Cross label-cross"></span>
+                        Salle de bain
+                    </span>
+                </div>
+                <div class="span3"></div>
+	        </div>
+             <div class="row-fluid">
+                <div class="span3"><a class="btn btn-info" wicket:id="etapePrecedente2">Etape précédente</a></div>
+                <div class="span6"></div>
+                <div class="span3"><a class="btn btn-info mot-cle-btn-suivant">Etape suivante</a></div>
+	        </div>
 		</div>
 	</div>
 </wicket:panel>

@@ -9,7 +9,7 @@ import java.util.Objects;
  *
  * @author Casaucau Cyril
  */
-public class CategorieDTO {
+public class CategorieDTO extends AbstractDTO {
 
     private String motCle;
 

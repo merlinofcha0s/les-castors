@@ -43,12 +43,12 @@
     padding-top: 20px;
 }
 
-#code-postal-text{
+#code-postal-text {
     vertical-align: super;
     margin-right: 10px;
 }
 
-#carte-france-container{
+#carte-france-container {
     margin-top: 20px;
     margin-bottom: 30px;
 }
@@ -628,7 +628,7 @@ table tr td .error {
 }
 
 /* Composant Profil */
-#profil-png{
+#profil-png {
     padding-left: 30px;
 }
 
@@ -652,12 +652,12 @@ table tr td .error {
     margin-top: 10px;
 }
 
-#container-entreprise-verifier{
+#container-entreprise-verifier {
     margin-top: 60px;
     text-align: center;
 }
 
-#container-entreprise-verifier div{
+#container-entreprise-verifier div {
     margin-top: 9px;
 }
 
@@ -904,7 +904,7 @@ table tr td .error {
     height: 135px;
 }
 
-#votreAvisInteresse{
+#votreAvisInteresse {
     padding-top: 10px;
 }
 
@@ -921,7 +921,7 @@ table tr td .error {
     padding-top: 10px;
 }
 
-.containerInformationsEntrepriseGeneral{
+.containerInformationsEntrepriseGeneral {
     padding-top: 15px;
     padding-bottom: 15px;
 }
@@ -953,25 +953,25 @@ table tr td .error {
     padding-top: 7px;
 }
 
-.titleEntreprise{
+.titleEntreprise {
     padding-bottom: 5px;
 }
 
-.categorie-entreprise{
+.categorie-entreprise {
     padding-left: 5px;
     font-size: 30px;
     width: 35px;
 }
 
-.icons-8-entreprise{
+.icons-8-entreprise {
     vertical-align: top;
 }
 
-#photoChantierTemoin{
+#photoChantierTemoin {
     padding-top: 15px;
 }
 
-.icon-specialite{
+.icon-specialite {
     font-size: 21px;
     padding-right: 15px;
 }
@@ -982,31 +982,32 @@ table tr td .error {
     font-weight: bold;
 }
 
-.pagination-castor ul li::before{
-    content:"";
+.pagination-castor ul li::before {
+    content: "";
     display: none;
 }
-#clearAvis{
+
+#clearAvis {
     clear: both;
 }
 
-#pagerAvis{
+#pagerAvis {
     text-align: center;
 }
 
-.pagination-castor ul li, .pagination-castor ol li{
+.pagination-castor ul li, .pagination-castor ol li {
     padding: 0 0 0 0px;
 }
 
-#container-moyenne{
+#container-moyenne {
     padding-bottom: 25px;
 }
 
-#container-moyenne div{
+#container-moyenne div {
     font-weight: bold;
 }
 
-.informations-importante-entreprise{
+.informations-importante-entreprise {
     font-size: 16px;
     line-height: 18px;
     font-family: "Open Sans", sans-serif;
@@ -1014,7 +1015,7 @@ table tr td .error {
     text-decoration: none;
 }
 
-.informations-importante-entreprise-font-awesome{
+.informations-importante-entreprise-font-awesome {
     font-size: 16px;
     line-height: 18px;
     font-family: "Open Sans", sans-serif;
@@ -1034,38 +1035,38 @@ table tr td .error {
     display: inline-block;
 }
 
-#btnPlusDAvisEntreprise{
+#btnPlusDAvisEntreprise {
     margin-top: 10px;
 }
 
-.contactez_suivez_nous{
+.contactez_suivez_nous {
     padding-top: 20px;
 }
 
 /* RECHERCHE ANNONCE */
-#plomberie{
+#plomberie {
     padding-bottom: 7px;
     padding-left: 15px;
 }
 
-#espace-vert{
+#espace-vert {
     padding-bottom: 6px;
     padding-left: 13px;
 }
 
-#maconnerie{
+#maconnerie {
     padding-left: 9px;
 }
 
-.headInModule .tooltip{
+.headInModule .tooltip {
     text-transform: none !important;
 }
 
-#helper-search{
+#helper-search {
     font-family: 'FontAwesome' !important;
 }
 
-#rechercheValider{
+#rechercheValider {
     float: right;
 }
 
@@ -1103,4 +1104,29 @@ table tr td .error {
 
 .typeahead a strong {
     color: #000000;
+}
+
+.label-mot-cle {
+    width: 120px;
+    height: 22px;
+    text-align: center;
+    padding-top: 10px;
+}
+
+.label-cross {
+    display: block;
+    float: right;
+    color: black;
+    padding-top: 1px;
+    padding-right: 2px;
+    font-size: 9px;
+    cursor: pointer;
+}
+
+.label-center {
+    text-align: center;
+}
+
+.mot-cle-btn-suivant {
+    float: right;
 }
