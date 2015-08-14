@@ -1080,7 +1080,7 @@ table tr td .error {
 }
 
 .typeahead li:before {
-    content: '';
+    content: '' !important;
     padding-right: 0px;
     position: absolute;
     left: 0px;
@@ -1093,7 +1093,7 @@ table tr td .error {
 .typeahead li, .typeahead ol li {
     line-height: 20px;
     margin: 0 0 0 0px;
-    padding: 0 0 0 0px;
+    padding: 0 0 0 0px !important;
     position: relative;
     color: #666666;
 }
