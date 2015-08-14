@@ -1113,6 +1113,11 @@ table tr td .error {
     padding-left: 11px;
     padding-right: 5px;
     margin-top: 7px;
+    margin-left: 10px;
+}
+
+.label-mot-cle span {
+    color: white;
 }
 
 .label-cross {

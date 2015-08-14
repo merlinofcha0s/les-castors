@@ -2,7 +2,7 @@ package fr.batimen.web.client.extend.nouveau.devis;
 
 import fr.batimen.dto.CategorieDTO;
 import fr.batimen.dto.CategorieMetierDTO;
-import fr.batimen.dto.helper.CategorieIniter;
+import fr.batimen.dto.helper.CategorieService;
 import fr.batimen.web.app.constants.Etape;
 import fr.batimen.web.client.extend.nouveau.communs.JSCommun;
 import fr.batimen.web.client.extend.nouveau.devis.event.CategorieEvent;
@@ -13,13 +13,19 @@ import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
+import org.apache.wicket.markup.html.WebMarkupContainer;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.list.ListItem;
+import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -33,20 +39,37 @@ public class Etape2Categorie extends Panel {
     private static final long serialVersionUID = -3950302126805043243L;
 
     @Inject
-    private CategorieIniter categorieIniter;
+    private CategorieService categorieService;
 
     private List<String> motClesToString;
+    private List<CategorieDTO> categoriesSelectionnee = new ArrayList<>();
+
+    private WebMarkupContainer categoriesChoisiesContainer;
 
     public Etape2Categorie(String id) {
         super(id);
 
-        motClesToString = categorieIniter.getAllCategories().stream().map(c -> c.getMotCle()).collect(Collectors.toList());
+        motClesToString = categorieService.getAllCategories().stream().map(c -> c.getMotCle()).collect(Collectors.toList());
 
-        TextField<CategorieDTO> motCleCategorie = new TextField<>("motCleField", new Model<>());
+        TextField<String> motCleCategorie = new TextField<>("motCleField", new Model<>());
         motCleCategorie.add(new AjaxFormComponentUpdatingBehavior("onchange") {
             @Override
             protected void onUpdate(AjaxRequestTarget target) {
-                System.out.println("loooooooooooooooooooooooooooooooooooooool");
+                String motcle = motCleCategorie.getModelObject();
+                Optional<CategorieDTO> categorieDTOSelectionnee = categorieService.getCategorieByMotCle(motcle);
+
+                if (categorieDTOSelectionnee.isPresent() && !categoriesSelectionnee.stream().filter(cat -> cat.equals(categorieDTOSelectionnee.get())).findAny().isPresent()) {
+                    categoriesSelectionnee.add(categorieDTOSelectionnee.get());
+                }
+
+                target.add(categoriesChoisiesContainer);
+            }
+        });
+        motCleCategorie.add(new AjaxFormComponentUpdatingBehavior("onblur") {
+
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+
             }
         });
 
@@ -71,6 +94,8 @@ public class Etape2Categorie extends Panel {
         etapePrecedente2.setMarkupId("etapePrecedente2");
 
         add(motCleForm, etapePrecedente2);
+
+        initCategoriesChoisie();
     }
 
     private void createAndTriggerEvent(AjaxRequestTarget target, CategorieMetierDTO categorieMetier) {
@@ -78,6 +103,27 @@ public class Etape2Categorie extends Panel {
         CategorieEvent categorieEvent = new CategorieEvent(target, categorieMetier);
         // On trigger l'event
         target.getPage().send(target.getPage(), Broadcast.BREADTH, categorieEvent);
+    }
+
+    private void initCategoriesChoisie() {
+        categoriesChoisiesContainer = new WebMarkupContainer("categoriesChoisiesContainer");
+        categoriesChoisiesContainer.setOutputMarkupId(true);
+
+        ListView<CategorieDTO> categorieDTOListView = new ListView<CategorieDTO>("categorieDTOListView", categoriesSelectionnee) {
+            @Override
+            protected void populateItem(ListItem<CategorieDTO> item) {
+                CategorieDTO categorieDTO = item.getModelObject();
+
+                Label motCle = new Label("motCle", categorieDTO.getMotCle());
+                WebMarkupContainer cross = new WebMarkupContainer("cross");
+
+                item.add(motCle, cross);
+                //TODO Suppression mot clé
+            }
+        };
+
+        categoriesChoisiesContainer.add(categorieDTOListView);
+        add(categoriesChoisiesContainer);
     }
 
     @Override

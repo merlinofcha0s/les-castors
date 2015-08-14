@@ -8,6 +8,7 @@ import javax.inject.Singleton;
 import java.io.*;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -22,9 +23,9 @@ import java.util.stream.Stream;
  * @author Casaucau Cyril
  */
 @Singleton
-public class CategorieIniter implements Serializable {
+public class CategorieService implements Serializable {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(CategorieIniter.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CategorieService.class);
     /**
      * Transforme une ligne en CategorieDTO
      */
@@ -53,13 +54,13 @@ public class CategorieIniter implements Serializable {
     };
     private List<CategorieDTO> allCategories;
 
-    public CategorieIniter() {
+    public CategorieService() {
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("----------------------------- Début init du fichier des catégories --------------------------");
         }
 
-        InputStream inputStreamCategories = CategorieIniter.class.getClassLoader().getResourceAsStream("mot-cles-categories.csv");
+        InputStream inputStreamCategories = CategorieService.class.getClassLoader().getResourceAsStream("mot-cles-categories.csv");
         BufferedReader readerCategories = null;
         try {
             readerCategories = new BufferedReader(new InputStreamReader(inputStreamCategories, "UTF-8"));
@@ -72,6 +73,10 @@ public class CategorieIniter implements Serializable {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("----------------------------- Fin init du fichier des catégories --------------------------");
         }
+    }
+
+    public Optional<CategorieDTO> getCategorieByMotCle(String motcCle) {
+        return allCategories.stream().filter(cat -> cat.getMotCle().equals(motcCle)).findFirst();
     }
 
     public List<CategorieDTO> getAllCategories() {
