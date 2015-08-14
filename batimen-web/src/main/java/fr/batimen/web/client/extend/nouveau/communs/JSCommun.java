@@ -21,12 +21,12 @@ public class JSCommun {
         sourceTypeAhead.append(selector).append("').typeahead({ source: [");
         boolean firstTime = true;
 
-        for (String ville : motsCles) {
+        for (String motcle : motsCles) {
             if (firstTime) {
                 firstTime = false;
-                sourceTypeAhead.append("'").append(ville).append("'");
+                sourceTypeAhead.append("'").append(motcle).append("'");
             } else {
-                sourceTypeAhead.append(",'").append(ville).append("'");
+                sourceTypeAhead.append(",'").append(motcle).append("'");
             }
         }
         sourceTypeAhead.append("]});");

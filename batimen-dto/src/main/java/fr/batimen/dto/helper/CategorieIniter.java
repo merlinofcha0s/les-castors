@@ -5,10 +5,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Singleton;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.Serializable;
+import java.io.*;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
@@ -63,7 +60,12 @@ public class CategorieIniter implements Serializable {
         }
 
         InputStream inputStreamCategories = CategorieIniter.class.getClassLoader().getResourceAsStream("mot-cles-categories.csv");
-        BufferedReader readerCategories = new BufferedReader(new InputStreamReader(inputStreamCategories));
+        BufferedReader readerCategories = null;
+        try {
+            readerCategories = new BufferedReader(new InputStreamReader(inputStreamCategories, "UTF-8"));
+        } catch (UnsupportedEncodingException e) {
+            LOGGER.error("UTF-8 pas supporté lors de la lecture du fichier de mots clé des catégories", e);
+        }
         Stream<String> lines = readerCategories.lines();
         allCategories = lines.map(mapToCategorie).collect(Collectors.toList());
 

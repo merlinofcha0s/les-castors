@@ -4,14 +4,23 @@ import fr.batimen.dto.CategorieDTO;
 import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.helper.CategorieIniter;
 import fr.batimen.web.app.constants.Etape;
+import fr.batimen.web.client.extend.nouveau.communs.JSCommun;
 import fr.batimen.web.client.extend.nouveau.devis.event.CategorieEvent;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormComponentUpdatingBehavior;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.event.Broadcast;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
+import org.apache.wicket.markup.html.form.Form;
+import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
+import org.apache.wicket.model.Model;
 
 import javax.inject.Inject;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Panel de l'Etape 2 de la creation d'annonce. Permet à l'utilisateur de
@@ -26,8 +35,27 @@ public class Etape2Categorie extends Panel {
     @Inject
     private CategorieIniter categorieIniter;
 
+    private List<String> motClesToString;
+
     public Etape2Categorie(String id) {
         super(id);
+
+        motClesToString = categorieIniter.getAllCategories().stream().map(c -> c.getMotCle()).collect(Collectors.toList());
+
+        TextField<CategorieDTO> motCleCategorie = new TextField<>("motCleField", new Model<>());
+        motCleCategorie.add(new AjaxFormComponentUpdatingBehavior("onchange") {
+            @Override
+            protected void onUpdate(AjaxRequestTarget target) {
+                System.out.println("loooooooooooooooooooooooooooooooooooooool");
+            }
+        });
+
+        motCleCategorie.setOutputMarkupId(true);
+        motCleCategorie.setMarkupId("motCleField");
+
+        Form<Void> motCleForm = new Form<>("motCleForm");
+
+        motCleForm.add(motCleCategorie);
 
         AjaxLink<Void> etapePrecedente2 = new AjaxLink<Void>("etapePrecedente2") {
 
@@ -42,9 +70,7 @@ public class Etape2Categorie extends Panel {
         etapePrecedente2.setOutputMarkupId(true);
         etapePrecedente2.setMarkupId("etapePrecedente2");
 
-        List<CategorieDTO> categorieDTOList = categorieIniter.getAllCategories();
-
-        add(etapePrecedente2);
+        add(motCleForm, etapePrecedente2);
     }
 
     private void createAndTriggerEvent(AjaxRequestTarget target, CategorieMetierDTO categorieMetier) {
@@ -52,6 +78,13 @@ public class Etape2Categorie extends Panel {
         CategorieEvent categorieEvent = new CategorieEvent(target, categorieMetier);
         // On trigger l'event
         target.getPage().send(target.getPage(), Broadcast.BREADTH, categorieEvent);
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        String initVilleTypeAhead = JSCommun.buildSourceTypeAhead(motClesToString, "#motCleField");
+        response.render(OnDomReadyHeaderItem.forScript(initVilleTypeAhead));
+        response.render(JavaScriptHeaderItem.forUrl("js/typeahead.bundle.js"));
     }
 
 }

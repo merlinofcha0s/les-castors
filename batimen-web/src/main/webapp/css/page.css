@@ -1107,10 +1107,12 @@ table tr td .error {
 }
 
 .label-mot-cle {
-    width: 120px;
     height: 22px;
     text-align: center;
     padding-top: 10px;
+    padding-left: 11px;
+    padding-right: 5px;
+    margin-top: 7px;
 }
 
 .label-cross {
@@ -1121,6 +1123,7 @@ table tr td .error {
     padding-right: 2px;
     font-size: 9px;
     cursor: pointer;
+    padding-left: 5px;
 }
 
 .label-center {
