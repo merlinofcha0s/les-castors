@@ -51,9 +51,8 @@ import java.util.Properties;
  */
 public class BatimenApplication extends AuthenticatedWebApplication {
 
-    private boolean setStripWicketTags;
-
     private static final Logger LOGGER = LoggerFactory.getLogger(BatimenApplication.class);
+    private boolean setStripWicketTags;
 
     private void getAppProperties() {
 
@@ -115,9 +114,6 @@ public class BatimenApplication extends AuthenticatedWebApplication {
         // (appel d'une url http dans une page https)
         getJavaScriptLibrarySettings().setJQueryReference(
                 new UrlResourceReference(Url.parse("//code.jquery.com/jquery-1.11.2.min.js")));
-        // Chargement de Jquery-ui avec le theme Smoothness
-        /*addResourceReplacement(WiQueryCoreThemeResourceReference.get(), new WiQueryCoreThemeResourceReference(
-                "smoothness"));*/
 
         // Cfg urls des pages principales
         mountPage(UrlPage.ACCUEIL_URL, Accueil.class);
