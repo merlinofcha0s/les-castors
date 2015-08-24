@@ -41,7 +41,7 @@ public class JSCommun {
      * @param selector Le champs sur lequel on veut activé le typeAhead.
      * @return La string généré.
      */
-    public static String buildSourceTypeAheadForMotCles(List<String> motsCles, String selector) {
+    public static String buildSourceTypeAheadForMotCles(List<String> motsCles, String selector, String callback) {
         StringBuilder sourceTypeAhead = new StringBuilder("$('");
         sourceTypeAhead.append(selector).append("').typeahead({ source: [");
         boolean firstTime = true;
@@ -55,7 +55,9 @@ public class JSCommun {
             }
         }
         sourceTypeAhead.append("],");
-        sourceTypeAhead.append("updater: function(item){  console.log('LOOOLLLLLLL MDRRRRRRRRRRRRRRRRRRRRRRRR'); return item; }");
+        sourceTypeAhead.append("updater: function(item){ var motCle = item; ");
+        sourceTypeAhead.append(callback);
+        sourceTypeAhead.append(" return item; }");
         sourceTypeAhead.append("});");
 
         return sourceTypeAhead.toString();

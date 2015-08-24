@@ -4,11 +4,14 @@ import fr.batimen.dto.CategorieDTO;
 import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.helper.CategorieService;
 import fr.batimen.web.app.constants.Etape;
+import fr.batimen.web.client.behaviour.AjaxMotCleBehaviour;
+import fr.batimen.web.client.event.MotCleEvent;
 import fr.batimen.web.client.extend.nouveau.communs.JSCommun;
 import fr.batimen.web.client.extend.nouveau.devis.event.CategorieEvent;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.event.Broadcast;
+import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
@@ -23,6 +26,7 @@ import org.apache.wicket.model.Model;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -39,39 +43,24 @@ public class Etape2Categorie extends Panel {
     private CategorieService categorieService;
 
     private List<String> motClesToString;
-    private List<CategorieDTO> categoriesSelectionnee = new ArrayList<>();
+    private List<CategorieDTO> categoriesSelectionnees = new ArrayList<>();
+    private String initMotClesTypeAheadJS;
 
     private WebMarkupContainer categoriesChoisiesContainer;
+    private TextField<String> motCleCategorie;
+    private AjaxMotCleBehaviour ajaxMotCleBehaviour;
 
     public Etape2Categorie(String id) {
         super(id);
 
         motClesToString = categorieService.getAllCategories().stream().map(c -> c.getMotCle()).collect(Collectors.toList());
 
-        TextField<String> motCleCategorie = new TextField<>("motCleField", new Model<>());
-        /*motCleCategorie.add(new AjaxFormComponentUpdatingBehavior("onchange") {
-            @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-                String motcle = motCleCategorie.getModelObject();
-                Optional<CategorieDTO> categorieDTOSelectionnee = categorieService.getCategorieByMotCle(motcle);
-
-                if (categorieDTOSelectionnee.isPresent() && !categoriesSelectionnee.stream().filter(cat -> cat.equals(categorieDTOSelectionnee.get())).findAny().isPresent()) {
-                    categoriesSelectionnee.add(categorieDTOSelectionnee.get());
-                }
-
-                target.add(categoriesChoisiesContainer);
-            }
-        });*/
-        /*motCleCategorie.add(new AjaxFormComponentUpdatingBehavior("onblur") {
-
-            @Override
-            protected void onUpdate(AjaxRequestTarget target) {
-
-            }
-        });*/
-
+        motCleCategorie = new TextField<>("motCleField", new Model<>());
         motCleCategorie.setOutputMarkupId(true);
         motCleCategorie.setMarkupId("motCleField");
+
+        ajaxMotCleBehaviour = new AjaxMotCleBehaviour();
+        motCleCategorie.add(ajaxMotCleBehaviour);
 
         Form<Void> motCleForm = new Form<>("motCleForm");
 
@@ -106,7 +95,7 @@ public class Etape2Categorie extends Panel {
         categoriesChoisiesContainer = new WebMarkupContainer("categoriesChoisiesContainer");
         categoriesChoisiesContainer.setOutputMarkupId(true);
 
-        ListView<CategorieDTO> categorieDTOListView = new ListView<CategorieDTO>("categorieDTOListView", categoriesSelectionnee) {
+        ListView<CategorieDTO> categorieDTOListView = new ListView<CategorieDTO>("categorieDTOListView", categoriesSelectionnees) {
             @Override
             protected void populateItem(ListItem<CategorieDTO> item) {
                 CategorieDTO categorieDTO = item.getModelObject();
@@ -116,7 +105,7 @@ public class Etape2Categorie extends Panel {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
-                        categoriesSelectionnee.remove(categorieDTO);
+                        categoriesSelectionnees.remove(categorieDTO);
                         target.add(categoriesChoisiesContainer);
                     }
                 };
@@ -131,8 +120,29 @@ public class Etape2Categorie extends Panel {
 
     @Override
     public void renderHead(IHeaderResponse response) {
-        String initMotClesTypeAhead = JSCommun.buildSourceTypeAheadForMotCles(motClesToString, "#motCleField");
-        response.render(OnDomReadyHeaderItem.forScript(initMotClesTypeAhead));
+        initMotClesTypeAheadJS = JSCommun.buildSourceTypeAheadForMotCles(motClesToString, "#motCleField", ajaxMotCleBehaviour.getCallbackScript().toString());
+        response.render(OnDomReadyHeaderItem.forScript(initMotClesTypeAheadJS));
     }
 
+    @Override
+    public void onEvent(IEvent<?> event) {
+        super.onEvent(event);
+
+        if (event.getPayload() instanceof MotCleEvent) {
+            MotCleEvent motCleEvent = (MotCleEvent) event.getPayload();
+
+            String motcle = motCleEvent.getMotCle();
+            Optional<CategorieDTO> categorieDTOSelectionnee = categorieService.getCategorieByMotCle(motcle);
+
+            if (categorieDTOSelectionnee.isPresent() && !categoriesSelectionnees.stream().filter(cat -> cat.equals(categorieDTOSelectionnee.get())).findAny().isPresent()) {
+                categoriesSelectionnees.add(categorieDTOSelectionnee.get());
+            }
+
+            motCleCategorie.clearInput();
+
+            motCleEvent.getTarget().add(motCleCategorie);
+            motCleEvent.getTarget().appendJavaScript(initMotClesTypeAheadJS);
+            motCleEvent.getTarget().add(categoriesChoisiesContainer);
+        }
+    }
 }
