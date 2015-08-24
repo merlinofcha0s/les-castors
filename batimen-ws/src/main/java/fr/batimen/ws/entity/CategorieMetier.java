@@ -1,17 +1,8 @@
 package fr.batimen.ws.entity;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
 
 /**
  * Entité categorie metier : Symbolise la categorie metier de l'entreprise en
@@ -45,18 +36,18 @@ public class CategorieMetier implements Serializable {
     }
 
     /**
-     * @return the entreprise
-     */
-    public Entreprise getEntreprise() {
-        return entreprise;
-    }
-
-    /**
      * @param categorieMetier
      *            the categorieMetier to set
      */
     public void setCategorieMetier(short categorieMetier) {
         this.categorieMetier = categorieMetier;
+    }
+
+    /**
+     * @return the entreprise
+     */
+    public Entreprise getEntreprise() {
+        return entreprise;
     }
 
     /**
@@ -67,17 +58,27 @@ public class CategorieMetier implements Serializable {
         this.entreprise = entreprise;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CategorieMetier that = (CategorieMetier) o;
-        return Objects.equals(categorieMetier, that.categorieMetier);
+        return Objects.equals(categorieMetier, that.categorieMetier) &&
+                Objects.equals(id, that.id) &&
+                Objects.equals(entreprise, that.entreprise);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(categorieMetier);
+        return Objects.hash(id, categorieMetier, entreprise);
     }
 
     @Override
@@ -85,7 +86,7 @@ public class CategorieMetier implements Serializable {
         final StringBuilder sb = new StringBuilder("CategorieMetier{");
         sb.append("id=").append(id);
         sb.append(", categorieMetier=").append(categorieMetier);
-        sb.append(", entreprise=").append(entreprise.getId());
+        sb.append(", entreprise=").append(entreprise);
         sb.append('}');
         return sb.toString();
     }

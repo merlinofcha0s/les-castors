@@ -1,39 +1,21 @@
 package fr.batimen.ws.entity;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Objects;
-import java.util.Set;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.LazyToOne;
-import org.hibernate.annotations.LazyToOneOption;
-
 import fr.batimen.core.constant.QueryJPQL;
 import fr.batimen.dto.enums.DelaiIntervention;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.TypeContact;
 import fr.batimen.dto.enums.TypeTravaux;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+import org.hibernate.annotations.LazyToOne;
+import org.hibernate.annotations.LazyToOneOption;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * Entité Annonce, est utilisée pour symboliser l'annonce d'un particulier en
@@ -92,10 +74,6 @@ public class Annonce extends AbstractEntity implements Serializable {
     @Column(nullable = false)
     private Integer nbConsultation;
     @Column(nullable = false)
-    private Short categorieMetier;
-    @Column(nullable = false)
-    private String sousCategorieMetier;
-    @Column(nullable = false)
     private EtatAnnonce etatAnnonce;
     @Column(nullable = false)
     private String hashID;
@@ -129,6 +107,11 @@ public class Annonce extends AbstractEntity implements Serializable {
     @Fetch(FetchMode.SELECT)
     @OneToMany(mappedBy = "annonce", targetEntity = Image.class, cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     private Set<Image> images = new HashSet<Image>();
+    @OneToMany(mappedBy = "annonce",
+            targetEntity = CategorieMetier.class,
+            cascade = CascadeType.REMOVE,
+            fetch = FetchType.LAZY)
+    private Set<MotCle> motcles;
 
     /**
      * @return the id
@@ -258,26 +241,19 @@ public class Annonce extends AbstractEntity implements Serializable {
     }
 
     /**
-     * @return the notationAnnonce
-     */
-    public Avis getAvisAnnonce() {
-        return avis;
-    }
-
-    /**
-     * @param notationAnnonce
-     *            the notationAnnonce to set
-     */
-    public void setAvisAnnonce(Avis notationAnnonce) {
-        this.avis = notationAnnonce;
-    }
-
-    /**
      * @param demandeur
      *            the demandeur to set
      */
     public void setDemandeur(Client demandeur) {
         this.demandeur = demandeur;
+    }
+
+    public Avis getAvis() {
+        return avis;
+    }
+
+    public void setAvis(Avis avis) {
+        this.avis = avis;
     }
 
     /**
@@ -295,34 +271,12 @@ public class Annonce extends AbstractEntity implements Serializable {
         this.adresseChantier = adresseChantier;
     }
 
-    /**
-     * @return the categorieMetier
-     */
-    public Short getCategorieMetier() {
-        return categorieMetier;
+    public Set<MotCle> getMotcles() {
+        return motcles;
     }
 
-    /**
-     * @return the sousCategorieMetier
-     */
-    public String getSousCategorieMetier() {
-        return sousCategorieMetier;
-    }
-
-    /**
-     * @param categorieMetier
-     *            the categorieMetier to set
-     */
-    public void setCategorieMetier(Short categorieMetier) {
-        this.categorieMetier = categorieMetier;
-    }
-
-    /**
-     * @param sousCategorieMetier
-     *            the sousCategorieMetier to set
-     */
-    public void setSousCategorieMetier(String sousCategorieMetier) {
-        this.sousCategorieMetier = sousCategorieMetier;
+    public void setMotcles(Set<MotCle> motcles) {
+        this.motcles = motcles;
     }
 
     /**
@@ -363,6 +317,14 @@ public class Annonce extends AbstractEntity implements Serializable {
     }
 
     /**
+     * @param hashID
+     *            the hashID to set
+     */
+    public void setHashID(String hashID) {
+        this.hashID = hashID;
+    }
+
+    /**
      * @return the selHashID
      */
     public String getSelHashID() {
@@ -370,11 +332,11 @@ public class Annonce extends AbstractEntity implements Serializable {
     }
 
     /**
-     * @param hashID
-     *            the hashID to set
+     * @param selHashID
+     *            the selHashID to set
      */
-    public void setHashID(String hashID) {
-        this.hashID = hashID;
+    public void setSelHashID(String selHashID) {
+        this.selHashID = selHashID;
     }
 
     /**
@@ -390,14 +352,6 @@ public class Annonce extends AbstractEntity implements Serializable {
      */
     public void setTypeTravaux(TypeTravaux typeTravaux) {
         this.typeTravaux = typeTravaux;
-    }
-
-    /**
-     * @param selHashID
-     *            the selHashID to set
-     */
-    public void setSelHashID(String selHashID) {
-        this.selHashID = selHashID;
     }
 
     /**
@@ -430,35 +384,41 @@ public class Annonce extends AbstractEntity implements Serializable {
         this.images = images;
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#hashCode()
-     */
     @Override
-    public int hashCode() {
-        return Objects.hashCode(Objects.hash(this.description, this.categorieMetier, this.sousCategorieMetier,
-                this.dateCreation));
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Annonce annonce = (Annonce) o;
+        return Objects.equals(id, annonce.id) &&
+                Objects.equals(description, annonce.description) &&
+                Objects.equals(dateCreation, annonce.dateCreation) &&
+                Objects.equals(dateMAJ, annonce.dateMAJ) &&
+                Objects.equals(nbConsultation, annonce.nbConsultation) &&
+                Objects.equals(etatAnnonce, annonce.etatAnnonce) &&
+                Objects.equals(hashID, annonce.hashID) &&
+                Objects.equals(selHashID, annonce.selHashID);
     }
 
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#equals(java.lang.Object)
-     */
     @Override
-    public boolean equals(Object object) {
-        if (this == object) {
-            return true;
-        }
+    public int hashCode() {
+        return Objects.hash(id, description, dateCreation, dateMAJ, nbConsultation, etatAnnonce, hashID, selHashID);
+    }
 
-        if (object instanceof Annonce) {
-            Annonce other = (Annonce) object;
-            return Objects.equals(this.description, other.description)
-                    && Objects.equals(this.categorieMetier, other.categorieMetier)
-                    && Objects.equals(this.sousCategorieMetier, other.sousCategorieMetier)
-                    && Objects.equals(this.dateCreation, other.dateCreation);
-        }
-        return false;
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Annonce{");
+        sb.append("id=").append(id);
+        sb.append(", description='").append(description).append('\'');
+        sb.append(", typeContact=").append(typeContact);
+        sb.append(", delaiIntervention=").append(delaiIntervention);
+        sb.append(", dateCreation=").append(dateCreation);
+        sb.append(", dateMAJ=").append(dateMAJ);
+        sb.append(", nbConsultation=").append(nbConsultation);
+        sb.append(", etatAnnonce=").append(etatAnnonce);
+        sb.append(", hashID='").append(hashID).append('\'');
+        sb.append(", selHashID='").append(selHashID).append('\'');
+        sb.append(", typeTravaux=").append(typeTravaux);
+        sb.append('}');
+        return sb.toString();
     }
 }

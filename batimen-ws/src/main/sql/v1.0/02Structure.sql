@@ -16,8 +16,6 @@ CREATE TABLE Annonce (
   description                VARCHAR(500) NOT NULL,
   etatAnnonce                INT4         NOT NULL,
   typeTravaux                INT4         NOT NULL,
-  categorieMetier            INT2         NOT NULL,
-  sousCategorieMetier        VARCHAR(40)  NOT NULL,
   nbConsultation             INT4         NOT NULL,
   typeContact                INT4         NOT NULL,
   hashID                     VARCHAR(255),
@@ -48,7 +46,15 @@ CREATE TABLE Artisan (
 CREATE TABLE CategorieMetier (
   id              BIGSERIAL NOT NULL,
   categorieMetier INT2      NOT NULL,
-  entreprise_fk   INT8,
+  entreprise_fk INT8,
+  PRIMARY KEY (id)
+);
+
+CREATE TABLE MotCle (
+  id           BIGSERIAL NOT NULL,
+  motCle       VARCHAR(25),
+  annonce_fk   INT8,
+  categorie_fk INT8,
   PRIMARY KEY (id)
 );
 
@@ -161,6 +167,16 @@ ALTER TABLE CategorieMetier
 ADD CONSTRAINT categorie_metier_entreprise
 FOREIGN KEY (entreprise_fk)
 REFERENCES Entreprise;
+
+ALTER TABLE MotCle
+ADD CONSTRAINT mot_cle_annonce
+FOREIGN KEY (annonce_fk)
+REFERENCES Annonce ON DELETE CASCADE;
+
+ALTER TABLE MotCle
+ADD CONSTRAINT mot_cle_categorie
+FOREIGN KEY (categorie_fk)
+REFERENCES CategorieMetier ON DELETE CASCADE;
 
 ALTER TABLE Entreprise
 ADD CONSTRAINT entreprise_adresse

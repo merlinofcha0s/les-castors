@@ -132,7 +132,7 @@ public class ModifierAnnonce extends MasterPage {
         mapper.map(annonceAffichageDTO.getAnnonce(), creationAnnonceDTO);
 
         CategorieMetierDTO categorieMetierDTO = CategorieLoader.getCategorieByCode(annonceAffichageDTO.getAnnonce().getCategorieMetier());
-        creationAnnonceDTO.setCategorieMetier(categorieMetierDTO);
+        //creationAnnonceDTO.setCategorieMetier(categorieMetierDTO);
 
         sousCategorieMetierDTOList = categorieMetierDTO.getSousCategories();
 
@@ -141,7 +141,7 @@ public class ModifierAnnonce extends MasterPage {
                 sousCategorieMetierDTO = new SousCategorieMetierDTO(annonceAffichageDTO.getAnnonce().getSousCategorieMetier());
             }
         }
-        propertyModelModificationAnnonce = new CompoundPropertyModel<CreationAnnonceDTO>(creationAnnonceDTO);
+        propertyModelModificationAnnonce = new CompoundPropertyModel<>(creationAnnonceDTO);
     }
 
     @Override

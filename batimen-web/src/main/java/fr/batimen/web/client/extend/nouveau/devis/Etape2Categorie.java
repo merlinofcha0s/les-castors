@@ -1,13 +1,15 @@
 package fr.batimen.web.client.extend.nouveau.devis;
 
 import fr.batimen.dto.CategorieDTO;
-import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.helper.CategorieService;
 import fr.batimen.web.app.constants.Etape;
+import fr.batimen.web.app.constants.FeedbackMessageLevel;
 import fr.batimen.web.client.behaviour.AjaxMotCleBehaviour;
+import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.batimen.web.client.event.MotCleEvent;
 import fr.batimen.web.client.extend.nouveau.communs.JSCommun;
 import fr.batimen.web.client.extend.nouveau.devis.event.CategorieEvent;
+import fr.batimen.web.client.master.MasterPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.event.Broadcast;
@@ -56,6 +58,7 @@ public class Etape2Categorie extends Panel {
         motClesToString = categorieService.getAllCategories().stream().map(c -> c.getMotCle()).collect(Collectors.toList());
 
         motCleCategorie = new TextField<>("motCleField", new Model<>());
+        motCleCategorie.add(new RequiredBorderBehaviour());
         motCleCategorie.setOutputMarkupId(true);
         motCleCategorie.setMarkupId("motCleField");
 
@@ -79,16 +82,31 @@ public class Etape2Categorie extends Panel {
         etapePrecedente2.setOutputMarkupId(true);
         etapePrecedente2.setMarkupId("etapePrecedente2");
 
-        add(motCleForm, etapePrecedente2);
+        AjaxLink<Void> etapeSuivante = new AjaxLink<Void>("etapeSuivante") {
+
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+
+                if (categoriesSelectionnees.isEmpty()) {
+                    MasterPage.triggerEventFeedBackPanel(target, "Veuillez selectionner au moins un mot clé", FeedbackMessageLevel.ERROR);
+                } else {
+                    // On crée l'event qui sera envoyé à la page de nouveau devis
+                    CategorieEvent categorieEvent = new CategorieEvent(target, categoriesSelectionnees);
+                    // On trigger l'event
+                    target.getPage().send(target.getPage(), Broadcast.BREADTH, categorieEvent);
+                }
+
+            }
+        };
+
+        etapeSuivante.setOutputMarkupId(true);
+        etapeSuivante.setMarkupId("etapeSuivante");
+
+        add(motCleForm, etapePrecedente2, etapeSuivante);
 
         initCategoriesChoisie();
-    }
-
-    private void createAndTriggerEvent(AjaxRequestTarget target, CategorieMetierDTO categorieMetier) {
-        // On crée l'event qui sera envoyé à la page de nouveau devis
-        CategorieEvent categorieEvent = new CategorieEvent(target, categorieMetier);
-        // On trigger l'event
-        target.getPage().send(target.getPage(), Broadcast.BREADTH, categorieEvent);
     }
 
     private void initCategoriesChoisie() {

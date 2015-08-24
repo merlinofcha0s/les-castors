@@ -18,7 +18,6 @@ import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.web.client.event.ModificationAnnonceEvent;
 import fr.batimen.web.client.extend.connected.Annonce;
 import fr.batimen.web.client.extend.nouveau.communs.JSCommun;
-import fr.batimen.web.client.extend.nouveau.devis.event.CategorieEvent;
 import fr.batimen.web.client.extend.nouveau.devis.event.ChangementEtapeClientEvent;
 import fr.batimen.web.client.validator.TelephonePresentValidator;
 import fr.batimen.web.client.validator.VilleValidator;
@@ -26,7 +25,6 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.event.Broadcast;
-import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.ComponentTag;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
@@ -65,7 +63,6 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
     private final CreationAnnonceDTO nouvelleAnnonce;
 
     private FileFieldValidatorAndLoaderBehaviour fileFieldValidatorBehaviour;
-    private DropDownChoice<SousCategorieMetierDTO> sousCategorieSelect;
     private String idAnnonce;
     private String initVilleTypeAhead;
 
@@ -90,8 +87,8 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
     public Etape3AnnonceForm(final String id, IModel<CreationAnnonceDTO> model, List<SousCategorieMetierDTO> sousCategorieMetierDTOList, SousCategorieMetierDTO sousCategorieChoisie) {
         this(id, model);
         forModification = true;
-        sousCategorieSelect.setChoices(sousCategorieMetierDTOList);
-        sousCategorieSelect.setModelObject(sousCategorieChoisie);
+        //sousCategorieSelect.setChoices(sousCategorieMetierDTOList);
+        //sousCategorieSelect.setModelObject(sousCategorieChoisie);
     }
 
     /**
@@ -110,27 +107,6 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
         setMarkupId("formEtape3");
 
         nouvelleAnnonce = model.getObject();
-
-        sousCategorieSelect = new DropDownChoice<SousCategorieMetierDTO>(
-                "sousCategorie") {
-
-            private static final long serialVersionUID = -4258418495065575690L;
-
-            @Override
-            public void onEvent(IEvent<?> event) {
-                if (event.getPayload() instanceof CategorieEvent) {
-                    CategorieEvent eventCategorie = (CategorieEvent) event.getPayload();
-                    // On maj la liste des sous categorie quand on passe dans //
-                    // l'etape 3
-                    this.setChoices(eventCategorie.getCategorieChoisie().getSousCategories());
-                    eventCategorie.getTarget().add(this);
-                }
-            }
-        };
-        sousCategorieSelect.setMarkupId("sousCategorieSelect");
-        sousCategorieSelect.setRequired(true);
-        sousCategorieSelect.add(new RequiredBorderBehaviour());
-        sousCategorieSelect.add(new ErrorHighlightBehavior());
 
         TextArea<String> descriptionDevisField = new TextArea<String>("description");
         descriptionDevisField.setRequired(true);
@@ -259,15 +235,6 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
                 }
             }
 
-            /*
-             * (non-Javadoc)
-             *target.add(getForm());
-                this.send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target));
-             * @see
-             * org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink#onError
-             * (org.apache.wicket.ajax.AjaxRequestTarget,
-             * org.apache.wicket.markup.html.form.Form)
-             */
             @Override
             protected void onError(AjaxRequestTarget target, Form<?> form) {
                 target.add(getForm());
@@ -296,7 +263,7 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
         etapePrecedente3.setOutputMarkupId(true);
         etapePrecedente3.setMarkupId("etapePrecedente3");
 
-        this.add(sousCategorieSelect, descriptionDevisField, typeContactField, delaiInterventionField,
+        this.add(descriptionDevisField, typeContactField, delaiInterventionField,
                 adresseField, adresseComplementField, codePostalField, villeField, validateQualification, typeTravaux,
                 etapePrecedente3, containerPhoto);
     }
@@ -318,6 +285,6 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
     }
 
     public void setSousCategorieChoices(List<SousCategorieMetierDTO> sousCategorieMetierDTOList) {
-        sousCategorieSelect.setChoices(sousCategorieMetierDTOList);
+        //sousCategorieSelect.setChoices(sousCategorieMetierDTOList);
     }
 }

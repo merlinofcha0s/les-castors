@@ -250,7 +250,7 @@ public class NouveauDevis extends MasterPage {
 
         ContactezNous contactezNousComposant = new ContactezNous("contactezNous");
 
-        containerGeneral.add(/*carteFrance*/etape1, etape2Categorie, containerQualification, containerInscription,
+        containerGeneral.add(etape1, etape2Categorie, containerQualification, containerInscription,
                 containerConfirmation, navigationWizard);
 
         add(containerGeneral, contactezNousComposant);
@@ -330,7 +330,7 @@ public class NouveauDevis extends MasterPage {
             case 3:
                 loggerChangementEtape("Passage dans l'étape 3");
                 etapeEncours = Etape.ETAPE_3;
-                etape3AnnonceForm.setSousCategorieChoices(nouvelleAnnonce.getCategorieMetier().getSousCategories());
+                //etape3AnnonceForm.setSousCategorieChoices(nouvelleAnnonce.getCategorieMetier().getSousCategories());
                 break;
             case 4:
                 loggerChangementEtape("Passage dans l'étape 4");
@@ -399,7 +399,7 @@ public class NouveauDevis extends MasterPage {
         if (event.getPayload() instanceof CategorieEvent) {
             CategorieEvent eventCategorie = (CategorieEvent) event.getPayload();
             // On recupere la catégorie métier
-            nouvelleAnnonce.setCategorieMetier(eventCategorie.getCategorieChoisie());
+            nouvelleAnnonce.setCategoriesMetier(eventCategorie.getCategoriesChoisies());
             // On set la prochaine etape
             nouvelleAnnonce.setNumeroEtape(3);
 

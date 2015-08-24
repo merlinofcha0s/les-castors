@@ -1,7 +1,7 @@
 package fr.batimen.dto.aggregate;
 
 import fr.batimen.dto.AbstractDTO;
-import fr.batimen.dto.CategorieMetierDTO;
+import fr.batimen.dto.CategorieDTO;
 import fr.batimen.dto.ClientDTO;
 import fr.batimen.dto.SousCategorieMetierDTO;
 import fr.batimen.dto.enums.DelaiIntervention;
@@ -30,7 +30,7 @@ public class CreationAnnonceDTO extends AbstractDTO {
     // Annonce
     @Valid
     @NotNull
-    private CategorieMetierDTO categorieMetier;
+    private List<CategorieDTO> categoriesMetier;
     @Valid
     @NotNull
     private SousCategorieMetierDTO sousCategorie;
@@ -192,23 +192,6 @@ public class CreationAnnonceDTO extends AbstractDTO {
     }
 
     /**
-     * @return the categorieMetier
-     */
-
-    public CategorieMetierDTO getCategorieMetier() {
-        return categorieMetier;
-    }
-
-    /**
-     * @param categorieMetier
-     *            the categorieMetier to set
-     */
-
-    public void setCategorieMetier(CategorieMetierDTO categorieMetier) {
-        this.categorieMetier = categorieMetier;
-    }
-
-    /**
      * @return the sousCategorie
      */
 
@@ -245,11 +228,20 @@ public class CreationAnnonceDTO extends AbstractDTO {
         return villesPossbles;
     }
 
+
+    public List<CategorieDTO> getCategoriesMetier() {
+        return categoriesMetier;
+    }
+
+    public void setCategoriesMetier(List<CategorieDTO> categoriesMetier) {
+        this.categoriesMetier = categoriesMetier;
+    }
+
     /*
-             * (non-Javadoc)
-             *
-             * @see java.lang.Object#hashCode()
-             */
+                 * (non-Javadoc)
+                 *
+                 * @see java.lang.Object#hashCode()
+                 */
     @Override
     public int hashCode() {
         return Objects.hashCode(Objects.hash(this.description, this.codePostal, this.ville));
@@ -277,7 +269,7 @@ public class CreationAnnonceDTO extends AbstractDTO {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("CreationAnnonceDTO{");
-        sb.append("categorieMetier=").append(categorieMetier);
+        sb.append("categoriesMetier=").append(categoriesMetier);
         sb.append(", sousCategorie=").append(sousCategorie);
         sb.append(", description='").append(description).append('\'');
         sb.append(", typeContact=").append(typeContact);

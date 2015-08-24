@@ -1,40 +1,27 @@
 package fr.batimen.ws.service;
 
-import java.util.*;
-
-import javax.ejb.*;
-import javax.inject.Inject;
-
-import fr.batimen.dto.helper.DeserializeJsonHelper;
-import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.exception.BackendException;
 import fr.batimen.core.exception.DuplicateEntityException;
 import fr.batimen.core.security.HashHelper;
-import fr.batimen.dto.AdresseDTO;
-import fr.batimen.dto.AnnonceDTO;
-import fr.batimen.dto.ClientDTO;
-import fr.batimen.dto.DemandeAnnonceDTO;
-import fr.batimen.dto.EntrepriseDTO;
-import fr.batimen.dto.ImageDTO;
-import fr.batimen.dto.PermissionDTO;
+import fr.batimen.dto.*;
 import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
+import fr.batimen.dto.helper.DeserializeJsonHelper;
 import fr.batimen.ws.dao.AdresseDAO;
 import fr.batimen.ws.dao.AnnonceDAO;
 import fr.batimen.ws.dao.ClientDAO;
 import fr.batimen.ws.dao.PermissionDAO;
-import fr.batimen.ws.entity.Adresse;
-import fr.batimen.ws.entity.Annonce;
-import fr.batimen.ws.entity.Artisan;
-import fr.batimen.ws.entity.Client;
-import fr.batimen.ws.entity.Image;
-import fr.batimen.ws.entity.Permission;
+import fr.batimen.ws.entity.*;
 import fr.batimen.ws.enums.PropertiesFileWS;
+import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.ejb.*;
+import javax.inject.Inject;
+import java.util.*;
 
 /**
  * Classe de gestion des annonces
@@ -48,20 +35,15 @@ import fr.batimen.ws.enums.PropertiesFileWS;
 public class AnnonceService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AnnonceService.class);
-
+    private final ModelMapper mapper = new ModelMapper();
     @Inject
     private AdresseDAO adresseDAO;
-
     @Inject
     private ClientDAO clientDAO;
-
     @Inject
     private PermissionDAO permissionDAO;
-
     @Inject
     private AnnonceDAO annonceDAO;
-
-    private final ModelMapper mapper = new ModelMapper();
 
     /**
      * Crée une entité annonce a partir d'une DTO CreationAnnonce.
@@ -91,8 +73,9 @@ public class AnnonceService {
         nouvelleAnnonce.setDelaiIntervention(nouvelleAnnonceDTO.getDelaiIntervention());
         nouvelleAnnonce.setDescription(nouvelleAnnonceDTO.getDescription());
 
-        nouvelleAnnonce.setCategorieMetier(nouvelleAnnonceDTO.getCategorieMetier().getCodeCategorieMetier());
-        nouvelleAnnonce.setSousCategorieMetier(nouvelleAnnonceDTO.getSousCategorie().getName());
+
+        //nouvelleAnnonce.setCategorieMetier(nouvelleAnnonceDTO.getCategorieMetier().getCodeCategorieMetier());
+        //nouvelleAnnonce.setSousCategorieMetier(nouvelleAnnonceDTO.getSousCategorie().getName());
         nouvelleAnnonce.setNbConsultation(0);
         nouvelleAnnonce.setTypeContact(nouvelleAnnonceDTO.getTypeContact());
         nouvelleAnnonce.setTypeTravaux(nouvelleAnnonceDTO.getTypeTravaux());

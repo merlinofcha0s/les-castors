@@ -36,7 +36,8 @@ public class DataHelper {
 
         creationAnnonceDTO.setDelaiIntervention(DelaiIntervention.LE_PLUS_RAPIDEMENT_POSSIBLE);
         creationAnnonceDTO.setDepartement(06);
-        creationAnnonceDTO.setCategorieMetier(CategorieLoader.getCategorieElectricite());
+        //TODO : pas oublier de corriger ca !!!!
+        //creationAnnonceDTO.setCategorieMetier(CategorieLoader.getCategorieElectricite());
         creationAnnonceDTO.setSousCategorie(CategorieLoader.getCategorieElectricite().getSousCategories().get(0));
         creationAnnonceDTO.setTypeContact(TypeContact.EMAIL);
         creationAnnonceDTO.setVille("Nice");

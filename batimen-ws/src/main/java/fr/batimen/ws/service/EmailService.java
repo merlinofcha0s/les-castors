@@ -7,7 +7,6 @@ import fr.batimen.core.constant.EmailConstant;
 import fr.batimen.core.exception.EmailException;
 import fr.batimen.dto.ContactMailDTO;
 import fr.batimen.dto.enums.TypeCompte;
-import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.ws.dao.EmailDAO;
 import fr.batimen.ws.entity.Annonce;
 import fr.batimen.ws.entity.Notification;
@@ -63,9 +62,9 @@ public class EmailService {
         // On charge le contenu
         Map<String, String> templateContent = new HashMap<String, String>();
         templateContent.put(EmailConstant.TAG_EMAIL_USERNAME, nouvelleAnnonce.getDemandeur().getLogin());
-        templateContent.put(EmailConstant.TAG_EMAIL_METIER,
-                CategorieLoader.getCategorieByCode(nouvelleAnnonce.getCategorieMetier()).getName());
-        templateContent.put(EmailConstant.TAG_EMAIL_SOUS_CATEGORIE_METIER, nouvelleAnnonce.getSousCategorieMetier());
+        //templateContent.put(EmailConstant.TAG_EMAIL_METIER,
+        //      CategorieLoader.getCategorieByCode(nouvelleAnnonce.getCategorieMetier()).getName());
+        //templateContent.put(EmailConstant.TAG_EMAIL_SOUS_CATEGORIE_METIER, nouvelleAnnonce.getSousCategorieMetier());
         templateContent.put(EmailConstant.TAG_EMAIL_DELAI_INTERVENTION, nouvelleAnnonce.getDelaiIntervention()
                 .getText());
         templateContent.put(EmailConstant.TAG_EMAIL_TYPE_CONTACT, nouvelleAnnonce.getTypeContact().getAffichage());

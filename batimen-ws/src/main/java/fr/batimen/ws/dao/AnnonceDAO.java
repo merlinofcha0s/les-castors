@@ -516,9 +516,10 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
         //Clause pour la date
         Predicate predicates = criteriaBuilderSearch.between(searchAnnonceRoot.get(Annonce_.dateCreation), aPartirDu, new Date());
 
+        //TODO : Pas oublier de corriger ca !!!!!
         //Predicat pour les catégories
-        Expression<Short> categorieExpression = searchAnnonceRoot.get(Annonce_.categorieMetier);
-        Predicate categoriePredicate = categorieExpression.in(categoriesMetier);
+        /*Expression<Short> categorieExpression = searchAnnonceRoot.get(Annonce_.categorieMetier);
+        Predicate categoriePredicate = categorieExpression.in(categoriesMetier);*/
 
         //Predicat pour l'etat de l'annonce
         Expression<EtatAnnonce> etatAnnonceExpression = searchAnnonceRoot.get(Annonce_.etatAnnonce);
@@ -529,7 +530,7 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
         Predicate departementPredicate = criteriaBuilderSearch.and(criteriaBuilderSearch.equal(adresseJoin.get(Adresse_.departement), departement));
 
         //Fusion des predicats avec des "ET"
-        predicates = criteriaBuilderSearch.and(predicates, categoriePredicate, etatAnnoncePredicate, departementPredicate);
+        predicates = criteriaBuilderSearch.and(predicates, etatAnnoncePredicate, departementPredicate);
 
         return predicates;
     }
