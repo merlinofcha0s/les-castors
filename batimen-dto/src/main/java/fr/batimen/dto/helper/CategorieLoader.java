@@ -20,6 +20,7 @@ public class CategorieLoader {
     public static final Short ESPACE_VERT_CODE = 2;
     public static final Short DECORATION_MACONNERIE_CODE = 3;
     public static final Short MENUISERIE_CODE = 4;
+
     private static CategorieMetierDTO electricite;
     private static CategorieMetierDTO plomberie;
     private static CategorieMetierDTO espaceVert;

@@ -2,6 +2,7 @@ package fr.batimen.ws.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -23,11 +24,11 @@ public class MotCle implements Serializable {
     @JoinColumn(name = "annonce_fk")
     private Annonce annonce;
 
-    @OneToMany(mappedBy = "annonce",
+    @OneToMany(mappedBy = "motCle",
             targetEntity = CategorieMetier.class,
             cascade = CascadeType.REMOVE,
             fetch = FetchType.LAZY)
-    private Set<CategorieMetier> categoriesMetier;
+    private Set<CategorieMetier> categoriesMetier = new HashSet<>();
 
     public Long getId() {
         return id;

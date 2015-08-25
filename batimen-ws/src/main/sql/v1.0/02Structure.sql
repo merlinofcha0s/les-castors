@@ -47,6 +47,7 @@ CREATE TABLE CategorieMetier (
   id              BIGSERIAL NOT NULL,
   categorieMetier INT2      NOT NULL,
   entreprise_fk INT8,
+  motcle_fk INT8 NULL,
   PRIMARY KEY (id)
 );
 
@@ -54,7 +55,6 @@ CREATE TABLE MotCle (
   id           BIGSERIAL NOT NULL,
   motCle       VARCHAR(25),
   annonce_fk   INT8,
-  categorie_fk INT8,
   PRIMARY KEY (id)
 );
 
@@ -168,15 +168,15 @@ ADD CONSTRAINT categorie_metier_entreprise
 FOREIGN KEY (entreprise_fk)
 REFERENCES Entreprise;
 
+ALTER TABLE CategorieMetier
+ADD CONSTRAINT categorie_metier_motcle
+FOREIGN KEY (motcle_fk)
+REFERENCES MotCle;
+
 ALTER TABLE MotCle
 ADD CONSTRAINT mot_cle_annonce
 FOREIGN KEY (annonce_fk)
 REFERENCES Annonce ON DELETE CASCADE;
-
-ALTER TABLE MotCle
-ADD CONSTRAINT mot_cle_categorie
-FOREIGN KEY (categorie_fk)
-REFERENCES CategorieMetier ON DELETE CASCADE;
 
 ALTER TABLE Entreprise
 ADD CONSTRAINT entreprise_adresse

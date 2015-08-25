@@ -3,7 +3,6 @@ package fr.batimen.dto.aggregate;
 import fr.batimen.dto.AbstractDTO;
 import fr.batimen.dto.CategorieDTO;
 import fr.batimen.dto.ClientDTO;
-import fr.batimen.dto.SousCategorieMetierDTO;
 import fr.batimen.dto.enums.DelaiIntervention;
 import fr.batimen.dto.enums.TypeContact;
 import fr.batimen.dto.enums.TypeTravaux;
@@ -30,10 +29,7 @@ public class CreationAnnonceDTO extends AbstractDTO {
     // Annonce
     @Valid
     @NotNull
-    private List<CategorieDTO> categoriesMetier;
-    @Valid
-    @NotNull
-    private SousCategorieMetierDTO sousCategorie;
+    private List<CategorieDTO> categoriesMetier = new ArrayList<>();
     @NotNull
     @Size(min = ANNONCE_DESCRIPTION_MIN, max = ANNONCE_DESCRIPTION_MAX)
     private String description;
@@ -192,24 +188,6 @@ public class CreationAnnonceDTO extends AbstractDTO {
     }
 
     /**
-     * @return the sousCategorie
-     */
-
-    public SousCategorieMetierDTO getSousCategorie() {
-        return sousCategorie;
-    }
-
-    /**
-     *
-     * @param sousCategorie
-     *            the sousCategorie to set
-     */
-
-    public void setSousCategorie(SousCategorieMetierDTO sousCategorie) {
-        this.sousCategorie = sousCategorie;
-    }
-
-    /**
      * @return the typeTravaux
      */
     public TypeTravaux getTypeTravaux() {
@@ -270,7 +248,6 @@ public class CreationAnnonceDTO extends AbstractDTO {
     public String toString() {
         final StringBuilder sb = new StringBuilder("CreationAnnonceDTO{");
         sb.append("categoriesMetier=").append(categoriesMetier);
-        sb.append(", sousCategorie=").append(sousCategorie);
         sb.append(", description='").append(description).append('\'');
         sb.append(", typeContact=").append(typeContact);
         sb.append(", delaiIntervention=").append(delaiIntervention);

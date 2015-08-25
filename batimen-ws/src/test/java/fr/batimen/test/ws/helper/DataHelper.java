@@ -1,13 +1,14 @@
 package fr.batimen.test.ws.helper;
 
+import fr.batimen.dto.CategorieDTO;
 import fr.batimen.dto.ContactMailDTO;
 import fr.batimen.dto.PermissionDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
+import fr.batimen.dto.constant.Categorie;
 import fr.batimen.dto.enums.DelaiIntervention;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.enums.TypeContact;
 import fr.batimen.dto.enums.TypeTravaux;
-import fr.batimen.dto.helper.CategorieLoader;
 
 public class DataHelper {
 
@@ -36,15 +37,16 @@ public class DataHelper {
 
         creationAnnonceDTO.setDelaiIntervention(DelaiIntervention.LE_PLUS_RAPIDEMENT_POSSIBLE);
         creationAnnonceDTO.setDepartement(06);
-        //TODO : pas oublier de corriger ca !!!!
-        //creationAnnonceDTO.setCategorieMetier(CategorieLoader.getCategorieElectricite());
-        creationAnnonceDTO.setSousCategorie(CategorieLoader.getCategorieElectricite().getSousCategories().get(0));
         creationAnnonceDTO.setTypeContact(TypeContact.EMAIL);
         creationAnnonceDTO.setVille("Nice");
         creationAnnonceDTO.setTypeTravaux(TypeTravaux.NEUF);
 
-        return creationAnnonceDTO;
+        CategorieDTO categorieDTO = new CategorieDTO();
+        categorieDTO.setMotCle("Salles de bains");
+        categorieDTO.getCategories().add(Categorie.ELECTRICITE_CODE);
+        creationAnnonceDTO.getCategoriesMetier().add(categorieDTO);
 
+        return creationAnnonceDTO;
     }
 
     /**

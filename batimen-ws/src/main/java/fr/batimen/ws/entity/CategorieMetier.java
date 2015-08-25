@@ -28,6 +28,10 @@ public class CategorieMetier implements Serializable {
     @JoinColumn(name = "entreprise_fk")
     private Entreprise entreprise;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "motcle_fk")
+    private MotCle motCle;
+
     /**
      * @return the categorieMetier
      */
@@ -56,6 +60,14 @@ public class CategorieMetier implements Serializable {
      */
     public void setEntreprise(Entreprise entreprise) {
         this.entreprise = entreprise;
+    }
+
+    public MotCle getMotCle() {
+        return motCle;
+    }
+
+    public void setMotCle(MotCle motCle) {
+        this.motCle = motCle;
     }
 
     public Long getId() {

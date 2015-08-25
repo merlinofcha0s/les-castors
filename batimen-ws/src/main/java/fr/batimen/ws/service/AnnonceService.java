@@ -9,10 +9,7 @@ import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
-import fr.batimen.ws.dao.AdresseDAO;
-import fr.batimen.ws.dao.AnnonceDAO;
-import fr.batimen.ws.dao.ClientDAO;
-import fr.batimen.ws.dao.PermissionDAO;
+import fr.batimen.ws.dao.*;
 import fr.batimen.ws.entity.*;
 import fr.batimen.ws.enums.PropertiesFileWS;
 import org.modelmapper.ModelMapper;
@@ -44,6 +41,10 @@ public class AnnonceService {
     private PermissionDAO permissionDAO;
     @Inject
     private AnnonceDAO annonceDAO;
+    @Inject
+    private CategorieMetierDAO categorieMetierDAO;
+    @Inject
+    private MotCleDAO motCleDAO;
 
     /**
      * Crée une entité annonce a partir d'une DTO CreationAnnonce.
@@ -67,15 +68,27 @@ public class AnnonceService {
             isNotSignedUp(nouvelleAnnonceDTO, nouvelleAnnonce);
         }
 
+        nouvelleAnnonceDTO.getCategoriesMetier().forEach(categorieDTO -> {
+            MotCle motCle = new MotCle();
+            motCle.setMotCle(categorieDTO.getMotCle());
+
+            categorieDTO.getCategories().forEach(categorie -> {
+                CategorieMetier categorieMetier = new CategorieMetier();
+                categorieMetier.setCategorieMetier(categorieMetier.getCategorieMetier());
+                categorieMetier.setMotCle(motCle);
+                categorieMetierDAO.persistCategorieMetier(categorieMetier);
+                motCle.getCategoriesMetier().add(categorieMetier);
+            });
+
+            motCleDAO.persistMotCle(motCle);
+            nouvelleAnnonce.getMotcles().add(motCle);
+        });
+
         // On rempli l'entité annonce grace à la DTO
         nouvelleAnnonce.setDateCreation(new Date());
         nouvelleAnnonce.setDateMAJ(new Date());
         nouvelleAnnonce.setDelaiIntervention(nouvelleAnnonceDTO.getDelaiIntervention());
         nouvelleAnnonce.setDescription(nouvelleAnnonceDTO.getDescription());
-
-
-        //nouvelleAnnonce.setCategorieMetier(nouvelleAnnonceDTO.getCategorieMetier().getCodeCategorieMetier());
-        //nouvelleAnnonce.setSousCategorieMetier(nouvelleAnnonceDTO.getSousCategorie().getName());
         nouvelleAnnonce.setNbConsultation(0);
         nouvelleAnnonce.setTypeContact(nouvelleAnnonceDTO.getTypeContact());
         nouvelleAnnonce.setTypeTravaux(nouvelleAnnonceDTO.getTypeTravaux());
