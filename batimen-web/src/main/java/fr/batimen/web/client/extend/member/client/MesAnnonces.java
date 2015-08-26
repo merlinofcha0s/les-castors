@@ -5,7 +5,6 @@ import fr.batimen.dto.DemandeMesAnnoncesDTO;
 import fr.batimen.dto.NotificationDTO;
 import fr.batimen.dto.aggregate.MesAnnoncesDTO;
 import fr.batimen.dto.enums.TypeCompte;
-import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.web.app.constants.FeedbackMessageLevel;
 import fr.batimen.web.app.constants.ParamsConstant;
 import fr.batimen.web.app.security.Authentication;
@@ -195,14 +194,14 @@ public final class MesAnnonces extends MasterPage {
                     descriptionCutting.append(annonce.getDescription());
                 }
 
-                WebMarkupContainer iconCategorie = new WebMarkupContainer("iconCategorie");
-                StringBuilder classCssIcon = new StringBuilder("iconsMesDevis");
-                classCssIcon.append(" ").append(CategorieLoader.getIconForCategorie(annonce.getCategorieMetier()));
+                //WebMarkupContainer iconCategorie = new WebMarkupContainer("iconCategorie");
+                //StringBuilder classCssIcon = new StringBuilder("iconsMesDevis");
+                //classCssIcon.append(" ").append(CategorieLoader.getIcon(annonce.getCategorieMetier()));
 
-                iconCategorie.add(new AttributeModifier("class", classCssIcon.toString()));
+                //iconCategorie.add(new AttributeModifier("class", classCssIcon.toString()));
 
-                Label categorie = new Label("categorie", CategorieLoader.getCategorieByCode(annonce
-                        .getCategorieMetier()));
+                /*Label categorie = new Label("categorie", CategorieLoader.getCategorieByCode(annonce
+                        .getCategorieMetier()));*/
                 Label description = new Label("description", descriptionCutting.toString());
 
                 WebMarkupContainer progressBar = new WebMarkupContainer("progressBar");
@@ -241,7 +240,7 @@ public final class MesAnnonces extends MasterPage {
                         setResponsePage(Annonce.class, params);
                     }
                 });
-                item.add(iconCategorie, categorie, description, nbDevis, etatAnnonce, voirAnnonce, progressBar);
+                item.add(/*iconCategorie, categorie,*/ description, nbDevis, etatAnnonce, voirAnnonce, progressBar);
             }
         };
 

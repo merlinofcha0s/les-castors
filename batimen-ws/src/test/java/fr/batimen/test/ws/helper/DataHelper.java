@@ -44,6 +44,7 @@ public class DataHelper {
         CategorieDTO categorieDTO = new CategorieDTO();
         categorieDTO.setMotCle("Salles de bains");
         categorieDTO.getCategories().add(Categorie.ELECTRICITE_CODE);
+        categorieDTO.getCategories().add(Categorie.DECORATION_MACONNERIE_CODE);
         creationAnnonceDTO.getCategoriesMetier().add(categorieDTO);
 
         return creationAnnonceDTO;

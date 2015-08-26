@@ -10,6 +10,8 @@ import fr.batimen.dto.constant.Categorie;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.ws.dao.EmailDAO;
 import fr.batimen.ws.entity.Annonce;
+import fr.batimen.ws.entity.CategorieMetier;
+import fr.batimen.ws.entity.MotCle;
 import fr.batimen.ws.entity.Notification;
 import fr.batimen.ws.enums.PropertiesFileWS;
 import fr.batimen.ws.utils.ClientUtils;
@@ -65,11 +67,12 @@ public class EmailService {
 
         Set<String> categorie = new HashSet<>();
 
-        nouvelleAnnonce.getMotcles().forEach(motCle -> {
-            motCle.getCategoriesMetier().forEach(categ -> {
-                categorie.add(Categorie.getNameByCode(categ.getCategorieMetier()));
-            });
-        });
+        for (MotCle motCle : nouvelleAnnonce.getMotcles()) {
+            for (CategorieMetier categorieMetier : motCle.getCategoriesMetier()) {
+                String nomCateg = Categorie.getNameByCode(categorieMetier.getCategorieMetier());
+                categorie.add(nomCateg);
+            }
+        }
 
         String categorieForMail = categorie.stream().collect(Collectors.joining(", "));
 

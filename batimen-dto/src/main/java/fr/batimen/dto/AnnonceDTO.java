@@ -7,7 +7,9 @@ import fr.batimen.dto.enums.TypeTravaux;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 import static fr.batimen.dto.constant.ValidatorConstant.ANNONCE_DESCRIPTION_MAX;
@@ -44,6 +46,8 @@ public class AnnonceDTO extends AbstractDTO {
     @NotNull
     private TypeTravaux typeTravaux;
     private String hashID;
+
+    private List<MotCleDTO> motCles = new ArrayList<>();
 
     // Rempli que pour l'affichage
     private String loginOwner;
@@ -243,11 +247,19 @@ public class AnnonceDTO extends AbstractDTO {
         this.loginOwner = loginOwner;
     }
 
+    public List<MotCleDTO> getMotCles() {
+        return motCles;
+    }
+
+    public void setMotCles(List<MotCleDTO> motCles) {
+        this.motCles = motCles;
+    }
+
     /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#hashCode()
-     */
+         * (non-Javadoc)
+         *
+         * @see java.lang.Object#hashCode()
+         */
     @Override
     public int hashCode() {
         return Objects.hashCode(Objects.hash(this.typeContact, this.delaiIntervention, this.dateCreation, this.hashID,

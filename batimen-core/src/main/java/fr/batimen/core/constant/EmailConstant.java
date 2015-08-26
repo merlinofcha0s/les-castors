@@ -30,8 +30,8 @@ public class EmailConstant {
     // Creation annonce tags Email
     public static final String TAG_EMAIL_USERNAME = "username";
     public static final String TAG_EMAIL_TITRE = "titre";
-    public static final String TAG_EMAIL_MOT_CLE = "metier";
-    public static final String TAG_EMAIL_CATEGORIE_METIER = "souscategoriemetier";
+    public static final String TAG_EMAIL_MOT_CLE = "motcle";
+    public static final String TAG_EMAIL_CATEGORIE_METIER = "categoriemetier";
     public static final String TAG_EMAIL_TYPE_CONTACT = "typecontact";
     public static final String TAG_EMAIL_DELAI_INTERVENTION = "delaiintervention";
     public static final String TAG_EMAIL_ACTIVATION_LINK = "lienactivation";

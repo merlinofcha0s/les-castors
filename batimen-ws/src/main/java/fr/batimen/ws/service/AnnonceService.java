@@ -317,12 +317,11 @@ public class AnnonceService {
             // On crée le nouvel objet
             AnnonceDTO annonceDTO = new AnnonceDTO();
             // On transfert les données d'un objet a l'autre
-            annonceDTO.setCategorieMetier((Short) annonce[0]);
-            annonceDTO.setDescription((String) annonce[1]);
-            annonceDTO.setEtatAnnonce((EtatAnnonce) annonce[2]);
-            Long nbDevis = (Long) annonce[3];
+            annonceDTO.setDescription((String) annonce[0]);
+            annonceDTO.setEtatAnnonce((EtatAnnonce) annonce[1]);
+            Long nbDevis = (Long) annonce[2];
             annonceDTO.setNbDevis(nbDevis);
-            annonceDTO.setHashID(String.valueOf(annonce[4]));
+            annonceDTO.setHashID(String.valueOf(annonce[3]));
 
             // On ajoute à la liste
             annoncesDTO.add(annonceDTO);
@@ -339,7 +338,7 @@ public class AnnonceService {
 
             categorieDTO.getCategories().forEach(categorie -> {
                 CategorieMetier categorieMetier = new CategorieMetier();
-                categorieMetier.setCategorieMetier(categorieMetier.getCategorieMetier());
+                categorieMetier.setCategorieMetier(categorie.shortValue());
                 categorieMetier.setMotCle(motCle);
                 categorieMetierDAO.persistCategorieMetier(categorieMetier);
                 motCle.getCategoriesMetier().add(categorieMetier);

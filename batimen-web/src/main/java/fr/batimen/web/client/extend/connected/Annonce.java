@@ -3,6 +3,7 @@ package fr.batimen.web.client.extend.connected;
 import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.dto.*;
 import fr.batimen.dto.aggregate.*;
+import fr.batimen.dto.constant.Categorie;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.enums.TypeContact;
@@ -307,7 +308,7 @@ public class Annonce extends MasterPage {
 
         StringBuilder classCssIcon = new StringBuilder("glyphAnnonce");
         classCssIcon.append(" ").append(
-                CategorieLoader.getIconForCategorie(annonceAffichageDTO.getAnnonce().getCategorieMetier()));
+                Categorie.getIcon(annonceAffichageDTO.getAnnonce().getCategorieMetier()));
         iconCategorie.add(new AttributeModifier("class", classCssIcon.toString()));
 
         Label categorie = new Label("categorie", CategorieLoader.getCategorieByCode(annonceAffichageDTO.getAnnonce()

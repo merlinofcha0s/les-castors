@@ -34,4 +34,16 @@ public class Categorie {
                 return "";
         }
     }
+
+    public static String getIcon(Short codeCategorieMetier) {
+        if (codeCategorieMetier.equals(ELECTRICITE_CODE)) {
+            return "icon-Lightning";
+        } else if (codeCategorieMetier.equals(PLOMBERIE_CODE)) {
+            return "icons8-plumbing";
+        } else if (codeCategorieMetier.equals(ESPACE_VERT_CODE)) {
+            return "icons8-garden-shears";
+        } else {
+            return "icon-Tool";
+        }
+    }
 }
