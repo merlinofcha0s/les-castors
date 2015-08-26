@@ -120,6 +120,7 @@ public class GestionAnnonceFacade {
             annonceDAO.saveAnnonceFirstTime(nouvelleAnnonce);
             annonceService.remplirSelAndHash(nouvelleAnnonce);
             annonceDAO.update(nouvelleAnnonce);
+            annonceService.remplirMotCle(nouvelleAnnonce, nouvelleAnnonceDTO);
         } catch (BackendException | DuplicateEntityException e) {
             if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("Erreur lors de l'enregistrement de l'annonce", e);

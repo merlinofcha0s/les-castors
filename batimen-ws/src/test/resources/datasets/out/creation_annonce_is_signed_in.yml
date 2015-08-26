@@ -3,8 +3,6 @@ annonce:
     delaiintervention: 0
     description: Peinture d'un mur
     etatannonce: 0
-    categoriemetier: 0
-    souscategoriemetier: Tableaux électriques
     nbconsultation: 0
     typeTravaux: 0
     typecontact: 0
@@ -24,3 +22,7 @@ client:
     isactive: true
 permission:
   - typecompte: 4
+motcle:
+  - motcle: Salles de bains
+categoriemetier:
+  - categoriemetier: 0

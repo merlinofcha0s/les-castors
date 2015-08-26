@@ -6,6 +6,7 @@ import com.microtripit.mandrillapp.lutung.view.MandrillMessage.MergeVar;
 import fr.batimen.core.constant.EmailConstant;
 import fr.batimen.core.exception.EmailException;
 import fr.batimen.dto.ContactMailDTO;
+import fr.batimen.dto.constant.Categorie;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.ws.dao.EmailDAO;
 import fr.batimen.ws.entity.Annonce;
@@ -20,6 +21,7 @@ import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Classe de gestion d'envoi de mail.
@@ -59,12 +61,23 @@ public class EmailService {
                 nouvelleAnnonce.getDemandeur().getLogin(), nomDestinataire);
         recipients.put(nomDestinataire.toString(), nouvelleAnnonce.getDemandeur().getEmail());
 
+        String motclesForMail = nouvelleAnnonce.getMotcles().stream().map(motCle -> motCle.getMotCle()).collect(Collectors.joining(", "));
+
+        Set<String> categorie = new HashSet<>();
+
+        nouvelleAnnonce.getMotcles().forEach(motCle -> {
+            motCle.getCategoriesMetier().forEach(categ -> {
+                categorie.add(Categorie.getNameByCode(categ.getCategorieMetier()));
+            });
+        });
+
+        String categorieForMail = categorie.stream().collect(Collectors.joining(", "));
+
         // On charge le contenu
-        Map<String, String> templateContent = new HashMap<String, String>();
+        Map<String, String> templateContent = new HashMap<>();
         templateContent.put(EmailConstant.TAG_EMAIL_USERNAME, nouvelleAnnonce.getDemandeur().getLogin());
-        //templateContent.put(EmailConstant.TAG_EMAIL_METIER,
-        //      CategorieLoader.getCategorieByCode(nouvelleAnnonce.getCategorieMetier()).getName());
-        //templateContent.put(EmailConstant.TAG_EMAIL_SOUS_CATEGORIE_METIER, nouvelleAnnonce.getSousCategorieMetier());
+        templateContent.put(EmailConstant.TAG_EMAIL_MOT_CLE, motclesForMail);
+        templateContent.put(EmailConstant.TAG_EMAIL_CATEGORIE_METIER, categorieForMail);
         templateContent.put(EmailConstant.TAG_EMAIL_DELAI_INTERVENTION, nouvelleAnnonce.getDelaiIntervention()
                 .getText());
         templateContent.put(EmailConstant.TAG_EMAIL_TYPE_CONTACT, nouvelleAnnonce.getTypeContact().getAffichage());
@@ -220,7 +233,7 @@ public class EmailService {
 
     /**
      * Suivant le type de notification on rajoute le contenu qui sera remplacé dans l'email template
-     * <p/>
+     * <p>
      * Deux type de tags sont présents ceux qui remplacent une balise via mc:edit (templateContent) et ceux qui remplacent un tag du type *|TOTO|* (mergedVars) dans le template
      *
      * @param notification     La notification qui va etre générée

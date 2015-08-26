@@ -68,22 +68,6 @@ public class AnnonceService {
             isNotSignedUp(nouvelleAnnonceDTO, nouvelleAnnonce);
         }
 
-        nouvelleAnnonceDTO.getCategoriesMetier().forEach(categorieDTO -> {
-            MotCle motCle = new MotCle();
-            motCle.setMotCle(categorieDTO.getMotCle());
-
-            categorieDTO.getCategories().forEach(categorie -> {
-                CategorieMetier categorieMetier = new CategorieMetier();
-                categorieMetier.setCategorieMetier(categorieMetier.getCategorieMetier());
-                categorieMetier.setMotCle(motCle);
-                categorieMetierDAO.persistCategorieMetier(categorieMetier);
-                motCle.getCategoriesMetier().add(categorieMetier);
-            });
-
-            motCleDAO.persistMotCle(motCle);
-            nouvelleAnnonce.getMotcles().add(motCle);
-        });
-
         // On rempli l'entité annonce grace à la DTO
         nouvelleAnnonce.setDateCreation(new Date());
         nouvelleAnnonce.setDateMAJ(new Date());
@@ -345,5 +329,24 @@ public class AnnonceService {
         }
 
         return annoncesDTO;
+    }
+
+    public void remplirMotCle(Annonce nouvelleAnnonce, CreationAnnonceDTO nouvelleAnnonceDTO) {
+        nouvelleAnnonceDTO.getCategoriesMetier().forEach(categorieDTO -> {
+            MotCle motCle = new MotCle();
+            motCle.setMotCle(categorieDTO.getMotCle());
+            motCle.setAnnonce(nouvelleAnnonce);
+
+            categorieDTO.getCategories().forEach(categorie -> {
+                CategorieMetier categorieMetier = new CategorieMetier();
+                categorieMetier.setCategorieMetier(categorieMetier.getCategorieMetier());
+                categorieMetier.setMotCle(motCle);
+                categorieMetierDAO.persistCategorieMetier(categorieMetier);
+                motCle.getCategoriesMetier().add(categorieMetier);
+            });
+
+            motCleDAO.persistMotCle(motCle);
+            nouvelleAnnonce.getMotcles().add(motCle);
+        });
     }
 }

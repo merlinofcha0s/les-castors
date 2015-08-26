@@ -166,7 +166,8 @@ public class ModifierAnnonce extends MasterPage {
 
             //Champs non mappés
             modificationAnnonceDTO.setLoginDemandeur(authentication.getCurrentUserInfo().getLogin());
-            modificationAnnonceDTO.getAnnonce().setSousCategorieMetier(creationAnnonceDTO.getSousCategorie().getName());
+            //TODO ICI
+            //modificationAnnonceDTO.getAnnonce().setSousCategorieMetier(creationAnnonceDTO.getSousCategorie().getName());
             modificationAnnonceDTO.getAnnonce().setDateMAJ(new Date());
             modificationAnnonceDTO.getAnnonce().setEtatAnnonce(annonceAffichageDTO.getAnnonce().getEtatAnnonce());
             modificationAnnonceDTO.getAnnonce().setDateCreation(annonceAffichageDTO.getAnnonce().getDateCreation());
@@ -182,7 +183,6 @@ public class ModifierAnnonce extends MasterPage {
                 params.add(ParamsConstant.ID_ANNONCE_PARAM, idAnnonce);
                 params.add(ParamsConstant.IS_MODIF_PARAM, "OK");
                 this.setResponsePage(Annonce.class, params);
-                //feedBackPanelGeneral.sendMessage("Votre annonce a été modifiée avec succés !", FeedbackMessageLevel.SUCCESS);
             } else {
                 feedBackPanelGeneral.sendMessage("Problème lors de l'enregistrement de l'annonce, veuillez réessayer ultérieurement", FeedbackMessageLevel.ERROR);
             }
