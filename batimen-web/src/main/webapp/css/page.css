@@ -737,8 +737,12 @@ table tr td .error {
     padding-top: 7px;
 }
 
-#sousCategorieLabel {
+#motClesLbl {
     padding-top: 7px;
+}
+
+#motcleContainer {
+    clear: both;
 }
 
 .containerInformationAnnonce {

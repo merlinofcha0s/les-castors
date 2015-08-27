@@ -1,12 +1,11 @@
 package fr.batimen.dto;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 
 public class CategorieMetierDTO implements Serializable {
 
@@ -16,7 +15,7 @@ public class CategorieMetierDTO implements Serializable {
     private String name;
 
     @NotNull
-    private Short codeCategorieMetier;
+    private Short categorieMetier;
 
     @Valid
     private List<SousCategorieMetierDTO> sousCategories = new ArrayList<SousCategorieMetierDTO>();
@@ -24,9 +23,9 @@ public class CategorieMetierDTO implements Serializable {
     public CategorieMetierDTO() {
     }
 
-    public CategorieMetierDTO(String name, short codeCategorieMetier) {
+    public CategorieMetierDTO(String name, short categorieMetier) {
         this.name = name;
-        this.codeCategorieMetier = codeCategorieMetier;
+        this.categorieMetier = categorieMetier;
     }
 
     public void addSousCategorie(SousCategorieMetierDTO sousCategorie) {
@@ -56,36 +55,36 @@ public class CategorieMetierDTO implements Serializable {
     }
 
     /**
-     * @return the codeCategorieMetier
-     */
-    public Short getCodeCategorieMetier() {
-        return codeCategorieMetier;
-    }
-
-    /**
-     * @param codeCategorieMetier
-     *            the codeCategorieMetier to set
-     */
-    public void setCodeCategorieMetier(Short codeCategorieMetier) {
-        this.codeCategorieMetier = codeCategorieMetier;
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see java.lang.Object#hashCode()
-     */
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(Objects.hash(this.name, this.codeCategorieMetier));
-    }
-
-    /**
      * @param sousCategories
      *            the sousCategories to set
      */
     public void setSousCategories(List<SousCategorieMetierDTO> sousCategories) {
         this.sousCategories = sousCategories;
+    }
+
+    /**
+     * @return the codeCategorieMetier
+     */
+    public Short getCategorieMetier() {
+        return categorieMetier;
+    }
+
+    /**
+     * @param categorieMetier
+     *            the codeCategorieMetier to set
+     */
+    public void setCategorieMetier(Short categorieMetier) {
+        this.categorieMetier = categorieMetier;
+    }
+
+    /*
+     * (non-Javadoc)
+     *
+     * @see java.lang.Object#hashCode()
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(Objects.hash(this.name, this.categorieMetier));
     }
 
     /*
@@ -102,7 +101,7 @@ public class CategorieMetierDTO implements Serializable {
         if (object instanceof CategorieMetierDTO) {
             CategorieMetierDTO other = (CategorieMetierDTO) object;
             return Objects.equals(this.name, other.name)
-                    && Objects.equals(this.codeCategorieMetier, other.codeCategorieMetier);
+                    && Objects.equals(this.categorieMetier, other.categorieMetier);
         }
         return false;
     }

@@ -831,7 +831,7 @@ public class GestionAnnonceFacade {
         List<Short> codeCategorieMetier = new ArrayList<>();
 
         for (CategorieMetierDTO categorieMetier : searchAnnonceDTOIn.getCategoriesMetierDTO()) {
-            codeCategorieMetier.add(categorieMetier.getCodeCategorieMetier());
+            codeCategorieMetier.add(categorieMetier.getCategorieMetier());
         }
 
         List<Annonce> annonces = annonceDAO.searchAnnonce(codeCategorieMetier, searchAnnonceDTOIn.getaPartirdu()

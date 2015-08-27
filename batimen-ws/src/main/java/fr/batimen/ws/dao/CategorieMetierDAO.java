@@ -1,14 +1,13 @@
 package fr.batimen.ws.dao;
 
-import javax.ejb.*;
-
 import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.EntrepriseDTO;
+import fr.batimen.ws.entity.CategorieMetier;
 import fr.batimen.ws.entity.Entreprise;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.batimen.ws.entity.CategorieMetier;
+import javax.ejb.*;
 
 /**
  * Classe d'accés aux données des catégories métier
@@ -61,7 +60,7 @@ public class CategorieMetierDAO extends AbstractDAO<CategorieMetier> {
         }
         for (CategorieMetierDTO categorieMetierDTO : entrepriseDTO.getCategoriesMetier()) {
             CategorieMetier categorieMetier = new CategorieMetier();
-            categorieMetier.setCategorieMetier(categorieMetierDTO.getCodeCategorieMetier());
+            categorieMetier.setCategorieMetier(categorieMetierDTO.getCategorieMetier());
             categorieMetier.setEntreprise(entrepriseAMettreAJour);
             if(LOGGER.isDebugEnabled()){
                 LOGGER.debug(categorieMetier.toString());

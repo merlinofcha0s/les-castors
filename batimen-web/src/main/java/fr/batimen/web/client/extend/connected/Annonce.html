@@ -24,18 +24,20 @@
                     <h2 class="headInModule">Informations sur l'annonce</h2>
                 </div>
                 <div>
-                    <div class="containerGlyph">
-						<span
-                                wicket:id="iconCategorie"
-                                class="glyphAnnonce"></span>
+                    <div wicket:id="categorieRepeater">
+                        <div class="containerGlyph">
+						    <span wicket:id="iconCategorie" class="glyphAnnonce"></span>
+                        </div>
+                        <div class="labelAnnonce" wicket:id="categorie"></div>
+                      <!--  <div id="categorieLabelSpace">&nbsp;:&nbsp;</div> -->
                     </div>
-                    <div
-                            class="labelAnnonce"
-                            wicket:id="categorie"></div>
-                    <div id="categorieLabelSpace">&nbsp;:&nbsp;</div>
-                    <div
-                            id="sousCategorieLabel"
-                            wicket:id="sousCategorie"></div>
+                </div>
+                <div class="containerInformationAnnonce" id="motcleContainer">
+                    <div class="containerGlyph">
+                        <span class="icon-Label glyphAnnonce"></span>
+                    </div>
+                    <div class="labelAnnonce">Mot clés :</div>
+                    <div class="informationAnnonce" wicket:id="motClesLbl"></div>
                 </div>
                 <div class="containerInformationAnnonce">
                     <div class="containerGlyph">

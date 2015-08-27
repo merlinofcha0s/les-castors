@@ -11,7 +11,7 @@ public class MotCleDTO extends AbstractDTO {
 
     private String motCle;
 
-    private List<Integer> categories = new ArrayList<>();
+    private List<CategorieMetierDTO> categories = new ArrayList<>();
 
     public String getMotCle() {
         return motCle;
@@ -21,11 +21,11 @@ public class MotCleDTO extends AbstractDTO {
         this.motCle = motCle;
     }
 
-    public List<Integer> getCategories() {
+    public List<CategorieMetierDTO> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<Integer> categories) {
+    public void setCategories(List<CategorieMetierDTO> categories) {
         this.categories = categories;
     }
 

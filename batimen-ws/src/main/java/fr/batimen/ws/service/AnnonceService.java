@@ -226,7 +226,7 @@ public class AnnonceService {
         }
 
         // Informations sur les artisans inscrits à l'annonce.
-        // N'est envoyé vers le backend que si et seulement
+        // N'est envoyé vers le frontend que si et seulement
         // c'est un client qui a fait la demande.
         for (Artisan artisan : annonce.getArtisans()) {
             // Creation des objets de transferts

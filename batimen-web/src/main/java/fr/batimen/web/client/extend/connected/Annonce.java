@@ -7,7 +7,6 @@ import fr.batimen.dto.constant.Categorie;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.enums.TypeContact;
-import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.web.app.constants.FeedbackMessageLevel;
 import fr.batimen.web.app.constants.ParamsConstant;
 import fr.batimen.web.app.security.Authentication;
@@ -41,6 +40,11 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Page d'affichage d'une annonce .
@@ -304,25 +308,42 @@ public class Annonce extends MasterPage {
     private void affichageDonneesAnnonce() {
         Label description = new Label("description", annonceAffichageDTO.getAnnonce().getDescription());
 
-        WebMarkupContainer iconCategorie = new WebMarkupContainer("iconCategorie");
+        Set<Short> categories = new HashSet<>();
 
-        StringBuilder classCssIcon = new StringBuilder("glyphAnnonce");
-        classCssIcon.append(" ").append(
-                Categorie.getIcon(annonceAffichageDTO.getAnnonce().getCategorieMetier()));
-        iconCategorie.add(new AttributeModifier("class", classCssIcon.toString()));
-
-        Label categorie = new Label("categorie", CategorieLoader.getCategorieByCode(annonceAffichageDTO.getAnnonce()
-                .getCategorieMetier()));
-
-        if (annonceAffichageDTO.getAnnonce().getCategorieMetier().equals(CategorieLoader.PLOMBERIE_CODE)
-                || annonceAffichageDTO.getAnnonce().getCategorieMetier().equals(CategorieLoader.ESPACE_VERT_CODE)) {
-            categorie.add(new AttributeModifier("class", "labelAnnonce-icon8"));
+        for (MotCleDTO motCle : annonceAffichageDTO.getAnnonce().getMotCles()) {
+            for (CategorieMetierDTO categorieMetier : motCle.getCategories()) {
+                categories.add(categorieMetier.getCategorieMetier());
+            }
         }
 
-        Label sousCategorie = new Label("sousCategorie", new LoadableDetachableModel<String>() {
+        List<Short> categorieList = new ArrayList<>(categories);
+
+        ListView<Short> categorieRepeater = new ListView<Short>("categorieRepeater", categorieList) {
+            @Override
+            protected void populateItem(ListItem<Short> item) {
+                StringBuilder classCssIcon = new StringBuilder("glyphAnnonce");
+                classCssIcon.append(" ").append(
+                        Categorie.getIcon(item.getModelObject()));
+                WebMarkupContainer iconCategorie = new WebMarkupContainer("iconCategorie");
+                iconCategorie.add(new AttributeModifier("class", classCssIcon.toString()));
+
+                Label categorie = new Label("categorie", Categorie.getNameByCode(item.getModelObject()));
+
+                if (item.getModelObject().equals(Categorie.PLOMBERIE_CODE)
+                        || item.getModelObject().equals(Categorie.ESPACE_VERT_CODE)) {
+                    categorie.add(new AttributeModifier("class", "labelAnnonce-icon8"));
+                }
+
+                item.add(categorie, iconCategorie);
+            }
+        };
+
+        String motcles = annonceAffichageDTO.getAnnonce().getMotCles().stream().map(motCle -> motCle.getMotCle()).collect(Collectors.joining(", "));
+
+        Label motClesLbl = new Label("motClesLbl", new LoadableDetachableModel<String>() {
             @Override
             protected String load() {
-                return annonceAffichageDTO.getAnnonce().getSousCategorieMetier();
+                return motcles;
             }
         });
         Label typeTravaux = new Label("typeTravaux", new LoadableDetachableModel<String>() {
@@ -363,7 +384,7 @@ public class Annonce extends MasterPage {
         etatAnnonce.setMarkupId("etatAnnonce");
         Label typeContact = new Label("typeContact", annonceAffichageDTO.getAnnonce().getTypeContact().getAffichage());
 
-        add(description, iconCategorie, categorie, sousCategorie, typeTravaux, delaiIntervention, dateCreation,
+        add(description, categorieRepeater, motClesLbl, typeTravaux, delaiIntervention, dateCreation,
                 nbConsultation, etatAnnonce, typeContact);
     }
 
