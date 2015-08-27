@@ -329,8 +329,8 @@ public class Annonce extends MasterPage {
 
                 Label categorie = new Label("categorie", Categorie.getNameByCode(item.getModelObject()));
 
-                if (item.getModelObject().equals(Categorie.PLOMBERIE_CODE)
-                        || item.getModelObject().equals(Categorie.ESPACE_VERT_CODE)) {
+                if (item.getModelObject().equals(Categorie.PLOMBERIE_CODE.shortValue())
+                        || item.getModelObject().equals(Categorie.ESPACE_VERT_CODE.shortValue())) {
                     categorie.add(new AttributeModifier("class", "labelAnnonce-icon8"));
                 }
 

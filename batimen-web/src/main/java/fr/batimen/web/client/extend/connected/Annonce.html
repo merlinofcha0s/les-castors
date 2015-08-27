@@ -24,19 +24,22 @@
                     <h2 class="headInModule">Informations sur l'annonce</h2>
                 </div>
                 <div>
+                    <div class="containerGlyph">
+                        <span class="icon-House glyphAnnonce"></span>
+                    </div>
+                    <div class="labelAnnonce">Catégorie :</div>
                     <div wicket:id="categorieRepeater">
                         <div class="containerGlyph">
 						    <span wicket:id="iconCategorie" class="glyphAnnonce"></span>
                         </div>
-                        <div class="labelAnnonce" wicket:id="categorie"></div>
-                      <!--  <div id="categorieLabelSpace">&nbsp;:&nbsp;</div> -->
+                        <div class="labelAnnonce-categorie" wicket:id="categorie"></div>
                     </div>
                 </div>
                 <div class="containerInformationAnnonce" id="motcleContainer">
                     <div class="containerGlyph">
-                        <span class="icon-Label glyphAnnonce"></span>
+                        <span class="icon-Setting3 glyphAnnonce"></span>
                     </div>
-                    <div class="labelAnnonce">Mot clés :</div>
+                    <div class="labelAnnonce">Mots clés :</div>
                     <div class="informationAnnonce" wicket:id="motClesLbl"></div>
                 </div>
                 <div class="containerInformationAnnonce">
@@ -44,9 +47,7 @@
                         <span class="icon-Label glyphAnnonce"></span>
                     </div>
                     <div class="labelAnnonce">Type de travaux :</div>
-                    <div
-                            class="informationAnnonce"
-                            wicket:id="typeTravaux"></div>
+                    <div class="informationAnnonce" wicket:id="typeTravaux"></div>
                 </div>
                 <div class="containerInformationAnnonce">
                     <div class="containerGlyph">

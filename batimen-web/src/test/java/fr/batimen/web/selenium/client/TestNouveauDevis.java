@@ -264,9 +264,8 @@ public class TestNouveauDevis extends AbstractITTest {
             Thread.sleep(1000);
         }
         WebElement checkConditionAnnoncePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
-                .until(ExpectedConditions.presenceOfElementLocated((By.id("sousCategorieSelect"))));
+                .until(ExpectedConditions.presenceOfElementLocated((By.id("typeContactField"))));
         assertNotNull(checkConditionAnnoncePresent);
-        new Select(driver.findElement(By.id("sousCategorieSelect"))).selectByVisibleText("Tableaux électriques");
         driver.findElement(By.id("descriptionDevisField")).clear();
         driver.findElement(By.id("descriptionDevisField")).sendKeys("Refonte complete de l'electricite dans la maison");
         new Select(driver.findElement(By.id("typeContactField"))).selectByVisibleText("Téléphone");
@@ -296,7 +295,10 @@ public class TestNouveauDevis extends AbstractITTest {
         if (browser.equals("ie")) {
             Thread.sleep(1000);
         }
-        driver.findElement(By.id("electricite")).click();
+
+        driver.findElement(By.id("motCleField")).sendKeys("Salles de bain");
+        driver.findElement(By.linkText("Salles de bain")).click();
+        driver.findElement(By.id("etapeSuivante")).click();
     }
 
 }

@@ -725,6 +725,13 @@ table tr td .error {
     padding-top: 7px;
 }
 
+.labelAnnonce-categorie {
+    padding-left: 15px;
+    float: left;
+    padding-right: 12px;
+    padding-top: 7px;
+}
+
 .labelAnnonce-icon8 {
     padding-left: 9px;
     float: left;

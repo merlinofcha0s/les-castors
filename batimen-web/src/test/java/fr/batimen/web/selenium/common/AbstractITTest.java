@@ -23,38 +23,19 @@ import static com.ninja_squad.dbsetup.Operations.insertInto;
 import static org.junit.Assert.*;
 
 /**
- * 
  * Classe abstraite permettant de mettre en place les tests d'integration avec
  * selenium
- * 
+ *
  * @author Casaucau Cyril
- * 
  */
 public abstract class AbstractITTest {
-
-    protected WebDriver driver;
-    protected String appUrl;
-    protected boolean acceptNextAlert = true;
-    protected StringBuilder verificationErrors = new StringBuilder();
-    private String ipServeur;
-    private String portServeur;
-    private String nomApp;
-    private String dataSourceAddress;
-    private String loginDB;
-    private String passwordDB;
-    protected String browser;
-    private String chromeDriverAddress;
-    private String ieDriverAddress;
 
     public final static String BON_MOT_DE_PASSE = "lollollol";
     public final static String MAUVAIS_MOT_DE_PASSE = "kikoulolmauvais";
     public final static int TEMPS_ATTENTE_AJAX = 20;
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractITTest.class);
-
     // DBSetup
-    public static final Operation DELETE_ALL = deleteAllFrom("notification", "annonce_artisan", "annonce",
-            "permission", "avis", "artisan", "categoriemetier", "entreprise", "adresse", "client");
+    public static final Operation DELETE_ALL = deleteAllFrom("notification", "annonce_artisan", "categoriemetier", "motcle", "annonce",
+            "permission", "avis", "artisan", "entreprise", "adresse", "client");
     public static final Operation INSERT_USER_DATA = insertInto("client")
             .columns("id", "email", "nom", "prenom", "login", "password", "numeroTel", "dateInscription", "isActive",
                     "cleactivation")
@@ -72,6 +53,20 @@ public abstract class AbstractITTest {
                     "2014-01-08", false, "lolmdr201").build();
     public static final Operation INSERT_USER_PERMISSION = insertInto("permission").columns("typecompte", "client_fk")
             .values(4, 100001).values(4, 100002).values(0, 100003).values(4, 100004).build();
+    private static final Logger LOGGER = LoggerFactory.getLogger(AbstractITTest.class);
+    protected WebDriver driver;
+    protected String appUrl;
+    protected boolean acceptNextAlert = true;
+    protected StringBuilder verificationErrors = new StringBuilder();
+    protected String browser;
+    private String ipServeur;
+    private String portServeur;
+    private String nomApp;
+    private String dataSourceAddress;
+    private String loginDB;
+    private String passwordDB;
+    private String chromeDriverAddress;
+    private String ieDriverAddress;
 
     @Before
     public void setUpITTest() throws Exception {
@@ -114,16 +109,16 @@ public abstract class AbstractITTest {
         sbUrlApp.append(nomApp);
 
         switch (browser) {
-        case "chrome":
-            System.setProperty("webdriver.chrome.driver", chromeDriverAddress);
-            driver = new ChromeDriver();
-            break;
-        case "firefox":
-            driver = new FirefoxDriver();
-            break;
-        case "ie":
-            System.setProperty("webdriver.ie.driver", ieDriverAddress);
-            driver = new InternetExplorerDriver();
+            case "chrome":
+                System.setProperty("webdriver.chrome.driver", chromeDriverAddress);
+                driver = new ChromeDriver();
+                break;
+            case "firefox":
+                driver = new FirefoxDriver();
+                break;
+            case "ie":
+                System.setProperty("webdriver.ie.driver", ieDriverAddress);
+                driver = new InternetExplorerDriver();
         }
 
         appUrl = sbUrlApp.toString();

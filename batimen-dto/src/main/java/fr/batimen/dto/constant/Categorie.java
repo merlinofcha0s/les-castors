@@ -14,7 +14,7 @@ public class Categorie {
     public static final String ELECTRICITE_NAME = "Electricité";
     public static final String PLOMBERIE_NAME = "Plomberie";
     public static final String ESPACE_VERT_NAME = "Espace vert";
-    public static final String DECORATION_MACONNERIE_NAME = "Maconnerie";
+    public static final String DECORATION_MACONNERIE_NAME = "Maçonnerie";
     public static final String MENUISERIE_NAME = "Menuiserie";
 
 
@@ -36,12 +36,14 @@ public class Categorie {
     }
 
     public static String getIcon(Short codeCategorieMetier) {
-        if (codeCategorieMetier.equals(ELECTRICITE_CODE)) {
+        if (codeCategorieMetier.equals(ELECTRICITE_CODE.shortValue())) {
             return "icon-Lightning";
-        } else if (codeCategorieMetier.equals(PLOMBERIE_CODE)) {
+        } else if (codeCategorieMetier.equals(PLOMBERIE_CODE.shortValue())) {
             return "icons8-plumbing";
-        } else if (codeCategorieMetier.equals(ESPACE_VERT_CODE)) {
+        } else if (codeCategorieMetier.equals(ESPACE_VERT_CODE.shortValue())) {
             return "icons8-garden-shears";
+        } else if (codeCategorieMetier.equals(MENUISERIE_CODE.shortValue())) {
+            return "icon-Forrst";
         } else {
             return "icon-Tool";
         }
