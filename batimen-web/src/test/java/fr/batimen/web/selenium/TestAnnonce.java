@@ -22,9 +22,8 @@ import static org.junit.Assert.*;
 
 /**
  * Test d'intégration pour la page d'affichage d'une annonce.
- * 
+ *
  * @author Casaucau Cyril
- * 
  */
 public class TestAnnonce extends AbstractITTest {
 
@@ -32,7 +31,8 @@ public class TestAnnonce extends AbstractITTest {
     public void prepareDB() throws Exception {
         Operation operation = sequenceOf(DELETE_ALL, INSERT_USER_DATA, INSERT_USER_PERMISSION, INSERT_ADRESSE_DATA,
                 INSERT_ENTREPRISE_DATA, INSERT_ARTISAN_DATA, INSERT_ARTISAN_PERMISSION, INSERT_AVIS_DATA,
-                INSERT_ANNONCE_DATA, INSERT_NOTIFICATION_DATA, INSERT_ANNONCE_ARTISAN, INSERT_ANNONCE_IMAGE);
+                INSERT_ANNONCE_DATA, INSERT_NOTIFICATION_DATA, INSERT_ANNONCE_ARTISAN, INSERT_ANNONCE_IMAGE,
+                INSERT_ANNONCE_MOT_CLE, INSERT_CATEGORIE_METIER);
         DbSetup dbSetup = new DbSetup(getDriverManagerDestination(), operation);
         dbSetup.launch();
     }
@@ -40,7 +40,6 @@ public class TestAnnonce extends AbstractITTest {
     /**
      * Cas de test : Le client accede a son annonce en se connectant a les
      * castors, il doit y arriver
-     * 
      */
     @Test
     public void testAnnonceAffichageWithClient() {
@@ -64,7 +63,6 @@ public class TestAnnonce extends AbstractITTest {
     /**
      * Cas de test : Le client accede a son annonce en se connectant a les
      * castors, il doit y arriver
-     * 
      */
     @Test
     public void testAnnonceAffichageWithClientWithImage() {
@@ -87,7 +85,6 @@ public class TestAnnonce extends AbstractITTest {
      * Cas de test : L'artisan essaye d'acceder a une annonce en se connectant a
      * les castors, il doit y arriver mais l'encar avec les entreprises deja
      * inscrite ne doit pas s'afficher
-     * 
      */
     @Test(expected = NoSuchElementException.class)
     public void testAnnonceAffichageWithArtisan() {
@@ -110,7 +107,6 @@ public class TestAnnonce extends AbstractITTest {
     /**
      * Cas de test : L'admin essaye d'acceder a une annonce en se connectant a
      * les castors, il doit y arriver et tout doit s'afficher
-     * 
      */
     @Test
     public void testAnnonceAffichageWithAdmin() {
@@ -270,7 +266,7 @@ public class TestAnnonce extends AbstractITTest {
     /**
      * Cas de test : Un client se connecte sur le site, va sur une annonce et et
      * note l'artisan qu'il a selectionné auparavant, tout se passe comme prévu
-     * 
+     *
      * @throws InterruptedException
      */
     @Test
@@ -282,7 +278,7 @@ public class TestAnnonce extends AbstractITTest {
      * Cas de test : Un administrateur se connecte sur le site, va sur une
      * annonce et note l'artisan qui a été selectionné auparavant par le client,
      * tout se passe comme prévu
-     * 
+     *
      * @throws InterruptedException
      */
     @Test
@@ -345,23 +341,27 @@ public class TestAnnonce extends AbstractITTest {
      * Vérifie les informations principales de l'annonce
      */
     public void assertCoreInformationOfAnnonce(EtatAnnonce etatAnnonce) {
-        Boolean checkSousCategoriePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
-                .until(ExpectedConditions.textToBePresentInElementLocated(By.id("sousCategorieLabel"),
-                        "Installation électrique"));
-        assertTrue(checkSousCategoriePresent);
+        Boolean checkCategoriePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("div.labelAnnonce-categorie"),
+                        "Electricité"));
+        assertTrue(checkCategoriePresent);
+
+        Boolean checkMotClePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("div.informationAnnonce"),
+                        "Salles de bain"));
+        assertTrue(checkMotClePresent);
 
         assertEquals("Construction compliqué qui necessite des connaissance en geologie",
                 driver.findElement(By.cssSelector("div.span7 > div")).getText());
-        assertEquals("Electricité", driver.findElement(By.cssSelector("div.labelAnnonce")).getText());
-        assertEquals("Neuf", driver.findElement(By.cssSelector("div.informationAnnonce")).getText());
+        assertEquals("Neuf", driver.findElement(By.xpath("//div[@id='containerInformationsAnnonce']/div[4]/div[3]")).getText());
         assertEquals("Le plus rapidement possible",
-                driver.findElement(By.xpath("//div[@id='containerInformationsAnnonce']/div[4]/div[3]")).getText());
-        assertEquals("Email", driver.findElement(By.xpath("//div[@id='containerInformationsAnnonce']/div[5]/div[3]"))
+                driver.findElement(By.xpath("//div[@id='containerInformationsAnnonce']/div[5]/div[3]")).getText());
+        assertEquals("Email", driver.findElement(By.xpath("//div[@id='containerInformationsAnnonce']/div[6]/div[3]"))
                 .getText());
         assertEquals(etatAnnonce.getType(),
-                driver.findElement(By.xpath("//div[@id='containerInformationsAnnonce']/div[6]/div[3]")).getText());
-        assertEquals("10/01/2014",
                 driver.findElement(By.xpath("//div[@id='containerInformationsAnnonce']/div[7]/div[3]")).getText());
+        assertEquals("10/01/2014",
+                driver.findElement(By.xpath("//div[@id='containerInformationsAnnonce']/div[8]/div[3]")).getText());
     }
 
     private void testDesinscriptionEntreprise(TypeCompte typeCompte) {

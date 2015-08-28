@@ -1,0 +1,27 @@
+<wicket:panel>
+           <div class="row-fluid">
+                <form class="form-horizontal" wicket:id="motCleForm">
+                    <div class="span3"></div>
+		            <div class="span6">
+                        <div class="control-group">
+                            <label class="control-label" for="motcle">Mot clé :</label>
+                            <div class="controls">
+			                    <input wicket:id="motCleField" id="motcle" type="text"
+                                       placeholder="Ex: Salles de bain" autocomplete="off"/>
+                            </div>
+                        </div>
+		            </div>
+                    <div class="span3"></div>
+                 </form>
+	        </div>
+            <div class="row-fluid" wicket:id="categoriesChoisiesContainer">
+                <div class="span3"></div>
+                <div class="span6 label-center">
+                    <span class="label label-info label-mot-cle" wicket:id="categorieDTOListView">
+                        <span class="icon-Cross label-cross" wicket:id="cross"></span>
+                        <span wicket:id="motCle">Salles de bain</span>
+                    </span>
+                </div>
+                <div class="span3"></div>
+	        </div>
+</wicket:panel>

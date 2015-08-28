@@ -1,7 +1,6 @@
 package fr.batimen.web.client.extend.nouveau.devis;
 
 import fr.batimen.dto.PermissionDTO;
-import fr.batimen.dto.SousCategorieMetierDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.dto.enums.DelaiIntervention;
@@ -47,7 +46,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 /**
  * Form de l'etape 3 de création d'annonce.
@@ -76,19 +74,19 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
 
     /**
      * Constructeur utile pour la modification d'une annonce.
-     * <p/>
+     * <p>
      * Particularité : on charge le composant de selection des sous categories differement car à la creation de l'annonce celui ci est rempli grace a un event ajax que nous n'avons pas ici.
      *
-     * @param id                         l'id wicket du composant sur la page
-     * @param model                      Le model permettant l'affichage des données;
-     * @param sousCategorieMetierDTOList La liste des sous catégories chargé au demarrage du composant
-     * @param sousCategorieChoisie       La sous catégorie choisi précedemment par l'utilisateur
+     * @param id    l'id wicket du composant sur la page
+     * @param model Le model permettant l'affichage des données;
      */
-    public Etape3AnnonceForm(final String id, IModel<CreationAnnonceDTO> model, List<SousCategorieMetierDTO> sousCategorieMetierDTOList, SousCategorieMetierDTO sousCategorieChoisie) {
+    public Etape3AnnonceForm(final String id, IModel<CreationAnnonceDTO> model, boolean forModification) {
         this(id, model);
-        forModification = true;
-        //sousCategorieSelect.setChoices(sousCategorieMetierDTOList);
-        //sousCategorieSelect.setModelObject(sousCategorieChoisie);
+        this.forModification = forModification;
+
+        if (forModification) {
+
+        }
     }
 
     /**
@@ -282,9 +280,5 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
 
     public void setIdAnnonce(String idAnnonce) {
         this.idAnnonce = idAnnonce;
-    }
-
-    public void setSousCategorieChoices(List<SousCategorieMetierDTO> sousCategorieMetierDTOList) {
-        //sousCategorieSelect.setChoices(sousCategorieMetierDTOList);
     }
 }

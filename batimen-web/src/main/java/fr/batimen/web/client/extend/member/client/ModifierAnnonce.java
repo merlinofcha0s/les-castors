@@ -3,20 +3,15 @@ package fr.batimen.web.client.extend.member.client;
 import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.dto.AdresseDTO;
 import fr.batimen.dto.AnnonceDTO;
-import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.SousCategorieMetierDTO;
 import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.aggregate.ModificationAnnonceDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
-import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.web.app.constants.FeedbackMessageLevel;
 import fr.batimen.web.app.constants.ParamsConstant;
 import fr.batimen.web.app.security.Authentication;
-import fr.batimen.web.client.component.Commentaire;
-import fr.batimen.web.client.component.ContactezNous;
-import fr.batimen.web.client.component.PhotosContainer;
-import fr.batimen.web.client.component.Profil;
+import fr.batimen.web.client.component.*;
 import fr.batimen.web.client.event.AjoutPhotoEvent;
 import fr.batimen.web.client.event.ModificationAnnonceEvent;
 import fr.batimen.web.client.event.SuppressionPhotoEvent;
@@ -69,6 +64,8 @@ public class ModifierAnnonce extends MasterPage {
 
     private String idAnnonce;
 
+    private MotCle motCle;
+
     public ModifierAnnonce() {
         this((AnnonceAffichageDTO) null);
     }
@@ -110,10 +107,13 @@ public class ModifierAnnonce extends MasterPage {
             LOGGER.debug("Init des composants de la page de modification de mon annonce");
         }
         Profil profil = new Profil("profil", false);
-        etape3AnnonceForm = new Etape3AnnonceForm("formQualification", propertyModelModificationAnnonce, sousCategorieMetierDTOList, sousCategorieMetierDTO);
+        etape3AnnonceForm = new Etape3AnnonceForm("formQualification", propertyModelModificationAnnonce, true);
 
         photosContainer = new PhotosContainer("afficheurPhotos", annonceAffichageDTO.getImages(), "Les photos de votre annonce", "h4", true);
         photosContainer.setOutputMarkupId(true);
+
+        motCle = new MotCle("motCle");
+        etape3AnnonceForm.add(motCle);
 
         ContactezNous contactezNous = new ContactezNous("contactezNous");
         Commentaire commentaire = new Commentaire("commentaire");
@@ -131,16 +131,6 @@ public class ModifierAnnonce extends MasterPage {
         mapper.map(annonceAffichageDTO.getAdresse(), creationAnnonceDTO);
         mapper.map(annonceAffichageDTO.getAnnonce(), creationAnnonceDTO);
 
-        CategorieMetierDTO categorieMetierDTO = CategorieLoader.getCategorieByCode(annonceAffichageDTO.getAnnonce().getCategorieMetier());
-        //creationAnnonceDTO.setCategorieMetier(categorieMetierDTO);
-
-        sousCategorieMetierDTOList = categorieMetierDTO.getSousCategories();
-
-        for (SousCategorieMetierDTO sousCategorieMetierDTOPossible : sousCategorieMetierDTOList) {
-            if (sousCategorieMetierDTOPossible.getName().equals(annonceAffichageDTO.getAnnonce().getSousCategorieMetier())) {
-                sousCategorieMetierDTO = new SousCategorieMetierDTO(annonceAffichageDTO.getAnnonce().getSousCategorieMetier());
-            }
-        }
         propertyModelModificationAnnonce = new CompoundPropertyModel<>(creationAnnonceDTO);
     }
 
@@ -166,8 +156,7 @@ public class ModifierAnnonce extends MasterPage {
 
             //Champs non mappés
             modificationAnnonceDTO.setLoginDemandeur(authentication.getCurrentUserInfo().getLogin());
-            //TODO ICI
-            //modificationAnnonceDTO.getAnnonce().setSousCategorieMetier(creationAnnonceDTO.getSousCategorie().getName());
+
             modificationAnnonceDTO.getAnnonce().setDateMAJ(new Date());
             modificationAnnonceDTO.getAnnonce().setEtatAnnonce(annonceAffichageDTO.getAnnonce().getEtatAnnonce());
             modificationAnnonceDTO.getAnnonce().setDateCreation(annonceAffichageDTO.getAnnonce().getDateCreation());
