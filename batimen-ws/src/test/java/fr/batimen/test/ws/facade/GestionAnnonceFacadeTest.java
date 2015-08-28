@@ -164,7 +164,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
         Assert.assertFalse(annonceAffichage.getImages().isEmpty());
 
         Assert.assertFalse(annonceAffichage.getAnnonce().getMotCles().isEmpty());
-        annonceAffichage.getAnnonce().getMotCles().forEach(motCleDTO -> Assert.assertFalse(motCleDTO.getCategories().isEmpty()));
+        annonceAffichage.getAnnonce().getMotCles().forEach(motCleDTO -> Assert.assertFalse(motCleDTO.getCategoriesMetier().isEmpty()));
     }
 
     /**

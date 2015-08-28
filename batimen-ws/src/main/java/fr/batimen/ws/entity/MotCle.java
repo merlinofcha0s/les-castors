@@ -67,8 +67,7 @@ public class MotCle implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         MotCle motCle1 = (MotCle) o;
-        return Objects.equals(id, motCle1.id) &&
-                Objects.equals(motCle, motCle1.motCle);
+        return Objects.equals(motCle, motCle1.motCle);
     }
 
     @Override

@@ -5,6 +5,7 @@ import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.TypeContact;
 import fr.batimen.dto.enums.TypeTravaux;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
@@ -37,16 +38,13 @@ public class AnnonceDTO extends AbstractDTO {
     private Date dateMAJ;
     private Integer nbConsultation;
     @NotNull
-    private Short categorieMetier;
-    @NotNull
-    private String sousCategorieMetier;
-    @NotNull
     private EtatAnnonce etatAnnonce;
     private Long nbDevis;
     @NotNull
     private TypeTravaux typeTravaux;
     private String hashID;
 
+    @Valid
     private List<MotCleDTO> motCles = new ArrayList<>();
 
     // Rempli que pour l'affichage
@@ -158,36 +156,6 @@ public class AnnonceDTO extends AbstractDTO {
     }
 
     /**
-     * @return the categorieMetier
-     */
-    public Short getCategorieMetier() {
-        return categorieMetier;
-    }
-
-    /**
-     * @param categorieMetier
-     *            the categorieMetier to set
-     */
-    public void setCategorieMetier(Short categorieMetier) {
-        this.categorieMetier = categorieMetier;
-    }
-
-    /**
-     * @return the sousCategorieMetier
-     */
-    public String getSousCategorieMetier() {
-        return sousCategorieMetier;
-    }
-
-    /**
-     * @param sousCategorieMetier
-     *            the sousCategorieMetier to set
-     */
-    public void setSousCategorieMetier(String sousCategorieMetier) {
-        this.sousCategorieMetier = sousCategorieMetier;
-    }
-
-    /**
      * @return the etatAnnonce
      */
     public EtatAnnonce getEtatAnnonce() {
@@ -296,8 +264,6 @@ public class AnnonceDTO extends AbstractDTO {
         sb.append(", dateCreation=").append(dateCreation);
         sb.append(", dateMAJ=").append(dateMAJ);
         sb.append(", nbConsultation=").append(nbConsultation);
-        sb.append(", categorieMetier=").append(categorieMetier);
-        sb.append(", sousCategorieMetier='").append(sousCategorieMetier).append('\'');
         sb.append(", etatAnnonce=").append(etatAnnonce);
         sb.append(", nbDevis=").append(nbDevis);
         sb.append(", typeTravaux=").append(typeTravaux);

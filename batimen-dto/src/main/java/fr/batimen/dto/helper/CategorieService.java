@@ -1,6 +1,7 @@
 package fr.batimen.dto.helper;
 
-import fr.batimen.dto.CategorieDTO;
+import fr.batimen.dto.CategorieMetierDTO;
+import fr.batimen.dto.MotCleDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,10 +30,10 @@ public class CategorieService implements Serializable {
     /**
      * Transforme une ligne en CategorieDTO
      */
-    public static Function<String, CategorieDTO> mapToCategorie = (line) -> {
+    public static Function<String, MotCleDTO> mapToCategorie = (line) -> {
         List<String> valeurs = Arrays.asList(line.split(";"));
 
-        final CategorieDTO categorieDTO = new CategorieDTO();
+        final MotCleDTO motCleDTO = new MotCleDTO();
 
         valeurs.forEach(valeur -> {
             //Si valeur est un integer c'est que c'est une categorie, sinon c'est un mot clé
@@ -40,19 +41,22 @@ public class CategorieService implements Serializable {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("Valeur : " + valeur);
                 }
-                Integer categorie = Integer.valueOf(valeur);
-                categorieDTO.getCategories().add(categorie);
+                Short categorie = Short.valueOf(valeur);
+
+                CategorieMetierDTO categorieMetierDTO = new CategorieMetierDTO();
+                categorieMetierDTO.setCategorieMetier(categorie);
+                motCleDTO.getCategoriesMetier().add(categorieMetierDTO);
             } catch (NumberFormatException nfe) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("C'est un mot clé !!!!");
                 }
-                categorieDTO.setMotCle(valeur);
+                motCleDTO.setMotCle(valeur);
             }
         });
 
-        return categorieDTO;
+        return motCleDTO;
     };
-    private List<CategorieDTO> allCategories;
+    private List<MotCleDTO> allCategories;
 
     public CategorieService() {
 
@@ -75,11 +79,11 @@ public class CategorieService implements Serializable {
         }
     }
 
-    public Optional<CategorieDTO> getCategorieByMotCle(String motcCle) {
+    public Optional<MotCleDTO> getCategorieByMotCle(String motcCle) {
         return allCategories.stream().filter(cat -> cat.getMotCle().equals(motcCle)).findFirst();
     }
 
-    public List<CategorieDTO> getAllCategories() {
+    public List<MotCleDTO> getAllCategories() {
         return allCategories;
     }
 }

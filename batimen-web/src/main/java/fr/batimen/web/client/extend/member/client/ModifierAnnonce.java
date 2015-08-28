@@ -64,7 +64,7 @@ public class ModifierAnnonce extends MasterPage {
 
     private String idAnnonce;
 
-    private MotCle motCle;
+    private MotCle motCleComposant;
 
     public ModifierAnnonce() {
         this((AnnonceAffichageDTO) null);
@@ -112,8 +112,8 @@ public class ModifierAnnonce extends MasterPage {
         photosContainer = new PhotosContainer("afficheurPhotos", annonceAffichageDTO.getImages(), "Les photos de votre annonce", "h4", true);
         photosContainer.setOutputMarkupId(true);
 
-        motCle = new MotCle("motCle");
-        etape3AnnonceForm.add(motCle);
+        motCleComposant = new MotCle("motCle", ((CreationAnnonceDTO) propertyModelModificationAnnonce.getObject()).getMotCles());
+        etape3AnnonceForm.add(motCleComposant);
 
         ContactezNous contactezNous = new ContactezNous("contactezNous");
         Commentaire commentaire = new Commentaire("commentaire");
@@ -163,6 +163,7 @@ public class ModifierAnnonce extends MasterPage {
             modificationAnnonceDTO.getAnnonce().setHashID(idAnnonce);
             modificationAnnonceDTO.getAnnonce().setNbConsultation(annonceAffichageDTO.getAnnonce().getNbConsultation());
             modificationAnnonceDTO.getAnnonce().setNbDevis(annonceAffichageDTO.getAnnonce().getNbDevis());
+
 
             //Appel du service
             Integer codeRetourService = annonceServiceREST.modifierAnnonce(modificationAnnonceDTO);

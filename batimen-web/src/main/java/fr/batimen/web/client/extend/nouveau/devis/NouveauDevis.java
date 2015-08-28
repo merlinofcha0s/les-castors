@@ -399,7 +399,7 @@ public class NouveauDevis extends MasterPage {
         if (event.getPayload() instanceof CategorieEvent) {
             CategorieEvent eventCategorie = (CategorieEvent) event.getPayload();
             // On recupere la catégorie métier
-            nouvelleAnnonce.setCategoriesMetier(eventCategorie.getCategoriesChoisies());
+            nouvelleAnnonce.setMotCles(eventCategorie.getCategoriesChoisies());
             // On set la prochaine etape
             nouvelleAnnonce.setNumeroEtape(3);
 

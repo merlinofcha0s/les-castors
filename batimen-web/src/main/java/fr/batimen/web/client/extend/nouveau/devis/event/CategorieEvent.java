@@ -1,6 +1,6 @@
 package fr.batimen.web.client.extend.nouveau.devis.event;
 
-import fr.batimen.dto.CategorieDTO;
+import fr.batimen.dto.MotCleDTO;
 import fr.batimen.web.client.event.AbstractEvent;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
@@ -15,14 +15,14 @@ import java.util.List;
  */
 public class CategorieEvent extends AbstractEvent {
 
-    private final List<CategorieDTO> categoriesChoisies;
+    private final List<MotCleDTO> categoriesChoisies;
 
-    public CategorieEvent(AjaxRequestTarget target, List<CategorieDTO> categoriesChoisies) {
+    public CategorieEvent(AjaxRequestTarget target, List<MotCleDTO> categoriesChoisies) {
         super(target);
         this.categoriesChoisies = categoriesChoisies;
     }
 
-    public List<CategorieDTO> getCategoriesChoisies() {
+    public List<MotCleDTO> getCategoriesChoisies() {
         return categoriesChoisies;
     }
 }

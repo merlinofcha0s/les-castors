@@ -1,7 +1,8 @@
 package fr.batimen.test.ws.helper;
 
-import fr.batimen.dto.CategorieDTO;
+import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.ContactMailDTO;
+import fr.batimen.dto.MotCleDTO;
 import fr.batimen.dto.PermissionDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.constant.Categorie;
@@ -41,11 +42,18 @@ public class DataHelper {
         creationAnnonceDTO.setVille("Nice");
         creationAnnonceDTO.setTypeTravaux(TypeTravaux.NEUF);
 
-        CategorieDTO categorieDTO = new CategorieDTO();
+        MotCleDTO categorieDTO = new MotCleDTO();
         categorieDTO.setMotCle("Salles de bains");
-        categorieDTO.getCategories().add(Categorie.ELECTRICITE_CODE);
-        categorieDTO.getCategories().add(Categorie.DECORATION_MACONNERIE_CODE);
-        creationAnnonceDTO.getCategoriesMetier().add(categorieDTO);
+
+        CategorieMetierDTO categorieMetierElectriciteDTO = new CategorieMetierDTO();
+        categorieMetierElectriciteDTO.setCategorieMetier(Categorie.ELECTRICITE_CODE);
+        categorieDTO.getCategoriesMetier().add(categorieMetierElectriciteDTO);
+
+        CategorieMetierDTO categorieMetierDecorationMaconnerieDTO = new CategorieMetierDTO();
+        categorieMetierDecorationMaconnerieDTO.setCategorieMetier(Categorie.DECORATION_MACONNERIE_CODE);
+        categorieDTO.getCategoriesMetier().add(categorieMetierDecorationMaconnerieDTO);
+
+        creationAnnonceDTO.getMotCles().add(categorieDTO);
 
         return creationAnnonceDTO;
     }

@@ -330,22 +330,26 @@ public class AnnonceService {
         return annoncesDTO;
     }
 
-    public void remplirMotCle(Annonce nouvelleAnnonce, CreationAnnonceDTO nouvelleAnnonceDTO) {
-        nouvelleAnnonceDTO.getCategoriesMetier().forEach(categorieDTO -> {
+    @TransactionAttribute(TransactionAttributeType.MANDATORY)
+    public void remplirMotCle(Annonce annonce, List<MotCleDTO> motCleDTOs) {
+        motCleDTOs.forEach(MotCleDTO -> {
             MotCle motCle = new MotCle();
-            motCle.setMotCle(categorieDTO.getMotCle());
-            motCle.setAnnonce(nouvelleAnnonce);
+            motCle.setMotCle(MotCleDTO.getMotCle());
+            motCle.setAnnonce(annonce);
 
-            categorieDTO.getCategories().forEach(categorie -> {
+            MotCleDTO.getCategoriesMetier().forEach(categorie -> {
                 CategorieMetier categorieMetier = new CategorieMetier();
-                categorieMetier.setCategorieMetier(categorie.shortValue());
+                categorieMetier.setCategorieMetier(categorie.getCategorieMetier());
                 categorieMetier.setMotCle(motCle);
                 categorieMetierDAO.persistCategorieMetier(categorieMetier);
                 motCle.getCategoriesMetier().add(categorieMetier);
             });
 
+            //LE FAIRE EN LAMBDA ???? avec If present ???
+
             motCleDAO.persistMotCle(motCle);
-            nouvelleAnnonce.getMotcles().add(motCle);
+            annonce.getMotcles().add(motCle);
+
         });
     }
 }

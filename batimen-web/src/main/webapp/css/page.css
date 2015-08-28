@@ -156,6 +156,10 @@
     font-size: 22px;
 }
 
+#categoriesChoisiesContainer {
+    margin-bottom: 10px;
+}
+
 #radioTypeTravauxNeuf {
     float: left;
     padding-right: 30px;

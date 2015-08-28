@@ -1,5 +1,7 @@
 package fr.batimen.dto;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -9,9 +11,11 @@ import java.util.Objects;
  */
 public class MotCleDTO extends AbstractDTO {
 
+    @NotNull
     private String motCle;
 
-    private List<CategorieMetierDTO> categories = new ArrayList<>();
+    @Valid
+    private List<CategorieMetierDTO> categoriesMetier = new ArrayList<>();
 
     public String getMotCle() {
         return motCle;
@@ -21,12 +25,12 @@ public class MotCleDTO extends AbstractDTO {
         this.motCle = motCle;
     }
 
-    public List<CategorieMetierDTO> getCategories() {
-        return categories;
+    public List<CategorieMetierDTO> getCategoriesMetier() {
+        return categoriesMetier;
     }
 
-    public void setCategories(List<CategorieMetierDTO> categories) {
-        this.categories = categories;
+    public void setCategoriesMetier(List<CategorieMetierDTO> categoriesMetier) {
+        this.categoriesMetier = categoriesMetier;
     }
 
     @Override
@@ -35,19 +39,19 @@ public class MotCleDTO extends AbstractDTO {
         if (o == null || getClass() != o.getClass()) return false;
         MotCleDTO motCleDTO = (MotCleDTO) o;
         return Objects.equals(motCle, motCleDTO.motCle) &&
-                Objects.equals(categories, motCleDTO.categories);
+                Objects.equals(categoriesMetier, motCleDTO.categoriesMetier);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(motCle, categories);
+        return Objects.hash(motCle, categoriesMetier);
     }
 
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("MotCleDTO{");
         sb.append("motCle='").append(motCle).append('\'');
-        sb.append(", categories=").append(categories);
+        sb.append(", categories=").append(categoriesMetier);
         sb.append('}');
         return sb.toString();
     }

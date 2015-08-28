@@ -18,6 +18,7 @@ import fr.batimen.dto.enums.TypeNotification;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 import fr.batimen.ws.dao.AnnonceDAO;
 import fr.batimen.ws.dao.ArtisanDAO;
+import fr.batimen.ws.dao.MotCleDAO;
 import fr.batimen.ws.dao.NotificationDAO;
 import fr.batimen.ws.entity.Annonce;
 import fr.batimen.ws.entity.Artisan;
@@ -98,6 +99,9 @@ public class GestionAnnonceFacade {
     @Inject
     private NotationService notationService;
 
+    @Inject
+    private MotCleDAO motCleDAO;
+
     /**
      * Permet la creation d'une nouvelle annonce par le client ainsi que le
      * compte de ce dernier
@@ -120,7 +124,7 @@ public class GestionAnnonceFacade {
             annonceDAO.saveAnnonceFirstTime(nouvelleAnnonce);
             annonceService.remplirSelAndHash(nouvelleAnnonce);
             annonceDAO.update(nouvelleAnnonce);
-            annonceService.remplirMotCle(nouvelleAnnonce, nouvelleAnnonceDTO);
+            annonceService.remplirMotCle(nouvelleAnnonce, nouvelleAnnonceDTO.getMotCles());
         } catch (BackendException | DuplicateEntityException e) {
             if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("Erreur lors de l'enregistrement de l'annonce", e);
@@ -683,6 +687,9 @@ public class GestionAnnonceFacade {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Mise à jour de l'annonce : {}", annonceAModifier);
             }
+
+            annonceService.remplirMotCle(annonceAModifier, modificationAnnonceDTO.getAnnonce().getMotCles());
+
             generateNotification = true;
         } else {
             return CodeRetourService.ANNONCE_RETOUR_INTROUVABLE;

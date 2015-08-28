@@ -178,13 +178,13 @@ public class RechercheAnnonce extends MasterPage {
                 SimpleDateFormat dateCreationFormat = new SimpleDateFormat("dd/MM/yyyy");
 
                 StringBuilder classCssIcon = new StringBuilder("iconsMesDevis");
-                classCssIcon.append(" ").append(CategorieLoader.getIconForCategorie(annonce.getCategorieMetier()));
+                //classCssIcon.append(" ").append(CategorieLoader.getIconForCategorie(annonce.getCategorieMetier()));
 
                 WebMarkupContainer iconCategorie = new WebMarkupContainer("iconCategorie");
                 iconCategorie.add(new AttributeModifier("class", classCssIcon.toString()));
 
-                Label categorie = new Label("categorie", CategorieLoader.getCategorieByCode(annonce
-                        .getCategorieMetier()));
+                /*Label categorie = new Label("categorie", CategorieLoader.getCategorieByCode(annonce
+                        .getCategorieMetier()));*/
                 Label delaiIntervention = new Label("delaiIntervention", annonce.getDelaiIntervention().getText());
                 Label dateCreation = new Label("dateCreation", dateCreationFormat.format(annonce.getDateCreation()));
                 Label typeTravaux = new Label("typeTravaux", annonce.getTypeTravaux().getText());
@@ -210,7 +210,7 @@ public class RechercheAnnonce extends MasterPage {
                 });
                 voirAnnonce.setOutputMarkupId(true);
 
-                item.add(iconCategorie, categorie, delaiIntervention, dateCreation, typeTravaux, voirAnnonce);
+                item.add(iconCategorie, /*categorie,*/ delaiIntervention, dateCreation, typeTravaux, voirAnnonce);
             }
         };
 

@@ -311,7 +311,7 @@ public class Annonce extends MasterPage {
         Set<Short> categories = new HashSet<>();
 
         for (MotCleDTO motCle : annonceAffichageDTO.getAnnonce().getMotCles()) {
-            for (CategorieMetierDTO categorieMetier : motCle.getCategories()) {
+            for (CategorieMetierDTO categorieMetier : motCle.getCategoriesMetier()) {
                 categories.add(categorieMetier.getCategorieMetier());
             }
         }

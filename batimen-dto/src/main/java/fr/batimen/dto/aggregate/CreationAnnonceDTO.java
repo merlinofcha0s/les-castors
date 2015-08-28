@@ -1,8 +1,8 @@
 package fr.batimen.dto.aggregate;
 
 import fr.batimen.dto.AbstractDTO;
-import fr.batimen.dto.CategorieDTO;
 import fr.batimen.dto.ClientDTO;
+import fr.batimen.dto.MotCleDTO;
 import fr.batimen.dto.enums.DelaiIntervention;
 import fr.batimen.dto.enums.TypeContact;
 import fr.batimen.dto.enums.TypeTravaux;
@@ -29,7 +29,7 @@ public class CreationAnnonceDTO extends AbstractDTO {
     // Annonce
     @Valid
     @NotNull
-    private List<CategorieDTO> categoriesMetier = new ArrayList<>();
+    private List<MotCleDTO> motCles = new ArrayList<>();
     @NotNull
     @Size(min = ANNONCE_DESCRIPTION_MIN, max = ANNONCE_DESCRIPTION_MAX)
     private String description;
@@ -207,12 +207,12 @@ public class CreationAnnonceDTO extends AbstractDTO {
     }
 
 
-    public List<CategorieDTO> getCategoriesMetier() {
-        return categoriesMetier;
+    public List<MotCleDTO> getMotCles() {
+        return motCles;
     }
 
-    public void setCategoriesMetier(List<CategorieDTO> categoriesMetier) {
-        this.categoriesMetier = categoriesMetier;
+    public void setMotCles(List<MotCleDTO> motCles) {
+        this.motCles = motCles;
     }
 
     /*
@@ -247,7 +247,7 @@ public class CreationAnnonceDTO extends AbstractDTO {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("CreationAnnonceDTO{");
-        sb.append("categoriesMetier=").append(categoriesMetier);
+        sb.append("categoriesMetier=").append(motCles);
         sb.append(", description='").append(description).append('\'');
         sb.append(", typeContact=").append(typeContact);
         sb.append(", delaiIntervention=").append(delaiIntervention);

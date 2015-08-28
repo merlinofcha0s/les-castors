@@ -1,6 +1,6 @@
 package fr.batimen.web.client.component;
 
-import fr.batimen.dto.CategorieDTO;
+import fr.batimen.dto.MotCleDTO;
 import fr.batimen.dto.helper.CategorieService;
 import fr.batimen.web.client.behaviour.AjaxMotCleBehaviour;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
@@ -35,7 +35,7 @@ public class MotCle extends Panel {
     private CategorieService categorieService;
 
     private List<String> motClesToString;
-    private List<CategorieDTO> categoriesSelectionnees = new ArrayList<>();
+    private List<MotCleDTO> categoriesSelectionnees = new ArrayList<>();
     private String initMotClesTypeAheadJS;
 
     private WebMarkupContainer categoriesChoisiesContainer;
@@ -45,6 +45,18 @@ public class MotCle extends Panel {
     public MotCle(String id) {
         super(id);
 
+        initMotCleTextField();
+        initCategoriesChoisie();
+    }
+
+    public MotCle(String id, List<MotCleDTO> categoriesSelectionnees) {
+        super(id);
+        this.categoriesSelectionnees = categoriesSelectionnees;
+        initMotCleTextField();
+        initCategoriesChoisie();
+    }
+
+    private void initMotCleTextField() {
         motClesToString = categorieService.getAllCategories().stream().map(c -> c.getMotCle()).collect(Collectors.toList());
 
         motCleCategorie = new TextField<>("motCleField", new Model<>());
@@ -60,21 +72,20 @@ public class MotCle extends Panel {
         motCleForm.add(motCleCategorie);
 
         add(motCleForm);
-
-        initCategoriesChoisie();
     }
 
     private void initCategoriesChoisie() {
         categoriesChoisiesContainer = new WebMarkupContainer("categoriesChoisiesContainer");
         categoriesChoisiesContainer.setOutputMarkupId(true);
+        categoriesChoisiesContainer.setMarkupId("categoriesChoisiesContainer");
 
-        ListView<CategorieDTO> categorieDTOListView = new ListView<CategorieDTO>("categorieDTOListView", categoriesSelectionnees) {
+        ListView<MotCleDTO> categorieDTOListView = new ListView<MotCleDTO>("categorieDTOListView", categoriesSelectionnees) {
             @Override
-            protected void populateItem(ListItem<CategorieDTO> item) {
-                CategorieDTO categorieDTO = item.getModelObject();
+            protected void populateItem(ListItem<MotCleDTO> item) {
+                MotCleDTO categorieDTO = item.getModelObject();
 
                 Label motCle = new Label("motCle", categorieDTO.getMotCle());
-                AjaxLink<CategorieDTO> cross = new AjaxLink<CategorieDTO>("cross", new Model<>(categorieDTO)) {
+                AjaxLink<MotCleDTO> cross = new AjaxLink<MotCleDTO>("cross", new Model<>(categorieDTO)) {
 
                     @Override
                     public void onClick(AjaxRequestTarget target) {
@@ -105,10 +116,10 @@ public class MotCle extends Panel {
             MotCleEvent motCleEvent = (MotCleEvent) event.getPayload();
 
             String motcle = motCleEvent.getMotCle();
-            Optional<CategorieDTO> categorieDTOSelectionnee = categorieService.getCategorieByMotCle(motcle);
+            Optional<MotCleDTO> motCleSelectionne = categorieService.getCategorieByMotCle(motcle);
 
-            if (categorieDTOSelectionnee.isPresent() && !categoriesSelectionnees.stream().filter(cat -> cat.equals(categorieDTOSelectionnee.get())).findAny().isPresent()) {
-                categoriesSelectionnees.add(categorieDTOSelectionnee.get());
+            if (motCleSelectionne.isPresent() && !categoriesSelectionnees.stream().filter(cat -> cat.equals(motCleSelectionne.get())).findAny().isPresent()) {
+                categoriesSelectionnees.add(motCleSelectionne.get());
             }
 
             motCleCategorie.clearInput();
@@ -119,11 +130,7 @@ public class MotCle extends Panel {
         }
     }
 
-    public List<CategorieDTO> getCategoriesSelectionnees() {
+    public List<MotCleDTO> getCategoriesSelectionnees() {
         return categoriesSelectionnees;
-    }
-
-    public void setCategoriesSelectionnees(List<CategorieDTO> categoriesSelectionnees) {
-        this.categoriesSelectionnees = categoriesSelectionnees;
     }
 }

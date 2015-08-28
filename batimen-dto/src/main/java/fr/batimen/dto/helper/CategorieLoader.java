@@ -44,14 +44,14 @@ public class CategorieLoader {
             SousCategorieMetierDTO videoSurveillance = new SousCategorieMetierDTO("Vidéo surveillance");
             SousCategorieMetierDTO desenfumage = new SousCategorieMetierDTO("Desenfumage");
 
-            electricite.addSousCategorie(tableauxElectriques);
+           /* electricite.addSousCategorie(tableauxElectriques);
             electricite.addSousCategorie(reseauxBranchementElectrique);
             electricite.addSousCategorie(domotiques);
             electricite.addSousCategorie(interphone);
             electricite.addSousCategorie(antenneSatellite);
             electricite.addSousCategorie(alarme);
             electricite.addSousCategorie(videoSurveillance);
-            electricite.addSousCategorie(desenfumage);
+            electricite.addSousCategorie(desenfumage);*/
 
         }
         return electricite;
@@ -76,7 +76,7 @@ public class CategorieLoader {
             SousCategorieMetierDTO chambreFroide = new SousCategorieMetierDTO("Chambre froide");
             SousCategorieMetierDTO vmc = new SousCategorieMetierDTO("VMC");
 
-            plomberie.addSousCategorie(sousPlomberie);
+           /* plomberie.addSousCategorie(sousPlomberie);
             plomberie.addSousCategorie(petitTravaux);
             plomberie.addSousCategorie(installation);
             plomberie.addSousCategorie(cumulus);
@@ -90,7 +90,7 @@ public class CategorieLoader {
             plomberie.addSousCategorie(hamman);
             plomberie.addSousCategorie(climatisation);
             plomberie.addSousCategorie(chambreFroide);
-            plomberie.addSousCategorie(vmc);
+            plomberie.addSousCategorie(vmc);*/
         }
         return plomberie;
     }
@@ -110,7 +110,7 @@ public class CategorieLoader {
             SousCategorieMetierDTO couverturePiscine = new SousCategorieMetierDTO("Couverture piscine");
             SousCategorieMetierDTO poseMargelle = new SousCategorieMetierDTO("Pose d'une margelle");
 
-            espaceVert.addSousCategorie(cloture);
+           /* espaceVert.addSousCategorie(cloture);
             espaceVert.addSousCategorie(elagage);
             espaceVert.addSousCategorie(arrosageAutomatique);
             espaceVert.addSousCategorie(pepinieriste);
@@ -121,7 +121,7 @@ public class CategorieLoader {
             espaceVert.addSousCategorie(localTechnique);
             espaceVert.addSousCategorie(entretienPiscine);
             espaceVert.addSousCategorie(couverturePiscine);
-            espaceVert.addSousCategorie(poseMargelle);
+            espaceVert.addSousCategorie(poseMargelle);*/
         }
         return espaceVert;
     }
@@ -157,7 +157,7 @@ public class CategorieLoader {
             SousCategorieMetierDTO constructionAnnexes = new SousCategorieMetierDTO("Construction annexes");
             SousCategorieMetierDTO muretMurSoutennement = new SousCategorieMetierDTO("Muret / Mur soutennement");
 
-            decorationMaconnerie.addSousCategorie(porteFenetre);
+            /*decorationMaconnerie.addSousCategorie(porteFenetre);
             decorationMaconnerie.addSousCategorie(pluieDeLumiere);
             decorationMaconnerie.addSousCategorie(portailFerronerie);
             decorationMaconnerie.addSousCategorie(serrurier);
@@ -182,7 +182,7 @@ public class CategorieLoader {
             decorationMaconnerie.addSousCategorie(surelevation);
             decorationMaconnerie.addSousCategorie(constructionAnnexes);
             decorationMaconnerie.addSousCategorie(sousDecorationMaconnerie);
-            decorationMaconnerie.addSousCategorie(muretMurSoutennement);
+            decorationMaconnerie.addSousCategorie(muretMurSoutennement);*/
         }
         return decorationMaconnerie;
     }

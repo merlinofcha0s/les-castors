@@ -1,6 +1,6 @@
 package fr.batimen.web.client.extend.nouveau.devis;
 
-import fr.batimen.dto.CategorieDTO;
+import fr.batimen.dto.MotCleDTO;
 import fr.batimen.web.app.constants.Etape;
 import fr.batimen.web.app.constants.FeedbackMessageLevel;
 import fr.batimen.web.client.component.MotCle;
@@ -24,7 +24,7 @@ public class Etape2Categorie extends Panel {
 
     private static final long serialVersionUID = -3950302126805043243L;
 
-    private List<CategorieDTO> categoriesSelectionnees = new ArrayList<>();
+    private List<MotCleDTO> categoriesSelectionnees = new ArrayList<>();
 
     public Etape2Categorie(String id) {
         super(id);
