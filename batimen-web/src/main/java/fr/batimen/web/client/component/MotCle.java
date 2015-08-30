@@ -31,13 +31,12 @@ import java.util.stream.Collectors;
  */
 public class MotCle extends Panel {
 
+    public static final String ERROR_MESSAGE = "Veuillez selectionner au moins un mot clé";
     @Inject
     private CategorieService categorieService;
-
     private List<String> motClesToString;
     private List<MotCleDTO> categoriesSelectionnees = new ArrayList<>();
     private String initMotClesTypeAheadJS;
-
     private WebMarkupContainer categoriesChoisiesContainer;
     private TextField<String> motCleCategorie;
     private AjaxMotCleBehaviour ajaxMotCleBehaviour;

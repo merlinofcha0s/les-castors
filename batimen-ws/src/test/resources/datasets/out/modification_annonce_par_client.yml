@@ -142,8 +142,6 @@ annonce:
     delaiintervention: 4
     description: Peinture d'un mur
     etatannonce: 0
-    categoriemetier: 0
-    souscategoriemetier: Installation électrique
     nbconsultation: 0
     typecontact: 1
     typeTravaux: 1
@@ -158,8 +156,6 @@ annonce:
     delaiintervention: 0
     description: Peinture d'un mur
     etatannonce: 0
-    categoriemetier: 0
-    souscategoriemetier: Installation électrique
     nbconsultation: 0
     typecontact: 0
     typeTravaux: 0
@@ -201,3 +197,21 @@ image:
    - id: 1000
      url: "https://res.cloudinary.com/lescastors/image/upload/v1427874120/test/zbeod6tici6yrphpco39.jpg"
      id_annonce: 1020
+motcle:
+  - id: 1
+    motcle: Salles de bains
+  - id: 2
+    motcle: Salles de bains
+  - id: 3
+    motcle: Piscine
+categoriemetier:
+  - categoriemetier: 0
+    motcle_fk: 1
+  - categoriemetier: 3
+    motcle_fk: 1
+  - categoriemetier: 0
+    motcle_fk: 2
+  - categoriemetier: 3
+    motcle_fk: 2
+  - categoriemetier: 1
+    motcle_fk: 3

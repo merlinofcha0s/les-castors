@@ -22,9 +22,8 @@ import java.util.*;
 
 /**
  * Classe de gestion des annonces
- * 
+ *
  * @author Casaucau Cyril
- * 
  */
 @Stateless(name = "AnnonceService")
 @LocalBean
@@ -48,9 +47,8 @@ public class AnnonceService {
 
     /**
      * Crée une entité annonce a partir d'une DTO CreationAnnonce.
-     * 
-     * @param nouvelleAnnonceDTO
-     *            L'objet provenant du backend contenant les infos de l'annonce.
+     *
+     * @param nouvelleAnnonceDTO L'objet provenant du backend contenant les infos de l'annonce.
      * @return Entité Annonce
      * @throws BackendException
      */
@@ -83,11 +81,9 @@ public class AnnonceService {
     /**
      * Cette méthode à sert aller chercher un client qui est deja inscit pour le
      * binder à l'annonce.
-     * 
-     * @param nouvelleAnnonceDTO
-     *            objet provenant du front
-     * @param nouvelleAnnonce
-     *            entité qui sera persisté
+     *
+     * @param nouvelleAnnonceDTO objet provenant du front
+     * @param nouvelleAnnonce    entité qui sera persisté
      */
     private void isSignedUp(CreationAnnonceDTO nouvelleAnnonceDTO, Annonce nouvelleAnnonce) throws BackendException,
             DuplicateEntityException {
@@ -107,13 +103,10 @@ public class AnnonceService {
      * Methode qui permet de populer l'entité client grace à la
      * CreationAnnonceDTO et a la persister dans la BDD. Dans le cas d'une
      * inscription.
-     * 
-     * @param nouvelleAnnonceDTO
-     *            objet provenant du front
-     * @param nouvelleAnnonce
-     *            entité qui sera persisté
-     * @throws BackendException
-     *             en cas de probleme de sauvegarde dans la BDD
+     *
+     * @param nouvelleAnnonceDTO objet provenant du front
+     * @param nouvelleAnnonce    entité qui sera persisté
+     * @throws BackendException en cas de probleme de sauvegarde dans la BDD
      */
     private void isNotSignedUp(CreationAnnonceDTO nouvelleAnnonceDTO, Annonce nouvelleAnnonce) throws BackendException,
             DuplicateEntityException {
@@ -135,7 +128,7 @@ public class AnnonceService {
     /**
      * Rempli une entité Adresse grace à la DTO de création de l'annonce, puis
      * la persiste
-     * 
+     *
      * @param nouvelleAnnonce
      * @return
      * @throws BackendException
@@ -159,7 +152,7 @@ public class AnnonceService {
 
     /**
      * Rempli une entité Client grace à la DTO de création de l'annonce
-     * 
+     *
      * @param nouvelleAnnonceDTO
      * @param nouvelleAnnonce
      * @return
@@ -197,7 +190,7 @@ public class AnnonceService {
 
     @TransactionAttribute(TransactionAttributeType.MANDATORY)
     public AnnonceAffichageDTO doMappingAnnonceAffichageDTO(Annonce annonce, AnnonceAffichageDTO annonceAffichageDTO,
-            Boolean isArtisan, Boolean isArtisanInscrit, Boolean isAdmin) {
+                                                            Boolean isArtisan, Boolean isArtisanInscrit, Boolean isAdmin) {
 
         if (isArtisanInscrit || isAdmin) {
             annonceAffichageDTO.setTelephoneClient(annonce.getDemandeur().getNumeroTel());
@@ -332,20 +325,26 @@ public class AnnonceService {
 
     @TransactionAttribute(TransactionAttributeType.MANDATORY)
     public void remplirMotCle(Annonce annonce, List<MotCleDTO> motCleDTOs) {
-        motCleDTOs.forEach(MotCleDTO -> {
+
+        annonce.getMotcles().clear();
+        motCleDAO.deleteAllMotsCles(annonce.getMotcles());
+
+
+        motCleDTOs.forEach(motCleDTO -> {
+
+            //boolean motCleNotPresent = annonce.getMotcles().stream().noneMatch(motCle -> motCle.getMotCle().equals(motCleDTO.getMotCle()));
+
             MotCle motCle = new MotCle();
-            motCle.setMotCle(MotCleDTO.getMotCle());
+            motCle.setMotCle(motCleDTO.getMotCle());
             motCle.setAnnonce(annonce);
 
-            MotCleDTO.getCategoriesMetier().forEach(categorie -> {
+            motCleDTO.getCategoriesMetier().forEach(categorie -> {
                 CategorieMetier categorieMetier = new CategorieMetier();
                 categorieMetier.setCategorieMetier(categorie.getCategorieMetier());
                 categorieMetier.setMotCle(motCle);
                 categorieMetierDAO.persistCategorieMetier(categorieMetier);
                 motCle.getCategoriesMetier().add(categorieMetier);
             });
-
-            //LE FAIRE EN LAMBDA ???? avec If present ???
 
             motCleDAO.persistMotCle(motCle);
             annonce.getMotcles().add(motCle);

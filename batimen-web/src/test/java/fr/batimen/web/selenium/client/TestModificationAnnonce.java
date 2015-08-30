@@ -11,17 +11,17 @@ import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import static com.ninja_squad.dbsetup.Operations.sequenceOf;
 import static fr.batimen.web.selenium.dataset.AnnonceDataset.*;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Test Selenium concernant la page de modification d'une annonce.
  *
  * @author Casaucau Cyril.
- *         <p/>
+ *         <p>
  *         Created by Casaucau on 20/04/2015.
  */
 public class TestModificationAnnonce extends AbstractITTest {
@@ -30,7 +30,8 @@ public class TestModificationAnnonce extends AbstractITTest {
     public void prepareDB() throws Exception {
         Operation operation = sequenceOf(DELETE_ALL, INSERT_USER_DATA, INSERT_USER_PERMISSION, INSERT_ADRESSE_DATA,
                 INSERT_ENTREPRISE_DATA, INSERT_ARTISAN_DATA, INSERT_ARTISAN_PERMISSION, INSERT_AVIS_DATA,
-                INSERT_ANNONCE_DATA, INSERT_NOTIFICATION_DATA, INSERT_ANNONCE_ARTISAN, INSERT_ANNONCE_IMAGE);
+                INSERT_ANNONCE_DATA, INSERT_NOTIFICATION_DATA, INSERT_ANNONCE_ARTISAN, INSERT_ANNONCE_IMAGE,
+                INSERT_ANNONCE_MOT_CLE, INSERT_CATEGORIE_METIER);
         DbSetup dbSetup = new DbSetup(getDriverManagerDestination(), operation);
         dbSetup.launch();
     }
@@ -53,8 +54,8 @@ public class TestModificationAnnonce extends AbstractITTest {
     @Test
     public void testModificationAnnonceNominale() {
         driver.findElement(By.linkText("Modifier votre annonce")).click();
-        new Select(driver.findElement(By.id("typeContactField"))).selectByVisibleText("Téléphone");
-        new Select(driver.findElement(By.id("sousCategorieSelect"))).selectByVisibleText("Interphone");
+        driver.findElement(By.id("motCleField")).sendKeys("Piscine");
+        driver.findElement(By.linkText("Piscine")).click();
         driver.findElement(By.id("radioTypeTravauxRenovation")).click();
         driver.findElement(By.id("typeTravauxRenovation")).click();
         driver.findElement(By.id("validateQualification")).click();
@@ -62,6 +63,10 @@ public class TestModificationAnnonce extends AbstractITTest {
                 .until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("span.box_type4"),
                         "Votre annonce a été modifiée avec succés !"));
         Assert.assertTrue(checkUntilModifOK);
+        Boolean checkMotClePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("div.informationAnnonce"),
+                        "Salles de bain"));
+        assertTrue(checkMotClePresent);
     }
 
     /**

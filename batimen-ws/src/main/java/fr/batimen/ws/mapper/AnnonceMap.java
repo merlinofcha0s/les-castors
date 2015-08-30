@@ -16,5 +16,6 @@ public class AnnonceMap extends PropertyMap<AnnonceDTO, Annonce>{
     protected void configure() {
         map().setHashID(source.getHashID());
         skip(destination.getId());
+        skip(destination.getMotcles());
     }
 }

@@ -1,9 +1,9 @@
 package fr.batimen.web.client.component;
 
+import fr.batimen.web.app.constants.FeedbackMessageLevel;
+import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.feedback.FeedbackMessage;
 import org.apache.wicket.markup.html.panel.FeedbackPanel;
-
-import fr.batimen.web.app.constants.FeedbackMessageLevel;
 
 /**
  * Version custom du feedback panel provenant de wicket Cette version prends en
@@ -55,6 +55,12 @@ public class BatimenFeedbackPanel extends FeedbackPanel {
         return css;
     }
 
+    /**
+     * Envoi un message à l'utilisateur via le feedback panel
+     *
+     * @param message      Le message à envoyer
+     * @param messageLevel Le niveau du message ERROR, INFO, SUCCESS
+     */
     public void sendMessage(String message, FeedbackMessageLevel messageLevel) {
         switch (messageLevel) {
         case ERROR:
@@ -70,5 +76,33 @@ public class BatimenFeedbackPanel extends FeedbackPanel {
             this.error(message);
             break;
         }
+    }
+
+    /**
+     * Envoi un message à l'utilisateur via le feedback panel et scroll automatiquement en haut de la page
+     * <p>
+     * Comme ca on est sur que l'utilisateur voit le message.
+     *
+     * @param message      Le message à envoyer
+     * @param messageLevel Le niveau du message ERROR, INFO, SUCCESS
+     * @param target       La target Ajax
+     */
+    public void sendMessageAndGoToTop(String message, FeedbackMessageLevel messageLevel, AjaxRequestTarget target) {
+        switch (messageLevel) {
+            case ERROR:
+                this.error(message);
+                break;
+            case INFO:
+                this.info(message);
+                break;
+            case SUCCESS:
+                this.success(message);
+                break;
+            default:
+                this.error(message);
+                break;
+        }
+
+        target.appendJavaScript("$(window).scrollTop(0);");
     }
 }

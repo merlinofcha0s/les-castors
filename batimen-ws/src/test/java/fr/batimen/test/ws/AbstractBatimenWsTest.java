@@ -3,6 +3,9 @@ package fr.batimen.test.ws;
 import fr.batimen.ws.client.WsConnector;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.persistence.Cleanup;
+import org.jboss.arquillian.persistence.CleanupStrategy;
+import org.jboss.arquillian.persistence.TestExecutionPhase;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
@@ -21,6 +24,7 @@ import javax.inject.Inject;
 
 @RunWith(Arquillian.class)
 //@ApplyScriptBefore(value = "datasets/cleanup/before.sql")
+@Cleanup(phase = TestExecutionPhase.BEFORE, strategy = CleanupStrategy.STRICT)
 public abstract class AbstractBatimenWsTest {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AbstractBatimenWsTest.class);

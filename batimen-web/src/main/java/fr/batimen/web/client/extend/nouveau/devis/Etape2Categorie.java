@@ -54,7 +54,7 @@ public class Etape2Categorie extends Panel {
                 categoriesSelectionnees = motCle.getCategoriesSelectionnees();
 
                 if (categoriesSelectionnees.isEmpty()) {
-                    MasterPage.triggerEventFeedBackPanel(target, "Veuillez selectionner au moins un mot clé", FeedbackMessageLevel.ERROR);
+                    MasterPage.triggerEventFeedBackPanel(target, motCle.ERROR_MESSAGE, FeedbackMessageLevel.ERROR);
                 } else {
                     // On crée l'event qui sera envoyé à la page de nouveau devis
                     CategorieEvent categorieEvent = new CategorieEvent(target, categoriesSelectionnees);

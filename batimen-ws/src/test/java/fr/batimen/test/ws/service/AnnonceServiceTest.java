@@ -3,6 +3,7 @@ package fr.batimen.test.ws.service;
 import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.dto.*;
 import fr.batimen.dto.aggregate.*;
+import fr.batimen.dto.constant.Categorie;
 import fr.batimen.dto.enums.*;
 import fr.batimen.ws.client.service.AnnonceServiceREST;
 import fr.batimen.ws.dao.AnnonceDAO;
@@ -135,6 +136,15 @@ public class AnnonceServiceTest {
         modificationAnnonceDTO.getAnnonce().setTypeContact(TypeContact.TELEPHONE);
         modificationAnnonceDTO.getAnnonce().setTypeTravaux(TypeTravaux.RENOVATION);
         modificationAnnonceDTO.getAnnonce().setDelaiIntervention(DelaiIntervention.SIX_MOIS);
+
+        MotCleDTO motCleDTO = new MotCleDTO();
+        motCleDTO.setMotCle("Piscine");
+
+        CategorieMetierDTO categorieMetierDTO = new CategorieMetierDTO();
+        categorieMetierDTO.setCategorieMetier(Categorie.PLOMBERIE_CODE);
+        motCleDTO.getCategoriesMetier().add(categorieMetierDTO);
+
+        modificationAnnonceDTO.getAnnonce().getMotCles().add(motCleDTO);
 
         Integer codeRetourOK = annonceServiceREST.modifierAnnonce(modificationAnnonceDTO);
 

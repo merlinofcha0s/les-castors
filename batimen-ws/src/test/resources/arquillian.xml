@@ -24,6 +24,10 @@
         <property name="defaultCleanupStrategy">STRICT</property>
     </extension>
 
+    <extension qualifier="transaction">
+        <property name="manager">java:jboss/UserTransaction</property>
+    </extension>
+
     <extension qualifier="persistence-dbunit">
         <property name="datatypeFactory">org.dbunit.ext.postgresql.PostgresqlDataTypeFactory</property>
         <property name="excludePoi">true</property>

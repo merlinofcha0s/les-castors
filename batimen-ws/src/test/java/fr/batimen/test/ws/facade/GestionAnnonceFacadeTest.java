@@ -581,7 +581,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
     @ShouldMatchDataSet(value = "datasets/out/modification_annonce_par_client.yml", excludeColumns = {"id",
-            "datemaj", "datecreation", "datenotation", "datenotification"})
+            "datemaj", "datecreation", "datenotation", "datenotification", "motcle_fk", "annonce_fk"})
     public void testModificationAnnonceParClient() {
         annonceServiceTest.testModificationAnnonce(TypeCompte.CLIENT, "pebronne", CodeRetourService.RETOUR_OK);
     }
@@ -592,7 +592,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
     @ShouldMatchDataSet(value = "datasets/out/modification_annonce_par_client.yml", excludeColumns = {"id",
-            "datemaj", "datecreation", "datenotation", "datenotification"})
+            "datemaj", "datecreation", "datenotation", "datenotification", "motcle_fk", "annonce_fk"})
     public void testModificationAnnonceParAdmin() {
         annonceServiceTest.testModificationAnnonce(TypeCompte.ADMINISTRATEUR, "admin", CodeRetourService.RETOUR_OK);
     }
@@ -603,7 +603,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @Test
     @UsingDataSet("datasets/in/annonces_by_id.yml")
     @ShouldMatchDataSet(value = "datasets/in/annonces_by_id.yml", excludeColumns = {"id",
-            "datemaj", "datecreation", "datenotation", "datenotification"})
+            "datemaj", "datecreation", "datenotation", "datenotification", "motcle_fk", "annonce_fk"})
     public void testModificationAnnonceParClientNotAllowed() {
         annonceServiceTest.testModificationAnnonce(TypeCompte.CLIENT, "bertrand", CodeRetourService.ANNONCE_RETOUR_INTROUVABLE);
     }

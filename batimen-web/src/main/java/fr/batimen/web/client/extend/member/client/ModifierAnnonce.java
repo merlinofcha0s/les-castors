@@ -33,9 +33,9 @@ import java.util.List;
 
 /**
  * Page permettant aux clients ou aux admins de modifier une annonce postée par un client
- * <p/>
+ * <p>
  * Created by Casaucau on 17/04/2015.
- * <p/>
+ * <p>
  *
  * @author Casaucau Cyril
  */
@@ -140,44 +140,47 @@ public class ModifierAnnonce extends MasterPage {
         if (event.getPayload() instanceof ModificationAnnonceEvent) {
             //Extraction des infos
             ModificationAnnonceEvent modificationAnnonceEvent = (ModificationAnnonceEvent) event.getPayload();
-            CreationAnnonceDTO creationAnnonceDTO = modificationAnnonceEvent.getCreationAnnonceDTO();
+            if (!motCleComposant.getCategoriesSelectionnees().isEmpty()) {
+                CreationAnnonceDTO creationAnnonceDTO = modificationAnnonceEvent.getCreationAnnonceDTO();
 
-            ModelMapper mapper = new ModelMapper();
+                ModelMapper mapper = new ModelMapper();
 
-            //Init des objets
-            ModificationAnnonceDTO modificationAnnonceDTO = new ModificationAnnonceDTO();
-            modificationAnnonceDTO.setAnnonce(new AnnonceDTO());
-            modificationAnnonceDTO.setAdresse(new AdresseDTO());
+                //Init des objets
+                ModificationAnnonceDTO modificationAnnonceDTO = new ModificationAnnonceDTO();
+                modificationAnnonceDTO.setAnnonce(new AnnonceDTO());
+                modificationAnnonceDTO.setAdresse(new AdresseDTO());
+
+                //Remplissage des DTOs
+                mapper.map(creationAnnonceDTO, modificationAnnonceDTO.getAnnonce());
+                mapper.map(creationAnnonceDTO, modificationAnnonceDTO.getAdresse());
+
+                //Champs non mappés
+                modificationAnnonceDTO.setLoginDemandeur(authentication.getCurrentUserInfo().getLogin());
+
+                modificationAnnonceDTO.getAnnonce().setDateMAJ(new Date());
+                modificationAnnonceDTO.getAnnonce().setEtatAnnonce(annonceAffichageDTO.getAnnonce().getEtatAnnonce());
+                modificationAnnonceDTO.getAnnonce().setDateCreation(annonceAffichageDTO.getAnnonce().getDateCreation());
+                modificationAnnonceDTO.getAnnonce().setHashID(idAnnonce);
+                modificationAnnonceDTO.getAnnonce().setNbConsultation(annonceAffichageDTO.getAnnonce().getNbConsultation());
+                modificationAnnonceDTO.getAnnonce().setNbDevis(annonceAffichageDTO.getAnnonce().getNbDevis());
 
 
-            //Remplissage des DTOs
-            mapper.map(creationAnnonceDTO, modificationAnnonceDTO.getAnnonce());
-            mapper.map(creationAnnonceDTO, modificationAnnonceDTO.getAdresse());
+                //Appel du service
+                Integer codeRetourService = annonceServiceREST.modifierAnnonce(modificationAnnonceDTO);
 
-            //Champs non mappés
-            modificationAnnonceDTO.setLoginDemandeur(authentication.getCurrentUserInfo().getLogin());
-
-            modificationAnnonceDTO.getAnnonce().setDateMAJ(new Date());
-            modificationAnnonceDTO.getAnnonce().setEtatAnnonce(annonceAffichageDTO.getAnnonce().getEtatAnnonce());
-            modificationAnnonceDTO.getAnnonce().setDateCreation(annonceAffichageDTO.getAnnonce().getDateCreation());
-            modificationAnnonceDTO.getAnnonce().setHashID(idAnnonce);
-            modificationAnnonceDTO.getAnnonce().setNbConsultation(annonceAffichageDTO.getAnnonce().getNbConsultation());
-            modificationAnnonceDTO.getAnnonce().setNbDevis(annonceAffichageDTO.getAnnonce().getNbDevis());
-
-
-            //Appel du service
-            Integer codeRetourService = annonceServiceREST.modifierAnnonce(modificationAnnonceDTO);
-
-            if (codeRetourService.equals(CodeRetourService.RETOUR_OK)) {
-                PageParameters params = new PageParameters();
-                params.add(ParamsConstant.ID_ANNONCE_PARAM, idAnnonce);
-                params.add(ParamsConstant.IS_MODIF_PARAM, "OK");
-                this.setResponsePage(Annonce.class, params);
+                if (codeRetourService.equals(CodeRetourService.RETOUR_OK)) {
+                    PageParameters params = new PageParameters();
+                    params.add(ParamsConstant.ID_ANNONCE_PARAM, idAnnonce);
+                    params.add(ParamsConstant.IS_MODIF_PARAM, "OK");
+                    this.setResponsePage(Annonce.class, params);
+                } else {
+                    feedBackPanelGeneral.sendMessage("Problème lors de l'enregistrement de l'annonce, veuillez réessayer ultérieurement", FeedbackMessageLevel.ERROR);
+                }
+                modificationAnnonceEvent.getTarget().add(feedBackPanelGeneral);
             } else {
-                feedBackPanelGeneral.sendMessage("Problème lors de l'enregistrement de l'annonce, veuillez réessayer ultérieurement", FeedbackMessageLevel.ERROR);
+                feedBackPanelGeneral.sendMessageAndGoToTop(MotCle.ERROR_MESSAGE, FeedbackMessageLevel.ERROR, modificationAnnonceEvent.getTarget());
+                modificationAnnonceEvent.getTarget().add(feedBackPanelGeneral);
             }
-
-            modificationAnnonceEvent.getTarget().add(feedBackPanelGeneral);
         }
 
         if (event.getPayload() instanceof SuppressionPhotoEvent) {
