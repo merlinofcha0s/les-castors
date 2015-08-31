@@ -4,10 +4,7 @@ import fr.batimen.core.constant.QueryJPQL;
 import fr.batimen.core.exception.DuplicateEntityException;
 import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
-import fr.batimen.ws.entity.Adresse;
-import fr.batimen.ws.entity.Adresse_;
-import fr.batimen.ws.entity.Annonce;
-import fr.batimen.ws.entity.Annonce_;
+import fr.batimen.ws.entity.*;
 import fr.batimen.ws.utils.RolesUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -448,10 +445,10 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
      * Permet d'effectuer une recherche d'annonce dans la base de données.
      *
      * @param categoriesMetier La catégorie de l'annonce
-     * @param aPartirDu A partir de quelle date
-     * @param departement Le departement où se trouve le chantier
-     * @param rangeDebut Pagination de début
-     * @param rangeFin Pagination de fin
+     * @param aPartirDu        A partir de quelle date
+     * @param departement      Le departement où se trouve le chantier
+     * @param rangeDebut       Pagination de début
+     * @param rangeFin         Pagination de fin
      * @return La liste d'annonces correspondantent
      */
     @TransactionAttribute(TransactionAttributeType.MANDATORY)
@@ -466,7 +463,7 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
         Root<Annonce> searchAnnonceRoot = searchCriteria.from(Annonce.class);
 
         //Ajout des prédicats à la requete
-        searchCriteria.where(createSearchPredicate(searchAnnonceRoot, categoriesMetier, aPartirDu, departement));
+        searchCriteria.where(createSearchPredicate(searchAnnonceRoot, searchCriteria, categoriesMetier, aPartirDu, departement));
         searchCriteria.orderBy(criteriaBuilderSearch.desc(searchAnnonceRoot.get(Annonce_.dateCreation)));
 
         //Preparation au lancement de la requete
@@ -502,7 +499,7 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
         searchCriteria.select(criteriaBuilderSearch.count(searchAnnonceRoot));
 
         //Ajout des prédicats à la requete
-        searchCriteria.where(createSearchPredicate(searchAnnonceRoot, categoriesMetier, aPartirDu, departement));
+        searchCriteria.where(createSearchPredicate(searchAnnonceRoot, searchCriteria, categoriesMetier, aPartirDu, departement));
 
         //Preparation au lancement de la requete
         TypedQuery<Long> searchQuery = entityManager.createQuery(searchCriteria);
@@ -510,16 +507,17 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
         return searchQuery.getSingleResult();
     }
 
-    private Predicate createSearchPredicate(Root<Annonce> searchAnnonceRoot, List<Short> categoriesMetier, Date aPartirDu, Integer departement) {
+    private <T> Predicate createSearchPredicate(Root<Annonce> searchAnnonceRoot, CriteriaQuery<T> searchCriteria, List<Short> categoriesMetier, Date aPartirDu, Integer departement) {
         CriteriaBuilder criteriaBuilderSearch = entityManager.getCriteriaBuilder();
 
         //Clause pour la date
         Predicate predicates = criteriaBuilderSearch.between(searchAnnonceRoot.get(Annonce_.dateCreation), aPartirDu, new Date());
 
-        //TODO : Pas oublier de corriger ca !!!!!
-        //Predicat pour les catégories
-        /*Expression<Short> categorieExpression = searchAnnonceRoot.get(Annonce_.categorieMetier);
-        Predicate categoriePredicate = categorieExpression.in(categoriesMetier);*/
+        Join<Annonce, MotCle> motCleJoin = searchAnnonceRoot.join(Annonce_.motcles, JoinType.LEFT);
+        Join<MotCle, CategorieMetier> categorieJoin = motCleJoin.join(MotCle_.categoriesMetier, JoinType.LEFT);
+
+        Expression<Short> categNumberExpression = categorieJoin.get(CategorieMetier_.categorieMetier);
+        Predicate categPredicate = categNumberExpression.in(categoriesMetier);
 
         //Predicat pour l'etat de l'annonce
         Expression<EtatAnnonce> etatAnnonceExpression = searchAnnonceRoot.get(Annonce_.etatAnnonce);
@@ -530,7 +528,7 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
         Predicate departementPredicate = criteriaBuilderSearch.and(criteriaBuilderSearch.equal(adresseJoin.get(Adresse_.departement), departement));
 
         //Fusion des predicats avec des "ET"
-        predicates = criteriaBuilderSearch.and(predicates, etatAnnoncePredicate, departementPredicate);
+        predicates = criteriaBuilderSearch.and(predicates, etatAnnoncePredicate, departementPredicate, categPredicate);
 
         return predicates;
     }

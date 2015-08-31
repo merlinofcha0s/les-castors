@@ -10,7 +10,6 @@ import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.client.component.*;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.ws.client.service.AnnonceServiceREST;
-import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -180,8 +179,8 @@ public class RechercheAnnonce extends MasterPage {
                 StringBuilder classCssIcon = new StringBuilder("iconsMesDevis");
                 //classCssIcon.append(" ").append(CategorieLoader.getIconForCategorie(annonce.getCategorieMetier()));
 
-                WebMarkupContainer iconCategorie = new WebMarkupContainer("iconCategorie");
-                iconCategorie.add(new AttributeModifier("class", classCssIcon.toString()));
+                //WebMarkupContainer iconCategorie = new WebMarkupContainer("iconCategorie");
+                //iconCategorie.add(new AttributeModifier("class", classCssIcon.toString()));
 
                 /*Label categorie = new Label("categorie", CategorieLoader.getCategorieByCode(annonce
                         .getCategorieMetier()));*/
@@ -210,7 +209,7 @@ public class RechercheAnnonce extends MasterPage {
                 });
                 voirAnnonce.setOutputMarkupId(true);
 
-                item.add(iconCategorie, /*categorie,*/ delaiIntervention, dateCreation, typeTravaux, voirAnnonce);
+                item.add(/*iconCategorie, categorie,*/ delaiIntervention, dateCreation, typeTravaux, voirAnnonce);
             }
         };
 

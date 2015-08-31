@@ -16,26 +16,31 @@ import java.util.Objects;
 public class CategorieMetier implements Serializable {
 
     private static final long serialVersionUID = -3444525849226642872L;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(nullable = false)
-    private short categorieMetier;
-
+    private Short categorieMetier;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "entreprise_fk")
     private Entreprise entreprise;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "motcle_fk")
     private MotCle motCle;
 
+    public CategorieMetier(Short categorieMetier) {
+        this();
+        this.categorieMetier = categorieMetier;
+    }
+
+    public CategorieMetier() {
+        super();
+    }
+
     /**
      * @return the categorieMetier
      */
-    public short getCategorieMetier() {
+    public Short getCategorieMetier() {
         return categorieMetier;
     }
 
@@ -43,7 +48,7 @@ public class CategorieMetier implements Serializable {
      * @param categorieMetier
      *            the categorieMetier to set
      */
-    public void setCategorieMetier(short categorieMetier) {
+    public void setCategorieMetier(Short categorieMetier) {
         this.categorieMetier = categorieMetier;
     }
 
@@ -83,9 +88,7 @@ public class CategorieMetier implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CategorieMetier that = (CategorieMetier) o;
-        return Objects.equals(categorieMetier, that.categorieMetier) &&
-                Objects.equals(id, that.id) &&
-                Objects.equals(entreprise, that.entreprise);
+        return Objects.equals(categorieMetier, that.categorieMetier);
     }
 
     @Override
@@ -95,11 +98,6 @@ public class CategorieMetier implements Serializable {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("CategorieMetier{");
-        sb.append("id=").append(id);
-        sb.append(", categorieMetier=").append(categorieMetier);
-        sb.append(", entreprise=").append(entreprise);
-        sb.append('}');
-        return sb.toString();
+        return String.valueOf(categorieMetier);
     }
 }
