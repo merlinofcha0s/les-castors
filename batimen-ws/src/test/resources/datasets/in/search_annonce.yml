@@ -148,8 +148,6 @@ annonce:
     delaiintervention: 0
     description: Peinture d'un mur
     etatannonce: 0
-    categoriemetier: 0
-    souscategoriemetier: Installation électrique
     nbconsultation: 0
     typecontact: 0
     typeTravaux: 0
@@ -164,8 +162,6 @@ annonce:
     delaiintervention: 0
     description: Peinture d'un mur
     etatannonce: 0
-    categoriemetier: 0
-    souscategoriemetier: Installation électrique
     nbconsultation: 0
     typecontact: 0
     typeTravaux: 0
@@ -179,8 +175,6 @@ annonce:
     delaiintervention: 0
     description: Réparation du lavabo
     etatannonce: 0
-    categoriemetier: 1
-    souscategoriemetier: Plomberie
     nbconsultation: 0
     typecontact: 0
     typeTravaux: 0
@@ -206,3 +200,26 @@ image:
    - id: 1000
      url: "https://res.cloudinary.com/lescastors/image/upload/v1427874120/test/zbeod6tici6yrphpco39.jpg"
      id_annonce: 1020
+motcle:
+   - id: 1000
+     motcle: Salles de bains
+     annonce_fk: 1020
+   - id: 1001
+     motcle: Salles de bains
+     annonce_fk: 1021
+   - id: 1002
+     motcle: Salles de bains
+     annonce_fk: 1022
+categoriemetier:
+   - categoriemetier: 0
+     motcle_fk: 1000
+   - categoriemetier: 3
+     motcle_fk: 1000
+   - categoriemetier: 0
+     motcle_fk: 1001
+   - categoriemetier: 3
+     motcle_fk: 1001
+   - categoriemetier: 1
+     motcle_fk: 1002
+   - categoriemetier: 3
+     motcle_fk: 1002

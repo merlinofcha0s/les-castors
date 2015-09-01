@@ -7,10 +7,10 @@ import fr.batimen.dto.DemandeAnnonceDTO;
 import fr.batimen.dto.ImageDTO;
 import fr.batimen.dto.NotificationDTO;
 import fr.batimen.dto.aggregate.*;
+import fr.batimen.dto.constant.Categorie;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.enums.TypeNotification;
-import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.test.ws.AbstractBatimenWsTest;
 import fr.batimen.test.ws.helper.DataHelper;
 import fr.batimen.test.ws.service.AnnonceServiceTest;
@@ -742,7 +742,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @UsingDataSet("datasets/in/search_annonce.yml")
     public void testRechercheAnnonceNominal() {
         List<CategorieMetierDTO> categorieMetierDTOs = new ArrayList<>();
-        categorieMetierDTOs.add(CategorieLoader.getCategorieElectricite());
+        categorieMetierDTOs.add(Categorie.getElectricite());
         annonceServiceTest.searchAnnonce("pebronneArtisanne", categorieMetierDTOs, 2);
     }
 
@@ -753,7 +753,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @UsingDataSet("datasets/in/search_annonce.yml")
     public void testRechercheAnnonceParAdmin() {
         List<CategorieMetierDTO> categorieMetierDTOs = new ArrayList<>();
-        categorieMetierDTOs.add(CategorieLoader.getCategorieElectricite());
+        categorieMetierDTOs.add(Categorie.getElectricite());
         annonceServiceTest.searchAnnonce("admin", categorieMetierDTOs, 2);
     }
 
@@ -764,8 +764,9 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
     @UsingDataSet("datasets/in/search_annonce.yml")
     public void testRechercheAnnonceParArtisanParPlusieursCategories() {
         List<CategorieMetierDTO> categorieMetierDTOs = new ArrayList<>();
-        categorieMetierDTOs.add(CategorieLoader.getCategorieElectricite());
-        categorieMetierDTOs.add(CategorieLoader.getCategoriePlomberie());
+        categorieMetierDTOs.add(Categorie.getPlomberie());
+        categorieMetierDTOs.add(Categorie.getMaconnerie());
+        categorieMetierDTOs.add(Categorie.getElectricite());
         annonceServiceTest.searchAnnonce("admin", categorieMetierDTOs, 3);
     }
 }

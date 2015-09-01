@@ -63,7 +63,7 @@
                    class="table table-hover">
                     <thead>
                     <tr>
-                        <th>Catégorie</th>
+                        <th>Mots clés</th>
                         <th>Délai d'intervention</th>
                         <th>Date de création</th>
                         <th>Type de travaux</th>
@@ -72,10 +72,7 @@
                     </thead>
                     <tbody>
                     <tr wicket:id="resultat" class="annonce-list">
-                        <td>
-                            <span class="iconsMesDevis icon-Lightning"></span>
-                            <span>Electricité</span>
-                        </td>
+                        <td wicket:id="motsCles"></td>
                         <td wicket:id="delaiIntervention">Le plus rapidement possible</td>
                         <td wicket:id="dateCreation">05/07/2015</td>
                         <td wicket:id="typeTravaux">Rénovation</td>

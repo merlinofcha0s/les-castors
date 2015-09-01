@@ -845,7 +845,9 @@ public class GestionAnnonceFacade {
                 , searchAnnonceDTOIn.getDepartement(), searchAnnonceDTOIn.getRangeDebut(), searchAnnonceDTOIn.getRangeFin());
 
         long nbAnnonceTotale = annonceDAO.countSearchAnnonce(codeCategorieMetier, searchAnnonceDTOIn.getaPartirdu()
-                , searchAnnonceDTOIn.getDepartement(), searchAnnonceDTOIn.getRangeDebut(), searchAnnonceDTOIn.getRangeFin());
+                , searchAnnonceDTOIn.getDepartement());
+
+        //Set<Annonce>
 
         searchAnnonceDTOOut.setNbTotalResultat(nbAnnonceTotale);
 

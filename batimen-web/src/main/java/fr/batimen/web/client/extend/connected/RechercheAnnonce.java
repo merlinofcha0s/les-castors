@@ -3,6 +3,7 @@ package fr.batimen.web.client.extend.connected;
 import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.aggregate.SearchAnnonceDTOIn;
 import fr.batimen.dto.aggregate.SearchAnnonceDTOOut;
+import fr.batimen.dto.constant.Categorie;
 import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.web.app.constants.ParamsConstant;
@@ -35,6 +36,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Page de recherche des annonce, destinée au Artisan
@@ -115,16 +117,16 @@ public class RechercheAnnonce extends MasterPage {
                 searchAnnonceDTO.getCategoriesMetierDTO().clear();
 
                 if (electricite.getConvertedInput()) {
-                    searchAnnonceDTO.getCategoriesMetierDTO().add(CategorieLoader.getCategorieElectricite());
+                    searchAnnonceDTO.getCategoriesMetierDTO().add(Categorie.getElectricite());
                 }
                 if (plomberie.getConvertedInput()) {
-                    searchAnnonceDTO.getCategoriesMetierDTO().add(CategorieLoader.getCategoriePlomberie());
+                    searchAnnonceDTO.getCategoriesMetierDTO().add(Categorie.getPlomberie());
                 }
                 if (espaceVert.getConvertedInput()) {
-                    searchAnnonceDTO.getCategoriesMetierDTO().add(CategorieLoader.getCategorieEspaceVert());
+                    searchAnnonceDTO.getCategoriesMetierDTO().add(Categorie.getEspaceVert());
                 }
                 if (maconnerie.getConvertedInput()) {
-                    searchAnnonceDTO.getCategoriesMetierDTO().add(CategorieLoader.getCategorieDecorationMaconnerie());
+                    searchAnnonceDTO.getCategoriesMetierDTO().add(Categorie.getMaconnerie());
                 }
                 if (!electricite.getConvertedInput() && !plomberie.getModelObject() && !espaceVert.getModelObject() && !maconnerie.getModelObject()) {
                     searchAnnonceDTO.getCategoriesMetierDTO().addAll(CategorieLoader.getAllCategories());
@@ -177,13 +179,10 @@ public class RechercheAnnonce extends MasterPage {
                 SimpleDateFormat dateCreationFormat = new SimpleDateFormat("dd/MM/yyyy");
 
                 StringBuilder classCssIcon = new StringBuilder("iconsMesDevis");
-                //classCssIcon.append(" ").append(CategorieLoader.getIconForCategorie(annonce.getCategorieMetier()));
 
-                //WebMarkupContainer iconCategorie = new WebMarkupContainer("iconCategorie");
-                //iconCategorie.add(new AttributeModifier("class", classCssIcon.toString()));
+                String motcleCollector = annonce.getMotCles().stream().map(motCleDTO -> motCleDTO.getMotCle()).collect(Collectors.joining(", "));
 
-                /*Label categorie = new Label("categorie", CategorieLoader.getCategorieByCode(annonce
-                        .getCategorieMetier()));*/
+                Label motsCles = new Label("motsCles", motcleCollector);
                 Label delaiIntervention = new Label("delaiIntervention", annonce.getDelaiIntervention().getText());
                 Label dateCreation = new Label("dateCreation", dateCreationFormat.format(annonce.getDateCreation()));
                 Label typeTravaux = new Label("typeTravaux", annonce.getTypeTravaux().getText());
@@ -209,7 +208,7 @@ public class RechercheAnnonce extends MasterPage {
                 });
                 voirAnnonce.setOutputMarkupId(true);
 
-                item.add(/*iconCategorie, categorie,*/ delaiIntervention, dateCreation, typeTravaux, voirAnnonce);
+                item.add(motsCles, delaiIntervention, dateCreation, typeTravaux, voirAnnonce);
             }
         };
 

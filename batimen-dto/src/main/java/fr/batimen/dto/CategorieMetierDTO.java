@@ -18,6 +18,10 @@ public class CategorieMetierDTO implements Serializable {
         this.categorieMetier = categorieMetier;
     }
 
+    public CategorieMetierDTO(short categorieMetier) {
+        this.categorieMetier = categorieMetier;
+    }
+
     public Short getCategorieMetier() {
         return categorieMetier;
     }

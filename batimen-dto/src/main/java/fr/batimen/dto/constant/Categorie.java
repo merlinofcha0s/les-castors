@@ -1,7 +1,11 @@
 package fr.batimen.dto.constant;
 
+import fr.batimen.dto.CategorieMetierDTO;
+
 /**
- * Created by Casaucau on 25/08/2015.
+ * Classe utilitaire permettant de gérer les catégories
+ *
+ * @author Casaucau Cyril
  */
 public class Categorie {
 
@@ -47,5 +51,25 @@ public class Categorie {
         } else {
             return "icon-Tool";
         }
+    }
+
+    public static CategorieMetierDTO getElectricite() {
+        return new CategorieMetierDTO(ELECTRICITE_CODE);
+    }
+
+    public static CategorieMetierDTO getPlomberie() {
+        return new CategorieMetierDTO(PLOMBERIE_CODE);
+    }
+
+    public static CategorieMetierDTO getMaconnerie() {
+        return new CategorieMetierDTO(DECORATION_MACONNERIE_CODE);
+    }
+
+    public static CategorieMetierDTO getEspaceVert() {
+        return new CategorieMetierDTO(ESPACE_VERT_CODE);
+    }
+
+    public static CategorieMetierDTO getMenuiserie() {
+        return new CategorieMetierDTO(MENUISERIE_CODE);
     }
 }
