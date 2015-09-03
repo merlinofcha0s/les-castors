@@ -38,10 +38,8 @@ public class CreationAnnonceDTO extends AbstractDTO {
     @NotNull
     private DelaiIntervention delaiIntervention;
     private transient List<File> photos = new ArrayList<File>();
-    @NotNull
     @Size(min = ADRESSE_MIN, max = ADRESSE_MAX)
     private String adresse;
-    @NotNull
     @Size(max = COMPLEMENT_ADRESSE_MAX)
     private String complementAdresse;
     @NotNull

@@ -89,6 +89,24 @@ categoriemetier:
   - id: 1002
     categoriemetier: 0
     entreprise_fk: 1004
+  - id: 1003
+    categoriemetier: 0
+    motcle_fk: 1000
+  - id: 1004
+    categoriemetier: 3
+    motcle_fk: 1000
+  - id: 1005
+    categoriemetier: 0
+    motcle_fk: 1001
+  - id: 1006
+    categoriemetier: 3
+    motcle_fk: 1001
+  - id: 1007
+    categoriemetier: 0
+    motcle_fk: 1002
+  - id: 1008
+    categoriemetier: 3
+    motcle_fk: 1002
 avis:
   - id: 1020
     score: 3
@@ -130,8 +148,6 @@ annonce:
     delaiintervention: 0
     description: Peinture d'un mur
     etatannonce: 6
-    categoriemetier: 0
-    souscategoriemetier: Installation électrique
     nbconsultation: 0
     typecontact: 0
     typeTravaux: 0
@@ -144,8 +160,6 @@ annonce:
     delaiintervention: 0
     description: Peinture d'un mur lol
     etatannonce: 6
-    categoriemetier: 0
-    souscategoriemetier: Installation électrique
     nbconsultation: 0
     typecontact: 0
     typeTravaux: 0
@@ -158,8 +172,6 @@ annonce:
     delaiintervention: 0
     description: Peinture d'un mur lol xD
     etatannonce: 6
-    categoriemetier: 0
-    souscategoriemetier: Installation électrique
     nbconsultation: 0
     typecontact: 0
     typeTravaux: 0
@@ -177,3 +189,13 @@ image:
   - id: 1002
     url: "https://res.cloudinary.com/lescastors/image/upload/v1427874120/test/zbeod6tioi6yrphpco39.jpg"
     id_entreprise: 1003
+motcle:
+  - id: 1000
+    motcle: Salles de bains
+    annonce_fk: 1000
+  - id: 1001
+    motcle: Salles de bains
+    annonce_fk: 1001
+  - id: 1002
+    motcle: Salles de bains
+    annonce_fk: 1002

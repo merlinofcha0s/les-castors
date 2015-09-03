@@ -85,10 +85,19 @@ permission:
 categoriemetier:
   - id: 1001
     categoriemetier: 1
-    entreprise_fk: 1003
   - id: 1002
     categoriemetier: 0
-    entreprise_fk: 1004
   - id: 1003
     categoriemetier: 3
-    entreprise_fk: 1003
+  - id: 1004
+    categoriemetier: 0
+  - id: 1005
+    categoriemetier: 0
+  - id: 1006
+    categoriemetier: 3
+  - id: 1007
+    categoriemetier: 0
+  - id: 1008
+    categoriemetier: 3
+  - id: 1009
+    categoriemetier: 3

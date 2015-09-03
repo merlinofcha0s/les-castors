@@ -28,7 +28,7 @@ public class TestMesAnnonces extends AbstractITTest {
         Operation operation = sequenceOf(DELETE_ALL, INSERT_USER_DATA, INSERT_USER_PERMISSION,
                 INSERT_ADRESSE_DATA, INSERT_ENTREPRISE_DATA,
                 INSERT_ARTISAN_DATA, INSERT_ARTISAN_PERMISSION, INSERT_AVIS_DATA,
-                INSERT_ANNONCE_DATA, INSERT_NOTIFICATION_DATA, INSERT_ANNONCE_ARTISAN);
+                INSERT_ANNONCE_DATA, INSERT_NOTIFICATION_DATA, INSERT_ANNONCE_ARTISAN, INSERT_ANNONCE_MOT_CLE, INSERT_CATEGORIE_METIER);
         DbSetup dbSetup = new DbSetup(getDriverManagerDestination(), operation);
         dbSetup.launch();
     }
@@ -79,7 +79,7 @@ public class TestMesAnnonces extends AbstractITTest {
 
         Boolean checkConditionAnnonceDescription = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.textToBePresentInElementLocated(
-                        By.xpath("//div[2]/table/tbody/tr/td[2]/span"), "Construction compliqué qui nec..."));
+                        By.xpath("//div[2]/table/tbody/tr/td[1]/span"), "Construction compliqué qui nec..."));
         assertTrue(checkConditionAnnonceDescription);
 
         WebElement checkConditionAnnoncePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
@@ -89,19 +89,18 @@ public class TestMesAnnonces extends AbstractITTest {
 
         if (typeCompte.equals(TypeCompte.CLIENT)) {
             driver.findElement(
-                    By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[2]/table/tbody/tr[1]/td[5]/a"))
+                    By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[2]/table/tbody/tr[1]"))
                     .click();
         } else if (typeCompte.equals(TypeCompte.ARTISAN)) {
             driver.findElement(
-                    By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[2]/table/tbody/tr/td[4]/a"))
+                    By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[2]/table/tbody/tr[1]"))
                     .click();
         }
 
 
-        Boolean checkConditionAccessToAnnonceViaList = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
-                .until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("h1.title"),
-                        "ANNONCE PARTICULIER"));
-        assertTrue(checkConditionAccessToAnnonceViaList);
+        WebElement checkConditionAccessToAnnonceViaList = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("h1.title")));
+        assertNotNull(checkConditionAccessToAnnonceViaList);
 
         driver.findElement(By.id("connexionlbl")).click();
     }

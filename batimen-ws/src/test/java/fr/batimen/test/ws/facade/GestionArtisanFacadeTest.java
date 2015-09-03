@@ -134,7 +134,8 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
      */
     @Test
     @UsingDataSet("datasets/in/entreprises_informations.yml")
-    @ShouldMatchDataSet(value = "datasets/out/modification_entreprise.yml", excludeColumns = { "id", "datemaj", "datecreation" })
+    @ShouldMatchDataSet(value = "datasets/out/modification_entreprise.yml",
+            excludeColumns = {"id", "datemaj", "datecreation", "motcle_fk", "entreprise_fk"})
     public void saveEntrepriseInformation(){
         EntrepriseDTO entrepriseDTO = new EntrepriseDTO();
         entrepriseDTO.setNomComplet("Pebronne enterprise");
@@ -274,7 +275,7 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
     @Test
     @UsingDataSet("datasets/in/entreprises_informations.yml")
     @ShouldMatchDataSet(value = "datasets/out/suppression_photo_chantier_temoin.yml", excludeColumns = {"id",
-            "datemaj", "datecreation", "datenotation", "datenotification", "url"})
+            "datemaj", "datecreation", "datenotation", "datenotification", "url", "categoriemetier", "entreprise_fk", "motcle_fk"})
     public void suppressionPhotoChantierTemoinNominal(){
         testSuppressionPhoto("pebronneArtisanne", true);
     }
@@ -286,7 +287,7 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
     @Test
     @UsingDataSet("datasets/in/entreprises_informations.yml")
     @ShouldMatchDataSet(value = "datasets/out/suppression_photo_chantier_temoin.yml", excludeColumns = {"id",
-            "datemaj", "datecreation", "datenotation", "datenotification", "url"})
+            "datemaj", "datecreation", "datenotation", "datenotification", "url", "categoriemetier", "entreprise_fk", "motcle_fk"})
     public void suppressionPhotoChantierTemoinAdmin(){
         testSuppressionPhoto("admin", true);
     }

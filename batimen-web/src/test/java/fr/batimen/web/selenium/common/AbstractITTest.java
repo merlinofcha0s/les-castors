@@ -7,6 +7,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -67,6 +68,7 @@ public abstract class AbstractITTest {
     private String passwordDB;
     private String chromeDriverAddress;
     private String ieDriverAddress;
+    private String edgeDriverAddress;
 
     @Before
     public void setUpITTest() throws Exception {
@@ -76,6 +78,9 @@ public abstract class AbstractITTest {
         if (browser.equals("ie")) {
             driver.get(appUrl);
             driver.findElement(By.id("overridelink")).click();
+        } else if (browser.equals("edge")) {
+            driver.get(appUrl);
+            driver.findElement(By.id("invalidcert_continue")).click();
         }
     }
 
@@ -100,6 +105,7 @@ public abstract class AbstractITTest {
         browser = wsProperties.getProperty("app.browser.target");
         chromeDriverAddress = wsProperties.getProperty("app.address.chrome.driver");
         ieDriverAddress = wsProperties.getProperty("app.address.ie.driver");
+        edgeDriverAddress = wsProperties.getProperty("app.address.edge.driver");
 
         StringBuilder sbUrlApp = new StringBuilder("https://");
         sbUrlApp.append(ipServeur);
@@ -119,6 +125,9 @@ public abstract class AbstractITTest {
             case "ie":
                 System.setProperty("webdriver.ie.driver", ieDriverAddress);
                 driver = new InternetExplorerDriver();
+            case "edge":
+                System.setProperty("webdriver.edge.driver", edgeDriverAddress);
+                driver = new EdgeDriver();
         }
 
         appUrl = sbUrlApp.toString();

@@ -677,12 +677,18 @@ public class Annonce extends MasterPage {
             }
         };
 
+        String adresseValeur = annonceAffichageDTO.getAdresse().getAdresse();
         String complementAdresse = annonceAffichageDTO.getAdresse().getComplementAdresse();
 
-        StringBuilder adresseComplete = new StringBuilder(annonceAffichageDTO.getAdresse().getAdresse());
+        StringBuilder adresseComplete = new StringBuilder();
+
+        if (adresseValeur != null && !adresseValeur.isEmpty()) {
+            adresseComplete.append(annonceAffichageDTO.getAdresse().getAdresse());
+        }
+
         adresseComplete.append(" ");
 
-        if (!complementAdresse.isEmpty()) {
+        if (complementAdresse != null && !complementAdresse.isEmpty()) {
             adresseComplete.append(complementAdresse).append(" ");
         }
 

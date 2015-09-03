@@ -93,7 +93,8 @@ public class TestAnnonce extends AbstractITTest {
         connectAndGoToAnnonce(TypeCompte.ARTISAN, "toto");
         assertCoreInformationOfAnnonce(EtatAnnonce.ACTIVE);
 
-        assertEquals("1", driver.findElement(By.xpath("//div[@id='containerInformationsAnnonce']/div[8]/div[3]"))
+        //Nombre de consultation
+        assertEquals("1", driver.findElement(By.xpath("//div[@id='containerInformationsAnnonce']/div[9]/div[3]"))
                 .getText());
 
         // Les entreprises qui vous proposent des devis

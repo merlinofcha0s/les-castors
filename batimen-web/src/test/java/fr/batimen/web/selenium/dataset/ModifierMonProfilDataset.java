@@ -1,6 +1,7 @@
 package fr.batimen.web.selenium.dataset;
 
 import com.ninja_squad.dbsetup.operation.Operation;
+import fr.batimen.dto.constant.Categorie;
 import fr.batimen.dto.enums.StatutNotification;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.enums.TypeNotification;
@@ -15,15 +16,15 @@ public class ModifierMonProfilDataset {
 
     public static final Operation INSERT_ANNONCE_DATA = insertInto("annonce")
             .columns("id", "datecreation", "datemaj", "delaiintervention", "description", "etatannonce",
-                    "categoriemetier", "souscategoriemetier", "nbconsultation", "typecontact", "hashID", "selHashID",
+                    "nbconsultation", "typecontact", "hashID", "selHashID",
                     "typeTravaux", "adressechantier_id", "demandeur_fk", "entreprise_selectionnee_fk",
                     "avis_id")
             .values(200010, "2014-01-10", "2014-01-10", "0",
-                    "Construction compliqué qui necessite des connaissance en geologie", "0", 0,
-                    "Installation électrique", 0, 0, "toto", "tata", 0, 200005, 100001, 200009, 200012)
+                    "Construction compliqué qui necessite des connaissance en geologie", "0",
+                    0, 0, "toto", "tata", 0, 200005, 100001, 200009, 200012)
             .values(200011, "2014-01-10", "2014-01-10", "0",
-                    "Construction compliqué qui necessite des connaissance en geologie", "0", 0,
-                    "Installation électrique", 0, 0, "toto", "tata", 0, 200014, 100001, 200009, 200013).build();
+                    "Construction compliqué qui necessite des connaissance en geologie", "0",
+                    0, 0, "toto", "tata", 0, 200014, 100001, 200009, 200013).build();
 
     public static final Operation INSERT_ARTISAN_DATA = insertInto("artisan")
             .columns("civilite", "email", "nom", "prenom", "login", "password", "id", "numeroTel", "dateInscription",
@@ -59,6 +60,18 @@ public class ModifierMonProfilDataset {
 
     public static final Operation INSERT_CATEGORIE_ENTREPRISE = insertInto("categorieMetier")
             .columns("id", "categorieMetier", "entreprise_fk").values(200000, CategorieLoader.ELECTRICITE_CODE, 200009).build();
+
+    public static final Operation INSERT_ANNONCE_MOT_CLE = insertInto("motcle")
+            .columns("id", "motcle", "annonce_fk")
+            .values(10001, "Salles de bains", 200010)
+            .values(10002, "Salles de bains", 200011).build();
+
+    public static final Operation INSERT_CATEGORIE_METIER = insertInto("categoriemetier")
+            .columns("id", "categoriemetier", "entreprise_fk", "motcle_fk")
+            .values(10001, Categorie.ELECTRICITE_CODE, null, 10001)
+            .values(10002, Categorie.DECORATION_MACONNERIE_CODE, null, 10001)
+            .values(10003, Categorie.ELECTRICITE_CODE, null, 10002)
+            .values(10004, Categorie.DECORATION_MACONNERIE_CODE, null, 10002).build();
 
 
 }

@@ -43,11 +43,13 @@
 
         <!-- Infos Web App -->
         <app.ip>127.0.0.1</app.ip>
-        <app.port>8443</app.port>
+        <app.port>8181</app.port>
         <app.name>batimen-web</app.name>
         <app.browser.target>firefox</app.browser.target>
         <app.address.chrome.driver>C:/selenium/chromedriver.exe</app.address.chrome.driver>
         <app.address.ie.driver>C:/selenium/IEDriverServer.exe</app.address.ie.driver>
+        <app.address.edge.driver>C:/Program Files (x86)/Microsoft Web Driver/MicrosoftWebDriver.exe
+        </app.address.edge.driver>
         <app.temp.img.dir.test>D:/dev/temp/img/</app.temp.img.dir.test>
 
         <!-- Logs -->
@@ -382,6 +384,12 @@
             </activation>
             <properties>
                 <app.browser.target>firefox</app.browser.target>
+            </properties>
+        </profile>
+        <profile>
+            <id>it-test-edge</id>
+            <properties>
+                <app.browser.target>edge</app.browser.target>
             </properties>
         </profile>
         <profile>

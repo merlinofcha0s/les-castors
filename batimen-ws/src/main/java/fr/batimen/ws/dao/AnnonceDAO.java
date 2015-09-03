@@ -481,8 +481,6 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
      * @param categoriesMetier La catégorie de l'annonce
      * @param aPartirDu        A partir de quelle date
      * @param departement      Le departement où se trouve le chantier
-     * @param rangeDebut       Pagination de début
-     * @param rangeFin         Pagination de fin
      * @return La liste d'annonces correspondantent
      */
     @TransactionAttribute(TransactionAttributeType.MANDATORY)

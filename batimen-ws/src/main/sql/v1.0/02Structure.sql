@@ -1,10 +1,10 @@
 CREATE TABLE Adresse (
-  id                BIGSERIAL    NOT NULL,
-  adresse           VARCHAR(255) NOT NULL,
-  codePostal        VARCHAR(5)   NOT NULL,
+  id          BIGSERIAL   NOT NULL,
+  adresse     VARCHAR(255),
+  codePostal  VARCHAR(5)  NOT NULL,
   complementAdresse VARCHAR(255),
-  ville             VARCHAR(45)  NOT NULL,
-  departement       INT4         NOT NULL,
+  ville       VARCHAR(45) NOT NULL,
+  departement INT4        NOT NULL,
   PRIMARY KEY (id)
 );
 
@@ -47,14 +47,14 @@ CREATE TABLE CategorieMetier (
   id              BIGSERIAL NOT NULL,
   categorieMetier INT2      NOT NULL,
   entreprise_fk INT8,
-  motcle_fk INT8 NULL,
+  motcle_fk     INT8 NULL,
   PRIMARY KEY (id)
 );
 
 CREATE TABLE MotCle (
-  id           BIGSERIAL NOT NULL,
-  motCle       VARCHAR(25),
-  annonce_fk   INT8,
+  id         BIGSERIAL NOT NULL,
+  motCle     VARCHAR(25),
+  annonce_fk INT8,
   PRIMARY KEY (id)
 );
 

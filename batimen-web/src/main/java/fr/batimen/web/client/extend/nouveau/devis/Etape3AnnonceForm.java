@@ -162,17 +162,15 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
         containerPhoto.add(lblPhoto, photoField);
 
         TextField<String> adresseField = new TextField<String>("adresse");
-        adresseField.setRequired(true);
+        adresseField.setRequired(false);
         adresseField.setMarkupId("adresseField");
         adresseField.add(StringValidator.lengthBetween(ValidatorConstant.ADRESSE_MIN, ValidatorConstant.ADRESSE_MAX));
         adresseField.add(new ErrorHighlightBehavior());
-        adresseField.add(new RequiredBorderBehaviour());
 
         TextField<String> adresseComplementField = new TextField<String>("complementAdresse");
         adresseComplementField.setMarkupId("adresseComplementField");
         adresseComplementField.add(StringValidator.maximumLength(ValidatorConstant.COMPLEMENT_ADRESSE_MAX));
         adresseComplementField.add(new ErrorHighlightBehavior());
-        adresseComplementField.add(new RequiredBorderBehaviour());
 
         TextField<String> codePostalField = new TextField<String>("codePostal");
         codePostalField.setRequired(true);
@@ -194,14 +192,6 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
 
             private static final long serialVersionUID = -4417031301033032959L;
 
-            /*
-             * (non-Javadoc)
-             *
-             * @see
-             * org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink#onSubmit
-             * (org.apache.wicket.ajax.AjaxRequestTarget,
-             * org.apache.wicket.markup.html.form.Form)
-             */
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
                 if (forModification) {

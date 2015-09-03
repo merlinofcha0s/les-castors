@@ -1,8 +1,8 @@
 package fr.batimen.web.selenium.dataset;
 
 import com.ninja_squad.dbsetup.operation.Operation;
+import fr.batimen.dto.constant.Categorie;
 import fr.batimen.dto.enums.*;
-import fr.batimen.dto.helper.CategorieLoader;
 
 import static com.ninja_squad.dbsetup.Operations.insertInto;
 
@@ -15,32 +15,32 @@ public class RechercheDataset {
 
     public static final Operation INSERT_ANNONCE_DATA = insertInto("annonce")
             .columns("id", "datecreation", "datemaj", "delaiintervention", "description", "etatannonce",
-                    "categoriemetier", "souscategoriemetier", "nbconsultation", "typecontact", "hashID", "selHashID",
+                    "nbconsultation", "typecontact", "hashID", "selHashID",
                     "typeTravaux", "adressechantier_id", "demandeur_fk", "entreprise_selectionnee_fk",
                     "avis_id")
             .values(200010, "2014-01-10", "2014-01-10", DelaiIntervention.LE_PLUS_RAPIDEMENT_POSSIBLE,
                     "Construction compliqué qui necessite des connaissance en geologie", EtatAnnonce.ACTIVE,
-                    CategorieLoader.ELECTRICITE_CODE, "Installation électrique", 0, TypeContact.EMAIL, "toto", "tata",
+                    0, TypeContact.EMAIL, "toto", "tata",
                     TypeTravaux.NEUF, 200005, 100001, null, null)
             .values(200011, "2014-01-10", "2014-01-10", DelaiIntervention.LE_PLUS_RAPIDEMENT_POSSIBLE,
                     "Construction compliqué qui necessite des connaissance en geologie", EtatAnnonce.ACTIVE,
-                    CategorieLoader.ELECTRICITE_CODE, "Installation électrique", 0, TypeContact.EMAIL, "lolmdr",
+                    0, TypeContact.EMAIL, "lolmdr",
                     "tata", TypeTravaux.NEUF, 200014, 100001, null, null)
             .values(200012, "2014-05-11", "2014-06-10", DelaiIntervention.LE_PLUS_RAPIDEMENT_POSSIBLE,
                     "Installation d'une baignoire", EtatAnnonce.ACTIVE,
-                    CategorieLoader.PLOMBERIE_CODE, "Installation", 0, TypeContact.EMAIL, "lolxd", "titi",
+                    0, TypeContact.EMAIL, "lolxd", "titi",
                     TypeTravaux.NEUF, 200015, 100001, null, null)
             .values(200013, "2014-01-10", "2014-01-10", DelaiIntervention.LE_PLUS_RAPIDEMENT_POSSIBLE,
                     "Construction compliqué qui necessite des connaissance en geologie", EtatAnnonce.ACTIVE,
-                    CategorieLoader.ELECTRICITE_CODE, "Installation électrique", 0, TypeContact.EMAIL, "lolmdrxD",
+                    0, TypeContact.EMAIL, "lolmdrxD",
                     "titi", TypeTravaux.NEUF, 200016, 100001, null, null)
             .values(200015, "2014-05-15", "2014-06-20", DelaiIntervention.LE_PLUS_RAPIDEMENT_POSSIBLE,
                     "Construction compliqué qui necessite des connaissance en geologie", EtatAnnonce.ACTIVE,
-                    CategorieLoader.PLOMBERIE_CODE, "Installation", 0, TypeContact.EMAIL, "lolmdrxDdsqdqsdqsdqsdsd",
+                    0, TypeContact.EMAIL, "lolmdrxDdsqdqsdqsdqsdsd",
                     "titi", TypeTravaux.NEUF, 200017, 100001, null, null)
             .values(200016, "2014-07-20", "2014-07-22", DelaiIntervention.LE_PLUS_RAPIDEMENT_POSSIBLE,
                     "Construction compliqué qui necessite des connaissance en geologie", EtatAnnonce.ACTIVE,
-                    CategorieLoader.PLOMBERIE_CODE, "Installation", 0, TypeContact.EMAIL, "lolmdrxDdsqfddsfvcvxcxwqs",
+                    0, TypeContact.EMAIL, "lolmdrxDdsqfddsfvcvxcxwqs",
                     "titi", TypeTravaux.NEUF, 200018, 100001, null, null).build();
 
     public static final Operation INSERT_ARTISAN_DATA = insertInto("artisan")
@@ -87,5 +87,28 @@ public class RechercheDataset {
             .values(10001,
                     "http://res.cloudinary.com/lescastors/image/upload/q_27/v1430908935/test/srwdbvzwlvhxoytsheha.jpg",
                     200011).build();
+    public static final Operation INSERT_ANNONCE_MOT_CLE = insertInto("motcle")
+            .columns("id", "motcle", "annonce_fk")
+            .values(10001, "Salles de bains", 200010)
+            .values(10002, "Salles de bains", 200011)
+            .values(10003, "Salles de bains", 200012)
+            .values(10004, "Salles de bains", 200013)
+            .values(10005, "Salles de bains", 200015)
+            .values(10006, "Salles de bains", 200016).build();
+
+    public static final Operation INSERT_CATEGORIE_METIER = insertInto("categoriemetier")
+            .columns("id", "categoriemetier", "entreprise_fk", "motcle_fk")
+            .values(10001, Categorie.ELECTRICITE_CODE, null, 10001)
+            .values(10002, Categorie.DECORATION_MACONNERIE_CODE, null, 10001)
+            .values(10003, Categorie.ELECTRICITE_CODE, null, 10002)
+            .values(10004, Categorie.DECORATION_MACONNERIE_CODE, null, 10002)
+            .values(10005, Categorie.ELECTRICITE_CODE, null, 10003)
+            .values(10006, Categorie.DECORATION_MACONNERIE_CODE, null, 10003)
+            .values(10007, Categorie.ELECTRICITE_CODE, null, 10004)
+            .values(10008, Categorie.DECORATION_MACONNERIE_CODE, null, 10004)
+            .values(10009, Categorie.ELECTRICITE_CODE, null, 10005)
+            .values(10010, Categorie.DECORATION_MACONNERIE_CODE, null, 10005)
+            .values(10011, Categorie.ELECTRICITE_CODE, null, 10006)
+            .values(10012, Categorie.DECORATION_MACONNERIE_CODE, null, 10006).build();
 
 }

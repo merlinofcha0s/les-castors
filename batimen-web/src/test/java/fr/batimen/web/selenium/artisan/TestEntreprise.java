@@ -23,7 +23,8 @@ public class TestEntreprise extends AbstractITTest {
         Operation operation = sequenceOf(DELETE_ALL, INSERT_USER_DATA, INSERT_USER_PERMISSION,
                 INSERT_ADRESSE_DATA, INSERT_ENTREPRISE_DATA,
                 INSERT_ARTISAN_DATA, INSERT_ARTISAN_PERMISSION, INSERT_AVIS_DATA,
-                INSERT_ANNONCE_DATA, INSERT_NOTIFICATION_DATA, INSERT_ANNONCE_ARTISAN, INSERT_CATEGORIE_ENTREPRISE);
+                INSERT_ANNONCE_DATA, INSERT_NOTIFICATION_DATA, INSERT_ANNONCE_ARTISAN, INSERT_CATEGORIE_ENTREPRISE,
+                INSERT_ANNONCE_MOT_CLE, INSERT_CATEGORIE_METIER);
         DbSetup dbSetup = new DbSetup(getDriverManagerDestination(), operation);
         dbSetup.launch();
     }
