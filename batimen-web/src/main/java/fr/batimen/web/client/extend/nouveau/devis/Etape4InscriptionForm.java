@@ -1,5 +1,9 @@
 package fr.batimen.web.client.extend.nouveau.devis;
 
+import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
+import com.mashape.unirest.http.Unirest;
+import com.mashape.unirest.http.exceptions.UnirestException;
 import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.security.HashHelper;
 import fr.batimen.dto.ModifClientDTO;
@@ -25,6 +29,8 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.event.Broadcast;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -35,6 +41,8 @@ import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.request.cycle.RequestCycle;
+import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.apache.wicket.validation.validator.StringValidator;
@@ -171,7 +179,7 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
 
             /*
              * (non-Javadoc)
-             * 
+             *
              * @see org.apache.wicket.Component#isVisible()
              */
             @Override
@@ -225,7 +233,7 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
 
             /*
              * (non-Javadoc)
-             * 
+             *
              * @see org.apache.wicket.Component#isVisible()
              */
             @Override
@@ -244,7 +252,7 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
 
             /*
              * (non-Javadoc)
-             * 
+             *
              * @see
              * org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink#onSubmit
              * (org.apache.wicket.ajax.AjaxRequestTarget,
@@ -257,6 +265,20 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
                     target.add(getForm());
                     this.send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target));
                 } else {
+                    final WebRequest request = (WebRequest) RequestCycle.get().getRequest();
+                    final String userToken = request.getRequestParameters().getParameterValue("g-recaptcha-response").toString();
+
+                    HttpResponse<JsonNode> jsonResponse = null;
+                    try {
+                        jsonResponse = Unirest.post("https://www.google.com/recaptcha/api/siteverify").header("accept", "application/json")
+                                .queryString("secret", "6LfRUAwTAAAAAGpwEyadz8Ku5-tWmzRoNzQvSjEK")
+                                .queryString("response", userToken).asJson();
+                    } catch (UnirestException e) {
+                        e.printStackTrace();
+                    }
+
+                    System.out.println(jsonResponse.getBody().getArray().toString());
+
                     nouvelleAnnonce.setNumeroEtape(5);
                     ChangementEtapeClientEvent changementEtapeEventClient = new ChangementEtapeClientEvent(target,
                             nouvelleAnnonce);
@@ -267,7 +289,7 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
 
             /*
              * (non-Javadoc)
-             * 
+             *
              * @see
              * org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink#onError
              * (org.apache.wicket.ajax.AjaxRequestTarget,
@@ -293,6 +315,12 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
 
         this.add(nomField, prenomField, numeroTelField, emailField, loginField, passwordField, confirmPassword,
                 oldPasswordContainer, cguContainer, validateInscription, etapePrecedente4);
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.render(JavaScriptHeaderItem.forUrl("https://www.google.com/recaptcha/api.js"));
     }
 
     public void initChooser(final Boolean forModification) {
