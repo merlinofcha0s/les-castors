@@ -423,8 +423,8 @@
                 <database.address>127.0.0.1</database.address>
                 <database.name>batimen</database.name>
                 <datasource.url>jdbc:postgresql://${database.address}:5432/${database.name}</datasource.url>
-                <database.login>raiden</database.login>
-                <database.password>M0ntaleign3</database.password>
+                <database.login>postgres</database.login>
+                <database.password>0tgtIDKFaB</database.password>
             </properties>
             <build>
                 <resources>
