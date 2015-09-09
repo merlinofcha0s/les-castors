@@ -473,8 +473,8 @@
                 <!-- BDD pour les tests -->
                 <database.address>127.0.0.1</database.address>
                 <database.name>batimen_test</database.name>
-                <database.login>raiden</database.login>
-                <database.password>M0ntaleign3</database.password>
+                <database.login>postgres</database.login>
+                <database.password>0tgtIDKFaB</database.password>
 
                 <!-- Logs -->
                 <logs.address>/usr/share/log-batimen</logs.address>
@@ -500,7 +500,7 @@
                 <email.active>true</email.active>
 
                 <!-- URL du frontend -->
-                <url.frontend.web>https://lescastors.fr/batimen-web/</url.frontend.web>
+                <url.frontend.web>https://integration.lescastors.fr/batimen-web/</url.frontend.web>
 
                 <!-- Gestion des images -->
                 <prop.temp.img.dir>/usr/share/castor-temp/img/</prop.temp.img.dir>
