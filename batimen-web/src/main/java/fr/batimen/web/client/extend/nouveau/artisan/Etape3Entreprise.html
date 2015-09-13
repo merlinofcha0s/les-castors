@@ -98,7 +98,7 @@
                     <div class="span3"></div>
             <div class="span6">
                 <form wicket:id="etape3EntrepriseForm">
-                    <table class="tableBatimen" id="tableFormEtape3Entreprise">
+                    <table class="tableBatimen" id="tableFormEtape3Entreprise" wicket:id="fieldContainer">
                          <tr>
                             <th>Spécialité :</th>
                             <td><input
@@ -208,6 +208,14 @@
                                     value=""/></td>
                         </tr>
                     </table>
+                    <div class="row-fluid" id="captchaArtisanContainer">
+                        <div class="span3"></div>
+                        <div class="span6">
+                            <div wicket:id="recaptchaInscription"></div>
+                        </div>
+                        <div class="span3"></div>
+                    </div>
+
                     <div id="champsObligatoireNouveauPartenaire">
                         <span class='required'>*</span> : champs obligatoires
                     </div>

@@ -141,7 +141,7 @@
                         <h4 class="headInModule">Inscription / Connexion</h4>
                     </div>
                     <form wicket:id="formInscription">
-                        <table class="tableBatimen">
+                        <table class="tableBatimen" wicket:id="fieldContainer">
                             <tr>
                                 <th>Nom :</th>
                                 <td><input
@@ -222,14 +222,8 @@
                                         type="checkbox"
                                         wicket:id="cguConfirmation"/></td>
                             </tr>
-                             <tr>
-                                <th>Captcha: </th>
-                                <td>
-                                    <div class="g-recaptcha"
-                                         data-sitekey="6LfRUAwTAAAAAEzozsHfOVCgLLlxm4-bEEGkUU4n"></div>
-                                </td>
-                            </tr>
                         </table>
+                        <div wicket:id="recaptchaInscription"></div>
                          <div id="champsObligatoire">
                             <span class='required'>*</span> : champs obligatoires
                         </div>

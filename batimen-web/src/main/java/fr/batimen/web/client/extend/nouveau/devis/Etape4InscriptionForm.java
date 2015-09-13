@@ -1,36 +1,36 @@
 package fr.batimen.web.client.extend.nouveau.devis;
 
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
-import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
 import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.security.HashHelper;
+import fr.batimen.dto.CaptchaDTO;
 import fr.batimen.dto.ModifClientDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.enums.TypeContact;
 import fr.batimen.web.app.constants.Etape;
+import fr.batimen.web.app.constants.FeedbackMessageLevel;
 import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.app.security.RolesUtils;
 import fr.batimen.web.app.utils.ProgrammaticBeanLookup;
 import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
+import fr.batimen.web.client.component.ReCaptcha;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.web.client.extend.CGU;
 import fr.batimen.web.client.extend.nouveau.devis.event.ChangementEtapeClientEvent;
+import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.web.client.validator.ChangePasswordValidator;
 import fr.batimen.web.client.validator.CheckBoxTrueValidator;
 import fr.batimen.web.client.validator.EmailUniquenessValidator;
 import fr.batimen.web.client.validator.LoginUniquenessValidator;
+import fr.batimen.web.enums.PropertiesFileWeb;
 import fr.batimen.ws.client.service.UtilisateurServiceREST;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.CheckBox;
@@ -41,8 +41,6 @@ import org.apache.wicket.markup.html.form.validation.EqualPasswordInputValidator
 import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.request.cycle.RequestCycle;
-import org.apache.wicket.request.http.WebRequest;
 import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.apache.wicket.validation.validator.StringValidator;
@@ -62,6 +60,7 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
     private static final long serialVersionUID = 2500892594731116597L;
     private static final Logger LOGGER = LoggerFactory.getLogger(Etape4InscriptionForm.class);
     private static final String ID_VALIDATE_INSCRIPTION = "validateInscription";
+    private final RequiredBorderBehaviour requiredBorderBehaviour = new RequiredBorderBehaviour();
     private final CreationAnnonceDTO nouvelleAnnonce;
     private final PasswordTextField passwordField;
     private final PasswordTextField confirmPassword;
@@ -72,6 +71,7 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
     private final TextField<String> emailField;
     private final TextField<String> loginField;
     public boolean addedRequiredBehaviour;
+    private ReCaptcha reCaptcha;
     @Inject
     private UtilisateurServiceREST utilisateurServiceREST;
     @Inject
@@ -94,6 +94,9 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
 
         nouvelleAnnonce = model.getObject();
 
+        WebMarkupContainer fieldContainer = new WebMarkupContainer("fieldContainer");
+        fieldContainer.setOutputMarkupId(true);
+
         nomField = new TextField<>("client.nom");
         nomField.setMarkupId("nom");
         nomField.add(new ErrorHighlightBehavior());
@@ -105,8 +108,6 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
         prenomField.add(StringValidator.lengthBetween(ValidatorConstant.CLIENT_PRENOM_MIN,
                 ValidatorConstant.CLIENT_PRENOM_MAX));
 
-        final RequiredBorderBehaviour requiredBorderBehaviour = new RequiredBorderBehaviour();
-
         numeroTelField = new TextField<String>("client.numeroTel") {
 
             @Override
@@ -117,7 +118,7 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
                     setAddedRequiredBehaviour(true);
                 } else {
                     setRequired(false);
-                    if(isAddedRequiredBehaviour()){
+                    if (isAddedRequiredBehaviour()) {
                         remove(requiredBorderBehaviour);
                     }
                     setAddedRequiredBehaviour(false);
@@ -132,7 +133,7 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
         emailField = new TextField<>("client.email");
         emailField.setMarkupId("email");
         emailField.setRequired(true);
-        emailField.add(new RequiredBorderBehaviour());
+        emailField.add(requiredBorderBehaviour);
         emailField.add(new ErrorHighlightBehavior());
         emailField.add(EmailAddressValidator.getInstance());
 
@@ -144,7 +145,7 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
         loginField = new TextField<String>("client.login");
         loginField.setMarkupId("login");
         loginField.setRequired(true);
-        loginField.add(new RequiredBorderBehaviour());
+        loginField.add(requiredBorderBehaviour);
         loginField.add(new ErrorHighlightBehavior());
         loginField.add(StringValidator.lengthBetween(ValidatorConstant.CLIENT_LOGIN_RANGE_MIN,
                 ValidatorConstant.CLIENT_LOGIN_RANGE_MAX));
@@ -154,9 +155,9 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
 
         loginField.add(loginUniquenessValidator);
 
-        if(forModification && rolesUtils.checkRoles(TypeCompte.ARTISAN)){
-            nomField.add(new RequiredBorderBehaviour());
-            prenomField.add(new RequiredBorderBehaviour());
+        if (forModification && rolesUtils.checkRoles(TypeCompte.ARTISAN)) {
+            nomField.add(requiredBorderBehaviour);
+            prenomField.add(requiredBorderBehaviour);
             nomField.setRequired(true);
             prenomField.setRequired(true);
         }
@@ -265,26 +266,17 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
                     target.add(getForm());
                     this.send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target));
                 } else {
-                    final WebRequest request = (WebRequest) RequestCycle.get().getRequest();
-                    final String userToken = request.getRequestParameters().getParameterValue("g-recaptcha-response").toString();
+                    CaptchaDTO captchaDTO = reCaptcha.verifyCaptcha();
 
-                    HttpResponse<JsonNode> jsonResponse = null;
-                    try {
-                        jsonResponse = Unirest.post("https://www.google.com/recaptcha/api/siteverify").header("accept", "application/json")
-                                .queryString("secret", "6LfRUAwTAAAAAGpwEyadz8Ku5-tWmzRoNzQvSjEK")
-                                .queryString("response", userToken).asJson();
-                    } catch (UnirestException e) {
-                        e.printStackTrace();
+                    if (!Boolean.valueOf(captchaDTO.getSuccess()) && Boolean.valueOf(PropertiesFileWeb.APP.getProperties().getProperty("app.activate.captcha"))) {
+                        MasterPage.triggerEventFeedBackPanel(target, "Veuillez cocher le reCaptcha", FeedbackMessageLevel.ERROR);
+                    } else {
+                        nouvelleAnnonce.setNumeroEtape(5);
+                        ChangementEtapeClientEvent changementEtapeEventClient = new ChangementEtapeClientEvent(target,
+                                nouvelleAnnonce);
+                        target.getPage().send(target.getPage(), Broadcast.BREADTH, changementEtapeEventClient);
                     }
-
-                    System.out.println(jsonResponse.getBody().getArray().toString());
-
-                    nouvelleAnnonce.setNumeroEtape(5);
-                    ChangementEtapeClientEvent changementEtapeEventClient = new ChangementEtapeClientEvent(target,
-                            nouvelleAnnonce);
-                    target.getPage().send(target.getPage(), Broadcast.BREADTH, changementEtapeEventClient);
                 }
-
             }
 
             /*
@@ -297,10 +289,10 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
              */
             @Override
             protected void onError(AjaxRequestTarget target, Form<?> form) {
-                target.add(getForm());
+                target.add(fieldContainer);
                 this.send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target));
+                //target.appendJavaScript("grecaptcha.reset();");
             }
-
         };
         validateInscription.setMarkupId(ID_VALIDATE_INSCRIPTION);
         Label validateInscriptionLabel = new Label("validateInscriptionLabel", Model.of(""));
@@ -313,14 +305,14 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
 
         validateInscription.add(validateInscriptionLabel);
 
-        this.add(nomField, prenomField, numeroTelField, emailField, loginField, passwordField, confirmPassword,
-                oldPasswordContainer, cguContainer, validateInscription, etapePrecedente4);
+        fieldContainer.add(nomField, prenomField, numeroTelField, emailField, loginField, passwordField, confirmPassword, oldPasswordContainer, cguContainer);
+
+        add(fieldContainer, validateInscription, etapePrecedente4);
     }
 
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.render(JavaScriptHeaderItem.forUrl("https://www.google.com/recaptcha/api.js"));
     }
 
     public void initChooser(final Boolean forModification) {
@@ -328,15 +320,17 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
         if (!forModification) {
             cguConfirm.setRequired(true);
             cguConfirm.add(new CheckBoxTrueValidator());
-            cguConfirm.add(new RequiredBorderBehaviour());
+            cguConfirm.add(requiredBorderBehaviour);
             confirmPassword.setMarkupId("confirmPassword");
             confirmPassword.setRequired(true);
-            confirmPassword.add(new RequiredBorderBehaviour());
+            confirmPassword.add(requiredBorderBehaviour);
             confirmPassword.add(new ErrorHighlightBehavior());
             passwordField.setMarkupId("password");
             passwordField.setRequired(true);
-            passwordField.add(new RequiredBorderBehaviour());
+            passwordField.add(requiredBorderBehaviour);
             passwordField.add(new ErrorHighlightBehavior());
+            reCaptcha = new ReCaptcha("recaptchaInscription");
+            add(reCaptcha);
         } else {
             passwordField.setRequired(Boolean.FALSE);
             confirmPassword.setRequired(Boolean.FALSE);
@@ -427,7 +421,7 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
         return addedRequiredBehaviour;
     }
 
-    public void setAddedRequiredBehaviour(boolean addedRequiredBehaviour){
+    public void setAddedRequiredBehaviour(boolean addedRequiredBehaviour) {
         this.addedRequiredBehaviour = addedRequiredBehaviour;
     }
 }

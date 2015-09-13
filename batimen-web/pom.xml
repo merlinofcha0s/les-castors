@@ -40,6 +40,7 @@
 
         <!-- Config de Wicket pour qu'il enleve / mette ses tags dans le HTML -->
         <app.setStripWicketTags>true</app.setStripWicketTags>
+        <app.activate.captcha>true</app.activate.captcha>
 
         <!-- Infos Web App -->
         <app.ip>127.0.0.1</app.ip>
@@ -261,12 +262,6 @@
             <artifactId>wicketstuff-html5</artifactId>
             <version>${wicket.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.mashape.unirest</groupId>
-            <artifactId>unirest-java</artifactId>
-            <version>1.4.7</version>
-            <scope>compile</scope>
-        </dependency>
         <!-- AOP -->
         <dependency>
             <groupId>org.aspectj</groupId>
@@ -399,6 +394,18 @@
             </properties>
         </profile>
         <profile>
+            <id>integration-without-captcha</id>
+            <properties>
+                <app.activate.captcha>false</app.activate.captcha>
+            </properties>
+        </profile>
+        <profile>
+            <id>integration-with-captcha</id>
+            <properties>
+                <app.activate.captcha>true</app.activate.captcha>
+            </properties>
+        </profile>
+        <profile>
             <id>integration</id>
             <properties>
                 <!-- Wicket -->
@@ -411,7 +418,6 @@
                 <app.browser.target>firefox</app.browser.target>
                 <app.address.chrome.driver>/var/lib/chrome-driver/chromedriver</app.address.chrome.driver>
                 <app.temp.img.dir.test>/usr/share/castor-temp/img-test/</app.temp.img.dir.test>
-
                 <!-- Logs -->
                 <logs.address>/usr/share/log-batimen</logs.address>
                 <logs.archives>${logs.address}/archived</logs.archives>

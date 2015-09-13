@@ -137,7 +137,6 @@ public class Etape3EntrepriseForm extends Form<CreationPartenaireDTO> {
             departementField.setEnabled(false);
         }
 
-
         add(nomComplet, statutJuridique, nbEmployes, dateCreation, siret, logo, adresse, complementAdresse,
                 codePostalField, villeField, departementField, specialite);
     }
