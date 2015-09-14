@@ -129,9 +129,9 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
         delaiInterventionField.add(new ErrorHighlightBehavior());
         delaiInterventionField.add(new RequiredBorderBehaviour());
 
-        RadioGroup<TypeTravaux> typeTravaux = new RadioGroup<TypeTravaux>("typeTravaux");
-        Radio<TypeTravaux> neuf = new Radio<TypeTravaux>("typeTravaux.neuf", new Model<TypeTravaux>(TypeTravaux.NEUF));
-        Radio<TypeTravaux> renovation = new Radio<TypeTravaux>("typeTravaux.renovation", new Model<TypeTravaux>(
+        RadioGroup<TypeTravaux> typeTravaux = new RadioGroup<>("typeTravaux");
+        Radio<TypeTravaux> neuf = new Radio<>("typeTravaux.neuf", new Model<TypeTravaux>(TypeTravaux.NEUF));
+        Radio<TypeTravaux> renovation = new Radio<>("typeTravaux.renovation", new Model<TypeTravaux>(
                 TypeTravaux.RENOVATION));
         typeTravaux.add(neuf);
         typeTravaux.add(renovation);

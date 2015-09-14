@@ -40,6 +40,7 @@
 
         <!-- Config de Wicket pour qu'il enleve / mette ses tags dans le HTML -->
         <app.setStripWicketTags>true</app.setStripWicketTags>
+        <!-- Activation des captchas lors de l'inscription / nouveau compte -->
         <app.activate.captcha>true</app.activate.captcha>
 
         <!-- Infos Web App -->
@@ -397,12 +398,6 @@
             <id>integration-without-captcha</id>
             <properties>
                 <app.activate.captcha>false</app.activate.captcha>
-            </properties>
-        </profile>
-        <profile>
-            <id>integration-with-captcha</id>
-            <properties>
-                <app.activate.captcha>true</app.activate.captcha>
             </properties>
         </profile>
         <profile>

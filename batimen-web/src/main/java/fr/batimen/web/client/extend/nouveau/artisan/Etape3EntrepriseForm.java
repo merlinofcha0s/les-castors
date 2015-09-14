@@ -9,6 +9,7 @@ import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.batimen.web.client.component.CastorDatePicker;
 import fr.batimen.web.client.validator.SiretValidator;
 import fr.batimen.web.client.validator.VilleValidator;
+import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextField;
@@ -37,6 +38,8 @@ public class Etape3EntrepriseForm extends Form<CreationPartenaireDTO> {
     private static final long serialVersionUID = 7654913676022607009L;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Etape3EntrepriseForm.class);
+
+    private WebMarkupContainer fieldContainer;
 
     @Inject
     private VilleValidator villeValidator;
@@ -137,12 +140,21 @@ public class Etape3EntrepriseForm extends Form<CreationPartenaireDTO> {
             departementField.setEnabled(false);
         }
 
-        add(nomComplet, statutJuridique, nbEmployes, dateCreation, siret, logo, adresse, complementAdresse,
+        fieldContainer = new WebMarkupContainer("fieldContainer");
+        fieldContainer.setOutputMarkupId(true);
+
+        fieldContainer.add(nomComplet, statutJuridique, nbEmployes, dateCreation, siret, logo, adresse, complementAdresse,
                 codePostalField, villeField, departementField, specialite);
+
+        add(fieldContainer);
     }
 
     @Override
     public boolean wantSubmitOnParentFormSubmit() {
         return true;
+    }
+
+    public WebMarkupContainer getFieldContainer() {
+        return fieldContainer;
     }
 }

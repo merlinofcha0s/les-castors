@@ -7,6 +7,7 @@ import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
 import fr.batimen.dto.CaptchaDTO;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
+import fr.batimen.web.enums.PropertiesFileWeb;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.panel.Panel;
@@ -34,22 +35,26 @@ public class ReCaptcha extends Panel {
     }
 
     public CaptchaDTO verifyCaptcha() {
-        final WebRequest request = (WebRequest) RequestCycle.get().getRequest();
-        final String userToken = request.getRequestParameters().getParameterValue("g-recaptcha-response").toString();
+        if (Boolean.valueOf(PropertiesFileWeb.APP.getProperties().getProperty("app.activate.captcha"))) {
+            final WebRequest request = (WebRequest) RequestCycle.get().getRequest();
+            final String userToken = request.getRequestParameters().getParameterValue("g-recaptcha-response").toString();
 
-        MultivaluedMap<String, String> captchaVerificationForm = new MultivaluedMapImpl();
-        captchaVerificationForm.add("secret", secretKey);
-        captchaVerificationForm.add("response", userToken);
+            MultivaluedMap<String, String> captchaVerificationForm = new MultivaluedMapImpl();
+            captchaVerificationForm.add("secret", secretKey);
+            captchaVerificationForm.add("response", userToken);
 
-        ClientConfig clientConfig = new DefaultClientConfig();
-        Client client = Client.create(clientConfig);
-        client.setFollowRedirects(true);
-        WebResource call = client.resource("https://www.google.com/recaptcha/api/siteverify");
-        String response =
-                call.type(MediaType.
-                        APPLICATION_FORM_URLENCODED_TYPE)
-                        .post(String.class, captchaVerificationForm);
+            ClientConfig clientConfig = new DefaultClientConfig();
+            Client client = Client.create(clientConfig);
+            client.setFollowRedirects(true);
+            WebResource call = client.resource("https://www.google.com/recaptcha/api/siteverify");
+            String response =
+                    call.type(MediaType.
+                            APPLICATION_FORM_URLENCODED_TYPE)
+                            .post(String.class, captchaVerificationForm);
 
-        return DeserializeJsonHelper.deserializeDTO(response, CaptchaDTO.class);
+            return DeserializeJsonHelper.deserializeDTO(response, CaptchaDTO.class);
+        } else {
+            return new CaptchaDTO();
+        }
     }
 }

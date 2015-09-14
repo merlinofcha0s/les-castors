@@ -18,6 +18,7 @@ import fr.batimen.web.client.extend.nouveau.artisan.event.ChangementEtapeEventAr
 import fr.batimen.web.client.extend.nouveau.communs.JSCommun;
 import fr.batimen.web.client.extend.nouveau.devis.NouveauUtils;
 import fr.batimen.web.client.master.MasterPage;
+import fr.batimen.web.enums.PropertiesFileWeb;
 import fr.batimen.ws.client.service.ArtisanServiceREST;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -210,8 +211,7 @@ public class Etape3Entreprise extends Panel {
 
             @Override
             protected void onError(AjaxRequestTarget target, Form<?> form) {
-                //TODO : Faire des getters et des setters sur tous les composants de etape3EntrepriseForm et les rafraichirrent via ajax
-                target.add(getForm());
+                target.add(etape3EntrepriseForm.getFieldContainer());
                 refreshJS(target);
                 this.send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target));
             }
@@ -234,7 +234,9 @@ public class Etape3Entreprise extends Panel {
                 } else {
                     CaptchaDTO captchaDTO = reCaptcha.verifyCaptcha();
 
-                    if (Boolean.valueOf(captchaDTO.getSuccess())) {
+                    if (!Boolean.valueOf(captchaDTO.getSuccess()) && Boolean.valueOf(PropertiesFileWeb.APP.getProperties().getProperty("app.activate.captcha"))) {
+                        MasterPage.triggerEventFeedBackPanel(target, "Veuillez cocher le recaptcha avant de pouvoir continuer", FeedbackMessageLevel.ERROR);
+                    } else {
                         if (electricite.getConvertedInput()) {
                             categoriesSelectionnees.add(CategorieLoader.getCategorieElectricite());
                         }
@@ -253,13 +255,9 @@ public class Etape3Entreprise extends Panel {
                                 nouveauPartenaire);
                         refreshJS(target);
                         this.send(target.getPage(), Broadcast.EXACT, changementEtapeEvent);
-                    } else {
-                        MasterPage.triggerEventFeedBackPanel(target, "Veuillez cocher le recaptcha avant de pouvoir continuer", FeedbackMessageLevel.ERROR);
                     }
                 }
             }
-
-
         };
 
         validateEtape3Partenaire.setMarkupId("validateEtape3Partenaire");
@@ -309,7 +307,12 @@ public class Etape3Entreprise extends Panel {
         etape3EntrepriseForm = new Etape3EntrepriseForm("etape3EntrepriseForm",
                 new CompoundPropertyModel<>(nouveauPartenaire), isInModification);
 
-        reCaptcha = new ReCaptcha("recaptchaInscription");
+        reCaptcha = new ReCaptcha("recaptchaInscription") {
+            @Override
+            public boolean isVisible() {
+                return !isInModification;
+            }
+        };
 
         etape3EntrepriseForm.add(reCaptcha);
 
