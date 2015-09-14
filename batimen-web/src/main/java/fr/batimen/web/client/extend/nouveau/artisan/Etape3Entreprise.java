@@ -1,6 +1,7 @@
 package fr.batimen.web.client.extend.nouveau.artisan;
 
 import fr.batimen.core.constant.CodeRetourService;
+import fr.batimen.dto.CaptchaDTO;
 import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.LocalisationDTO;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
@@ -11,11 +12,13 @@ import fr.batimen.web.app.constants.FeedbackMessageLevel;
 import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.app.security.RolesUtils;
 import fr.batimen.web.app.utils.codepostal.CSVCodePostalReader;
+import fr.batimen.web.client.component.ReCaptcha;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.web.client.extend.nouveau.artisan.event.ChangementEtapeEventArtisan;
 import fr.batimen.web.client.extend.nouveau.communs.JSCommun;
 import fr.batimen.web.client.extend.nouveau.devis.NouveauUtils;
 import fr.batimen.web.client.master.MasterPage;
+import fr.batimen.web.enums.PropertiesFileWeb;
 import fr.batimen.ws.client.service.ArtisanServiceREST;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -58,6 +61,7 @@ public class Etape3Entreprise extends Panel {
     private StringBuilder INIT_TOOLTIP_CATEGORIE;
     private boolean isInModification;
     private String classCSSTooltip;
+    private ReCaptcha reCaptcha;
 
     @Inject
     private Authentication authentication;
@@ -207,7 +211,7 @@ public class Etape3Entreprise extends Panel {
 
             @Override
             protected void onError(AjaxRequestTarget target, Form<?> form) {
-                target.add(getForm());
+                target.add(etape3EntrepriseForm.getFieldContainer());
                 refreshJS(target);
                 this.send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target));
             }
@@ -228,24 +232,30 @@ public class Etape3Entreprise extends Panel {
                     }
 
                 } else {
-                    if (electricite.getConvertedInput()) {
-                        categoriesSelectionnees.add(CategorieLoader.getCategorieElectricite());
-                    }
-                    if (plomberie.getConvertedInput()) {
-                        categoriesSelectionnees.add(CategorieLoader.getCategoriePlomberie());
-                    }
-                    if (espaceVert.getConvertedInput()) {
-                        categoriesSelectionnees.add(CategorieLoader.getCategorieEspaceVert());
-                    }
-                    if (maconnerie.getConvertedInput()) {
-                        categoriesSelectionnees.add(CategorieLoader.getCategorieDecorationMaconnerie());
-                    }
+                    CaptchaDTO captchaDTO = reCaptcha.verifyCaptcha();
 
-                    nouveauPartenaire.setNumeroEtape(4);
-                    ChangementEtapeEventArtisan changementEtapeEvent = new ChangementEtapeEventArtisan(target,
-                            nouveauPartenaire);
-                    refreshJS(target);
-                    this.send(target.getPage(), Broadcast.EXACT, changementEtapeEvent);
+                    if (!Boolean.valueOf(captchaDTO.getSuccess()) && Boolean.valueOf(PropertiesFileWeb.APP.getProperties().getProperty("app.activate.captcha"))) {
+                        MasterPage.triggerEventFeedBackPanel(target, "Veuillez cocher le recaptcha avant de pouvoir continuer", FeedbackMessageLevel.ERROR);
+                    } else {
+                        if (electricite.getConvertedInput()) {
+                            categoriesSelectionnees.add(CategorieLoader.getCategorieElectricite());
+                        }
+                        if (plomberie.getConvertedInput()) {
+                            categoriesSelectionnees.add(CategorieLoader.getCategoriePlomberie());
+                        }
+                        if (espaceVert.getConvertedInput()) {
+                            categoriesSelectionnees.add(CategorieLoader.getCategorieEspaceVert());
+                        }
+                        if (maconnerie.getConvertedInput()) {
+                            categoriesSelectionnees.add(CategorieLoader.getCategorieDecorationMaconnerie());
+                        }
+
+                        nouveauPartenaire.setNumeroEtape(4);
+                        ChangementEtapeEventArtisan changementEtapeEvent = new ChangementEtapeEventArtisan(target,
+                                nouveauPartenaire);
+                        refreshJS(target);
+                        this.send(target.getPage(), Broadcast.EXACT, changementEtapeEvent);
+                    }
                 }
             }
         };
@@ -296,6 +306,15 @@ public class Etape3Entreprise extends Panel {
 
         etape3EntrepriseForm = new Etape3EntrepriseForm("etape3EntrepriseForm",
                 new CompoundPropertyModel<>(nouveauPartenaire), isInModification);
+
+        reCaptcha = new ReCaptcha("recaptchaInscription") {
+            @Override
+            public boolean isVisible() {
+                return !isInModification;
+            }
+        };
+
+        etape3EntrepriseForm.add(reCaptcha);
 
         containerActivite.add(electriciteContainer, plomberieContainer, espaceVertContainer, maconnerieContainer, multicategorieContainer);
         etape3FormGeneral.add(containerActivite, etape3EntrepriseForm, terminerInscriptionPartenaire, containerEtapePrecedenteNouveauArtisan3);

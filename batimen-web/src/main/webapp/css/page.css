@@ -160,6 +160,11 @@
     margin-bottom: 10px;
 }
 
+#captchaArtisanContainer {
+    padding-top: 5px;
+    padding-bottom: 10px;
+}
+
 #radioTypeTravauxNeuf {
     float: left;
     padding-right: 30px;
