@@ -3,13 +3,9 @@ package fr.batimen.web.client.behaviour;
 import fr.batimen.core.enums.PropertiesFileGeneral;
 import fr.batimen.web.app.constants.FeedbackMessageLevel;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
-import fr.batimen.web.enums.PropertiesFileWeb;
-import fr.batimen.ws.client.enums.PropertiesFileWsClient;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.event.Broadcast;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.wicketstuff.html5.fileapi.FileFieldSizeCheckBehavior;
 import org.wicketstuff.html5.fileapi.FileList;
 import org.wicketstuff.html5.fileapi.Html5File;
@@ -31,8 +27,6 @@ import java.util.List;
  */
 public class FileFieldValidatorAndLoaderBehaviour extends FileFieldSizeCheckBehavior {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(FileFieldValidatorAndLoaderBehaviour.class);
-
     private final List<String> allowedFileTypes = Arrays.asList("JPG", "PNG", "JPEG");
 
     private boolean validationOK = true;
@@ -41,7 +35,7 @@ public class FileFieldValidatorAndLoaderBehaviour extends FileFieldSizeCheckBeha
      * Constructeur principal pour cette behaviour
      */
     public FileFieldValidatorAndLoaderBehaviour() {
-
+        super();
     }
 
 

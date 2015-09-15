@@ -5,8 +5,8 @@ import fr.batimen.dto.CaptchaDTO;
 import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.LocalisationDTO;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
+import fr.batimen.dto.constant.Categorie;
 import fr.batimen.dto.enums.TypeCompte;
-import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.web.app.constants.Etape;
 import fr.batimen.web.app.constants.FeedbackMessageLevel;
 import fr.batimen.web.app.security.Authentication;
@@ -59,7 +59,6 @@ public class Etape3Entreprise extends Panel {
     private String INIT_VILLE_TYPE_AHEAD;
     private StringBuilder INIT_MULTI_CATEGORIE_CHECKBOX;
     private StringBuilder INIT_TOOLTIP_CATEGORIE;
-    private boolean isInModification;
     private String classCSSTooltip;
     private ReCaptcha reCaptcha;
 
@@ -81,7 +80,6 @@ public class Etape3Entreprise extends Panel {
     public Etape3Entreprise(String id, IModel<?> model, final CreationPartenaireDTO nouveauPartenaire, final boolean isInModification) {
         this(id, model);
         this.nouveauPartenaire = nouveauPartenaire;
-        this.isInModification = isInModification;
         Model<String> titreModificationEntrepriseModel = new Model<>();
 
         rolesUtils = new RolesUtils();
@@ -238,16 +236,16 @@ public class Etape3Entreprise extends Panel {
                         MasterPage.triggerEventFeedBackPanel(target, "Veuillez cocher le recaptcha avant de pouvoir continuer", FeedbackMessageLevel.ERROR);
                     } else {
                         if (electricite.getConvertedInput()) {
-                            categoriesSelectionnees.add(CategorieLoader.getCategorieElectricite());
+                            categoriesSelectionnees.add(Categorie.getElectricite());
                         }
                         if (plomberie.getConvertedInput()) {
-                            categoriesSelectionnees.add(CategorieLoader.getCategoriePlomberie());
+                            categoriesSelectionnees.add(Categorie.getPlomberie());
                         }
                         if (espaceVert.getConvertedInput()) {
-                            categoriesSelectionnees.add(CategorieLoader.getCategorieEspaceVert());
+                            categoriesSelectionnees.add(Categorie.getEspaceVert());
                         }
                         if (maconnerie.getConvertedInput()) {
-                            categoriesSelectionnees.add(CategorieLoader.getCategorieDecorationMaconnerie());
+                            categoriesSelectionnees.add(Categorie.getMaconnerie());
                         }
 
                         nouveauPartenaire.setNumeroEtape(4);

@@ -253,7 +253,7 @@ public class NouveauArtisan extends MasterPage {
 
         if (event.getPayload() instanceof LocalisationEvent) {
             LocalisationEvent localisationEvent = (LocalisationEvent) event.getPayload();
-            if(localisationEvent.getLocalisationDTOMemeCodePostal().size() != 0){
+            if (!localisationEvent.getLocalisationDTOMemeCodePostal().isEmpty()) {
                 nouveauPartenaire.getAdresse().setCodePostal(localisationEvent.getLocalisationDTOMemeCodePostal().get(0).getCodePostal());
                 nouveauPartenaire.getAdresse().setDepartement(Integer.valueOf(localisationEvent.getLocalisationDTOMemeCodePostal().get(0).getDepartement()));
             }

@@ -18,7 +18,7 @@ public class ModalCastor extends Panel {
 
     private static final long serialVersionUID = -1420068924107876280L;
 
-    private final TransparentWebMarkupContainer modalCastor;
+    private final TransparentWebMarkupContainer modalCastorContainer;
     private final Label title;
     private final String id;
     private final StringBuilder fctJsNameOpen;
@@ -30,14 +30,14 @@ public class ModalCastor extends Panel {
         StringBuilder sizeModalCSS = new StringBuilder("width: ");
         sizeModalCSS.append(size).append("px");
         // MASTER CONTAINER
-        modalCastor = new TransparentWebMarkupContainer("modalCastor");
-        modalCastor.setOutputMarkupId(true);
-        modalCastor.setMarkupId(id);
-        modalCastor.add(new AttributeModifier("style", sizeModalCSS.toString()));
+        modalCastorContainer = new TransparentWebMarkupContainer("modalCastor");
+        modalCastorContainer.setOutputMarkupId(true);
+        modalCastorContainer.setMarkupId(id);
+        modalCastorContainer.add(new AttributeModifier("style", sizeModalCSS.toString()));
 
         this.title = new Label("title", title);
 
-        add(modalCastor, this.title);
+        add(modalCastorContainer, this.title);
         // NOM DES FCT JAVASCRIPT POUR L OUVERTURE / FERMETURE DE LA MODAL
         fctJsNameOpen = new StringBuilder("showModal");
         fctJsNameOpen.append(id).append("Open()");

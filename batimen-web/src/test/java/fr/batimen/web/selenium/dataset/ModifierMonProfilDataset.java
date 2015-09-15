@@ -5,7 +5,6 @@ import fr.batimen.dto.constant.Categorie;
 import fr.batimen.dto.enums.StatutNotification;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.enums.TypeNotification;
-import fr.batimen.dto.helper.CategorieLoader;
 
 import static com.ninja_squad.dbsetup.Operations.insertInto;
 
@@ -59,7 +58,7 @@ public class ModifierMonProfilDataset {
             .columns("annonce_id", "artisans_id").values(200011, 200008).build();
 
     public static final Operation INSERT_CATEGORIE_ENTREPRISE = insertInto("categorieMetier")
-            .columns("id", "categorieMetier", "entreprise_fk").values(200000, CategorieLoader.ELECTRICITE_CODE, 200009).build();
+            .columns("id", "categorieMetier", "entreprise_fk").values(200000, Categorie.ELECTRICITE_CODE, 200009).build();
 
     public static final Operation INSERT_ANNONCE_MOT_CLE = insertInto("motcle")
             .columns("id", "motcle", "annonce_fk")

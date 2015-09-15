@@ -3,8 +3,8 @@ package fr.batimen.web.client.extend.connected;
 import fr.batimen.dto.AvisDTO;
 import fr.batimen.dto.CategorieMetierDTO;
 import fr.batimen.dto.EntrepriseDTO;
+import fr.batimen.dto.constant.Categorie;
 import fr.batimen.dto.enums.StatutJuridique;
-import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.web.app.constants.ParamsConstant;
 import fr.batimen.web.client.component.*;
 import fr.batimen.web.client.master.MasterPage;
@@ -167,25 +167,25 @@ public class Entreprise extends MasterPage {
             protected void populateItem(ListItem<CategorieMetierDTO> item) {
                 CategorieMetierDTO categorieMetierDTO = item.getModelObject();
 
-                if (categorieMetierDTO.getCategorieMetier().equals(CategorieLoader.ELECTRICITE_CODE)) {
+                if (categorieMetierDTO.getCategorieMetier().equals(Categorie.ELECTRICITE_CODE)) {
                     item.add(new AttributeModifier("data-original-title", "Electricité"));
                     item.add(new AttributeModifier("title", "Electricité"));
                     item.add(new AttributeModifier("class", "icon-Lightning font-glyph-entreprise categorie-entreprise"));
                 }
 
-                if (categorieMetierDTO.getCategorieMetier().equals(CategorieLoader.PLOMBERIE_CODE)) {
+                if (categorieMetierDTO.getCategorieMetier().equals(Categorie.PLOMBERIE_CODE)) {
                     item.add(new AttributeModifier("data-original-title", "Plomberie"));
                     item.add(new AttributeModifier("title", "Plomberie"));
                     item.add(new AttributeModifier("class", "icons8-plumbing font-glyph-entreprise categorie-entreprise icons-8-entreprise"));
                 }
 
-                if (categorieMetierDTO.getCategorieMetier().equals(CategorieLoader.ESPACE_VERT_CODE)) {
+                if (categorieMetierDTO.getCategorieMetier().equals(Categorie.ESPACE_VERT_CODE)) {
                     item.add(new AttributeModifier("data-original-title", "Espaces verts"));
                     item.add(new AttributeModifier("title", "Espaces verts"));
                     item.add(new AttributeModifier("class", "icons8-garden-shears font-glyph-entreprise categorie-entreprise icons-8-entreprise"));
                 }
 
-                if (categorieMetierDTO.getCategorieMetier().equals(CategorieLoader.DECORATION_MACONNERIE_CODE)) {
+                if (categorieMetierDTO.getCategorieMetier().equals(Categorie.DECORATION_MACONNERIE_CODE)) {
                     item.add(new AttributeModifier("data-original-title", "Décoration / Maconnerie"));
                     item.add(new AttributeModifier("title", "Décoration / Maconnerie"));
                     item.add(new AttributeModifier("class", "icon-Tool font-glyph-entreprise categorie-entreprise"));

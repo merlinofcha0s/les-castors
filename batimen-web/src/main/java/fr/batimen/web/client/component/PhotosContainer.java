@@ -1,17 +1,12 @@
 package fr.batimen.web.client.component;
 
-import fr.batimen.core.enums.PropertiesFileGeneral;
 import fr.batimen.dto.ImageDTO;
 import fr.batimen.dto.aggregate.AjoutPhotoDTO;
-import fr.batimen.dto.aggregate.SuppressionPhotoDTO;
-import fr.batimen.web.app.constants.FeedbackMessageLevel;
 import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.client.behaviour.FileFieldValidatorAndLoaderBehaviour;
 import fr.batimen.web.client.event.AjoutPhotoEvent;
-import fr.batimen.web.client.event.ClearFeedbackPanelEvent;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.web.client.event.SuppressionPhotoEvent;
-import fr.batimen.ws.client.service.AnnonceServiceREST;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -23,7 +18,6 @@ import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.upload.FileUpload;
 import org.apache.wicket.markup.html.form.upload.FileUploadField;
 import org.apache.wicket.markup.html.image.Image;
 import org.apache.wicket.markup.html.link.ExternalLink;
@@ -35,7 +29,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import java.io.IOException;
 import java.util.List;
 
 /**
@@ -46,21 +39,18 @@ import java.util.List;
  */
 public class PhotosContainer extends Panel {
 
+    public static final String REFRESH_TOOLTIP_ON_SUPPRESS_LINK = "$('.suppress-link').tooltip()";
+    public static final String REFRESH_PRETTY_PHOTO_ON_PICTURE = "$(\"a[class^='prettyPhoto']\").prettyPhoto();";
     private static final Logger LOGGER = LoggerFactory.getLogger(PhotosContainer.class);
-
     private List<ImageDTO> images;
     private String title;
     private String baliseTypeTitle;
     private boolean canAdd;
     private String idAnnonce;
-    private WebMarkupContainer photosContainer;
+    private WebMarkupContainer photos;
     private WebMarkupContainer aucunePhotoContainer;
     private WebMarkupContainer transparentMarkupForPhotosAjax;
     private ListView<ImageDTO> imagesView;
-
-    public static final String REFRESH_TOOLTIP_ON_SUPPRESS_LINK = "$('.suppress-link').tooltip()";
-    public static final String REFRESH_PRETTY_PHOTO_ON_PICTURE = "$(\"a[class^='prettyPhoto']\").prettyPhoto();";
-
     @Inject
     private Authentication authentication;
 
@@ -83,7 +73,7 @@ public class PhotosContainer extends Panel {
 
     private void initComponent() {
 
-        photosContainer = new WebMarkupContainer("photosContainer") {
+        photos = new WebMarkupContainer("photosContainer") {
 
             private static final long serialVersionUID = 1L;
 
@@ -93,7 +83,7 @@ public class PhotosContainer extends Panel {
             }
         };
 
-        photosContainer.setOutputMarkupId(true);
+        photos.setOutputMarkupId(true);
 
         Label titleContainer = new Label("titleContainer", title) {
 
@@ -164,7 +154,7 @@ public class PhotosContainer extends Panel {
             }
         };
 
-        photosContainer.add(imagesView, titleContainer);
+        photos.add(imagesView, titleContainer);
 
         aucunePhotoContainer = new WebMarkupContainer("aucunePhotoContainer") {
 
@@ -183,7 +173,7 @@ public class PhotosContainer extends Panel {
 
         transparentMarkupForPhotosAjax = new WebMarkupContainer("transparentMarkupForPhotosAjax");
         transparentMarkupForPhotosAjax.setOutputMarkupId(true);
-        transparentMarkupForPhotosAjax.add(photosContainer, aucunePhotoContainer);
+        transparentMarkupForPhotosAjax.add(photos, aucunePhotoContainer);
         add(transparentMarkupForPhotosAjax);
     }
 

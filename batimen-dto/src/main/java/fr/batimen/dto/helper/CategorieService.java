@@ -30,7 +30,7 @@ public class CategorieService implements Serializable {
     /**
      * Transforme une ligne en CategorieDTO
      */
-    public static Function<String, MotCleDTO> mapToCategorie = (line) -> {
+    public static final Function<String, MotCleDTO> mapToCategorie = (line) -> {
         List<String> valeurs = Arrays.asList(line.split(";"));
 
         final MotCleDTO motCleDTO = new MotCleDTO();

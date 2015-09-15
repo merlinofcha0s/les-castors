@@ -10,7 +10,8 @@ public enum PropertiesFileGeneral {
 
     GENERAL("general.properties");
 
-    private final Logger logger = LoggerFactory.getLogger(PropertiesFileGeneral.class);
+    private transient final Logger logger = LoggerFactory.getLogger(PropertiesFileGeneral.class);
+    private Properties properties;
 
     private PropertiesFileGeneral(String propertiesFileName) {
 
@@ -23,8 +24,6 @@ public enum PropertiesFileGeneral {
             }
         }
     }
-
-    private Properties properties;
 
     public Properties getProperties() {
         return properties;

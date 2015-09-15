@@ -1,10 +1,10 @@
 package fr.batimen.ws.enums;
 
-import java.io.IOException;
-import java.util.Properties;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
+import java.util.Properties;
 
 /**
  * Enum qui permet de gérer / charger les fichiers properties
@@ -17,9 +17,10 @@ public enum PropertiesFileWS {
     URL("url.properties"), EMAIL("email.properties"), CASTOR("castor.properties"), JOBS("jobs.properties"), IMAGE(
             "image.properties");
 
-    private final Logger logger = LoggerFactory.getLogger(PropertiesFileWS.class);
+    private final transient Logger logger = LoggerFactory.getLogger(PropertiesFileWS.class);
+    private Properties properties;
 
-    private PropertiesFileWS(String propertiesFileName) {
+    PropertiesFileWS(String propertiesFileName) {
 
         this.properties = new Properties();
         try {
@@ -30,8 +31,6 @@ public enum PropertiesFileWS {
             }
         }
     }
-
-    private Properties properties;
 
     public Properties getProperties() {
         return properties;

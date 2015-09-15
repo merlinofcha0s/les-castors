@@ -1,11 +1,14 @@
 package fr.batimen.web.client.extend.nouveau.devis;
 
+import fr.batimen.web.client.event.CastorWizardEvent;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.event.Broadcast;
 
-import fr.batimen.web.client.event.CastorWizardEvent;
-
 public class NouveauUtils {
+
+    private NouveauUtils() {
+        super();
+    }
 
     public static void sendEventForPreviousStep(AjaxRequestTarget target, Integer etapeEnCours) {
         CastorWizardEvent castorWizardEvent = new CastorWizardEvent(target);

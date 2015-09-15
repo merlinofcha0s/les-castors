@@ -1,9 +1,8 @@
 package fr.batimen.dto;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
-
-import javax.validation.constraints.NotNull;
 
 public class SousCategorieMetierDTO implements Serializable {
 
@@ -17,6 +16,7 @@ public class SousCategorieMetierDTO implements Serializable {
     }
 
     public SousCategorieMetierDTO() {
+        super();
     }
 
     /**

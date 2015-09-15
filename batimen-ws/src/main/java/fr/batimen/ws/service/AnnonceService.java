@@ -258,7 +258,7 @@ public class AnnonceService {
         // Si c'est le dernier artisan avant qu'on atteigne le quota, on change
         // l'etat de l'annonce.
         Properties propertiesCastor = PropertiesFileWS.CASTOR.getProperties();
-        int nbMaxArtisanParAnnonce = Integer.valueOf(propertiesCastor.getProperty("prop.nb.max.artisan.annonce"));
+        int nbMaxArtisanParAnnonce = Integer.parseInt(propertiesCastor.getProperty("prop.nb.max.artisan.annonce"));
 
         if (annonce.getArtisans().size() == nbMaxArtisanParAnnonce - 1) {
             annonce.setEtatAnnonce(EtatAnnonce.QUOTA_MAX_ATTEINT);
@@ -279,7 +279,7 @@ public class AnnonceService {
     public Integer desactivateAnnoncePerime() {
         // Récuperation des properties
         Properties castorProperties = PropertiesFileWS.CASTOR.getProperties();
-        int nbJourAvantPeremption = Integer.valueOf(castorProperties.getProperty("prop.temps.peremption.annonce"));
+        int nbJourAvantPeremption = Integer.parseInt(castorProperties.getProperty("prop.temps.peremption.annonce"));
         Integer nbMaxArtisanParAnnonce = Integer.valueOf(castorProperties.getProperty("prop.nb.max.artisan.annonce"));
 
         Calendar calJourPeremptionAnnonce = Calendar.getInstance(Locale.FRANCE);
@@ -331,9 +331,6 @@ public class AnnonceService {
 
 
         motCleDTOs.forEach(motCleDTO -> {
-
-            //boolean motCleNotPresent = annonce.getMotcles().stream().noneMatch(motCle -> motCle.getMotCle().equals(motCleDTO.getMotCle()));
-
             MotCle motCle = new MotCle();
             motCle.setMotCle(motCleDTO.getMotCle());
             motCle.setAnnonce(annonce);

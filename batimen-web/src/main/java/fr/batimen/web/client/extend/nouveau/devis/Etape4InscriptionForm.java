@@ -60,6 +60,7 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
     private static final long serialVersionUID = 2500892594731116597L;
     private static final Logger LOGGER = LoggerFactory.getLogger(Etape4InscriptionForm.class);
     private static final String ID_VALIDATE_INSCRIPTION = "validateInscription";
+    public static boolean addedRequiredBehaviour;
     private final RequiredBorderBehaviour requiredBorderBehaviour = new RequiredBorderBehaviour();
     private final CreationAnnonceDTO nouvelleAnnonce;
     private final PasswordTextField passwordField;
@@ -70,7 +71,6 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
     private final TextField<String> numeroTelField;
     private final TextField<String> emailField;
     private final TextField<String> loginField;
-    public boolean addedRequiredBehaviour;
     private ReCaptcha reCaptcha;
     @Inject
     private UtilisateurServiceREST utilisateurServiceREST;

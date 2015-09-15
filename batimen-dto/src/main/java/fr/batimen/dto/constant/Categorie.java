@@ -2,6 +2,9 @@ package fr.batimen.dto.constant;
 
 import fr.batimen.dto.CategorieMetierDTO;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Classe utilitaire permettant de gérer les catégories
  *
@@ -20,6 +23,10 @@ public class Categorie {
     public static final String ESPACE_VERT_NAME = "Espace vert";
     public static final String DECORATION_MACONNERIE_NAME = "Maçonnerie";
     public static final String MENUISERIE_NAME = "Menuiserie";
+
+    private Categorie() {
+        super();
+    }
 
 
     public static String getNameByCode(int code) {
@@ -71,5 +78,29 @@ public class Categorie {
 
     public static CategorieMetierDTO getMenuiserie() {
         return new CategorieMetierDTO(MENUISERIE_CODE);
+    }
+
+    public static synchronized List<CategorieMetierDTO> getAllCategories() {
+        List<CategorieMetierDTO> allCategories = new ArrayList<CategorieMetierDTO>();
+        allCategories.add(getElectricite());
+        allCategories.add(getPlomberie());
+        allCategories.add(getEspaceVert());
+        allCategories.add(getMaconnerie());
+        return allCategories;
+    }
+
+    public static CategorieMetierDTO getCategorieByCode(Short codeCategorie) {
+        switch (codeCategorie) {
+            case 0:
+                return getElectricite();
+            case 1:
+                return getPlomberie();
+            case 2:
+                return getEspaceVert();
+            case 3:
+                return getMaconnerie();
+            default:
+                throw new UnsupportedOperationException();
+        }
     }
 }

@@ -3,7 +3,7 @@ package fr.batimen.ws.service;
 import fr.batimen.dto.AdresseDTO;
 import fr.batimen.dto.EntrepriseDTO;
 import fr.batimen.dto.ImageDTO;
-import fr.batimen.dto.helper.CategorieLoader;
+import fr.batimen.dto.constant.Categorie;
 import fr.batimen.ws.entity.CategorieMetier;
 import fr.batimen.ws.entity.Entreprise;
 import fr.batimen.ws.entity.Image;
@@ -36,7 +36,7 @@ public class EntrepriseService {
             entrepriseDTO.setSpecialite(entreprise.getSpecialite());
 
             for(CategorieMetier categorieMetier : entreprise.getCategoriesMetier()){
-                entrepriseDTO.getCategoriesMetier().add(CategorieLoader.getCategorieByCode(categorieMetier.getCategorieMetier()));
+                entrepriseDTO.getCategoriesMetier().add(Categorie.getCategorieByCode(categorieMetier.getCategorieMetier()));
             }
 
             for(Image image : entreprise.getImagesChantierTemoin()){

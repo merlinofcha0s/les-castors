@@ -20,9 +20,6 @@ public class CategorieDTO extends AbstractDTO {
         this.categories = categories;
     }
 
-    public CategorieDTO() {
-    }
-
     public String getMotCle() {
         return motCle;
     }

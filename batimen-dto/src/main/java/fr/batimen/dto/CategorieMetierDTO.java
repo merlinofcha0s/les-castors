@@ -11,7 +11,9 @@ public class CategorieMetierDTO implements Serializable {
     @NotNull
     private Short categorieMetier;
 
+
     public CategorieMetierDTO() {
+        super();
     }
 
     public CategorieMetierDTO(String name, short categorieMetier) {

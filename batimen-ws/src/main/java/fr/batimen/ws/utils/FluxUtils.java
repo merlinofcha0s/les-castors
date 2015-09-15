@@ -27,6 +27,10 @@ public class FluxUtils {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(FluxUtils.class);
 
+    private FluxUtils() {
+        super();
+    }
+
     /**
      * Tranforme un input stream en string JSON
      *

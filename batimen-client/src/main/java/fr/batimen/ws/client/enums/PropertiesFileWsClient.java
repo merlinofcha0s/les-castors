@@ -10,7 +10,7 @@ public enum PropertiesFileWsClient {
 
     WS("ws.properties");
 
-    private final Logger logger = LoggerFactory.getLogger(PropertiesFileWsClient.class);
+    private final transient Logger logger = LoggerFactory.getLogger(PropertiesFileWsClient.class);
     private Properties properties;
 
     PropertiesFileWsClient(String propertiesFileName) {

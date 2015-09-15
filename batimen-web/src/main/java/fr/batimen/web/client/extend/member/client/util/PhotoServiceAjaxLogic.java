@@ -86,6 +86,8 @@ public class PhotoServiceAjaxLogic implements Serializable {
                 break;
             case CHANTIER_TEMOIN_PHOTO_SERVICE : imageDTOs.addAll(artisanServiceREST.suppressionPhotoChantierTemoin(suppressionPhotoDTO));
                 break;
+            default:
+                throw new UnsupportedOperationException();
         }
 
         if (suppressionPhotoEvent.getNbImagesAvant() != imageDTOs.size()) {
@@ -128,6 +130,8 @@ public class PhotoServiceAjaxLogic implements Serializable {
                     break;
                 case CHANTIER_TEMOIN_PHOTO_SERVICE : images.addAll(artisanServiceREST.ajouterPhotosChantierTemoin(ajoutImageDTO));
                     break;
+                default:
+                    throw new UnsupportedOperationException();
             }
 
             if (sizeBefore == images.size()) {

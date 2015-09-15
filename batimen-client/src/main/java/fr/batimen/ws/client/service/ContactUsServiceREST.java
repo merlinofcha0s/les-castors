@@ -40,7 +40,7 @@ public class ContactUsServiceREST implements Serializable {
         String jsonResponse = wsConnector.sendRequestJSON(WsPath.MAIL_SERVICE_PATH, WsPath.MAIL_SERVICE_SEND_CONTACT_MAIL,
                 contactMail);
 
-        int serverResponse = Integer.valueOf(jsonResponse);
+        int serverResponse = Integer.parseInt(jsonResponse);
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Fin appel service d'envoi email contact");
             LOGGER.debug("Server response : {}", serverResponse);

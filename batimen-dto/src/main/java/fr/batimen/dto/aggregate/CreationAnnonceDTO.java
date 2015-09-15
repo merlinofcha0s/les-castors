@@ -51,7 +51,7 @@ public class CreationAnnonceDTO extends AbstractDTO {
     @NotNull
     private Integer numeroEtape = 1;
     @NotNull
-    @Min(value = 01)
+    @Min(value = 1)
     @Max(value = 100)
     private Integer departement;
     @NotNull

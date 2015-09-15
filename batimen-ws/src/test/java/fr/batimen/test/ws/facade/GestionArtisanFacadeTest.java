@@ -6,10 +6,10 @@ import fr.batimen.dto.*;
 import fr.batimen.dto.aggregate.AjoutPhotoDTO;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
 import fr.batimen.dto.aggregate.SuppressionPhotoDTO;
+import fr.batimen.dto.constant.Categorie;
 import fr.batimen.dto.enums.Civilite;
 import fr.batimen.dto.enums.StatutJuridique;
 import fr.batimen.dto.enums.TypeCompte;
-import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.test.ws.AbstractBatimenWsTest;
 import fr.batimen.ws.client.service.ArtisanServiceREST;
 import fr.batimen.ws.dao.ArtisanDAO;
@@ -71,7 +71,7 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
         nouveauPartenaire.getEntreprise().setDateCreation(new Date());
 
         List<CategorieMetierDTO> categoriesMetier = new ArrayList<CategorieMetierDTO>();
-        categoriesMetier.add(CategorieLoader.getCategoriePlomberie());
+        categoriesMetier.add(Categorie.getPlomberie());
 
         nouveauPartenaire.getEntreprise().getCategoriesMetier().addAll(categoriesMetier);
         nouveauPartenaire.getEntreprise().setNbEmployees(2);
@@ -148,8 +148,8 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
         cal.set(2014, 03, 23, 22, 00, 00);
         entrepriseDTO.setDateCreation(cal.getTime());
 
-        entrepriseDTO.getCategoriesMetier().add(CategorieLoader.getCategoriePlomberie());
-        entrepriseDTO.getCategoriesMetier().add(CategorieLoader.getCategorieDecorationMaconnerie());
+        entrepriseDTO.getCategoriesMetier().add(Categorie.getPlomberie());
+        entrepriseDTO.getCategoriesMetier().add(Categorie.getMaconnerie());
 
         AdresseDTO adresseDTO = new AdresseDTO();
         adresseDTO.setAdresse("2410 avenue de l'artisan");
@@ -183,8 +183,8 @@ public class GestionArtisanFacadeTest extends AbstractBatimenWsTest {
         cal.set(2014, 03, 23, 22, 00, 00);
         entrepriseDTO.setDateCreation(cal.getTime());
 
-        entrepriseDTO.getCategoriesMetier().add(CategorieLoader.getCategoriePlomberie());
-        entrepriseDTO.getCategoriesMetier().add(CategorieLoader.getCategorieDecorationMaconnerie());
+        entrepriseDTO.getCategoriesMetier().add(Categorie.getPlomberie());
+        entrepriseDTO.getCategoriesMetier().add(Categorie.getMaconnerie());
 
         AdresseDTO adresseDTO = new AdresseDTO();
         adresseDTO.setAdresse("106 chemin de la modification");

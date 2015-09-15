@@ -10,7 +10,8 @@ public enum PropertiesFileWeb {
 
     APP("app.properties"), DEPARTEMENT_ALLOWED("departement_allowed.properties");
 
-    private final Logger logger = LoggerFactory.getLogger(PropertiesFileWeb.class);
+    private final transient Logger logger = LoggerFactory.getLogger(PropertiesFileWeb.class);
+    private Properties properties;
 
     PropertiesFileWeb(String propertiesFileName) {
 
@@ -23,8 +24,6 @@ public enum PropertiesFileWeb {
             }
         }
     }
-
-    private Properties properties;
 
     public Properties getProperties() {
         return properties;

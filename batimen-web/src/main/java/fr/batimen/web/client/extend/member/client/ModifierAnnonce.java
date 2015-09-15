@@ -3,7 +3,6 @@ package fr.batimen.web.client.extend.member.client;
 import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.dto.AdresseDTO;
 import fr.batimen.dto.AnnonceDTO;
-import fr.batimen.dto.SousCategorieMetierDTO;
 import fr.batimen.dto.aggregate.AnnonceAffichageDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
 import fr.batimen.dto.aggregate.ModificationAnnonceDTO;
@@ -29,7 +28,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Page permettant aux clients ou aux admins de modifier une annonce postée par un client
@@ -56,9 +54,6 @@ public class ModifierAnnonce extends MasterPage {
 
     private AnnonceAffichageDTO annonceAffichageDTO;
     private CompoundPropertyModel propertyModelModificationAnnonce;
-
-    private List<SousCategorieMetierDTO> sousCategorieMetierDTOList;
-    private SousCategorieMetierDTO sousCategorieMetierDTO;
 
     private PhotosContainer photosContainer;
 

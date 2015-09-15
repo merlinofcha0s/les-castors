@@ -5,7 +5,6 @@ import fr.batimen.dto.aggregate.SearchAnnonceDTOIn;
 import fr.batimen.dto.aggregate.SearchAnnonceDTOOut;
 import fr.batimen.dto.constant.Categorie;
 import fr.batimen.dto.constant.ValidatorConstant;
-import fr.batimen.dto.helper.CategorieLoader;
 import fr.batimen.web.app.constants.ParamsConstant;
 import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.client.component.*;
@@ -129,7 +128,7 @@ public class RechercheAnnonce extends MasterPage {
                     searchAnnonceDTO.getCategoriesMetierDTO().add(Categorie.getMaconnerie());
                 }
                 if (!electricite.getConvertedInput() && !plomberie.getModelObject() && !espaceVert.getModelObject() && !maconnerie.getModelObject()) {
-                    searchAnnonceDTO.getCategoriesMetierDTO().addAll(CategorieLoader.getAllCategories());
+                    searchAnnonceDTO.getCategoriesMetierDTO().addAll(Categorie.getAllCategories());
                 }
 
                 searchAnnonceDTO.setLoginDemandeur(authentication.getCurrentUserInfo().getLogin());
@@ -177,8 +176,6 @@ public class RechercheAnnonce extends MasterPage {
             protected void populateItem(ListItem<AnnonceDTO> item) {
                 final AnnonceDTO annonce = item.getModelObject();
                 SimpleDateFormat dateCreationFormat = new SimpleDateFormat("dd/MM/yyyy");
-
-                StringBuilder classCssIcon = new StringBuilder("iconsMesDevis");
 
                 String motcleCollector = annonce.getMotCles().stream().map(motCleDTO -> motCleDTO.getMotCle()).collect(Collectors.joining(", "));
 
