@@ -535,7 +535,7 @@
                                 <id>deploy-ws-on-wildfly</id>
                                 <phase>pre-integration-test</phase>
                                 <goals>
-                                    <goal>redeploy</goal>
+                                    <goal>deploy</goal>
                                 </goals>
                             </execution>
                         </executions>
