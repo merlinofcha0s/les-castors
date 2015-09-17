@@ -99,6 +99,8 @@ public class Categorie {
                 return getEspaceVert();
             case 3:
                 return getMaconnerie();
+            case 4:
+                return getMenuiserie();
             default:
                 throw new UnsupportedOperationException();
         }

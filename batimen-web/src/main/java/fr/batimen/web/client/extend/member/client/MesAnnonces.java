@@ -194,14 +194,6 @@ public final class MesAnnonces extends MasterPage {
                     descriptionCutting.append(annonce.getDescription());
                 }
 
-                //WebMarkupContainer iconCategorie = new WebMarkupContainer("iconCategorie");
-                //StringBuilder classCssIcon = new StringBuilder("iconsMesDevis");
-                //classCssIcon.append(" ").append(CategorieLoader.getIcon(annonce.getCategorieMetier()));
-
-                //iconCategorie.add(new AttributeModifier("class", classCssIcon.toString()));
-
-                /*Label categorie = new Label("categorie", CategorieLoader.getCategorieByCode(annonce
-                        .getCategorieMetier()));*/
                 Label description = new Label("description", descriptionCutting.toString());
 
                 WebMarkupContainer progressBar = new WebMarkupContainer("progressBar");

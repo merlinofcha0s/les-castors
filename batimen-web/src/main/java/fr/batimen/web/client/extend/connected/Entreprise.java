@@ -47,6 +47,7 @@ public class Entreprise extends MasterPage {
     private LoadableDetachableModel<Integer> nombreEmployesModel;
     private LoadableDetachableModel<String> dateCreationModel;
     private LoadableDetachableModel<Integer> nbAnnonceRemporteModel;
+    private LoadableDetachableModel<String> titleEntrepriseModel;
 
     private boolean hasClickPlusDAvis = false;
 
@@ -89,6 +90,8 @@ public class Entreprise extends MasterPage {
     }
 
     private void initInformationsGenerales() {
+        Label titleEntreprise = new Label("titreEntreprise", titleEntrepriseModel);
+        titleEntreprise.setMarkupId("titreEntreprise");
         Label specialite = new Label("specialite", specialiteModel);
         specialite.setMarkupId(specialite.getId());
         Label siret = new Label("siret", siretModel);
@@ -102,7 +105,7 @@ public class Entreprise extends MasterPage {
         Label nbAnnonceRemporte = new Label("nbAnnonceRemporte", nbAnnonceRemporteModel);
         nbAnnonceRemporte.setMarkupId(nbAnnonceRemporte.getId());
 
-        add(specialite, siret, statutJuridique, nombreEmployes, dateCreation, nbAnnonceRemporte);
+        add(titleEntreprise, specialite, siret, statutJuridique, nombreEmployes, dateCreation, nbAnnonceRemporte);
     }
 
     private void initModelInformationsGenerales() {
@@ -159,6 +162,13 @@ public class Entreprise extends MasterPage {
             }
         };
 
+        titleEntrepriseModel = new LoadableDetachableModel<String>() {
+            @Override
+            protected String load() {
+                return entrepriseDTO.getNomComplet();
+            }
+        };
+
     }
 
     private void initCategorieEntreprise() {
@@ -190,6 +200,12 @@ public class Entreprise extends MasterPage {
                     item.add(new AttributeModifier("title", "Décoration / Maconnerie"));
                     item.add(new AttributeModifier("class", "icon-Tool font-glyph-entreprise categorie-entreprise"));
                 }
+
+                if (categorieMetierDTO.getCategorieMetier().equals(Categorie.MENUISERIE_CODE)) {
+                    item.add(new AttributeModifier("data-original-title", "Menuiserie"));
+                    item.add(new AttributeModifier("title", "Menuiserie"));
+                    item.add(new AttributeModifier("class", "icon-Forrst font-glyph-entreprise categorie-entreprise"));
+                }
             }
         };
 
@@ -200,7 +216,7 @@ public class Entreprise extends MasterPage {
         StringBuilder adresseComplete = new StringBuilder(entrepriseDTO.getAdresseEntreprise().getAdresse());
         adresseComplete.append(" ");
 
-        if (!entrepriseDTO.getAdresseEntreprise().getComplementAdresse().isEmpty()) {
+        if (entrepriseDTO.getAdresseEntreprise().getComplementAdresse() != null && !entrepriseDTO.getAdresseEntreprise().getComplementAdresse().isEmpty()) {
             adresseComplete.append(entrepriseDTO.getAdresseEntreprise().getComplementAdresse()).append(" ");
         }
 

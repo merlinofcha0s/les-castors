@@ -24,19 +24,16 @@ import javax.inject.Inject;
 public class Profil extends Panel {
 
     private static final long serialVersionUID = -3775533895973607467L;
-
+    private static final String REFRESH_TOOLTIP_ON_ENTREPRISE_VERIFIEE = "$('#container-entreprise-verifier').tooltip()";
     @Inject
     private Authentication authentication;
     @Inject
     private RolesUtils rolesUtils;
-
     private LinkLabel monProfil;
     private LinkLabel modifierMonProfil;
     private Model<String> voirProfilModel;
     private Model<String> modifierProfilModel;
     private boolean activeEntrepriseVerif;
-
-    private static final  String REFRESH_TOOLTIP_ON_ENTREPRISE_VERIFIEE = "$('#container-entreprise-verifier').tooltip()";
 
     public Profil(String id, boolean activeEntrepriseVerif) {
         super(id);

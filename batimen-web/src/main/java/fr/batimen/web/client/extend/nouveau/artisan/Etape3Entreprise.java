@@ -65,10 +65,12 @@ public class Etape3Entreprise extends Panel {
     private Model<Boolean> plomberieModel;
     private Model<Boolean> maconnerieModel;
     private Model<Boolean> espaceVertModel;
+    private Model<Boolean> menuiserieModel;
     private CheckBox electricite;
     private CheckBox plomberie;
     private CheckBox espaceVert;
     private CheckBox maconnerie;
+    private CheckBox menuiserie;
     private CheckBox multiCategories;
 
     @Inject
@@ -149,39 +151,7 @@ public class Etape3Entreprise extends Panel {
                 String siretTrimed = StringUtils.deleteWhitespace(nouveauPartenaire.getEntreprise().getSiret());
                 nouveauPartenaire.getEntreprise().setSiret(siretTrimed);
 
-                if (electricite.getConvertedInput()) {
-                    Boolean aElectricite = categoriesSelectionnees.stream().anyMatch(categorieMetierDTO -> categorieMetierDTO.getCategorieMetier().equals(Categorie.ELECTRICITE_CODE));
-                    if (!aElectricite) {
-                        categoriesSelectionnees.add(Categorie.getElectricite());
-                    }
-                } else {
-                    categoriesSelectionnees.removeIf(categorieMetierDTO -> categorieMetierDTO.getCategorieMetier().equals(Categorie.ELECTRICITE_CODE));
-                }
-                if (plomberie.getConvertedInput()) {
-                    Boolean aPlomberie = categoriesSelectionnees.stream().anyMatch(categorieMetierDTO -> categorieMetierDTO.getCategorieMetier().equals(Categorie.PLOMBERIE_CODE));
-                    if (!aPlomberie) {
-                        categoriesSelectionnees.add(Categorie.getPlomberie());
-                    }
-                } else {
-                    categoriesSelectionnees.removeIf(categorieMetierDTO -> categorieMetierDTO.getCategorieMetier().equals(Categorie.PLOMBERIE_CODE));
-                }
-
-                if (espaceVert.getConvertedInput()) {
-                    Boolean aEspaceVert = categoriesSelectionnees.stream().anyMatch(categorieMetierDTO -> categorieMetierDTO.getCategorieMetier().equals(Categorie.ESPACE_VERT_CODE));
-                    if (!aEspaceVert) {
-                        categoriesSelectionnees.add(Categorie.getEspaceVert());
-                    }
-                } else {
-                    categoriesSelectionnees.removeIf(categorieMetierDTO -> categorieMetierDTO.getCategorieMetier().equals(Categorie.ESPACE_VERT_CODE));
-                }
-                if (maconnerie.getConvertedInput()) {
-                    Boolean aDecoration = categoriesSelectionnees.stream().anyMatch(categorieMetierDTO -> categorieMetierDTO.getCategorieMetier().equals(Categorie.DECORATION_MACONNERIE_CODE));
-                    if (!aDecoration) {
-                        categoriesSelectionnees.add(Categorie.getMaconnerie());
-                    }
-                } else {
-                    categoriesSelectionnees.removeIf(categorieMetierDTO -> categorieMetierDTO.getCategorieMetier().equals(Categorie.DECORATION_MACONNERIE_CODE));
-                }
+                recordCategories();
 
                 if (isInModification) {
                     nouveauPartenaire.getEntreprise().setAdresseEntreprise(nouveauPartenaire.getAdresse());
@@ -322,6 +292,7 @@ public class Etape3Entreprise extends Panel {
         plomberieModel = new Model<>();
         maconnerieModel = new Model<>();
         espaceVertModel = new Model<>();
+        menuiserieModel = new Model<>();
 
         for (CategorieMetierDTO categorieMetierDTO : nouveauPartenaire.getEntreprise().getCategoriesMetier()) {
             switch (categorieMetierDTO.getCategorieMetier()) {
@@ -336,6 +307,9 @@ public class Etape3Entreprise extends Panel {
                     break;
                 case Categorie.ESPACE_VERT_CODE:
                     espaceVertModel.setObject(Boolean.TRUE);
+                    break;
+                case Categorie.MENUISERIE_CODE:
+                    menuiserieModel.setObject(Boolean.TRUE);
                     break;
             }
         }
@@ -354,6 +328,8 @@ public class Etape3Entreprise extends Panel {
         espaceVert.setMarkupId("espaceVert");
         maconnerie = new CheckBox("decorationMaconnerie", maconnerieModel);
         maconnerie.setMarkupId("decorationMaconnerie");
+        menuiserie = new CheckBox("menuiserie", menuiserieModel);
+        menuiserie.setMarkupId("menuiserie");
         multiCategories = new CheckBox("multiCategories", Model.of(Boolean.FALSE));
         multiCategories.setMarkupId("multiCategorie");
 
@@ -385,6 +361,15 @@ public class Etape3Entreprise extends Panel {
                 getCSSClassForCategorie(tag, isInModification);
             }
         };
+
+        WebMarkupContainer menuiserieContainer = new WebMarkupContainer("menuiserieContainer") {
+            @Override
+            protected void onComponentTag(ComponentTag tag) {
+                super.onComponentTag(tag);
+                getCSSClassForCategorie(tag, isInModification);
+            }
+        };
+
         WebMarkupContainer multicategorieContainer = new WebMarkupContainer("multicategorieContainer") {
             @Override
             protected void onComponentTag(ComponentTag tag) {
@@ -397,8 +382,9 @@ public class Etape3Entreprise extends Panel {
         plomberieContainer.add(plomberie);
         espaceVertContainer.add(espaceVert);
         maconnerieContainer.add(maconnerie);
+        menuiserieContainer.add(menuiserie);
         multicategorieContainer.add(multiCategories);
-        containerActivite.add(electriciteContainer, plomberieContainer, espaceVertContainer, maconnerieContainer, multicategorieContainer);
+        containerActivite.add(electriciteContainer, plomberieContainer, espaceVertContainer, maconnerieContainer, menuiserieContainer, multicategorieContainer);
     }
 
     private void initEtapePrecedenteNouveauArtisan3() {
@@ -449,5 +435,24 @@ public class Etape3Entreprise extends Panel {
         };
 
         etape3EntrepriseForm.add(reCaptcha);
+    }
+
+    private void recordCategories() {
+        checkAndRecordCategorie(electricite.getConvertedInput(), Categorie.ELECTRICITE_CODE, Categorie.getElectricite());
+        checkAndRecordCategorie(plomberie.getConvertedInput(), Categorie.PLOMBERIE_CODE, Categorie.getPlomberie());
+        checkAndRecordCategorie(espaceVert.getConvertedInput(), Categorie.ESPACE_VERT_CODE, Categorie.getEspaceVert());
+        checkAndRecordCategorie(maconnerie.getConvertedInput(), Categorie.DECORATION_MACONNERIE_CODE, Categorie.getMaconnerie());
+        checkAndRecordCategorie(menuiserie.getConvertedInput(), Categorie.MENUISERIE_CODE, Categorie.getMenuiserie());
+    }
+
+    private void checkAndRecordCategorie(Boolean resultat, Short categorieCode, CategorieMetierDTO categorieMetierDTO) {
+        if (resultat) {
+            Boolean possedeCategorie = categoriesSelectionnees.stream().anyMatch(categorieMetierDTOToTest -> categorieMetierDTOToTest.getCategorieMetier().equals(categorieCode));
+            if (!possedeCategorie) {
+                categoriesSelectionnees.add(categorieMetierDTO);
+            }
+        } else {
+            categoriesSelectionnees.removeIf(categorieMetierDTOToTest -> categorieMetierDTOToTest.getCategorieMetier().equals(categorieCode));
+        }
     }
 }
