@@ -14,7 +14,6 @@ import java.nio.file.Files;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Parse et classe la ville et le departement par code postal d'apres un fichier csv
@@ -27,7 +26,8 @@ public class CSVCodePostalReader implements Serializable{
     private static final Logger LOGGER = LoggerFactory.getLogger(CSVCodePostalReader.class);
 
     //Triée par code postal
-    private final transient Map<String, List<LocalisationDTO>> localisationDTOs = new LinkedHashMap<>();
+    //On utilise direct l'implementation car elle implemente serializable ce qui n'est pas le cas de l'interface (Map)
+    private final LinkedHashMap<String, List<LocalisationDTO>> localisationDTOs = new LinkedHashMap<>();
 
     public CSVCodePostalReader() {
 
@@ -75,7 +75,7 @@ public class CSVCodePostalReader implements Serializable{
         }
     }
 
-    public Map<String, List<LocalisationDTO>> getLocalisationDTOs() {
+    public LinkedHashMap<String, List<LocalisationDTO>> getLocalisationDTOs() {
         return localisationDTOs;
     }
 }

@@ -12,11 +12,11 @@ import java.util.List;
  */
 public class Categorie {
 
-    public static final Short ELECTRICITE_CODE = 0;
-    public static final Short PLOMBERIE_CODE = 1;
-    public static final Short ESPACE_VERT_CODE = 2;
-    public static final Short DECORATION_MACONNERIE_CODE = 3;
-    public static final Short MENUISERIE_CODE = 4;
+    public static final short ELECTRICITE_CODE = 0;
+    public static final short PLOMBERIE_CODE = 1;
+    public static final short ESPACE_VERT_CODE = 2;
+    public static final short DECORATION_MACONNERIE_CODE = 3;
+    public static final short MENUISERIE_CODE = 4;
 
     public static final String ELECTRICITE_NAME = "Electricité";
     public static final String PLOMBERIE_NAME = "Plomberie";

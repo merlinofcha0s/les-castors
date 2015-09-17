@@ -61,6 +61,15 @@ public class Etape3Entreprise extends Panel {
     private StringBuilder INIT_TOOLTIP_CATEGORIE;
     private String classCSSTooltip;
     private ReCaptcha reCaptcha;
+    private Model<Boolean> electriciteModel;
+    private Model<Boolean> plomberieModel;
+    private Model<Boolean> maconnerieModel;
+    private Model<Boolean> espaceVertModel;
+    private CheckBox electricite;
+    private CheckBox plomberie;
+    private CheckBox espaceVert;
+    private CheckBox maconnerie;
+    private CheckBox multiCategories;
 
     @Inject
     private Authentication authentication;
@@ -73,6 +82,8 @@ public class Etape3Entreprise extends Panel {
 
     private RolesUtils rolesUtils;
 
+    private Boolean isInModification;
+
     public Etape3Entreprise(String id, IModel<?> model) {
         super(id, model);
     }
@@ -80,6 +91,8 @@ public class Etape3Entreprise extends Panel {
     public Etape3Entreprise(String id, IModel<?> model, final CreationPartenaireDTO nouveauPartenaire, final boolean isInModification) {
         this(id, model);
         this.nouveauPartenaire = nouveauPartenaire;
+        this.isInModification = isInModification;
+
         Model<String> titreModificationEntrepriseModel = new Model<>();
 
         rolesUtils = new RolesUtils();
@@ -91,24 +104,257 @@ public class Etape3Entreprise extends Panel {
                 for (LocalisationDTO localisationDTO : localisationDTOs) {
                     nouveauPartenaire.getVillesPossbles().add(localisationDTO.getCommune());
                 }
-                classCSSTooltip = "checkbox-tooltip-modif";
             } else {
-                classCSSTooltip = "checkbox-tooltip";
                 titreModificationEntrepriseModel.setObject("Renseignez les informations de l'entreprise");
             }
         }
 
         Label titreModificationEntreprise = new Label("titreModificationEntreprise", titreModificationEntrepriseModel);
 
-        final CheckBox electricite = new CheckBox("electricite", Model.of(Boolean.FALSE));
+        etape3EntrepriseForm = new Etape3EntrepriseForm("etape3EntrepriseForm",
+                new CompoundPropertyModel<>(nouveauPartenaire), isInModification);
+
+        initModelCheckBox();
+        initCheckBoxCategorie();
+
+        categoriesSelectionnees = nouveauPartenaire.getEntreprise().getCategoriesMetier();
+
+        etape3FormGeneral = new Form<CreationPartenaireDTO>("etape3FormGeneral", new CompoundPropertyModel<>(nouveauPartenaire)) {
+            @Override
+            public boolean isRootForm() {
+                return true;
+            }
+
+            @Override
+            public boolean wantSubmitOnNestedFormSubmit() {
+                return true;
+            }
+        };
+
+        initEtapePrecedenteNouveauArtisan3();
+
+        AjaxSubmitLink validateEtape3Partenaire = new AjaxSubmitLink("validateEtape3Partenaire") {
+
+            private static final long serialVersionUID = 4945314422581299777L;
+
+            @Override
+            protected void onError(AjaxRequestTarget target, Form<?> form) {
+                target.add(etape3EntrepriseForm.getFieldContainer());
+                refreshJS(target);
+                this.send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target));
+            }
+
+            @Override
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                String siretTrimed = StringUtils.deleteWhitespace(nouveauPartenaire.getEntreprise().getSiret());
+                nouveauPartenaire.getEntreprise().setSiret(siretTrimed);
+
+                if (electricite.getConvertedInput()) {
+                    Boolean aElectricite = categoriesSelectionnees.stream().anyMatch(categorieMetierDTO -> categorieMetierDTO.getCategorieMetier().equals(Categorie.ELECTRICITE_CODE));
+                    if (!aElectricite) {
+                        categoriesSelectionnees.add(Categorie.getElectricite());
+                    }
+                } else {
+                    categoriesSelectionnees.removeIf(categorieMetierDTO -> categorieMetierDTO.getCategorieMetier().equals(Categorie.ELECTRICITE_CODE));
+                }
+                if (plomberie.getConvertedInput()) {
+                    Boolean aPlomberie = categoriesSelectionnees.stream().anyMatch(categorieMetierDTO -> categorieMetierDTO.getCategorieMetier().equals(Categorie.PLOMBERIE_CODE));
+                    if (!aPlomberie) {
+                        categoriesSelectionnees.add(Categorie.getPlomberie());
+                    }
+                } else {
+                    categoriesSelectionnees.removeIf(categorieMetierDTO -> categorieMetierDTO.getCategorieMetier().equals(Categorie.PLOMBERIE_CODE));
+                }
+
+                if (espaceVert.getConvertedInput()) {
+                    Boolean aEspaceVert = categoriesSelectionnees.stream().anyMatch(categorieMetierDTO -> categorieMetierDTO.getCategorieMetier().equals(Categorie.ESPACE_VERT_CODE));
+                    if (!aEspaceVert) {
+                        categoriesSelectionnees.add(Categorie.getEspaceVert());
+                    }
+                } else {
+                    categoriesSelectionnees.removeIf(categorieMetierDTO -> categorieMetierDTO.getCategorieMetier().equals(Categorie.ESPACE_VERT_CODE));
+                }
+                if (maconnerie.getConvertedInput()) {
+                    Boolean aDecoration = categoriesSelectionnees.stream().anyMatch(categorieMetierDTO -> categorieMetierDTO.getCategorieMetier().equals(Categorie.DECORATION_MACONNERIE_CODE));
+                    if (!aDecoration) {
+                        categoriesSelectionnees.add(Categorie.getMaconnerie());
+                    }
+                } else {
+                    categoriesSelectionnees.removeIf(categorieMetierDTO -> categorieMetierDTO.getCategorieMetier().equals(Categorie.DECORATION_MACONNERIE_CODE));
+                }
+
+                if (isInModification) {
+                    nouveauPartenaire.getEntreprise().setAdresseEntreprise(nouveauPartenaire.getAdresse());
+                    Integer codeRetour = artisanServiceREST.saveEntrepriseInformation(nouveauPartenaire.getEntreprise());
+                    if (codeRetour.equals(CodeRetourService.RETOUR_OK)) {
+                        authentication.setEntrepriseUserInfo(nouveauPartenaire.getEntreprise());
+                        MasterPage.triggerEventFeedBackPanel(target, "Profil mis à jour avec succés", FeedbackMessageLevel.SUCCESS);
+                    } else {
+                        MasterPage.triggerEventFeedBackPanel(target, "Problème durant l'appel au service de mise à jour, veuillez réessayer ultérieurement ", FeedbackMessageLevel.ERROR);
+                    }
+
+                } else {
+                    CaptchaDTO captchaDTO = reCaptcha.verifyCaptcha();
+
+                    if (!Boolean.valueOf(captchaDTO.getSuccess()) && Boolean.valueOf(PropertiesFileWeb.APP.getProperties().getProperty("app.activate.captcha"))) {
+                        MasterPage.triggerEventFeedBackPanel(target, "Veuillez cocher le recaptcha avant de pouvoir continuer", FeedbackMessageLevel.ERROR);
+                    } else {
+                        nouveauPartenaire.setNumeroEtape(4);
+                        ChangementEtapeEventArtisan changementEtapeEvent = new ChangementEtapeEventArtisan(target,
+                                nouveauPartenaire);
+                        refreshJS(target);
+                        this.send(target.getPage(), Broadcast.EXACT, changementEtapeEvent);
+                    }
+                }
+            }
+        };
+
+        validateEtape3Partenaire.setMarkupId("validateEtape3Partenaire");
+
+        WebMarkupContainer terminerInscriptionPartenaire = new WebMarkupContainer("terminerInscriptionPartenaire") {
+            @Override
+            protected void onComponentTag(ComponentTag tag) {
+                super.onComponentTag(tag);
+                if (isInModification) {
+                    if (tag.getAttribute("class") != null) {
+                        StringBuilder classCSS = new StringBuilder(tag.getAttribute("class"));
+                        classCSS.append(" offset3");
+                        tag.remove("class");
+                        tag.put("class", classCSS.toString());
+                    }
+                } else {
+                    if (tag.getAttribute("class") != null) {
+                        StringBuilder classCSS = new StringBuilder(tag.getAttribute("class"));
+                        classCSS.append(" nouveauPartenaire-btn");
+                        tag.remove("class");
+                        tag.put("class", classCSS.toString());
+                    } else {
+                        tag.put("class", "nouveauPartenaire-btn");
+                    }
+
+                }
+            }
+        };
+
+        Label validateEtape3Name = new Label("validateEtape3Name", Model.of(""));
+        validateEtape3Partenaire.add(validateEtape3Name);
+        terminerInscriptionPartenaire.add(validateEtape3Partenaire);
+
+        if (!isInModification) {
+            terminerInscriptionPartenaire.setOutputMarkupId(true);
+            terminerInscriptionPartenaire.setMarkupId("terminerInscriptionPartenaire-nouveau");
+            validateEtape3Name.setDefaultModelObject("Terminer");
+        } else {
+            validateEtape3Name.setDefaultModelObject("Sauvegarder");
+        }
+
+        initRecaptcha();
+
+        etape3FormGeneral.add(containerActivite, etape3EntrepriseForm, terminerInscriptionPartenaire);
+        add(titreModificationEntreprise, etape3FormGeneral);
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.render(CssContentHeaderItem.forUrl("css/font_icons8.css"));
+        response.render(JavaScriptHeaderItem.forUrl("//www.fuelcdn.com/fuelux/2.6.1/loader.min.js"));
+        response.render(CssContentHeaderItem.forUrl("//www.fuelcdn.com/fuelux/2.6.1/css/fuelux.min.css"));
+        response.render(CssContentHeaderItem.forUrl("//www.fuelcdn.com/fuelux/2.6.1/css/fuelux-responsive.css"));
+
+        if (isInModification) {
+            classCSSTooltip = "checkbox-tooltip-modif";
+        } else {
+            classCSSTooltip = "checkbox-tooltip";
+        }
+
+        INIT_TOOLTIP_CATEGORIE = new StringBuilder();
+        INIT_TOOLTIP_CATEGORIE.append("$('.").append(classCSSTooltip).append("').tooltip()");
+
+
+        INIT_MULTI_CATEGORIE_CHECKBOX = new StringBuilder();
+        INIT_MULTI_CATEGORIE_CHECKBOX.append("$(function () {");
+        INIT_MULTI_CATEGORIE_CHECKBOX.append("$('#multiCategorie').on('click', function () {");
+        INIT_MULTI_CATEGORIE_CHECKBOX.append("if ($(this).prop('checked')) {");
+        INIT_MULTI_CATEGORIE_CHECKBOX.append("$('.sr-only').checkbox('check');");
+        INIT_MULTI_CATEGORIE_CHECKBOX.append("} else {");
+        INIT_MULTI_CATEGORIE_CHECKBOX.append("$('.sr-only').checkbox('uncheck');");
+        INIT_MULTI_CATEGORIE_CHECKBOX.append(" }");
+        INIT_MULTI_CATEGORIE_CHECKBOX.append("});");
+        INIT_MULTI_CATEGORIE_CHECKBOX.append("});");
+
+        INIT_VILLE_TYPE_AHEAD = JSCommun.buildSourceTypeAhead(nouveauPartenaire.getVillesPossbles(), "#villeField");
+
+        response.render(OnDomReadyHeaderItem.forScript(INIT_TOOLTIP_CATEGORIE.toString()));
+        response.render(OnDomReadyHeaderItem.forScript(INIT_MULTI_CATEGORIE_CHECKBOX.toString()));
+        response.render(OnDomReadyHeaderItem.forScript(INIT_VILLE_TYPE_AHEAD));
+    }
+
+    private void getCSSClassForCategorie(ComponentTag tag, boolean isInModification) {
+        if (isInModification) {
+            String classCss = tag.getAttribute("class");
+
+            if (classCss.contains("checkbox-tooltip")) {
+                classCss = StringUtils.replace(classCss, "checkbox-tooltip", "checkbox-tooltip-modif");
+            }
+            if (classCss.contains("non-icon8")) {
+                classCss = StringUtils.replace(classCss, "non-icon8", "non-icon8-modif");
+            }
+
+            tag.put("class", classCss);
+        }
+    }
+
+    private void refreshJS(AjaxRequestTarget target) {
+        target.appendJavaScript(INIT_VILLE_TYPE_AHEAD);
+        target.appendJavaScript(INIT_MULTI_CATEGORIE_CHECKBOX);
+        target.appendJavaScript("$('.checkbox').checkbox()");
+        target.appendJavaScript(INIT_TOOLTIP_CATEGORIE);
+    }
+
+    @Override
+    public boolean isVisible() {
+        return rolesUtils.checkRoles(TypeCompte.ARTISAN);
+    }
+
+    private void initModelCheckBox() {
+        electriciteModel = new Model<>();
+        plomberieModel = new Model<>();
+        maconnerieModel = new Model<>();
+        espaceVertModel = new Model<>();
+
+        for (CategorieMetierDTO categorieMetierDTO : nouveauPartenaire.getEntreprise().getCategoriesMetier()) {
+            switch (categorieMetierDTO.getCategorieMetier()) {
+                case Categorie.ELECTRICITE_CODE:
+                    electriciteModel.setObject(Boolean.TRUE);
+                    break;
+                case Categorie.PLOMBERIE_CODE:
+                    plomberieModel.setObject(Boolean.TRUE);
+                    break;
+                case Categorie.DECORATION_MACONNERIE_CODE:
+                    maconnerieModel.setObject(Boolean.TRUE);
+                    break;
+                case Categorie.ESPACE_VERT_CODE:
+                    espaceVertModel.setObject(Boolean.TRUE);
+                    break;
+            }
+        }
+    }
+
+    private void initCheckBoxCategorie() {
+        containerActivite = new WebMarkupContainer("containerActivite");
+        containerActivite.setOutputMarkupId(true);
+        containerActivite.setMarkupId("containerActivite");
+
+        electricite = new CheckBox("electricite", electriciteModel);
         electricite.setMarkupId("electricite");
-        final CheckBox plomberie = new CheckBox("plomberie", Model.of(Boolean.FALSE));
+        plomberie = new CheckBox("plomberie", plomberieModel);
         plomberie.setMarkupId("plomberie");
-        final CheckBox espaceVert = new CheckBox("espaceVert", Model.of(Boolean.FALSE));
+        espaceVert = new CheckBox("espaceVert", espaceVertModel);
         espaceVert.setMarkupId("espaceVert");
-        final CheckBox maconnerie = new CheckBox("decorationMaconnerie", Model.of(Boolean.FALSE));
+        maconnerie = new CheckBox("decorationMaconnerie", maconnerieModel);
         maconnerie.setMarkupId("decorationMaconnerie");
-        final CheckBox multiCategories = new CheckBox("multiCategories", Model.of(Boolean.FALSE));
+        multiCategories = new CheckBox("multiCategories", Model.of(Boolean.FALSE));
         multiCategories.setMarkupId("multiCategorie");
 
         WebMarkupContainer electriciteContainer = new WebMarkupContainer("eletriciteContainer") {
@@ -152,21 +398,10 @@ public class Etape3Entreprise extends Panel {
         espaceVertContainer.add(espaceVert);
         maconnerieContainer.add(maconnerie);
         multicategorieContainer.add(multiCategories);
+        containerActivite.add(electriciteContainer, plomberieContainer, espaceVertContainer, maconnerieContainer, multicategorieContainer);
+    }
 
-        categoriesSelectionnees = nouveauPartenaire.getEntreprise().getCategoriesMetier();
-
-        etape3FormGeneral = new Form<CreationPartenaireDTO>("etape3FormGeneral", new CompoundPropertyModel<>(nouveauPartenaire)) {
-            @Override
-            public boolean isRootForm() {
-                return true;
-            }
-
-            @Override
-            public boolean wantSubmitOnNestedFormSubmit() {
-                return true;
-            }
-        };
-
+    private void initEtapePrecedenteNouveauArtisan3() {
         final AjaxLink<Void> etapePrecedenteNouveauArtisan3 = new AjaxLink<Void>("etapePrecedenteNouveauArtisan3") {
 
             private static final long serialVersionUID = 1L;
@@ -202,109 +437,10 @@ public class Etape3Entreprise extends Panel {
         }
 
         containerEtapePrecedenteNouveauArtisan3.add(etapePrecedenteNouveauArtisan3);
+        etape3FormGeneral.add(containerEtapePrecedenteNouveauArtisan3);
+    }
 
-        AjaxSubmitLink validateEtape3Partenaire = new AjaxSubmitLink("validateEtape3Partenaire") {
-
-            private static final long serialVersionUID = 4945314422581299777L;
-
-            @Override
-            protected void onError(AjaxRequestTarget target, Form<?> form) {
-                target.add(etape3EntrepriseForm.getFieldContainer());
-                refreshJS(target);
-                this.send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target));
-            }
-
-            @Override
-            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
-                String siretTrimed = StringUtils.deleteWhitespace(nouveauPartenaire.getEntreprise().getSiret());
-                nouveauPartenaire.getEntreprise().setSiret(siretTrimed);
-
-                if (isInModification) {
-                    nouveauPartenaire.getEntreprise().setAdresseEntreprise(nouveauPartenaire.getAdresse());
-                    Integer codeRetour = artisanServiceREST.saveEntrepriseInformation(nouveauPartenaire.getEntreprise());
-                    if (codeRetour.equals(CodeRetourService.RETOUR_OK)) {
-                        authentication.setEntrepriseUserInfo(nouveauPartenaire.getEntreprise());
-                        MasterPage.triggerEventFeedBackPanel(target, "Profil mis à jour avec succés", FeedbackMessageLevel.SUCCESS);
-                    } else {
-                        MasterPage.triggerEventFeedBackPanel(target, "Problème durant l'appel au service de mise à jour, veuillez réessayer ultérieurement ", FeedbackMessageLevel.ERROR);
-                    }
-
-                } else {
-                    CaptchaDTO captchaDTO = reCaptcha.verifyCaptcha();
-
-                    if (!Boolean.valueOf(captchaDTO.getSuccess()) && Boolean.valueOf(PropertiesFileWeb.APP.getProperties().getProperty("app.activate.captcha"))) {
-                        MasterPage.triggerEventFeedBackPanel(target, "Veuillez cocher le recaptcha avant de pouvoir continuer", FeedbackMessageLevel.ERROR);
-                    } else {
-                        if (electricite.getConvertedInput()) {
-                            categoriesSelectionnees.add(Categorie.getElectricite());
-                        }
-                        if (plomberie.getConvertedInput()) {
-                            categoriesSelectionnees.add(Categorie.getPlomberie());
-                        }
-                        if (espaceVert.getConvertedInput()) {
-                            categoriesSelectionnees.add(Categorie.getEspaceVert());
-                        }
-                        if (maconnerie.getConvertedInput()) {
-                            categoriesSelectionnees.add(Categorie.getMaconnerie());
-                        }
-
-                        nouveauPartenaire.setNumeroEtape(4);
-                        ChangementEtapeEventArtisan changementEtapeEvent = new ChangementEtapeEventArtisan(target,
-                                nouveauPartenaire);
-                        refreshJS(target);
-                        this.send(target.getPage(), Broadcast.EXACT, changementEtapeEvent);
-                    }
-                }
-            }
-        };
-
-        validateEtape3Partenaire.setMarkupId("validateEtape3Partenaire");
-
-        WebMarkupContainer terminerInscriptionPartenaire = new WebMarkupContainer("terminerInscriptionPartenaire") {
-            @Override
-            protected void onComponentTag(ComponentTag tag) {
-                super.onComponentTag(tag);
-                if (isInModification) {
-                    if (tag.getAttribute("class") != null) {
-                        StringBuilder classCSS = new StringBuilder(tag.getAttribute("class"));
-                        classCSS.append(" offset3");
-                        tag.remove("class");
-                        tag.put("class", classCSS.toString());
-                    }
-                } else {
-                    if (tag.getAttribute("class") != null) {
-                        StringBuilder classCSS = new StringBuilder(tag.getAttribute("class"));
-                        classCSS.append(" nouveauPartenaire-btn");
-                        tag.remove("class");
-                        tag.put("class", classCSS.toString());
-                    } else {
-                        tag.put("class", "nouveauPartenaire-btn");
-                    }
-
-                }
-            }
-        };
-
-        Label validateEtape3Name = new Label("validateEtape3Name", Model.of(""));
-
-        if (!isInModification) {
-            terminerInscriptionPartenaire.setOutputMarkupId(true);
-            terminerInscriptionPartenaire.setMarkupId("terminerInscriptionPartenaire-nouveau");
-            validateEtape3Name.setDefaultModelObject("Terminer");
-        } else {
-            validateEtape3Name.setDefaultModelObject("Sauvegarder");
-        }
-
-        validateEtape3Partenaire.add(validateEtape3Name);
-
-        terminerInscriptionPartenaire.add(validateEtape3Partenaire);
-        containerActivite = new WebMarkupContainer("containerActivite");
-        containerActivite.setOutputMarkupId(true);
-        containerActivite.setMarkupId("containerActivite");
-
-        etape3EntrepriseForm = new Etape3EntrepriseForm("etape3EntrepriseForm",
-                new CompoundPropertyModel<>(nouveauPartenaire), isInModification);
-
+    private void initRecaptcha() {
         reCaptcha = new ReCaptcha("recaptchaInscription") {
             @Override
             public boolean isVisible() {
@@ -313,66 +449,5 @@ public class Etape3Entreprise extends Panel {
         };
 
         etape3EntrepriseForm.add(reCaptcha);
-
-        containerActivite.add(electriciteContainer, plomberieContainer, espaceVertContainer, maconnerieContainer, multicategorieContainer);
-        etape3FormGeneral.add(containerActivite, etape3EntrepriseForm, terminerInscriptionPartenaire, containerEtapePrecedenteNouveauArtisan3);
-        add(titreModificationEntreprise, etape3FormGeneral);
-    }
-
-    @Override
-    public void renderHead(IHeaderResponse response) {
-        super.renderHead(response);
-        response.render(CssContentHeaderItem.forUrl("css/font_icons8.css"));
-        response.render(JavaScriptHeaderItem.forUrl("//www.fuelcdn.com/fuelux/2.6.1/loader.min.js"));
-        response.render(CssContentHeaderItem.forUrl("//www.fuelcdn.com/fuelux/2.6.1/css/fuelux.min.css"));
-        response.render(CssContentHeaderItem.forUrl("//www.fuelcdn.com/fuelux/2.6.1/css/fuelux-responsive.css"));
-
-        INIT_TOOLTIP_CATEGORIE = new StringBuilder();
-        INIT_TOOLTIP_CATEGORIE.append("$('.").append(classCSSTooltip).append("').tooltip()");
-
-
-        INIT_MULTI_CATEGORIE_CHECKBOX = new StringBuilder();
-        INIT_MULTI_CATEGORIE_CHECKBOX.append("$(function () {");
-        INIT_MULTI_CATEGORIE_CHECKBOX.append("$('#multiCategories').on('click', function () {");
-        INIT_MULTI_CATEGORIE_CHECKBOX.append("if ($(this).prop('checked')) {");
-        INIT_MULTI_CATEGORIE_CHECKBOX.append("$('.sr-only').checkbox('check');");
-        INIT_MULTI_CATEGORIE_CHECKBOX.append("} else {");
-        INIT_MULTI_CATEGORIE_CHECKBOX.append("$('.sr-only').checkbox('uncheck');");
-        INIT_MULTI_CATEGORIE_CHECKBOX.append(" }");
-        INIT_MULTI_CATEGORIE_CHECKBOX.append("});");
-        INIT_MULTI_CATEGORIE_CHECKBOX.append("});");
-
-        INIT_VILLE_TYPE_AHEAD = JSCommun.buildSourceTypeAhead(nouveauPartenaire.getVillesPossbles(), "#villeField");
-
-        response.render(OnDomReadyHeaderItem.forScript(INIT_TOOLTIP_CATEGORIE.toString()));
-        response.render(OnDomReadyHeaderItem.forScript(INIT_MULTI_CATEGORIE_CHECKBOX.toString()));
-        response.render(OnDomReadyHeaderItem.forScript(INIT_VILLE_TYPE_AHEAD));
-    }
-
-    private void getCSSClassForCategorie(ComponentTag tag, boolean isInModification) {
-        if (isInModification) {
-            String classCss = tag.getAttribute("class");
-
-            if (classCss.contains("checkbox-tooltip")) {
-                classCss = StringUtils.replace(classCss, "checkbox-tooltip", "checkbox-tooltip-modif");
-            }
-            if (classCss.contains("non-icon8")) {
-                classCss = StringUtils.replace(classCss, "non-icon8", "non-icon8-modif");
-            }
-
-            tag.put("class", classCss);
-        }
-    }
-
-    private void refreshJS(AjaxRequestTarget target) {
-        target.appendJavaScript(INIT_VILLE_TYPE_AHEAD);
-        target.appendJavaScript(INIT_MULTI_CATEGORIE_CHECKBOX);
-        target.appendJavaScript("$('.checkbox').checkbox()");
-        target.appendJavaScript(INIT_TOOLTIP_CATEGORIE);
-    }
-
-    @Override
-    public boolean isVisible() {
-        return rolesUtils.checkRoles(TypeCompte.ARTISAN);
     }
 }
