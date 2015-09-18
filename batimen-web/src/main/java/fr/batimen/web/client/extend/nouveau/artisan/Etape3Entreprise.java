@@ -143,6 +143,7 @@ public class Etape3Entreprise extends Panel {
             protected void onError(AjaxRequestTarget target, Form<?> form) {
                 target.add(etape3EntrepriseForm.getFieldContainer());
                 refreshJS(target);
+                JSCommun.scrollToTop(target);
                 this.send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target));
             }
 
@@ -163,6 +164,7 @@ public class Etape3Entreprise extends Panel {
                         MasterPage.triggerEventFeedBackPanel(target, "Problème durant l'appel au service de mise à jour, veuillez réessayer ultérieurement ", FeedbackMessageLevel.ERROR);
                     }
 
+                    JSCommun.scrollToTop(target);
                 } else {
                     CaptchaDTO captchaDTO = reCaptcha.verifyCaptcha();
 
@@ -445,12 +447,22 @@ public class Etape3Entreprise extends Panel {
         checkAndRecordCategorie(menuiserie.getConvertedInput(), Categorie.MENUISERIE_CODE, Categorie.getMenuiserie());
     }
 
-    private void checkAndRecordCategorie(Boolean resultat, Short categorieCode, CategorieMetierDTO categorieMetierDTO) {
-        if (resultat) {
+    /**
+     * Méthode générique de vérification si la checkbox est cochée,
+     * si c'est le cas et qu'elle n'est pas deja presente dans l'entreprise on la rajoute sinon on la supprime
+     *
+     * @param checked            si la checkbox est cochée
+     * @param categorieCode      Le code catégorie a laquelle appartient la checkbox
+     * @param categorieMetierDTO La catégorie a laquelle appartient la checkbox
+     */
+    private void checkAndRecordCategorie(Boolean checked, Short categorieCode, CategorieMetierDTO categorieMetierDTO) {
+        if (checked) {
+            //Si elle existe, on en fait rien
             Boolean possedeCategorie = categoriesSelectionnees.stream().anyMatch(categorieMetierDTOToTest -> categorieMetierDTOToTest.getCategorieMetier().equals(categorieCode));
             if (!possedeCategorie) {
                 categoriesSelectionnees.add(categorieMetierDTO);
             }
+            //Si elle n'est pas coché mais qu'elle est présente
         } else {
             categoriesSelectionnees.removeIf(categorieMetierDTOToTest -> categorieMetierDTOToTest.getCategorieMetier().equals(categorieCode));
         }

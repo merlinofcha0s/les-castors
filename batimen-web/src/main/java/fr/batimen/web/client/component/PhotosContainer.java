@@ -7,6 +7,7 @@ import fr.batimen.web.client.behaviour.FileFieldValidatorAndLoaderBehaviour;
 import fr.batimen.web.client.event.AjoutPhotoEvent;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
 import fr.batimen.web.client.event.SuppressionPhotoEvent;
+import fr.batimen.web.client.extend.nouveau.communs.JSCommun;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -235,5 +236,7 @@ public class PhotosContainer extends Panel {
         target.appendJavaScript(REFRESH_TOOLTIP_ON_SUPPRESS_LINK);
         //Reload de pretty photo sur les photos client
         target.appendJavaScript(REFRESH_PRETTY_PHOTO_ON_PICTURE);
+
+        JSCommun.scrollToTop(target);
     }
 }

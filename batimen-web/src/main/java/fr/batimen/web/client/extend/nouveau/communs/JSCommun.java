@@ -1,5 +1,7 @@
 package fr.batimen.web.client.extend.nouveau.communs;
 
+import org.apache.wicket.ajax.AjaxRequestTarget;
+
 import java.util.List;
 
 /**
@@ -61,5 +63,9 @@ public class JSCommun {
         sourceTypeAhead.append("});");
 
         return sourceTypeAhead.toString();
+    }
+
+    public static void scrollToTop(AjaxRequestTarget target) {
+        target.appendJavaScript("$(window).scrollTop(0);");
     }
 }

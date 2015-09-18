@@ -100,6 +100,7 @@ public class RechercheAnnonce extends MasterPage {
         final CheckBox plomberie = new CheckBox("plomberie", Model.of(Boolean.FALSE));
         final CheckBox espaceVert = new CheckBox("espaceVert", Model.of(Boolean.FALSE));
         final CheckBox maconnerie = new CheckBox("maconnerie", Model.of(Boolean.FALSE));
+        final CheckBox menuiserie = new CheckBox("menuiserie", Model.of(Boolean.FALSE));
 
         castorDatePicker = new CastorDatePicker("aPartirdu", "rechercheDate", true);
         castorDatePicker.add(DateValidator.maximum(new Date(), "dd/MM/yyyy"));
@@ -127,7 +128,10 @@ public class RechercheAnnonce extends MasterPage {
                 if (maconnerie.getConvertedInput()) {
                     searchAnnonceDTO.getCategoriesMetierDTO().add(Categorie.getMaconnerie());
                 }
-                if (!electricite.getConvertedInput() && !plomberie.getModelObject() && !espaceVert.getModelObject() && !maconnerie.getModelObject()) {
+                if (menuiserie.getConvertedInput()) {
+                    searchAnnonceDTO.getCategoriesMetierDTO().add(Categorie.getMenuiserie());
+                }
+                if (!electricite.getConvertedInput() && !plomberie.getModelObject() && !espaceVert.getModelObject() && !maconnerie.getModelObject() && !menuiserie.getConvertedInput()) {
                     searchAnnonceDTO.getCategoriesMetierDTO().addAll(Categorie.getAllCategories());
                 }
 
@@ -162,7 +166,7 @@ public class RechercheAnnonce extends MasterPage {
         };
 
         Form searchForm = new Form<>("searchForm", new CompoundPropertyModel<>(searchAnnonceDTO));
-        searchForm.add(electricite, plomberie, espaceVert, maconnerie, castorDatePicker, departement, rechercher);
+        searchForm.add(electricite, plomberie, espaceVert, maconnerie, menuiserie, castorDatePicker, departement, rechercher);
 
         add(searchForm);
     }

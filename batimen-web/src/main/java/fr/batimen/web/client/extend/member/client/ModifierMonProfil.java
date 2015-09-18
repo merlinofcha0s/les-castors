@@ -103,7 +103,6 @@ public class ModifierMonProfil extends MasterPage {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Init des données de la page de modification de mon profil");
         }
-        //TODO : Visiblement le webservice ou ce qu'on met en session fait de la merde, voir pk
         // Pour les besoins du form etape 4 qu'on reutilise ici, on instancie sa
         // DTO mais on ne rempli que les informations du client
         CreationAnnonceDTO creationAnnonceDTO = new CreationAnnonceDTO();

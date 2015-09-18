@@ -45,6 +45,7 @@ public class TestModifierMonEntreprise extends AbstractITTest {
         (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX)).until(ExpectedConditions
                 .elementToBeClickable(By.id("electricite")));
         driver.findElement(By.id("electricite")).click();
+        driver.findElement(By.id("menuiserie")).click();
 
         driver.findElement(By.id("nbEmployeField")).clear();
         driver.findElement(By.id("nbEmployeField")).sendKeys("20");
@@ -62,7 +63,14 @@ public class TestModifierMonEntreprise extends AbstractITTest {
                         "Profil mis à jour avec succés"));
 
         Assert.assertTrue(checkConditionModificationInformation);
+        verificationModificationPageMonEntreprise();
 
+    }
+
+    private void verificationModificationPageMonEntreprise() {
+        driver.findElement(By.linkText("Voir mon entreprise")).click();
+        (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX)).until(ExpectedConditions
+                .presenceOfElementLocated(By.xpath("//div[@id='containerActivite']/span[2]")));
     }
 
     /**
