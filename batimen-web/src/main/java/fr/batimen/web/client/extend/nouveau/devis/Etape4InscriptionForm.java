@@ -118,10 +118,10 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
                     setAddedRequiredBehaviour(true);
                 } else {
                     setRequired(false);
+                    setAddedRequiredBehaviour(false);
                     if (isAddedRequiredBehaviour()) {
                         remove(requiredBorderBehaviour);
                     }
-                    setAddedRequiredBehaviour(false);
                 }
             }
         };
