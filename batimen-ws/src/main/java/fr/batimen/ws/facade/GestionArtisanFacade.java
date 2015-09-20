@@ -173,10 +173,20 @@ public class GestionArtisanFacade {
         // On recupere l'url du frontend
         Properties urlProperties = PropertiesFileWS.URL.getProperties();
         String urlFrontend = urlProperties.getProperty("url.frontend.web");
+        Boolean emailInscriptionConfirmationByCastorTeam = Boolean.valueOf(urlProperties.getProperty("email.confirmation.by.team"));
+
         try {
-            emailService.envoiMailActivationCompte(nouveauPartenaireDTO.getArtisan().getNom(), nouveauPartenaireDTO
-                    .getArtisan().getPrenom(), nouveauPartenaireDTO.getArtisan().getLogin(), nouveauPartenaireDTO
-                    .getArtisan().getEmail(), nouveauArtisan.getCleActivation(), urlFrontend);
+            if (emailInscriptionConfirmationByCastorTeam) {
+                String mailAdresseCastorTeam = urlProperties.getProperty("email.box.team");
+                emailService.envoiMailActivationCompte(nouveauPartenaireDTO.getArtisan().getNom(), nouveauPartenaireDTO
+                        .getArtisan().getPrenom(), nouveauPartenaireDTO.getArtisan().getLogin(), mailAdresseCastorTeam
+                        , nouveauArtisan.getCleActivation(), urlFrontend);
+            } else {
+                emailService.envoiMailActivationCompte(nouveauPartenaireDTO.getArtisan().getNom(), nouveauPartenaireDTO
+                        .getArtisan().getPrenom(), nouveauPartenaireDTO.getArtisan().getLogin(), nouveauPartenaireDTO
+                        .getArtisan().getEmail(), nouveauArtisan.getCleActivation(), urlFrontend);
+            }
+
         } catch (EmailException | MandrillApiError | IOException e) {
             if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("Problème d'envoi de mail de confirmation pour un artisan", e);
@@ -284,10 +294,10 @@ public class GestionArtisanFacade {
 
     /**
      * Service qui permet à un artisan de pouvoir ajouter / rajouter des photos de chantier témoin<br/>
-     * <p/>
+     * <p>
      * Mode multipart, en plus du JSON la request contient des photos.
      *
-     * @param formInputRaw     L'objet provenant du frontend qui permet l'ajout de photo
+     * @param formInputRaw L'objet provenant du frontend qui permet l'ajout de photo
      * @return La liste des images appartenant à l'utilisateur contenu dans cloudinary.
      */
     @POST
@@ -313,7 +323,7 @@ public class GestionArtisanFacade {
         }
 
         String rolesDemandeur = gestionUtilisateurFacade.getUtilisateurRoles(ajoutPhotoDTO.getLoginDemandeur());
-        Entreprise entrepriseAjoutPhotos =  artisanService.loadEntrepriseAndCheckRole(rolesDemandeur, ajoutPhotoDTO.getId(), ajoutPhotoDTO.getLoginDemandeur());
+        Entreprise entrepriseAjoutPhotos = artisanService.loadEntrepriseAndCheckRole(rolesDemandeur, ajoutPhotoDTO.getId(), ajoutPhotoDTO.getLoginDemandeur());
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Chargement de l'entreprise en cours, grace à la DTO en entrée : {}", ajoutPhotoDTO.toString());

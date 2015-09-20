@@ -51,6 +51,8 @@
         <!-- Email -->
         <mandrill.api.key>OOBiT-ollMvq7_JaMjyDOQ</mandrill.api.key>
         <email.active>true</email.active>
+        <email.confirmation.by.team>true</email.confirmation.by.team>
+        <email.box.team>contactlescastors@gmail.com</email.box.team>
 
         <!-- URL du frontend -->
         <url.frontend.web>https://127.0.0.1:8181/batimen-web/</url.frontend.web>
@@ -498,6 +500,8 @@
                 <mandrill.api.key>AqM7U8jIxFR7GURuupcsIA</mandrill.api.key>
                 <!-- <mandrill.api.key>OOBiT-ollMvq7_JaMjyDOQ</mandrill.api.key> -->
                 <email.active>true</email.active>
+                <email.confirmation.by.team>true</email.confirmation.by.team>
+                <email.box.team>contactlescastors@gmail.com</email.box.team>
 
                 <!-- URL du frontend -->
                 <url.frontend.web>https://integration.lescastors.fr/batimen-web/</url.frontend.web>
