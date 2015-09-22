@@ -173,11 +173,12 @@ public class GestionArtisanFacade {
         // On recupere l'url du frontend
         Properties urlProperties = PropertiesFileWS.URL.getProperties();
         String urlFrontend = urlProperties.getProperty("url.frontend.web");
-        Boolean emailInscriptionConfirmationByCastorTeam = Boolean.valueOf(urlProperties.getProperty("email.confirmation.by.team"));
+        Properties emailProperties = PropertiesFileWS.EMAIL.getProperties();
+        Boolean emailInscriptionConfirmationByCastorTeam = Boolean.valueOf(emailProperties.getProperty("email.confirmation.by.team"));
 
         try {
             if (emailInscriptionConfirmationByCastorTeam) {
-                String mailAdresseCastorTeam = urlProperties.getProperty("email.box.team");
+                String mailAdresseCastorTeam = emailProperties.getProperty("email.box.team");
                 emailService.envoiMailActivationCompte(nouveauPartenaireDTO.getArtisan().getNom(), nouveauPartenaireDTO
                         .getArtisan().getPrenom(), nouveauPartenaireDTO.getArtisan().getLogin(), mailAdresseCastorTeam
                         , nouveauArtisan.getCleActivation(), urlFrontend);

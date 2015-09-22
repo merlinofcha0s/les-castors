@@ -1158,3 +1158,11 @@ table tr td .error {
 .mot-cle-btn-suivant {
     float: right;
 }
+
+.hspaceCastor {
+    padding-top: 10px;
+}
+
+.textContact {
+    text-align: center;
+}

@@ -28,11 +28,14 @@ public class VilleValidator implements IValidator<String> {
         List<LocalisationDTO> localisationDTOs = csvCodePostalReader.getLocalisationDTOs().get(codepostalField.getConvertedInput());
         boolean villeCorrespondsCodePostal = false;
 
-        for (LocalisationDTO localisationDTO : localisationDTOs) {
-            if (localisationDTO.getCommune().equalsIgnoreCase(ville)) {
-                villeCorrespondsCodePostal = true;
+        if (localisationDTOs != null) {
+            for (LocalisationDTO localisationDTO : localisationDTOs) {
+                if (localisationDTO.getCommune().equalsIgnoreCase(ville)) {
+                    villeCorrespondsCodePostal = true;
+                }
             }
         }
+
 
         if (!villeCorrespondsCodePostal) {
             ValidationError error = new ValidationError(this);

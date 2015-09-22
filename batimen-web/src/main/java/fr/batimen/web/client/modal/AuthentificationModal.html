@@ -3,7 +3,7 @@
 			<form class="form-inline" wicket:id="loginForm">
 				<div>
 					<i class="icon-Person"></i> 
-					<input type="text" class="input-medium"	placeholder="Identifiant" wicket:id="login"  >
+					<input type="text" class="input-medium" placeholder="Identifiant" wicket:id="login">
 				</div>
 				<div id="pswDiv">
 					<i class="icon-Key"></i>
@@ -13,4 +13,11 @@
 					<button wicket:id="signIn" class="btn btn-info">Se Connecter</button>
 				</div>
 			</form>
+	<div class="row-fluid" id="containerMotDePasseOublie">
+        <div class="span4"></div>
+        <div class="span4"></div>
+		<div class="span4">
+			<a wicket:id="passwordForgot">Mot de passe oublié ?</a>
+		</div>
+	</div>
 </wicket:extend>

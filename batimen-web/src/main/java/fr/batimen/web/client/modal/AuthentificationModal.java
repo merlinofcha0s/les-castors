@@ -1,9 +1,13 @@
 package fr.batimen.web.client.modal;
 
-import javax.inject.Inject;
-
+import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.dto.enums.TypeCompte;
+import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.app.security.RolesUtils;
+import fr.batimen.web.client.component.LinkLabel;
+import fr.batimen.web.client.component.ModalCastor;
+import fr.batimen.web.client.event.LoginEvent;
+import fr.batimen.web.client.extend.Contact;
 import fr.batimen.web.client.extend.member.client.MesAnnonces;
 import fr.batimen.web.client.extend.nouveau.devis.NouveauDevis;
 import org.apache.wicket.AttributeModifier;
@@ -20,10 +24,7 @@ import org.apache.wicket.validation.validator.StringValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.batimen.dto.constant.ValidatorConstant;
-import fr.batimen.web.app.security.Authentication;
-import fr.batimen.web.client.component.ModalCastor;
-import fr.batimen.web.client.event.LoginEvent;
+import javax.inject.Inject;
 
 /**
  * Panel qui contient un form permettant à l'utilisateur de pouvoir
@@ -46,6 +47,7 @@ public class AuthentificationModal extends ModalCastor {
     private StatelessForm<AuthentificationModal> loginForm;
     private TextField<String> login;
     private PasswordTextField password;
+    private LinkLabel passwordForgot;
 
     private Label errorLogin;
 
@@ -115,12 +117,18 @@ public class AuthentificationModal extends ModalCastor {
         errorLogin = new Label("errorLogin", "");
         errorLogin.setOutputMarkupId(true);
 
-        loginForm.add(signIn);
-        loginForm.add(login);
-        loginForm.add(password);
+        Model<String> passwordForgotModel = new Model<>("Mot de passe oublié ?");
 
-        this.add(loginForm);
-        this.add(errorLogin);
+        passwordForgot = new LinkLabel("passwordForgot", passwordForgotModel) {
+            @Override
+            public void onClick() {
+                this.setResponsePage(Contact.class);
+            }
+        };
+
+        loginForm.add(signIn, login, password);
+
+        this.add(loginForm, errorLogin, passwordForgot);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Fin initialisation du form d'authentification");
