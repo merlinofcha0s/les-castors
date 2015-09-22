@@ -8,10 +8,6 @@ package fr.batimen.core.constant;
  */
 public class UrlPage {
 
-    private UrlPage() {
-
-    }
-
     // Nom des pages web
     public static final String ACCUEIL_URL = "/accueil";
     public static final String AUTHENTIFICATION_URL = "/connexion";
@@ -28,5 +24,10 @@ public class UrlPage {
     public static final String MODIFIER_MON_ANNONCE = "/modifierannonce";
     public static final String ENTREPRISE = "/entreprise";
     public static final String RECHERCHE_ANNONCE = "/rechercheannonce";
+    public static final String FAQ = "/faq";
+
+    private UrlPage() {
+
+    }
 
 }

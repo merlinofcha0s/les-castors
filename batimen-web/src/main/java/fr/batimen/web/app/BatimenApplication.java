@@ -1,10 +1,7 @@
 package fr.batimen.web.app;
 
 import fr.batimen.core.constant.UrlPage;
-import fr.batimen.web.client.extend.Accueil;
-import fr.batimen.web.client.extend.CGU;
-import fr.batimen.web.client.extend.Contact;
-import fr.batimen.web.client.extend.QuiSommeNous;
+import fr.batimen.web.client.extend.*;
 import fr.batimen.web.client.extend.activation.Activation;
 import fr.batimen.web.client.extend.authentification.Authentification;
 import fr.batimen.web.client.extend.connected.Annonce;
@@ -131,6 +128,7 @@ public class BatimenApplication extends AuthenticatedWebApplication {
         mount(new MountedMapper(UrlPage.MODIFIER_MON_ANNONCE, ModifierAnnonce.class, new UrlPathPageParametersEncoder()));
         mountPage(UrlPage.ENTREPRISE, Entreprise.class);
         mountPage(UrlPage.RECHERCHE_ANNONCE, RechercheAnnonce.class);
+        mountPage(UrlPage.FAQ, FAQ.class);
         // Page d'erreur
         mountPage("/interdit", AccesInterdit.class);
         mountPage("/expiree", Expiree.class);

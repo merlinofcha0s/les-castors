@@ -8,6 +8,7 @@ import fr.batimen.web.client.component.LinkLabel;
 import fr.batimen.web.client.component.WaiterModal;
 import fr.batimen.web.client.event.*;
 import fr.batimen.web.client.extend.Accueil;
+import fr.batimen.web.client.extend.FAQ;
 import fr.batimen.web.client.extend.connected.RechercheAnnonce;
 import fr.batimen.web.client.extend.member.client.MesAnnonces;
 import fr.batimen.web.client.extend.nouveau.artisan.NouveauArtisan;
@@ -114,6 +115,7 @@ public abstract class MasterPage extends WebPage {
 
         initComponentConnexion();
         initTitleHeader(isPageWithTitleHeader, title, adresseImgBackground);
+        initFooterLink();
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Instantiation de la master page.....OK");
@@ -455,6 +457,19 @@ public abstract class MasterPage extends WebPage {
             authentificationPanel = new AuthentificationModal("authenticationModal");
         }
         return authentificationPanel;
+    }
+
+    private void initFooterLink() {
+        Model<String> faqModel = new Model<>("FAQ");
+
+        LinkLabel faq = new LinkLabel("faq", faqModel) {
+            @Override
+            public void onClick() {
+                setResponsePage(FAQ.class);
+            }
+        };
+
+        add(faq);
     }
 
     /*
