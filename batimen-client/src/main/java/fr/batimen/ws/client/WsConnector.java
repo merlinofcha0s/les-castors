@@ -51,6 +51,7 @@ public class WsConnector implements Serializable {
     private boolean isTest;
     private String userWs;
     private String passwordWs;
+    private boolean isProd;
 
     public WsConnector() {
         getWsProperties();
@@ -77,34 +78,35 @@ public class WsConnector implements Serializable {
         // On initialise le context avec le bon trust manager qui activera ou
         // non la verification du certificat.
         try {
-            context = SSLContext.getInstance("TLSv1.2");
-            context.init(null, TrustManagerSingleton.getTrustedCertificate(), TrustManagerSingleton.secureRandomOrNot());
-
-            HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
 
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Config de client config.....");
             }
 
             ClientConfig config = new DefaultClientConfig();
-            config.getProperties().put(HTTPSProperties.PROPERTY_HTTPS_PROPERTIES,
-                    new HTTPSProperties(new HostnameVerifier() {
-                        @Override
-                        public boolean verify(String s, SSLSession sslSession) {
-                            return true;
-                        }
-                    }, context));
+
+            if (!isProd) {
+                context = SSLContext.getInstance("TLSv1.2");
+                try {
+                    context.init(null, TrustManagerSingleton.getTrustedCertificate(), TrustManagerSingleton.secureRandomOrNot());
+                } catch (KeyManagementException e) {
+                    e.printStackTrace();
+                }
+                HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
+                config.getProperties().put(HTTPSProperties.PROPERTY_HTTPS_PROPERTIES,
+                        new HTTPSProperties(new HostnameVerifier() {
+                            @Override
+                            public boolean verify(String s, SSLSession sslSession) {
+                                return true;
+                            }
+                        }, context));
+            }
 
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Config de client config.....OK");
             }
 
             return config;
-        } catch (KeyManagementException e) {
-            if (LOGGER.isErrorEnabled()) {
-                LOGGER.error("Problème de chargement de certificat", e);
-            }
-            return null;
         } catch (NoSuchAlgorithmException e) {
             if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("Algorithme SSL introuvable", e);
@@ -118,12 +120,14 @@ public class WsConnector implements Serializable {
         adresseService.append(ipServeur);
         adresseService.append(":");
         adresseService.append(portServeur);
-        adresseService.append("/");
         if (isTest) {
+            adresseService.append("/");
             adresseService.append(nomWsTest);
-        } else {
+        } else if (!nomWs.isEmpty()) {
+            adresseService.append("/");
             adresseService.append(nomWs);
         }
+
         adresseService.append("/");
         adresseService.append(controller);
         adresseService.append("/");
@@ -154,6 +158,7 @@ public class WsConnector implements Serializable {
         nomWsTest = wsProperties.getProperty("ws.name.test.arquillian");
         userWs = wsProperties.getProperty("ws.user.login");
         passwordWs = wsProperties.getProperty("ws.user.password");
+        isProd = Boolean.valueOf(wsProperties.getProperty("ws.isprod"));
     }
 
     /**

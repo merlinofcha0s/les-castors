@@ -517,7 +517,7 @@
                 <resources>
                     <resource>
                         <filtering>true</filtering>
-                        <directory>src/main/resources/prod</directory>
+                        <directory>src/main/resources/integration</directory>
                         <includes>
                             <include>**</include>
                         </includes>
@@ -573,10 +573,71 @@
             </build>
         </profile>
         <profile>
-            <id>glassfish-managed-debug</id>
+            <id>production</id>
             <properties>
-                <glassfish.debug>true</glassfish.debug>
+                <jdbc.jndi>java:jboss/datasources/PostgreSQLDS</jdbc.jndi>
+                <maven.test.skip>true</maven.test.skip>
+
+                <!-- Logs -->
+                <logs.address>${OPENSHIFT_LOG_DIR}</logs.address>
+                <logs.archives>${OPENSHIFT_LOG_DIR}/archived</logs.archives>
+                <logs.lvl>DEBUG</logs.lvl>
+
+                <!-- Hibernate -->
+                <hibernate.show_sql>false</hibernate.show_sql>
+                <hibernate.format_sql>false</hibernate.format_sql>
+                <hibernate.use_sql_comments>false</hibernate.use_sql_comments>
+                <hibernate.generate_statistics>false</hibernate.generate_statistics>
+
+                <!-- Email -->
+                <mandrill.api.key>AqM7U8jIxFR7GURuupcsIA</mandrill.api.key>
+                <!-- <mandrill.api.key>OOBiT-ollMvq7_JaMjyDOQ</mandrill.api.key> -->
+                <email.active>true</email.active>
+                <email.confirmation.by.team>true</email.confirmation.by.team>
+                <email.box.team>contactlescastors@gmail.com</email.box.team>
+
+                <!-- URL du frontend -->
+                <url.frontend.web>https://lescastors.fr/</url.frontend.web>
+
+                <!-- Gestion des images -->
+                <prop.temp.img.dir>${OPENSHIFT_DATA_DIR}</prop.temp.img.dir>
+                <prop.image.is.test>false</prop.image.is.test>
+
+                <!-- Gestion des images pour les tests -->
+                <app.temp.img.dir.test>${OPENSHIFT_DATA_DIR}/img-test/</app.temp.img.dir.test>
             </properties>
+            <build>
+                <resources>
+                    <resource>
+                        <filtering>true</filtering>
+                        <directory>src/main/resources/prod</directory>
+                        <includes>
+                            <include>**</include>
+                        </includes>
+                    </resource>
+                </resources>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <version>2.6</version>
+                        <configuration>
+                            <warName>ROOT</warName>
+                            <failOnMissingWebXml>true</failOnMissingWebXml>
+                            <webResources>
+                                <resource>
+                                    <directory>${basedir}/src/main/webapp/WEB-INF</directory>
+                                    <filtering>true</filtering>
+                                    <targetPath>WEB-INF</targetPath>
+                                    <includes>
+                                        <include>**/*.xml</include>
+                                    </includes>
+                                </resource>
+                            </webResources>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 

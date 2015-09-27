@@ -24,11 +24,9 @@
 	</modules>
 
 	<properties>
-		<redmine.address>https://lescastors.fr/redmine/projects/batimen</redmine.address>
-		<redmine.depot.address>https://lescastors.fr/redmine/projects/batimen/repository</redmine.depot.address>
-		<jenkins.address>http://lescastors.fr:9090/</jenkins.address>
-		<git.repository>scm:git:https://raiden@lescastors.fr:8181/git/batimen.git</git.repository>
-		<app.version>0.3.0-SNAPSHOT</app.version>
+		<youtrack.address>https://integration.lescastors.fr/youtrack</youtrack.address>
+		<jenkins.address>http://integration.lescastors.fr/jenkins</jenkins.address>
+		<git.repository>scm:git:https://root@integration.lescastors.fr/root/batimen.git</git.repository>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<logback.version>1.1.2</logback.version>
@@ -45,8 +43,8 @@
 	</properties>
 
 	<issueManagement>
-		<system>Redmine</system>
-		<url>${redmine.address}</url>
+		<system>Youtrack</system>
+		<url>${youtrack.address}</url>
 	</issueManagement>
 
 	<ciManagement>
@@ -57,7 +55,6 @@
 	<scm>
 		<connection>${git.repository}</connection>
 		<developerConnection>${git.repository}</developerConnection>
-		<url>${redmine.depot.address}</url>
 	</scm>
 
 	<build>
@@ -128,6 +125,11 @@
 					<artifactId>wildfly-maven-plugin</artifactId>
 					<version>1.1.0.Alpha2</version>
 				</plugin>
+				<!-- <plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-release-plugin</artifactId>
+					<version>2.5.2</version>
+				</plugin> -->
 			</plugins>
 		</pluginManagement>
 		<plugins>

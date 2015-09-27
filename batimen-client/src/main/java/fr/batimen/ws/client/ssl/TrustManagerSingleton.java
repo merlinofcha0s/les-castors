@@ -1,24 +1,21 @@
 package fr.batimen.ws.client.ssl;
 
+import fr.batimen.ws.client.enums.PropertiesFileWsClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
 import java.util.Properties;
 
-import javax.net.ssl.TrustManager;
-import javax.net.ssl.X509TrustManager;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import fr.batimen.ws.client.enums.PropertiesFileWsClient;
-
 public class TrustManagerSingleton {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(TrustManagerSingleton.class);
     private static TrustManagerSingleton trustManagerSingleton;
     private static TrustManager[] trustedCertificate;
     private static Boolean isProd;
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(TrustManagerSingleton.class);
 
     private TrustManagerSingleton() {
         if (LOGGER.isDebugEnabled()) {
@@ -40,35 +37,21 @@ public class TrustManagerSingleton {
             trustedCertificate = new TrustManager[1];
             TrustManagerSingleton.setTrustedCertificate(trustedCertificate);
 
-            // Si on est en prod, on active la verification de l'identité du
-            // serveur (ws)
-            if (isProd) {
-
-                if (LOGGER.isDebugEnabled()) {
-                    LOGGER.debug("Prod => la verif du certificat est active");
-                }
-
-                try {
-                    trustedCertificate[0] = new TrustManagerForProduction();
-                } catch (Exception e) {
-                    if (LOGGER.isErrorEnabled()) {
-                        LOGGER.error("Problème pendant l'initialisation du trust manager for production", e);
-                    }
-                }
-                // on est pas en prod donc : on desactive la vérification des
-                // certificats
-            } else if (!isProd) {
+            // on est pas en prod donc : on desactive la vérification des
+            // certificats
+            if (!isProd) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("Pas en prod => pas de verification du certificat");
                 }
                 trustedCertificate[0] = trustManagerWithoutCertificatCheck();
             }
         }
+
     }
 
     /**
      * Renvoi un TrustManager qui ne verifie pas l'identité du serveur
-     * 
+     *
      * @return trust manager qui ne verifie pas l'identité du serveur
      */
     private static X509TrustManager trustManagerWithoutCertificatCheck() {
@@ -92,19 +75,15 @@ public class TrustManagerSingleton {
 
     public static SecureRandom secureRandomOrNot() {
         initTrustManagerSingleton();
-        if (isProd) {
-            return null;
-        } else {
-            return new SecureRandom();
-        }
+        return new SecureRandom();
     }
 
     /**
      * Renvoi un trust manager en fonction de l'environement pour verifier ou
      * non l'identité du serveur suivant que l'on soit en prod ou pas
-     * 
+     * <p>
      * S'occupe également d'intialiser le singleton
-     * 
+     *
      * @return the trustedCertificate
      */
     public static TrustManager[] getTrustedCertificate() {
@@ -115,8 +94,7 @@ public class TrustManagerSingleton {
     }
 
     /**
-     * @param trustedCertificate
-     *            the trustedCertificate to set
+     * @param trustedCertificate the trustedCertificate to set
      */
     private static void setTrustedCertificate(TrustManager[] trustedCertificate) {
         // Même raison que pour le getter on enregistre seulement la copie
