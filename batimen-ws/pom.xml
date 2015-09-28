@@ -614,6 +614,9 @@
                         <includes>
                             <include>**</include>
                         </includes>
+                        <excludes>
+                            <exclude>openshift/**/*</exclude>
+                        </excludes>
                     </resource>
                 </resources>
                 <plugins>

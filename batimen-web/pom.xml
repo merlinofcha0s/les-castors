@@ -531,6 +531,7 @@
                         </includes>
                         <excludes>
                             <exclude>web.xml</exclude>
+                            <exclude>openshift/**/*</exclude>
                         </excludes>
                     </resource>
                 </resources>
