@@ -1,0 +1,1 @@
+export _JAVA_OPTIONS="$_JAVA_OPTIONS -javaagent:/var/lib/openshift/5603a27d89f5cfe5f4000203/app-root/repo/newrelic/newrelic.jar"
