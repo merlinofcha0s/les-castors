@@ -143,7 +143,7 @@
             <properties>
                 <maven.test.skip>true</maven.test.skip>
                 <!-- Adresse du WS -->
-                <ws.ip>prodws-lescastors.rhcloud.com</ws.ip>
+                <ws.ip>prodwsv2-lescastors.rhcloud.com</ws.ip>
                 <ws.port>443</ws.port>
                 <ws.name></ws.name>
                 <!-- Utilisé pour activer la verification du certificat du serveur obligatoirement
