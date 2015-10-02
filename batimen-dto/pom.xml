@@ -1,11 +1,12 @@
 <?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>fr.batimen.app</groupId>
         <artifactId>batimen-module</artifactId>
-        <version>0.5.0</version>
+        <version>0.5.0-SNAPSHOT</version>
         <relativePath>../batimen-module</relativePath>
     </parent>
 
@@ -15,22 +16,9 @@
     <packaging>jar</packaging>
     <name>batimen-dto</name>
 
-    <issueManagement>
-        <system>Redmine</system>
-        <url>${redmine.address}</url>
-    </issueManagement>
-
-    <ciManagement>
-        <system>Jenkins</system>
-        <url>${jenkins.address}</url>
-    </ciManagement>
-
     <scm>
-        <connection>${git.repository}</connection>
-        <developerConnection>${git.repository}</developerConnection>
-        <url>${redmine.depot.address}</url>
-      <tag>batimen-module-0.5.0</tag>
-  </scm>
+        <tag>batimen-module-0.5.0</tag>
+    </scm>
 
     <build>
         <plugins>

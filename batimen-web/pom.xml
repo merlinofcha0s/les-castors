@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>fr.batimen.app</groupId>
         <artifactId>batimen-module</artifactId>
-        <version>0.5.0</version>
+        <version>0.5.0-SNAPSHOT</version>
         <relativePath>../batimen-module</relativePath>
     </parent>
 
@@ -15,20 +16,9 @@
     <name>batimen-web</name>
     <description>Application web de Batimen</description>
 
-    <issueManagement>
-        <system>Redmine</system>
-        <url>${redmine.address}</url>
-    </issueManagement>
-    <ciManagement>
-        <system>Jenkins</system>
-        <url>${jenkins.address}</url>
-    </ciManagement>
     <scm>
-        <connection>${git.repository}</connection>
-        <developerConnection>${git.repository}</developerConnection>
-        <url>${redmine.depot.address}</url>
-      <tag>batimen-module-0.5.0</tag>
-  </scm>
+        <tag>batimen-module-0.5.0</tag>
+    </scm>
 
     <properties>
         <wicket.version>6.20.0</wicket.version>
@@ -181,7 +171,7 @@
                 </configuration>
             </plugin>
 
-            <!-- Executions des tests selenium -->
+            <!-- Executions des tests selenium
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
@@ -208,7 +198,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin>-->
         </plugins>
     </build>
 

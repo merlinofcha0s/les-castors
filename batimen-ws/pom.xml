@@ -1,11 +1,12 @@
 <?xml version="1.0"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
         <groupId>fr.batimen.app</groupId>
         <artifactId>batimen-module</artifactId>
-        <version>0.5.0</version>
+        <version>0.5.0-SNAPSHOT</version>
         <relativePath>../batimen-module</relativePath>
     </parent>
 
@@ -63,21 +64,6 @@
         <app.temp.img.dir.test>D:/dev/temp/img/</app.temp.img.dir.test>
     </properties>
 
-    <issueManagement>
-        <system>Redmine</system>
-        <url>${redmine.address}</url>
-    </issueManagement>
-    <ciManagement>
-        <system>Jenkins</system>
-        <url>${jenkins.address}</url>
-    </ciManagement>
-    <scm>
-        <connection>${git.repository}</connection>
-        <developerConnection>${git.repository}</developerConnection>
-        <url>${redmine.depot.address}</url>
-      <tag>batimen-module-0.5.0</tag>
-  </scm>
-
     <build>
         <plugins>
             <!-- Conf eclipse M2e -->
@@ -110,43 +96,42 @@
                 </configuration>
             </plugin>
             <!-- Pour les tests unitaires (Junit) -->
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.18.1</version>
-                <configuration>
-                    <skipTests>false</skipTests>
-                    <testFailureIgnore>true</testFailureIgnore>
-                    <argLine>${surefireArgLine}</argLine>
-                    <disableXmlReport>false</disableXmlReport>
-                    <trimStackTrace>false</trimStackTrace>
-                    <reportFormat>plain</reportFormat>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>${jacoco.version}</version>
-                <configuration>
-                    <destFile>${sonar.jacoco.reportPath}</destFile>
-                    <dataFile>${sonar.jacoco.reportPath}</dataFile>
-                    <!--<append>true</append> -->
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>pre-unit-test</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>report</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+            <!--    <plugin>
+                   <artifactId>maven-surefire-plugin</artifactId>
+                   <version>2.18.1</version>
+                   <configuration>
+                       <skipTests>false</skipTests>
+                       <testFailureIgnore>true</testFailureIgnore>
+                       <argLine>${surefireArgLine}</argLine>
+                       <disableXmlReport>false</disableXmlReport>
+                       <trimStackTrace>false</trimStackTrace>
+                       <reportFormat>plain</reportFormat>
+                   </configuration>
+               </plugin>
+               <plugin>
+                   <groupId>org.jacoco</groupId>
+                   <artifactId>jacoco-maven-plugin</artifactId>
+                   <version>${jacoco.version}</version>
+                   <configuration>
+                       <destFile>${sonar.jacoco.reportPath}</destFile>
+                       <dataFile>${sonar.jacoco.reportPath}</dataFile>
+                   </configuration>
+                   <executions>
+                       <execution>
+                           <id>pre-unit-test</id>
+                           <goals>
+                               <goal>prepare-agent</goal>
+                           </goals>
+                       </execution>
+                       <execution>
+                           <id>report</id>
+                           <phase>prepare-package</phase>
+                           <goals>
+                               <goal>report</goal>
+                           </goals>
+                       </execution>
+                   </executions>
+               </plugin> -->
 
             <!-- Execute .sql avant les tests -->
             <plugin>
