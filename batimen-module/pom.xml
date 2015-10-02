@@ -50,8 +50,8 @@
     </ciManagement>
 
     <scm>
-        <connection>scm:git:https://maven:i1CCBA3=bQ@integration.lescastors.fr/root/batimen.git</connection>
-        <developerConnection>scm:git:https://maven:i1CCBA3=bQ@integration.lescastors.fr/root/batimen.git
+        <connection>scm:git:https://root@integration.lescastors.fr/root/batimen.git</connection>
+        <developerConnection>scm:git:https://root@integration.lescastors.fr/root/batimen.git
         </developerConnection>
         <tag>batimen-module-0.5.0</tag>
     </scm>
