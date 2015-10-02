@@ -5,7 +5,7 @@
     <groupId>fr.batimen.app</groupId>
     <artifactId>batimen-module</artifactId>
     <description>Projet principal de Batimen</description>
-    <version>0.5.0</version>
+    <version>0.5.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <prerequisites>
@@ -49,8 +49,8 @@
     </ciManagement>
 
     <scm>
-        <connection>scm:git:https://raiden@integration.lescastors.fr/raiden/batimen.git</connection>
-        <developerConnection>scm:git:https://raiden@integration.lescastors.fr/raiden/batimen.git
+        <connection>scm:git:https://raiden@integration.lescastors.fr/root/batimen.git</connection>
+        <developerConnection>scm:git:https://raiden@integration.lescastors.fr/root/batimen.git
         </developerConnection>
         <tag>batimen-module-0.5.0</tag>
     </scm>
