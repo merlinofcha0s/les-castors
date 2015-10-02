@@ -49,10 +49,9 @@
     </ciManagement>
 
     <scm>
-        <connection>scm:git:https://raiden@integration.lescastors.fr/root/batimen.git</connection>
-        <developerConnection>scm:git:https://raiden@integration.lescastors.fr/root/batimen.git
-        </developerConnection>
-        <tag>batimen-module-0.5.0</tag>
+        <connection>scm:git:https://integration.lescastors.fr/root/batimen.git</connection>
+        <developerConnection>scm:git:https://integration.lescastors.fr/root/batimen.git</developerConnection>
+        <url>https://integration.lescastors.fr/root/batimen.git</url>
     </scm>
 
     <build>
