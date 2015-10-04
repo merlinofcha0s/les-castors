@@ -4,6 +4,7 @@ import com.microtripit.mandrillapp.lutung.model.MandrillApiError;
 import com.microtripit.mandrillapp.lutung.view.MandrillMessage;
 import com.microtripit.mandrillapp.lutung.view.MandrillMessage.MergeVar;
 import fr.batimen.core.constant.EmailConstant;
+import fr.batimen.core.constant.UrlPage;
 import fr.batimen.core.exception.EmailException;
 import fr.batimen.dto.ContactMailDTO;
 import fr.batimen.dto.constant.Categorie;
@@ -127,6 +128,8 @@ public class EmailService {
         templateContent.put(EmailConstant.TAG_EMAIL_USERNAME, login);
 
         StringBuilder lienActivation = new StringBuilder(url);
+        lienActivation.append(UrlPage.ACTIVATION_URL.replace("/", ""));
+        lienActivation.append("?key=");
         lienActivation.append(cleActivation);
 
         // On charge les variables dynamique à remplacer

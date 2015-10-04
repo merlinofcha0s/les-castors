@@ -1,8 +1,9 @@
 package fr.batimen.web.selenium.client;
 
-import static com.ninja_squad.dbsetup.Operations.sequenceOf;
-import static org.junit.Assert.assertNotNull;
-
+import com.ninja_squad.dbsetup.DbSetup;
+import com.ninja_squad.dbsetup.operation.Operation;
+import fr.batimen.core.constant.UrlPage;
+import fr.batimen.web.selenium.common.AbstractITTest;
 import org.junit.Assert;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -10,10 +11,8 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.ninja_squad.dbsetup.DbSetup;
-import com.ninja_squad.dbsetup.operation.Operation;
-
-import fr.batimen.web.selenium.common.AbstractITTest;
+import static com.ninja_squad.dbsetup.Operations.sequenceOf;
+import static org.junit.Assert.assertNotNull;
 
 public class TestActivationCompte extends AbstractITTest {
 
@@ -27,11 +26,10 @@ public class TestActivationCompte extends AbstractITTest {
     /**
      * Cas de test : L'utilisateur essaie d'activer un compte avec une clé
      * erronée, l'application lui affiche un message d'erreur.
-     * 
      */
     @Test
     public void testActivationWithNoValidKey() {
-        driver.get(appUrl + "/activation?key=lolmdrxd06");
+        driver.get(appUrl + UrlPage.ACTIVATION_URL + "?key=lolmdrxd06");
 
         WebElement checkConditionActivationImageKO = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("div.confirmationactivationko")));
@@ -58,12 +56,11 @@ public class TestActivationCompte extends AbstractITTest {
     /**
      * Cas de test : L'utilisateur essaie d'activer plusieurs fois son compte,
      * l'application doit lui afficher un message d'erreur
-     * 
      */
     @Test
     public void testActivationTwoTimes() {
-        driver.get(appUrl + "/activation?key=lolmdr06");
-        driver.get(appUrl + "/activation?key=lolmdr06");
+        driver.get(appUrl + UrlPage.ACTIVATION_URL + "?key=lolmdr06");
+        driver.get(appUrl + UrlPage.ACTIVATION_URL + "?key=lolmdr06");
 
         WebElement checkConditionActivationImageKO = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("div.confirmationactivationko")));
@@ -82,11 +79,10 @@ public class TestActivationCompte extends AbstractITTest {
     /**
      * Cas de test : L'utilisateur clique sur le lien qui se trouve dans l'email
      * envoyé et active son compte avec succés
-     * 
      */
     @Test
     public void testActivationOK() {
-        driver.get(appUrl + "/activation?key=lolmdr201");
+        driver.get(appUrl + UrlPage.ACTIVATION_URL + "?key=lolmdr201");
 
         WebElement checkConditionActivationImageOK = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("div.confirmationactivationok")));
