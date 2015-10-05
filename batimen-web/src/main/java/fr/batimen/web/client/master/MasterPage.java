@@ -14,6 +14,7 @@ import fr.batimen.web.client.extend.member.client.MesAnnonces;
 import fr.batimen.web.client.extend.nouveau.artisan.NouveauArtisan;
 import fr.batimen.web.client.extend.nouveau.devis.NouveauDevis;
 import fr.batimen.web.client.modal.AuthentificationModal;
+import fr.batimen.web.enums.PropertiesFileWeb;
 import org.apache.shiro.SecurityUtils;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -408,6 +409,17 @@ public abstract class MasterPage extends WebPage {
         response.render(addStringToMetaResourcesToHeader(metaKeywords, "", "keywords"));
         response.render(OnDomReadyHeaderItem.forScript(getJSForClickListenerOnConnexion(loginDialogBehaviour
                 .getCallbackScript())));
+
+        if (Boolean.valueOf(PropertiesFileWeb.APP.getProperties().getProperty("app.activate.analytics"))) {
+            StringBuilder googleAnalytics = new StringBuilder("(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){");
+            googleAnalytics.append("(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),");
+            googleAnalytics.append("m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)");
+            googleAnalytics.append("})(window,document,'script','//www.google-analytics.com/analytics.js','ga');");
+            googleAnalytics.append(" ga('create', 'UA-68443139-1', 'auto');");
+            googleAnalytics.append(" ga('send', 'pageview');");
+            response.render(OnDomReadyHeaderItem.forScript(googleAnalytics.toString()));
+        }
+
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Ajout des resources dans le header.....OK");
         }
