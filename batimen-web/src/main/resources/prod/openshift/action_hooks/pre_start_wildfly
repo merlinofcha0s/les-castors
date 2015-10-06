@@ -1,1 +1,1 @@
-export _JAVA_OPTIONS="$_JAVA_OPTIONS -javaagent:/var/lib/openshift/560cde462d5271d228000023/app-root/runtime/repo/.openshift/newrelic/newrelic.jar"
+export _JAVA_OPTIONS="$_JAVA_OPTIONS -javaagent:/var/lib/openshift/560cde462d5271d228000023/app-root/runtime/repo/.openshift/newrelic/newrelic.jar -Duser.language=fr -Duser.country=FR -Duser.timezone=Europe/Paris"
