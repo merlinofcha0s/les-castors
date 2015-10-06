@@ -31,6 +31,7 @@ import org.apache.wicket.request.Response;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.mapper.parameter.UrlPathPageParametersEncoder;
 import org.apache.wicket.request.resource.UrlResourceReference;
+import org.apache.wicket.resource.CssUrlReplacer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wicketstuff.javaee.injection.JavaEEComponentInjector;
@@ -111,6 +112,8 @@ public class BatimenApplication extends AuthenticatedWebApplication {
         // (appel d'une url http dans une page https)
         getJavaScriptLibrarySettings().setJQueryReference(
                 new UrlResourceReference(Url.parse("//code.jquery.com/jquery-1.11.2.min.js")));
+
+        getResourceSettings().setCssCompressor(new CssUrlReplacer());
 
         // Cfg urls des pages principales
         mountPage(UrlPage.ACCUEIL_URL, Accueil.class);

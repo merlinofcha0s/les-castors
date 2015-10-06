@@ -21,10 +21,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.event.IEvent;
-import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.JavaScriptHeaderItem;
-import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
-import org.apache.wicket.markup.head.StringHeaderItem;
+import org.apache.wicket.markup.head.*;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
@@ -411,6 +408,24 @@ public abstract class MasterPage extends WebPage {
         response.render(OnDomReadyHeaderItem.forScript(getJSForClickListenerOnConnexion(loginDialogBehaviour
                 .getCallbackScript())));
 
+        response.render(JavaScriptHeaderItem.forUrl("js/bootstrap.js"));
+        response.render(JavaScriptHeaderItem.forUrl("js/components/bootstrap-modal/bootstrap-modalmanager.js"));
+        response.render(JavaScriptHeaderItem.forUrl("js/components/bootstrap-modal/bootstrap-modal.js"));
+        response.render(JavaScriptHeaderItem.forUrl("js/theme.js"));
+
+        response.render(CssHeaderItem.forUrl("css/google_font.css"));
+        response.render(CssHeaderItem.forUrl("css/bootstrap.css"));
+        response.render(CssHeaderItem.forUrl("css/bootstrap-override.css"));
+        response.render(CssHeaderItem.forUrl("css/bootstrap-responsive.css"));
+        response.render(CssHeaderItem.forUrl("css/plugins.css"));
+        response.render(CssHeaderItem.forUrl("css/theme.css"));
+        response.render(CssHeaderItem.forUrl("css/responsive.css"));
+        response.render(CssHeaderItem.forUrl("css/theme_settings.css"));
+        response.render(CssHeaderItem.forUrl("css/color_theme.css"));
+        response.render(CssHeaderItem.forUrl("css/soliglyphs.css"));
+        response.render(CssHeaderItem.forUrl("css/page.css"));
+        response.render(CssHeaderItem.forUrl("css/widgets.css"));
+
         if (Boolean.valueOf(PropertiesFileWeb.APP.getProperties().getProperty("app.activate.analytics"))) {
             StringBuilder googleAnalytics = new StringBuilder("(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){");
             googleAnalytics.append("(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),");
@@ -418,8 +433,11 @@ public abstract class MasterPage extends WebPage {
             googleAnalytics.append("})(window,document,'script','//www.google-analytics.com/analytics.js','ga');");
             googleAnalytics.append(" ga('create', 'UA-68443139-1', 'auto');");
             googleAnalytics.append(" ga('send', 'pageview');");
-            response.render(JavaScriptHeaderItem.forScript("googleAnalytics", googleAnalytics.toString()));
+            response.render(JavaScriptHeaderItem.forScript(googleAnalytics.toString(), "googleAnalytics"));
         }
+
+        //response.render(CssHeaderItem.forUrl("//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"));
+        //response.render(JavaScriptHeaderItem.forUrl("//www.fuelcdn.com/fuelux/2.6.1/loader.min.js"));
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Ajout des resources dans le header.....OK");
