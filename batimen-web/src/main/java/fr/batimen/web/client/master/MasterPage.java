@@ -22,6 +22,7 @@ import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.head.StringHeaderItem;
 import org.apache.wicket.markup.html.TransparentWebMarkupContainer;
@@ -417,7 +418,7 @@ public abstract class MasterPage extends WebPage {
             googleAnalytics.append("})(window,document,'script','//www.google-analytics.com/analytics.js','ga');");
             googleAnalytics.append(" ga('create', 'UA-68443139-1', 'auto');");
             googleAnalytics.append(" ga('send', 'pageview');");
-            response.render(OnDomReadyHeaderItem.forScript(googleAnalytics.toString()));
+            response.render(JavaScriptHeaderItem.forScript("googleAnalytics", googleAnalytics.toString()));
         }
 
         if (LOGGER.isDebugEnabled()) {
