@@ -3,7 +3,6 @@ package fr.batimen.web.app;
 import fr.batimen.core.constant.UrlPage;
 import fr.batimen.web.client.extend.*;
 import fr.batimen.web.client.extend.activation.Activation;
-import fr.batimen.web.client.extend.authentification.Authentification;
 import fr.batimen.web.client.extend.connected.Annonce;
 import fr.batimen.web.client.extend.connected.Entreprise;
 import fr.batimen.web.client.extend.connected.RechercheAnnonce;
@@ -71,13 +70,13 @@ public class BatimenApplication extends AuthenticatedWebApplication {
     }
 
     @Override
-    protected Class<? extends WebPage> getSignInPageClass() {
-        return Authentification.class;
+    protected Class<? extends AbstractAuthenticatedWebSession> getWebSessionClass() {
+        return BatimenSession.class;
     }
 
     @Override
-    protected Class<? extends AbstractAuthenticatedWebSession> getWebSessionClass() {
-        return BatimenSession.class;
+    protected Class<? extends WebPage> getSignInPageClass() {
+        return Accueil.class;
     }
 
     /**
@@ -117,7 +116,6 @@ public class BatimenApplication extends AuthenticatedWebApplication {
 
         // Cfg urls des pages principales
         mountPage(UrlPage.ACCUEIL_URL, Accueil.class);
-        mountPage(UrlPage.AUTHENTIFICATION_URL, Authentification.class);
         mountPage(UrlPage.MES_ANNONCES_URL, MesAnnonces.class);
         mountPage(UrlPage.QUI_SOMMES_NOUS_URL, QuiSommeNous.class);
         mountPage(UrlPage.CONTACT_URL, Contact.class);

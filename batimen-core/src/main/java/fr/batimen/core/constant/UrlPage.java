@@ -10,7 +10,6 @@ public class UrlPage {
 
     // Nom des pages web
     public static final String ACCUEIL_URL = "/accueil";
-    public static final String AUTHENTIFICATION_URL = "/connexion";
     public static final String MES_ANNONCES_URL = "/mesannonces";
     public static final String QUI_SOMMES_NOUS_URL = "/quisommesnous";
     public static final String CONTACT_URL = "/contact";

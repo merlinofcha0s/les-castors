@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    <url>
+        <loc>https://www.lescastors.fr/accueil</loc>
+        <changefreq>Weekly</changefreq>
+    </url>
+    <url>
+        <loc>https://www.lescastors.fr/contact</loc>
+        <changefreq>Weekly</changefreq>
+    </url>
+    <url>
+        <loc>https://www.lescastors.fr/quisommesnous</loc>
+        <changefreq>Weekly</changefreq>
+    </url>
+    <url>
+        <loc>https://www.lescastors.fr/cgu</loc>
+        <changefreq>Weekly</changefreq>
+    </url>
+    <url>
+        <loc>https://www.lescastors.fr/faq</loc>
+        <changefreq>Weekly</changefreq>
+    </url>
+    <url>
+        <loc>https://www.lescastors.fr/nouveaudevis</loc>
+        <changefreq>Weekly</changefreq>
+    </url>
+    <url>
+        <loc>https://www.lescastors.fr/nouveaupartenaire</loc>
+        <changefreq>Weekly</changefreq>
+    </url>
+</urlset>
+        <!--<guid value="3b74b7af-a22d-450a-9b5c-178bccabc31b" />-->

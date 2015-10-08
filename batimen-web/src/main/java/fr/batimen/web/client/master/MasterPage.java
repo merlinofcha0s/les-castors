@@ -436,9 +436,6 @@ public abstract class MasterPage extends WebPage {
             response.render(JavaScriptHeaderItem.forScript(googleAnalytics.toString(), "googleAnalytics"));
         }
 
-        //response.render(CssHeaderItem.forUrl("//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"));
-        //response.render(JavaScriptHeaderItem.forUrl("//www.fuelcdn.com/fuelux/2.6.1/loader.min.js"));
-
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Ajout des resources dans le header.....OK");
         }
