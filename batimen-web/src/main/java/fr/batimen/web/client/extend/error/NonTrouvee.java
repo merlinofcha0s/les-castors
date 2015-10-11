@@ -1,11 +1,10 @@
 package fr.batimen.web.client.extend.error;
 
+import fr.batimen.web.client.extend.Accueil;
+import fr.batimen.web.client.master.MasterPage;
 import org.apache.wicket.markup.html.link.Link;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import fr.batimen.web.client.extend.Accueil;
-import fr.batimen.web.client.master.MasterPage;
 
 /**
  * Page qui avertit l'utilisateur d'une erreur 404
@@ -20,7 +19,7 @@ public class NonTrouvee extends MasterPage {
     private static final Logger LOGGER = LoggerFactory.getLogger(NonTrouvee.class);
 
     public NonTrouvee() {
-        super("Page erreur 404", "page web non trouvée", "Page non trouvée", false, "");
+        super("Page erreur 404", "page web non trouvée 404", "Page non trouvée", false, "");
 
         if (LOGGER.isErrorEnabled()) {
             LOGGER.error("Appel d'une page d'erreur 404");

@@ -1,6 +1,7 @@
 package fr.batimen.web.client.extend;
 
 import fr.batimen.core.constant.CodeRetourService;
+import fr.batimen.core.constant.UrlPage;
 import fr.batimen.dto.CaptchaDTO;
 import fr.batimen.dto.ContactMailDTO;
 import fr.batimen.dto.constant.ValidatorConstant;
@@ -17,6 +18,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.event.Broadcast;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
@@ -56,7 +58,7 @@ public class Contact extends MasterPage {
     private WebMarkupContainer formContainerContact;
 
     public Contact() {
-        super("Contacter l'equipe des castors", "", "Contacter l'équipe des castors", true, "img/bg_title1.jpg");
+        super("Contacter l'equipe des castors", "contactez lescastors contacte question", "Contacter l'équipe des castors", true, "img/bg_title1.jpg");
         initComponents();
     }
 
@@ -178,5 +180,20 @@ public class Contact extends MasterPage {
         formContact.add(formContainerContact, reCaptcha, resetButton, submitButton);
 
         add(formContact);
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+
+        StringBuilder adresseContact = new StringBuilder();
+        adresseContact.append("https://lescastors.fr").append(UrlPage.CONTACT_URL);
+
+        //Opengraph tags
+        response.render(addOpenGraphMetaResourcesToHeader("og:url", adresseContact.toString()));
+        response.render(addOpenGraphMetaResourcesToHeader("og:type", "website"));
+        response.render(addOpenGraphMetaResourcesToHeader("og:title", "Contacter l'équipe du site lescastors.fr"));
+        response.render(addOpenGraphMetaResourcesToHeader("og:description", "Posez vos questions à notre équipe"));
+        response.render(addOpenGraphMetaResourcesToHeader("og:image", "https://res.cloudinary.com/lescastors/image/upload/v1443971771/mail/logo-bleu2x.png"));
     }
 }

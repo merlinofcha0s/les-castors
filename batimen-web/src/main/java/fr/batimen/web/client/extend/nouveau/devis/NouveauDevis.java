@@ -1,6 +1,7 @@
 package fr.batimen.web.client.extend.nouveau.devis;
 
 import fr.batimen.core.constant.CodeRetourService;
+import fr.batimen.core.constant.UrlPage;
 import fr.batimen.core.exception.FrontEndException;
 import fr.batimen.core.security.HashHelper;
 import fr.batimen.dto.ClientDTO;
@@ -26,6 +27,7 @@ import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.event.IEvent;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.image.Image;
@@ -97,15 +99,30 @@ public class NouveauDevis extends MasterPage {
     }
 
     public NouveauDevis() {
-        super("Nouveau devis", "devis batiment renovation", "Nouveau devis", true, "img/bg_title1.jpg");
+        super("Nouveau devis", "devis lescastors renovation neuf gratuit", "Nouveau devis", true, "img/bg_title1.jpg");
         initPage();
     }
 
     public NouveauDevis(CreationAnnonceDTO creationAnnonce) {
-        super("Nouveau devis", "devis batiment renovation", "Nouveau devis", true, "img/bg_title1.jpg");
+        super("Nouveau devis", "devis lescastors renovation neuf gratuit", "Nouveau devis", true, "img/bg_title1.jpg");
         this.nouvelleAnnonce = creationAnnonce;
         propertyModelNouvelleAnnonce = new CompoundPropertyModel<>(nouvelleAnnonce);
         initPage();
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+
+        StringBuilder adresseNouveauDevis = new StringBuilder();
+        adresseNouveauDevis.append("https://lescastors.fr").append(UrlPage.NOUVEAU_DEVIS_URL);
+
+        //Opengraph tags
+        response.render(addOpenGraphMetaResourcesToHeader("og:url", adresseNouveauDevis.toString()));
+        response.render(addOpenGraphMetaResourcesToHeader("og:type", "website"));
+        response.render(addOpenGraphMetaResourcesToHeader("og:title", "Création de demande de devis sur lescastors.fr"));
+        response.render(addOpenGraphMetaResourcesToHeader("og:description", "Vous serez guidé pas à pas pour faire votre demande de devis"));
+        response.render(addOpenGraphMetaResourcesToHeader("og:image", "https://res.cloudinary.com/lescastors/image/upload/v1443971771/mail/logo-bleu2x.png"));
     }
 
     public void initPage() {

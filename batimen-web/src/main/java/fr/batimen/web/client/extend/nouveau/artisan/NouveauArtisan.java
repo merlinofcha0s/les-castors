@@ -1,5 +1,6 @@
 package fr.batimen.web.client.extend.nouveau.artisan;
 
+import fr.batimen.core.constant.UrlPage;
 import fr.batimen.core.exception.FrontEndException;
 import fr.batimen.dto.LocalisationDTO;
 import fr.batimen.dto.aggregate.CreationPartenaireDTO;
@@ -13,6 +14,7 @@ import fr.batimen.web.client.extend.nouveau.devis.event.LocalisationEvent;
 import fr.batimen.web.client.master.MasterPage;
 import fr.batimen.ws.client.service.ArtisanServiceREST;
 import org.apache.wicket.event.IEvent;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
@@ -158,6 +160,20 @@ public class NouveauArtisan extends MasterPage {
                 LOGGER.error("Erreur lors du changment d'étape pendant la creation d'un nouveau partenaire", e);
             }
         }
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        StringBuilder adresseNouveauDevis = new StringBuilder();
+        adresseNouveauDevis.append("https://lescastors.fr").append(UrlPage.PARTENAIRE_URL);
+
+        //Opengraph tags
+        response.render(addOpenGraphMetaResourcesToHeader("og:url", adresseNouveauDevis.toString()));
+        response.render(addOpenGraphMetaResourcesToHeader("og:type", "website"));
+        response.render(addOpenGraphMetaResourcesToHeader("og:title", "Inscription d'un nouveau partenaire sur lescastors.fr"));
+        response.render(addOpenGraphMetaResourcesToHeader("og:description", "Vous serez guidé pas à pas pour pour votre inscription sur lescastors.fr"));
+        response.render(addOpenGraphMetaResourcesToHeader("og:image", "https://res.cloudinary.com/lescastors/image/upload/v1443971771/mail/logo-bleu2x.png"));
     }
 
     private void initNavigationWizard() {

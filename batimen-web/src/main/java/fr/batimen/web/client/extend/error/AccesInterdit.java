@@ -1,11 +1,10 @@
 package fr.batimen.web.client.extend.error;
 
+import fr.batimen.web.client.extend.member.client.MesAnnonces;
+import fr.batimen.web.client.master.MasterPage;
 import org.apache.wicket.markup.html.link.Link;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import fr.batimen.web.client.extend.member.client.MesAnnonces;
-import fr.batimen.web.client.master.MasterPage;
 
 /**
  * Page d'erreur pour les accés interdits
@@ -20,7 +19,7 @@ public class AccesInterdit extends MasterPage {
     private static final Logger LOGGER = LoggerFactory.getLogger(AccesInterdit.class);
 
     public AccesInterdit() {
-        super("Accès interdit", "acces interdit droit", "Accès interdit", false, "");
+        super("Accès interdit", "acces interdit pas le droit", "Accès interdit", false, "");
 
         if (LOGGER.isErrorEnabled()) {
             LOGGER.error("Appel d'une page d'erreur d'accés");

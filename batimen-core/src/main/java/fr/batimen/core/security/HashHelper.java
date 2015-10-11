@@ -25,14 +25,12 @@ public class HashHelper {
     private static final Logger LOGGER = LoggerFactory.getLogger(HashHelper.class);
 
     private static String CHARSET_UTF_8 = "UTF-8";
-
+    private static int CPU_COST = 64;
+    private static int MEMORY_COST = 64;
+    private static int PARALLELIZATION_COST = 64;
     private HashHelper() {
 
     }
-
-    private static int CPU_COST = 32;
-    private static int MEMORY_COST = 64;
-    private static int PARALLELIZATION_COST = 64;
 
     // TODO Pas sur que ces valeurs soient correct en 2013, a checker.
 

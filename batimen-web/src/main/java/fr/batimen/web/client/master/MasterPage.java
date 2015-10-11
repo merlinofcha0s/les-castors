@@ -472,6 +472,30 @@ public abstract class MasterPage extends WebPage {
         return StringHeaderItem.forString(balise.toString());
     }
 
+    /**
+     * Génére une balise meta propre a opengraph (Facebook SEO)
+     *
+     * @param property Le type de balise (og:url, etc)
+     * @param content  Le contenu que l'on veut mettre
+     * @return objet wicket qui permet de generer la balise link
+     */
+    protected StringHeaderItem addOpenGraphMetaResourcesToHeader(String property, String content) {
+
+        // On crée la balise de type : <meta property="text/html; charset=utf-8"
+        // http-equiv="property-type" />
+        StringBuilder balise = new StringBuilder("<meta property=\"");
+        balise.append(property);
+        balise.append("\"");
+        balise.append(" ");
+        if (!content.isEmpty()) {
+            balise.append(generateAttribute("content", content));
+        }
+        balise.append("/>");
+
+        // On dit à wicket de la placer dans le header de la master page
+        return StringHeaderItem.forString(balise.toString());
+    }
+
     private String generateAttribute(String paramName, String value) {
         StringBuilder attribute = new StringBuilder(paramName);
         attribute.append("=\"");
