@@ -7,6 +7,7 @@ import fr.batimen.web.client.extend.nouveau.devis.NouveauDevis;
 import fr.batimen.web.client.master.MasterPage;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.link.Link;
 
 /**
@@ -31,7 +32,14 @@ public class Accueil extends MasterPage {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
+        response.render(CssHeaderItem.forUrl("css/font_icons8.css"));
+        response.render(CssHeaderItem.forUrl("css/accueil.css"));
+        response.render(CssHeaderItem.forUrl("css/rs-settings.css"));
+        response.render(CssHeaderItem.forUrl("css/rs-settings-override.css"));
         response.render(CssHeaderItem.forUrl("//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"));
+
+        response.render(JavaScriptHeaderItem.forUrl("js/jquery.themepunch.plugins.min.js"));
+        response.render(JavaScriptHeaderItem.forUrl("js/jquery.themepunch.revolution.min.js"));
 
         StringBuilder adresseAccueil = new StringBuilder();
         adresseAccueil.append("https://lescastors.fr").append(UrlPage.ACCUEIL_URL);
