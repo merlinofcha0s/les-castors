@@ -137,7 +137,7 @@ public class NouveauDevis extends MasterPage {
         containerGeneral = new WebMarkupContainer("containerGeneral");
         containerGeneral.setOutputMarkupId(true);
 
-        etape1 = new Etape1("etape1") {
+        etape1 = new Etape1("etape1", "Entrer le code postal de votre chantier") {
             @Override
             public boolean isVisible() {
                 if (etapeEncours.equals(Etape.ETAPE_1)) {

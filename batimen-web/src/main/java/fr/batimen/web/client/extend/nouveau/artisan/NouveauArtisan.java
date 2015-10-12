@@ -83,7 +83,7 @@ public class NouveauArtisan extends MasterPage {
         initNavigationWizard();
 
         // Etape 1 : selection du departement avec la carte de la france
-        etape1 = new Etape1("etape1"){
+        etape1 = new Etape1("etape1", "Entrer votre code postal") {
             @Override
             public boolean isVisible() {
                 return etapeEncours.equals(Etape.ETAPE_1);

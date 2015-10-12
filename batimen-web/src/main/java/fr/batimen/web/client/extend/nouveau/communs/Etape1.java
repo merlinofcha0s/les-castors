@@ -1,9 +1,9 @@
 package fr.batimen.web.client.extend.nouveau.communs;
 
+import fr.batimen.dto.LocalisationDTO;
 import fr.batimen.dto.constant.ValidatorConstant;
 import fr.batimen.web.app.constants.FeedbackMessageLevel;
 import fr.batimen.web.app.utils.codepostal.CSVCodePostalReader;
-import fr.batimen.dto.LocalisationDTO;
 import fr.batimen.web.client.behaviour.ErrorHighlightBehavior;
 import fr.batimen.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.batimen.web.client.event.FeedBackPanelEvent;
@@ -13,7 +13,7 @@ import fr.batimen.web.enums.PropertiesFileWeb;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.event.Broadcast;
-import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.form.TextField;
@@ -36,13 +36,17 @@ public class Etape1 extends Panel {
     private TextField<String> codePostal;
     private AjaxSubmitLink valideCodePostal;
     private StatelessForm formCodePostal;
+    private Label subtitle;
 
     @Inject
     private CSVCodePostalReader csvCodePostalReader;
 
-    public Etape1(String id) {
+    public Etape1(String id, String subtitleValue) {
         super(id);
-        codePostal = new TextField<>("codePostal", new Model<String>());
+
+        subtitle = new Label("subtitle", subtitleValue);
+
+        codePostal = new TextField<>("codePostal", new Model<>());
         codePostal.setRequired(true);
         codePostal.setMarkupId("codePostal");
         codePostal.add(new PatternValidator(ValidatorConstant.CODE_POSTAL_REGEX));
@@ -94,6 +98,6 @@ public class Etape1 extends Panel {
         valideCodePostal.setMarkupId("valideCodePostal");
 
         formCodePostal.add(codePostal, valideCodePostal);
-        add(formCodePostal);
+        add(subtitle, formCodePostal);
     }
 }
