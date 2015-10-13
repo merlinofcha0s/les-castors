@@ -1,18 +1,22 @@
 package fr.batimen.test.ws.facade;
 
-import static org.junit.Assert.assertTrue;
-
-import java.util.Calendar;
-import java.util.List;
-import java.util.Locale;
-
-import javax.inject.Inject;
-
+import fr.batimen.core.constant.CodeRetourService;
+import fr.batimen.core.exception.BackendException;
+import fr.batimen.core.exception.DuplicateEntityException;
 import fr.batimen.dto.*;
 import fr.batimen.dto.aggregate.MesAnnoncesDTO;
+import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.StatutNotification;
+import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.enums.TypeNotification;
+import fr.batimen.test.ws.AbstractBatimenWsTest;
 import fr.batimen.ws.client.service.ClientServiceREST;
+import fr.batimen.ws.client.service.UtilisateurServiceREST;
+import fr.batimen.ws.dao.AnnonceDAO;
+import fr.batimen.ws.dao.ClientDAO;
+import fr.batimen.ws.entity.Annonce;
+import fr.batimen.ws.entity.Client;
+import fr.batimen.ws.entity.Permission;
 import org.jboss.arquillian.persistence.ShouldMatchDataSet;
 import org.jboss.arquillian.persistence.UsingDataSet;
 import org.junit.Assert;
@@ -21,18 +25,12 @@ import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import fr.batimen.core.constant.CodeRetourService;
-import fr.batimen.core.exception.BackendException;
-import fr.batimen.core.exception.DuplicateEntityException;
-import fr.batimen.dto.enums.EtatAnnonce;
-import fr.batimen.dto.enums.TypeCompte;
-import fr.batimen.test.ws.AbstractBatimenWsTest;
-import fr.batimen.ws.client.service.UtilisateurServiceREST;
-import fr.batimen.ws.dao.AnnonceDAO;
-import fr.batimen.ws.dao.ClientDAO;
-import fr.batimen.ws.entity.Annonce;
-import fr.batimen.ws.entity.Client;
-import fr.batimen.ws.entity.Permission;
+import javax.inject.Inject;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * 
@@ -344,6 +342,8 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
         DemandeMesAnnoncesDTO demandeMesAnnoncesDTO = new DemandeMesAnnoncesDTO();
         demandeMesAnnoncesDTO.setLogin("pebronne");
         demandeMesAnnoncesDTO.setLoginDemandeur("pebronne");
+        demandeMesAnnoncesDTO.setRangeAnnoncesDebut(0);
+        demandeMesAnnoncesDTO.setRangeAnnonceFin(3);
 
         MesAnnoncesDTO mesAnnonces = utilisateurServiceREST.getMesInfosAnnonce(demandeMesAnnoncesDTO);
 
@@ -351,7 +351,7 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
         List<AnnonceDTO> annonces = mesAnnonces.getAnnonces();
 
         Assert.assertEquals(1, notifications.size());
-        Assert.assertEquals(1, annonces.size());
+        Assert.assertEquals(2, annonces.size());
 
         // Check de la notification.
         Boolean notificationPresent = Boolean.FALSE;
@@ -390,7 +390,8 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
 
         Assert.assertTrue(rightDescription);
         Assert.assertTrue(rightHashID);
-        Assert.assertEquals(1, annonces.size());
+        Assert.assertEquals(2, annonces.size());
+        Assert.assertEquals(Long.valueOf(2), mesAnnonces.getNbTotalAnnonces());
     }
 
     /**
@@ -404,6 +405,9 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
         DemandeMesAnnoncesDTO demandeMesAnnoncesDTO = new DemandeMesAnnoncesDTO();
         demandeMesAnnoncesDTO.setLogin("pebronneArtisanne");
         demandeMesAnnoncesDTO.setLoginDemandeur("pebronneArtisanne");
+        demandeMesAnnoncesDTO.setRangeAnnoncesDebut(0);
+        demandeMesAnnoncesDTO.setRangeAnnonceFin(3);
+
         getInfoForMesAnnoncesPourAdminOuArtisan(demandeMesAnnoncesDTO);
     }
 
@@ -417,6 +421,8 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
         DemandeMesAnnoncesDTO demandeMesAnnoncesDTO = new DemandeMesAnnoncesDTO();
         demandeMesAnnoncesDTO.setLogin("pebronneArtisanne");
         demandeMesAnnoncesDTO.setLoginDemandeur("admin");
+        demandeMesAnnoncesDTO.setRangeAnnoncesDebut(0);
+        demandeMesAnnoncesDTO.setRangeAnnonceFin(3);
 
         getInfoForMesAnnoncesPourAdminOuArtisan(demandeMesAnnoncesDTO);
     }
@@ -432,6 +438,8 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
         DemandeMesAnnoncesDTO demandeMesAnnoncesDTO = new DemandeMesAnnoncesDTO();
         demandeMesAnnoncesDTO.setLogin("pebronneArtisanne");
         demandeMesAnnoncesDTO.setLoginDemandeur("pebronne");
+        demandeMesAnnoncesDTO.setRangeAnnoncesDebut(0);
+        demandeMesAnnoncesDTO.setRangeAnnonceFin(3);
 
         MesAnnoncesDTO mesAnnonces = utilisateurServiceREST.getMesInfosAnnonce(demandeMesAnnoncesDTO);
 

@@ -26,7 +26,13 @@ public class MesAnnoncesDataset {
                     0, 0, "titi", "tata", 0, 200005, 100001, 200009, 200012)
             .values(200011, "2014-01-10", "2014-01-10", "0",
                     "Construction compliqué qui necessite des connaissance en geologie", "0",
-                    0, 0, "toto", "tata", 0, 200014, 100001, 200009, 200013).build();
+                    0, 0, "toto", "tata", 0, 200014, 100001, 200009, 200013)
+            .values(200012, "2014-01-10", "2014-01-10", "0",
+                    "Construction compliqué qui necessite des connaissance en geologie", "0",
+                    0, 0, "toto", "tata", 0, 200015, 100001, 200009, 200013)
+            .values(200013, "2014-01-10", "2014-01-10", "0",
+                    "Construction compliqué qui necessite des connaissance en geologie", "0",
+                    0, 0, "toto", "tata", 0, 200016, 100001, 200009, 200013).build();
 
     public static final Operation INSERT_ARTISAN_DATA = insertInto("artisan")
             .columns("civilite", "email", "nom", "prenom", "login", "password", "id", "numeroTel", "dateInscription",
@@ -48,7 +54,9 @@ public class MesAnnoncesDataset {
     public static final Operation INSERT_ADRESSE_DATA = insertInto("adresse")
             .columns("id", "adresse", "codepostal", "complementadresse", "ville", "departement")
             .values(200005, "254 chemin du test", "06600", "Residence du test", "Test City", 06)
-            .values(200014, "254 chemin du test", "06600", "Residence du test", "Test City", 06).build();
+            .values(200014, "254 chemin du test", "06600", "Residence du test", "Test City", 06)
+            .values(200015, "260 chemin du test", "06800", "Residence du test", "Test City", 06)
+            .values(200016, "270 chemin du test", "06500", "Residence du test", "Test City", 06).build();
 
     public static final Operation INSERT_AVIS_DATA = insertInto("avis")
             .columns("id", "commentaire", "dateavis", "score", "artisan_fk")

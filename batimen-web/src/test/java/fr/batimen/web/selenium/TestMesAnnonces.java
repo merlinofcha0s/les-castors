@@ -86,6 +86,8 @@ public class TestMesAnnonces extends AbstractITTest {
                 .until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("h4.headInModule")));
         assertNotNull(checkConditionAnnoncePresent);
 
+        //TODO Mettre le test du bouton ici
+
 
         if (typeCompte.equals(TypeCompte.CLIENT)) {
             driver.findElement(
