@@ -298,11 +298,11 @@ public class AnnonceService {
      * @return La liste des annonces de cet utilisateur
      */
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public List<AnnonceDTO> getAnnoncesByClientLoginForMesAnnonces(String login, boolean isArtisan) {
+    public List<AnnonceDTO> getAnnoncesByClientLoginForMesAnnonces(String login, boolean isArtisan, Integer rangeDebut, Integer rangeFin) {
         // On escape les ""
         String loginEscaped = DeserializeJsonHelper.parseString(login);
         // On recupere les annonces de l'utilisateur
-        List<Object[]> queryAnnoncesResult = annonceDAO.getAnnoncesByLoginForMesAnnonces(loginEscaped, isArtisan);
+        List<Object[]> queryAnnoncesResult = annonceDAO.getAnnoncesByLoginForMesAnnonces(loginEscaped, isArtisan, rangeDebut, rangeFin);
         // On crée la liste qui accueuillera les DTO
         List<AnnonceDTO> annoncesDTO = new ArrayList<AnnonceDTO>();
 

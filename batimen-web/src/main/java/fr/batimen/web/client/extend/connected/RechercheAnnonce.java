@@ -47,7 +47,7 @@ public class RechercheAnnonce extends MasterPage {
     private static final Logger LOGGER = LoggerFactory.getLogger(RechercheAnnonce.class);
 
     private static final String REFRESH_TOOLTIP_HELP_SEARCH = "$('#helper-search').tooltip()";
-    private static final Integer NB_ANNONCE_PAR_PAGE = 2;
+    private static final Integer NB_ANNONCE_PAR_PAGE = 5;
     private final SearchAnnonceDTOIn searchAnnonceDTO = new SearchAnnonceDTOIn();
     @Inject
     private Authentication authentication;

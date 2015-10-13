@@ -7,6 +7,7 @@ import fr.batimen.dto.*;
 import fr.batimen.dto.aggregate.MesAnnoncesDTO;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
+import fr.batimen.ws.dao.AnnonceDAO;
 import fr.batimen.ws.dao.ArtisanDAO;
 import fr.batimen.ws.dao.ClientDAO;
 import fr.batimen.ws.dao.PermissionDAO;
@@ -37,9 +38,8 @@ import java.util.List;
 
 /**
  * Facade REST de gestion des utilisateurs
- * 
+ *
  * @author Casaucau Cyril
- * 
  */
 @Stateless(name = "GestionUtilisateurFacade")
 @LocalBean
@@ -47,7 +47,7 @@ import java.util.List;
 @RolesAllowed(Constant.USERS_ROLE)
 @Produces(JsonHelper.JSON_MEDIA_TYPE_AND_UTF_8_CHARSET)
 @Consumes(JsonHelper.JSON_MEDIA_TYPE_AND_UTF_8_CHARSET)
-@Interceptors(value = { BatimenInterceptor.class })
+@Interceptors(value = {BatimenInterceptor.class})
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class GestionUtilisateurFacade {
 
@@ -77,13 +77,15 @@ public class GestionUtilisateurFacade {
     @Inject
     private AnnonceService annonceService;
 
+    @Inject
+    private AnnonceDAO annonceDAO;
+
     /**
      * Methode de login des utilisateurs
-     * 
-     * @param toLogin
-     *            loginDTO objet permettant l'authentification
+     *
+     * @param toLogin loginDTO objet permettant l'authentification
      * @return vide si la combinaison login / mdp ne corresponds pas ou si
-     *         inexistant
+     * inexistant
      */
     @POST
     @Path(WsPath.GESTION_UTILISATEUR_SERVICE_LOGIN)
@@ -114,9 +116,8 @@ public class GestionUtilisateurFacade {
     /**
      * Renvoi le hash d'un utilisateur, vide si il n'existe pas.<br/>
      * Vide également dans le cas où son compte n'est pas activé
-     * 
-     * @param login
-     *            Le login du Client
+     *
+     * @param login Le login du Client
      * @return
      */
     @POST
@@ -145,9 +146,8 @@ public class GestionUtilisateurFacade {
 
     /**
      * Renvoi les roles d'un utilisateur, vide si pas de roles.
-     * 
-     * @param login
-     *            Le login de l'utilisateur
+     *
+     * @param login Le login de l'utilisateur
      * @return
      */
     @POST
@@ -185,9 +185,8 @@ public class GestionUtilisateurFacade {
 
     /**
      * Methode de recuperation d'un utilisateur par son email
-     * 
-     * @param email
-     *            l'email que l'on veut tester
+     *
+     * @param email l'email que l'on veut tester
      * @return Le client avec l'email correspondant
      */
     @POST
@@ -211,10 +210,9 @@ public class GestionUtilisateurFacade {
 
     /**
      * Methode d'activation d'un compte d'un utilisateur.
-     * 
-     * @param cleActivation
-     *            la clé permettant de retrouver le client et d'activer son
-     *            compte.
+     *
+     * @param cleActivation la clé permettant de retrouver le client et d'activer son
+     *                      compte.
      * @return Le resultat de l'activation.
      */
     @POST
@@ -250,9 +248,8 @@ public class GestionUtilisateurFacade {
 
     /**
      * Methode de mise à jour des infos d'un client
-     * 
-     * @param clientDTO
-     *            les infos du clients
+     *
+     * @param clientDTO les infos du clients
      * @return Code retour @see {@link Constant}
      */
     @POST
@@ -266,12 +263,12 @@ public class GestionUtilisateurFacade {
         boolean isArtisan = false;
 
         AbstractUser clientInDB = clientDAO.getClientByEmail(clientDTO.getOldEmail());
-        if(clientInDB.getDateInscription() == null){
+        if (clientInDB.getDateInscription() == null) {
             isArtisan = true;
-           clientInDB = artisanDAO.getArtisanByEmail(clientDTO.getOldEmail());
+            clientInDB = artisanDAO.getArtisanByEmail(clientDTO.getOldEmail());
         }
 
-        if(clientInDB == null){
+        if (clientInDB == null) {
             return CodeRetourService.RETOUR_KO;
         }
 
@@ -349,10 +346,15 @@ public class GestionUtilisateurFacade {
         }
 
         List<AnnonceDTO> annoncesDTO =
-                annonceService.getAnnoncesByClientLoginForMesAnnonces(login, rolesUtils.checkIfArtisanWithString(rolesDemander));
+                annonceService.getAnnoncesByClientLoginForMesAnnonces(login, rolesUtils.checkIfArtisanWithString(rolesDemander)
+                        , demandeMesAnnoncesDTO.getRangeAnnoncesDebut(), demandeMesAnnoncesDTO.getRangeAnnonceFin());
+
+        Long nbannonceByLogin = annonceDAO.getNbAnnonceByLogin(demandeMesAnnoncesDTO.getLogin());
+
 
         mesAnnoncesDTO.setNotifications(notificationsDTO);
         mesAnnoncesDTO.setAnnonces(annoncesDTO);
+        mesAnnoncesDTO.setNbTotalAnnonces(nbannonceByLogin);
 
         return mesAnnoncesDTO;
     }

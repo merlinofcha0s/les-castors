@@ -20,6 +20,7 @@ import fr.batimen.ws.client.service.UtilisateurServiceREST;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.list.ListItem;
@@ -31,6 +32,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -45,22 +47,22 @@ public final class MesAnnonces extends MasterPage {
     private static final long serialVersionUID = 1902734649854998120L;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MesAnnonces.class);
-
+    private static final Integer NB_ANNONCE_PAR_PAGE = 3;
     @Inject
     private UtilisateurServiceREST utilisateurServiceREST;
-
     @Inject
     private Authentication authentication;
-
     @Inject
     private RolesUtils rolesUtils;
-
-    private List<AnnonceDTO> annonces;
+    private List<AnnonceDTO> annonces = new ArrayList<>();
     private List<NotificationDTO> notifications;
-
+    private Long nbAnnonceTotaleValeur;
+    private Label infoNbAnnonce;
     private Model<String> voirAnnonceModel;
     private Model<String> demandeDeDevisTitleModel;
     private Model<String> pasDeNotificationModel;
+    private WebMarkupContainer annoncesContainer;
+
 
     public MesAnnonces() {
         super("Mes annonces ", "lol", "Bienvenue sur lescastors.fr", true, "img/bg_title1.jpg");
@@ -74,6 +76,8 @@ public final class MesAnnonces extends MasterPage {
         loadInfosMesAnnonces();
         initRepeaterNotifications();
         initRepeaterAnnonces();
+        afficherAnciennesAnnonces();
+
         this.setOutputMarkupId(true);
     }
 
@@ -154,12 +158,10 @@ public final class MesAnnonces extends MasterPage {
                 item.add(linkObjetNotification);
                 item.add(dateNotification);
             }
-
         };
 
         this.add(nbNotification);
         this.add(listViewNotification);
-
     }
 
     private void initRepeaterAnnonces() {
@@ -177,7 +179,7 @@ public final class MesAnnonces extends MasterPage {
             }
         };
 
-        Label nbAnnonce = new Label("nbAnnonce", annonces.size());
+        Label nbAnnonce = new Label("nbAnnonce", nbAnnonceTotaleValeur);
 
         ListView<AnnonceDTO> listViewAnnonce = new ListView<AnnonceDTO>("listAnnonce", annonces) {
             private static final long serialVersionUID = 9041719964383711900L;
@@ -232,11 +234,41 @@ public final class MesAnnonces extends MasterPage {
                         setResponsePage(Annonce.class, params);
                     }
                 });
-                item.add(/*iconCategorie, categorie,*/ description, nbDevis, etatAnnonce, voirAnnonce, progressBar);
+                item.add(description, nbDevis, etatAnnonce, voirAnnonce, progressBar);
             }
         };
 
-        this.add(nbAnnonce, nbDevisHeader, listViewAnnonce);
+        annoncesContainer = new WebMarkupContainer("annoncesContainer");
+        annoncesContainer.setOutputMarkupId(true);
+        annoncesContainer.setMarkupId("annoncesContainer");
+        annoncesContainer.add(listViewAnnonce, nbDevisHeader);
+
+        add(nbAnnonce, annoncesContainer);
+    }
+
+    private void afficherAnciennesAnnonces() {
+        AjaxLink<Void> afficherAnciennesAnnonces = new AjaxLink<Void>("afficherAnciennesAnnonces") {
+
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                loadInfosMesAnnonces();
+                updateModelInfoNbAnnonce();
+                target.add(annoncesContainer, infoNbAnnonce);
+            }
+
+            @Override
+            public boolean isVisible() {
+                return !annonces.isEmpty() && annonces.size() != nbAnnonceTotaleValeur;
+            }
+        };
+
+        infoNbAnnonce = new Label("infoNbAnnonce", new Model<>());
+        infoNbAnnonce.setOutputMarkupId(true);
+        infoNbAnnonce.setMarkupId("infoNbAnnonce");
+
+        updateModelInfoNbAnnonce();
+
+        add(afficherAnciennesAnnonces, infoNbAnnonce);
     }
 
     private void loadInfosMesAnnonces() {
@@ -247,11 +279,14 @@ public final class MesAnnonces extends MasterPage {
         DemandeMesAnnoncesDTO demandeMesAnnoncesDTO = new DemandeMesAnnoncesDTO();
         demandeMesAnnoncesDTO.setLoginDemandeur(authentication.getCurrentUserInfo().getLogin());
         demandeMesAnnoncesDTO.setLogin(authentication.getCurrentUserInfo().getLogin());
+        demandeMesAnnoncesDTO.setRangeAnnoncesDebut(annonces.size());
+        demandeMesAnnoncesDTO.setRangeAnnonceFin(NB_ANNONCE_PAR_PAGE);
 
         MesAnnoncesDTO mesInfos = utilisateurServiceREST.getMesInfosAnnonce(demandeMesAnnoncesDTO);
 
-        annonces = mesInfos.getAnnonces();
+        annonces.addAll(mesInfos.getAnnonces());
         notifications = mesInfos.getNotifications();
+        nbAnnonceTotaleValeur = mesInfos.getNbTotalAnnonces();
     }
 
     private String parQui(NotificationDTO notificationDTO) {
@@ -310,5 +345,11 @@ public final class MesAnnonces extends MasterPage {
             voirAnnonceModel.setObject("Voir / modifier annonce");
             pasDeNotificationModel.setObject("Retrouvez ici toutes les notifications sur vos demandes de devis");
         }
+    }
+
+    private void updateModelInfoNbAnnonce() {
+        StringBuilder infoNbAnnonceValeur = new StringBuilder();
+        infoNbAnnonceValeur.append(annonces.size()).append(" annonce(s) affichées sur ").append(nbAnnonceTotaleValeur);
+        infoNbAnnonce.setDefaultModelObject(infoNbAnnonceValeur.toString());
     }
 }

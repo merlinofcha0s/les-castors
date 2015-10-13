@@ -41,7 +41,7 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
      * @return Liste d'annonces appartenant à l'utilisateur.
      */
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public List<Object[]> getAnnoncesByLoginForMesAnnonces(String login, boolean isArtisan) {
+    public List<Object[]> getAnnoncesByLoginForMesAnnonces(String login, boolean isArtisan, Integer rangeDebut, Integer rangeFin) {
 
         List<Object[]> listAnnonceByLogin = null;
 
@@ -57,6 +57,9 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
             }
 
             query.setParameter(QueryJPQL.PARAM_CLIENT_LOGIN, login);
+
+            query.setFirstResult(rangeDebut);
+            query.setMaxResults(rangeFin);
 
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Chargement requete JPQL OK ");

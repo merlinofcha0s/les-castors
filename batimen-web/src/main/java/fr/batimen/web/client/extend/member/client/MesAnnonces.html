@@ -18,8 +18,7 @@
                             wicket:id="nbNotification">5</span>
                     </h4>
                 </div>
-                <div wicket:id="pasDeNotificationLbl">Retrouvez ici toutes les notifications sur vos demandes de devis
-                </div>
+                <div wicket:id="pasDeNotificationLbl">Retrouvez ici toutes les notifications sur vos demandes de devis</div>
                 <table
                         class="table table-hover">
                     <thead>
@@ -50,10 +49,9 @@
                     </h4>
                 </div>
                 <table
-                        class="table table-hover">
+                        class="table table-hover" wicket:id="annoncesContainer">
                     <thead>
                     <tr>
-                       <!-- <th>Catégorie</th> -->
                         <th>Description</th>
                         <th wicket:id="nbDevisHeader">Nb devis</th>
                         <th>Progression annonce</th>
@@ -62,9 +60,6 @@
                     </thead>
                     <tbody>
                     <tr wicket:id="listAnnonce" class="annonce-list">
-                        <!-- <td><span
-                                class="iconsMesDevis"
-                                wicket:id="iconCategorie"></span><span wicket:id="categorie"></span></td> -->
                         <td><span wicket:id="description"></span></td>
                         <td wicket:id="nbDevis"></td>
                         <td>
@@ -77,6 +72,13 @@
                     </tr>
                     </tbody>
                 </table>
+                <div class="row-fluid">
+                <div class="span4"></div>
+                <div class="span4">
+                    <a class="btn btn-info" id="btnPlusDAvisEntreprise" wicket:id="afficherAnciennesAnnonces">Afficher mes anciennes annonces</a>
+                </div>
+                <div class="span4"><div id="infoNbAnnonce" wicket:id="infoNbAnnonce"></div></div>
+            </div>
             </div>
         </div>
     </div>

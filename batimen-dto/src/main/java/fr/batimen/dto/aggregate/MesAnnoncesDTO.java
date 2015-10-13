@@ -1,14 +1,14 @@
 package fr.batimen.dto.aggregate;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
 import fr.batimen.dto.AbstractDTO;
 import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.NotificationDTO;
 
 import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 public class MesAnnoncesDTO extends AbstractDTO {
 
@@ -17,6 +17,17 @@ public class MesAnnoncesDTO extends AbstractDTO {
     private List<NotificationDTO> notifications = new ArrayList<NotificationDTO>();
     @Valid
     private List<AnnonceDTO> annonces = new ArrayList<AnnonceDTO>();
+
+    @NotNull
+    private Long nbTotalAnnonces;
+
+    public Long getNbTotalAnnonces() {
+        return nbTotalAnnonces;
+    }
+
+    public void setNbTotalAnnonces(Long nbTotalAnnonces) {
+        this.nbTotalAnnonces = nbTotalAnnonces;
+    }
 
     /**
      * @return the notifications

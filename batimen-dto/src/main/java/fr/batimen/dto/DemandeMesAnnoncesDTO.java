@@ -2,7 +2,6 @@ package fr.batimen.dto;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-
 import java.util.Objects;
 
 import static fr.batimen.dto.constant.ValidatorConstant.CLIENT_LOGIN_RANGE_MAX;
@@ -23,6 +22,12 @@ public class DemandeMesAnnoncesDTO extends AbstractDTO {
     @Size(min = CLIENT_LOGIN_RANGE_MIN, max = CLIENT_LOGIN_RANGE_MAX)
     private String loginDemandeur;
 
+    @NotNull
+    private Integer rangeAnnoncesDebut;
+
+    @NotNull
+    private Integer rangeAnnonceFin;
+
     public String getLogin() {
         return login;
     }
@@ -37,6 +42,22 @@ public class DemandeMesAnnoncesDTO extends AbstractDTO {
 
     public void setLoginDemandeur(String loginDemandeur) {
         this.loginDemandeur = loginDemandeur;
+    }
+
+    public Integer getRangeAnnoncesDebut() {
+        return rangeAnnoncesDebut;
+    }
+
+    public void setRangeAnnoncesDebut(Integer rangeAnnoncesDebut) {
+        this.rangeAnnoncesDebut = rangeAnnoncesDebut;
+    }
+
+    public Integer getRangeAnnonceFin() {
+        return rangeAnnonceFin;
+    }
+
+    public void setRangeAnnonceFin(Integer rangeAnnonceFin) {
+        this.rangeAnnonceFin = rangeAnnonceFin;
     }
 
     @Override
