@@ -44,10 +44,9 @@ import java.util.List;
 
 public final class MesAnnonces extends MasterPage {
 
+    public static final Integer NB_ANNONCE_PAR_PAGE = 3;
     private static final long serialVersionUID = 1902734649854998120L;
-
     private static final Logger LOGGER = LoggerFactory.getLogger(MesAnnonces.class);
-    private static final Integer NB_ANNONCE_PAR_PAGE = 3;
     @Inject
     private UtilisateurServiceREST utilisateurServiceREST;
     @Inject
@@ -349,7 +348,7 @@ public final class MesAnnonces extends MasterPage {
 
     private void updateModelInfoNbAnnonce() {
         StringBuilder infoNbAnnonceValeur = new StringBuilder();
-        infoNbAnnonceValeur.append(annonces.size()).append(" annonce(s) affichées sur ").append(nbAnnonceTotaleValeur);
+        infoNbAnnonceValeur.append(annonces.size()).append(" annonce(s) affichée(s) sur ").append(nbAnnonceTotaleValeur);
         infoNbAnnonce.setDefaultModelObject(infoNbAnnonceValeur.toString());
     }
 }

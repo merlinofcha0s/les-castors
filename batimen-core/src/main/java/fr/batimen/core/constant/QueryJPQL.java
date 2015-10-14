@@ -24,7 +24,8 @@ public class QueryJPQL {
     public static final String ANNONCE_BY_TITLE_AND_DESCRIPTION = "annonceByTitleAndDescription";
     public static final String ANNONCE_BY_DEMANDEUR_LOGIN_FETCH_ARTISAN = "annonceByDemandeurLoginFetchArtisan";
     public static final String ANNONCE_BY_ARTISAN_LOGIN_FETCH_ARTISAN = "annonceByArtisanLoginFetchArtisan";
-    public static final String NB_ANNONCE_BY_LOGIN = "nbAnnonceByLogin";
+    public static final String NB_ANNONCE_BY_LOGIN_FOR_CLIENT = "nbAnnonceByLoginForClient";
+    public static final String NB_ANNONCE_BY_LOGIN_FOR_ARTISAN = "nbAnnonceByLoginForArtisan";
     public static final String ANNONCE_BY_ID_FETCH_ARTISAN_ENTREPRISE_CLIENT_ADRESSE = "annonceByIDFetchArtisanEntrepriseClientAdresse";
     public static final String ANNONCE_BY_ID = "annonceByID";
     public static final String ANNONCE_UPDATE_NB_CONSULTATION = "annonceUpdateNbConsultation";

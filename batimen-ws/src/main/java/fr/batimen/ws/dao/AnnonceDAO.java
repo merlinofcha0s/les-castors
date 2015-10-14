@@ -76,7 +76,7 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
             if (LOGGER.isWarnEnabled()) {
                 LOGGER.warn("Aucune correspondance trouvées dans la BDD", nre);
             }
-            return new ArrayList<Object[]>();
+            return new ArrayList<>();
         }
     }
 
@@ -197,12 +197,34 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
      * @return Le nb d'annonce
      */
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public Long getNbAnnonceByLogin(String login) {
+    public Long getNbAnnonceByLoginForClient(String login) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Debut comptage du nb d'annonce");
         }
 
-        TypedQuery<Long> query = entityManager.createNamedQuery(QueryJPQL.NB_ANNONCE_BY_LOGIN, Long.class);
+        TypedQuery<Long> query = entityManager.createNamedQuery(QueryJPQL.NB_ANNONCE_BY_LOGIN_FOR_CLIENT, Long.class);
+        query.setParameter(QueryJPQL.PARAM_CLIENT_LOGIN, login);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Fin comptage du nb d'annonce");
+        }
+
+        return query.getSingleResult();
+    }
+
+    /**
+     * Calcul le nb d'annonce surlesquuels un artisan est inscrit.
+     *
+     * @param login le login de l'artisan
+     * @return Le nb d'annonce
+     */
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public Long getNbAnnonceByLoginForArtisan(String login) {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Debut comptage du nb d'annonce");
+        }
+
+        TypedQuery<Long> query = entityManager.createNamedQuery(QueryJPQL.NB_ANNONCE_BY_LOGIN_FOR_ARTISAN, Long.class);
         query.setParameter(QueryJPQL.PARAM_CLIENT_LOGIN, login);
 
         if (LOGGER.isDebugEnabled()) {

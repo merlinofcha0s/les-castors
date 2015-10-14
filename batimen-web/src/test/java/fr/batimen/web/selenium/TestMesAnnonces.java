@@ -4,6 +4,7 @@ import com.ninja_squad.dbsetup.DbSetup;
 import com.ninja_squad.dbsetup.operation.Operation;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.enums.TypeNotification;
+import fr.batimen.web.client.extend.member.client.MesAnnonces;
 import fr.batimen.web.selenium.common.AbstractITTest;
 import org.junit.Test;
 import org.openqa.selenium.By;
@@ -41,7 +42,7 @@ public class TestMesAnnonces extends AbstractITTest {
      */
     @Test
     public void testAccessToMesAnnonceByClient() {
-        testMesAnnonces("raiden", TypeNotification.INSCRIT_A_ANNONCE, TypeCompte.CLIENT);
+        testMesAnnonces("raiden", TypeNotification.INSCRIT_A_ANNONCE, TypeCompte.CLIENT, 4, 4);
 
         driver.findElement(
                 By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[1]/table/tbody/tr[1]/td[2]/a[2]"))
@@ -62,10 +63,10 @@ public class TestMesAnnonces extends AbstractITTest {
      */
     @Test
     public void testAccessToMesAnnonceByArtisan() {
-        testMesAnnonces("pebron", TypeNotification.A_CHOISI_ENTREPRISE, TypeCompte.ARTISAN);
+        testMesAnnonces("pebron", TypeNotification.A_CHOISI_ENTREPRISE, TypeCompte.ARTISAN, 1, 1);
     }
 
-    private void testMesAnnonces(String login, TypeNotification typeNotification, TypeCompte typeCompte) {
+    private void testMesAnnonces(String login, TypeNotification typeNotification, TypeCompte typeCompte, int nbAnnoncePagine, int nbAnnonceTotale) {
         driver.get(appUrl);
         // On s'authentifie à l'application
         connexionApplication(login, AbstractITTest.BON_MOT_DE_PASSE, Boolean.FALSE);
@@ -86,7 +87,19 @@ public class TestMesAnnonces extends AbstractITTest {
                 .until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("h4.headInModule")));
         assertNotNull(checkConditionAnnoncePresent);
 
-        //TODO Mettre le test du bouton ici
+        //Si il y a assez d'annonce pour activer la pagination
+        if (nbAnnonceTotale > MesAnnonces.NB_ANNONCE_PAR_PAGE) {
+            //Vérification de la pagination
+            driver.findElement(By.id("btnPlusDAvisEntreprise")).click();
+
+            StringBuilder texteVerificationPagination = new StringBuilder(nbAnnoncePagine);
+            texteVerificationPagination.append(" annonce(s) affichée(s) sur ").append(nbAnnonceTotale);
+
+            Boolean checkPagination = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                    .until(ExpectedConditions.textToBePresentInElementLocated(By.id("infoNbAnnonce"),
+                            texteVerificationPagination.toString()));
+            assertTrue(checkPagination);
+        }
 
 
         if (typeCompte.equals(TypeCompte.CLIENT)) {

@@ -312,6 +312,7 @@ public class GestionUtilisateurFacade {
             LOGGER.debug(demandeMesAnnoncesDTO.toString());
         }
         MesAnnoncesDTO mesAnnoncesDTO = new MesAnnoncesDTO();
+        Long nbannonceByLogin = new Long(0);
 
         String rolesDemandeur = getUtilisateurRoles(demandeMesAnnoncesDTO
                 .getLoginDemandeur());
@@ -337,8 +338,10 @@ public class GestionUtilisateurFacade {
 
         if (rolesUtils.checkIfArtisanWithString(rolesDemander)) {
             notificationsDTO = notificationService.getNotificationByLogin(login, TypeCompte.ARTISAN);
+            nbannonceByLogin = annonceDAO.getNbAnnonceByLoginForArtisan(demandeMesAnnoncesDTO.getLogin());
         } else if (rolesUtils.checkIfClientWithString(rolesDemander)) {
             notificationsDTO = notificationService.getNotificationByLogin(login, TypeCompte.CLIENT);
+            nbannonceByLogin = annonceDAO.getNbAnnonceByLoginForClient(demandeMesAnnoncesDTO.getLogin());
         }
 
         if (LOGGER.isDebugEnabled()) {
@@ -348,8 +351,6 @@ public class GestionUtilisateurFacade {
         List<AnnonceDTO> annoncesDTO =
                 annonceService.getAnnoncesByClientLoginForMesAnnonces(login, rolesUtils.checkIfArtisanWithString(rolesDemander)
                         , demandeMesAnnoncesDTO.getRangeAnnoncesDebut(), demandeMesAnnoncesDTO.getRangeAnnonceFin());
-
-        Long nbannonceByLogin = annonceDAO.getNbAnnonceByLogin(demandeMesAnnoncesDTO.getLogin());
 
 
         mesAnnoncesDTO.setNotifications(notificationsDTO);

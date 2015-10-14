@@ -65,7 +65,7 @@ public class GestionClientFacade {
         String loginEscaped = DeserializeJsonHelper.parseString(login);
 
         // Recup des données
-        Long nbAnnonce = annonceDAO.getNbAnnonceByLogin(loginEscaped);
+        Long nbAnnonce = annonceDAO.getNbAnnonceByLoginForClient(loginEscaped);
         List<Object[]> notations = notationDAO.getNotationByLoginClient(loginEscaped, Boolean.TRUE);
 
         // Remplissage de la DTO
