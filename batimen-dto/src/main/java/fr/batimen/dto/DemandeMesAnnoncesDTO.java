@@ -28,6 +28,28 @@ public class DemandeMesAnnoncesDTO extends AbstractDTO {
     @NotNull
     private Integer rangeAnnonceFin;
 
+    @NotNull
+    private Integer rangeNotificationsDebut;
+
+    @NotNull
+    private Integer rangeNotificationsFin;
+
+    public Integer getRangeNotificationsFin() {
+        return rangeNotificationsFin;
+    }
+
+    public void setRangeNotificationsFin(Integer rangeNotificationsFin) {
+        this.rangeNotificationsFin = rangeNotificationsFin;
+    }
+
+    public Integer getRangeNotificationsDebut() {
+        return rangeNotificationsDebut;
+    }
+
+    public void setRangeNotificationsDebut(Integer rangeNotificationsDebut) {
+        this.rangeNotificationsDebut = rangeNotificationsDebut;
+    }
+
     public String getLogin() {
         return login;
     }

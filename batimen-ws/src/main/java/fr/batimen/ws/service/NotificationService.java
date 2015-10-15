@@ -1,24 +1,6 @@
 package fr.batimen.ws.service;
 
-import java.io.IOException;
-import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
-import javax.inject.Inject;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.microtripit.mandrillapp.lutung.model.MandrillApiError;
-
 import fr.batimen.core.exception.EmailException;
 import fr.batimen.dto.NotificationDTO;
 import fr.batimen.dto.enums.StatutNotification;
@@ -29,6 +11,16 @@ import fr.batimen.ws.dao.NotificationDAO;
 import fr.batimen.ws.entity.Annonce;
 import fr.batimen.ws.entity.Artisan;
 import fr.batimen.ws.entity.Notification;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.ejb.*;
+import javax.inject.Inject;
+import java.io.IOException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Classe de gestion des notifications
@@ -56,7 +48,7 @@ public class NotificationService {
      * @return La liste de notification de l'utilisateur.
      */
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public List<NotificationDTO> getNotificationByLogin(String login, TypeCompte typeCompte) {
+    public List<NotificationDTO> getNotificationByLogin(String login, TypeCompte typeCompte, Integer rangeDebutNotification, Integer rangeFinNotification) {
         List<NotificationDTO> notificationsDTO = new ArrayList<>();
         String loginEscaped = DeserializeJsonHelper.parseString(login);
         List<Object[]> notifications = null;
@@ -67,13 +59,13 @@ public class NotificationService {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Query notification pour client en préparation");
             }
-            notifications = notificationDAO.getNotificationForClient(loginEscaped);
+            notifications = notificationDAO.getNotificationForClient(loginEscaped, rangeDebutNotification, rangeFinNotification);
             clientOrArtisan = Boolean.TRUE;
         } else if (typeCompte.equals(TypeCompte.ARTISAN)) {
             if (LOGGER.isDebugEnabled()) {
                 LOGGER.debug("Query notification pour artisan en préparation");
             }
-            notifications = notificationDAO.getNotificationForArtisan(loginEscaped);
+            notifications = notificationDAO.getNotificationForArtisan(loginEscaped, rangeDebutNotification, rangeFinNotification);
             clientOrArtisan = Boolean.TRUE;
         }
 

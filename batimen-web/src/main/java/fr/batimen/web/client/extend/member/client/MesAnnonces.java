@@ -45,23 +45,29 @@ import java.util.List;
 public final class MesAnnonces extends MasterPage {
 
     public static final Integer NB_ANNONCE_PAR_PAGE = 3;
+    public static final Integer NB_MAX_NOTIFICATIONS = 3;
+
     private static final long serialVersionUID = 1902734649854998120L;
     private static final Logger LOGGER = LoggerFactory.getLogger(MesAnnonces.class);
+
     @Inject
     private UtilisateurServiceREST utilisateurServiceREST;
     @Inject
     private Authentication authentication;
     @Inject
     private RolesUtils rolesUtils;
+
     private List<AnnonceDTO> annonces = new ArrayList<>();
-    private List<NotificationDTO> notifications;
+    private List<NotificationDTO> notifications = new ArrayList<>();
     private Long nbAnnonceTotaleValeur;
     private Label infoNbAnnonce;
     private Model<String> voirAnnonceModel;
     private Model<String> demandeDeDevisTitleModel;
     private Model<String> pasDeNotificationModel;
     private WebMarkupContainer annoncesContainer;
-
+    private WebMarkupContainer notificationsContainer;
+    private AjaxLink<Void> afficherAnciennesAnnonces;
+    private AjaxLink<Void> voirAnciennesNotifications;
 
     public MesAnnonces() {
         super("Mes annonces ", "lol", "Bienvenue sur lescastors.fr", true, "img/bg_title1.jpg");
@@ -76,6 +82,7 @@ public final class MesAnnonces extends MasterPage {
         initRepeaterNotifications();
         initRepeaterAnnonces();
         afficherAnciennesAnnonces();
+        afficherAnciennesNotifications();
 
         this.setOutputMarkupId(true);
     }
@@ -164,8 +171,13 @@ public final class MesAnnonces extends MasterPage {
             }
         };
 
+        notificationsContainer = new WebMarkupContainer("notificationsContainer");
+        notificationsContainer.setOutputMarkupId(true);
+        notificationsContainer.setMarkupId("notificationsContainer");
+        notificationsContainer.add(listViewNotification);
+
         this.add(nbNotification);
-        this.add(listViewNotification);
+        this.add(notificationsContainer);
     }
 
     private void initRepeaterAnnonces() {
@@ -251,13 +263,13 @@ public final class MesAnnonces extends MasterPage {
     }
 
     private void afficherAnciennesAnnonces() {
-        AjaxLink<Void> afficherAnciennesAnnonces = new AjaxLink<Void>("afficherAnciennesAnnonces") {
+        afficherAnciennesAnnonces = new AjaxLink<Void>("afficherAnciennesAnnonces") {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
                 loadInfosMesAnnonces();
                 updateModelInfoNbAnnonce();
-                target.add(annoncesContainer, infoNbAnnonce);
+                target.add(annoncesContainer, infoNbAnnonce, afficherAnciennesAnnonces);
             }
 
             @Override
@@ -275,6 +287,23 @@ public final class MesAnnonces extends MasterPage {
         add(afficherAnciennesAnnonces, infoNbAnnonce);
     }
 
+    private void afficherAnciennesNotifications() {
+        voirAnciennesNotifications = new AjaxLink<Void>("voirAnciennesNotifications") {
+            @Override
+            public void onClick(AjaxRequestTarget target) {
+                loadInfosMesAnnonces();
+                target.add(notificationsContainer, voirAnciennesNotifications);
+            }
+
+            @Override
+            public boolean isVisible() {
+                return !notifications.isEmpty();
+            }
+        };
+
+        add(voirAnciennesNotifications);
+    }
+
     private void loadInfosMesAnnonces() {
 
         if (LOGGER.isDebugEnabled()) {
@@ -286,10 +315,13 @@ public final class MesAnnonces extends MasterPage {
         demandeMesAnnoncesDTO.setRangeAnnoncesDebut(annonces.size());
         demandeMesAnnoncesDTO.setRangeAnnonceFin(NB_ANNONCE_PAR_PAGE);
 
+        demandeMesAnnoncesDTO.setRangeNotificationsDebut(notifications.size());
+        demandeMesAnnoncesDTO.setRangeNotificationsFin(NB_MAX_NOTIFICATIONS);
+
         MesAnnoncesDTO mesInfos = utilisateurServiceREST.getMesInfosAnnonce(demandeMesAnnoncesDTO);
 
         annonces.addAll(mesInfos.getAnnonces());
-        notifications = mesInfos.getNotifications();
+        notifications.addAll(mesInfos.getNotifications());
         nbAnnonceTotaleValeur = mesInfos.getNbTotalAnnonces();
     }
 

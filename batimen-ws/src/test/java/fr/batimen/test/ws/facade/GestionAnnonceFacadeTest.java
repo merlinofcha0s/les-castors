@@ -430,7 +430,7 @@ public class GestionAnnonceFacadeTest extends AbstractBatimenWsTest {
 
         // VERIFICATION DE L'ENREGISTREMENT DE LA NOTIFICATION
         List<NotificationDTO> notifications = notificationService.getNotificationByLogin(annonce.getDemandeur()
-                .getLogin(), TypeCompte.CLIENT);
+                .getLogin(), TypeCompte.CLIENT, 0, 15);
         Assert.assertEquals(2, notifications.size());
         boolean isNotificationCorrecte = false;
 

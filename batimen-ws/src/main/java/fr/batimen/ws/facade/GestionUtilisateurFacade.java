@@ -337,10 +337,10 @@ public class GestionUtilisateurFacade {
         List<NotificationDTO> notificationsDTO = null;
 
         if (rolesUtils.checkIfArtisanWithString(rolesDemander)) {
-            notificationsDTO = notificationService.getNotificationByLogin(login, TypeCompte.ARTISAN);
+            notificationsDTO = notificationService.getNotificationByLogin(login, TypeCompte.ARTISAN, demandeMesAnnoncesDTO.getRangeNotificationsDebut(), demandeMesAnnoncesDTO.getRangeNotificationsFin());
             nbannonceByLogin = annonceDAO.getNbAnnonceByLoginForArtisan(demandeMesAnnoncesDTO.getLogin());
         } else if (rolesUtils.checkIfClientWithString(rolesDemander)) {
-            notificationsDTO = notificationService.getNotificationByLogin(login, TypeCompte.CLIENT);
+            notificationsDTO = notificationService.getNotificationByLogin(login, TypeCompte.CLIENT, demandeMesAnnoncesDTO.getRangeNotificationsDebut(), demandeMesAnnoncesDTO.getRangeNotificationsFin());
             nbannonceByLogin = annonceDAO.getNbAnnonceByLoginForClient(demandeMesAnnoncesDTO.getLogin());
         }
 
