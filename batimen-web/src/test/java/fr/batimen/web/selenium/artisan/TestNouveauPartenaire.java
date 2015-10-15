@@ -142,7 +142,7 @@ public class TestNouveauPartenaire extends AbstractITTest {
 
         Boolean checkConditionConfirmation2 = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//div[@id='confirmation']/h5[2]"),
-                        "Un email vous a été envoyé, merci de cliquer sur le lien présent dans ce dernier pour activer votre compte"));
+                        "Les équipes de les castors vont valider votre dossier, nous vous tiendrons informé dès que votre compte sera activé."));
 
         assertTrue(checkConditionConfirmation1);
         assertTrue(checkConditionConfirmation2);
