@@ -21,13 +21,6 @@
                 <div wicket:id="pasDeNotificationLbl">Retrouvez ici toutes les notifications sur vos demandes de devis</div>
                 <table
                         class="table table-hover">
-                    <thead>
-                    <tr>
-                        <th></th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                    </thead>
                     <tbody>
                     <tr wicket:id="listNotification">
                         <td class="td-IconNotif"><span class="iconNotif icon-Info"></span></td>
@@ -37,6 +30,14 @@
                     </tr>
                     </tbody>
                 </table>
+                <div class="row-fluid">
+                <div class="span4"></div>
+                <div class="span4">
+                    <a>Voir anciennes notifications</a>
+                </div>
+                <div class="span4">
+                </div>
+            </div>
             </div>
             <div>
                 <div
@@ -75,7 +76,7 @@
                 <div class="row-fluid">
                 <div class="span4"></div>
                 <div class="span4">
-                    <a class="btn btn-info" id="btnPlusDAvisEntreprise" wicket:id="afficherAnciennesAnnonces">Afficher mes anciennes annonces</a>
+                    <a wicket:id="afficherAnciennesAnnonces">Voir anciennes annonces</a>
                 </div>
                 <div class="span4"><div id="infoNbAnnonce" wicket:id="infoNbAnnonce"></div></div>
             </div>

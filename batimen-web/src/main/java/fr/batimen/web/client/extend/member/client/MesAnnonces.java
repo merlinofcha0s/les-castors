@@ -96,7 +96,12 @@ public final class MesAnnonces extends MasterPage {
         Commentaire commentaire = new Commentaire("commentaire");
 
         Label demandeDeDevisTitle = new Label("demandeDeDevisTitle", demandeDeDevisTitleModel);
-        Label pasDeNotificationLbl = new Label("pasDeNotificationLbl", pasDeNotificationModel);
+        Label pasDeNotificationLbl = new Label("pasDeNotificationLbl", pasDeNotificationModel) {
+            @Override
+            public boolean isVisible() {
+                return notifications.isEmpty();
+            }
+        };
 
         add(profil, commentaire, contactezNous, demandeDeDevisTitle, pasDeNotificationLbl);
     }
