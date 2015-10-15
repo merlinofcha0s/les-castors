@@ -29,10 +29,10 @@ public class MesAnnoncesDataset {
                     0, 0, "toto", "tata", 0, 200014, 100001, 200009, 200013)
             .values(200012, "2014-01-10", "2014-01-10", "0",
                     "Construction compliqué qui necessite des connaissance en geologie", "0",
-                    0, 0, "toto", "tata", 0, 200015, 100001, 200009, 200013)
+                    0, 0, "tata", "tata", 0, 200015, 100001, 200009, 200013)
             .values(200013, "2014-01-10", "2014-01-10", "0",
                     "Construction compliqué qui necessite des connaissance en geologie", "0",
-                    0, 0, "toto", "tata", 0, 200016, 100001, 200009, 200013).build();
+                    0, 0, "tutu", "tata", 0, 200016, 100001, 200009, 200013).build();
 
     public static final Operation INSERT_ARTISAN_DATA = insertInto("artisan")
             .columns("civilite", "email", "nom", "prenom", "login", "password", "id", "numeroTel", "dateInscription",
