@@ -9,10 +9,6 @@ package fr.batimen.core.constant;
  */
 public class WsPath {
 
-    private WsPath() {
-
-    }
-
     // Path Gestion Utilisateur
     public static final String GESTION_UTILISATEUR_SERVICE_PATH = "gestionUtilisateur";
     public static final String GESTION_UTILISATEUR_SERVICE_LOGIN = "byLogin";
@@ -21,8 +17,8 @@ public class WsPath {
     public static final String GESTION_UTILISATEUR_SERVICE_HASH = "byHash";
     public static final String GESTION_UTILISATEUR_SERVICE_ROLES = "getRoles";
     public static final String GESTION_UTILISATEUR_SERVICE_UPDATE_INFO = "update";
-    public static final String GESTION_UTILISATEUR_SERVICE_INFOS_MES_ANNONCES = "getInfoForMesAnnoncesByLogin";
-
+    public static final String GESTION_UTILISATEUR_SERVICE_ANNONCES_FOR_MES_ANNONCES = "getAnnoncesForMesAnnonces";
+    public static final String GESTION_UTILISATEUR_SERVICE_NOTIFICATIONS_FOR_MES_ANNONCES = "getNotificationsForMesAnnonces";
     // Path Gestion Annonce
     public static final String GESTION_ANNONCE_SERVICE_PATH = "gestionAnnonce";
     public static final String GESTION_ANNONCE_SERVICE_CREATION_ANNONCE = "creationAnnonce";
@@ -40,7 +36,6 @@ public class WsPath {
     public static final String GESTION_ANNONCE_SERVICE_RECUPERATION_PHOTO = "getPhotos";
     public static final String GESTION_ANNONCE_SERVICE_SUPPRESSION_PHOTO = "supprimerPhoto";
     public static final String GESTION_ANNONCE_SERVICE_RECHERCHE = "rechercheAnnonce";
-
     // Path Gestion Partenaire
     public static final String GESTION_PARTENAIRE_SERVICE_PATH = "gestionPartenaire";
     public static final String GESTION_PARTENAIRE_SERVICE_CREATION_PARTENAIRE = "creationPartenaire";
@@ -50,12 +45,14 @@ public class WsPath {
     public static final String GESTION_PARTENAIRE_SERVICE_GET_NOTATION_BY_SIRET = "getEntrepriseNotationBySiret";
     public static final String GESTION_PARTENAIRE_SERVICE_AJOUT_PHOTO_CHANTIER_TEMOIN = "ajoutPhotoChantierTemoin";
     public static final String GESTION_PARTENAIRE_SERVICE_SUPPRESSION_PHOTO_CHANTIER_TEMOIN = "suppressionPhotoChantierTemoin";
-
     // Path Envoi mail de contact
     public static final String MAIL_SERVICE_PATH = "mailService";
     public static final String MAIL_SERVICE_SEND_CONTACT_MAIL = "sendContactMail";
-
     // Path Gestion client
     public static final String GESTION_CLIENT_SERVICE_PATH = "gestionClient";
     public static final String GESTION_CLIENT_SERVICE_INFOS_MON_PROFIL = "getInfoForMonProfil";
+
+    private WsPath() {
+
+    }
 }

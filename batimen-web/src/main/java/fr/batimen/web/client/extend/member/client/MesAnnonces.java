@@ -3,7 +3,8 @@ package fr.batimen.web.client.extend.member.client;
 import fr.batimen.dto.AnnonceDTO;
 import fr.batimen.dto.DemandeMesAnnoncesDTO;
 import fr.batimen.dto.NotificationDTO;
-import fr.batimen.dto.aggregate.MesAnnoncesDTO;
+import fr.batimen.dto.aggregate.MesAnnoncesAnnonceDTO;
+import fr.batimen.dto.aggregate.MesAnnoncesNotificationDTO;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.web.app.constants.FeedbackMessageLevel;
 import fr.batimen.web.app.constants.ParamsConstant;
@@ -78,7 +79,8 @@ public final class MesAnnonces extends MasterPage {
 
         calculModelLabelByTypeCompte();
         initStaticComposant();
-        loadInfosMesAnnonces();
+        loadMesAnnonces();
+        loadMesNotifications();
         initRepeaterNotifications();
         initRepeaterAnnonces();
         afficherAnciennesAnnonces();
@@ -267,7 +269,7 @@ public final class MesAnnonces extends MasterPage {
 
             @Override
             public void onClick(AjaxRequestTarget target) {
-                loadInfosMesAnnonces();
+                loadMesAnnonces();
                 updateModelInfoNbAnnonce();
                 target.add(annoncesContainer, infoNbAnnonce, afficherAnciennesAnnonces);
             }
@@ -291,7 +293,7 @@ public final class MesAnnonces extends MasterPage {
         voirAnciennesNotifications = new AjaxLink<Void>("voirAnciennesNotifications") {
             @Override
             public void onClick(AjaxRequestTarget target) {
-                loadInfosMesAnnonces();
+                loadMesNotifications();
                 target.add(notificationsContainer, voirAnciennesNotifications);
             }
 
@@ -304,11 +306,28 @@ public final class MesAnnonces extends MasterPage {
         add(voirAnciennesNotifications);
     }
 
-    private void loadInfosMesAnnonces() {
-
+    private void loadMesAnnonces() {
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Appel webservice pour la récupération des données à afficher");
+            LOGGER.debug("Appel webservice pour la récupération des données à afficher (Annonces)");
         }
+        DemandeMesAnnoncesDTO demandeMesAnnoncesDTO = computeDemandeMesAnnoncesDTO();
+
+        MesAnnoncesAnnonceDTO mesAnnonces = utilisateurServiceREST.getAnnonceForMesAnnonces(demandeMesAnnoncesDTO);
+        annonces.addAll(mesAnnonces.getAnnonces());
+        nbAnnonceTotaleValeur = mesAnnonces.getNbTotalAnnonces();
+    }
+
+    private void loadMesNotifications() {
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Appel webservice pour la récupération des données à afficher (Notifications");
+        }
+        DemandeMesAnnoncesDTO demandeMesAnnoncesDTO = computeDemandeMesAnnoncesDTO();
+
+        MesAnnoncesNotificationDTO mesNotifications = utilisateurServiceREST.getNotificationForMesAnnonces(demandeMesAnnoncesDTO);
+        notifications.addAll(mesNotifications.getNotifications());
+    }
+
+    private DemandeMesAnnoncesDTO computeDemandeMesAnnoncesDTO() {
         DemandeMesAnnoncesDTO demandeMesAnnoncesDTO = new DemandeMesAnnoncesDTO();
         demandeMesAnnoncesDTO.setLoginDemandeur(authentication.getCurrentUserInfo().getLogin());
         demandeMesAnnoncesDTO.setLogin(authentication.getCurrentUserInfo().getLogin());
@@ -318,11 +337,7 @@ public final class MesAnnonces extends MasterPage {
         demandeMesAnnoncesDTO.setRangeNotificationsDebut(notifications.size());
         demandeMesAnnoncesDTO.setRangeNotificationsFin(NB_MAX_NOTIFICATIONS);
 
-        MesAnnoncesDTO mesInfos = utilisateurServiceREST.getMesInfosAnnonce(demandeMesAnnoncesDTO);
-
-        annonces.addAll(mesInfos.getAnnonces());
-        notifications.addAll(mesInfos.getNotifications());
-        nbAnnonceTotaleValeur = mesInfos.getNbTotalAnnonces();
+        return demandeMesAnnoncesDTO;
     }
 
     private String parQui(NotificationDTO notificationDTO) {

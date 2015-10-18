@@ -22,16 +22,12 @@ public class DemandeMesAnnoncesDTO extends AbstractDTO {
     @Size(min = CLIENT_LOGIN_RANGE_MIN, max = CLIENT_LOGIN_RANGE_MAX)
     private String loginDemandeur;
 
-    @NotNull
     private Integer rangeAnnoncesDebut;
 
-    @NotNull
     private Integer rangeAnnonceFin;
 
-    @NotNull
     private Integer rangeNotificationsDebut;
 
-    @NotNull
     private Integer rangeNotificationsFin;
 
     public Integer getRangeNotificationsFin() {

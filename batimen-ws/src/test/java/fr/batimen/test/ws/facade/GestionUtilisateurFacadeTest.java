@@ -4,7 +4,8 @@ import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.exception.BackendException;
 import fr.batimen.core.exception.DuplicateEntityException;
 import fr.batimen.dto.*;
-import fr.batimen.dto.aggregate.MesAnnoncesDTO;
+import fr.batimen.dto.aggregate.MesAnnoncesAnnonceDTO;
+import fr.batimen.dto.aggregate.MesAnnoncesNotificationDTO;
 import fr.batimen.dto.enums.EtatAnnonce;
 import fr.batimen.dto.enums.StatutNotification;
 import fr.batimen.dto.enums.TypeCompte;
@@ -332,26 +333,24 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
     }
 
     /**
-     * Cas de test : Le client se rend sur la page "mes annonces" <br/>
-     * Ce test verifie que les données remontent de maniere correctes
+     * Cas de test : Le client recupere ses notifications <br/>
+     * Ce test verifie que les données de notifications remontent de manière correctes
      *
      */
     @Test
     @UsingDataSet("datasets/in/client_notification_annonce.yml")
-    public void testGetInfoForMesAnnoncesParUnClient() {
+    public void testGetNotificationMesAnnoncesParUnClient() {
         DemandeMesAnnoncesDTO demandeMesAnnoncesDTO = new DemandeMesAnnoncesDTO();
         demandeMesAnnoncesDTO.setLogin("pebronne");
         demandeMesAnnoncesDTO.setLoginDemandeur("pebronne");
-        demandeMesAnnoncesDTO.setRangeAnnoncesDebut(0);
-        demandeMesAnnoncesDTO.setRangeAnnonceFin(3);
+        demandeMesAnnoncesDTO.setRangeNotificationsDebut(0);
+        demandeMesAnnoncesDTO.setRangeNotificationsFin(3);
 
-        MesAnnoncesDTO mesAnnonces = utilisateurServiceREST.getMesInfosAnnonce(demandeMesAnnoncesDTO);
+        MesAnnoncesNotificationDTO mesAnnoncesNotificationDTO = utilisateurServiceREST.getNotificationForMesAnnonces(demandeMesAnnoncesDTO);
 
-        List<NotificationDTO> notifications = mesAnnonces.getNotifications();
-        List<AnnonceDTO> annonces = mesAnnonces.getAnnonces();
+        List<NotificationDTO> notifications = mesAnnoncesNotificationDTO.getNotifications();
 
         Assert.assertEquals(1, notifications.size());
-        Assert.assertEquals(2, annonces.size());
 
         // Check de la notification.
         Boolean notificationPresent = Boolean.FALSE;
@@ -372,6 +371,151 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
         }
 
         Assert.assertTrue(notificationPresent);
+    }
+
+    /**
+     * Cas de test : Le client se rend sur la page "mes annonces" <br/>
+     * Ce test verifie que les données d'annonces remontent de maniere correctes
+     *
+     */
+    @Test
+    @UsingDataSet("datasets/in/client_notification_annonce.yml")
+    public void testGetAnnonceForMesAnnoncesParUnClient() {
+        DemandeMesAnnoncesDTO demandeMesAnnoncesDTO = new DemandeMesAnnoncesDTO();
+        demandeMesAnnoncesDTO.setLogin("pebronne");
+        demandeMesAnnoncesDTO.setLoginDemandeur("pebronne");
+        demandeMesAnnoncesDTO.setRangeAnnoncesDebut(0);
+        demandeMesAnnoncesDTO.setRangeAnnonceFin(3);
+
+        MesAnnoncesAnnonceDTO mesAnnonces = utilisateurServiceREST.getAnnonceForMesAnnonces(demandeMesAnnoncesDTO);
+
+        // Check de l'annonce.
+        Boolean rightDescription = Boolean.FALSE;
+        Boolean rightHashID = Boolean.FALSE;
+
+        for (AnnonceDTO annonce : mesAnnonces.getAnnonces()) {
+            if (annonce.getDescription().equals("Peinture d'un mur")) {
+                rightDescription = Boolean.TRUE;
+            }
+            if (annonce
+                    .getHashID()
+                    .equals("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21")) {
+                rightHashID = Boolean.TRUE;
+            }
+        }
+
+        Assert.assertTrue(rightDescription);
+        Assert.assertTrue(rightHashID);
+        Assert.assertEquals(2, mesAnnonces.getAnnonces().size());
+        Assert.assertEquals(Long.valueOf(2), mesAnnonces.getNbTotalAnnonces());
+    }
+
+    /**
+     * Cas de test : Un artisan se rend sur la page "mes annonces" <br/>
+     * Ce test verifie que les données d'annonces remontent de maniere correctes
+     *
+     */
+    @Test
+    @UsingDataSet("datasets/in/client_notification_annonce.yml")
+    public void testGetAnnonceForMesAnnoncesParUnArtisan() {
+        DemandeMesAnnoncesDTO demandeMesAnnoncesDTO = new DemandeMesAnnoncesDTO();
+        demandeMesAnnoncesDTO.setLogin("pebronneArtisanne");
+        demandeMesAnnoncesDTO.setLoginDemandeur("pebronneArtisanne");
+        demandeMesAnnoncesDTO.setRangeAnnoncesDebut(0);
+        demandeMesAnnoncesDTO.setRangeAnnonceFin(3);
+
+        getAnnoncesMesAnnoncesPourAdminOuArtisan(demandeMesAnnoncesDTO);
+    }
+
+    /**
+     * Cas de test : Un artisan recupère ses notifications <br/>
+     * Ce test verifie que les données de notifications remontent de maniere correctes
+     *
+     */
+    @Test
+    @UsingDataSet("datasets/in/client_notification_annonce.yml")
+    public void testGetNotificationForMesAnnoncesParUnArtisan() {
+        DemandeMesAnnoncesDTO demandeMesAnnoncesDTO = new DemandeMesAnnoncesDTO();
+        demandeMesAnnoncesDTO.setLogin("pebronneArtisanne");
+        demandeMesAnnoncesDTO.setLoginDemandeur("pebronneArtisanne");
+        demandeMesAnnoncesDTO.setRangeNotificationsDebut(0);
+        demandeMesAnnoncesDTO.setRangeNotificationsFin(3);
+
+        getInfoNotificationForMesAnnoncesPourAdminOuArtisan(demandeMesAnnoncesDTO);
+    }
+
+    /**
+     * Cas de test : Un administrateur utilise le service pour récuperer les informations de notification
+     * d'un client / artisan
+     *
+     */
+    @Test
+    @UsingDataSet("datasets/in/client_notification_annonce.yml")
+    public void testGetNotificationsForMesAnnoncesParUnAdmin() {
+        DemandeMesAnnoncesDTO demandeMesAnnoncesDTO = new DemandeMesAnnoncesDTO();
+        demandeMesAnnoncesDTO.setLogin("pebronneArtisanne");
+        demandeMesAnnoncesDTO.setLoginDemandeur("admin");
+        demandeMesAnnoncesDTO.setRangeNotificationsDebut(0);
+        demandeMesAnnoncesDTO.setRangeNotificationsFin(3);
+
+        getInfoNotificationForMesAnnoncesPourAdminOuArtisan(demandeMesAnnoncesDTO);
+    }
+
+    /**
+     * Cas de test : Un administrateur utilise le service pour récuperer les annonces d'un client / artisan
+     */
+    @Test
+    @UsingDataSet("datasets/in/client_notification_annonce.yml")
+    public void testGetAnnoncesMesAnnoncesParUnAdmin() {
+        DemandeMesAnnoncesDTO demandeMesAnnoncesDTO = new DemandeMesAnnoncesDTO();
+        demandeMesAnnoncesDTO.setLogin("pebronneArtisanne");
+        demandeMesAnnoncesDTO.setLoginDemandeur("admin");
+        demandeMesAnnoncesDTO.setRangeAnnoncesDebut(0);
+        demandeMesAnnoncesDTO.setRangeAnnonceFin(3);
+
+        getAnnoncesMesAnnoncesPourAdminOuArtisan(demandeMesAnnoncesDTO);
+    }
+
+    /**
+     * Cas de test : Un client essaye de recuperer des annonces qu'il ne possede pas.
+     * Le webservice ne lui renvoi rien.
+     *
+     */
+    @Test
+    @UsingDataSet("datasets/in/client_notification_annonce.yml")
+    public void testGetAnnoncesForMesAnnoncesParUnClientPasLesDroits() {
+        DemandeMesAnnoncesDTO demandeMesAnnoncesDTO = new DemandeMesAnnoncesDTO();
+        demandeMesAnnoncesDTO.setLogin("pebronneArtisanne");
+        demandeMesAnnoncesDTO.setLoginDemandeur("pebronne");
+        demandeMesAnnoncesDTO.setRangeAnnoncesDebut(0);
+        demandeMesAnnoncesDTO.setRangeAnnonceFin(3);
+
+        MesAnnoncesAnnonceDTO mesAnnonces = utilisateurServiceREST.getAnnonceForMesAnnonces(demandeMesAnnoncesDTO);
+
+        Assert.assertTrue(mesAnnonces.getAnnonces().isEmpty());
+    }
+
+    /**
+     * Cas de test : Un client essaye de recuperer des notifications qu'il ne possede pas.
+     * Le webservice ne lui renvoi rien.
+     */
+    @Test
+    @UsingDataSet("datasets/in/client_notification_annonce.yml")
+    public void testGetNotificationsForMesAnnoncesParUnClientPasLesDroits() {
+        DemandeMesAnnoncesDTO demandeMesAnnoncesDTO = new DemandeMesAnnoncesDTO();
+        demandeMesAnnoncesDTO.setLogin("pebronneArtisanne");
+        demandeMesAnnoncesDTO.setLoginDemandeur("pebronne");
+        demandeMesAnnoncesDTO.setRangeNotificationsDebut(0);
+        demandeMesAnnoncesDTO.setRangeNotificationsFin(3);
+
+        MesAnnoncesNotificationDTO mesAnnoncesNotificationDTO = utilisateurServiceREST.getNotificationForMesAnnonces(demandeMesAnnoncesDTO);
+
+        Assert.assertTrue(mesAnnoncesNotificationDTO.getNotifications().isEmpty());
+    }
+
+    private void getAnnoncesMesAnnoncesPourAdminOuArtisan(DemandeMesAnnoncesDTO demandeMesAnnoncesDTO) {
+        MesAnnoncesAnnonceDTO mesAnnoncesAnnonceDTO = utilisateurServiceREST.getAnnonceForMesAnnonces(demandeMesAnnoncesDTO);
+        List<AnnonceDTO> annonces = mesAnnoncesAnnonceDTO.getAnnonces();
 
         // Check de l'annonce.
         Boolean rightDescription = Boolean.FALSE;
@@ -390,70 +534,14 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
 
         Assert.assertTrue(rightDescription);
         Assert.assertTrue(rightHashID);
-        Assert.assertEquals(2, annonces.size());
-        Assert.assertEquals(Long.valueOf(2), mesAnnonces.getNbTotalAnnonces());
+        Assert.assertEquals(1, annonces.size());
     }
 
-    /**
-     * Cas de test : Un artisan se rend sur la page "mes annonces" <br/>
-     * Ce test verifie que les données remontent de maniere correctes
-     *
-     */
-    @Test
-    @UsingDataSet("datasets/in/client_notification_annonce.yml")
-    public void testGetInfoForMesAnnoncesParUnArtisan() {
-        DemandeMesAnnoncesDTO demandeMesAnnoncesDTO = new DemandeMesAnnoncesDTO();
-        demandeMesAnnoncesDTO.setLogin("pebronneArtisanne");
-        demandeMesAnnoncesDTO.setLoginDemandeur("pebronneArtisanne");
-        demandeMesAnnoncesDTO.setRangeAnnoncesDebut(0);
-        demandeMesAnnoncesDTO.setRangeAnnonceFin(3);
-
-        getInfoForMesAnnoncesPourAdminOuArtisan(demandeMesAnnoncesDTO);
-    }
-
-    /**
-     * Cas de test : Un administrateur utilise le service de la page mes annonces pour récuperer les informations d'un client / artisan
-     *
-     */
-    @Test
-    @UsingDataSet("datasets/in/client_notification_annonce.yml")
-    public void testGetInfoForMesAnnoncesParUnAdmin() {
-        DemandeMesAnnoncesDTO demandeMesAnnoncesDTO = new DemandeMesAnnoncesDTO();
-        demandeMesAnnoncesDTO.setLogin("pebronneArtisanne");
-        demandeMesAnnoncesDTO.setLoginDemandeur("admin");
-        demandeMesAnnoncesDTO.setRangeAnnoncesDebut(0);
-        demandeMesAnnoncesDTO.setRangeAnnonceFin(3);
-
-        getInfoForMesAnnoncesPourAdminOuArtisan(demandeMesAnnoncesDTO);
-    }
-
-    /**
-     * Cas de test : Un client essaye de recuperer des informations qu'il ne possede pas.
-     * Le webservice ne lui renvoi rien.
-     *
-     */
-    @Test
-    @UsingDataSet("datasets/in/client_notification_annonce.yml")
-    public void testGetInfoForMesAnnoncesParUnClientPasLesDroits() {
-        DemandeMesAnnoncesDTO demandeMesAnnoncesDTO = new DemandeMesAnnoncesDTO();
-        demandeMesAnnoncesDTO.setLogin("pebronneArtisanne");
-        demandeMesAnnoncesDTO.setLoginDemandeur("pebronne");
-        demandeMesAnnoncesDTO.setRangeAnnoncesDebut(0);
-        demandeMesAnnoncesDTO.setRangeAnnonceFin(3);
-
-        MesAnnoncesDTO mesAnnonces = utilisateurServiceREST.getMesInfosAnnonce(demandeMesAnnoncesDTO);
-
-        Assert.assertTrue(mesAnnonces.getAnnonces().isEmpty());
-        Assert.assertTrue(mesAnnonces.getNotifications().isEmpty());
-    }
-
-    private void getInfoForMesAnnoncesPourAdminOuArtisan(DemandeMesAnnoncesDTO demandeMesAnnoncesDTO){
-        MesAnnoncesDTO mesAnnonces = utilisateurServiceREST.getMesInfosAnnonce(demandeMesAnnoncesDTO);
-        List<NotificationDTO> notifications = mesAnnonces.getNotifications();
-        List<AnnonceDTO> annonces = mesAnnonces.getAnnonces();
+    private void getInfoNotificationForMesAnnoncesPourAdminOuArtisan(DemandeMesAnnoncesDTO demandeMesAnnoncesDTO) {
+        MesAnnoncesNotificationDTO mesAnnoncesNotificationDTO = utilisateurServiceREST.getNotificationForMesAnnonces(demandeMesAnnoncesDTO);
+        List<NotificationDTO> notifications = mesAnnoncesNotificationDTO.getNotifications();
 
         Assert.assertEquals(1, notifications.size());
-        Assert.assertEquals(1, annonces.size());
 
         // Check de la notification.
         Boolean notificationPresent = Boolean.FALSE;
@@ -474,25 +562,5 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
         }
 
         Assert.assertTrue(notificationPresent);
-
-        // Check de l'annonce.
-        Boolean rightDescription = Boolean.FALSE;
-        Boolean rightHashID = Boolean.FALSE;
-
-        for (AnnonceDTO annonce : annonces) {
-            if (annonce.getDescription().equals("Peinture d'un mur")) {
-                rightDescription = Boolean.TRUE;
-            }
-            if (annonce
-                    .getHashID()
-                    .equals("88263227a51224d8755b21e729e1d10c0569b10f98749264ddf66fb65b53519fb863cf44092880247f2841d6335473a5d99402ae0a4d9d94f665d97132dcbc21")) {
-                rightHashID = Boolean.TRUE;
-            }
-        }
-
-        Assert.assertTrue(rightDescription);
-        Assert.assertTrue(rightHashID);
-        Assert.assertEquals(1, annonces.size());
     }
-
 }

@@ -4,7 +4,8 @@ import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.WsPath;
 import fr.batimen.dto.*;
-import fr.batimen.dto.aggregate.MesAnnoncesDTO;
+import fr.batimen.dto.aggregate.MesAnnoncesAnnonceDTO;
+import fr.batimen.dto.aggregate.MesAnnoncesNotificationDTO;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 import fr.batimen.ws.dao.AnnonceDAO;
@@ -295,23 +296,21 @@ public class GestionUtilisateurFacade {
     }
 
     /**
-     * Methode de récuperation des informations de la page de mes annonces
-     * (notifications + annonces) d'un client / artisan
+     * Récupére les informations des annonces pour les afficher sur la page mesannonces.
      *
-     * @param demandeMesAnnoncesDTO Permet de connaitre le login pour le chargement des infos ainsi que le demandeur
-     * @return Les notifications + les annonces (5 max)
-     * @see DemandeMesAnnoncesDTO
-     * @see MesAnnoncesDTO
+     * Si c'est un client, on renvoi les annonces qu'il a créée.
+     *
+     * Si c'est un artisan on renvoi les annonces auquels il est inscrit.
+     *
+     * @param demandeMesAnnoncesDTO
+     * @return La liste des annonces paginées concernant l'utilisateur.
      */
     @POST
-    @Path(WsPath.GESTION_UTILISATEUR_SERVICE_INFOS_MES_ANNONCES)
+    @Path(WsPath.GESTION_UTILISATEUR_SERVICE_ANNONCES_FOR_MES_ANNONCES)
     @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
-    public MesAnnoncesDTO getInfoForMesAnnonces(DemandeMesAnnoncesDTO demandeMesAnnoncesDTO) {
+    public MesAnnoncesAnnonceDTO getAnnonceForMesAnnonces(DemandeMesAnnoncesDTO demandeMesAnnoncesDTO) {
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug(demandeMesAnnoncesDTO.toString());
-        }
-        MesAnnoncesDTO mesAnnoncesDTO = new MesAnnoncesDTO();
+        MesAnnoncesAnnonceDTO mesAnnoncesAnnonceDTO = new MesAnnoncesAnnonceDTO();
         Long nbannonceByLogin = new Long(0);
 
         String rolesDemandeur = getUtilisateurRoles(demandeMesAnnoncesDTO
@@ -320,15 +319,68 @@ public class GestionUtilisateurFacade {
                 .getLogin());
 
         if (rolesDemandeur.isEmpty()) {
-            return new MesAnnoncesDTO();
+            return new MesAnnoncesAnnonceDTO();
         }
 
         if (!rolesUtils.checkIfAdminWithString(rolesDemandeur)
                 && !demandeMesAnnoncesDTO.getLogin().equals(demandeMesAnnoncesDTO.getLoginDemandeur())) {
-            return new MesAnnoncesDTO();
+            return new MesAnnoncesAnnonceDTO();
+        }
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Récuperation annonce.........");
         }
 
         String login = demandeMesAnnoncesDTO.getLogin();
+
+        List<AnnonceDTO> annoncesDTO =
+                annonceService.getAnnoncesByClientLoginForMesAnnonces(login, rolesUtils.checkIfArtisanWithString(rolesDemander)
+                        , demandeMesAnnoncesDTO.getRangeAnnoncesDebut(), demandeMesAnnoncesDTO.getRangeAnnonceFin());
+
+        if (rolesUtils.checkIfArtisanWithString(rolesDemander)) {
+            nbannonceByLogin = annonceDAO.getNbAnnonceByLoginForArtisan(demandeMesAnnoncesDTO.getLogin());
+        } else if (rolesUtils.checkIfClientWithString(rolesDemander)) {
+            nbannonceByLogin = annonceDAO.getNbAnnonceByLoginForClient(demandeMesAnnoncesDTO.getLogin());
+        }
+
+        mesAnnoncesAnnonceDTO.setAnnonces(annoncesDTO);
+        mesAnnoncesAnnonceDTO.setNbTotalAnnonces(nbannonceByLogin);
+
+        return mesAnnoncesAnnonceDTO;
+    }
+
+    /**
+     * Récupère les notifications d'un utilisateur.
+     * <p>
+     * Charge les notifications de manière paginées
+     *
+     * @param demandeMesAnnoncesDTO
+     * @return
+     */
+    @POST
+    @Path(WsPath.GESTION_UTILISATEUR_SERVICE_NOTIFICATIONS_FOR_MES_ANNONCES)
+    @TransactionAttribute(TransactionAttributeType.NOT_SUPPORTED)
+    public MesAnnoncesNotificationDTO getNotificationForMesAnnonces(DemandeMesAnnoncesDTO demandeMesAnnoncesDTO) {
+
+        MesAnnoncesNotificationDTO mesAnnoncesNotificationDTO = new MesAnnoncesNotificationDTO();
+        Long nbannonceByLogin = new Long(0);
+
+        String rolesDemandeur = getUtilisateurRoles(demandeMesAnnoncesDTO
+                .getLoginDemandeur());
+        String rolesDemander = getUtilisateurRoles(demandeMesAnnoncesDTO
+                .getLogin());
+
+        if (rolesDemandeur.isEmpty()) {
+            return new MesAnnoncesNotificationDTO();
+        }
+
+        if (!rolesUtils.checkIfAdminWithString(rolesDemandeur)
+                && !demandeMesAnnoncesDTO.getLogin().equals(demandeMesAnnoncesDTO.getLoginDemandeur())) {
+            return new MesAnnoncesNotificationDTO();
+        }
+
+        String login = demandeMesAnnoncesDTO.getLogin();
+
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Récuperation notification.........");
@@ -338,25 +390,14 @@ public class GestionUtilisateurFacade {
 
         if (rolesUtils.checkIfArtisanWithString(rolesDemander)) {
             notificationsDTO = notificationService.getNotificationByLogin(login, TypeCompte.ARTISAN, demandeMesAnnoncesDTO.getRangeNotificationsDebut(), demandeMesAnnoncesDTO.getRangeNotificationsFin());
-            nbannonceByLogin = annonceDAO.getNbAnnonceByLoginForArtisan(demandeMesAnnoncesDTO.getLogin());
         } else if (rolesUtils.checkIfClientWithString(rolesDemander)) {
             notificationsDTO = notificationService.getNotificationByLogin(login, TypeCompte.CLIENT, demandeMesAnnoncesDTO.getRangeNotificationsDebut(), demandeMesAnnoncesDTO.getRangeNotificationsFin());
-            nbannonceByLogin = annonceDAO.getNbAnnonceByLoginForClient(demandeMesAnnoncesDTO.getLogin());
         }
 
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Récuperation annonce.........");
-        }
+        mesAnnoncesNotificationDTO.setNotifications(notificationsDTO);
+        mesAnnoncesNotificationDTO.setNbTotalNotifications(nbannonceByLogin);
 
-        List<AnnonceDTO> annoncesDTO =
-                annonceService.getAnnoncesByClientLoginForMesAnnonces(login, rolesUtils.checkIfArtisanWithString(rolesDemander)
-                        , demandeMesAnnoncesDTO.getRangeAnnoncesDebut(), demandeMesAnnoncesDTO.getRangeAnnonceFin());
-
-
-        mesAnnoncesDTO.setNotifications(notificationsDTO);
-        mesAnnoncesDTO.setAnnonces(annoncesDTO);
-        mesAnnoncesDTO.setNbTotalAnnonces(nbannonceByLogin);
-
-        return mesAnnoncesDTO;
+        return mesAnnoncesNotificationDTO;
     }
+
 }

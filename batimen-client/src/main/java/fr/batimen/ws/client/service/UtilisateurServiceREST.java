@@ -1,24 +1,21 @@
 package fr.batimen.ws.client.service;
 
-import java.io.Serializable;
-
-import javax.enterprise.context.Dependent;
-import javax.inject.Inject;
-import javax.inject.Named;
-import javax.inject.Singleton;
-
-import fr.batimen.dto.DemandeMesAnnoncesDTO;
-import fr.batimen.dto.ModifClientDTO;
-import fr.batimen.dto.aggregate.MesAnnoncesDTO;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.WsPath;
 import fr.batimen.dto.ClientDTO;
+import fr.batimen.dto.DemandeMesAnnoncesDTO;
 import fr.batimen.dto.LoginDTO;
+import fr.batimen.dto.ModifClientDTO;
+import fr.batimen.dto.aggregate.MesAnnoncesAnnonceDTO;
+import fr.batimen.dto.aggregate.MesAnnoncesNotificationDTO;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
 import fr.batimen.ws.client.WsConnector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+import java.io.Serializable;
 
 /**
  * 
@@ -176,22 +173,41 @@ public class UtilisateurServiceREST implements Serializable{
         return codeRetour;
     }
 
-    public MesAnnoncesDTO getMesInfosAnnonce(DemandeMesAnnoncesDTO demandeMesAnnoncesDTO) {
-        MesAnnoncesDTO mesInfosAnnonces = null;
+    public MesAnnoncesAnnonceDTO getAnnonceForMesAnnonces(DemandeMesAnnoncesDTO demandeMesAnnoncesDTO) {
+        MesAnnoncesAnnonceDTO mesAnnoncesAnnonceDTO = null;
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Début appel service de recuperation des données de la page mes annonces");
+            LOGGER.debug("Début appel service de recuperation des données de la page mes annonces (annonces)");
         }
 
         String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_UTILISATEUR_SERVICE_PATH,
-                WsPath.GESTION_UTILISATEUR_SERVICE_INFOS_MES_ANNONCES, demandeMesAnnoncesDTO);
+                WsPath.GESTION_UTILISATEUR_SERVICE_ANNONCES_FOR_MES_ANNONCES, demandeMesAnnoncesDTO);
 
-        mesInfosAnnonces = DeserializeJsonHelper.deserializeDTO(objectInJSON, MesAnnoncesDTO.class);
+        mesAnnoncesAnnonceDTO = DeserializeJsonHelper.deserializeDTO(objectInJSON, MesAnnoncesAnnonceDTO.class);
 
         if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Fin appel service de recuperation des données de la page mes annonces + deserialization");
+            LOGGER.debug("Fin appel service de recuperation des données de la page mes annonces + deserialization (annonces)");
         }
 
-        return mesInfosAnnonces;
+        return mesAnnoncesAnnonceDTO;
+    }
+
+    public MesAnnoncesNotificationDTO getNotificationForMesAnnonces(DemandeMesAnnoncesDTO demandeMesAnnoncesDTO) {
+        MesAnnoncesNotificationDTO mesAnnoncesNotificationDTO = null;
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Début appel service de recuperation des données de la page mes annonces (notifications)");
+        }
+
+        String objectInJSON = wsConnector.sendRequestJSON(WsPath.GESTION_UTILISATEUR_SERVICE_PATH,
+                WsPath.GESTION_UTILISATEUR_SERVICE_NOTIFICATIONS_FOR_MES_ANNONCES, demandeMesAnnoncesDTO);
+
+        mesAnnoncesNotificationDTO = DeserializeJsonHelper.deserializeDTO(objectInJSON, MesAnnoncesNotificationDTO.class);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Fin appel service de recuperation des données de la page mes annonces + deserialization (notifications)");
+        }
+
+        return mesAnnoncesNotificationDTO;
     }
 }
