@@ -49,7 +49,10 @@ public class MesAnnoncesDataset {
             .columns("id", "dateNotification", "typeNotification", "pourquinotification", "statutnotification",
                     "id_artisan", "id_client", "id_annonce")
             .values(200006, "2014-02-10", 0, 4, 0, 200008, 100001, 200010)
-            .values(200007, "2014-02-10", TypeNotification.A_CHOISI_ENTREPRISE, TypeCompte.ARTISAN, StatutNotification.VU, 200008, 100001, 200011).build();
+            .values(200007, "2014-02-10", TypeNotification.A_CHOISI_ENTREPRISE, TypeCompte.ARTISAN, StatutNotification.VU, 200008, 100001, 200011)
+            .values(200008, "2015-02-10", TypeNotification.A_CHOISI_ENTREPRISE, TypeCompte.ARTISAN, StatutNotification.VU, 200008, 100001, 200011)
+            .values(200009, "2015-09-10", TypeNotification.A_CHOISI_ENTREPRISE, TypeCompte.ARTISAN, StatutNotification.VU, 200008, 100001, 200011)
+            .values(200010, "2015-10-10", TypeNotification.A_CHOISI_ENTREPRISE, TypeCompte.ARTISAN, StatutNotification.VU, 200008, 100001, 200011).build();
 
     public static final Operation INSERT_ADRESSE_DATA = insertInto("adresse")
             .columns("id", "adresse", "codepostal", "complementadresse", "ville", "departement")

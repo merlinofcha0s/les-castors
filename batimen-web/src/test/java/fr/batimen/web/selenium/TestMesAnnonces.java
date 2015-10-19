@@ -42,16 +42,16 @@ public class TestMesAnnonces extends AbstractITTest {
      */
     @Test
     public void testAccessToMesAnnonceByClient() {
-        testMesAnnonces("raiden", TypeNotification.INSCRIT_A_ANNONCE, TypeCompte.CLIENT, 4, 4);
+        testMesAnnonces("raiden", TypeNotification.INSCRIT_A_ANNONCE, TypeCompte.CLIENT, 4, 4, 1);
 
         driver.findElement(
                 By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[1]/table/tbody/tr[1]/td[2]/a[2]"))
                 .click();
 
-        Boolean checkConditionAccessToANnonceViaNotif = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+        Boolean checkConditionAccessToAnnonceViaNotif = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("h1.title"),
                         "ANNONCE PARTICULIER"));
-        assertTrue(checkConditionAccessToANnonceViaNotif);
+        assertTrue(checkConditionAccessToAnnonceViaNotif);
 
     }
 
@@ -63,10 +63,10 @@ public class TestMesAnnonces extends AbstractITTest {
      */
     @Test
     public void testAccessToMesAnnonceByArtisan() {
-        testMesAnnonces("pebron", TypeNotification.A_CHOISI_ENTREPRISE, TypeCompte.ARTISAN, 1, 1);
+        testMesAnnonces("pebron", TypeNotification.A_CHOISI_ENTREPRISE, TypeCompte.ARTISAN, 1, 1, 4);
     }
 
-    private void testMesAnnonces(String login, TypeNotification typeNotification, TypeCompte typeCompte, int nbAnnoncePagine, int nbAnnonceTotale) {
+    private void testMesAnnonces(String login, TypeNotification typeNotification, TypeCompte typeCompte, int nbAnnoncePagine, int nbAnnonceTotale, int nbTotalNotification) {
         driver.get(appUrl);
         // On s'authentifie à l'application
         connexionApplication(login, AbstractITTest.BON_MOT_DE_PASSE, Boolean.FALSE);
@@ -87,16 +87,26 @@ public class TestMesAnnonces extends AbstractITTest {
                 .until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("h4.headInModule")));
         assertNotNull(checkConditionAnnoncePresent);
 
-        //Si il y a assez d'annonce pour activer la pagination
-        if (nbAnnonceTotale > MesAnnonces.NB_ANNONCE_PAR_PAGE) {
-            //Vérification de la pagination
-            driver.findElement(By.id("btnPlusDAvisEntreprise")).click();
+        //S'il y a assez de notification pour activer la pagination
+        if (nbTotalNotification > MesAnnonces.NB_NOTIFICATION_PAR_PAGE) {
+            //Vérification de la pagination des notifications
+            driver.findElement(By.id("afficherAnciennesNotifications")).click();
+            WebElement checkConditionNotificationPaginePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                    .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//table[@id='notificationsContainer']/tbody/tr[4]/td[2]")));
+            assertNotNull(checkConditionNotificationPaginePresent);
+        }
 
-            StringBuilder texteVerificationPagination = new StringBuilder(nbAnnoncePagine);
+        //S'il y a assez d'annonce pour activer la pagination
+        if (nbAnnonceTotale > MesAnnonces.NB_ANNONCE_PAR_PAGE) {
+            //Vérification de la pagination des annonces
+            driver.findElement(By.id("afficherAnciennesAnnonces")).click();
+
+            StringBuilder texteVerificationPagination = new StringBuilder();
+            texteVerificationPagination.append(nbAnnoncePagine);
             texteVerificationPagination.append(" annonce(s) affichée(s) sur ").append(nbAnnonceTotale);
 
             Boolean checkPagination = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
-                    .until(ExpectedConditions.textToBePresentInElementLocated(By.id("infoNbAnnonce"),
+                    .until(ExpectedConditions.textToBePresentInElementLocated(By.id("infosNbAnnonce"),
                             texteVerificationPagination.toString()));
             assertTrue(checkPagination);
         }

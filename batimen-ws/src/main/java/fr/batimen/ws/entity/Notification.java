@@ -1,26 +1,14 @@
 package fr.batimen.ws.entity;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.Objects;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-
 import fr.batimen.core.constant.QueryJPQL;
 import fr.batimen.dto.enums.StatutNotification;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.enums.TypeNotification;
+
+import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.Objects;
 
 /**
  * Entité qui symbolise les notifications en base de données.
@@ -34,7 +22,12 @@ import fr.batimen.dto.enums.TypeNotification;
         @NamedQuery(name = QueryJPQL.NOTIFICATION_BY_CLIENT_LOGIN,
                 query = "SELECT n.typeNotification, n.dateNotification, n.statutNotification, n.pourQuiNotification, artisanNotifier.login, clientNotifier.login, artisanNotifier.entreprise.nomComplet, annonce.hashID, artisanNotifier.entreprise.siret  FROM Notification AS n WHERE n.clientNotifier.login = :login AND annonce.etatAnnonce != 4 AND pourQuiNotification = :typeCompte ORDER BY dateNotification ASC"),
         @NamedQuery(name = QueryJPQL.NOTIFICATION_BY_ARTISAN_LOGIN,
-                query = "SELECT n.typeNotification, n.dateNotification, n.statutNotification, n.pourQuiNotification, artisanNotifier.login, clientNotifier.login, artisanNotifier.entreprise.nomComplet, annonce.hashID,  artisanNotifier.entreprise.siret  FROM Notification AS n WHERE n.artisanNotifier.login = :login AND annonce.etatAnnonce != 4 AND pourQuiNotification = :typeCompte ORDER BY dateNotification ASC") })
+                query = "SELECT n.typeNotification, n.dateNotification, n.statutNotification, n.pourQuiNotification, artisanNotifier.login, clientNotifier.login, artisanNotifier.entreprise.nomComplet, annonce.hashID,  artisanNotifier.entreprise.siret  FROM Notification AS n WHERE n.artisanNotifier.login = :login AND annonce.etatAnnonce != 4 AND pourQuiNotification = :typeCompte ORDER BY dateNotification ASC"),
+        @NamedQuery(name = QueryJPQL.NOTIFICATION_COUNT_BY_ARTISAN_LOGIN,
+                query = "SELECT COUNT(n) FROM Notification AS n WHERE n.artisanNotifier.login = :login AND n.pourQuiNotification = :typeCompte"),
+        @NamedQuery(name = QueryJPQL.NOTIFICATION_COUNT_BY_CLIENT_LOGIN,
+                query = "SELECT COUNT(n) FROM Notification AS n WHERE n.clientNotifier.login = :login AND n.pourQuiNotification = :typeCompte AND n.annonce.etatAnnonce != 4")
+})
 public class Notification extends AbstractEntity implements Serializable {
 
     private static final long serialVersionUID = 1953843726850626949L;
@@ -69,6 +62,14 @@ public class Notification extends AbstractEntity implements Serializable {
     }
 
     /**
+     * @param id
+     *            the id to set
+     */
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    /**
      * @return the typeNotification
      */
     public TypeNotification getTypeNotification() {
@@ -91,14 +92,6 @@ public class Notification extends AbstractEntity implements Serializable {
     }
 
     /**
-     * @param id
-     *            the id to set
-     */
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    /**
      * @param dateNotification
      *            the dateNotification to set
      */
@@ -114,18 +107,18 @@ public class Notification extends AbstractEntity implements Serializable {
     }
 
     /**
-     * @return the clientNotifier
-     */
-    public Client getClientNotifier() {
-        return clientNotifier;
-    }
-
-    /**
      * @param artisanNotifier
      *            the artisanNotifier to set
      */
     public void setArtisanNotifier(Artisan artisanNotifier) {
         this.artisanNotifier = artisanNotifier;
+    }
+
+    /**
+     * @return the clientNotifier
+     */
+    public Client getClientNotifier() {
+        return clientNotifier;
     }
 
     /**
@@ -144,18 +137,18 @@ public class Notification extends AbstractEntity implements Serializable {
     }
 
     /**
-     * @return the pourQuiNotification
-     */
-    public TypeCompte getPourQuiNotification() {
-        return pourQuiNotification;
-    }
-
-    /**
      * @param statutNotification
      *            the statutNotification to set
      */
     public void setStatutNotification(StatutNotification statutNotification) {
         this.statutNotification = statutNotification;
+    }
+
+    /**
+     * @return the pourQuiNotification
+     */
+    public TypeCompte getPourQuiNotification() {
+        return pourQuiNotification;
     }
 
     /**

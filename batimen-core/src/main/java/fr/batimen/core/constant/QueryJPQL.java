@@ -69,6 +69,8 @@ public class QueryJPQL {
     // Entity notification
     public static final String NOTIFICATION_BY_CLIENT_LOGIN = "notificationClientByLogin";
     public static final String NOTIFICATION_BY_ARTISAN_LOGIN = "notificationArtisanByLogin";
+    public static final String NOTIFICATION_COUNT_BY_ARTISAN_LOGIN = "notificationCountByArtisanLogin";
+    public static final String NOTIFICATION_COUNT_BY_CLIENT_LOGIN = "notificationCountByClientLogin";
     // Entity notation
     public static final String NOTATION_BY_CLIENT_LOGIN = "notationByClientLogin";
     public static final String NOTATION_BY_ENTREPRISE_SIRET = "notationByEntrepriseSiret";

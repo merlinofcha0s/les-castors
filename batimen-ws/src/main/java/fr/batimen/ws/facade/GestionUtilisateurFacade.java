@@ -8,10 +8,7 @@ import fr.batimen.dto.aggregate.MesAnnoncesAnnonceDTO;
 import fr.batimen.dto.aggregate.MesAnnoncesNotificationDTO;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.dto.helper.DeserializeJsonHelper;
-import fr.batimen.ws.dao.AnnonceDAO;
-import fr.batimen.ws.dao.ArtisanDAO;
-import fr.batimen.ws.dao.ClientDAO;
-import fr.batimen.ws.dao.PermissionDAO;
+import fr.batimen.ws.dao.*;
 import fr.batimen.ws.entity.AbstractUser;
 import fr.batimen.ws.entity.Artisan;
 import fr.batimen.ws.entity.Client;
@@ -74,6 +71,9 @@ public class GestionUtilisateurFacade {
 
     @Inject
     private NotificationService notificationService;
+
+    @Inject
+    private NotificationDAO notificationDAO;
 
     @Inject
     private AnnonceService annonceService;
@@ -363,7 +363,7 @@ public class GestionUtilisateurFacade {
     public MesAnnoncesNotificationDTO getNotificationForMesAnnonces(DemandeMesAnnoncesDTO demandeMesAnnoncesDTO) {
 
         MesAnnoncesNotificationDTO mesAnnoncesNotificationDTO = new MesAnnoncesNotificationDTO();
-        Long nbannonceByLogin = new Long(0);
+        Long nbNotificationByLogin = new Long(0);
 
         String rolesDemandeur = getUtilisateurRoles(demandeMesAnnoncesDTO
                 .getLoginDemandeur());
@@ -390,12 +390,14 @@ public class GestionUtilisateurFacade {
 
         if (rolesUtils.checkIfArtisanWithString(rolesDemander)) {
             notificationsDTO = notificationService.getNotificationByLogin(login, TypeCompte.ARTISAN, demandeMesAnnoncesDTO.getRangeNotificationsDebut(), demandeMesAnnoncesDTO.getRangeNotificationsFin());
+            nbNotificationByLogin = notificationDAO.countNotificationByUser(login, TypeCompte.ARTISAN);
         } else if (rolesUtils.checkIfClientWithString(rolesDemander)) {
             notificationsDTO = notificationService.getNotificationByLogin(login, TypeCompte.CLIENT, demandeMesAnnoncesDTO.getRangeNotificationsDebut(), demandeMesAnnoncesDTO.getRangeNotificationsFin());
+            nbNotificationByLogin = notificationDAO.countNotificationByUser(login, TypeCompte.CLIENT);
         }
 
         mesAnnoncesNotificationDTO.setNotifications(notificationsDTO);
-        mesAnnoncesNotificationDTO.setNbTotalNotifications(nbannonceByLogin);
+        mesAnnoncesNotificationDTO.setNbTotalNotifications(nbNotificationByLogin);
 
         return mesAnnoncesNotificationDTO;
     }

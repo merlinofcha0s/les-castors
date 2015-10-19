@@ -349,8 +349,10 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
         MesAnnoncesNotificationDTO mesAnnoncesNotificationDTO = utilisateurServiceREST.getNotificationForMesAnnonces(demandeMesAnnoncesDTO);
 
         List<NotificationDTO> notifications = mesAnnoncesNotificationDTO.getNotifications();
+        Long nbNotifications = mesAnnoncesNotificationDTO.getNbTotalNotifications();
 
         Assert.assertEquals(1, notifications.size());
+        Assert.assertEquals(Long.valueOf(1), nbNotifications);
 
         // Check de la notification.
         Boolean notificationPresent = Boolean.FALSE;
@@ -540,8 +542,10 @@ public class GestionUtilisateurFacadeTest extends AbstractBatimenWsTest {
     private void getInfoNotificationForMesAnnoncesPourAdminOuArtisan(DemandeMesAnnoncesDTO demandeMesAnnoncesDTO) {
         MesAnnoncesNotificationDTO mesAnnoncesNotificationDTO = utilisateurServiceREST.getNotificationForMesAnnonces(demandeMesAnnoncesDTO);
         List<NotificationDTO> notifications = mesAnnoncesNotificationDTO.getNotifications();
+        Long nbNotifications = mesAnnoncesNotificationDTO.getNbTotalNotifications();
 
         Assert.assertEquals(1, notifications.size());
+        Assert.assertEquals(Long.valueOf(1), nbNotifications);
 
         // Check de la notification.
         Boolean notificationPresent = Boolean.FALSE;

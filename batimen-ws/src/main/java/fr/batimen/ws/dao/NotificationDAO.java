@@ -78,4 +78,37 @@ public class NotificationDAO extends AbstractDAO<Notification> {
             return new ArrayList<>();
         }
     }
+
+    /**
+     * Compte le nombre de notification d'un utilisateur
+     *
+     * @param login      Le login de l'utilisateur
+     * @param typeCompte Son type de compte
+     * @return le nombre de notification
+     */
+    public Long countNotificationByUser(String login, TypeCompte typeCompte) {
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Comptage des notifications de l'utilisateur ");
+        }
+
+        TypedQuery<Long> query = null;
+
+        if (typeCompte.equals(TypeCompte.ARTISAN)) {
+            query = entityManager.createNamedQuery(QueryJPQL.NOTIFICATION_COUNT_BY_ARTISAN_LOGIN, Long.class);
+        } else if (typeCompte.equals(TypeCompte.CLIENT)) {
+            query = entityManager.createNamedQuery(QueryJPQL.NOTIFICATION_COUNT_BY_CLIENT_LOGIN, Long.class);
+        } else {
+            return Long.valueOf(0);
+        }
+
+        query.setParameter(QueryJPQL.PARAM_CLIENT_LOGIN, login);
+        query.setParameter(QueryJPQL.PARAM_TYPE_COMPTE, typeCompte);
+
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Nombre de notifications trouvées : {}", query.getSingleResult());
+        }
+
+        return query.getSingleResult();
+    }
 }

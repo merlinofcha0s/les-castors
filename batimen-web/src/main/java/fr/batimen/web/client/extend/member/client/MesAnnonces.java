@@ -46,7 +46,7 @@ import java.util.List;
 public final class MesAnnonces extends MasterPage {
 
     public static final Integer NB_ANNONCE_PAR_PAGE = 3;
-    public static final Integer NB_MAX_NOTIFICATIONS = 3;
+    public static final Integer NB_NOTIFICATION_PAR_PAGE = 3;
 
     private static final long serialVersionUID = 1902734649854998120L;
     private static final Logger LOGGER = LoggerFactory.getLogger(MesAnnonces.class);
@@ -60,18 +60,19 @@ public final class MesAnnonces extends MasterPage {
 
     private List<AnnonceDTO> annonces = new ArrayList<>();
     private List<NotificationDTO> notifications = new ArrayList<>();
-    private Long nbAnnonceTotaleValeur;
-    private Label infoNbAnnonce;
+    private Long nbAnnonceTotaleValeur, nbNotificationTotaleValeur;
+    private Label infosNbAnnonce;
+    private Label nbNotification;
     private Model<String> voirAnnonceModel;
     private Model<String> demandeDeDevisTitleModel;
     private Model<String> pasDeNotificationModel;
     private WebMarkupContainer annoncesContainer;
     private WebMarkupContainer notificationsContainer;
     private AjaxLink<Void> afficherAnciennesAnnonces;
-    private AjaxLink<Void> voirAnciennesNotifications;
+    private AjaxLink<Void> afficherAnciennesNotifications;
 
     public MesAnnonces() {
-        super("Mes annonces ", "lol", "Bienvenue sur lescastors.fr", true, "img/bg_title1.jpg");
+        super("Mes annonces ", "", "Bienvenue sur lescastors.fr", true, "img/bg_title1.jpg");
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Init de la page mes annonces");
@@ -121,7 +122,9 @@ public final class MesAnnonces extends MasterPage {
             LOGGER.debug("Init du repeater des notifications");
         }
 
-        Label nbNotification = new Label("nbNotification", notifications.size());
+        nbNotification = new Label("nbNotification", nbNotificationTotaleValeur);
+        nbNotification.setOutputMarkupId(true);
+        nbNotification.setMarkupId("nbNotification");
 
         ListView<NotificationDTO> listViewNotification = new ListView<NotificationDTO>("listNotification",
                 notifications) {
@@ -271,7 +274,7 @@ public final class MesAnnonces extends MasterPage {
             public void onClick(AjaxRequestTarget target) {
                 loadMesAnnonces();
                 updateModelInfoNbAnnonce();
-                target.add(annoncesContainer, infoNbAnnonce, afficherAnciennesAnnonces);
+                target.add(annoncesContainer, infosNbAnnonce, afficherAnciennesAnnonces);
             }
 
             @Override
@@ -280,30 +283,36 @@ public final class MesAnnonces extends MasterPage {
             }
         };
 
-        infoNbAnnonce = new Label("infoNbAnnonce", new Model<>());
-        infoNbAnnonce.setOutputMarkupId(true);
-        infoNbAnnonce.setMarkupId("infoNbAnnonce");
+        afficherAnciennesAnnonces.setOutputMarkupId(true);
+        afficherAnciennesAnnonces.setMarkupId("afficherAnciennesAnnonces");
+
+        infosNbAnnonce = new Label("infosNbAnnonce", new Model<>());
+        infosNbAnnonce.setOutputMarkupId(true);
+        infosNbAnnonce.setMarkupId("infosNbAnnonce");
 
         updateModelInfoNbAnnonce();
 
-        add(afficherAnciennesAnnonces, infoNbAnnonce);
+        add(afficherAnciennesAnnonces, infosNbAnnonce);
     }
 
     private void afficherAnciennesNotifications() {
-        voirAnciennesNotifications = new AjaxLink<Void>("voirAnciennesNotifications") {
+        afficherAnciennesNotifications = new AjaxLink<Void>("afficherAnciennesNotifications") {
             @Override
             public void onClick(AjaxRequestTarget target) {
                 loadMesNotifications();
-                target.add(notificationsContainer, voirAnciennesNotifications);
+                target.add(notificationsContainer, afficherAnciennesNotifications, nbNotification);
             }
 
             @Override
             public boolean isVisible() {
-                return !notifications.isEmpty();
+                return !notifications.isEmpty() && notifications.size() != nbNotificationTotaleValeur;
             }
         };
 
-        add(voirAnciennesNotifications);
+        afficherAnciennesNotifications.setOutputMarkupId(true);
+        afficherAnciennesNotifications.setMarkupId("afficherAnciennesNotifications");
+
+        add(afficherAnciennesNotifications);
     }
 
     private void loadMesAnnonces() {
@@ -325,6 +334,7 @@ public final class MesAnnonces extends MasterPage {
 
         MesAnnoncesNotificationDTO mesNotifications = utilisateurServiceREST.getNotificationForMesAnnonces(demandeMesAnnoncesDTO);
         notifications.addAll(mesNotifications.getNotifications());
+        nbNotificationTotaleValeur = mesNotifications.getNbTotalNotifications();
     }
 
     private DemandeMesAnnoncesDTO computeDemandeMesAnnoncesDTO() {
@@ -335,7 +345,7 @@ public final class MesAnnonces extends MasterPage {
         demandeMesAnnoncesDTO.setRangeAnnonceFin(NB_ANNONCE_PAR_PAGE);
 
         demandeMesAnnoncesDTO.setRangeNotificationsDebut(notifications.size());
-        demandeMesAnnoncesDTO.setRangeNotificationsFin(NB_MAX_NOTIFICATIONS);
+        demandeMesAnnoncesDTO.setRangeNotificationsFin(NB_NOTIFICATION_PAR_PAGE);
 
         return demandeMesAnnoncesDTO;
     }
@@ -401,6 +411,6 @@ public final class MesAnnonces extends MasterPage {
     private void updateModelInfoNbAnnonce() {
         StringBuilder infoNbAnnonceValeur = new StringBuilder();
         infoNbAnnonceValeur.append(annonces.size()).append(" annonce(s) affichée(s) sur ").append(nbAnnonceTotaleValeur);
-        infoNbAnnonce.setDefaultModelObject(infoNbAnnonceValeur.toString());
+        infosNbAnnonce.setDefaultModelObject(infoNbAnnonceValeur.toString());
     }
 }
