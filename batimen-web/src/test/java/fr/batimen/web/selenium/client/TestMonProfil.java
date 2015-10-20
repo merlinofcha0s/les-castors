@@ -72,7 +72,7 @@ public class TestMonProfil extends AbstractITTest {
 
         assertNotNull(checkConditionLoginPresent);
 
-        assertEquals("2", driver.findElement(By.cssSelector("#nbTravauxRealisesLbl > span")).getText());
+        assertEquals("4", driver.findElement(By.cssSelector("#nbTravauxRealisesLbl > span")).getText());
         assertEquals("Entreprise de toto", driver.findElement(By.cssSelector("div.nomEntreprise")).getText());
         assertEquals("Artisan moins sympatique", driver.findElement(By.cssSelector("div.commentaireClient")).getText());
     }

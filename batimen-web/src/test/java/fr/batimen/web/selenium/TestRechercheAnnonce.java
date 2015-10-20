@@ -56,7 +56,7 @@ public class TestRechercheAnnonce extends AbstractITTest {
         driver.findElement(By.id("rechercheValider")).click();
 
         Boolean checkConditionAnnonceRechercheOK = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
-                .until(ExpectedConditions.textToBePresentInElementLocated(By.id("infoNbAnnonce"), "2 annonces affichées sur 6"));
+                .until(ExpectedConditions.textToBePresentInElementLocated(By.id("infoNbAnnonce"), "5 annonces affichées sur 6"));
 
         Assert.assertTrue(checkConditionAnnonceRechercheOK);
 
@@ -67,7 +67,7 @@ public class TestRechercheAnnonce extends AbstractITTest {
         driver.findElement(By.id("btnPlusDAvisEntreprise")).click();
 
         Boolean checkConditionAnnonceRechercheOKPlusDeResultat = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
-                .until(ExpectedConditions.textToBePresentInElementLocated(By.id("infoNbAnnonce"), "4 annonces affichées sur 6"));
+                .until(ExpectedConditions.textToBePresentInElementLocated(By.id("infoNbAnnonce"), "6 annonces affichées sur 6"));
 
         Assert.assertTrue(checkConditionAnnonceRechercheOKPlusDeResultat);
     }
