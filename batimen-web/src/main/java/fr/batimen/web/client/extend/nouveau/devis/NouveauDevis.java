@@ -12,7 +12,6 @@ import fr.batimen.web.app.security.Authentication;
 import fr.batimen.web.client.component.ContactezNous;
 import fr.batimen.web.client.component.NavigationWizard;
 import fr.batimen.web.client.event.CastorWizardEvent;
-import fr.batimen.web.client.event.Event;
 import fr.batimen.web.client.event.LoginEvent;
 import fr.batimen.web.client.extend.Accueil;
 import fr.batimen.web.client.extend.Contact;
@@ -347,7 +346,6 @@ public class NouveauDevis extends MasterPage {
             case 3:
                 loggerChangementEtape("Passage dans l'étape 3");
                 etapeEncours = Etape.ETAPE_3;
-                //etape3AnnonceForm.setSousCategorieChoices(nouvelleAnnonce.getCategorieMetier().getSousCategories());
                 break;
             case 4:
                 loggerChangementEtape("Passage dans l'étape 4");
@@ -395,21 +393,17 @@ public class NouveauDevis extends MasterPage {
         // Event déclenché par la popup de connexion, fait sauter l'etape 3 si
         // l'utilisateur se connecte
         if (event.getPayload() instanceof LoginEvent) {
-            Event update = (Event) event.getPayload();
+            LoginEvent update = (LoginEvent) event.getPayload();
             if (nouvelleAnnonce.getNumeroEtape() == 4) {
                 if (LOGGER.isDebugEnabled()) {
                     LOGGER.debug("On est a l'étape 3 : Evenement recu de la popup de connexion, on passe à l'etape 5");
                 }
-                try {
-                    changementEtape(5);
-                } catch (FrontEndException e) {
-                    if (LOGGER.isErrorEnabled()) {
-                        LOGGER.error("Probleme frontend", e);
-                    }
-                }
+                nouvelleAnnonce.setNumeroEtape(5);
 
-                navigationWizard.setStep(etapeEncours.ordinal() + 1);
-                update.getTarget().add(containerGeneral);
+                if (feedBackPanelGeneral.hasFeedbackMessage()) {
+                    feedBackPanelGeneral.getFeedbackMessages().clear();
+                }
+                setResponsePage(new NouveauDevis(nouvelleAnnonce));
             }
         }
 

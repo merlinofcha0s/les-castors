@@ -32,6 +32,8 @@ import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.http.ClientProperties;
 import org.apache.wicket.protocol.http.WebSession;
+import org.apache.wicket.request.http.WebResponse;
+import org.apache.wicket.util.time.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,6 +59,7 @@ public abstract class MasterPage extends WebPage {
     private AuthentificationModal authentificationPanel;
     private Label connexionlbl;
     private LoginDialogBehaviour loginDialogBehaviour;
+    private WebMarkupContainer menu;
 
     /**
      * Constructeur par defaut, initialise les composants de base de la page
@@ -177,26 +180,31 @@ public abstract class MasterPage extends WebPage {
         containerTitleHeader.add(new AttributeModifier("style", bgImageAdresseCSS.toString()));*/
     }
 
+    private void computeConnexionLbl() {
+
+
+        if (SecurityUtils.getSubject().isAuthenticated()) {
+            connexionlbl.setDefaultModelObject("Mon Compte");
+        } else {
+            connexionlbl.setDefaultModelObject("Connexion à l’espace membre");
+        }
+    }
+
     private void initComponentConnexion() {
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Initialisation du composant de connexion.....");
         }
-        final WebMarkupContainer menu = new WebMarkupContainer("menu");
-        menu.setOutputMarkupId(Boolean.TRUE);
+        menu = new WebMarkupContainer("menu");
+        menu.setOutputMarkupId(true);
         // add behaviour to page
         loginDialogBehaviour = new LoginDialogBehaviour();
         this.add(loginDialogBehaviour);
 
         // link to show authentication panel
         connexionlbl = new Label("connexionlbl", new Model<String>());
-        if (SecurityUtils.getSubject().isAuthenticated()) {
-            connexionlbl.setDefaultModelObject("Mon Compte");
-        } else {
-            connexionlbl.setDefaultModelObject("Connexion à l’espace membre");
-        }
-
         connexionlbl.setOutputMarkupId(true);
+        computeConnexionLbl();
 
         menu.add(connexionlbl);
 
@@ -204,7 +212,7 @@ public abstract class MasterPage extends WebPage {
             LOGGER.debug("Initialisation du composant de connexion.....OK");
         }
 
-        final LinkLabel demandeDevis = new LinkLabel("demandeDevis", new Model<String>("Obtenir des devis gratuitement")) {
+        final LinkLabel demandeDevis = new LinkLabel("demandeDevis", new Model<>("Obtenir des devis gratuitement")) {
 
             private static final long serialVersionUID = 737917087176303983L;
 
@@ -408,10 +416,22 @@ public abstract class MasterPage extends WebPage {
         response.render(OnDomReadyHeaderItem.forScript(getJSForClickListenerOnConnexion(loginDialogBehaviour
                 .getCallbackScript())));
 
-        response.render(JavaScriptHeaderItem.forUrl("js/bootstrap.js"));
-        response.render(JavaScriptHeaderItem.forUrl("js/components/bootstrap-modal/bootstrap-modalmanager.js"));
-        response.render(JavaScriptHeaderItem.forUrl("js/components/bootstrap-modal/bootstrap-modal.js"));
-        response.render(JavaScriptHeaderItem.forUrl("js/theme.js"));
+        JavaScriptUrlReferenceHeaderItem bootstrapJS = JavaScriptHeaderItem.forUrl("js/bootstrap.js");
+        //bootstrapJS.setAsync(true);
+
+        JavaScriptUrlReferenceHeaderItem bootstrapModalManager = JavaScriptHeaderItem.forUrl("js/components/bootstrap-modal/bootstrap-modalmanager.js");
+        //bootstrapModalManager.setAsync(true);
+
+        JavaScriptUrlReferenceHeaderItem bootstrapModal = JavaScriptHeaderItem.forUrl("js/components/bootstrap-modal/bootstrap-modal.js");
+        //bootstrapModal.setAsync(true);
+
+        JavaScriptUrlReferenceHeaderItem theme = JavaScriptHeaderItem.forUrl("js/theme.js");
+        //theme.setAsync(true);
+
+        response.render(bootstrapJS);
+        response.render(bootstrapModalManager);
+        response.render(bootstrapModal);
+        response.render(theme);
 
         response.render(CssHeaderItem.forUrl("css/google_font.css"));
         response.render(CssHeaderItem.forUrl("css/bootstrap.css"));
@@ -439,6 +459,15 @@ public abstract class MasterPage extends WebPage {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Ajout des resources dans le header.....OK");
         }
+    }
+
+    @Override
+    protected void setHeaders(WebResponse response) {
+        super.setHeaders(response);
+        String version = PropertiesFileWeb.APP.getProperties().getProperty("app.web.version");
+
+        response.setHeader("ETag", version);
+        response.enableCaching(Duration.hours(2), WebResponse.CacheScope.PUBLIC);
     }
 
     /**
@@ -554,11 +583,10 @@ public abstract class MasterPage extends WebPage {
                 getLoginDialog().open(((Event) event.getPayload()).getTarget());
             }
         } else if (event.getPayload() instanceof LoginEvent) {
-
             Event update = (Event) event.getPayload();
-            connexionlbl.setDefaultModelObject("Mon Compte");
 
-            update.getTarget().add(this);
+            computeConnexionLbl();
+            update.getTarget().add(menu);
             getLoginDialog().close(update.getTarget());
         } else if (event.getPayload() instanceof ClearFeedbackPanelEvent) {
 

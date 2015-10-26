@@ -90,11 +90,11 @@ public class AuthentificationModal extends ModalCastor {
                 if (authResult) {
                     // On envoi un event pour que le connected container
                     // (masterpage) se recharge
-                    send(getPage(), Broadcast.BREADTH, new LoginEvent(target));
 
                     // Si il voulait aller sur une page en particulier, on
                     // le redirige vers celle ci
                     if(getPage().getClass().equals(NouveauDevis.class) || rolesUtils.checkRoles(TypeCompte.ADMINISTRATEUR)){
+                        send(getPage(), Broadcast.BREADTH, new LoginEvent(target));
                         continueToOriginalDestination();
                     } else {
                         this.setResponsePage(MesAnnonces.class);

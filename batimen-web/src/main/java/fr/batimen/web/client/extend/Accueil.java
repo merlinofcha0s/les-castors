@@ -8,6 +8,7 @@ import fr.batimen.web.client.master.MasterPage;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
+import org.apache.wicket.markup.head.JavaScriptUrlReferenceHeaderItem;
 import org.apache.wicket.markup.html.link.Link;
 
 /**
@@ -38,8 +39,13 @@ public class Accueil extends MasterPage {
         response.render(CssHeaderItem.forUrl("css/rs-settings-override.css"));
         response.render(CssHeaderItem.forUrl("//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"));
 
-        response.render(JavaScriptHeaderItem.forUrl("js/jquery.themepunch.plugins.min.js"));
-        response.render(JavaScriptHeaderItem.forUrl("js/jquery.themepunch.revolution.min.js"));
+        JavaScriptUrlReferenceHeaderItem themePunchPlugin = JavaScriptHeaderItem.forUrl("js/jquery.themepunch.plugins.min.js");
+        themePunchPlugin.setAsync(true);
+        JavaScriptUrlReferenceHeaderItem themePunchPluginRevolution = JavaScriptHeaderItem.forUrl("js/jquery.themepunch.revolution.min.js");
+        themePunchPluginRevolution.setAsync(true);
+
+        response.render(themePunchPlugin);
+        response.render(themePunchPluginRevolution);
 
         StringBuilder adresseAccueil = new StringBuilder();
         adresseAccueil.append("https://lescastors.fr").append(UrlPage.ACCUEIL_URL);

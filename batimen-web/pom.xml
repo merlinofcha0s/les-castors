@@ -25,6 +25,7 @@
         <jersey.client.version>1.18.1</jersey.client.version>
         <shiro.version>1.2.3</shiro.version>
         <aspectjrt.version>1.8.5</aspectjrt.version>
+        <lol></lol>
 
         <wicket.mode>development</wicket.mode>
 
