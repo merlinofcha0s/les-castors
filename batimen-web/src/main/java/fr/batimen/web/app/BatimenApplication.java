@@ -24,6 +24,7 @@ import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.cdi.CdiConfiguration;
 import org.apache.wicket.cdi.ConversationPropagation;
 import org.apache.wicket.core.request.mapper.MountedMapper;
+import org.apache.wicket.javascript.DefaultJavaScriptCompressor;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
@@ -113,6 +114,17 @@ public class BatimenApplication extends AuthenticatedWebApplication {
                 new UrlResourceReference(Url.parse("//code.jquery.com/jquery-1.11.2.min.js")));
 
         getResourceSettings().setCssCompressor(new CssUrlReplacer());
+        getResourceSettings().setJavaScriptCompressor(new DefaultJavaScriptCompressor());
+        getResourceSettings().setUseMinifiedResources(true);
+
+        /*IResourceCachingStrategy strategy = new FilenameWithVersionResourceCachingStrategy(
+                new LastModifiedResourceVersion());
+        getResourceSettings().setCachingStrategy(strategy);
+        getResourceSettings().setDefaultCacheDuration(Duration.minutes(120));*/
+
+        /*getStoreSettings().setMaxSizePerSession(Bytes.megabytes(2));
+        //Nombre de page max en mémoire
+        getStoreSettings().setInmemoryCacheSize(50);*/
 
         // Cfg urls des pages principales
         mountPage(UrlPage.ACCUEIL_URL, Accueil.class);
