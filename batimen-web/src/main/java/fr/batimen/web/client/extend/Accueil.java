@@ -55,7 +55,7 @@ public class Accueil extends MasterPage {
         response.render(addOpenGraphMetaResourcesToHeader("og:type", "website"));
         response.render(addOpenGraphMetaResourcesToHeader("og:title", "Bienvenue sur le site lescastors.fr"));
         response.render(addOpenGraphMetaResourcesToHeader("og:description", "Des artisans de qualités prés de chez vous"));
-        response.render(addOpenGraphMetaResourcesToHeader("og:image", "https://res.cloudinary.com/lescastors/image/upload/v1443971771/mail/logo-bleu2x.png"));
+        response.render(addOpenGraphMetaResourcesToHeader("og:image", UrlPage.LOGO));
     }
 
     private void initLinks() {

@@ -1178,3 +1178,11 @@ table tr td .error {
     text-decoration: underline;
 }
 
+/* qui sommes nous */
+#qui-sommes-nous-content-text {
+    margin-top: 15px;
+}
+
+.align-center {
+    text-align: center;
+}

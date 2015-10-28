@@ -194,6 +194,6 @@ public class Contact extends MasterPage {
         response.render(addOpenGraphMetaResourcesToHeader("og:type", "website"));
         response.render(addOpenGraphMetaResourcesToHeader("og:title", "Contacter l'équipe du site lescastors.fr"));
         response.render(addOpenGraphMetaResourcesToHeader("og:description", "Posez vos questions à notre équipe"));
-        response.render(addOpenGraphMetaResourcesToHeader("og:image", "https://res.cloudinary.com/lescastors/image/upload/v1443971771/mail/logo-bleu2x.png"));
+        response.render(addOpenGraphMetaResourcesToHeader("og:image", UrlPage.LOGO));
     }
 }

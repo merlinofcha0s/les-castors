@@ -31,7 +31,11 @@ import org.apache.wicket.request.Response;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.mapper.parameter.UrlPathPageParametersEncoder;
 import org.apache.wicket.request.resource.UrlResourceReference;
+import org.apache.wicket.request.resource.caching.FilenameWithVersionResourceCachingStrategy;
+import org.apache.wicket.request.resource.caching.IResourceCachingStrategy;
+import org.apache.wicket.request.resource.caching.version.LastModifiedResourceVersion;
 import org.apache.wicket.resource.CssUrlReplacer;
+import org.apache.wicket.util.time.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wicketstuff.javaee.injection.JavaEEComponentInjector;
@@ -117,10 +121,10 @@ public class BatimenApplication extends AuthenticatedWebApplication {
         getResourceSettings().setJavaScriptCompressor(new DefaultJavaScriptCompressor());
         getResourceSettings().setUseMinifiedResources(true);
 
-        /*IResourceCachingStrategy strategy = new FilenameWithVersionResourceCachingStrategy(
+        IResourceCachingStrategy strategy = new FilenameWithVersionResourceCachingStrategy(
                 new LastModifiedResourceVersion());
         getResourceSettings().setCachingStrategy(strategy);
-        getResourceSettings().setDefaultCacheDuration(Duration.minutes(120));*/
+        getResourceSettings().setDefaultCacheDuration(Duration.minutes(120));
 
         /*getStoreSettings().setMaxSizePerSession(Bytes.megabytes(2));
         //Nombre de page max en mémoire

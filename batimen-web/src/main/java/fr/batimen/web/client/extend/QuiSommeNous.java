@@ -29,6 +29,6 @@ public class QuiSommeNous extends MasterPage {
         response.render(addOpenGraphMetaResourcesToHeader("og:type", "website"));
         response.render(addOpenGraphMetaResourcesToHeader("og:title", "Présentation de l'équipe du site lescastors.fr"));
         response.render(addOpenGraphMetaResourcesToHeader("og:description", "Petite présentation de notre équipe"));
-        response.render(addOpenGraphMetaResourcesToHeader("og:image", "https://res.cloudinary.com/lescastors/image/upload/v1443971771/mail/logo-bleu2x.png"));
+        response.render(addOpenGraphMetaResourcesToHeader("og:image", UrlPage.LOGO));
     }
 }
