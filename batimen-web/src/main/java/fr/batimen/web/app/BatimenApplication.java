@@ -55,6 +55,7 @@ public class BatimenApplication extends AuthenticatedWebApplication {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(BatimenApplication.class);
     private boolean setStripWicketTags;
+    private boolean activateResourceCaching;
 
     private void getAppProperties() {
 
@@ -64,6 +65,7 @@ public class BatimenApplication extends AuthenticatedWebApplication {
 
         Properties appProperties = PropertiesFileWeb.APP.getProperties();
         setStripWicketTags = Boolean.valueOf(appProperties.getProperty("app.setStripWicketTags"));
+        activateResourceCaching = Boolean.valueOf(appProperties.getProperty("app.activate.cache.resources"));
     }
 
     /**
@@ -121,10 +123,12 @@ public class BatimenApplication extends AuthenticatedWebApplication {
         getResourceSettings().setJavaScriptCompressor(new DefaultJavaScriptCompressor());
         getResourceSettings().setUseMinifiedResources(true);
 
-        IResourceCachingStrategy strategy = new FilenameWithVersionResourceCachingStrategy(
-                new LastModifiedResourceVersion());
-        getResourceSettings().setCachingStrategy(strategy);
-        getResourceSettings().setDefaultCacheDuration(Duration.minutes(120));
+        if (activateResourceCaching) {
+            IResourceCachingStrategy strategy = new FilenameWithVersionResourceCachingStrategy(
+                    new LastModifiedResourceVersion());
+            getResourceSettings().setCachingStrategy(strategy);
+            getResourceSettings().setDefaultCacheDuration(Duration.minutes(120));
+        }
 
         /*getStoreSettings().setMaxSizePerSession(Bytes.megabytes(2));
         //Nombre de page max en mémoire

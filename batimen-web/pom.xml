@@ -25,7 +25,6 @@
         <jersey.client.version>1.18.1</jersey.client.version>
         <shiro.version>1.2.3</shiro.version>
         <aspectjrt.version>1.8.5</aspectjrt.version>
-        <lol></lol>
 
         <wicket.mode>development</wicket.mode>
 
@@ -35,6 +34,7 @@
         <app.activate.captcha>true</app.activate.captcha>
         <!-- Activation de google analytics -->
         <app.activate.analytics>false</app.activate.analytics>
+        <app.activate.cache.resources>false</app.activate.cache.resources>
 
         <!-- Infos Web App -->
         <app.ip>127.0.0.1</app.ip>
@@ -420,6 +420,10 @@
                 <app.setStripWicketTags>true</app.setStripWicketTags>
                 <!-- Activation de google analytics -->
                 <app.activate.analytics>false</app.activate.analytics>
+                <!-- Activation du cache pour les ressources HTTP (CSS, JS, etc) -->
+                <app.activate.cache.resources>false</app.activate.cache.resources>
+                <!-- Activation des captchas lors de l'inscription / nouveau compte -->
+                <app.activate.captcha>true</app.activate.captcha>
 
                 <!-- Propriétés de la BDD pour les tests d'integration -->
                 <database.address>127.0.0.1</database.address>
@@ -517,6 +521,10 @@
                 <app.setStripWicketTags>true</app.setStripWicketTags>
                 <!-- Activation de google analytics -->
                 <app.activate.analytics>true</app.activate.analytics>
+                <!-- Activation du cache pour les ressources HTTP (CSS, JS, etc) -->
+                <app.activate.cache.resources>true</app.activate.cache.resources>
+                <!-- Activation des captchas lors de l'inscription / nouveau compte -->
+                <app.activate.captcha>true</app.activate.captcha>
             </properties>
             <build>
                 <resources>

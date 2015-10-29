@@ -1186,3 +1186,9 @@ table tr td .error {
 .align-center {
     text-align: center;
 }
+
+.profile {
+    width: 170px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+}
