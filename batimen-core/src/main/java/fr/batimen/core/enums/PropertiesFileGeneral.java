@@ -8,7 +8,7 @@ import java.util.Properties;
 
 public enum PropertiesFileGeneral {
 
-    GENERAL("general.properties");
+    GENERAL("general.properties"), URL("url.properties");
 
     private transient final Logger logger = LoggerFactory.getLogger(PropertiesFileGeneral.class);
     private Properties properties;

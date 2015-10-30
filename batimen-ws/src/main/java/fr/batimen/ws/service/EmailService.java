@@ -5,6 +5,7 @@ import com.microtripit.mandrillapp.lutung.view.MandrillMessage;
 import com.microtripit.mandrillapp.lutung.view.MandrillMessage.MergeVar;
 import fr.batimen.core.constant.EmailConstant;
 import fr.batimen.core.constant.UrlPage;
+import fr.batimen.core.enums.PropertiesFileGeneral;
 import fr.batimen.core.exception.EmailException;
 import fr.batimen.dto.ContactMailDTO;
 import fr.batimen.dto.constant.Categorie;
@@ -14,7 +15,6 @@ import fr.batimen.ws.entity.Annonce;
 import fr.batimen.ws.entity.CategorieMetier;
 import fr.batimen.ws.entity.MotCle;
 import fr.batimen.ws.entity.Notification;
-import fr.batimen.ws.enums.PropertiesFileWS;
 import fr.batimen.ws.utils.ClientUtils;
 
 import javax.ejb.LocalBean;
@@ -253,7 +253,7 @@ public class EmailService {
         StringBuilder nomArtisan = new StringBuilder();
         ClientUtils.chooseNomClient(notification.getArtisanNotifier().getNom(), notification.getArtisanNotifier().getPrenom(), notification.getArtisanNotifier().getLogin(), nomArtisan);
 
-        Properties urlProperties = PropertiesFileWS.URL.getProperties();
+        Properties urlProperties = PropertiesFileGeneral.URL.getProperties();
         String urlFrontend = urlProperties.getProperty("url.frontend.web");
 
         List<MandrillMessage.MergeVar> mergevars = new LinkedList<>();

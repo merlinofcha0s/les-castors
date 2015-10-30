@@ -1,26 +1,25 @@
 package fr.batimen.ws.dao;
 
+import com.microtripit.mandrillapp.lutung.MandrillApi;
+import com.microtripit.mandrillapp.lutung.model.MandrillApiError;
+import com.microtripit.mandrillapp.lutung.view.MandrillMessage;
+import com.microtripit.mandrillapp.lutung.view.MandrillMessage.Recipient;
+import com.microtripit.mandrillapp.lutung.view.MandrillMessageStatus;
+import fr.batimen.core.constant.EmailConstant;
+import fr.batimen.core.enums.PropertiesFileGeneral;
+import fr.batimen.core.exception.EmailException;
+import fr.batimen.ws.enums.PropertiesFileWS;
+
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Properties;
-
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
-
-import com.microtripit.mandrillapp.lutung.MandrillApi;
-import com.microtripit.mandrillapp.lutung.model.MandrillApiError;
-import com.microtripit.mandrillapp.lutung.view.MandrillMessage;
-import com.microtripit.mandrillapp.lutung.view.MandrillMessage.Recipient;
-import com.microtripit.mandrillapp.lutung.view.MandrillMessageStatus;
-
-import fr.batimen.core.constant.EmailConstant;
-import fr.batimen.core.exception.EmailException;
-import fr.batimen.ws.enums.PropertiesFileWS;
 
 /**
  * Classe de formatage et d'envoi d'email, l'envoi de mail est realisé par
@@ -153,7 +152,7 @@ public class EmailDAO {
      */
     public void remplirFooter(MandrillMessage mail) {
         // On charge les variables dynamique à remplacer
-        Properties urlProperties = PropertiesFileWS.URL.getProperties();
+        Properties urlProperties = PropertiesFileGeneral.URL.getProperties();
         String urlFront = urlProperties.getProperty("url.frontend.web");
         String urlFb = urlProperties.getProperty("url.fb");
         String urlTwitter = urlProperties.getProperty("url.twitter");

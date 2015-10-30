@@ -14,7 +14,7 @@ import java.util.Properties;
  */
 public enum PropertiesFileWS {
 
-    URL("url.properties"), EMAIL("email.properties"), CASTOR("castor.properties"), JOBS("jobs.properties"), IMAGE(
+    EMAIL("email.properties"), CASTOR("castor.properties"), JOBS("jobs.properties"), IMAGE(
             "image.properties");
 
     private final transient Logger logger = LoggerFactory.getLogger(PropertiesFileWS.class);

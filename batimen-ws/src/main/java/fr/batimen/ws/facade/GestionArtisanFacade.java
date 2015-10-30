@@ -4,6 +4,7 @@ import com.microtripit.mandrillapp.lutung.model.MandrillApiError;
 import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.WsPath;
+import fr.batimen.core.enums.PropertiesFileGeneral;
 import fr.batimen.core.exception.BackendException;
 import fr.batimen.core.exception.EmailException;
 import fr.batimen.dto.AvisDTO;
@@ -171,7 +172,7 @@ public class GestionArtisanFacade {
         }
 
         // On recupere l'url du frontend
-        Properties urlProperties = PropertiesFileWS.URL.getProperties();
+        Properties urlProperties = PropertiesFileGeneral.URL.getProperties();
         String urlFrontend = urlProperties.getProperty("url.frontend.web");
         Properties emailProperties = PropertiesFileWS.EMAIL.getProperties();
         Boolean emailInscriptionConfirmationByCastorTeam = Boolean.valueOf(emailProperties.getProperty("email.confirmation.by.team"));

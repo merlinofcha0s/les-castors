@@ -4,6 +4,7 @@ import com.microtripit.mandrillapp.lutung.model.MandrillApiError;
 import fr.batimen.core.constant.CodeRetourService;
 import fr.batimen.core.constant.Constant;
 import fr.batimen.core.constant.WsPath;
+import fr.batimen.core.enums.PropertiesFileGeneral;
 import fr.batimen.core.exception.BackendException;
 import fr.batimen.core.exception.DuplicateEntityException;
 import fr.batimen.core.exception.EmailException;
@@ -24,7 +25,6 @@ import fr.batimen.ws.entity.Annonce;
 import fr.batimen.ws.entity.Artisan;
 import fr.batimen.ws.entity.Entreprise;
 import fr.batimen.ws.entity.Image;
-import fr.batimen.ws.enums.PropertiesFileWS;
 import fr.batimen.ws.helper.JsonHelper;
 import fr.batimen.ws.interceptor.BatimenInterceptor;
 import fr.batimen.ws.mapper.AnnonceMap;
@@ -143,7 +143,7 @@ public class GestionAnnonceFacade {
                     emailService.envoiMailConfirmationCreationAnnonce(nouvelleAnnonce);
                 } else {
                     // On recupere l'url du frontend
-                    Properties urlProperties = PropertiesFileWS.URL.getProperties();
+                    Properties urlProperties = PropertiesFileGeneral.URL.getProperties();
                     String urlFrontend = urlProperties.getProperty("url.frontend.web");
                     emailService.envoiMailActivationCompte(nouvelleAnnonceDTO.getClient().getNom(), nouvelleAnnonceDTO
                             .getClient().getPrenom(), nouvelleAnnonceDTO.getClient().getLogin(), nouvelleAnnonceDTO

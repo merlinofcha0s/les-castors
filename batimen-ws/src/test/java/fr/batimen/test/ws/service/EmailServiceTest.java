@@ -2,6 +2,7 @@ package fr.batimen.test.ws.service;
 
 import com.microtripit.mandrillapp.lutung.model.MandrillApiError;
 import com.microtripit.mandrillapp.lutung.view.MandrillMessage;
+import fr.batimen.core.enums.PropertiesFileGeneral;
 import fr.batimen.core.exception.EmailException;
 import fr.batimen.dto.ContactMailDTO;
 import fr.batimen.dto.aggregate.CreationAnnonceDTO;
@@ -10,7 +11,6 @@ import fr.batimen.test.ws.helper.DataHelper;
 import fr.batimen.ws.dao.ClientDAO;
 import fr.batimen.ws.dao.EmailDAO;
 import fr.batimen.ws.entity.Client;
-import fr.batimen.ws.enums.PropertiesFileWS;
 import fr.batimen.ws.service.EmailService;
 import org.jboss.arquillian.persistence.UsingDataSet;
 import org.junit.Assert;
@@ -95,7 +95,7 @@ public class EmailServiceTest extends AbstractBatimenWsTest {
      */
     @Test
     public void sendActivationMail() throws MandrillApiError, IOException, EmailException {
-        Properties urlProperties = PropertiesFileWS.URL.getProperties();
+        Properties urlProperties = PropertiesFileGeneral.URL.getProperties();
         String urlFrontend = urlProperties.getProperty("url.frontend.web");
 
         boolean noError = emailService
