@@ -1,6 +1,7 @@
 package fr.batimen.web.client.extend;
 
 import fr.batimen.core.constant.UrlPage;
+import fr.batimen.core.enums.PropertiesFileGeneral;
 import fr.batimen.web.client.component.ContactezNous;
 import fr.batimen.web.client.extend.nouveau.artisan.NouveauArtisan;
 import fr.batimen.web.client.extend.nouveau.devis.NouveauDevis;
@@ -10,6 +11,7 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.head.JavaScriptUrlReferenceHeaderItem;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.pages.RedirectPage;
 
 /**
  * Premiere page visible quand l'utilisateur arrivera sur le site, elle definira
@@ -27,6 +29,7 @@ public class Accueil extends MasterPage {
         ContactezNous contactezNous = new ContactezNous("contactezNous");
         this.add(contactezNous);
         initLinks();
+        initSocialLink();
     }
 
 
@@ -110,8 +113,36 @@ public class Accueil extends MasterPage {
             }
         };
 
-        this.add(nouveauDevis2, rejoignezNousLink,  faireUnDevisSlide1,
+        add(nouveauDevis2, rejoignezNousLink, faireUnDevisSlide1,
                 faireUnDevisSlide2, faireUnDevisSlide3);
     }
 
+    private void initSocialLink() {
+        String linkFacebookCastor = PropertiesFileGeneral.URL.getProperties().getProperty("url.fb");
+        String linkTwitterCastor = PropertiesFileGeneral.URL.getProperties().getProperty("url.twitter");
+        String linkGooglePlusCastor = PropertiesFileGeneral.URL.getProperties().getProperty("url.google.plus");
+
+        Link<String> footerFB = new Link<String>("footerFB") {
+            @Override
+            public void onClick() {
+                this.setResponsePage(new RedirectPage(linkFacebookCastor));
+            }
+        };
+
+        Link<String> footerGPlus = new Link<String>("footerGPlus") {
+            @Override
+            public void onClick() {
+                this.setResponsePage(new RedirectPage(linkGooglePlusCastor));
+            }
+        };
+
+        Link<String> footerTwitter = new Link<String>("footerTwitter") {
+            @Override
+            public void onClick() {
+                this.setResponsePage(new RedirectPage(linkTwitterCastor));
+            }
+        };
+
+        add(footerFB, footerGPlus, footerTwitter);
+    }
 }
