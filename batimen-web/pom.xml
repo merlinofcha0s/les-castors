@@ -422,8 +422,6 @@
                 <app.activate.analytics>false</app.activate.analytics>
                 <!-- Activation du cache pour les ressources HTTP (CSS, JS, etc) -->
                 <app.activate.cache.resources>false</app.activate.cache.resources>
-                <!-- Activation des captchas lors de l'inscription / nouveau compte -->
-                <app.activate.captcha>true</app.activate.captcha>
 
                 <!-- Propriétés de la BDD pour les tests d'integration -->
                 <database.address>127.0.0.1</database.address>
