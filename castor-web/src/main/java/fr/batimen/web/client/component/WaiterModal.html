@@ -1,0 +1,34 @@
+<wicket:panel>
+	<div id="waiterModal"></div>
+
+	<script>
+		hideWaiterModal();
+		Wicket.Event.subscribe('/ajax/call/beforeSend', function(attributes,jqXHR, settings) {
+			
+			
+			var classes = attributes.target.activeElement.className;
+
+			if(classes instanceof String){
+				 var skipWait = classes.indexOf("skipWaiter")>=0;
+	              if(!skipWait){
+	                    showWaiterModal();
+	              }
+			} else {
+				 showWaiterModal();
+			}
+		});
+		Wicket.Event.subscribe('/ajax/call/complete', function(attributes,jqXHR, textStatus) {
+			hideWaiterModal()
+		});
+
+		function showWaiterModal() {
+			$('#waiterModal').fadeIn();
+			$('html').addClass('loading');
+		}
+
+		function hideWaiterModal() {
+			$('#waiterModal').fadeOut();
+			$('html').removeClass('loading');
+		}
+	</script>
+</wicket:panel>

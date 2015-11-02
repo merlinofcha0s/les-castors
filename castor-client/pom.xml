@@ -1,0 +1,155 @@
+<?xml version="1.0"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>fr.castor.app</groupId>
+        <artifactId>castor-module</artifactId>
+        <version>1.0.1-SNAPSHOT</version>
+        <relativePath>../castor-module</relativePath>
+    </parent>
+
+    <artifactId>castor-client</artifactId>
+    <packaging>jar</packaging>
+    <name>castor-client</name>
+
+    <properties>
+        <!-- Adresse du WS -->
+        <ws.ip>127.0.0.1</ws.ip>
+        <ws.port>8181</ws.port>
+        <ws.name>castor-ws</ws.name>
+
+        <!-- Utilisé pour activer la verification du certificat du serveur obligatoirement
+            mettre a true en prod -->
+        <ws.isprod>false</ws.isprod>
+        <ws.user.login>batimenuser</ws.user.login>
+        <ws.user.password>Lolmdr06</ws.user.password>
+    </properties>
+
+    <build>
+        <plugins>
+            <!-- Javadoc -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-eclipse-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+            </plugin>
+        </plugins>
+        <resources>
+            <resource>
+                <filtering>true</filtering>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+    </build>
+
+    <dependencies>
+        <!-- JEE -->
+        <dependency>
+            <groupId>org.jboss.spec</groupId>
+            <artifactId>jboss-javaee-7.0</artifactId>
+            <version>${java.spec.version}</version>
+            <scope>provided</scope>
+            <type>pom</type>
+        </dependency>
+        <!-- Jersey Client -->
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-client</artifactId>
+            <scope>compile</scope>
+            <version>${jersey.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.jersey.contribs</groupId>
+            <artifactId>jersey-apache-client</artifactId>
+            <version>${jersey.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.jersey</groupId>
+            <artifactId>jersey-json</artifactId>
+            <version>${jersey.version}</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.sun.jersey.contribs</groupId>
+            <artifactId>jersey-multipart</artifactId>
+            <version>${jersey.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.3.1</version>
+            <scope>compile</scope>
+        </dependency>
+        <!-- Intra projet -->
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>castor-dto</artifactId>
+            <version>${project.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>castor-core</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <!-- Logs -->
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-access</artifactId>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>xalan</groupId>
+                <artifactId>xalan</artifactId>
+                <version>2.7.1</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+    <profiles>
+        <profile>
+            <id>integration</id>
+            <properties>
+                <!-- Adresse du WS -->
+                <ws.ip>127.0.0.1</ws.ip>
+                <ws.port>8443</ws.port>
+                <ws.name>castor-ws</ws.name>
+                <!-- Utilisé pour activer la verification du certificat du serveur obligatoirement
+                    mettre a true en prod -->
+                <ws.isprod>false</ws.isprod>
+                <!-- Accés WS -->
+                <ws.user.login>castoruser</ws.user.login>
+                <ws.user.password>KWIT4A{3*U</ws.user.password>
+            </properties>
+        </profile>
+        <profile>
+            <id>production</id>
+            <properties>
+                <maven.test.skip>true</maven.test.skip>
+                <!-- Adresse du WS -->
+                <ws.ip>prodwsv2-lescastors.rhcloud.com</ws.ip>
+                <ws.port>443</ws.port>
+                <ws.name />
+                <!-- Utilisé pour activer la verification du certificat du serveur obligatoirement
+                    mettre a true en prod -->
+                <ws.isprod>true</ws.isprod>
+                <!-- Accés WS -->
+                <ws.user.login>castoruserws</ws.user.login>
+                <ws.user.password>L%rkaGqhra</ws.user.password>
+            </properties>
+        </profile>
+    </profiles>
+</project>
