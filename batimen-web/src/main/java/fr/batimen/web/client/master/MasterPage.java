@@ -1,5 +1,6 @@
 package fr.batimen.web.client.master;
 
+import fr.batimen.core.enums.PropertiesFileGeneral;
 import fr.batimen.dto.enums.TypeCompte;
 import fr.batimen.web.app.constants.FeedbackMessageLevel;
 import fr.batimen.web.client.behaviour.LoginDialogBehaviour;
@@ -27,6 +28,7 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.pages.RedirectPage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
@@ -118,6 +120,7 @@ public abstract class MasterPage extends WebPage {
         initComponentConnexion();
         initTitleHeader(isPageWithTitleHeader, title, adresseImgBackground);
         initFooterLink();
+        initSocialFooterLink();
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Instantiation de la master page.....OK");
@@ -599,6 +602,35 @@ public abstract class MasterPage extends WebPage {
             update.getTarget().add(feedBackPanelGeneral);
         }
 
+    }
+
+    private void initSocialFooterLink() {
+        String linkFacebookCastor = PropertiesFileGeneral.URL.getProperties().getProperty("url.fb");
+        String linkTwitterCastor = PropertiesFileGeneral.URL.getProperties().getProperty("url.twitter");
+        String linkGooglePlusCastor = PropertiesFileGeneral.URL.getProperties().getProperty("url.google.plus");
+
+        Link<String> footerFBMaster = new Link<String>("footerFBMaster") {
+            @Override
+            public void onClick() {
+                this.setResponsePage(new RedirectPage(linkFacebookCastor));
+            }
+        };
+
+        Link<String> footerGPlusMaster = new Link<String>("footerGPlusMaster") {
+            @Override
+            public void onClick() {
+                this.setResponsePage(new RedirectPage(linkGooglePlusCastor));
+            }
+        };
+
+        Link<String> footerTwitterMaster = new Link<String>("footerTwitterMaster") {
+            @Override
+            public void onClick() {
+                this.setResponsePage(new RedirectPage(linkTwitterCastor));
+            }
+        };
+
+        add(footerFBMaster, footerGPlusMaster, footerTwitterMaster);
     }
 
 }
