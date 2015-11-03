@@ -7,9 +7,9 @@
 		<listener-class>fr.batimen.ws.context.LogBackContextListener</listener-class>
 	</listener> -->
 	<security-constraint>
-		<display-name>BatimenSec</display-name>
+		<display-name>CastorSec</display-name>
 		<web-resource-collection>
-			<web-resource-name>BatimenSec</web-resource-name>
+			<web-resource-name>CastorSec</web-resource-name>
 			<description />
 			<url-pattern>/*</url-pattern>
 			<http-method>POST</http-method>

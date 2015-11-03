@@ -5,7 +5,7 @@
     <display-name>castor-web</display-name>
 
     <listener>
-        <listener-class>fr.batimen.web.app.security.ShiroCastorListener</listener-class>
+        <listener-class>fr.castor.web.app.security.ShiroCastorListener</listener-class>
     </listener>
     <filter>
         <filter-name>ShiroFilter</filter-name>
@@ -32,11 +32,11 @@
         "deployment". If no configuration is found, "development" is the default. -->
 
     <filter>
-        <filter-name>wicket.batimen-web</filter-name>
+        <filter-name>wicket.castor-web</filter-name>
         <filter-class>org.apache.wicket.protocol.http.WicketFilter</filter-class>
         <init-param>
             <param-name>applicationClassName</param-name>
-            <param-value>fr.batimen.web.app.BatimenApplication</param-value>
+            <param-value>fr.castor.web.app.CastorApplication</param-value>
         </init-param>
     </filter>
 
@@ -58,7 +58,7 @@
     </context-param>
 
     <filter-mapping>
-        <filter-name>wicket.batimen-web</filter-name>
+        <filter-name>wicket.castor-web</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
 

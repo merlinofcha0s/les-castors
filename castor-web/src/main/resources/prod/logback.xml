@@ -1,5 +1,5 @@
 <configuration scan="true" debug="false" scanPeriod="30 seconds">
-	<contextName>batimenWebContext</contextName>
+	<contextName>CastorWebContext</contextName>
 
 	<property name="LOGS_FOLDER" value="${logs.address}" />
 	<property name="LOGS_TO_COLLECT_FOLDER" value="${logs.archives}" />
@@ -10,7 +10,7 @@
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
 		<file>${LOGS_FOLDER}/batimen_web.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>${LOGS_TO_COLLECT_FOLDER}/batimen_web.%d{yyyyMMdd}.log</fileNamePattern>
+			<fileNamePattern>${LOGS_TO_COLLECT_FOLDER}/castor_web.%d{yyyyMMdd}.log</fileNamePattern>
 		</rollingPolicy>
 		<encoder>
 			<pattern>%d{yyyy/MM/dd HH:mm:ss,SSS} %-5level %logger{36} - %m %throwable{0}%n</pattern>

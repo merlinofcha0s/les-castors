@@ -1,5 +1,5 @@
 <configuration debug="true">
-	<contextName>batimenWebContext</contextName>
+	<contextName>CastorWebContext</contextName>
 
 	<!-- Permet d'avoir les logs dans la console d'eclipse et glassfish (a degager 
 		en prod) -->

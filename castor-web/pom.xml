@@ -19,7 +19,7 @@
     <properties>
         <wicket.version>6.20.0</wicket.version>
         <jersey.client.version>1.18.1</jersey.client.version>
-        <shiro.version>1.2.3</shiro.version>
+        <shiro.version>1.2.4</shiro.version>
         <aspectjrt.version>1.8.5</aspectjrt.version>
 
         <wicket.mode>development</wicket.mode>
