@@ -16,9 +16,8 @@ import org.apache.wicket.markup.html.pages.RedirectPage;
 /**
  * Premiere page visible quand l'utilisateur arrivera sur le site, elle definira
  * notre offre
- * 
+ *
  * @author Casaucau Cyril
- * 
  */
 public class Accueil extends MasterPage {
 
@@ -43,9 +42,7 @@ public class Accueil extends MasterPage {
         response.render(CssHeaderItem.forUrl("//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"));
 
         JavaScriptUrlReferenceHeaderItem themePunchPlugin = JavaScriptHeaderItem.forUrl("js/jquery.themepunch.plugins.min.js");
-        themePunchPlugin.setAsync(true);
         JavaScriptUrlReferenceHeaderItem themePunchPluginRevolution = JavaScriptHeaderItem.forUrl("js/jquery.themepunch.revolution.min.js");
-        themePunchPluginRevolution.setAsync(true);
 
         response.render(themePunchPlugin);
         response.render(themePunchPluginRevolution);
@@ -62,17 +59,6 @@ public class Accueil extends MasterPage {
     }
 
     private void initLinks() {
-        Link<String> nouveauDevis2 = new Link<String>("nouveauDevisLink2") {
-
-            private static final long serialVersionUID = -9117623557888658144L;
-
-            @Override
-            public void onClick() {
-                this.setResponsePage(NouveauDevis.class);
-            }
-
-        };
-
         Link<String> rejoignezNousLink = new Link<String>("rejoignezNousLink") {
 
             private static final long serialVersionUID = -5557301617442136725L;
@@ -113,8 +99,7 @@ public class Accueil extends MasterPage {
             }
         };
 
-        add(nouveauDevis2, rejoignezNousLink, faireUnDevisSlide1,
-                faireUnDevisSlide2, faireUnDevisSlide3);
+        add(rejoignezNousLink, faireUnDevisSlide1, faireUnDevisSlide2, faireUnDevisSlide3);
     }
 
     private void initSocialLink() {
