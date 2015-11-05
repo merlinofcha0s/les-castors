@@ -2,6 +2,7 @@ package fr.castor.web.client.extend;
 
 import fr.castor.core.constant.UrlPage;
 import fr.castor.core.enums.PropertiesFileGeneral;
+import fr.castor.web.app.constants.JSConstant;
 import fr.castor.web.client.component.ContactezNous;
 import fr.castor.web.client.extend.nouveau.artisan.NouveauArtisan;
 import fr.castor.web.client.extend.nouveau.devis.NouveauDevis;
@@ -39,7 +40,7 @@ public class Accueil extends MasterPage {
         response.render(CssHeaderItem.forUrl("css/accueil.css"));
         response.render(CssHeaderItem.forUrl("css/rs-settings.css"));
         response.render(CssHeaderItem.forUrl("css/rs-settings-override.css"));
-        response.render(CssHeaderItem.forUrl("//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"));
+        response.render(JSConstant.fontAwesome);
 
         JavaScriptUrlReferenceHeaderItem themePunchPlugin = JavaScriptHeaderItem.forUrl("js/jquery.themepunch.plugins.min.js");
         JavaScriptUrlReferenceHeaderItem themePunchPluginRevolution = JavaScriptHeaderItem.forUrl("js/jquery.themepunch.revolution.min.js");

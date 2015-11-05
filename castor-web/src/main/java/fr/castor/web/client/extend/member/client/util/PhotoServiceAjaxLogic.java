@@ -4,7 +4,7 @@ import fr.castor.core.enums.PropertiesFileGeneral;
 import fr.castor.dto.ImageDTO;
 import fr.castor.dto.aggregate.AjoutPhotoDTO;
 import fr.castor.dto.aggregate.SuppressionPhotoDTO;
-import fr.castor.web.app.constants.FeedbackMessageLevel;
+import fr.castor.web.app.enums.FeedbackMessageLevel;
 import fr.castor.web.app.security.Authentication;
 import fr.castor.web.client.behaviour.FileFieldValidatorAndLoaderBehaviour;
 import fr.castor.web.client.event.AjoutPhotoEvent;

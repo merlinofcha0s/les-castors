@@ -7,7 +7,7 @@ import fr.castor.core.security.HashHelper;
 import fr.castor.dto.ClientDTO;
 import fr.castor.dto.LocalisationDTO;
 import fr.castor.dto.aggregate.CreationAnnonceDTO;
-import fr.castor.web.app.constants.Etape;
+import fr.castor.web.app.enums.Etape;
 import fr.castor.web.app.security.Authentication;
 import fr.castor.web.client.component.ContactezNous;
 import fr.castor.web.client.component.NavigationWizard;

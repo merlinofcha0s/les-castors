@@ -7,7 +7,7 @@ import fr.castor.dto.aggregate.AnnonceAffichageDTO;
 import fr.castor.dto.aggregate.CreationAnnonceDTO;
 import fr.castor.dto.aggregate.ModificationAnnonceDTO;
 import fr.castor.dto.enums.EtatAnnonce;
-import fr.castor.web.app.constants.FeedbackMessageLevel;
+import fr.castor.web.app.enums.FeedbackMessageLevel;
 import fr.castor.web.app.constants.ParamsConstant;
 import fr.castor.web.app.security.Authentication;
 import fr.castor.web.client.component.*;

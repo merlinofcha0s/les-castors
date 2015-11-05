@@ -1,10 +1,10 @@
 package fr.castor.web.client.component;
 
+import fr.castor.web.app.constants.JSConstant;
 import fr.castor.web.client.behaviour.border.RequiredBorderBehaviour;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.markup.ComponentTag;
-import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.form.HiddenField;
@@ -84,7 +84,7 @@ public class RaterStarsCastor extends Panel {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.render(JavaScriptHeaderItem.forScript("function initRaterCastor() { $('.rating').rating({filled: 'fa fa-star',filledSelected: 'fa fa-star', empty: 'fa fa-star-o'});}", "initCastorRater"));
-        response.render(CssHeaderItem.forUrl("//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"));
+        response.render(JSConstant.fontAwesome);
     }
 
     @Override

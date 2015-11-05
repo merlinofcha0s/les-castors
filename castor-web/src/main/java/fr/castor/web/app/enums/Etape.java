@@ -1,4 +1,4 @@
-package fr.castor.web.app.constants;
+package fr.castor.web.app.enums;
 
 public enum Etape {
 

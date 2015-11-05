@@ -7,7 +7,7 @@ import com.sun.jersey.api.client.config.DefaultClientConfig;
 import com.sun.jersey.core.util.MultivaluedMapImpl;
 import fr.castor.dto.CaptchaDTO;
 import fr.castor.dto.helper.DeserializeJsonHelper;
-import fr.castor.web.enums.PropertiesFileWeb;
+import fr.castor.web.app.enums.PropertiesFileWeb;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.JavaScriptHeaderItem;
 import org.apache.wicket.markup.html.panel.Panel;

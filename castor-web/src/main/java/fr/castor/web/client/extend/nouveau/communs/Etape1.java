@@ -2,14 +2,14 @@ package fr.castor.web.client.extend.nouveau.communs;
 
 import fr.castor.dto.LocalisationDTO;
 import fr.castor.dto.constant.ValidatorConstant;
-import fr.castor.web.app.constants.FeedbackMessageLevel;
+import fr.castor.web.app.enums.FeedbackMessageLevel;
 import fr.castor.web.app.utils.codepostal.CSVCodePostalReader;
 import fr.castor.web.client.behaviour.ErrorHighlightBehavior;
 import fr.castor.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.castor.web.client.event.FeedBackPanelEvent;
 import fr.castor.web.client.extend.nouveau.devis.event.LocalisationEvent;
 import fr.castor.web.client.master.MasterPage;
-import fr.castor.web.enums.PropertiesFileWeb;
+import fr.castor.web.app.enums.PropertiesFileWeb;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.event.Broadcast;

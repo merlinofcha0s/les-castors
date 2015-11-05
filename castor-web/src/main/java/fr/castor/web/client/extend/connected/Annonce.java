@@ -7,7 +7,7 @@ import fr.castor.dto.constant.Categorie;
 import fr.castor.dto.enums.EtatAnnonce;
 import fr.castor.dto.enums.TypeCompte;
 import fr.castor.dto.enums.TypeContact;
-import fr.castor.web.app.constants.FeedbackMessageLevel;
+import fr.castor.web.app.enums.FeedbackMessageLevel;
 import fr.castor.web.app.constants.ParamsConstant;
 import fr.castor.web.app.security.Authentication;
 import fr.castor.web.app.security.RolesUtils;

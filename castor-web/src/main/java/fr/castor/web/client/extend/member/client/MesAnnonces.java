@@ -6,7 +6,7 @@ import fr.castor.dto.NotificationDTO;
 import fr.castor.dto.aggregate.MesAnnoncesAnnonceDTO;
 import fr.castor.dto.aggregate.MesAnnoncesNotificationDTO;
 import fr.castor.dto.enums.TypeCompte;
-import fr.castor.web.app.constants.FeedbackMessageLevel;
+import fr.castor.web.app.enums.FeedbackMessageLevel;
 import fr.castor.web.app.constants.ParamsConstant;
 import fr.castor.web.app.security.Authentication;
 import fr.castor.web.app.security.RolesUtils;

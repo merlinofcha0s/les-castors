@@ -1,23 +1,22 @@
 package fr.castor.web.client.modal;
 
+import fr.castor.dto.constant.ValidatorConstant;
+import fr.castor.web.app.constants.JSConstant;
+import fr.castor.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.castor.web.client.component.BatimenFeedbackPanel;
+import fr.castor.web.client.component.ModalCastor;
+import fr.castor.web.client.component.RaterStarsCastor;
+import fr.castor.web.client.event.NoterArtisanEventClose;
 import fr.castor.web.client.event.NoterArtisanEventOpen;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.event.IEvent;
-import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.TextArea;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.validator.StringValidator;
-
-import fr.castor.dto.constant.ValidatorConstant;
-import fr.castor.web.client.behaviour.border.RequiredBorderBehaviour;
-import fr.castor.web.client.component.ModalCastor;
-import fr.castor.web.client.component.RaterStarsCastor;
-import fr.castor.web.client.event.NoterArtisanEventClose;
 
 /**
  * Modal permettant à un client de noter un artisan une fois que les travaux
@@ -38,7 +37,7 @@ public class DonnerAvisArtisanModal extends ModalCastor {
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
-        response.render(CssHeaderItem.forUrl("//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"));
+        response.render(JSConstant.fontAwesome);
     }
 
     public DonnerAvisArtisanModal(String id) {

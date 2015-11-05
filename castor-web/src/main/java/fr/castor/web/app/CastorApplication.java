@@ -17,7 +17,7 @@ import fr.castor.web.client.extend.member.client.MonProfil;
 import fr.castor.web.client.extend.nouveau.artisan.NouveauArtisan;
 import fr.castor.web.client.extend.nouveau.devis.NouveauDevis;
 import fr.castor.web.client.session.BatimenSession;
-import fr.castor.web.enums.PropertiesFileWeb;
+import fr.castor.web.app.enums.PropertiesFileWeb;
 import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;

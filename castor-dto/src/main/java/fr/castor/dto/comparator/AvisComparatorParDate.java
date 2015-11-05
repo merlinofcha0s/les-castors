@@ -1,4 +1,4 @@
-package fr.castor.web.comparator;
+package fr.castor.dto.comparator;
 
 import fr.castor.dto.AvisDTO;
 

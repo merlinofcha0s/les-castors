@@ -1,8 +1,8 @@
 package fr.castor.web.client.extend.nouveau.devis;
 
 import fr.castor.dto.MotCleDTO;
-import fr.castor.web.app.constants.Etape;
-import fr.castor.web.app.constants.FeedbackMessageLevel;
+import fr.castor.web.app.enums.Etape;
+import fr.castor.web.app.enums.FeedbackMessageLevel;
 import fr.castor.web.client.component.MotCle;
 import fr.castor.web.client.extend.nouveau.devis.event.CategorieEvent;
 import fr.castor.web.client.master.MasterPage;

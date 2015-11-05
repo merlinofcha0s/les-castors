@@ -5,6 +5,7 @@ import fr.castor.dto.aggregate.SearchAnnonceDTOIn;
 import fr.castor.dto.aggregate.SearchAnnonceDTOOut;
 import fr.castor.dto.constant.Categorie;
 import fr.castor.dto.constant.ValidatorConstant;
+import fr.castor.web.app.constants.JSConstant;
 import fr.castor.web.app.constants.ParamsConstant;
 import fr.castor.web.app.security.Authentication;
 import fr.castor.web.client.component.*;
@@ -75,7 +76,7 @@ public class RechercheAnnonce extends MasterPage {
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
         response.render(CssContentHeaderItem.forUrl("css/font_icons8.css"));
-        response.render(CssHeaderItem.forUrl("//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css"));
+        response.render(JSConstant.fontAwesome);
 
         response.render(JavaScriptHeaderItem.forUrl("//www.fuelcdn.com/fuelux/2.6.1/loader.min.js"));
         response.render(CssContentHeaderItem.forUrl("//www.fuelcdn.com/fuelux/2.6.1/css/fuelux.min.css"));

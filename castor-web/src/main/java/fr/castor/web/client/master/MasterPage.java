@@ -2,7 +2,7 @@ package fr.castor.web.client.master;
 
 import fr.castor.core.enums.PropertiesFileGeneral;
 import fr.castor.dto.enums.TypeCompte;
-import fr.castor.web.app.constants.FeedbackMessageLevel;
+import fr.castor.web.app.enums.FeedbackMessageLevel;
 import fr.castor.web.client.behaviour.LoginDialogBehaviour;
 import fr.castor.web.client.component.BatimenFeedbackPanel;
 import fr.castor.web.client.component.LinkLabel;
@@ -15,7 +15,7 @@ import fr.castor.web.client.extend.member.client.MesAnnonces;
 import fr.castor.web.client.extend.nouveau.artisan.NouveauArtisan;
 import fr.castor.web.client.extend.nouveau.devis.NouveauDevis;
 import fr.castor.web.client.modal.AuthentificationModal;
-import fr.castor.web.enums.PropertiesFileWeb;
+import fr.castor.web.app.enums.PropertiesFileWeb;
 import org.apache.shiro.SecurityUtils;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;

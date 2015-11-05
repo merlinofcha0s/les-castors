@@ -33,23 +33,6 @@
     margin-bottom: 10px;
 }
 
-
-/* ARTISANS QUALITE */
-.artisansqualite blockquote p{
-    font-size: 1.17em;
-    line-height: 1.5em;
-    text-align: left;
-    color: #000000;
-}
-
-.artisansqualite a{
-    font-size: 1.2em;
-}
-
-.artisansqualite {
-    text-align: center;
-}
-
 /* REJOIGNEZ NOUS */
 .rejoignez{
     text-align: center;
@@ -140,4 +123,19 @@
 
 .contactez_suivez_nous{
     padding-top: 20px;
+}
+
+.motscles_populaires div{
+    text-align: center;
+}
+
+.motscles_populaires p{
+    margin-left: 98px;
+    font-size: 45px;
+    margin-bottom: 7px;
+}
+
+.title_accueil{
+    margin-bottom: 20px;
+    text-align: center;
 }

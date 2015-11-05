@@ -2,7 +2,7 @@ package fr.castor.web.client.event;
 
 import org.apache.wicket.ajax.AjaxRequestTarget;
 
-import fr.castor.web.app.constants.FeedbackMessageLevel;
+import fr.castor.web.app.enums.FeedbackMessageLevel;
 
 public class FeedBackPanelEvent extends AbstractEvent {
 

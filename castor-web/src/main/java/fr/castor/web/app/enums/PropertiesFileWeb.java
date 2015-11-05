@@ -1,4 +1,4 @@
-package fr.castor.web.enums;
+package fr.castor.web.app.enums;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -2,7 +2,7 @@ package fr.castor.web.client.extend.nouveau.artisan;
 
 import java.util.Arrays;
 
-import fr.castor.web.app.constants.Etape;
+import fr.castor.web.app.enums.Etape;
 import fr.castor.web.app.utils.ProgrammaticBeanLookup;
 import fr.castor.web.client.event.FeedBackPanelEvent;
 import fr.castor.web.client.validator.LoginUniquenessValidator;

@@ -16,7 +16,7 @@ import fr.castor.core.constant.CodeRetourService;
 import fr.castor.dto.ClientDTO;
 import fr.castor.dto.DemandeAnnonceDTO;
 import fr.castor.dto.enums.TypeCompte;
-import fr.castor.web.app.constants.FeedbackMessageLevel;
+import fr.castor.web.app.enums.FeedbackMessageLevel;
 import fr.castor.web.client.event.SuppressionCloseEvent;
 import fr.castor.web.client.extend.Accueil;
 import fr.castor.web.client.extend.member.client.MesAnnonces;

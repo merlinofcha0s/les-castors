@@ -4,7 +4,7 @@ import fr.castor.core.constant.UrlPage;
 import fr.castor.core.exception.FrontEndException;
 import fr.castor.dto.LocalisationDTO;
 import fr.castor.dto.aggregate.CreationPartenaireDTO;
-import fr.castor.web.app.constants.Etape;
+import fr.castor.web.app.enums.Etape;
 import fr.castor.web.client.component.ContactezNous;
 import fr.castor.web.client.component.NavigationWizard;
 import fr.castor.web.client.event.CastorWizardEvent;

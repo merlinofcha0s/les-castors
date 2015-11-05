@@ -8,7 +8,7 @@ import fr.castor.dto.enums.StatutJuridique;
 import fr.castor.web.app.constants.ParamsConstant;
 import fr.castor.web.client.component.*;
 import fr.castor.web.client.master.MasterPage;
-import fr.castor.web.comparator.AvisComparatorParDate;
+import fr.castor.dto.comparator.AvisComparatorParDate;
 import fr.castor.ws.client.service.ArtisanServiceREST;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxRequestTarget;

@@ -1,7 +1,7 @@
 package fr.castor.web.client.behaviour;
 
 import fr.castor.core.enums.PropertiesFileGeneral;
-import fr.castor.web.app.constants.FeedbackMessageLevel;
+import fr.castor.web.app.enums.FeedbackMessageLevel;
 import fr.castor.web.client.event.FeedBackPanelEvent;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
