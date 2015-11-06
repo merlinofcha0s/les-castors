@@ -8,8 +8,7 @@ import fr.castor.web.client.component.BatimenFeedbackPanel;
 import fr.castor.web.client.component.LinkLabel;
 import fr.castor.web.client.component.WaiterModal;
 import fr.castor.web.client.event.*;
-import fr.castor.web.client.extend.Accueil;
-import fr.castor.web.client.extend.FAQ;
+import fr.castor.web.client.extend.*;
 import fr.castor.web.client.extend.connected.RechercheAnnonce;
 import fr.castor.web.client.extend.member.client.MesAnnonces;
 import fr.castor.web.client.extend.nouveau.artisan.NouveauArtisan;
@@ -119,7 +118,7 @@ public abstract class MasterPage extends WebPage {
 
         initComponentConnexion();
         initTitleHeader(isPageWithTitleHeader, title, adresseImgBackground);
-        initFooterLink();
+        initLinkFooter();
         initSocialFooterLink();
 
         if (LOGGER.isDebugEnabled()) {
@@ -543,19 +542,6 @@ public abstract class MasterPage extends WebPage {
         return authentificationPanel;
     }
 
-    private void initFooterLink() {
-        Model<String> faqModel = new Model<>("FAQ");
-
-        LinkLabel faq = new LinkLabel("faq", faqModel) {
-            @Override
-            public void onClick() {
-                setResponsePage(FAQ.class);
-            }
-        };
-
-        add(faq);
-    }
-
     /*
      * (non-Javadoc)
      *
@@ -633,4 +619,42 @@ public abstract class MasterPage extends WebPage {
         add(footerFBMaster, footerGPlusMaster, footerTwitterMaster);
     }
 
+    private void initLinkFooter(){
+        Link<String> footerAccueil = new Link<String>("footerAccueil") {
+            @Override
+            public void onClick() {
+                this.setResponsePage(Accueil.class);
+            }
+        };
+
+        Link<String> footerQuiSommesNous = new Link<String>("footerQuiSommesNous") {
+            @Override
+            public void onClick() {
+                this.setResponsePage(QuiSommeNous.class);
+            }
+        };
+
+        Link<String> footerFAQ = new Link<String>("footerFAQ") {
+            @Override
+            public void onClick() {
+                this.setResponsePage(FAQ.class);
+            }
+        };
+
+        Link<String> footerCGU = new Link<String>("footerCGU") {
+            @Override
+            public void onClick() {
+                this.setResponsePage(CGU.class);
+            }
+        };
+
+        Link<String> footerNosObjectifs = new Link<String>("footerNosObjectifs") {
+            @Override
+            public void onClick() {
+                this.setResponsePage(Objectif.class);
+            }
+        };
+
+        add(footerAccueil, footerQuiSommesNous, footerCGU, footerFAQ, footerNosObjectifs);
+    }
 }

@@ -12,7 +12,7 @@ import org.apache.wicket.markup.head.IHeaderResponse;
 public class Objectif extends MasterPage {
 
     public Objectif() {
-        super("Nos objectifs", "Objectif plateforme recherche contact professionnel particulier", "Nos objectifs", true, "img/bg_title1.jpg");
+        super("Nos objectifs", "Objectif plateforme recherche contact artisan particulier", "Nos objectifs", true, "img/bg_title1.jpg");
         ContactezNous contactezNousComposant = new ContactezNous("contactezNous");
         add(contactezNousComposant);
     }
