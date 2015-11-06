@@ -1,21 +1,27 @@
 package fr.castor.web.client.extend;
 
 import fr.castor.core.constant.UrlPage;
+import fr.castor.web.app.constants.JSConstant;
+import fr.castor.web.client.component.ContactezNous;
 import fr.castor.web.client.master.MasterPage;
 import org.apache.wicket.markup.head.IHeaderResponse;
 
 /**
- * Created by Casaucau on 28/10/2015.
+ * Page nos objectif
  */
 public class Objectif extends MasterPage {
 
     public Objectif() {
         super("Nos objectifs", "Objectif plateforme recherche contact professionnel particulier", "Nos objectifs", true, "img/bg_title1.jpg");
+        ContactezNous contactezNousComposant = new ContactezNous("contactezNous");
+        add(contactezNousComposant);
     }
 
     @Override
     public void renderHead(IHeaderResponse response) {
         super.renderHead(response);
+        response.render(JSConstant.fontAwesome);
+
         StringBuilder adresseNosObjectifs = new StringBuilder();
         adresseNosObjectifs.append("https://lescastors.fr").append(UrlPage.NOS_OBJECTIFS);
 

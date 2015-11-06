@@ -150,6 +150,7 @@ public class CastorApplication extends AuthenticatedWebApplication {
         mountPage(UrlPage.ENTREPRISE, Entreprise.class);
         mountPage(UrlPage.RECHERCHE_ANNONCE, RechercheAnnonce.class);
         mountPage(UrlPage.FAQ, FAQ.class);
+        mountPage(UrlPage.NOS_OBJECTIFS, Objectif.class);
         // Page d'erreur
         mountPage("/interdit", AccesInterdit.class);
         mountPage("/expiree", Expiree.class);
