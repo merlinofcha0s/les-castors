@@ -8,7 +8,9 @@ import fr.castor.web.client.extend.nouveau.devis.event.CategorieEvent;
 import fr.castor.web.client.master.MasterPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.event.Broadcast;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.panel.Panel;
 
 import java.util.ArrayList;
@@ -28,7 +30,6 @@ public class Etape2Categorie extends Panel {
 
     public Etape2Categorie(String id) {
         super(id);
-
         MotCle motCle = new MotCle("motCle");
 
         AjaxLink<Void> etapePrecedente2 = new AjaxLink<Void>("etapePrecedente2") {
@@ -44,13 +45,11 @@ public class Etape2Categorie extends Panel {
         etapePrecedente2.setOutputMarkupId(true);
         etapePrecedente2.setMarkupId("etapePrecedente2");
 
-        AjaxLink<Void> etapeSuivante = new AjaxLink<Void>("etapeSuivante") {
-
-            private static final long serialVersionUID = 1L;
+        AjaxSubmitLink etapeSuivante = new AjaxSubmitLink("etapeSuivante") {
 
             @Override
-            public void onClick(AjaxRequestTarget target) {
-
+            protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                motCle.rechercheWithInputTextField();
                 categoriesSelectionnees = motCle.getCategoriesSelectionnees();
 
                 if (categoriesSelectionnees.isEmpty()) {
@@ -61,13 +60,26 @@ public class Etape2Categorie extends Panel {
                     // On trigger l'event
                     target.getPage().send(target.getPage(), Broadcast.BREADTH, categorieEvent);
                 }
-
             }
         };
 
         etapeSuivante.setOutputMarkupId(true);
         etapeSuivante.setMarkupId("etapeSuivante");
 
-        add(motCle, etapePrecedente2, etapeSuivante);
+        Form<Void> formRootEtape2 = new Form<Void>("formRootEtape2"){
+            @Override
+            public boolean isRootForm() {
+                return true;
+            }
+
+            @Override
+            public boolean wantSubmitOnNestedFormSubmit() {
+                return true;
+            }
+        };
+
+        formRootEtape2.add(motCle, etapePrecedente2, etapeSuivante);
+
+        add(formRootEtape2);
     }
 }

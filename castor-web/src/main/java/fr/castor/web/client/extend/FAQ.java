@@ -1,6 +1,7 @@
 package fr.castor.web.client.extend;
 
 import fr.castor.core.constant.UrlPage;
+import fr.castor.web.client.component.ContactezNous;
 import fr.castor.web.client.master.MasterPage;
 import org.apache.wicket.markup.head.IHeaderResponse;
 
@@ -13,6 +14,9 @@ public class FAQ extends MasterPage {
 
     public FAQ() {
         super("Foire aux questions", "FAQ questions lescastors", "Foire aux questions", true, "img/bg_title1.jpg");
+
+        ContactezNous contactezNousComposant = new ContactezNous("contactezNous");
+        add(contactezNousComposant);
     }
 
     @Override

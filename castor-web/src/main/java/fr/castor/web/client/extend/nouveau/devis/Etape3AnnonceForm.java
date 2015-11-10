@@ -83,10 +83,6 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
     public Etape3AnnonceForm(final String id, IModel<CreationAnnonceDTO> model, boolean forModification) {
         this(id, model);
         this.forModification = forModification;
-
-        if (forModification) {
-
-        }
     }
 
     /**

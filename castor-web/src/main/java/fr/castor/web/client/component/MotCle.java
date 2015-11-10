@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
  */
 public class MotCle extends Panel {
 
-    public static final String ERROR_MESSAGE = "Veuillez selectionner au moins un mot clé";
+    public static final String ERROR_MESSAGE = "Mot clé non reconnu, veuillez selectionner au moins un mot clé";
     @Inject
     private CategorieService categorieService;
     private List<String> motClesToString;
@@ -43,6 +43,7 @@ public class MotCle extends Panel {
 
     public MotCle(String id) {
         super(id);
+        setOutputMarkupId(true);
 
         initMotCleTextField();
         initCategoriesChoisie();
@@ -115,18 +116,30 @@ public class MotCle extends Panel {
             MotCleEvent motCleEvent = (MotCleEvent) event.getPayload();
 
             String motcle = motCleEvent.getMotCle();
-            Optional<MotCleDTO> motCleSelectionne = categorieService.getCategorieByMotCle(motcle);
 
-            if (motCleSelectionne.isPresent() && !categoriesSelectionnees.stream().filter(cat -> cat.equals(motCleSelectionne.get())).findAny().isPresent()) {
-                categoriesSelectionnees.add(motCleSelectionne.get());
-            }
-
-            motCleCategorie.clearInput();
-
-            motCleEvent.getTarget().add(motCleCategorie);
-            motCleEvent.getTarget().appendJavaScript(initMotClesTypeAheadJS);
-            motCleEvent.getTarget().add(categoriesChoisiesContainer);
+            rechercheEtChargeMotCle(motcle);
+            refreshUI(motCleEvent.getTarget());
         }
+    }
+
+    public void refreshUI(AjaxRequestTarget target){
+        motCleCategorie.clearInput();
+
+        target.add(motCleCategorie);
+        target.appendJavaScript(initMotClesTypeAheadJS);
+        target.add(categoriesChoisiesContainer);
+    }
+
+    private void rechercheEtChargeMotCle(String motcle){
+        Optional<MotCleDTO> motCleSelectionne = categorieService.getCategorieByMotCle(motcle);
+
+        if (motCleSelectionne.isPresent() && !categoriesSelectionnees.stream().filter(cat -> cat.equals(motCleSelectionne.get())).findAny().isPresent()) {
+            categoriesSelectionnees.add(motCleSelectionne.get());
+        }
+    }
+
+    public void rechercheWithInputTextField(){
+        rechercheEtChargeMotCle(motCleCategorie.getInput());
     }
 
     public List<MotCleDTO> getCategoriesSelectionnees() {

@@ -291,7 +291,6 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
             protected void onError(AjaxRequestTarget target, Form<?> form) {
                 target.add(fieldContainer);
                 this.send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target));
-                //target.appendJavaScript("grecaptcha.reset();");
             }
         };
         validateInscription.setMarkupId(ID_VALIDATE_INSCRIPTION);

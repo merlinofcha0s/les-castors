@@ -7,7 +7,7 @@ import org.apache.wicket.ajax.AjaxRequestTarget;
  */
 public class MotCleEvent extends AbstractEvent {
 
-    String motCle;
+    private String motCle;
 
     public MotCleEvent(AjaxRequestTarget target) {
         super(target);
