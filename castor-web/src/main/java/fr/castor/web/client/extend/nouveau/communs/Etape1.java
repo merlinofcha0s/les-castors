@@ -13,10 +13,14 @@ import fr.castor.web.app.enums.PropertiesFileWeb;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.event.Broadcast;
+import org.apache.wicket.markup.head.CssHeaderItem;
+import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.validator.PatternValidator;
@@ -54,6 +58,8 @@ public class Etape1 extends Panel {
         codePostal.add(new RequiredBorderBehaviour());
 
         formCodePostal = new StatelessForm("formCodePostal");
+
+        StoryTelling storyTelling = new StoryTelling("storyTelling", "C'est le moment de saisir votre code postal", 120, 120);
 
         valideCodePostal = new AjaxSubmitLink("valideCodePostal") {
             @Override
@@ -98,6 +104,11 @@ public class Etape1 extends Panel {
         valideCodePostal.setMarkupId("valideCodePostal");
 
         formCodePostal.add(codePostal, valideCodePostal);
-        add(subtitle, formCodePostal);
+        add(subtitle, formCodePostal, storyTelling);
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        response.render(CssHeaderItem.forUrl("css/bubble.css"));
     }
 }

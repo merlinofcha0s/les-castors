@@ -419,16 +419,9 @@ public abstract class MasterPage extends WebPage {
                 .getCallbackScript())));
 
         JavaScriptUrlReferenceHeaderItem bootstrapJS = JavaScriptHeaderItem.forUrl("js/bootstrap.js");
-        //bootstrapJS.setAsync(true);
-
         JavaScriptUrlReferenceHeaderItem bootstrapModalManager = JavaScriptHeaderItem.forUrl("js/components/bootstrap-modal/bootstrap-modalmanager.js");
-        //bootstrapModalManager.setAsync(true);
-
         JavaScriptUrlReferenceHeaderItem bootstrapModal = JavaScriptHeaderItem.forUrl("js/components/bootstrap-modal/bootstrap-modal.js");
-        //bootstrapModal.setAsync(true);
-
         JavaScriptUrlReferenceHeaderItem theme = JavaScriptHeaderItem.forUrl("js/theme.js");
-        //theme.setAsync(true);
 
         response.render(bootstrapJS);
         response.render(bootstrapModalManager);

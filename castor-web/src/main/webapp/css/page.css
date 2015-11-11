@@ -48,19 +48,12 @@
     margin-right: 10px;
 }
 
-#carte-france-container {
-    margin-top: 20px;
-    margin-bottom: 30px;
-}
-
 #formEtape3 {
     margin-top: 18px;
 }
 
 #formEtape4-nouveau-devis {
-    float: left;
     margin-top: 45px;
-    margin-left: 15px;
 }
 
 #formEtape4 {
@@ -70,11 +63,12 @@
 }
 
 #dejaInscrit {
-    float: right;
-    margin-top: 220px;
-    margin-right: 140px;
     font-weight: bold;
     font-size: 1.1em;
+}
+
+#dejaInscritContainer{
+    margin-top: 20px;
 }
 
 #tableFormEtape3Entreprise {

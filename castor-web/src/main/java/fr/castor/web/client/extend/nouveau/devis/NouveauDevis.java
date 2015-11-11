@@ -16,6 +16,7 @@ import fr.castor.web.client.event.LoginEvent;
 import fr.castor.web.client.extend.Accueil;
 import fr.castor.web.client.extend.Contact;
 import fr.castor.web.client.extend.nouveau.communs.Etape1;
+import fr.castor.web.client.extend.nouveau.communs.StoryTelling;
 import fr.castor.web.client.extend.nouveau.devis.event.CategorieEvent;
 import fr.castor.web.client.extend.nouveau.devis.event.ChangementEtapeClientEvent;
 import fr.castor.web.client.extend.nouveau.devis.event.LocalisationEvent;
@@ -177,7 +178,7 @@ public class NouveauDevis extends MasterPage {
 
         etape3AnnonceForm = new Etape3AnnonceForm("formQualification", propertyModelNouvelleAnnonce);
 
-        containerQualification.add(etape3AnnonceForm);
+        containerQualification.add(etape3AnnonceForm, new StoryTelling("storyTellingEtape3", "Pour vous aider il me faut plus d’informations !", 120, 120));
 
         // Etape 4 : Enregistrement des informations du client
         containerInscription = new WebMarkupContainer("containerInscription") {
@@ -207,7 +208,7 @@ public class NouveauDevis extends MasterPage {
 
         };
 
-        containerInscription.add(etape4InscriptionForm, connexionLink);
+        containerInscription.add(etape4InscriptionForm, connexionLink, new StoryTelling("storyTellingEtape4", "Il ne me manque plus que vos coordonnées !", 120, 101));
 
         // Etape 5 : Confirmation
         containerConfirmation = new WebMarkupContainer("containerConfirmation") {
@@ -484,11 +485,4 @@ public class NouveauDevis extends MasterPage {
             return annonceService.creationAnnonceAvecImage(nouvelleAnnonce);
         }
     }
-
-
-    /*@Override
-    protected void configureResponse(WebResponse response) {
-        super.configureResponse(response);
-        response.setHeader("Cache-Control", "no-cache, max-age=0,must-revalidate, no-store");
-    }*/
 }

@@ -5,6 +5,7 @@ import fr.castor.dto.aggregate.CreationAnnonceDTO;
 import fr.castor.web.app.enums.Etape;
 import fr.castor.web.app.enums.FeedbackMessageLevel;
 import fr.castor.web.client.component.MotCle;
+import fr.castor.web.client.extend.nouveau.communs.StoryTelling;
 import fr.castor.web.client.extend.nouveau.devis.event.CategorieEvent;
 import fr.castor.web.client.master.MasterPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -97,7 +98,7 @@ public class Etape2Categorie extends Panel {
 
         formRootEtape2.add(motCle, etapePrecedente2, etapeSuivante);
 
-        add(formRootEtape2);
+        add(formRootEtape2, new StoryTelling("storyTelling", "En quoi puis-je vous aider ?", 120, 120));
     }
 
 
