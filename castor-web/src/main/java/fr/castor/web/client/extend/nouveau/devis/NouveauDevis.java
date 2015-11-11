@@ -148,7 +148,7 @@ public class NouveauDevis extends MasterPage {
         };
 
         // Etape 2 : Selection de la catégorie principale des travaux
-        etape2Categorie = new Etape2Categorie("etape2Categorie") {
+        etape2Categorie = new Etape2Categorie("etape2Categorie", nouvelleAnnonce) {
 
             private static final long serialVersionUID = -3369100260215727230L;
 
@@ -411,8 +411,12 @@ public class NouveauDevis extends MasterPage {
             CategorieEvent eventCategorie = (CategorieEvent) event.getPayload();
             // On recupere la catégorie métier
             nouvelleAnnonce.setMotCles(eventCategorie.getCategoriesChoisies());
-            // On set la prochaine etape
-            nouvelleAnnonce.setNumeroEtape(3);
+            if (eventCategorie.isGoToTheNextStep()) {
+                // On set la prochaine etape
+                nouvelleAnnonce.setNumeroEtape(3);
+            } else {
+                nouvelleAnnonce.setNumeroEtape(2);
+            }
 
             if (feedBackPanelGeneral.hasFeedbackMessage()) {
                 feedBackPanelGeneral.getFeedbackMessages().clear();
@@ -480,4 +484,11 @@ public class NouveauDevis extends MasterPage {
             return annonceService.creationAnnonceAvecImage(nouvelleAnnonce);
         }
     }
+
+
+    /*@Override
+    protected void configureResponse(WebResponse response) {
+        super.configureResponse(response);
+        response.setHeader("Cache-Control", "no-cache, max-age=0,must-revalidate, no-store");
+    }*/
 }

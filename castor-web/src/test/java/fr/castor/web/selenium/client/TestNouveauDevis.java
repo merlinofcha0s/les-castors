@@ -60,9 +60,8 @@ public class TestNouveauDevis extends AbstractITTest {
         // On passe l'etape 3
         etape3(false);
 
-        if (browser.equals("ie")) {
-            Thread.sleep(1000);
-        }
+
+        Thread.sleep(1000);
         // On s'authentifie à l'application
         connexionApplication("raiden", AbstractITTest.BON_MOT_DE_PASSE, Boolean.TRUE);
 
@@ -135,6 +134,7 @@ public class TestNouveauDevis extends AbstractITTest {
         // On remplit l'étape 3
         etape3(false);
 
+        Thread.sleep(1000);
         // On se connecte
         connexionApplication("raiden", BON_MOT_DE_PASSE, Boolean.TRUE);
 
@@ -160,7 +160,7 @@ public class TestNouveauDevis extends AbstractITTest {
         Thread.sleep(1000);
         // On passe à l'étape 3
         etape3(false);
-
+        Thread.sleep(1000);
         connexionApplication("raiden", BON_MOT_DE_PASSE, Boolean.TRUE);
 
         assertEquals("Votre devis a été mis en ligne, nous vous avons envoyé un mail récapitulatif", driver
@@ -195,6 +195,7 @@ public class TestNouveauDevis extends AbstractITTest {
         // On remplit l'étape 3
         etape3(false);
 
+        Thread.sleep(1000);
         driver.findElement(By.id("etapePrecedente4")).click();
 
         Thread.sleep(1000);
@@ -214,6 +215,7 @@ public class TestNouveauDevis extends AbstractITTest {
         // On remplit l'étape 3
         etape3(false);
 
+        Thread.sleep(1000);
         WebElement checkConditionPresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.presenceOfElementLocated((By.xpath("//div[@id='batimenWizard']/ul/li[2]"))));
         assertNotNull(checkConditionPresent);
@@ -223,6 +225,8 @@ public class TestNouveauDevis extends AbstractITTest {
         etape2();
         // On remplit l'étape 3
         etape3(false);
+
+        Thread.sleep(1000);
 
         connexionApplication("raiden", BON_MOT_DE_PASSE, Boolean.TRUE);
 
@@ -257,6 +261,38 @@ public class TestNouveauDevis extends AbstractITTest {
         assertTrue(checkConditionModificationInformation);
 
         Thread.sleep(1000);
+    }
+
+    /**
+     * Cas de test : L'utilisateur crée un devis. Il est connecté, lors de l'etape 3, il dit qu'il veut etre contacté par téléphone
+     * mais il n'a pas spécifié de numéro, on lui refuse tant qu'il ne l'a pas fait.
+     *
+     * @throws InterruptedException
+     */
+    @Test
+    public void testSaisiMotCleSansClique() throws InterruptedException {
+        driver.get(appUrl + nouveauDevisURL);
+        // On selectionne le bon département
+        UtilsSelenium.etape1(driver);
+
+        Thread.sleep(1000);
+
+        driver.findElement(By.id("motCleField")).sendKeys("Salles de bain");
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Fail to wait authentication", e);
+            }
+        }
+
+        driver.findElement(By.id("etapeSuivante")).click();
+
+        etape3(false);
+        Thread.sleep(1000);
+
+        connexionApplication("raiden", BON_MOT_DE_PASSE, Boolean.TRUE);
     }
 
     private void etape3(boolean isAlreadyAuthenticate) throws InterruptedException {
@@ -298,6 +334,15 @@ public class TestNouveauDevis extends AbstractITTest {
 
         driver.findElement(By.id("motCleField")).sendKeys("Salles de bain");
         driver.findElement(By.linkText("Salles de bain")).click();
+
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            if (LOGGER.isErrorEnabled()) {
+                LOGGER.error("Fail to wait authentication", e);
+            }
+        }
+
         driver.findElement(By.id("etapeSuivante")).click();
     }
 

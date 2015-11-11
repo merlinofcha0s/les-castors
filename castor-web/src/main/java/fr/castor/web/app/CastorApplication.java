@@ -1,6 +1,7 @@
 package fr.castor.web.app;
 
 import fr.castor.core.constant.UrlPage;
+import fr.castor.web.app.enums.PropertiesFileWeb;
 import fr.castor.web.client.extend.*;
 import fr.castor.web.client.extend.activation.Activation;
 import fr.castor.web.client.extend.connected.Annonce;
@@ -17,25 +18,18 @@ import fr.castor.web.client.extend.member.client.MonProfil;
 import fr.castor.web.client.extend.nouveau.artisan.NouveauArtisan;
 import fr.castor.web.client.extend.nouveau.devis.NouveauDevis;
 import fr.castor.web.client.session.BatimenSession;
-import fr.castor.web.app.enums.PropertiesFileWeb;
 import org.apache.wicket.Session;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.cdi.CdiConfiguration;
 import org.apache.wicket.cdi.ConversationPropagation;
 import org.apache.wicket.core.request.mapper.MountedMapper;
-import org.apache.wicket.javascript.DefaultJavaScriptCompressor;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.request.Request;
 import org.apache.wicket.request.Response;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.mapper.parameter.UrlPathPageParametersEncoder;
 import org.apache.wicket.request.resource.UrlResourceReference;
-import org.apache.wicket.request.resource.caching.FilenameWithVersionResourceCachingStrategy;
-import org.apache.wicket.request.resource.caching.IResourceCachingStrategy;
-import org.apache.wicket.request.resource.caching.version.LastModifiedResourceVersion;
-import org.apache.wicket.resource.CssUrlReplacer;
-import org.apache.wicket.util.time.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wicketstuff.javaee.injection.JavaEEComponentInjector;
@@ -119,7 +113,7 @@ public class CastorApplication extends AuthenticatedWebApplication {
         getJavaScriptLibrarySettings().setJQueryReference(
                 new UrlResourceReference(Url.parse("//code.jquery.com/jquery-1.11.2.min.js")));
 
-        getResourceSettings().setCssCompressor(new CssUrlReplacer());
+        /*getResourceSettings().setCssCompressor(new CssUrlReplacer());
         getResourceSettings().setJavaScriptCompressor(new DefaultJavaScriptCompressor());
         getResourceSettings().setUseMinifiedResources(true);
 
@@ -128,7 +122,7 @@ public class CastorApplication extends AuthenticatedWebApplication {
                     new LastModifiedResourceVersion());
             getResourceSettings().setCachingStrategy(strategy);
             getResourceSettings().setDefaultCacheDuration(Duration.minutes(120));
-        }
+        }*/
 
         /*getStoreSettings().setMaxSizePerSession(Bytes.megabytes(2));
         //Nombre de page max en mémoire

@@ -16,13 +16,19 @@ import java.util.List;
 public class CategorieEvent extends AbstractEvent {
 
     private final List<MotCleDTO> categoriesChoisies;
+    private final boolean goToTheNextStep;
 
-    public CategorieEvent(AjaxRequestTarget target, List<MotCleDTO> categoriesChoisies) {
+    public CategorieEvent(AjaxRequestTarget target, List<MotCleDTO> categoriesChoisies, boolean goToTheNextStep) {
         super(target);
         this.categoriesChoisies = categoriesChoisies;
+        this.goToTheNextStep = goToTheNextStep;
     }
 
     public List<MotCleDTO> getCategoriesChoisies() {
         return categoriesChoisies;
+    }
+
+    public boolean isGoToTheNextStep() {
+        return goToTheNextStep;
     }
 }

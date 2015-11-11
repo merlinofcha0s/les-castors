@@ -1,6 +1,7 @@
 package fr.castor.web.client.extend.nouveau.devis;
 
 import fr.castor.dto.MotCleDTO;
+import fr.castor.dto.aggregate.CreationAnnonceDTO;
 import fr.castor.web.app.enums.Etape;
 import fr.castor.web.app.enums.FeedbackMessageLevel;
 import fr.castor.web.client.component.MotCle;
@@ -20,17 +21,29 @@ import java.util.List;
  * Panel de l'Etape 2 de la creation d'annonce. Permet à l'utilisateur de
  * choisir la catégorie qu'il desire dans sa demande de devis.
  *
+ * Le formulaire va recuperer les mots clés choisis et va les envoyer vers la page nouveauDevis
+ *
+ * Deux possibilités soit l'utilisateur a cliqué sur une proposition soit il a tapé le mot clé dans la text field et va le
+ * validé grace au bouton "etape suivante"
+ *
  * @author Casaucau Cyril
  */
 public class Etape2Categorie extends Panel {
 
     private static final long serialVersionUID = -3950302126805043243L;
 
-    private List<MotCleDTO> categoriesSelectionnees = new ArrayList<>();
+    private List<MotCleDTO> categoriesSelectionnees;
 
-    public Etape2Categorie(String id) {
+    public Etape2Categorie(String id, CreationAnnonceDTO nouvelleAnnonce) {
         super(id);
-        MotCle motCle = new MotCle("motCle");
+
+        if(!nouvelleAnnonce.getMotCles().isEmpty()){
+            categoriesSelectionnees = nouvelleAnnonce.getMotCles();
+        } else {
+            categoriesSelectionnees = new ArrayList<>();
+        }
+
+        MotCle motCle = new MotCle("motCle", categoriesSelectionnees);
 
         AjaxLink<Void> etapePrecedente2 = new AjaxLink<Void>("etapePrecedente2") {
 
@@ -49,14 +62,18 @@ public class Etape2Categorie extends Panel {
 
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
+                //On regarde si l'utilisateur a saisi un mot clé dans la text field "mot clé"
+                //Si c'est le cas on la recherche et on l'enregistre si on la trouve dans le fichier
+                //Pour info, c'est le form d'en dessous qui s'occupe de submit le mot clé au form d'au dessus (la ou nous sommes)
                 motCle.rechercheWithInputTextField();
+                //On récupére la liste
                 categoriesSelectionnees = motCle.getCategoriesSelectionnees();
 
                 if (categoriesSelectionnees.isEmpty()) {
                     MasterPage.triggerEventFeedBackPanel(target, motCle.ERROR_MESSAGE, FeedbackMessageLevel.ERROR);
                 } else {
                     // On crée l'event qui sera envoyé à la page de nouveau devis
-                    CategorieEvent categorieEvent = new CategorieEvent(target, categoriesSelectionnees);
+                    CategorieEvent categorieEvent = new CategorieEvent(target, categoriesSelectionnees, true);
                     // On trigger l'event
                     target.getPage().send(target.getPage(), Broadcast.BREADTH, categorieEvent);
                 }
@@ -82,4 +99,6 @@ public class Etape2Categorie extends Panel {
 
         add(formRootEtape2);
     }
+
+
 }

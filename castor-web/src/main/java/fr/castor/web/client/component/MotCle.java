@@ -6,8 +6,10 @@ import fr.castor.web.client.behaviour.AjaxMotCleBehaviour;
 import fr.castor.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.castor.web.client.event.MotCleEvent;
 import fr.castor.web.client.extend.nouveau.communs.JSCommun;
+import fr.castor.web.client.extend.nouveau.devis.event.CategorieEvent;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
@@ -27,7 +29,16 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * Created by Casaucau on 28/08/2015.
+ * Composant qui permet d'ajouter un mot clé à l'annonce.
+ * Ce mot clé est lié a des catégories
+ *
+ * On utilise le type ahead pour proposer des résultats à l'utilisateur
+ *
+ * Quand l'utilisateur clique sur un résultat proposé, on declenche un MotCleEvent grace au callback script qu'on charge
+ * dans initMotClesTypeAheadJS dans le render head
+ *
+ * Il y a deux modes de recherche soit l'utilisateur clique sur une proposition, soit il tape le mot entier et valide grace au bouton etape suivante.
+ * Dans ce cas la la logique se passe sur le formulaire d'au dessus (Etape2Categorie)
  */
 public class MotCle extends Panel {
 
@@ -35,11 +46,12 @@ public class MotCle extends Panel {
     @Inject
     private CategorieService categorieService;
     private List<String> motClesToString;
-    private List<MotCleDTO> categoriesSelectionnees = new ArrayList<>();
+    private List<MotCleDTO> categoriesSelectionnees;
     private String initMotClesTypeAheadJS;
     private WebMarkupContainer categoriesChoisiesContainer;
     private TextField<String> motCleCategorie;
     private AjaxMotCleBehaviour ajaxMotCleBehaviour;
+    private ListView<MotCleDTO> categorieDTOListView;
 
     public MotCle(String id) {
         super(id);
@@ -51,7 +63,12 @@ public class MotCle extends Panel {
 
     public MotCle(String id, List<MotCleDTO> categoriesSelectionnees) {
         super(id);
-        this.categoriesSelectionnees = categoriesSelectionnees;
+        if(categoriesSelectionnees != null){
+            this.categoriesSelectionnees = categoriesSelectionnees;
+        } else {
+            this.categoriesSelectionnees = new ArrayList<>();
+        }
+
         initMotCleTextField();
         initCategoriesChoisie();
     }
@@ -79,7 +96,7 @@ public class MotCle extends Panel {
         categoriesChoisiesContainer.setOutputMarkupId(true);
         categoriesChoisiesContainer.setMarkupId("categoriesChoisiesContainer");
 
-        ListView<MotCleDTO> categorieDTOListView = new ListView<MotCleDTO>("categorieDTOListView", categoriesSelectionnees) {
+        categorieDTOListView = new ListView<MotCleDTO>("categorieDTOListView", categoriesSelectionnees) {
             @Override
             protected void populateItem(ListItem<MotCleDTO> item) {
                 MotCleDTO categorieDTO = item.getModelObject();
@@ -114,25 +131,28 @@ public class MotCle extends Panel {
 
         if (event.getPayload() instanceof MotCleEvent) {
             MotCleEvent motCleEvent = (MotCleEvent) event.getPayload();
+            AjaxRequestTarget target = motCleEvent.getTarget();
 
             String motcle = motCleEvent.getMotCle();
-
             rechercheEtChargeMotCle(motcle);
             refreshUI(motCleEvent.getTarget());
+            target.getPage().send(target.getPage(), Broadcast.BREADTH, new CategorieEvent(target, categoriesSelectionnees, false));
         }
     }
 
     public void refreshUI(AjaxRequestTarget target){
         motCleCategorie.clearInput();
-
         target.add(motCleCategorie);
         target.appendJavaScript(initMotClesTypeAheadJS);
         target.add(categoriesChoisiesContainer);
+
     }
 
     private void rechercheEtChargeMotCle(String motcle){
+        //On recherche si il y a au moins un occurence qui correspond a la chaine de caractere de l'utilisateur
         Optional<MotCleDTO> motCleSelectionne = categorieService.getCategorieByMotCle(motcle);
 
+        //Si un mot clé a été trouvé et qu'il n'a pas deja été ajouter a la liste alors on l'ajoute
         if (motCleSelectionne.isPresent() && !categoriesSelectionnees.stream().filter(cat -> cat.equals(motCleSelectionne.get())).findAny().isPresent()) {
             categoriesSelectionnees.add(motCleSelectionne.get());
         }
