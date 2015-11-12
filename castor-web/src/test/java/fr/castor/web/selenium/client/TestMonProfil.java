@@ -41,39 +41,23 @@ public class TestMonProfil extends AbstractITTest {
         // On s'authentifie à l'application
         connexionApplication("raiden", AbstractITTest.BON_MOT_DE_PASSE, Boolean.TRUE);
 
-        driver.findElement(By.id("connexionlbl")).click();
+        findElement(By.id("connexionlbl")).click();
 
         By voirProfil = By.linkText("Voir le profil");
-
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            if (LOGGER.isErrorEnabled()) {
-                LOGGER.error("Fail to wait in testAccessToMonProfil", e);
-            }
-        }
 
         WebElement checkConditionVoirProfil = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.presenceOfElementLocated(voirProfil));
         assertNotNull(checkConditionVoirProfil);
 
-        driver.findElement(voirProfil).click();
-
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            if (LOGGER.isErrorEnabled()) {
-                LOGGER.error("Fail to wait in testAccessToMonProfil", e);
-            }
-        }
+        findElement(voirProfil).click();
 
         WebElement checkConditionLoginPresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("#infoNomClient > h1")));
 
         assertNotNull(checkConditionLoginPresent);
 
-        assertEquals("4", driver.findElement(By.cssSelector("#nbTravauxRealisesLbl > span")).getText());
-        assertEquals("Entreprise de toto", driver.findElement(By.cssSelector("div.nomEntreprise")).getText());
-        assertEquals("Artisan moins sympatique", driver.findElement(By.cssSelector("div.commentaireClient")).getText());
+        assertEquals("4", findElement(By.cssSelector("#nbTravauxRealisesLbl > span")).getText());
+        assertEquals("Entreprise de toto", findElement(By.cssSelector("div.nomEntreprise")).getText());
+        assertEquals("Artisan moins sympatique", findElement(By.cssSelector("div.commentaireClient")).getText());
     }
 }

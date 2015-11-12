@@ -5,7 +5,6 @@ import com.ninja_squad.dbsetup.Operations;
 import com.ninja_squad.dbsetup.operation.Operation;
 import fr.castor.core.constant.UrlPage;
 import fr.castor.web.selenium.common.AbstractITTest;
-import fr.castor.web.utils.UtilsSelenium;
 import fr.castor.web.selenium.dataset.AnnonceDataset;
 import org.junit.Assert;
 import org.junit.Before;
@@ -15,7 +14,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import static com.ninja_squad.dbsetup.Operations.sequenceOf;
 import static org.junit.Assert.assertTrue;
 
 /**
@@ -54,12 +52,12 @@ public class TestModificationAnnonce extends AbstractITTest {
      */
     @Test
     public void testModificationAnnonceNominale() {
-        driver.findElement(By.linkText("Modifier votre annonce")).click();
-        driver.findElement(By.id("motCleField")).sendKeys("Piscine");
-        driver.findElement(By.linkText("Piscine")).click();
-        driver.findElement(By.id("radioTypeTravauxRenovation")).click();
-        driver.findElement(By.id("typeTravauxRenovation")).click();
-        driver.findElement(By.id("validateQualification")).click();
+        findElement(By.linkText("Modifier votre annonce")).click();
+        findElement(By.id("motCleField")).sendKeys("Piscine");
+        findElement(By.linkText("Piscine")).click();
+        findElement(By.id("radioTypeTravauxRenovation")).click();
+        findElement(By.id("typeTravauxRenovation")).click();
+        findElement(By.id("validateQualification")).click();
         Boolean checkUntilModifOK = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("span.box_type4"),
                         "Votre annonce a été modifiée avec succés !"));
@@ -89,7 +87,7 @@ public class TestModificationAnnonce extends AbstractITTest {
      */
     @Test
     public void testAjoutPhotoModificationAnnonce() throws InterruptedException {
-        UtilsSelenium.testAjoutPhotoIT(driver, browser, true);
+        testAjoutPhotoIT(driver, true);
     }
 
     /**
@@ -98,8 +96,8 @@ public class TestModificationAnnonce extends AbstractITTest {
      */
     @Test
     public void testSuppressionPhotoModificationAnnonce() throws InterruptedException {
-        UtilsSelenium.testAjoutPhotoIT(driver, browser, true);
-        UtilsSelenium.suppressionPhotoIT(driver);
+        testAjoutPhotoIT(driver, true);
+        suppressionPhotoIT(driver);
     }
 
 }

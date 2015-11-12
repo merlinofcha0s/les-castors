@@ -23,15 +23,15 @@ public class TestContactPage extends AbstractITTest {
     @Test
     public void contactSuccess() throws Exception {
         driver.get(appUrl + "/contact");
-        driver.findElement(By.name("formContainerContact:name")).clear();
-        driver.findElement(By.name("formContainerContact:name")).sendKeys("Cyril");
-        driver.findElement(By.name("formContainerContact:email")).clear();
-        driver.findElement(By.name("formContainerContact:email")).sendKeys("raiden0610@hotmail.fr");
-        driver.findElement(By.name("formContainerContact:subject")).clear();
-        driver.findElement(By.name("formContainerContact:subject")).sendKeys("Object");
-        driver.findElement(By.name("formContainerContact:message")).clear();
-        driver.findElement(By.name("formContainerContact:message")).sendKeys("Messajation");
-        driver.findElement(By.id("submit2")).click();
+        findElement(By.name("formContainerContact:name")).clear();
+        findElement(By.name("formContainerContact:name")).sendKeys("Cyril");
+        findElement(By.name("formContainerContact:email")).clear();
+        findElement(By.name("formContainerContact:email")).sendKeys("raiden0610@hotmail.fr");
+        findElement(By.name("formContainerContact:subject")).clear();
+        findElement(By.name("formContainerContact:subject")).sendKeys("Object");
+        findElement(By.name("formContainerContact:message")).clear();
+        findElement(By.name("formContainerContact:message")).sendKeys("Messajation");
+        findElement(By.id("submit2")).click();
         Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("span.box_type4"),
                         "Votre message a été transmis correctement. Nous vous répondrons dans les plus brefs délais."));
@@ -44,11 +44,11 @@ public class TestContactPage extends AbstractITTest {
         connexionApplication("raiden", BON_MOT_DE_PASSE, true);
 
         driver.get(appUrl + "/contact");
-        driver.findElement(By.name("formContainerContact:subject")).clear();
-        driver.findElement(By.name("formContainerContact:subject")).sendKeys("Object");
-        driver.findElement(By.name("formContainerContact:message")).clear();
-        driver.findElement(By.name("formContainerContact:message")).sendKeys("Messajation");
-        driver.findElement(By.id("submit2")).click();
+        findElement(By.name("formContainerContact:subject")).clear();
+        findElement(By.name("formContainerContact:subject")).sendKeys("Object");
+        findElement(By.name("formContainerContact:message")).clear();
+        findElement(By.name("formContainerContact:message")).sendKeys("Messajation");
+        findElement(By.id("submit2")).click();
         Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("span.box_type4"),
                         "Votre message a été transmis correctement. Nous vous répondrons dans les plus brefs délais."));
@@ -58,13 +58,13 @@ public class TestContactPage extends AbstractITTest {
     @Test
     public void contactFail() throws Exception {
         driver.get(appUrl + "/contact");
-        driver.findElement(By.name("formContainerContact:name")).clear();
-        driver.findElement(By.name("formContainerContact:name")).sendKeys("Adnane");
-        driver.findElement(By.name("formContainerContact:email")).clear();
-        driver.findElement(By.name("formContainerContact:email")).sendKeys("adnane.tellou@hotmail.es");
-        driver.findElement(By.name("formContainerContact:subject")).clear();
-        driver.findElement(By.name("formContainerContact:subject")).sendKeys("Hey ho");
-        driver.findElement(By.id("submit2")).click();
+        findElement(By.name("formContainerContact:name")).clear();
+        findElement(By.name("formContainerContact:name")).sendKeys("Adnane");
+        findElement(By.name("formContainerContact:email")).clear();
+        findElement(By.name("formContainerContact:email")).sendKeys("adnane.tellou@hotmail.es");
+        findElement(By.name("formContainerContact:subject")).clear();
+        findElement(By.name("formContainerContact:subject")).sendKeys("Hey ho");
+        findElement(By.id("submit2")).click();
         Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("span.box_type6"),
                         "Veuillez entrer votre message !"));

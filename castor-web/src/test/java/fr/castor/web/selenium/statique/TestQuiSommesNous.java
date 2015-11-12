@@ -22,7 +22,7 @@ public class TestQuiSommesNous extends AbstractITTest {
     @Test
     public void testQuiSommesNousNominale() {
         driver.get(appUrl + UrlPage.ACCUEIL_URL);
-        driver.findElement(By.linkText("Qui sommes nous?")).click();
+        findElement(By.linkText("Qui sommes nous?")).click();
         Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("h1.title"),
                         "QUI SOMMES NOUS ?"));

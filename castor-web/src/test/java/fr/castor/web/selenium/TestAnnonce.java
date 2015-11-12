@@ -18,7 +18,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.concurrent.TimeUnit;
 
-import static com.ninja_squad.dbsetup.Operations.sequenceOf;
 import static org.junit.Assert.*;
 
 /**
@@ -116,7 +115,7 @@ public class TestAnnonce extends AbstractITTest {
         assertCoreInformationOfAnnonce(EtatAnnonce.ACTIVE);
         assertEquals(
                 "ENTREPRISES QUI SOUHAITENT VOUS CONTACTER",
-                driver.findElement(
+                findElement(
                         By.cssSelector("#containerEnteprisesInscrites > div.row-fluid > div.span12 > div.bg_title > h2.headInModule"))
                         .getText());
         assertEquals("Modifier votre annonce", driver.findElement(By.linkText("Modifier votre annonce")).getText());
@@ -127,7 +126,7 @@ public class TestAnnonce extends AbstractITTest {
         assertNotNull(checkConditionAnnoncePresent);
         assertEquals(
                 "ENTREPRISES QUI SOUHAITENT VOUS CONTACTER",
-                driver.findElement(
+                findElement(
                         By.cssSelector("#containerEnteprisesInscrites > div.row-fluid > div.span12 > div.bg_title > h2.headInModule"))
                         .getText());
         assertEquals("Aucune photo du chantier pour le moment :(", driver.findElement(By.id("aucunePhoto")).getText());
@@ -169,12 +168,12 @@ public class TestAnnonce extends AbstractITTest {
     public void testSuppressionAnnonceByClient() {
         connectAndGoToAnnonce(TypeCompte.CLIENT, "toto");
         assertCoreInformationOfAnnonce(EtatAnnonce.ACTIVE);
-        driver.findElement(By.id("supprimerAnnonce")).click();
+        findElement(By.id("supprimerAnnonce")).click();
 
         WebElement yesModalSuppression = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.visibilityOfElementLocated(By.id("yes")));
 
-        driver.findElement(By.id("yes")).click();
+        findElement(By.id("yes")).click();
         assertEquals("Votre annonce a bien été supprimée", driver.findElement(By.cssSelector("span.box_type4"))
                 .getText());
 
@@ -188,12 +187,12 @@ public class TestAnnonce extends AbstractITTest {
     public void testSuppressionAnnonceByAdmin() {
         connectAndGoToAnnonce(TypeCompte.ADMINISTRATEUR, "toto");
         assertCoreInformationOfAnnonce(EtatAnnonce.ACTIVE);
-        driver.findElement(By.id("supprimerAnnonce")).click();
+        findElement(By.id("supprimerAnnonce")).click();
 
         WebElement yesModalSuppression = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.visibilityOfElementLocated(By.id("yes")));
 
-        driver.findElement(By.id("yes")).click();
+        findElement(By.id("yes")).click();
         // TODO Verifier que l'on a bien redirigé l'admin sur la bonne page
         // quand la page d'accueil admin sera faites
     }
@@ -220,18 +219,13 @@ public class TestAnnonce extends AbstractITTest {
      * Cas de test : Un artisan s'inscrit à l'annonce, tout se passe comme prévu
      */
     @Test
-    public void testInscriptionArtisanAnnonce() {
+    public void testInscriptionArtisanAnnonce() throws InterruptedException {
         connectAndGoToAnnonce(TypeCompte.ARTISAN, "lolxd");
         assertCoreInformationOfAnnonce(EtatAnnonce.ACTIVE);
-        driver.findElement(By.id("inscrireAnnonce")).click();
-
-        WebElement checkConditionAnnoncePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
-                .until(ExpectedConditions.visibilityOfElementLocated(By
-                        .cssSelector("#inscriptionModal > div.modal-header > #myModalLabel")));
-        assertNotNull(checkConditionAnnoncePresent);
+        findElement(By.id("inscrireAnnonce")).click();
 
         // Lien inscription artisan sur la page de l'annonce.
-        driver.findElement(
+        findElement(
                 By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[5]/div/div[2]/a[1]"))
                 .click();
 
@@ -293,24 +287,24 @@ public class TestAnnonce extends AbstractITTest {
         assertCoreInformationOfAnnonce(EtatAnnonce.DONNER_AVIS);
 
         // Lien "notez artisan"
-        driver.findElement(
+        findElement(
                 By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[4]/div/div/div/div[2]/div[2]/div/div[3]/a"))
                 .click();
 
-        Thread.sleep(1000);
+        //Thread.sleep(1000);
 
         WebElement checkElementEnvoyerDevisPresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.presenceOfElementLocated(By.id("donnerAvisArtisanModal")));
         assertNotNull(checkElementEnvoyerDevisPresent);
 
         // Clique sur la première étoile
-        driver.findElement(By.className("rating-symbol")).click();
+        findElement(By.className("rating-symbol")).click();
 
-        driver.findElement(By.id("textAreaCommentaireNotation")).clear();
-        driver.findElement(By.id("textAreaCommentaireNotation")).sendKeys("moyen moyen le pébron !!");
+        findElement(By.id("textAreaCommentaireNotation")).clear();
+        findElement(By.id("textAreaCommentaireNotation")).sendKeys("moyen moyen le pébron !!");
 
         // Envoyer la notation
-        driver.findElement(
+        findElement(
                 By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[6]/div/div/div[2]/form/div[4]/div/a"))
                 .click();
 
@@ -331,7 +325,7 @@ public class TestAnnonce extends AbstractITTest {
         } else {
             connexionApplication("admin", AbstractITTest.BON_MOT_DE_PASSE, Boolean.TRUE);
         }
-        driver.findElement(By.id("connexionlbl")).click();
+        findElement(By.id("connexionlbl")).click();
 
         // On calcul l'url d'accées direct à l'annonce.
         StringBuilder appUrlAnnonce = new StringBuilder(appUrl);
@@ -370,17 +364,17 @@ public class TestAnnonce extends AbstractITTest {
         connectAndGoToAnnonce(typeCompte, "toto");
         assertCoreInformationOfAnnonce(EtatAnnonce.ACTIVE);
         // Le lien de selection de la premiere entreprise
-        driver.findElement(
+        findElement(
                 By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[4]/div/div/div/div[2]/div[2]/div[3]/a[2]"))
                 .click();
 
-        WebElement checkConditionAnnoncePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+        /*WebElement checkConditionAnnoncePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.visibilityOfElementLocated(By
                         .cssSelector("#desincriptionArtisanModal > div.modal-header > #myModalLabel")));
-        assertNotNull(checkConditionAnnoncePresent);
+        assertNotNull(checkConditionAnnoncePresent);*/
 
         // Le bouton oui de la modal
-        driver.findElement(
+        findElement(
                 By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[7]/div/div[2]/a[1]"))
                 .click();
 
@@ -395,17 +389,17 @@ public class TestAnnonce extends AbstractITTest {
         connectAndGoToAnnonce(typeCompte, "toto");
         assertCoreInformationOfAnnonce(EtatAnnonce.ACTIVE);
         // Le lien de selection de la premiere entreprise
-        driver.findElement(
+        findElement(
                 By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[4]/div/div/div/div[2]/div[2]/div[3]/a[1]"))
                 .click();
 
-        WebElement checkConditionAnnoncePresent = new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX)
+        /*WebElement checkConditionAnnoncePresent = new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX)
                 .until(ExpectedConditions.visibilityOfElementLocated(By
                         .xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[6]/div/div[2]/a[1]")));
-        assertNotNull(checkConditionAnnoncePresent);
+        assertNotNull(checkConditionAnnoncePresent);*/
 
         // Le bouton oui de la modal
-        driver.findElement(
+        findElement(
                 By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[6]/div/div[2]/a[1]"))
                 .click();
 

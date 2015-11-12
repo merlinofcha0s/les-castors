@@ -40,31 +40,27 @@ public class TestRechercheAnnonce extends AbstractITTest {
         driver.get(appUrl);
         connexionApplication("pebron", AbstractITTest.BON_MOT_DE_PASSE, Boolean.TRUE);
 
-        driver.findElement(By.id("rechercheAnnonce")).click();
+        findElement(By.id("rechercheAnnonce")).click();
 
         WebElement checkConditionAnnoncePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("h1.title")));
 
         Assert.assertNotNull(checkConditionAnnoncePresent);
 
-        driver.findElement(By.id("electricite")).click();
-        driver.findElement(By.id("plomberie")).click();
-        driver.findElement(By.id("rechercheDate")).clear();
-        driver.findElement(By.id("rechercheDate")).sendKeys("06/07/2013");
-        driver.findElement(By.id("rechercheDepartement")).clear();
-        driver.findElement(By.id("rechercheDepartement")).sendKeys("6");
-        driver.findElement(By.id("rechercheValider")).click();
+        findElement(By.id("electricite")).click();
+        findElement(By.id("plomberie")).click();
+        findElement(By.id("rechercheDate")).clear();
+        findElement(By.id("rechercheDate")).sendKeys("06/07/2013");
+        findElement(By.id("rechercheDepartement")).clear();
+        findElement(By.id("rechercheDepartement")).sendKeys("6");
+        findElement(By.id("rechercheValider")).click();
 
         Boolean checkConditionAnnonceRechercheOK = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.textToBePresentInElementLocated(By.id("infoNbAnnonce"), "5 annonces affichées sur 6"));
 
         Assert.assertTrue(checkConditionAnnonceRechercheOK);
 
-        if (browser.equals("ie")) {
-            Thread.sleep(1000);
-        }
-
-        driver.findElement(By.id("btnPlusDAvisEntreprise")).click();
+        findElement(By.id("btnPlusDAvisEntreprise")).click();
 
         Boolean checkConditionAnnonceRechercheOKPlusDeResultat = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.textToBePresentInElementLocated(By.id("infoNbAnnonce"), "6 annonces affichées sur 6"));

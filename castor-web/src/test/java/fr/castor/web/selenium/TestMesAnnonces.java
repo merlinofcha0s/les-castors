@@ -14,7 +14,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import static com.ninja_squad.dbsetup.Operations.sequenceOf;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -45,7 +44,7 @@ public class TestMesAnnonces extends AbstractITTest {
     public void testAccessToMesAnnonceByClient() {
         testMesAnnonces("raiden", TypeNotification.INSCRIT_A_ANNONCE, TypeCompte.CLIENT, 4, 4, 1);
 
-        driver.findElement(
+        findElement(
                 By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[1]/table/tbody/tr[1]/td[2]/a[2]"))
                 .click();
 
@@ -72,7 +71,7 @@ public class TestMesAnnonces extends AbstractITTest {
         // On s'authentifie à l'application
         connexionApplication(login, AbstractITTest.BON_MOT_DE_PASSE, Boolean.FALSE);
 
-        driver.findElement(By.id("connexionlbl")).click();
+        findElement(By.id("connexionlbl")).click();
 
         Boolean checkConditionNotificationPresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.textToBePresentInElementLocated(By.xpath("//td[2]/span"),
@@ -91,7 +90,7 @@ public class TestMesAnnonces extends AbstractITTest {
         //S'il y a assez de notification pour activer la pagination
         if (nbTotalNotification > MesAnnonces.NB_NOTIFICATION_PAR_PAGE) {
             //Vérification de la pagination des notifications
-            driver.findElement(By.id("afficherAnciennesNotifications")).click();
+            findElement(By.id("afficherAnciennesNotifications")).click();
             WebElement checkConditionNotificationPaginePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                     .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//table[@id='notificationsContainer']/tbody/tr[4]/td[2]")));
             assertNotNull(checkConditionNotificationPaginePresent);
@@ -100,7 +99,7 @@ public class TestMesAnnonces extends AbstractITTest {
         //S'il y a assez d'annonce pour activer la pagination
         if (nbAnnonceTotale > MesAnnonces.NB_ANNONCE_PAR_PAGE) {
             //Vérification de la pagination des annonces
-            driver.findElement(By.id("afficherAnciennesAnnonces")).click();
+            findElement(By.id("afficherAnciennesAnnonces")).click();
 
             StringBuilder texteVerificationPagination = new StringBuilder();
             texteVerificationPagination.append(nbAnnoncePagine);
@@ -114,11 +113,11 @@ public class TestMesAnnonces extends AbstractITTest {
 
 
         if (typeCompte.equals(TypeCompte.CLIENT)) {
-            driver.findElement(
+            findElement(
                     By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[2]/table/tbody/tr[1]"))
                     .click();
         } else if (typeCompte.equals(TypeCompte.ARTISAN)) {
-            driver.findElement(
+            findElement(
                     By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[2]/table/tbody/tr[1]"))
                     .click();
         }
@@ -128,7 +127,7 @@ public class TestMesAnnonces extends AbstractITTest {
                 .until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("h1.title")));
         assertNotNull(checkConditionAccessToAnnonceViaList);
 
-        driver.findElement(By.id("connexionlbl")).click();
+        findElement(By.id("connexionlbl")).click();
     }
 
 }

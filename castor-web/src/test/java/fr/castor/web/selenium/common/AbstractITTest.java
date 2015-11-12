@@ -4,18 +4,20 @@ import com.ninja_squad.dbsetup.destination.DriverManagerDestination;
 import com.ninja_squad.dbsetup.operation.Operation;
 import fr.castor.web.utils.PropertiesUtils;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Before;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.ie.InternetExplorerDriver;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.NoSuchElementException;
+import java.io.File;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
@@ -118,6 +120,7 @@ public abstract class AbstractITTest {
             case "chrome":
                 System.setProperty("webdriver.chrome.driver", chromeDriverAddress);
                 driver = new ChromeDriver();
+                driver.manage().window().setSize(new Dimension(1440,960));
                 break;
             case "firefox":
                 driver = new FirefoxDriver();
@@ -145,70 +148,23 @@ public abstract class AbstractITTest {
         }
     }
 
-    protected boolean isElementPresent(By by) {
-        try {
-            driver.findElement(by);
-            return true;
-        } catch (NoSuchElementException e) {
-            return false;
-        }
-    }
-
-    protected boolean isAlertPresent() {
-        try {
-            driver.switchTo().alert();
-            return true;
-        } catch (NoAlertPresentException e) {
-            return false;
-        }
-    }
-
-    protected String closeAlertAndGetItsText() {
-        try {
-            Alert alert = driver.switchTo().alert();
-            String alertText = alert.getText();
-            if (acceptNextAlert) {
-                alert.accept();
-            } else {
-                alert.dismiss();
-            }
-            return alertText;
-        } finally {
-            acceptNextAlert = true;
-        }
-    }
-
     protected void connexionApplication(String username, String password, Boolean isVerifLinkMonCompte) {
         WebElement checkConditionAnnoncePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.elementToBeClickable((By.id("connexionlbl"))));
         assertNotNull(checkConditionAnnoncePresent);
-        driver.findElement(By.id("connexionlbl")).click();
+        findElement(By.id("connexionlbl")).click();
         WebElement checkCondition = (new WebDriverWait(driver, TEMPS_ATTENTE_AJAX)).until(ExpectedConditions
                 .visibilityOfElementLocated(By.id("myModalLabel")));
         assertNotNull(checkCondition);
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            if (LOGGER.isErrorEnabled()) {
-                LOGGER.error("Fail to wait authentication", e);
-            }
-        }
-        driver.findElement(By.id("loginModal")).click();
-        driver.findElement(By.id("loginModal")).clear();
-        driver.findElement(By.id("loginModal")).sendKeys(username);
-        // On le fait attendre car il y a une probabilité qu'il ecrive trop vite
-        // dans les champs et qu'il se trompe
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            if (LOGGER.isErrorEnabled()) {
-                LOGGER.error("Fail to wait authentication", e);
-            }
-        }
-        driver.findElement(By.id("passwordModal")).click();
-        driver.findElement(By.id("passwordModal")).clear();
-        driver.findElement(By.id("passwordModal")).sendKeys(password);
-        driver.findElement(By.id("signInButton")).click();
+
+        findElement(By.id("loginModal")).click();
+        findElement(By.id("loginModal")).clear();
+        findElement(By.id("loginModal")).sendKeys(username);
+
+        findElement(By.id("passwordModal")).click();
+        findElement(By.id("passwordModal")).clear();
+        findElement(By.id("passwordModal")).sendKeys(password);
+        findElement(By.id("signInButton")).click();
 
         if (isVerifLinkMonCompte) {
             Boolean checkConditionMonCompteLabel = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
@@ -219,6 +175,91 @@ public abstract class AbstractITTest {
 
     protected DriverManagerDestination getDriverManagerDestination() {
         return new DriverManagerDestination(dataSourceAddress, loginDB, passwordDB);
+    }
+
+    public WebElement findElement(By by) {
+        waitForReady();
+        WebDriverWait webDriverWait = new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX);
+        return webDriverWait.until(ExpectedConditions.visibilityOfElementLocated(by));
+    }
+
+    public WebElement findElementAndWaitPresence(By by) {
+        waitForReady();
+        WebDriverWait webDriverWait = new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX);
+        return webDriverWait.until(ExpectedConditions.elementToBeClickable(by));
+    }
+
+    private void waitForReady() {
+        WebDriverWait webDriverWait = new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX);
+        webDriverWait.until((ExpectedCondition<Boolean>) input -> isAjaxFinished());
+    }
+
+    private Boolean isAjaxFinished() {
+        Boolean isJqueryUsed = (Boolean) ((JavascriptExecutor) driver).executeScript("return (typeof(jQuery) != 'undefined')");
+        if (isJqueryUsed) {
+            while (true) {
+                // JavaScript test to verify jQuery is active or not
+                Boolean ajaxIsComplete = (Boolean) (((JavascriptExecutor) driver).executeScript("return jQuery.active == 0"));
+                Boolean dataLoadIsComplete = (Boolean) (((JavascriptExecutor) driver).executeScript("return $('#waiterModal').is(':visible') == false"));
+                if (ajaxIsComplete && dataLoadIsComplete) {
+                    return true;
+                }
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                }
+            }
+        }
+        return false;
+    }
+
+    protected void etape1() {
+        findElement(By.id("codePostal")).clear();
+        findElement(By.id("codePostal")).sendKeys("06700");
+        findElement(By.id("valideCodePostal")).click();
+    }
+
+    protected void testAjoutPhotoIT(WebDriver driver, boolean isAnnonceModification) throws InterruptedException {
+        if(isAnnonceModification){
+            findElement(By.linkText("Modifier votre annonce")).click();
+        } else {
+            findElement(By.linkText("Modifier mes informations")).click();
+        }
+
+        Properties seleniumProperties = PropertiesUtils.loadPropertiesFile("selenium.properties");
+        StringBuilder adresseToImg = new StringBuilder(seleniumProperties.getProperty("app.temp.img.dir.test"));
+        adresseToImg.append("castor.jpg");
+        File file = new File(adresseToImg.toString());
+
+        WebElement photoField = driver.findElement(By.id("photoField"));
+        photoField.sendKeys(file.getAbsolutePath());
+
+        findElement(By.id("envoyerPhotos")).click();
+
+        Boolean checkUntilModifOK = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("span.box_type4"),
+                        "Photo(s) rajoutée(s) avec succés"));
+        Assert.assertTrue(checkUntilModifOK);
+    }
+
+    protected void suppressionPhotoIT(WebDriver driver){
+        //Clique sur le bouton supprimer la photo
+        findElement(By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[3]/div[2]/div/div[1]/div/div/div[2]/div[1]/div/div/a/div")).click();
+
+        Boolean checkUntilModifOK = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
+                .until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("span.box_type4"),
+                        "Suppression effectuée !"));
+        Assert.assertTrue(checkUntilModifOK);
+    }
+
+    /**
+     * Positive pour descendre, négative pour monter
+     *
+     * @param position
+     */
+    protected void scrollTo(int position){
+        JavascriptExecutor jse = (JavascriptExecutor) driver;
+        jse.executeScript("window.scrollBy(0 ," + position + ")", "");
     }
 
 }

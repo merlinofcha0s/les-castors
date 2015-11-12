@@ -39,7 +39,7 @@ public class TestEntreprise extends AbstractITTest {
     public void testInscriptionNouveauPartenaireNominal() throws InterruptedException {
         driver.get(appUrl);
         connexionApplication("raiden", AbstractITTest.BON_MOT_DE_PASSE, Boolean.TRUE);
-        driver.findElement(By.linkText("Entreprise de toto")).click();
+        findElement(By.linkText("Entreprise de toto")).click();
         new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX)
                 .until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@id='containerActivite']/span")));
         new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX)

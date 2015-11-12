@@ -3,7 +3,6 @@ package fr.castor.web.selenium.artisan;
 import com.ninja_squad.dbsetup.DbSetup;
 import com.ninja_squad.dbsetup.operation.Operation;
 import fr.castor.web.selenium.common.AbstractITTest;
-import fr.castor.web.utils.UtilsSelenium;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,11 +29,11 @@ public class TestModifierMonEntreprise extends AbstractITTest {
     }
 
     @Before
-    public void goToModifierMonEntreprise(){
+    public void goToModifierMonEntreprise() {
         driver.get(appUrl);
         connexionApplication("pebron", BON_MOT_DE_PASSE, Boolean.TRUE);
-        driver.findElement(By.id("connexionlbl")).click();
-        driver.findElement(By.linkText("Modifier mes informations")).click();
+        findElement(By.id("connexionlbl")).click();
+        findElement(By.linkText("Modifier mes informations")).click();
     }
 
     /**
@@ -44,19 +43,20 @@ public class TestModifierMonEntreprise extends AbstractITTest {
     public void modifierInformationMonEntreprise() throws InterruptedException {
         (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX)).until(ExpectedConditions
                 .elementToBeClickable(By.id("electricite")));
-        driver.findElement(By.id("electricite")).click();
-        driver.findElement(By.id("menuiserie")).click();
+        findElement(By.id("electricite")).click();
+        findElement(By.id("menuiserie")).click();
 
-        driver.findElement(By.id("nbEmployeField")).clear();
-        driver.findElement(By.id("nbEmployeField")).sendKeys("20");
-        driver.findElement(By.id("entreprisedateCreation")).click();
-        driver.findElement(By.id("codePostalField")).clear();
-        driver.findElement(By.id("codePostalField")).sendKeys("06700");
-        driver.findElement(By.id("villeField")).clear();
-        driver.findElement(By.id("villeField")).sendKeys("ST LAURENT DU VAR");
+        findElement(By.id("nbEmployeField")).clear();
+        findElement(By.id("nbEmployeField")).sendKeys("20");
+        findElement(By.id("entreprisedateCreation")).click();
+        findElement(By.id("codePostalField")).clear();
+        findElement(By.id("codePostalField")).sendKeys("06700");
+        findElement(By.id("villeField")).clear();
+        findElement(By.id("villeField")).sendKeys("ST LAURENT DU VAR");
 
-        driver.findElement(By.id("validateEtape3Partenaire")).click();
+        scrollTo(250);
 
+        findElementAndWaitPresence(By.id("validateEtape3Partenaire")).click();
 
         Boolean checkConditionModificationInformation = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("span.box_type4"),
@@ -68,7 +68,7 @@ public class TestModifierMonEntreprise extends AbstractITTest {
     }
 
     private void verificationModificationPageMonEntreprise() {
-        driver.findElement(By.linkText("Voir mon entreprise")).click();
+        findElement(By.linkText("Voir mon entreprise")).click();
         (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX)).until(ExpectedConditions
                 .presenceOfElementLocated(By.xpath("//div[@id='containerActivite']/span[2]")));
     }
@@ -78,7 +78,7 @@ public class TestModifierMonEntreprise extends AbstractITTest {
      */
     @Test
     public void ajouterPhotoChantierTemoin() throws InterruptedException {
-        UtilsSelenium.testAjoutPhotoIT(driver, browser, false);
+        testAjoutPhotoIT(driver, false);
     }
 
     /**
@@ -86,7 +86,7 @@ public class TestModifierMonEntreprise extends AbstractITTest {
      */
     @Test
     public void supprimerPhotoChantierTemoin() throws InterruptedException {
-        UtilsSelenium.testAjoutPhotoIT(driver, browser, false);
-        UtilsSelenium.suppressionPhotoIT(driver);
+        testAjoutPhotoIT(driver, false);
+        suppressionPhotoIT(driver);
     }
 }

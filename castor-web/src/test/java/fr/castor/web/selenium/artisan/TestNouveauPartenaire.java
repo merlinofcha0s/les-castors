@@ -3,7 +3,6 @@ package fr.castor.web.selenium.artisan;
 import com.ninja_squad.dbsetup.DbSetup;
 import com.ninja_squad.dbsetup.operation.Operation;
 import fr.castor.web.selenium.common.AbstractITTest;
-import fr.castor.web.utils.UtilsSelenium;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -41,18 +40,12 @@ public class TestNouveauPartenaire extends AbstractITTest {
         driver.get(appUrl + nouveauPartenaireURL);
 
         // On selectionne un departement
-        UtilsSelenium.etape1(driver);
-        if (browser.equals("ie")) {
-            Thread.sleep(1000);
-        }
+        etape1();
+
         etape2();
-        if (browser.equals("ie")) {
-            Thread.sleep(1000);
-        }
+
         etape3();
-        if (browser.equals("ie")) {
-            Thread.sleep(1000);
-        }
+
         etape4();
     }
 
@@ -68,20 +61,17 @@ public class TestNouveauPartenaire extends AbstractITTest {
         driver.get(appUrl + nouveauPartenaireURL);
 
         // On selectionne un departement
-        UtilsSelenium.etape1(driver);
+        etape1();
         etape2();
 
-        WebElement etapeButionNouveauArtisan = new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX).until(ExpectedConditions
-                .presenceOfElementLocated(By.id("etapePrecedenteNouveauArtisan3")));
-        Thread.sleep(1000);
+        WebElement etapeButtonNouveauArtisan = new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX).until(ExpectedConditions
+                .elementToBeClickable(By.id("etapePrecedenteNouveauArtisan3")));
 
-        driver.findElement(By.id("etapePrecedenteNouveauArtisan3")).click();
+        Thread.sleep(2000);
+
+        findElement(By.id("etapePrecedenteNouveauArtisan3")).click();
         etape2();
-        Thread.sleep(1000);
-        driver.findElement(By.id("etapePrecedenteNouveauArtisan3")).click();
-        Thread.sleep(1000);
-        etape2();
-        Thread.sleep(1000);
+
         etape3();
 
         etape4();
@@ -89,22 +79,22 @@ public class TestNouveauPartenaire extends AbstractITTest {
 
     private void etape2() {
         // Etape 2
-        new Select(driver.findElement(By.id("civilite"))).selectByVisibleText("Monsieur");
-        driver.findElement(By.id("nom")).clear();
-        driver.findElement(By.id("nom")).sendKeys("Dupont");
-        driver.findElement(By.id("prenomField")).clear();
-        driver.findElement(By.id("prenomField")).sendKeys("Xavier");
-        driver.findElement(By.id("numeroTelField")).clear();
-        driver.findElement(By.id("numeroTelField")).sendKeys("0493854578");
-        driver.findElement(By.id("emailField")).clear();
-        driver.findElement(By.id("emailField")).sendKeys("artisan.castor@outlook.fr");
-        driver.findElement(By.id("logintField")).clear();
-        driver.findElement(By.id("logintField")).sendKeys("xavier06");
-        driver.findElement(By.id("password")).clear();
-        driver.findElement(By.id("password")).sendKeys("lolmdr06");
-        driver.findElement(By.id("confirmPassword")).clear();
-        driver.findElement(By.id("confirmPassword")).sendKeys("lolmdr06");
-        driver.findElement(By.id("validateEtape2Partenaire")).click();
+        new Select(findElement(By.id("civilite"))).selectByVisibleText("Monsieur");
+        findElement(By.id("nom")).clear();
+        findElement(By.id("nom")).sendKeys("Dupont");
+        findElement(By.id("prenomField")).clear();
+        findElement(By.id("prenomField")).sendKeys("Xavier");
+        findElement(By.id("numeroTelField")).clear();
+        findElement(By.id("numeroTelField")).sendKeys("0493854578");
+        findElement(By.id("emailField")).clear();
+        findElement(By.id("emailField")).sendKeys("artisan.castor@outlook.fr");
+        findElement(By.id("logintField")).clear();
+        findElement(By.id("logintField")).sendKeys("xavier06");
+        findElement(By.id("password")).clear();
+        findElement(By.id("password")).sendKeys("lolmdr06");
+        findElement(By.id("confirmPassword")).clear();
+        findElement(By.id("confirmPassword")).sendKeys("lolmdr06");
+        findElement(By.id("validateEtape2Partenaire")).click();
     }
 
     private void etape3() throws InterruptedException {
@@ -112,26 +102,26 @@ public class TestNouveauPartenaire extends AbstractITTest {
         (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX)).until(ExpectedConditions
                 .visibilityOfElementLocated(By.id("electricite")));
 
-        driver.findElement(By.id("electricite")).click();
-        driver.findElement(By.id("plomberie")).click();
+        findElement(By.id("electricite")).click();
+        findElement(By.id("plomberie")).click();
 
-        driver.findElement(By.id("nomComplet")).clear();
-        driver.findElement(By.id("nomComplet")).sendKeys("Xav Entreprise");
+        findElement(By.id("nomComplet")).clear();
+        findElement(By.id("nomComplet")).sendKeys("Xav Entreprise");
         new Select(driver.findElement(By.id("statutJuridique"))).selectByVisibleText("SARL");
-        driver.findElement(By.id("nbEmployeField")).clear();
-        driver.findElement(By.id("nbEmployeField")).sendKeys("5");
-        driver.findElement(By.id("entreprisedateCreation")).clear();
-        driver.findElement(By.id("entreprisedateCreation")).sendKeys("01/05/2013");
-        driver.findElement(By.id("siretField")).clear();
-        driver.findElement(By.id("siretField")).sendKeys("43394298400017");
-        driver.findElement(By.id("adresseField")).clear();
-        driver.findElement(By.id("adresseField")).sendKeys("450 chemin du xav");
-        driver.findElement(By.id("codePostalField")).clear();
-        driver.findElement(By.id("codePostalField")).sendKeys("06700");
-        driver.findElement(By.id("villeField")).clear();
-        driver.findElement(By.id("villeField")).sendKeys("ST LAURENT DU VAR");
+        findElement(By.id("nbEmployeField")).clear();
+        findElement(By.id("nbEmployeField")).sendKeys("5");
+        findElement(By.id("entreprisedateCreation")).clear();
+        findElement(By.id("entreprisedateCreation")).sendKeys("01/05/2013");
+        findElement(By.id("siretField")).clear();
+        findElement(By.id("siretField")).sendKeys("43394298400017");
+        findElement(By.id("adresseField")).clear();
+        findElement(By.id("adresseField")).sendKeys("450 chemin du xav");
+        findElement(By.id("codePostalField")).clear();
+        findElement(By.id("codePostalField")).sendKeys("06700");
+        findElement(By.id("villeField")).clear();
+        findElement(By.id("villeField")).sendKeys("ST LAURENT DU VAR");
 
-        driver.findElement(By.id("validateEtape3Partenaire")).click();
+        findElement(By.id("validateEtape3Partenaire")).click();
     }
 
     private void etape4() {

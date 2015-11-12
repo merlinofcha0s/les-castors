@@ -3,7 +3,6 @@ package fr.castor.web.selenium.client;
 import com.ninja_squad.dbsetup.DbSetup;
 import com.ninja_squad.dbsetup.operation.Operation;
 import fr.castor.web.selenium.common.AbstractITTest;
-import fr.castor.web.utils.UtilsSelenium;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -44,24 +43,14 @@ public class TestNouveauDevis extends AbstractITTest {
         driver.get(appUrl + nouveauDevisURL);
 
         // On passe à l'etape 1
-        UtilsSelenium.etape1(driver);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            if (LOGGER.isErrorEnabled()) {
-                LOGGER.error("Fail to wait authentication", e);
-            }
-        }
+        etape1();
+
         // On remplit l'étape 2
         etape2();
-        if (browser.equals("ie")) {
-            Thread.sleep(1000);
-        }
+
         // On passe l'etape 3
         etape3(false);
 
-
-        Thread.sleep(1000);
         // On s'authentifie à l'application
         connexionApplication("raiden", AbstractITTest.BON_MOT_DE_PASSE, Boolean.TRUE);
 
@@ -81,28 +70,28 @@ public class TestNouveauDevis extends AbstractITTest {
     public void testCreationNouveauDevisNonAuthenticatedSucceed() throws InterruptedException {
         driver.get(appUrl + nouveauDevisURL);
         // On passe à l'etape 1
-        UtilsSelenium.etape1(driver);
+        etape1();
         // On remplit l'étape 2
         etape2();
         // On remplit l'étape 3
         etape3(false);
         // Etape 3
-        driver.findElement(By.id("nom")).clear();
-        driver.findElement(By.id("nom")).sendKeys("Selenium");
-        driver.findElement(By.id("prenom")).clear();
-        driver.findElement(By.id("prenom")).sendKeys("Test");
-        driver.findElement(By.id("numeroTel")).clear();
-        driver.findElement(By.id("numeroTel")).sendKeys("0614528796");
-        driver.findElement(By.id("email")).clear();
-        driver.findElement(By.id("email")).sendKeys("castor0610@hotmail.fr");
-        driver.findElement(By.id("login")).clear();
-        driver.findElement(By.id("login")).sendKeys("selenium");
-        driver.findElement(By.id("password")).clear();
-        driver.findElement(By.id("password")).sendKeys("mdrlollol");
-        driver.findElement(By.id("confirmPassword")).clear();
-        driver.findElement(By.id("confirmPassword")).sendKeys("mdrlollol");
-        driver.findElement(By.name("fieldContainer:CGUContainer:cguConfirmation")).click();
-        driver.findElement(By.id("validateInscription")).click();
+        findElement(By.id("nom")).clear();
+        findElement(By.id("nom")).sendKeys("Selenium");
+        findElement(By.id("prenom")).clear();
+        findElement(By.id("prenom")).sendKeys("Test");
+        findElement(By.id("numeroTel")).clear();
+        findElement(By.id("numeroTel")).sendKeys("0614528796");
+        findElement(By.id("email")).clear();
+        findElement(By.id("email")).sendKeys("castor0610@hotmail.fr");
+        findElement(By.id("login")).clear();
+        findElement(By.id("login")).sendKeys("selenium");
+        findElement(By.id("password")).clear();
+        findElement(By.id("password")).sendKeys("mdrlollol");
+        findElement(By.id("confirmPassword")).clear();
+        findElement(By.id("confirmPassword")).sendKeys("mdrlollol");
+        findElement(By.name("fieldContainer:CGUContainer:cguConfirmation")).click();
+        findElement(By.id("validateInscription")).click();
 
         Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("h5"),
@@ -121,20 +110,12 @@ public class TestNouveauDevis extends AbstractITTest {
     public void testCreationNouveauDevisSubscribeNotAuthenticatedSucceed() throws InterruptedException {
         driver.get(appUrl + nouveauDevisURL);
         // On selectionne le bon département
-        UtilsSelenium.etape1(driver);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            if (LOGGER.isErrorEnabled()) {
-                LOGGER.error("Fail to wait authentication", e);
-            }
-        }
+        etape1();
         // On remplit l'étape 2
         etape2();
         // On remplit l'étape 3
         etape3(false);
 
-        Thread.sleep(1000);
         // On se connecte
         connexionApplication("raiden", BON_MOT_DE_PASSE, Boolean.TRUE);
 
@@ -154,13 +135,12 @@ public class TestNouveauDevis extends AbstractITTest {
         // Premiere saisie de l'annonce.
         driver.get(appUrl + nouveauDevisURL);
         // On selectionne le bon département
-        UtilsSelenium.etape1(driver);
+        etape1();
         // On remplit l'étape 2
         etape2();
-        Thread.sleep(1000);
         // On passe à l'étape 3
         etape3(false);
-        Thread.sleep(1000);
+
         connexionApplication("raiden", BON_MOT_DE_PASSE, Boolean.TRUE);
 
         assertEquals("Votre devis a été mis en ligne, nous vous avons envoyé un mail récapitulatif", driver
@@ -168,10 +148,9 @@ public class TestNouveauDevis extends AbstractITTest {
 
         // Deuxieme saisie de l'annonce.
         driver.get(appUrl + nouveauDevisURL);
-        UtilsSelenium.etape1(driver);
+        etape1();
         etape2();
         etape3(true);
-        Thread.sleep(1000);
         assertEquals("Problème pendant l'enregistrement de l'annonce, veuillez nous excuser pour la gène occasionnée.",
                 driver.findElement(By.cssSelector("h5")).getText());
     }
@@ -187,29 +166,23 @@ public class TestNouveauDevis extends AbstractITTest {
     public void testEtapePrecedente() throws InterruptedException {
         driver.get(appUrl + nouveauDevisURL);
         // On selectionne le bon département
-        UtilsSelenium.etape1(driver);
+        etape1();
 
-        Thread.sleep(1000);
         // On remplit l'étape 2
         etape2();
         // On remplit l'étape 3
         etape3(false);
 
         Thread.sleep(1000);
-        driver.findElement(By.id("etapePrecedente4")).click();
+        findElement(By.id("etapePrecedente4")).click();
 
-        Thread.sleep(1000);
-        driver.findElement(By.id("etapePrecedente3")).click();
+        findElement(By.id("etapePrecedente3")).click();
 
-        Thread.sleep(1000);
-        driver.findElement(By.id("etapePrecedente2")).click();
-
-        Thread.sleep(1000);
+        findElement(By.id("etapePrecedente2")).click();
 
         // On selectionne le bon département
-        UtilsSelenium.etape1(driver);
+        etape1();
 
-        Thread.sleep(1000);
         // On remplit l'étape 2
         etape2();
         // On remplit l'étape 3
@@ -219,7 +192,7 @@ public class TestNouveauDevis extends AbstractITTest {
         WebElement checkConditionPresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.presenceOfElementLocated((By.xpath("//div[@id='batimenWizard']/ul/li[2]"))));
         assertNotNull(checkConditionPresent);
-        driver.findElement(By.xpath("//div[@id='batimenWizard']/ul/li[2]")).click();
+        findElement(By.xpath("//div[@id='batimenWizard']/ul/li[2]")).click();
 
         // On remplit l'étape 2
         etape2();
@@ -227,7 +200,6 @@ public class TestNouveauDevis extends AbstractITTest {
         etape3(false);
 
         Thread.sleep(1000);
-
         connexionApplication("raiden", BON_MOT_DE_PASSE, Boolean.TRUE);
 
         assertEquals("Votre devis a été mis en ligne, nous vous avons envoyé un mail récapitulatif", driver
@@ -245,12 +217,11 @@ public class TestNouveauDevis extends AbstractITTest {
     public void testContactTelMaisPasTelPasRenseigne() throws InterruptedException {
         driver.get(appUrl + nouveauDevisURL);
         // On selectionne le bon département
-        UtilsSelenium.etape1(driver);
+        etape1();
 
-        Thread.sleep(1000);
         // On remplit l'étape 2
         etape2();
-        Thread.sleep(1000);
+
         connexionApplication("xavier", BON_MOT_DE_PASSE, Boolean.TRUE);
         // On remplit l'étape 3
         etape3(true);
@@ -259,8 +230,6 @@ public class TestNouveauDevis extends AbstractITTest {
                 .until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("span.box_type6"),
                         "Veuillez renseigner un numéro de téléphone dans la rubrique mon compte > modifier mon profil si vous voulez être contacté par téléphone"));
         assertTrue(checkConditionModificationInformation);
-
-        Thread.sleep(1000);
     }
 
     /**
@@ -273,77 +242,47 @@ public class TestNouveauDevis extends AbstractITTest {
     public void testSaisiMotCleSansClique() throws InterruptedException {
         driver.get(appUrl + nouveauDevisURL);
         // On selectionne le bon département
-        UtilsSelenium.etape1(driver);
+        etape1();
 
-        Thread.sleep(1000);
-
-        driver.findElement(By.id("motCleField")).sendKeys("Salles de bain");
-
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            if (LOGGER.isErrorEnabled()) {
-                LOGGER.error("Fail to wait authentication", e);
-            }
-        }
-
-        driver.findElement(By.id("etapeSuivante")).click();
+        findElement(By.id("motCleField")).sendKeys("Salles de bain");
+        findElement(By.id("etapeSuivante")).click();
 
         etape3(false);
-        Thread.sleep(1000);
 
         connexionApplication("raiden", BON_MOT_DE_PASSE, Boolean.TRUE);
     }
 
     private void etape3(boolean isAlreadyAuthenticate) throws InterruptedException {
-        if (browser.equals("ie")) {
-            Thread.sleep(1000);
-        }
         WebElement checkConditionAnnoncePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.presenceOfElementLocated((By.id("typeContactField"))));
         assertNotNull(checkConditionAnnoncePresent);
-        driver.findElement(By.id("descriptionDevisField")).clear();
-        driver.findElement(By.id("descriptionDevisField")).sendKeys("Refonte complete de l'electricite dans la maison");
+        findElement(By.id("descriptionDevisField")).clear();
+        findElement(By.id("descriptionDevisField")).sendKeys("Refonte complete de l'electricite dans la maison");
         new Select(driver.findElement(By.id("typeContactField"))).selectByVisibleText("Téléphone");
         new Select(driver.findElement(By.id("delaiInterventionField")))
                 .selectByVisibleText("Le plus rapidement possible");
-        driver.findElement(By.id("radioTypeTravauxRenovation")).click();
-        driver.findElement(By.id("adresseField")).clear();
-        driver.findElement(By.id("adresseField")).sendKeys("106 avenue du test selenium");
-        driver.findElement(By.id("adresseComplementField")).clear();
-        driver.findElement(By.id("adresseComplementField")).sendKeys("complement du test");
-        driver.findElement(By.id("codePostalField")).clear();
-        driver.findElement(By.id("codePostalField")).sendKeys("06700");
-        driver.findElement(By.id("villeField")).clear();
-        driver.findElement(By.id("villeField")).sendKeys("ST LAURENT DU VAR");
-        driver.findElement(By.id("validateQualification")).click();
+        findElement(By.id("radioTypeTravauxRenovation")).click();
+        findElement(By.id("adresseField")).clear();
+        findElement(By.id("adresseField")).sendKeys("106 avenue du test selenium");
+        findElement(By.id("adresseComplementField")).clear();
+        findElement(By.id("adresseComplementField")).sendKeys("complement du test");
+        findElement(By.id("codePostalField")).clear();
+        findElement(By.id("codePostalField")).sendKeys("06700");
+        findElement(By.id("villeField")).clear();
+        findElement(By.id("villeField")).sendKeys("ST LAURENT DU VAR");
+        findElement(By.id("validateQualification")).click();
 
         if (!isAlreadyAuthenticate) {
             (new WebDriverWait(driver, 5)).until(ExpectedConditions.presenceOfElementLocated(By.id("dejaInscrit")));
         }
-
-        if (browser.equals("ie")) {
-            Thread.sleep(1000);
-        }
+        Thread.sleep(1000);
     }
 
     private void etape2() throws InterruptedException {
-        if (browser.equals("ie")) {
-            Thread.sleep(1000);
-        }
+        findElement(By.id("motCleField")).sendKeys("Salles de bain");
+        findElement(By.linkText("Salles de bain")).click();
 
-        driver.findElement(By.id("motCleField")).sendKeys("Salles de bain");
-        driver.findElement(By.linkText("Salles de bain")).click();
-
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            if (LOGGER.isErrorEnabled()) {
-                LOGGER.error("Fail to wait authentication", e);
-            }
-        }
-
-        driver.findElement(By.id("etapeSuivante")).click();
+        findElement(By.id("etapeSuivante")).click();
     }
 
 }

@@ -47,8 +47,8 @@ public class TestModifierMonProfil extends AbstractITTest {
     public void modifyInformationsProfilPasswordInformation() {
         driver.get(appUrl);
         connexionApplication("raiden", BON_MOT_DE_PASSE, Boolean.TRUE);
-        driver.findElement(By.id("connexionlbl")).click();
-        driver.findElement(By.linkText("Modifier le profil")).click();
+        findElement(By.id("connexionlbl")).click();
+        findElement(By.linkText("Modifier le profil")).click();
         assertModificationPage();
         modificationMotDePasse("lollollol");
         Boolean checkConditionModificationInformation = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
@@ -65,8 +65,8 @@ public class TestModifierMonProfil extends AbstractITTest {
     public void modifyInformationsProfilPasswordInformationWrong() {
         driver.get(appUrl);
         connexionApplication("raiden", BON_MOT_DE_PASSE, Boolean.TRUE);
-        driver.findElement(By.id("connexionlbl")).click();
-        driver.findElement(By.linkText("Modifier le profil")).click();
+        findElement(By.id("connexionlbl")).click();
+        findElement(By.linkText("Modifier le profil")).click();
         assertModificationPage();
         modificationMotDePasse("lollol");
         Boolean checkConditionModificationInformation = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
@@ -88,20 +88,20 @@ public class TestModifierMonProfil extends AbstractITTest {
     private void modifyInformationsProfilInformation(String login, String loginVoulu, String numeroTel, String messageAttendu, boolean isArtisan) {
         driver.get(appUrl);
         connexionApplication(login, BON_MOT_DE_PASSE, Boolean.TRUE);
-        driver.findElement(By.id("connexionlbl")).click();
+        findElement(By.id("connexionlbl")).click();
         if (isArtisan) {
-            driver.findElement(By.linkText("Modifier mes informations")).click();
+            findElement(By.linkText("Modifier mes informations")).click();
         } else {
-            driver.findElement(By.linkText("Modifier le profil")).click();
+            findElement(By.linkText("Modifier le profil")).click();
         }
 
         assertModificationPage();
 
-        driver.findElement(By.id("login")).clear();
-        driver.findElement(By.id("login")).sendKeys(loginVoulu);
-        driver.findElement(By.id("numeroTel")).clear();
-        driver.findElement(By.id("numeroTel")).sendKeys(numeroTel);
-        driver.findElement(By.id("validateInscription")).click();
+        findElement(By.id("login")).clear();
+        findElement(By.id("login")).sendKeys(loginVoulu);
+        findElement(By.id("numeroTel")).clear();
+        findElement(By.id("numeroTel")).sendKeys(numeroTel);
+        findElement(By.id("validateInscription")).click();
         Boolean checkConditionModificationInformation = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("span.box_type4"),
                         messageAttendu));
@@ -109,13 +109,13 @@ public class TestModifierMonProfil extends AbstractITTest {
     }
 
     private void modificationMotDePasse(String motDePasse) {
-        driver.findElement(By.id("oldpassword")).clear();
-        driver.findElement(By.id("oldpassword")).sendKeys(motDePasse);
-        driver.findElement(By.id("password")).clear();
-        driver.findElement(By.id("password")).sendKeys("lollollol06");
-        driver.findElement(By.id("confirmPassword")).clear();
-        driver.findElement(By.id("confirmPassword")).sendKeys("lollollol06");
-        driver.findElement(By.id("validateInscription")).click();
+        findElement(By.id("oldpassword")).clear();
+        findElement(By.id("oldpassword")).sendKeys(motDePasse);
+        findElement(By.id("password")).clear();
+        findElement(By.id("password")).sendKeys("lollollol06");
+        findElement(By.id("confirmPassword")).clear();
+        findElement(By.id("confirmPassword")).sendKeys("lollollol06");
+        findElement(By.id("validateInscription")).click();
     }
 
     private void assertModificationPage() {

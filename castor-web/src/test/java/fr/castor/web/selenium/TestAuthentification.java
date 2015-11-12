@@ -1,8 +1,8 @@
 package fr.castor.web.selenium;
 
-import static com.ninja_squad.dbsetup.Operations.sequenceOf;
-import static org.junit.Assert.assertTrue;
-
+import com.ninja_squad.dbsetup.DbSetup;
+import com.ninja_squad.dbsetup.operation.Operation;
+import fr.castor.web.selenium.common.AbstractITTest;
 import org.junit.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -10,10 +10,8 @@ import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import com.ninja_squad.dbsetup.DbSetup;
-import com.ninja_squad.dbsetup.operation.Operation;
-
-import fr.castor.web.selenium.common.AbstractITTest;
+import static com.ninja_squad.dbsetup.Operations.sequenceOf;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Classe de test selenium pour la popup d'authentification client.
@@ -37,16 +35,13 @@ public class TestAuthentification extends AbstractITTest {
     public void testAuthentificationAndDisconnectSuccess() throws Exception {
         driver.get(appUrl);
         connexionApplication("raiden", AbstractITTest.BON_MOT_DE_PASSE, Boolean.TRUE);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
         Boolean checkConditionMonCompte = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.textToBePresentInElementLocated(By.id("connexionlbl"), "MON COMPTE"));
         assertTrue(checkConditionMonCompte);
 
-        WebElement iconConnected = driver.findElement(By.cssSelector("#iconConnected"));
+        WebElement iconConnected = findElement(By.cssSelector("#iconConnected"));
+        //Exception car dans findElement, il faut que l'element soit visible hors ici l'element n'est visible qu'au survol
         WebElement logout = driver.findElement(By.id("logout"));
         Actions builder = new Actions(driver);
         builder.click(iconConnected).moveToElement(logout).click().build().perform();
@@ -61,11 +56,7 @@ public class TestAuthentification extends AbstractITTest {
     public void testAuthentificationFailed() throws Exception {
         driver.get(appUrl);
         connexionApplication("raiden", AbstractITTest.MAUVAIS_MOT_DE_PASSE, Boolean.FALSE);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
         Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.textToBePresentInElementLocated(By.id("errorLogin"), messageErreur));
         assertTrue(checkCondition);
@@ -75,11 +66,7 @@ public class TestAuthentification extends AbstractITTest {
     public void testAuthentificationFailedBecauseNotActivated() throws Exception {
         driver.get(appUrl);
         connexionApplication("xdlol", AbstractITTest.BON_MOT_DE_PASSE, Boolean.FALSE);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
         Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.textToBePresentInElementLocated(By.id("errorLogin"), messageErreur));
         assertTrue(checkCondition);
