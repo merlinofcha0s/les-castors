@@ -38,14 +38,10 @@ public class TestNouveauPartenaire extends AbstractITTest {
     @Test
     public void testInscriptionNouveauPartenaireNominal() throws InterruptedException {
         driver.get(appUrl + nouveauPartenaireURL);
-
         // On selectionne un departement
         etape1();
-
         etape2();
-
         etape3();
-
         etape4();
     }
 
@@ -71,9 +67,7 @@ public class TestNouveauPartenaire extends AbstractITTest {
 
         findElement(By.id("etapePrecedenteNouveauArtisan3")).click();
         etape2();
-
         etape3();
-
         etape4();
     }
 

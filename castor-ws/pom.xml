@@ -186,10 +186,11 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
+            <!-- Essayer de retablir quand changement de version d'hibernate -->
+            <!-- <plugin>
                 <groupId>org.hibernate.orm.tooling</groupId>
                 <artifactId>hibernate-enhance-maven-plugin</artifactId>
-                <version>4.3.10.Final</version>
+                <version>5.0.3.Final</version>
                 <executions>
                     <execution>
                         <phase>compile</phase>
@@ -199,22 +200,22 @@
                     </execution>
                 </executions>
                 <dependencies>
-                    <!-- Yes, you really must have an explicit dependency on the thing you
-                        want to enhance -->
+                     Yes, you really must have an explicit dependency on the thing you
+                        want to enhance
                     <dependency>
                         <groupId>${project.groupId}</groupId>
                         <artifactId>castor-dto</artifactId>
                         <version>${project.version}</version>
                     </dependency>
-                    <!-- Yes, you really must have an explicit dependency on the thing you
-                        want to enhance -->
+                      Yes, you really must have an explicit dependency on the thing you
+                        want to enhance
                     <dependency>
                         <groupId>${project.groupId}</groupId>
                         <artifactId>castor-ws</artifactId>
                         <version>${project.version}</version>
                     </dependency>
                 </dependencies>
-            </plugin>
+            </plugin> -->
         </plugins>
         <resources>
             <resource>
