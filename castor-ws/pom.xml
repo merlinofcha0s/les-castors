@@ -187,35 +187,34 @@
                 </executions>
             </plugin>
             <!-- Essayer de retablir quand changement de version d'hibernate -->
-            <!-- <plugin>
+            <plugin>
                 <groupId>org.hibernate.orm.tooling</groupId>
                 <artifactId>hibernate-enhance-maven-plugin</artifactId>
-                <version>5.0.3.Final</version>
+                <version>${hibernate.version}</version>
                 <executions>
                     <execution>
-                        <phase>compile</phase>
                         <goals>
                             <goal>enhance</goal>
                         </goals>
+                        <configuration>
+                            <failOnError>true</failOnError>
+                            <enableLazyInitialization>true</enableLazyInitialization>
+                            <enableDirtyTracking>true</enableDirtyTracking>
+                            <enableAssociationManagement>true</enableAssociationManagement>
+                            <enableFieldAccessEnhancement>false</enableFieldAccessEnhancement>
+                        </configuration>
                     </execution>
                 </executions>
                 <dependencies>
-                     Yes, you really must have an explicit dependency on the thing you
-                        want to enhance
-                    <dependency>
-                        <groupId>${project.groupId}</groupId>
-                        <artifactId>castor-dto</artifactId>
-                        <version>${project.version}</version>
-                    </dependency>
-                      Yes, you really must have an explicit dependency on the thing you
-                        want to enhance
+                    <!--   Yes, you really must have an explicit dependency on the thing you
+                         want to enhance -->
                     <dependency>
                         <groupId>${project.groupId}</groupId>
                         <artifactId>castor-ws</artifactId>
                         <version>${project.version}</version>
                     </dependency>
                 </dependencies>
-            </plugin> -->
+            </plugin>
         </plugins>
         <resources>
             <resource>

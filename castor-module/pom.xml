@@ -39,6 +39,8 @@
         <sonar.host.url>https://integration.lescastors.fr/sonar</sonar.host.url>
         <sonar.login>maven</sonar.login>
         <sonar.password>sIo7!C]3-s</sonar.password>
+        <sonar.sources>src/main/java</sonar.sources>
+        <sonar.exclusions>file:**/src/main/java/fr/castor/ws/entity/*</sonar.exclusions>
     </properties>
 
     <issueManagement>
@@ -65,6 +67,7 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>3.3</version>
                     <configuration>
+                        <useIncrementalCompilation>false</useIncrementalCompilation>
                         <source>1.8</source>
                         <target>1.8</target>
                         <optimize>true</optimize>
