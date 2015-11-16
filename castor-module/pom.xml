@@ -36,11 +36,14 @@
         <sonar.jacoco.reportPath>${project.basedir}/../target/jacoco.exec</sonar.jacoco.reportPath>
         <sonar.jacoco.itReportPath>${project.basedir}/../target/jacoco-it.exec</sonar.jacoco.itReportPath>
         <sonar.language>java</sonar.language>
+        <sonar.host.url>https://integration.lescastors.fr/sonar</sonar.host.url>
+        <sonar.login>maven</sonar.login>
+        <sonar.password>sIo7!C]3-s</sonar.password>
     </properties>
 
     <issueManagement>
-        <system>Youtrack</system>
-        <url>https://integration.lescastors.fr/youtrack</url>
+        <system>Trello</system>
+        <url>https://trello.com/b/HuU901L3/les-castors</url>
     </issueManagement>
 
     <ciManagement>
