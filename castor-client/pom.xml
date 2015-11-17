@@ -6,7 +6,6 @@
         <groupId>fr.castor.app</groupId>
         <artifactId>castor-module</artifactId>
         <version>1.0.1-SNAPSHOT</version>
-        <relativePath>../castor-module</relativePath>
     </parent>
 
     <artifactId>castor-client</artifactId>
