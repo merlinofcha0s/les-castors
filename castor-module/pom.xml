@@ -5,7 +5,7 @@
     <groupId>fr.castor.app</groupId>
     <artifactId>castor-module</artifactId>
     <description>Projet principal des castors</description>
-    <version>1.0.1</version>
+    <version>1.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <prerequisites>
@@ -57,7 +57,6 @@
         <connection>scm:git:https://integration.lescastors.fr/root/batimen.git</connection>
         <developerConnection>scm:git:https://integration.lescastors.fr/root/batimen.git</developerConnection>
         <url>https://integration.lescastors.fr/root/batimen.git</url>
-    <tag>castor-module-1.0.1</tag>
   </scm>
 
     <build>
