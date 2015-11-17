@@ -96,7 +96,7 @@
                 </configuration>
             </plugin>
             <!-- Pour les tests unitaires (Junit) -->
-            <plugin>
+           <!--  <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.18.1</version>
                 <configuration>
@@ -131,7 +131,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin> -->
 
             <!-- Execute .sql avant les tests -->
             <plugin>
@@ -201,7 +201,7 @@
                             <enableLazyInitialization>true</enableLazyInitialization>
                             <enableDirtyTracking>true</enableDirtyTracking>
                             <enableAssociationManagement>true</enableAssociationManagement>
-                            <enableFieldAccessEnhancement>false</enableFieldAccessEnhancement>
+                            <enableFieldAccessEnhancement>true</enableFieldAccessEnhancement>
                         </configuration>
                     </execution>
                 </executions>
