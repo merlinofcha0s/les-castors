@@ -54,9 +54,9 @@
     </ciManagement>
 
     <scm>
-        <connection>scm:git:https://integration.lescastors.fr/root/batimen.git</connection>
-        <developerConnection>scm:git:https://integration.lescastors.fr/root/batimen.git</developerConnection>
-        <url>https://integration.lescastors.fr/root/batimen.git</url>
+        <connection>scm:git:https://integration.lescastors.fr/raiden/Castor.git</connection>
+        <developerConnection>scm:git:https://integration.lescastors.fr/raiden/Castor.git</developerConnection>
+        <url>https://integration.lescastors.fr/raiden/batimen.git</url>
   </scm>
 
     <build>
