@@ -180,6 +180,9 @@
                     <includes>
                         <include>**/selenium/**/*.java</include>
                     </includes>
+                    <excludes>
+                        <exclude>**/selenium/**/TestProd.java</exclude>
+                    </excludes>
                     <argLine>${failsafeArgLine}</argLine>
                     <rerunFailingTestsCount>3</rerunFailingTestsCount>
                 </configuration>
