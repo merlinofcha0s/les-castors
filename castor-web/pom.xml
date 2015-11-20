@@ -4,7 +4,7 @@
     <parent>
         <groupId>fr.castor.app</groupId>
         <artifactId>castor-module</artifactId>
-        <version>1.1.0-SNAPSHOT</version>
+        <version>1.0.12-SNAPSHOT</version>
     </parent>
 
     <groupId>fr.castor.app</groupId>
@@ -154,7 +154,7 @@
 
 
             <!-- Executions des tests unitaires (Junit) -->
-            <plugin>
+           <!-- <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.18.1</version>
                 <configuration>
@@ -166,11 +166,10 @@
                     </excludes>
                     <argLine>${jacoco.agent.argLine}</argLine>
                 </configuration>
-            </plugin>
-            
+            </plugin> -->
 
             <!-- Executions des tests selenium -->
-            <plugin>
+          <!--  <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>2.18.1</version>
@@ -179,9 +178,6 @@
                     <includes>
                         <include>**/selenium/**/*.java</include>
                     </includes>
-                    <excludes>
-                        <exclude>**/selenium/**/TestProd.java</exclude>
-                    </excludes>
                     <argLine>${failsafeArgLine}</argLine>
                     <rerunFailingTestsCount>3</rerunFailingTestsCount>
                 </configuration>
@@ -199,7 +195,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin>
+            </plugin> -->
         </plugins>
     </build>
 
