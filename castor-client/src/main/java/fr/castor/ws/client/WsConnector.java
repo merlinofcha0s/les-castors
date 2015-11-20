@@ -90,7 +90,7 @@ public class WsConnector implements Serializable {
                 try {
                     context.init(null, TrustManagerSingleton.getTrustedCertificate(), TrustManagerSingleton.secureRandomOrNot());
                 } catch (KeyManagementException e) {
-                    e.printStackTrace();
+                    LOGGER.error("Erreur lors de l'init du context SSL", e);
                 }
                 HttpsURLConnection.setDefaultSSLSocketFactory(context.getSocketFactory());
                 config.getProperties().put(HTTPSProperties.PROPERTY_HTTPS_PROPERTIES,

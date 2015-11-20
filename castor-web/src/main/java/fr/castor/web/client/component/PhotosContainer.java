@@ -42,7 +42,6 @@ public class PhotosContainer extends Panel {
 
     public static final String REFRESH_TOOLTIP_ON_SUPPRESS_LINK = "$('.suppress-link').tooltip()";
     public static final String REFRESH_PRETTY_PHOTO_ON_PICTURE = "$(\"a[class^='prettyPhoto']\").prettyPhoto();";
-    private static final Logger LOGGER = LoggerFactory.getLogger(PhotosContainer.class);
     private List<ImageDTO> images;
     private String title;
     private String baliseTypeTitle;

@@ -23,7 +23,7 @@ public class AnnonceGarbageCollector implements Job {
 
         if (LOGGER.isDebugEnabled()) {
             Properties castorProperties = PropertiesFileWS.CASTOR.getProperties();
-            int nbJourAvantPeremption = Integer.valueOf(castorProperties.getProperty("prop.temps.peremption.annonce"));
+            int nbJourAvantPeremption = Integer.parseInt(castorProperties.getProperty("prop.temps.peremption.annonce"));
             Integer nbMaxArtisanParAnnonce = Integer.parseInt(castorProperties
                     .getProperty("prop.nb.max.artisan.annonce"));
             StringBuilder debugString = new StringBuilder(

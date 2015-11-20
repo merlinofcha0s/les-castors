@@ -11,9 +11,8 @@ import javax.persistence.PersistenceException;
 
 /**
  * Classe abstraite pour l'ensemble des classes DAO
- * 
+ *
  * @author Casaucau Cyril
- * 
  */
 public class AbstractDAO<T> {
 
@@ -21,23 +20,15 @@ public class AbstractDAO<T> {
     @PersistenceContext
     protected EntityManager entityManager;
 
-    public AbstractDAO() {
-    }
-
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public T create(T t) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Création de : " + t.getClass().getSimpleName());
         }
         entityManager.persist(t);
-        try {
-            entityManager.flush();
-        } catch (PersistenceException pe) {
-            if (LOGGER.isErrorEnabled()) {
-                LOGGER.error("Problème de flush pendant la creation de : " + t.getClass().getSimpleName(), pe);
-            }
-            return null;
-        }
+
+        flushing("Problème de flush pendant la creation de :  ", t);
+
         return t;
     }
 
@@ -47,15 +38,20 @@ public class AbstractDAO<T> {
             LOGGER.debug("Création de : " + t.getClass().getSimpleName());
         }
         entityManager.persist(t);
+
+        flushing("Problème de flush pendant la creation de :  ", t);
+
+        return t;
+    }
+
+    private void flushing(String exceptionMessage, T t) {
         try {
             entityManager.flush();
         } catch (PersistenceException pe) {
             if (LOGGER.isErrorEnabled()) {
-                LOGGER.error("Problème de flush pendant la creation de : " + t.getClass().getSimpleName(), pe);
+                LOGGER.error(exceptionMessage + t.getClass().getSimpleName(), pe);
             }
-            return null;
         }
-        return t;
     }
 
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
@@ -64,14 +60,9 @@ public class AbstractDAO<T> {
             LOGGER.debug("Mise à jour de : " + t.getClass().getSimpleName());
         }
         t = entityManager.merge(t);
-        try {
-            entityManager.flush();
-        } catch (PersistenceException pe) {
-            if (LOGGER.isErrorEnabled()) {
-                LOGGER.error("Problème de flush pendant l'update de : " + t.getClass().getSimpleName(), pe);
-            }
-            return null;
-        }
+
+        flushing("Problème de flush pendant l'update de : ", t);
+
         return t;
     }
 

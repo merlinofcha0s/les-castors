@@ -9,6 +9,7 @@ import fr.castor.dto.constant.Categorie;
 import fr.castor.dto.enums.TypeCompte;
 import fr.castor.web.app.enums.Etape;
 import fr.castor.web.app.enums.FeedbackMessageLevel;
+import fr.castor.web.app.enums.PropertiesFileWeb;
 import fr.castor.web.app.security.Authentication;
 import fr.castor.web.app.security.RolesUtils;
 import fr.castor.web.app.utils.codepostal.CSVCodePostalReader;
@@ -18,7 +19,6 @@ import fr.castor.web.client.extend.nouveau.artisan.event.ChangementEtapeEventArt
 import fr.castor.web.client.extend.nouveau.communs.JSCommun;
 import fr.castor.web.client.extend.nouveau.devis.NouveauUtils;
 import fr.castor.web.client.master.MasterPage;
-import fr.castor.web.app.enums.PropertiesFileWeb;
 import fr.castor.ws.client.service.ArtisanServiceREST;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -313,6 +313,8 @@ public class Etape3Entreprise extends Panel {
                 case Categorie.MENUISERIE_CODE:
                     menuiserieModel.setObject(Boolean.TRUE);
                     break;
+                default:
+                    throw new NullPointerException();
             }
         }
     }

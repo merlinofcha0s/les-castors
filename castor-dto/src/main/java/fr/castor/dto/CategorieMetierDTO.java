@@ -16,10 +16,6 @@ public class CategorieMetierDTO implements Serializable {
         super();
     }
 
-    public CategorieMetierDTO(String name, short categorieMetier) {
-        this.categorieMetier = categorieMetier;
-    }
-
     public CategorieMetierDTO(short categorieMetier) {
         this.categorieMetier = categorieMetier;
     }

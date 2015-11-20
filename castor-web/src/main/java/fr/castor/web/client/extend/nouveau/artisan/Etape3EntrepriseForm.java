@@ -37,8 +37,6 @@ public class Etape3EntrepriseForm extends Form<CreationPartenaireDTO> {
 
     private static final long serialVersionUID = 7654913676022607009L;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(Etape3EntrepriseForm.class);
-
     private WebMarkupContainer fieldContainer;
 
     @Inject
@@ -50,9 +48,6 @@ public class Etape3EntrepriseForm extends Form<CreationPartenaireDTO> {
         // Mode Multipart pour l'upload de fichier.
         this.setMultiPart(true);
         this.setMarkupId("formEntrepriseEtape3");
-
-        final CreationPartenaireDTO nouveauPartenaire = model.getObject();
-        final List<CategorieMetierDTO> categorieSelectionnees = nouveauPartenaire.getEntreprise().getCategoriesMetier();
 
         TextField<String> specialite = new TextField<String>("entreprise.specialite");
         specialite.setMarkupId("specialite");

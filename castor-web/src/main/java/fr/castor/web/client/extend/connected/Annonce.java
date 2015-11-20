@@ -7,8 +7,8 @@ import fr.castor.dto.constant.Categorie;
 import fr.castor.dto.enums.EtatAnnonce;
 import fr.castor.dto.enums.TypeCompte;
 import fr.castor.dto.enums.TypeContact;
-import fr.castor.web.app.enums.FeedbackMessageLevel;
 import fr.castor.web.app.constants.ParamsConstant;
+import fr.castor.web.app.enums.FeedbackMessageLevel;
 import fr.castor.web.app.security.Authentication;
 import fr.castor.web.app.security.RolesUtils;
 import fr.castor.web.client.component.*;
@@ -35,8 +35,6 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.text.SimpleDateFormat;
@@ -54,8 +52,6 @@ import java.util.stream.Collectors;
 public class Annonce extends MasterPage {
 
     private static final long serialVersionUID = -3604005728078066454L;
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(Annonce.class);
 
     @Inject
     private AnnonceServiceREST annonceServiceREST;

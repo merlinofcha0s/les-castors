@@ -34,10 +34,6 @@ public class UtilisateurServiceREST implements Serializable{
     @Inject
     private WsConnector wsConnector;
 
-    public UtilisateurServiceREST(){
-
-    }
-
     public int activateAccount(String cleActivation) {
 
         int resultatService;

@@ -1,16 +1,8 @@
 package fr.castor.web.app.aop;
 
-import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authz.AuthorizationException;
-import org.apache.shiro.subject.Subject;
-import org.apache.wicket.markup.html.WebPage;
-import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import fr.castor.dto.enums.TypeCompte;
-import fr.castor.web.client.extend.error.AccesInterdit;
 
 /**
  * Advice qui gére les accés au page où il faut être connecté <br/>
@@ -36,7 +28,7 @@ public class SecurityAdvice {
      */
     // @Around(value =
     // "execution(fr.batimen.web.client.extend.member.client.*.new())")
-    public void checkClientRole(ProceedingJoinPoint joinPoint) throws Throwable {
+    /*public void checkClientRole(ProceedingJoinPoint joinPoint) throws Throwable {
         // On recupère l'objet de la classe qui va être instancié
         WebPage page = (WebPage) joinPoint.getThis();
         Subject utilisateur = SecurityUtils.getSubject();
@@ -53,5 +45,5 @@ public class SecurityAdvice {
             }
             page.setResponsePage(AccesInterdit.class);
         }
-    }
+    }*/
 }

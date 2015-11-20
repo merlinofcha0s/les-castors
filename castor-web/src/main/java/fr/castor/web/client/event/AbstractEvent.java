@@ -16,6 +16,7 @@ public abstract class AbstractEvent implements Event {
 		this.target = target;
 	}
 
+	@Override
 	public AjaxRequestTarget getTarget() {
 		return target;
 	}

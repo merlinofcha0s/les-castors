@@ -63,7 +63,7 @@ public class FluxUtils {
         String[] contentDisposition = header.getFirst("Content-Disposition").split(";");
 
         for (String filename : contentDisposition) {
-            if ((filename.trim().startsWith("filename"))) {
+            if (filename.trim().startsWith("filename")) {
 
                 String[] name = filename.split("=");
 

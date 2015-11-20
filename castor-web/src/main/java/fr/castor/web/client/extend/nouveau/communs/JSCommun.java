@@ -11,6 +11,10 @@ import java.util.List;
  */
 public class JSCommun {
 
+    private JSCommun() {
+
+    }
+
     /**
      * Crée la string JS qui permet d'initialiser un TypeAHEAD avec ses données.
      *
@@ -21,16 +25,8 @@ public class JSCommun {
     public static String buildSourceTypeAhead(List<String> motsCles, String selector) {
         StringBuilder sourceTypeAhead = new StringBuilder("$('");
         sourceTypeAhead.append(selector).append("').typeahead({ source: [");
-        boolean firstTime = true;
 
-        for (String motcle : motsCles) {
-            if (firstTime) {
-                firstTime = false;
-                sourceTypeAhead.append("'").append(motcle).append("'");
-            } else {
-                sourceTypeAhead.append(",'").append(motcle).append("'");
-            }
-        }
+        remplisMotsClesString(motsCles, sourceTypeAhead);
         sourceTypeAhead.append("]});");
 
         return sourceTypeAhead.toString();
@@ -46,8 +42,20 @@ public class JSCommun {
     public static String buildSourceTypeAheadForMotCles(List<String> motsCles, String selector, String callback) {
         StringBuilder sourceTypeAhead = new StringBuilder("$('");
         sourceTypeAhead.append(selector).append("').typeahead({ source: [");
-        boolean firstTime = true;
 
+        remplisMotsClesString(motsCles, sourceTypeAhead);
+
+        sourceTypeAhead.append("],");
+        sourceTypeAhead.append("updater: function(item){ var motCle = item; ");
+        sourceTypeAhead.append(callback);
+        sourceTypeAhead.append(" return item; }");
+        sourceTypeAhead.append("});");
+
+        return sourceTypeAhead.toString();
+    }
+
+    private static void remplisMotsClesString(List<String> motsCles, StringBuilder sourceTypeAhead) {
+        boolean firstTime = true;
         for (String motcle : motsCles) {
             if (firstTime) {
                 firstTime = false;
@@ -56,13 +64,6 @@ public class JSCommun {
                 sourceTypeAhead.append(",'").append(motcle).append("'");
             }
         }
-        sourceTypeAhead.append("],");
-        sourceTypeAhead.append("updater: function(item){ var motCle = item; ");
-        sourceTypeAhead.append(callback);
-        sourceTypeAhead.append(" return item; }");
-        sourceTypeAhead.append("});");
-
-        return sourceTypeAhead.toString();
     }
 
     public static void scrollToTop(AjaxRequestTarget target) {

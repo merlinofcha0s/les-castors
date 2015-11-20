@@ -3,8 +3,6 @@ package fr.castor.web.client.session;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
 import org.apache.wicket.authroles.authorization.strategies.role.Roles;
 import org.apache.wicket.request.Request;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.Locale;
 
@@ -18,7 +16,6 @@ import java.util.Locale;
 public class BatimenSession extends AuthenticatedWebSession {
 
     private static final long serialVersionUID = -3460138748198816904L;
-    private static final Logger LOGGER = LoggerFactory.getLogger(BatimenSession.class);
 
     public BatimenSession(Request request) {
         super(request);

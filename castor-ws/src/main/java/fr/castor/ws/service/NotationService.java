@@ -5,12 +5,10 @@ import fr.castor.dto.AvisDTO;
 import fr.castor.ws.dao.NotationDAO;
 import fr.castor.ws.entity.Annonce;
 import fr.castor.ws.entity.Artisan;
-import fr.castor.ws.entity.Client;
 import fr.castor.ws.entity.Avis;
+import fr.castor.ws.entity.Client;
 import fr.castor.ws.utils.ClientUtils;
 import org.modelmapper.ModelMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.ejb.*;
 import javax.inject.Inject;
@@ -28,8 +26,6 @@ import java.util.List;
 @LocalBean
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class NotationService {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(NotationService.class);
 
     @Inject
     private NotationDAO notationDAO;
