@@ -25,6 +25,7 @@ public class UrlPage {
     public static final String RECHERCHE_ANNONCE = "/rechercheannonce";
     public static final String FAQ = "/faq";
     public static final String NOS_OBJECTIFS = "/nosobjectifs";
+    public static final String NOS_ENGAGEMENTS = "/nosengagements";
 
     public static final String LOGO = "https://res.cloudinary.com/lescastors/image/upload/v1443971771/mail/logo-bleu2x.png";
 

@@ -29,6 +29,7 @@ public class Accueil extends MasterPage {
         ContactezNous contactezNous = new ContactezNous("contactezNous");
         this.add(contactezNous);
         initLinks();
+        initPlusInfosServiceLink();
         initSocialLink();
     }
 
@@ -101,6 +102,31 @@ public class Accueil extends MasterPage {
         };
 
         add(rejoignezNousLink, faireUnDevisSlide1, faireUnDevisSlide2, faireUnDevisSlide3);
+    }
+
+    private void initPlusInfosServiceLink(){
+        Link<Void> nosObjectifsServices = new Link<Void>("nosObjectifsServices") {
+            @Override
+            public void onClick() {
+                setResponsePage(Objectif.class);
+            }
+        };
+
+        Link<Void> notreEquipeServices = new Link<Void>("notreEquipeServices") {
+            @Override
+            public void onClick() {
+                setResponsePage(QuiSommeNous.class);
+            }
+        };
+
+        Link<Void> nosEngagementsServices = new Link<Void>("nosEngagementsServices") {
+            @Override
+            public void onClick() {
+                setResponsePage(NosEngagements.class);
+            }
+        };
+
+        add(nosObjectifsServices, notreEquipeServices, nosEngagementsServices);
     }
 
     private void initSocialLink() {
