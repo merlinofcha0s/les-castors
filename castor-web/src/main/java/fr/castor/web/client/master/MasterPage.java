@@ -648,6 +648,13 @@ public abstract class MasterPage extends WebPage {
             }
         };
 
-        add(footerAccueil, footerQuiSommesNous, footerCGU, footerFAQ, footerNosObjectifs);
+        Link<String> footerNosEngagements = new Link<String>("footerNosEngagements") {
+            @Override
+            public void onClick() {
+                this.setResponsePage(NosEngagements.class);
+            }
+        };
+
+        add(footerAccueil, footerQuiSommesNous, footerCGU, footerFAQ, footerNosObjectifs, footerNosEngagements);
     }
 }
