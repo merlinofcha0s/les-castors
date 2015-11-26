@@ -259,7 +259,6 @@ public class AnnonceServiceTest {
 
         Calendar cal = Calendar.getInstance(Locale.FRENCH);
         cal.set(2014, 02, 28);
-        searchAnnonceDTO.setaPartirdu(cal.getTime());
 
         SearchAnnonceDTOOut searchAnnonceDTOOut = annonceServiceREST.searchAnnonce(searchAnnonceDTO);
         Assert.assertNotNull(searchAnnonceDTOOut);

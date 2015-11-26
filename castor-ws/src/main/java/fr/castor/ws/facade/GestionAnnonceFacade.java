@@ -841,13 +841,10 @@ public class GestionAnnonceFacade {
             codeCategorieMetier.add(categorieMetier.getCategorieMetier());
         }
 
-        List<Annonce> annonces = annonceDAO.searchAnnonce(codeCategorieMetier, searchAnnonceDTOIn.getaPartirdu()
-                , searchAnnonceDTOIn.getDepartement(), searchAnnonceDTOIn.getRangeDebut(), searchAnnonceDTOIn.getRangeFin());
+        List<Annonce> annonces = annonceDAO.searchAnnonce(codeCategorieMetier, searchAnnonceDTOIn.getDepartement()
+                , searchAnnonceDTOIn.getRangeDebut(), searchAnnonceDTOIn.getRangeFin());
 
-        long nbAnnonceTotale = annonceDAO.countSearchAnnonce(codeCategorieMetier, searchAnnonceDTOIn.getaPartirdu()
-                , searchAnnonceDTOIn.getDepartement());
-
-        //Set<Annonce>
+        long nbAnnonceTotale = annonceDAO.countSearchAnnonce(codeCategorieMetier, searchAnnonceDTOIn.getDepartement());
 
         searchAnnonceDTOOut.setNbTotalResultat(nbAnnonceTotale);
 

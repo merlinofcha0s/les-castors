@@ -5,8 +5,10 @@ import fr.castor.dto.CategorieMetierDTO;
 import fr.castor.dto.constant.ValidatorConstant;
 
 import javax.validation.Valid;
-import javax.validation.constraints.*;
-import java.util.Date;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
@@ -20,10 +22,6 @@ public class SearchAnnonceDTOIn extends AbstractDTO {
 
     @Valid
     private List<CategorieMetierDTO> categoriesMetierDTO = new LinkedList<>();
-
-    @NotNull
-    @Past
-    private Date aPartirdu;
 
     @NotNull
     @Min(value = ValidatorConstant.DEPARTEMENT_MIN)
@@ -45,14 +43,6 @@ public class SearchAnnonceDTOIn extends AbstractDTO {
 
     public void setCategoriesMetierDTO(List<CategorieMetierDTO> categoriesMetierDTO) {
         this.categoriesMetierDTO = categoriesMetierDTO;
-    }
-
-    public Date getaPartirdu() {
-        return aPartirdu;
-    }
-
-    public void setaPartirdu(Date aPartirdu) {
-        this.aPartirdu = aPartirdu;
     }
 
     public Integer getDepartement() {
@@ -88,7 +78,6 @@ public class SearchAnnonceDTOIn extends AbstractDTO {
     }
 
     public void clear(){
-        aPartirdu = new Date();
         categoriesMetierDTO.clear();
         departement = 0;
         rangeDebut = 0;
@@ -101,7 +90,6 @@ public class SearchAnnonceDTOIn extends AbstractDTO {
         if (o == null || getClass() != o.getClass()) return false;
         SearchAnnonceDTOIn that = (SearchAnnonceDTOIn) o;
         return Objects.equals(categoriesMetierDTO, that.categoriesMetierDTO) &&
-                Objects.equals(aPartirdu, that.aPartirdu) &&
                 Objects.equals(departement, that.departement) &&
                 Objects.equals(loginDemandeur, that.loginDemandeur) &&
                 Objects.equals(rangeDebut, that.rangeDebut) &&
@@ -110,14 +98,13 @@ public class SearchAnnonceDTOIn extends AbstractDTO {
 
     @Override
     public int hashCode() {
-        return Objects.hash(categoriesMetierDTO, aPartirdu, departement, loginDemandeur, rangeDebut, rangeFin);
+        return Objects.hash(categoriesMetierDTO, departement, loginDemandeur, rangeDebut, rangeFin);
     }
 
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("SearchAnnonceDTOIn{");
         sb.append("categoriesMetierDTO=").append(categoriesMetierDTO);
-        sb.append(", aPartirdu=").append(aPartirdu);
         sb.append(", departement=").append(departement);
         sb.append(", loginDemandeur='").append(loginDemandeur).append('\'');
         sb.append(", rangeDebut=").append(rangeDebut);

@@ -1,10 +1,19 @@
 package fr.castor.web.client.extend.nouveau.artisan;
 
-import java.util.Arrays;
-
+import fr.castor.core.security.HashHelper;
+import fr.castor.dto.PermissionDTO;
+import fr.castor.dto.aggregate.CreationPartenaireDTO;
+import fr.castor.dto.constant.ValidatorConstant;
+import fr.castor.dto.enums.Civilite;
+import fr.castor.dto.enums.TypeCompte;
 import fr.castor.web.app.enums.Etape;
 import fr.castor.web.app.utils.ProgrammaticBeanLookup;
+import fr.castor.web.client.behaviour.ErrorHighlightBehavior;
+import fr.castor.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.castor.web.client.event.FeedBackPanelEvent;
+import fr.castor.web.client.extend.nouveau.artisan.event.ChangementEtapeEventArtisan;
+import fr.castor.web.client.extend.nouveau.devis.NouveauUtils;
+import fr.castor.web.client.validator.EmailUniquenessValidator;
 import fr.castor.web.client.validator.LoginUniquenessValidator;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
@@ -21,17 +30,7 @@ import org.apache.wicket.validation.validator.EmailAddressValidator;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.apache.wicket.validation.validator.StringValidator;
 
-import fr.castor.core.security.HashHelper;
-import fr.castor.dto.PermissionDTO;
-import fr.castor.dto.aggregate.CreationPartenaireDTO;
-import fr.castor.dto.constant.ValidatorConstant;
-import fr.castor.dto.enums.Civilite;
-import fr.castor.dto.enums.TypeCompte;
-import fr.castor.web.client.behaviour.ErrorHighlightBehavior;
-import fr.castor.web.client.behaviour.border.RequiredBorderBehaviour;
-import fr.castor.web.client.extend.nouveau.artisan.event.ChangementEtapeEventArtisan;
-import fr.castor.web.client.extend.nouveau.devis.NouveauUtils;
-import fr.castor.web.client.validator.EmailUniquenessValidator;
+import java.util.Arrays;
 
 /**
  * Etape 2 de l'inscription d'un nouvel artisan : Informations du dirigeant
@@ -177,6 +176,7 @@ public class Etape2PartenaireForm extends Form<CreationPartenaireDTO> {
         };
         validateEtape2Partenaire.setMarkupId("validateEtape2Partenaire");
 
+        setDefaultButton(validateEtape2Partenaire);
         this.add(civilite, nom, prenom, numeroTel, email, identifiant, passwordField, confirmPassword,
                 validateEtape2Partenaire, etapePrecedenteNouveauArtisan2);
 

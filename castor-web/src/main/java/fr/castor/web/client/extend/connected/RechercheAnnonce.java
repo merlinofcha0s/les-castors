@@ -29,13 +29,11 @@ import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
-import org.apache.wicket.validation.validator.DateValidator;
 import org.apache.wicket.validation.validator.RangeValidator;
 
 import javax.inject.Inject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -52,7 +50,6 @@ public class RechercheAnnonce extends MasterPage {
     private Authentication authentication;
     @Inject
     private AnnonceServiceREST annonceServiceREST;
-    private CastorDatePicker castorDatePicker;
     private WebMarkupContainer resultatContainer;
     private WebMarkupContainer containerPlusAnnonce;
     private List<AnnonceDTO> annonceDTOList = new ArrayList<>();
@@ -101,9 +98,6 @@ public class RechercheAnnonce extends MasterPage {
         final CheckBox maconnerie = new CheckBox("maconnerie", Model.of(Boolean.FALSE));
         final CheckBox menuiserie = new CheckBox("menuiserie", Model.of(Boolean.FALSE));
 
-        castorDatePicker = new CastorDatePicker("aPartirdu", "rechercheDate", true);
-        castorDatePicker.add(DateValidator.maximum(new Date(), "dd/MM/yyyy"));
-
         final TextField<Integer> departement = new TextField<>("departement");
         departement.add(RangeValidator.minimum(ValidatorConstant.DEPARTEMENT_MIN));
         departement.add(RangeValidator.maximum(ValidatorConstant.DEPARTEMENT_MAX));
@@ -140,10 +134,6 @@ public class RechercheAnnonce extends MasterPage {
                     searchAnnonceDTO.setDepartement(authentication.getEntrepriseUserInfo().getAdresseEntreprise().getDepartement());
                 }
 
-                if (searchAnnonceDTO.getaPartirdu() == null) {
-                    searchAnnonceDTO.setaPartirdu(new Date());
-                }
-
                 searchAnnonceDTO.setRangeDebut(annonceDTOList.size());
                 searchAnnonceDTO.setRangeFin(NB_ANNONCE_PAR_PAGE);
 
@@ -165,7 +155,7 @@ public class RechercheAnnonce extends MasterPage {
         };
 
         Form searchForm = new Form<>("searchForm", new CompoundPropertyModel<>(searchAnnonceDTO));
-        searchForm.add(electricite, plomberie, espaceVert, maconnerie, menuiserie, castorDatePicker, departement, rechercher);
+        searchForm.add(electricite, plomberie, espaceVert, maconnerie, menuiserie, departement, rechercher);
 
         add(searchForm);
     }

@@ -154,7 +154,7 @@
 
 
             <!-- Executions des tests unitaires (Junit) -->
-           <!-- <plugin>
+            <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>2.18.1</version>
                 <configuration>
@@ -166,10 +166,10 @@
                     </excludes>
                     <argLine>${jacoco.agent.argLine}</argLine>
                 </configuration>
-            </plugin> -->
+            </plugin>
 
             <!-- Executions des tests selenium -->
-          <!--  <plugin>
+          <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>2.18.1</version>
@@ -195,7 +195,7 @@
                         </goals>
                     </execution>
                 </executions>
-            </plugin> -->
+            </plugin>
         </plugins>
     </build>
 
@@ -502,12 +502,7 @@
                 <!-- Logs -->
                 <logs.address>${OPENSHIFT_LOG_DIR}</logs.address>
                 <logs.archives>${OPENSHIFT_LOG_DIR}/archived</logs.archives>
-                <logs.lvl>DEBUG</logs.lvl>
-
-                <!-- Logs pour les tests -->
-                <logs.test.address>/usr/share/log-test-batimen</logs.test.address>
-                <logs.test.archives>${logs.test.address}/archived</logs.test.archives>
-                <logs.test.lvl>DEBUG</logs.test.lvl>
+                <logs.lvl>ERROR</logs.lvl>
 
                 <!-- Config de Wicket pour qu'il enleve / mette ses tags dans le HTML -->
                 <app.setStripWicketTags>true</app.setStripWicketTags>

@@ -484,9 +484,6 @@
                 <email.confirmation.by.team>true</email.confirmation.by.team>
                 <email.box.team>contactlescastors@gmail.com</email.box.team>
 
-                <!-- URL du frontend -->
-                <url.frontend.web>https://integration.lescastors.fr/batimen-web/</url.frontend.web>
-
                 <!-- Gestion des images -->
                 <prop.temp.img.dir>/usr/share/castor-temp/img/</prop.temp.img.dir>
                 <prop.image.is.test>false</prop.image.is.test>
@@ -562,7 +559,7 @@
                 <!-- Logs -->
                 <logs.address>${OPENSHIFT_LOG_DIR}</logs.address>
                 <logs.archives>${OPENSHIFT_LOG_DIR}/archived</logs.archives>
-                <logs.lvl>DEBUG</logs.lvl>
+                <logs.lvl>ERROR</logs.lvl>
 
                 <!-- Hibernate -->
                 <hibernate.show_sql>false</hibernate.show_sql>
@@ -576,9 +573,6 @@
                 <email.active>true</email.active>
                 <email.confirmation.by.team>true</email.confirmation.by.team>
                 <email.box.team>contactlescastors@gmail.com</email.box.team>
-
-                <!-- URL du frontend -->
-                <url.frontend.web>https://lescastors.fr/</url.frontend.web>
 
                 <!-- Gestion des images -->
                 <prop.temp.img.dir>${OPENSHIFT_DATA_DIR}</prop.temp.img.dir>

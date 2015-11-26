@@ -477,7 +477,7 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
      * @return La liste d'annonces correspondantent
      */
     @TransactionAttribute(TransactionAttributeType.MANDATORY)
-    public List<Annonce> searchAnnonce(List<Short> categoriesMetier, Date aPartirDu, Integer departement
+    public List<Annonce> searchAnnonce(List<Short> categoriesMetier, Integer departement
             , Integer rangeDebut, Integer rangeFin) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Debut de requete de recherche d'annonce");
@@ -488,7 +488,7 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
         Root<Annonce> searchAnnonceRoot = searchCriteria.from(Annonce.class);
 
         //Ajout des prédicats à la requete
-        searchCriteria.where(createSearchPredicate(searchAnnonceRoot, categoriesMetier, aPartirDu, departement));
+        searchCriteria.where(createSearchPredicate(searchAnnonceRoot, categoriesMetier, departement));
         searchCriteria.orderBy(criteriaBuilderSearch.desc(searchAnnonceRoot.get(Annonce_.dateCreation)));
 
         //Preparation au lancement de la requete
@@ -509,7 +509,7 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
      * @return La liste d'annonces correspondantent
      */
     @TransactionAttribute(TransactionAttributeType.MANDATORY)
-    public Long countSearchAnnonce(List<Short> categoriesMetier, Date aPartirDu, Integer departement) {
+    public Long countSearchAnnonce(List<Short> categoriesMetier, Integer departement) {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Debut de requete de recherche d'annonce");
         }
@@ -522,7 +522,7 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
         searchCriteria.select(criteriaBuilderSearch.countDistinct(searchAnnonceRoot));
 
         //Ajout des prédicats à la requete
-        searchCriteria.where(createSearchPredicate(searchAnnonceRoot, categoriesMetier, aPartirDu, departement));
+        searchCriteria.where(createSearchPredicate(searchAnnonceRoot, categoriesMetier,  departement));
 
         //Preparation au lancement de la requete
         TypedQuery<Long> searchQuery = entityManager.createQuery(searchCriteria);
@@ -531,11 +531,8 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
         return searchQuery.getSingleResult();
     }
 
-    private Predicate createSearchPredicate(Root<Annonce> searchAnnonceRoot, List<Short> categoriesMetier, Date aPartirDu, Integer departement) {
+    private Predicate createSearchPredicate(Root<Annonce> searchAnnonceRoot, List<Short> categoriesMetier, Integer departement) {
         CriteriaBuilder criteriaBuilderSearch = entityManager.getCriteriaBuilder();
-
-        //Clause pour la date
-        Predicate predicates = criteriaBuilderSearch.between(searchAnnonceRoot.get(Annonce_.dateCreation), aPartirDu, new Date());
 
         //Join Annonce => Mot clé, Mot clé Catégorie join
         Join<Annonce, MotCle> motCleJoin = searchAnnonceRoot.join(Annonce_.motcles);
@@ -554,9 +551,9 @@ public class AnnonceDAO extends AbstractDAO<Annonce> {
         Predicate departementPredicate = criteriaBuilderSearch.and(criteriaBuilderSearch.equal(adresseJoin.get(Adresse_.departement), departement));
 
         //Fusion des predicats avec des "ET"
-        predicates = criteriaBuilderSearch.and(predicates, etatAnnoncePredicate, departementPredicate, categPredicate);
+        categPredicate = criteriaBuilderSearch.and(etatAnnoncePredicate, departementPredicate, categPredicate);
 
-        return predicates;
+        return categPredicate;
     }
 
 

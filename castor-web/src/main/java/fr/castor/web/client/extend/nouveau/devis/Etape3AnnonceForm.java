@@ -95,8 +95,8 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
         super(id, model);
         // Mode Multipart pour l'upload de fichier.
         setMultiPart(true);
-        setFileMaxSize(Bytes.megabytes(10));
-        setMaxSize(Bytes.megabytes(11));
+        setFileMaxSize(Bytes.megabytes(15));
+        setMaxSize(Bytes.megabytes(30));
 
         setMarkupId("formEtape3");
 
@@ -246,6 +246,8 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
 
         etapePrecedente3.setOutputMarkupId(true);
         etapePrecedente3.setMarkupId("etapePrecedente3");
+
+        this.setDefaultButton(validateQualification);
 
         this.add(descriptionDevisField, typeContactField, delaiInterventionField,
                 adresseField, adresseComplementField, codePostalField, villeField, validateQualification, typeTravaux,

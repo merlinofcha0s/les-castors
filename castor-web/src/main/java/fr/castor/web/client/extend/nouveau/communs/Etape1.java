@@ -3,26 +3,26 @@ package fr.castor.web.client.extend.nouveau.communs;
 import fr.castor.dto.LocalisationDTO;
 import fr.castor.dto.constant.ValidatorConstant;
 import fr.castor.web.app.enums.FeedbackMessageLevel;
+import fr.castor.web.app.enums.PropertiesFileWeb;
 import fr.castor.web.app.utils.codepostal.CSVCodePostalReader;
 import fr.castor.web.client.behaviour.ErrorHighlightBehavior;
 import fr.castor.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.castor.web.client.event.FeedBackPanelEvent;
 import fr.castor.web.client.extend.nouveau.devis.event.LocalisationEvent;
 import fr.castor.web.client.master.MasterPage;
-import fr.castor.web.app.enums.PropertiesFileWeb;
 import org.apache.wicket.ajax.AjaxRequestTarget;
+import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.head.CssHeaderItem;
 import org.apache.wicket.markup.head.IHeaderResponse;
-import org.apache.wicket.markup.head.OnDomReadyHeaderItem;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.form.TextField;
-import org.apache.wicket.markup.html.internal.HtmlHeaderContainer;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
+import org.apache.wicket.util.string.AppendingStringBuffer;
 import org.apache.wicket.validation.validator.PatternValidator;
 
 import javax.inject.Inject;
@@ -58,6 +58,7 @@ public class Etape1 extends Panel {
         codePostal.add(new RequiredBorderBehaviour());
 
         formCodePostal = new StatelessForm("formCodePostal");
+        formCodePostal.setDefaultButton(valideCodePostal);
 
         StoryTelling storyTelling = new StoryTelling("storyTelling", "C'est le moment de saisir votre code postal", 120, 120);
 

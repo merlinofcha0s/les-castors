@@ -96,9 +96,10 @@ public class Etape2Categorie extends Panel {
             }
         };
 
+        formRootEtape2.setDefaultButton(etapeSuivante);
         formRootEtape2.add(motCle, etapePrecedente2, etapeSuivante);
 
-        add(formRootEtape2, new StoryTelling("storyTelling", "En quoi puis-je vous aider ?", 120, 120));
+        add(formRootEtape2, new StoryTelling("storyTelling", "Quelle est votre demande ?", 120, 120));
     }
 
 

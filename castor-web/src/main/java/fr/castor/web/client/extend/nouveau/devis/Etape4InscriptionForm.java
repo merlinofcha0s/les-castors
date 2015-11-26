@@ -304,6 +304,8 @@ public class Etape4InscriptionForm extends Form<CreationAnnonceDTO> {
 
         validateInscription.add(validateInscriptionLabel);
 
+        setDefaultButton(validateInscription);
+
         fieldContainer.add(nomField, prenomField, numeroTelField, emailField, loginField, passwordField, confirmPassword, oldPasswordContainer, cguContainer);
 
         add(fieldContainer, validateInscription, etapePrecedente4);

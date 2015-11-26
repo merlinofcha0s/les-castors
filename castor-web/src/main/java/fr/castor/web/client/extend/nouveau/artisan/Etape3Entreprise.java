@@ -222,6 +222,7 @@ public class Etape3Entreprise extends Panel {
 
         initRecaptcha();
 
+        etape3FormGeneral.setDefaultButton(validateEtape3Partenaire);
         etape3FormGeneral.add(containerActivite, etape3EntrepriseForm, terminerInscriptionPartenaire);
         add(titreModificationEntreprise, etape3FormGeneral);
     }

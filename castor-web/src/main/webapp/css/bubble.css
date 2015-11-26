@@ -3,18 +3,19 @@
     margin: 10px 0px 40px 40px;
     display: inline-block;
     position: relative;
-    width: 200px;
+    width: 206px;
     height: auto;
     background-color: white;
 }
+
 .border{
     border: 8px solid #3a87ad;
 }
+
 .round{
     border-radius: 30px;
     -webkit-border-radius: 30px;
     -moz-border-radius: 30px;
-
 }
 
 /* Right triangle placed top left flush. */

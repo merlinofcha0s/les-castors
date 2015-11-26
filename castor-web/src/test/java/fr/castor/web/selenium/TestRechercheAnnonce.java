@@ -49,8 +49,6 @@ public class TestRechercheAnnonce extends AbstractITTest {
 
         findElement(By.id("electricite")).click();
         findElement(By.id("plomberie")).click();
-        findElement(By.id("rechercheDate")).clear();
-        findElement(By.id("rechercheDate")).sendKeys("06/07/2013");
         findElement(By.id("rechercheDepartement")).clear();
         findElement(By.id("rechercheDepartement")).sendKeys("6");
         findElement(By.id("rechercheValider")).click();

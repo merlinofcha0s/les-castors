@@ -62,15 +62,15 @@ public class AuthentificationModal extends ModalCastor {
             LOGGER.debug("Initialisation du form d'authentification");
         }
 
-        loginForm = new StatelessForm<AuthentificationModal>("loginForm", new Model<AuthentificationModal>());
+        loginForm = new StatelessForm<>("loginForm", new Model<>());
 
-        login = new TextField<String>("login", new Model<String>());
+        login = new TextField<>("login", new Model<>());
         login.setMarkupId("loginModal");
         login.setRequired(true);
         login.add(new StringValidator(ValidatorConstant.CLIENT_LOGIN_RANGE_MIN,
                 ValidatorConstant.CLIENT_LOGIN_RANGE_MAX));
 
-        password = new PasswordTextField("password", new Model<String>());
+        password = new PasswordTextField("password", new Model<>());
         password.setModelObject("Password");
         password.setMarkupId("passwordModal");
         password.setRequired(true);
