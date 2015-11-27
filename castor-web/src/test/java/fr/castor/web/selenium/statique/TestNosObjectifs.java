@@ -20,7 +20,7 @@ public class TestNosObjectifs extends AbstractITTest {
     @Test
     public void testNominalNosObjectifs(){
         driver.get(appUrl + UrlPage.ACCUEIL_URL);
-        findElement(By.linkText("Nos Objectifs")).click();
+        findElement(By.linkText("Nos objectifs")).click();
         Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("h1.title"),
                         "NOS OBJECTIFS"));
