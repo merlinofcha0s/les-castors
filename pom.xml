@@ -5,7 +5,7 @@
     <groupId>fr.castor.app</groupId>
     <artifactId>castor-module</artifactId>
     <description>Projet principal des castors</description>
-    <version>1.1.1-SNAPSHOT</version>
+    <version>1.1.1</version>
     <packaging>pom</packaging>
 
     <prerequisites>
@@ -56,7 +56,7 @@
     <scm>
         <developerConnection>scm:git:https://integration.lescastors.fr/raiden/Castors.git</developerConnection>
         <connection>scm:git:https://integration.lescastors.fr/raiden/Castors.git</connection>
-      <tag>HEAD</tag>
+      <tag>castor-module-1.1.1</tag>
   </scm>
 
     <build>
