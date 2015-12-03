@@ -104,9 +104,9 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
 
         TextArea<String> descriptionDevisField = new TextArea<String>("description");
         descriptionDevisField.setRequired(true);
+        descriptionDevisField.setOutputMarkupId(true);
         descriptionDevisField.add(StringValidator.lengthBetween(ValidatorConstant.ANNONCE_DESCRIPTION_MIN,
                 ValidatorConstant.ANNONCE_DESCRIPTION_MAX));
-
         descriptionDevisField.add(new ErrorHighlightBehavior());
         descriptionDevisField.add(new RequiredBorderBehaviour());
 
@@ -117,6 +117,7 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
         typeContactField.add(new ErrorHighlightBehavior());
         typeContactField.add(new RequiredBorderBehaviour());
         typeContactField.add(telephonePresentValidator);
+        typeContactField.setOutputMarkupId(true);
 
         DropDownChoice<DelaiIntervention> delaiInterventionField = new DropDownChoice<DelaiIntervention>(
                 "delaiIntervention", Arrays.asList(DelaiIntervention.values()));
@@ -124,6 +125,7 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
         delaiInterventionField.setMarkupId("delaiInterventionField");
         delaiInterventionField.add(new ErrorHighlightBehavior());
         delaiInterventionField.add(new RequiredBorderBehaviour());
+        delaiInterventionField.setOutputMarkupId(true);
 
         RadioGroup<TypeTravaux> typeTravaux = new RadioGroup<>("typeTravaux");
         Radio<TypeTravaux> neuf = new Radio<>("typeTravaux.neuf", new Model<TypeTravaux>(TypeTravaux.NEUF));
@@ -221,8 +223,9 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
 
             @Override
             protected void onError(AjaxRequestTarget target, Form<?> form) {
-                target.add(getForm());
-                this.send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target));
+                send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target));
+                target.add(descriptionDevisField, typeContactField, delaiInterventionField,
+                        adresseField, adresseComplementField, codePostalField, villeField);
             }
 
         };

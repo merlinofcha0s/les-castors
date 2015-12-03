@@ -3,8 +3,9 @@ package fr.castor.web.client.master;
 import fr.castor.core.enums.PropertiesFileGeneral;
 import fr.castor.dto.enums.TypeCompte;
 import fr.castor.web.app.enums.FeedbackMessageLevel;
+import fr.castor.web.app.enums.PropertiesFileWeb;
 import fr.castor.web.client.behaviour.LoginDialogBehaviour;
-import fr.castor.web.client.component.BatimenFeedbackPanel;
+import fr.castor.web.client.component.CastorFeedbackPanel;
 import fr.castor.web.client.component.LinkLabel;
 import fr.castor.web.client.component.WaiterModal;
 import fr.castor.web.client.event.*;
@@ -14,7 +15,6 @@ import fr.castor.web.client.extend.member.client.MesAnnonces;
 import fr.castor.web.client.extend.nouveau.artisan.NouveauArtisan;
 import fr.castor.web.client.extend.nouveau.devis.NouveauDevis;
 import fr.castor.web.client.modal.AuthentificationModal;
-import fr.castor.web.app.enums.PropertiesFileWeb;
 import org.apache.shiro.SecurityUtils;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
@@ -52,7 +52,7 @@ public abstract class MasterPage extends WebPage {
     // Controle le tag HTML
     private final TransparentWebMarkupContainer htmlTag;
     // Feedback panel général
-    protected BatimenFeedbackPanel feedBackPanelGeneral;
+    protected CastorFeedbackPanel feedBackPanelGeneral;
     // waiter modal can be accessed from every child view
     protected WaiterModal waiterModal;
     private String metaDescription = "";
@@ -81,7 +81,8 @@ public abstract class MasterPage extends WebPage {
 
         // Instantiation du composant qui permet d'afficher des messages aux
         // utilisateur de maniere centralisé
-        feedBackPanelGeneral = new BatimenFeedbackPanel("feedBackPanelGeneral");
+        feedBackPanelGeneral = new CastorFeedbackPanel("feedBackPanelGeneral");
+        feedBackPanelGeneral.setMarkupId("feedBackPanelGeneral");
         feedBackPanelGeneral.setOutputMarkupId(true);
         htmlTag.add(feedBackPanelGeneral);
 
@@ -553,8 +554,8 @@ public abstract class MasterPage extends WebPage {
             }
 
             if (!feedBackPanelUpdate.getMessage().isEmpty()) {
-                feedBackPanelGeneral.sendMessage(feedBackPanelUpdate.getMessage(),
-                        feedBackPanelUpdate.getMessageLevel());
+                feedBackPanelGeneral.sendMessageAndGoToTop(feedBackPanelUpdate.getMessage(),
+                        feedBackPanelUpdate.getMessageLevel(), feedBackPanelUpdate.getTarget());
             }
 
             feedBackPanelUpdate.getTarget().add(feedBackPanelGeneral);
@@ -612,7 +613,7 @@ public abstract class MasterPage extends WebPage {
         add(footerFBMaster, footerGPlusMaster, footerTwitterMaster);
     }
 
-    private void initLinkFooter(){
+    private void initLinkFooter() {
         Link<String> footerAccueil = new Link<String>("footerAccueil") {
             @Override
             public void onClick() {

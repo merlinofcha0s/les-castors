@@ -169,7 +169,7 @@ public class ModifierAnnonce extends MasterPage {
                     params.add(ParamsConstant.IS_MODIF_PARAM, "OK");
                     this.setResponsePage(Annonce.class, params);
                 } else {
-                    feedBackPanelGeneral.sendMessage("Problème lors de l'enregistrement de l'annonce, veuillez réessayer ultérieurement", FeedbackMessageLevel.ERROR);
+                    feedBackPanelGeneral.sendMessageAndGoToTop("Problème lors de l'enregistrement de l'annonce, veuillez réessayer ultérieurement", FeedbackMessageLevel.ERROR, modificationAnnonceEvent.getTarget());
                 }
                 modificationAnnonceEvent.getTarget().add(feedBackPanelGeneral);
             } else {

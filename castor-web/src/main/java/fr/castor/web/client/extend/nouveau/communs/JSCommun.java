@@ -67,6 +67,7 @@ public class JSCommun {
     }
 
     public static void scrollToTop(AjaxRequestTarget target) {
-        target.appendJavaScript("$(window).scrollTop(0);");
+        target.appendJavaScript("$('html, body').animate({scrollTop : 0},800);");
+        //target.appendJavaScript("$(window).scrollTop(0);");
     }
 }
