@@ -7,8 +7,8 @@ import fr.castor.dto.aggregate.AnnonceAffichageDTO;
 import fr.castor.dto.aggregate.CreationAnnonceDTO;
 import fr.castor.dto.aggregate.ModificationAnnonceDTO;
 import fr.castor.dto.enums.EtatAnnonce;
-import fr.castor.web.app.enums.FeedbackMessageLevel;
 import fr.castor.web.app.constants.ParamsConstant;
+import fr.castor.web.app.enums.FeedbackMessageLevel;
 import fr.castor.web.app.security.Authentication;
 import fr.castor.web.client.component.*;
 import fr.castor.web.client.event.AjoutPhotoEvent;
@@ -20,6 +20,7 @@ import fr.castor.web.client.extend.nouveau.devis.Etape3AnnonceForm;
 import fr.castor.web.client.master.MasterPage;
 import fr.castor.ws.client.service.AnnonceServiceREST;
 import org.apache.wicket.event.IEvent;
+import org.apache.wicket.markup.html.form.Form;
 import org.apache.wicket.model.CompoundPropertyModel;
 import org.apache.wicket.request.mapper.parameter.PageParameters;
 import org.modelmapper.ModelMapper;
@@ -102,18 +103,32 @@ public class ModifierAnnonce extends MasterPage {
             LOGGER.debug("Init des composants de la page de modification de mon annonce");
         }
         Profil profil = new Profil("profil", false);
+
+        Form<Void> formPrincipalModification = new Form<Void>("formPrincipalModification"){
+            @Override
+            public boolean isRootForm() {
+                return true;
+            }
+
+            @Override
+            public boolean wantSubmitOnNestedFormSubmit() {
+                return true;
+            }
+        };
+
         etape3AnnonceForm = new Etape3AnnonceForm("formQualification", propertyModelModificationAnnonce, true);
 
         photosContainer = new PhotosContainer("afficheurPhotos", annonceAffichageDTO.getImages(), "Les photos de votre annonce", "h4", true);
         photosContainer.setOutputMarkupId(true);
 
         motCleComposant = new MotCle("motCle", ((CreationAnnonceDTO) propertyModelModificationAnnonce.getObject()).getMotCles());
-        etape3AnnonceForm.add(motCleComposant);
+
+        formPrincipalModification.add(motCleComposant, etape3AnnonceForm);
 
         ContactezNous contactezNous = new ContactezNous("contactezNous");
         Commentaire commentaire = new Commentaire("commentaire");
 
-        this.add(profil, etape3AnnonceForm, photosContainer, contactezNous, commentaire);
+        add(profil, formPrincipalModification, photosContainer, contactezNous, commentaire);
     }
 
     private void initData() {
@@ -135,6 +150,7 @@ public class ModifierAnnonce extends MasterPage {
         if (event.getPayload() instanceof ModificationAnnonceEvent) {
             //Extraction des infos
             ModificationAnnonceEvent modificationAnnonceEvent = (ModificationAnnonceEvent) event.getPayload();
+            motCleComposant.rechercheWithInputTextField();
             if (!motCleComposant.getCategoriesSelectionnees().isEmpty()) {
                 CreationAnnonceDTO creationAnnonceDTO = modificationAnnonceEvent.getCreationAnnonceDTO();
 

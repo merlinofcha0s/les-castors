@@ -8,6 +8,7 @@ public class FeedBackPanelEvent extends AbstractEvent {
 
     private String message;
     private FeedbackMessageLevel messageLevel;
+    private boolean goToTop = true;
 
     public FeedBackPanelEvent(AjaxRequestTarget target) {
         super(target);
@@ -17,6 +18,13 @@ public class FeedBackPanelEvent extends AbstractEvent {
         super(target);
         this.message = message;
         this.messageLevel = messageLevel;
+    }
+
+    public FeedBackPanelEvent(AjaxRequestTarget target, String message, FeedbackMessageLevel messageLevel, boolean goToTop) {
+        super(target);
+        this.message = message;
+        this.messageLevel = messageLevel;
+        this.goToTop = goToTop;
     }
 
     /**
@@ -49,4 +57,11 @@ public class FeedBackPanelEvent extends AbstractEvent {
         this.messageLevel = messageLevel;
     }
 
+    public boolean isGoToTop() {
+        return goToTop;
+    }
+
+    public void setGoToTop(boolean goToTop) {
+        this.goToTop = goToTop;
+    }
 }

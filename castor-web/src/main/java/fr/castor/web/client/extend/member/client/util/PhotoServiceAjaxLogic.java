@@ -69,7 +69,7 @@ public class PhotoServiceAjaxLogic implements Serializable {
         ajoutPhoto(ajoutPhotoEvent, CHANTIER_TEMOIN_PHOTO_SERVICE);
     }
 
-    private void suppressionPhoto(SuppressionPhotoEvent suppressionPhotoEvent, String serviceName){
+    private void suppressionPhoto(SuppressionPhotoEvent suppressionPhotoEvent, String serviceName) {
         AjaxRequestTarget target = suppressionPhotoEvent.getTarget();
         List<ImageDTO> imageDTOs = suppressionPhotoEvent.getImages();
         String loginDemandeur = suppressionPhotoEvent.getLogin();
@@ -81,10 +81,12 @@ public class PhotoServiceAjaxLogic implements Serializable {
         suppressionPhotoDTO.setImageASupprimer(suppressionPhotoEvent.getImageASupprimer());
 
         imageDTOs.clear();
-        switch (serviceName){
-            case ANNONCE_PHOTO_SERVICE: imageDTOs.addAll(annonceServiceREST.suppressionPhoto(suppressionPhotoDTO));
+        switch (serviceName) {
+            case ANNONCE_PHOTO_SERVICE:
+                imageDTOs.addAll(annonceServiceREST.suppressionPhoto(suppressionPhotoDTO));
                 break;
-            case CHANTIER_TEMOIN_PHOTO_SERVICE : imageDTOs.addAll(artisanServiceREST.suppressionPhotoChantierTemoin(suppressionPhotoDTO));
+            case CHANTIER_TEMOIN_PHOTO_SERVICE:
+                imageDTOs.addAll(artisanServiceREST.suppressionPhotoChantierTemoin(suppressionPhotoDTO));
                 break;
             default:
                 throw new UnsupportedOperationException();
@@ -107,49 +109,56 @@ public class PhotoServiceAjaxLogic implements Serializable {
         List<ImageDTO> images = ajoutPhotoEvent.getImageDTOs();
 
         final AjoutPhotoDTO ajoutImageDTO = new AjoutPhotoDTO();
-        for (FileUpload photo : photoField.getFileUploads()) {
-            try {
-                ajoutImageDTO.getImages().add(photo.writeToTempFile());
-            } catch (IOException e) {
-                if (LOGGER.isErrorEnabled()) {
-                    LOGGER.error("Problème durant l'écriture de la photo sur le disque", e);
+        if (!photoField.getFileUploads().isEmpty()) {
+            for (FileUpload photo : photoField.getFileUploads()) {
+                try {
+                    ajoutImageDTO.getImages().add(photo.writeToTempFile());
+                } catch (IOException e) {
+                    if (LOGGER.isErrorEnabled()) {
+                        LOGGER.error("Problème durant l'écriture de la photo sur le disque", e);
+                    }
                 }
             }
-        }
 
-        if (!fileFieldValidatorBehaviour.isValidationOK()) {
-            target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Validation erronnée de vos photos, veuillez corriger", FeedbackMessageLevel.ERROR));
-        } else {
-            //Ajout des photos
-            ajoutImageDTO.setId(id);
-            ajoutImageDTO.setLoginDemandeur(loginDemandeur);
-            int sizeBefore = ajoutPhotoEvent.getNbImages();
-            images.clear();
-            switch (serviceName){
-                case ANNONCE_PHOTO_SERVICE: images.addAll(annonceServiceREST.ajouterPhoto(ajoutImageDTO));
-                    break;
-                case CHANTIER_TEMOIN_PHOTO_SERVICE : images.addAll(artisanServiceREST.ajouterPhotosChantierTemoin(ajoutImageDTO));
-                    break;
-                default:
-                    throw new UnsupportedOperationException();
-            }
-
-            if (sizeBefore == images.size()) {
-                StringBuilder sbErrorTropPhoto = new StringBuilder("Vous dépassez le nombre de photos autorisées par annonce, veuillez en supprimer avant d'en rajouter ! (Pour rappel la limite est de ");
-                sbErrorTropPhoto.append(PropertiesFileGeneral.GENERAL.getProperties().getProperty("gen.max.number.file.annonce")).append(" photos par annonce)");
-                target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, sbErrorTropPhoto.toString(), FeedbackMessageLevel.ERROR));
-            } else if (images.isEmpty()) {
-                target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Problème durant le chargement des photos sur le serveur, veuillez réessayer ultérieurement", FeedbackMessageLevel.ERROR));
+            if (!fileFieldValidatorBehaviour.isValidationOK()) {
+                target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Validation erronnée de vos photos, veuillez corriger", FeedbackMessageLevel.ERROR));
             } else {
-                //Mise a jour des champs
-                ajoutImageDTO.getImages().clear();
-                photoField.getFileUploads().clear();
+                //Ajout des photos
+                ajoutImageDTO.setId(id);
+                ajoutImageDTO.setLoginDemandeur(loginDemandeur);
+                int sizeBefore = ajoutPhotoEvent.getNbImages();
+                images.clear();
+                switch (serviceName) {
+                    case ANNONCE_PHOTO_SERVICE:
+                        images.addAll(annonceServiceREST.ajouterPhoto(ajoutImageDTO));
+                        break;
+                    case CHANTIER_TEMOIN_PHOTO_SERVICE:
+                        images.addAll(artisanServiceREST.ajouterPhotosChantierTemoin(ajoutImageDTO));
+                        break;
+                    default:
+                        throw new UnsupportedOperationException();
+                }
 
-                target.getPage().send(target.getPage(), Broadcast.BREADTH, new ClearFeedbackPanelEvent(target));
-                target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Photo(s) rajoutée(s) avec succés", FeedbackMessageLevel.SUCCESS));
+                if (sizeBefore == images.size()) {
+                    StringBuilder sbErrorTropPhoto = new StringBuilder("Vous dépassez le nombre de photos autorisées par annonce, veuillez en supprimer avant d'en rajouter ! (Pour rappel la limite est de ");
+                    sbErrorTropPhoto.append(PropertiesFileGeneral.GENERAL.getProperties().getProperty("gen.max.number.file.annonce")).append(" photos par annonce)");
+                    target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, sbErrorTropPhoto.toString(), FeedbackMessageLevel.ERROR));
+                } else if (images.isEmpty()) {
+                    target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Problème durant le chargement des photos sur le serveur, veuillez réessayer ultérieurement", FeedbackMessageLevel.ERROR));
+                } else {
+                    //Mise a jour des champs
+                    ajoutImageDTO.getImages().clear();
+                    photoField.getFileUploads().clear();
+
+                    target.getPage().send(target.getPage(), Broadcast.BREADTH, new ClearFeedbackPanelEvent(target));
+                    target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Photo(s) rajoutée(s) avec succés", FeedbackMessageLevel.SUCCESS));
+                }
+
+                target.add(photoField);
             }
-
-            target.add(photoField);
+        } else {
+            target.getPage().send(target.getPage(), Broadcast.BREADTH, new ClearFeedbackPanelEvent(target));
+            target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Aucune photo présente dans le champ", FeedbackMessageLevel.ERROR));
         }
     }
 }

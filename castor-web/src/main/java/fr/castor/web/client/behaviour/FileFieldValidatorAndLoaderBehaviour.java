@@ -73,7 +73,6 @@ public class FileFieldValidatorAndLoaderBehaviour extends FileFieldSizeCheckBeha
 
         if (!errorExtensionInvalide && !errorNumberOfFiles) {
             validationOK = true;
-            target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Vérification photo(s) OK !", FeedbackMessageLevel.SUCCESS));
         } else {
             validationOK = false;
         }

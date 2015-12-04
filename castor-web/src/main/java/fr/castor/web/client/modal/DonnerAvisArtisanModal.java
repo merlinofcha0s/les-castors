@@ -49,7 +49,7 @@ public class DonnerAvisArtisanModal extends ModalCastor {
         raterCastor = new RaterStarsCastor("raterCastor", true);
         raterCastor.setMarkupId("raterCastor");
 
-        textAreaCommentaire = new TextArea<String>("textAreaCommentaireNotation", new Model<String>());
+        textAreaCommentaire = new TextArea<>("textAreaCommentaireNotation", new Model<String>());
         textAreaCommentaire.setMarkupId("textAreaCommentaireNotation");
         textAreaCommentaire.setRequired(true);
         textAreaCommentaire.add(new RequiredBorderBehaviour());

@@ -554,8 +554,13 @@ public abstract class MasterPage extends WebPage {
             }
 
             if (!feedBackPanelUpdate.getMessage().isEmpty()) {
-                feedBackPanelGeneral.sendMessageAndGoToTop(feedBackPanelUpdate.getMessage(),
-                        feedBackPanelUpdate.getMessageLevel(), feedBackPanelUpdate.getTarget());
+                if(feedBackPanelUpdate.isGoToTop()){
+                    feedBackPanelGeneral.sendMessageAndGoToTop(feedBackPanelUpdate.getMessage(),
+                            feedBackPanelUpdate.getMessageLevel(), feedBackPanelUpdate.getTarget());
+                } else {
+                    feedBackPanelGeneral.sendMessage(feedBackPanelUpdate.getMessage(),
+                            feedBackPanelUpdate.getMessageLevel());
+                }
             }
 
             feedBackPanelUpdate.getTarget().add(feedBackPanelGeneral);

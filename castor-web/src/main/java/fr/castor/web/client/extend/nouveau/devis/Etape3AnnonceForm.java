@@ -13,6 +13,7 @@ import fr.castor.web.app.constants.ParamsConstant;
 import fr.castor.web.client.behaviour.ErrorHighlightBehavior;
 import fr.castor.web.client.behaviour.FileFieldValidatorAndLoaderBehaviour;
 import fr.castor.web.client.behaviour.border.RequiredBorderBehaviour;
+import fr.castor.web.client.component.MotCle;
 import fr.castor.web.client.event.FeedBackPanelEvent;
 import fr.castor.web.client.event.ModificationAnnonceEvent;
 import fr.castor.web.client.extend.connected.Annonce;
@@ -69,6 +70,8 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
 
     @Inject
     private VilleValidator villeValidator;
+
+    private MotCle motCleComposant;
 
     private boolean forModification = false;
 
@@ -186,6 +189,9 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
         villeValidator.setCodepostalField(codePostalField);
         villeField.add(villeValidator);
 
+        WebMarkupContainer containerField = new WebMarkupContainer("containerField");
+        containerField.setOutputMarkupId(true);
+
         AjaxSubmitLink validateQualification = new AjaxSubmitLink("validateQualification") {
 
             private static final long serialVersionUID = -4417031301033032959L;
@@ -224,8 +230,7 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
             @Override
             protected void onError(AjaxRequestTarget target, Form<?> form) {
                 send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target));
-                target.add(descriptionDevisField, typeContactField, delaiInterventionField,
-                        adresseField, adresseComplementField, codePostalField, villeField);
+                target.add(containerField);
             }
 
         };
@@ -252,9 +257,11 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
 
         this.setDefaultButton(validateQualification);
 
-        this.add(descriptionDevisField, typeContactField, delaiInterventionField,
+        containerField.add(descriptionDevisField, typeContactField, delaiInterventionField,
                 adresseField, adresseComplementField, codePostalField, villeField, validateQualification, typeTravaux,
                 etapePrecedente3, containerPhoto);
+
+        add(containerField);
     }
 
     @Override

@@ -212,7 +212,7 @@ public class PhotosContainer extends Panel {
 
             @Override
             protected void onError(AjaxRequestTarget target, Form<?> form) {
-                target.add(getForm());
+                target.add(photoField);
                 this.send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target));
             }
         };
