@@ -2,11 +2,13 @@ package fr.castor.web.client.component;
 
 import fr.castor.dto.MotCleDTO;
 import fr.castor.dto.helper.CategorieService;
+import fr.castor.web.app.enums.FeedbackMessageLevel;
 import fr.castor.web.client.behaviour.AjaxMotCleBehaviour;
 import fr.castor.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.castor.web.client.event.MotCleEvent;
 import fr.castor.web.client.extend.nouveau.communs.JSCommun;
 import fr.castor.web.client.extend.nouveau.devis.event.CategorieEvent;
+import fr.castor.web.client.master.MasterPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
 import org.apache.wicket.event.Broadcast;
@@ -149,10 +151,10 @@ public class MotCle extends Panel {
     }
 
     private void rechercheEtChargeMotCle(String motcle){
-        //On recherche si il y a au moins un occurence qui correspond a la chaine de caractere de l'utilisateur
+        //On recherche si il y a au moins une occurence qui correspond à la chaine de caractere de l'utilisateur
         Optional<MotCleDTO> motCleSelectionne = categorieService.getCategorieByMotCle(motcle);
 
-        //Si un mot clé a été trouvé et qu'il n'a pas deja été ajouter a la liste alors on l'ajoute
+        //Si un mot clé a été trouvé et qu'il n'a pas deja été ajouter à la liste alors on l'ajoute
         if (motCleSelectionne.isPresent() && !categoriesSelectionnees.stream().filter(cat -> cat.equals(motCleSelectionne.get())).findAny().isPresent()) {
             categoriesSelectionnees.add(motCleSelectionne.get());
         }

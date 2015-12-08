@@ -945,10 +945,10 @@ public class Annonce extends MasterPage {
             etatAnnonceValue.setObject(annonceAffichageDTO.getAnnonce().getEtatAnnonce().getType());
 
             if (codeService.equals(CodeRetourService.RETOUR_OK)) {
-                feedBackPanelGeneral.success("Artisan noté avec succés, merci de votre retour");
+                feedBackPanelGeneral.success("Votre avis a été enregistré avec succés, merci !");
             } else {
                 feedBackPanelGeneral
-                        .error("Problème lors de la notation d'une entreprise, veuillez réessayer ultérieurement");
+                        .error("Problème lors de l'enregistrement de votre avis, veuillez réessayer ultérieurement");
             }
 
             noterArtisanEventClose.getTarget()

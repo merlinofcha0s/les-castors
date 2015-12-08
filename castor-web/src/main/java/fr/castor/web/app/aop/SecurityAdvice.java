@@ -17,6 +17,8 @@ public class SecurityAdvice {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SecurityAdvice.class);
 
+
+
     /**
      * Verifie que l'utilisateur qui se connecte a cette page a bien le rôle
      * CLIENT

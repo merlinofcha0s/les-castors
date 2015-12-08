@@ -87,6 +87,6 @@ public class TestModifierMonEntreprise extends AbstractITTest {
     @Test
     public void supprimerPhotoChantierTemoin() throws InterruptedException {
         testAjoutPhotoIT(driver, false);
-        suppressionPhotoIT(driver);
+        suppressionPhotoIT(driver, true);
     }
 }

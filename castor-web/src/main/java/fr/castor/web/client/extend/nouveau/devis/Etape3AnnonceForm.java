@@ -13,6 +13,7 @@ import fr.castor.web.app.constants.ParamsConstant;
 import fr.castor.web.client.behaviour.ErrorHighlightBehavior;
 import fr.castor.web.client.behaviour.FileFieldValidatorAndLoaderBehaviour;
 import fr.castor.web.client.behaviour.border.RequiredBorderBehaviour;
+import fr.castor.web.client.component.MotCle;
 import fr.castor.web.client.event.FeedBackPanelEvent;
 import fr.castor.web.client.event.ModificationAnnonceEvent;
 import fr.castor.web.client.extend.connected.Annonce;
@@ -70,6 +71,8 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
     @Inject
     private VilleValidator villeValidator;
 
+    private MotCle motCleComposant;
+
     private boolean forModification = false;
 
     /**
@@ -104,9 +107,9 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
 
         TextArea<String> descriptionDevisField = new TextArea<String>("description");
         descriptionDevisField.setRequired(true);
+        descriptionDevisField.setOutputMarkupId(true);
         descriptionDevisField.add(StringValidator.lengthBetween(ValidatorConstant.ANNONCE_DESCRIPTION_MIN,
                 ValidatorConstant.ANNONCE_DESCRIPTION_MAX));
-
         descriptionDevisField.add(new ErrorHighlightBehavior());
         descriptionDevisField.add(new RequiredBorderBehaviour());
 
@@ -117,6 +120,7 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
         typeContactField.add(new ErrorHighlightBehavior());
         typeContactField.add(new RequiredBorderBehaviour());
         typeContactField.add(telephonePresentValidator);
+        typeContactField.setOutputMarkupId(true);
 
         DropDownChoice<DelaiIntervention> delaiInterventionField = new DropDownChoice<DelaiIntervention>(
                 "delaiIntervention", Arrays.asList(DelaiIntervention.values()));
@@ -124,6 +128,7 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
         delaiInterventionField.setMarkupId("delaiInterventionField");
         delaiInterventionField.add(new ErrorHighlightBehavior());
         delaiInterventionField.add(new RequiredBorderBehaviour());
+        delaiInterventionField.setOutputMarkupId(true);
 
         RadioGroup<TypeTravaux> typeTravaux = new RadioGroup<>("typeTravaux");
         Radio<TypeTravaux> neuf = new Radio<>("typeTravaux.neuf", new Model<TypeTravaux>(TypeTravaux.NEUF));
@@ -184,6 +189,9 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
         villeValidator.setCodepostalField(codePostalField);
         villeField.add(villeValidator);
 
+        WebMarkupContainer containerField = new WebMarkupContainer("containerField");
+        containerField.setOutputMarkupId(true);
+
         AjaxSubmitLink validateQualification = new AjaxSubmitLink("validateQualification") {
 
             private static final long serialVersionUID = -4417031301033032959L;
@@ -221,8 +229,8 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
 
             @Override
             protected void onError(AjaxRequestTarget target, Form<?> form) {
-                target.add(getForm());
-                this.send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target));
+                send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target));
+                target.add(containerField);
             }
 
         };
@@ -249,9 +257,11 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
 
         this.setDefaultButton(validateQualification);
 
-        this.add(descriptionDevisField, typeContactField, delaiInterventionField,
+        containerField.add(descriptionDevisField, typeContactField, delaiInterventionField,
                 adresseField, adresseComplementField, codePostalField, villeField, validateQualification, typeTravaux,
                 etapePrecedente3, containerPhoto);
+
+        add(containerField);
     }
 
     @Override

@@ -3,7 +3,7 @@ package fr.castor.web.client.modal;
 import fr.castor.dto.constant.ValidatorConstant;
 import fr.castor.web.app.constants.JSConstant;
 import fr.castor.web.client.behaviour.border.RequiredBorderBehaviour;
-import fr.castor.web.client.component.BatimenFeedbackPanel;
+import fr.castor.web.client.component.CastorFeedbackPanel;
 import fr.castor.web.client.component.ModalCastor;
 import fr.castor.web.client.component.RaterStarsCastor;
 import fr.castor.web.client.event.NoterArtisanEventClose;
@@ -32,7 +32,7 @@ public class DonnerAvisArtisanModal extends ModalCastor {
     private final RaterStarsCastor raterCastor;
     private final TextArea<String> textAreaCommentaire;
 
-    private final BatimenFeedbackPanel feedBackPanel;
+    private final CastorFeedbackPanel feedBackPanel;
 
     @Override
     public void renderHead(IHeaderResponse response) {
@@ -43,13 +43,13 @@ public class DonnerAvisArtisanModal extends ModalCastor {
     public DonnerAvisArtisanModal(String id) {
         super(id, "Avis sur votre artisan", "550");
 
-        feedBackPanel = new BatimenFeedbackPanel("feedbackPanelNotationArtisan");
+        feedBackPanel = new CastorFeedbackPanel("feedbackPanelNotationArtisan");
         feedBackPanel.setOutputMarkupId(true);
 
         raterCastor = new RaterStarsCastor("raterCastor", true);
         raterCastor.setMarkupId("raterCastor");
 
-        textAreaCommentaire = new TextArea<String>("textAreaCommentaireNotation", new Model<String>());
+        textAreaCommentaire = new TextArea<>("textAreaCommentaireNotation", new Model<String>());
         textAreaCommentaire.setMarkupId("textAreaCommentaireNotation");
         textAreaCommentaire.setRequired(true);
         textAreaCommentaire.add(new RequiredBorderBehaviour());
