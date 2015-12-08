@@ -242,9 +242,20 @@ public abstract class AbstractITTest {
         Assert.assertTrue(checkUntilModifOK);
     }
 
-    protected void suppressionPhotoIT(WebDriver driver){
+    protected void suppressionPhotoIT(WebDriver driver, boolean isModificationEntreprise) throws InterruptedException {
+
+        String suppressionModificationEntreprise = "";
+
         //Clique sur le bouton supprimer la photo
-        findElement(By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[3]/div[2]/div/div[1]/div/div/div[2]/div[1]/div/div/a/div")).click();
+        if(isModificationEntreprise){
+            suppressionModificationEntreprise = "/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[3]/div[2]/div[2]/div[1]/div/div/div[2]/div[1]/div/div/a/div";
+        }else{
+            suppressionModificationEntreprise = "/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[3]/div[2]/div/div[1]/div/div/div[2]/div[1]/div/div/a/div";
+        }
+
+        Thread.sleep(500);
+
+        findElement(By.xpath(suppressionModificationEntreprise)).click();
 
         Boolean checkUntilModifOK = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("span.box_type4"),

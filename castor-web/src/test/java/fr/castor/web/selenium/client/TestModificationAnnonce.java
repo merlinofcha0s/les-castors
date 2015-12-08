@@ -97,7 +97,7 @@ public class TestModificationAnnonce extends AbstractITTest {
     @Test
     public void testSuppressionPhotoModificationAnnonce() throws InterruptedException {
         testAjoutPhotoIT(driver, true);
-        suppressionPhotoIT(driver);
+        suppressionPhotoIT(driver, false);
     }
 
 }
