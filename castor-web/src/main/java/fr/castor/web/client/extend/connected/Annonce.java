@@ -95,7 +95,7 @@ public class Annonce extends MasterPage {
     private ListView<EntrepriseDTO> listViewEntrepriseInscrite;
 
     public Annonce() {
-        super("", "", "Annonce particulier", true, "img/bg_title1.jpg");
+        super("", "", "Annonce particulier", true, "img/bg_title1.jpg", true);
     }
 
     public Annonce(PageParameters params) {

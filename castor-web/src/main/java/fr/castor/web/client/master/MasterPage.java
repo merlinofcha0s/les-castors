@@ -8,6 +8,7 @@ import fr.castor.web.client.behaviour.LoginDialogBehaviour;
 import fr.castor.web.client.component.CastorFeedbackPanel;
 import fr.castor.web.client.component.LinkLabel;
 import fr.castor.web.client.component.WaiterModal;
+import fr.castor.web.client.component.breadcrumb.BreadCrumbCastor;
 import fr.castor.web.client.event.*;
 import fr.castor.web.client.extend.*;
 import fr.castor.web.client.extend.connected.RechercheAnnonce;
@@ -61,6 +62,7 @@ public abstract class MasterPage extends WebPage {
     private Label connexionlbl;
     private LoginDialogBehaviour loginDialogBehaviour;
     private WebMarkupContainer menu;
+    private boolean useBreadcrumb;
 
     /**
      * Constructeur par defaut, initialise les composants de base de la page
@@ -110,7 +112,7 @@ public abstract class MasterPage extends WebPage {
 
         // Le titre qui se trouve dans la balise title (et donc qui s'affiche
         // dans l'onglet du navigateur)
-        Label titleLbl = new Label("title", new Model<String>(titleInHeader.toString()));
+        Label titleLbl = new Label("title", new Model<>(titleInHeader.toString()));
         this.add(titleLbl);
 
         // inserting the waitermodal at the bottom of the page
@@ -118,6 +120,7 @@ public abstract class MasterPage extends WebPage {
         this.add(waiterModal);
 
         initComponentConnexion();
+        initBreadcrumb();
         initTitleHeader(isPageWithTitleHeader, title, adresseImgBackground);
         initLinkFooter();
         initSocialFooterLink();
@@ -126,6 +129,25 @@ public abstract class MasterPage extends WebPage {
             LOGGER.debug("Instantiation de la master page.....OK");
         }
     }
+
+    public MasterPage(String metaDescription, String metaKeywords, String title, boolean isPageWithTitleHeader,
+                      String adresseImgBackground, boolean useBreadcrumb) {
+        this(metaDescription, metaKeywords, title, isPageWithTitleHeader, adresseImgBackground);
+
+        this.useBreadcrumb = useBreadcrumb;
+    }
+
+    private void initBreadcrumb() {
+        BreadCrumbCastor breadCrumbCastor = new BreadCrumbCastor("breadCrumbCastor", getPage().getPageClass()) {
+            @Override
+            public boolean isVisible() {
+                return useBreadcrumb;
+            }
+        };
+        add(breadCrumbCastor);
+    }
+
+
 
     public static void triggerEventFeedBackPanel(AjaxRequestTarget target, String message, FeedbackMessageLevel levelMessage) {
         FeedBackPanelEvent feedbackPanelEvent = new FeedBackPanelEvent(target);
@@ -554,7 +576,7 @@ public abstract class MasterPage extends WebPage {
             }
 
             if (!feedBackPanelUpdate.getMessage().isEmpty()) {
-                if(feedBackPanelUpdate.isGoToTop()){
+                if (feedBackPanelUpdate.isGoToTop()) {
                     feedBackPanelGeneral.sendMessageAndGoToTop(feedBackPanelUpdate.getMessage(),
                             feedBackPanelUpdate.getMessageLevel(), feedBackPanelUpdate.getTarget());
                 } else {

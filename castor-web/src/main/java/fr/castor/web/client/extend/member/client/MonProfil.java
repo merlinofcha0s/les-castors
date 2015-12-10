@@ -38,7 +38,7 @@ public class MonProfil extends MasterPage {
     private ClientDTO client;
 
     private MonProfil() {
-        super("", "", "Mon Profil", true, "img/bg_title1.jpg");
+        super("", "", "Mon Profil", true, "img/bg_title1.jpg", true);
         getDataMonProfil();
         initComposants();
         initLabel();

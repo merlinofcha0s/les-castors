@@ -52,7 +52,7 @@ public class Entreprise extends MasterPage {
     private boolean hasClickPlusDAvis = false;
 
     public Entreprise() {
-        super("", "", "Entreprise partenaire", true, "img/bg_title1.jpg");
+        super("", "", "Entreprise partenaire", true, "img/bg_title1.jpg", true);
     }
 
     public Entreprise(PageParameters params) {

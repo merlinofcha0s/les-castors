@@ -6,6 +6,7 @@ import fr.castor.dto.enums.TypeCompte;
 import fr.castor.web.app.constants.ParamsConstant;
 import fr.castor.web.app.security.Authentication;
 import fr.castor.web.app.security.RolesUtils;
+import fr.castor.web.client.component.link.MonProfilLink;
 import fr.castor.web.client.extend.connected.Entreprise;
 import fr.castor.web.client.extend.member.client.ModifierMonProfil;
 import fr.castor.web.client.extend.member.client.MonProfil;
@@ -62,26 +63,6 @@ public class Profil extends Panel {
     }
 
     private void setLink() {
-        monProfil = new LinkLabel("monProfil", voirProfilModel) {
-
-            private static final long serialVersionUID = 1L;
-
-            @Override
-            public void onClick() {
-                if (rolesUtils.checkRoles(TypeCompte.ARTISAN)) {
-                    PageParameters parameters = new PageParameters();
-                    EntrepriseDTO entreprise = authentication.getEntrepriseUserInfo();
-                    parameters.add(ParamsConstant.ID_ENTREPRISE_PARAM, entreprise.getSiret());
-                    this.setResponsePage(Entreprise.class, parameters);
-                } else if (rolesUtils.checkRoles(TypeCompte.CLIENT)) {
-                    PageParameters parameters = new PageParameters();
-                    ClientDTO client = authentication.getCurrentUserInfo();
-                    parameters.add("login", client.getLogin());
-                    this.setResponsePage(MonProfil.class, parameters);
-                }
-            }
-        };
-
         modifierMonProfil = new LinkLabel("modifierMonProfil", modifierProfilModel) {
 
             private static final long serialVersionUID = 1L;
@@ -92,7 +73,7 @@ public class Profil extends Panel {
             }
         };
 
-        this.add(monProfil);
+        this.add(new MonProfilLink("monProfil", voirProfilModel));
         this.add(modifierMonProfil);
     }
 

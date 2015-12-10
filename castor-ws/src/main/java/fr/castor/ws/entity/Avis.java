@@ -52,7 +52,7 @@ public class Avis extends AbstractEntity implements Serializable {
     private Date dateAvis;
     @OneToOne(mappedBy = "avis", fetch = FetchType.LAZY)
     @JoinColumn(name = "avisannonce_id")
-    @LazyToOne(LazyToOneOption.NO_PROXY)
+    //@LazyToOne(LazyToOneOption.PROXY)
     private Annonce annonce;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "artisan_fk")

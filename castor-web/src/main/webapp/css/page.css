@@ -67,7 +67,7 @@
     font-size: 1.1em;
 }
 
-#dejaInscritContainer{
+#dejaInscritContainer {
     margin-top: 20px;
 }
 
@@ -1188,15 +1188,29 @@ table tr td .error {
     margin-right: auto !important;
 }
 
-.nos_objectifs_client_artisan{
+.nos_objectifs_client_artisan {
     text-align: center;
     margin-top: 30px;
 }
 
-.nos_objectifs_client_artisan .fa{
+.nos_objectifs_client_artisan .fa {
     font-size: 70px;
 }
 
 .nos_objectifs_client_artisan .shortcode_iconbox p {
     font-size: 15px;
+}
+
+/* Breadcrumb */
+.castorBreadCrumb ul li::before {
+    content: "";
+}
+
+.castorBreadCrumb ul, .castorBreadCrumb ol {
+    padding: 0 0 0px;
+}
+
+.castorBreadCrumb .breadcrumb {
+    background-color: #f5f5f5;
+    padding: 10px;
 }

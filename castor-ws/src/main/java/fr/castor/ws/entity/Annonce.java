@@ -90,7 +90,7 @@ public class Annonce extends AbstractEntity implements Serializable {
     @JoinColumn(name = "demandeur_fk")
     private Client demandeur;
     @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
-    @LazyToOne(LazyToOneOption.NO_PROXY)
+    //@LazyToOne(LazyToOneOption.NO_PROXY)
     private Avis avis;
     @OneToOne(cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
     @LazyToOne(LazyToOneOption.NO_PROXY)

@@ -54,7 +54,7 @@ public class ModifierMonProfil extends MasterPage {
     private PhotosContainer photoChantierTemoin;
 
     public ModifierMonProfil() {
-        super("Modifier mon profil", "lol", "Modifier mon profil", true, "img/bg_title1.jpg");
+        super("Modifier mon profil", "lol", "Modifier mon profil", true, "img/bg_title1.jpg", true);
 
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Init de la page de modification de mon profil");

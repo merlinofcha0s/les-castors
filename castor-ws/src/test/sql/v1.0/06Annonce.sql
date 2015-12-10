@@ -1,7 +1,7 @@
 INSERT INTO Annonce (id, datecreation, datemaj, delaiintervention, description, etatannonce, nbconsultation, typecontact, hashID, selHashID, typeTravaux, adressechantier_id, demandeur_fk, avis_id, entreprise_selectionnee_fk)
 VALUES
   (100010, '2014-01-10', '2014-01-10', '0', 'Construction compliqué qui necessite des connaissance en geologie', '0',
-   '0', 0, 'toto', 'tata', 0, 100005, 100001, NULL, NULL);
+   '0', 0, 'toto', 'tata', 0, 100005, 100001, 100010, 100008);
 
 INSERT INTO Annonce (id, datecreation, datemaj, delaiintervention, description, etatannonce, nbconsultation, typecontact, hashID, selHashID, typetravaux, adressechantier_id, demandeur_fk, avis_id, entreprise_selectionnee_fk)
 VALUES

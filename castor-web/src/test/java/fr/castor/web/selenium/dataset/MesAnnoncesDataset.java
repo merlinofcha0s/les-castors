@@ -23,15 +23,15 @@ public class MesAnnoncesDataset {
                     "avis_id")
             .values(200010, "2014-01-10", "2014-01-10", "0",
                     "Construction compliqué qui necessite des connaissance en geologie", "0",
-                    0, 0, "titi", "tata", 0, 200005, 100001, 200009, 200012)
+                    0, 0, "titi", "tata", 0, 200005, 100001, null, null)
             .values(200011, "2014-01-10", "2014-01-10", "0",
                     "Construction compliqué qui necessite des connaissance en geologie", "0",
-                    0, 0, "toto", "tata", 0, 200014, 100001, 200009, 200013)
+                    0, 0, "toto", "tata", 0, 200014, 100001, null, null)
             .values(200012, "2014-01-10", "2014-01-10", "0",
-                    "Construction compliqué qui necessite des connaissance en geologie", "0",
-                    0, 0, "tata", "tata", 0, 200015, 100001, 200009, 200013)
+                    "Construction compliqué qui necessite des connaissance en geologie", "6",
+                    0, 0, "tata", "tata", 0, 200015, 100001, 200009, 200012)
             .values(200013, "2014-01-10", "2014-01-10", "0",
-                    "Construction compliqué qui necessite des connaissance en geologie", "0",
+                    "Construction compliqué qui necessite des connaissance en geologie", "6",
                     0, 0, "tutu", "tata", 0, 200016, 100001, 200009, 200013).build();
 
     public static final Operation INSERT_ARTISAN_DATA = insertInto("artisan")
