@@ -8,7 +8,7 @@ import org.apache.wicket.markup.head.CssUrlReferenceHeaderItem;
  */
 public class JSConstant {
 
-    public static final CssUrlReferenceHeaderItem fontAwesome = CssHeaderItem.forUrl("//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css");
+    public static final CssUrlReferenceHeaderItem fontAwesome = CssHeaderItem.forUrl("//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css");
 
     private JSConstant(){
 

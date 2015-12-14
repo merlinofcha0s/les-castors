@@ -612,6 +612,27 @@ table tr td .error {
     padding-top: 52px;
 }
 
+.search{
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.search button i{
+    font-size: 30px;
+    color: white;
+}
+
+.search button span {
+    font-size: 13px;
+    margin-left: 5px;
+    vertical-align: super;
+    color: white;
+}
+
+.containerAncienne{
+    text-align: center;
+}
+
 .iconNotif {
     font-size: 16px;
 }

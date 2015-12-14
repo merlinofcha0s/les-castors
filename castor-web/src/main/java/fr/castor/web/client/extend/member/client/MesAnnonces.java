@@ -6,6 +6,7 @@ import fr.castor.dto.NotificationDTO;
 import fr.castor.dto.aggregate.MesAnnoncesAnnonceDTO;
 import fr.castor.dto.aggregate.MesAnnoncesNotificationDTO;
 import fr.castor.dto.enums.TypeCompte;
+import fr.castor.web.app.constants.JSConstant;
 import fr.castor.web.app.constants.ParamsConstant;
 import fr.castor.web.app.enums.FeedbackMessageLevel;
 import fr.castor.web.app.security.Authentication;
@@ -16,14 +17,19 @@ import fr.castor.web.client.component.LinkLabel;
 import fr.castor.web.client.component.Profil;
 import fr.castor.web.client.extend.connected.Annonce;
 import fr.castor.web.client.extend.connected.Entreprise;
+import fr.castor.web.client.extend.connected.RechercheAnnonce;
+import fr.castor.web.client.extend.nouveau.devis.NouveauDevis;
 import fr.castor.web.client.master.MasterPage;
 import fr.castor.ws.client.service.UtilisateurServiceREST;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.ajax.AjaxEventBehavior;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.AjaxLink;
+import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
+import org.apache.wicket.markup.html.link.Link;
 import org.apache.wicket.markup.html.list.ListItem;
 import org.apache.wicket.markup.html.list.ListView;
 import org.apache.wicket.model.Model;
@@ -84,8 +90,10 @@ public final class MesAnnonces extends MasterPage {
         loadMesNotifications();
         initRepeaterNotifications();
         initRepeaterAnnonces();
+        initMesActionsLink();
         afficherAnciennesAnnonces();
         afficherAnciennesNotifications();
+
 
         this.setOutputMarkupId(true);
     }
@@ -93,6 +101,48 @@ public final class MesAnnonces extends MasterPage {
     public MesAnnonces(String messageToFeedBack, FeedbackMessageLevel messageLevel) {
         this();
         this.feedBackPanelGeneral.sendMessage(messageToFeedBack, messageLevel);
+    }
+
+    private void initMesActionsLink() {
+
+        String valeurModel = null;
+
+        if (rolesUtils.checkRoles(TypeCompte.CLIENT)) {
+            valeurModel = "Poster une annonce";
+        } else {
+            valeurModel = "Rechercher une annonce";
+        }
+
+        Model<String> modelActionLink = new Model<>(valeurModel);
+
+        Link<String> actionLink = new Link<String>("actionLink") {
+            @Override
+            public void onClick() {
+                if (rolesUtils.checkRoles(TypeCompte.CLIENT)) {
+                    setResponsePage(NouveauDevis.class);
+                } else if (rolesUtils.checkRoles(TypeCompte.ARTISAN) || rolesUtils.checkRoles(TypeCompte.ARTISAN_PREMIUM)) {
+                    setResponsePage(RechercheAnnonce.class);
+                }
+            }
+        };
+
+        WebMarkupContainer i = new WebMarkupContainer("icon"){
+            @Override
+            protected void onComponentTag(ComponentTag tag) {
+                super.onComponentTag(tag);
+                if (rolesUtils.checkRoles(TypeCompte.ARTISAN) || rolesUtils.checkRoles(TypeCompte.ARTISAN_PREMIUM)) {
+                    tag.put("class", "fa fa-search");
+                } else if (rolesUtils.checkRoles(TypeCompte.CLIENT)){
+                    tag.put("class", "fa fa-plus-circle");
+                }
+            }
+        };
+
+        Label labelActionLink = new Label("labelActionLink", modelActionLink);
+
+        actionLink.add(i, labelActionLink);
+
+        add(actionLink);
     }
 
     private void initStaticComposant() {
@@ -265,6 +315,13 @@ public final class MesAnnonces extends MasterPage {
         annoncesContainer.add(listViewAnnonce, nbDevisHeader);
 
         add(nbAnnonce, annoncesContainer);
+    }
+
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+
+        response.render(JSConstant.fontAwesome);
     }
 
     private void afficherAnciennesAnnonces() {
