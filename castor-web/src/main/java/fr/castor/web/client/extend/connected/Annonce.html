@@ -1,16 +1,55 @@
-<wicket:head>
+<wicket:head  xmlns:wicket="http://wicket.apache.org" lang="fr">
     <link
             rel="stylesheet"
             type="text/css"
             href="css/font_icons8.css"/>
 </wicket:head>
-<wicket:extend>
+<wicket:extend  xmlns:wicket="http://wicket.apache.org" lang="fr">
     <div class="row-fluid">
         <div wicket:id="profil"></div>
         <div class="span7">
-            <h2 class="headInModule">Description</h2>
+            <div class="row-fluid">
+                <div wicket:id="containerActions" class="span12">
+                    <div class="bg_title">
+                        <h2 class="headInModule">Mes Actions</h2>
+                    </div>
+                <div wicket:id="modifierAnnonceContainer" class="action">
+                     <button id="btn-modif" class="btn btn-info" href="#" wicket:id="modifierAnnonce">
+                            <i class="fa fa-pencil-square-o"></i>
+                        <span>Modifier votre annonce</span>
+                     </button>
+                </div>
+                <div class="action" wicket:id="supprimerAnnonceContainer">
+                    <button id="btn-suppr" class="btn btn-info" href="#" wicket:id="supprimerAnnonce">
+                        <i class="fa fa-trash-o"></i>
+                        <span>Supprimer l'annonce</span>
+                    </button>
+                </div>
+                <div class="action" wicket:id="inscrireAnnonceContainer">
+                     <button id="btn-contact" class="btn btn-info" href="#" wicket:id="inscrireAnnonce">
+                        <i class="fa fa-phone"></i>
+                      <span> Contacter l'annonceur</span>
+                     </button>
+                </div>
+                <div
+                        class="containerAction"
+                        wicket:id="envoyerDevisContainer">
+                    <div wicket:id="envoyerDevis">
+                        <div class="containerGlyph">
+                            <span class="icon-Envelope4 glyphAnnonce"></span>
+                        </div>
+                        <div class="sidebarRightWithPaddingTop">
+                            <a href="#">Envoyer votre devis</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+            <div class="bg_title">
+                <h2 class="headInModule">Description</h2>
+            </div>
 
-            <div wicket:id="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
+            <div wicket:id="description" id="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
                 incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
                 laboris nisi
                 ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
@@ -209,7 +248,7 @@
             </div>
         </div>
         <div class="span3">
-            <div
+            <!-- <div
                     wicket:id="containerActions">
                 <h2 class="headInModule">Action</h2>
 
@@ -257,7 +296,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> -->
             <div
                     id="containerContactMaster"
                     wicket:id="containerContactMaster">

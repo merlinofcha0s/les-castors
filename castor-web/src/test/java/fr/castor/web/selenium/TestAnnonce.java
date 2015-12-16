@@ -54,7 +54,7 @@ public class TestAnnonce extends AbstractITTest {
         WebElement checkConditionAnnoncePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.visibilityOfElementLocated(By.id("containerContactMaster")));
         assertNotNull(checkConditionAnnoncePresent);
-        assertEquals("Modifier votre annonce", driver.findElement(By.linkText("Modifier votre annonce")).getText());
+        assertEquals("Modifier votre annonce", driver.findElement(By.id("btn-modif")).getText());
         assertEquals("Supprimer l'annonce", driver.findElement(By.id("supprimerAnnonce")).getText());
         assertEquals("Aucune photo du chantier pour le moment :(", driver.findElement(By.id("aucunePhoto")).getText());
 
@@ -73,10 +73,10 @@ public class TestAnnonce extends AbstractITTest {
                 .until(ExpectedConditions.visibilityOfElementLocated(By.id("containerContactMaster")));
         WebElement checkConditionImageAnnoncePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.visibilityOfElementLocated(By
-                        .xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[3]/div[1]/div/div/div[2]/div[1]/div/a")));
+                        .xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div[2]/div[2]/div[2]/div[5]/div[1]/div/div/div[2]/div[1]/div/a")));
         assertNotNull(checkConditionAnnoncePresent);
         assertNotNull(checkConditionImageAnnoncePresent);
-        assertEquals("Modifier votre annonce", driver.findElement(By.linkText("Modifier votre annonce")).getText());
+        assertEquals("Modifier votre annonce", driver.findElement(By.id("btn-modif")).getText());
         assertEquals("Supprimer l'annonce", driver.findElement(By.id("supprimerAnnonce")).getText());
 
     }
@@ -118,7 +118,7 @@ public class TestAnnonce extends AbstractITTest {
                 findElement(
                         By.cssSelector("#containerEnteprisesInscrites > div.row-fluid > div.span12 > div.bg_title > h2.headInModule"))
                         .getText());
-        assertEquals("Modifier votre annonce", driver.findElement(By.linkText("Modifier votre annonce")).getText());
+        assertEquals("Modifier votre annonce", driver.findElement(By.id("btn-modif")).getText());
         assertEquals("Supprimer l'annonce", driver.findElement(By.id("supprimerAnnonce")).getText());
 
         WebElement checkConditionAnnoncePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
@@ -231,13 +231,8 @@ public class TestAnnonce extends AbstractITTest {
 
         Boolean checkCondition = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.textToBePresentInElementLocated(By.cssSelector("span.box_type4"),
-                        "Votre inscription a été prise en compte avec succés"));
+                        "Votre inscription a été prise en compte avec succés, les coordonnées de l'annonceur sont maintenant disponibles"));
         assertTrue(checkCondition);
-
-        WebElement checkElementEnvoyerDevisPresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
-                .until(ExpectedConditions.visibilityOfElementLocated(By.linkText("Envoyer votre devis")));
-        assertNotNull(checkElementEnvoyerDevisPresent);
-
     }
 
     /**
@@ -288,7 +283,7 @@ public class TestAnnonce extends AbstractITTest {
 
         // Lien "notez artisan"
         findElement(
-                By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[4]/div/div/div/div[2]/div[2]/div/div[3]/a"))
+                By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div[2]/div[2]/div[2]/div[6]/div/div/div/div[2]/div[2]/div/div[3]/a"))
                 .click();
 
         //Thread.sleep(1000);
@@ -348,7 +343,7 @@ public class TestAnnonce extends AbstractITTest {
         assertTrue(checkMotClePresent);
 
         assertEquals("Construction compliqué qui necessite des connaissance en geologie",
-                driver.findElement(By.cssSelector("div.span7 > div")).getText());
+                driver.findElement(By.id("description")).getText());
         assertEquals("Neuf", driver.findElement(By.xpath("//div[@id='containerInformationsAnnonce']/div[4]/div[3]")).getText());
         assertEquals("Le plus rapidement possible",
                 driver.findElement(By.xpath("//div[@id='containerInformationsAnnonce']/div[5]/div[3]")).getText());
@@ -365,7 +360,7 @@ public class TestAnnonce extends AbstractITTest {
         assertCoreInformationOfAnnonce(EtatAnnonce.ACTIVE);
         // Le lien de selection de la premiere entreprise
         findElement(
-                By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[4]/div/div/div/div[2]/div[2]/div[3]/a[2]"))
+                By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div[2]/div[2]/div[2]/div[6]/div/div/div/div[2]/div[2]/div[3]/a[2]"))
                 .click();
 
         /*WebElement checkConditionAnnoncePresent = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
@@ -390,7 +385,7 @@ public class TestAnnonce extends AbstractITTest {
         assertCoreInformationOfAnnonce(EtatAnnonce.ACTIVE);
         // Le lien de selection de la premiere entreprise
         findElement(
-                By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[4]/div/div/div/div[2]/div[2]/div[3]/a[1]"))
+                By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div[2]/div[2]/div[2]/div[6]/div/div/div/div[2]/div[2]/div[3]/a[1]"))
                 .click();
 
         /*WebElement checkConditionAnnoncePresent = new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX)

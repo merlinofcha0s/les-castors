@@ -7,6 +7,7 @@ import fr.castor.dto.constant.Categorie;
 import fr.castor.dto.enums.EtatAnnonce;
 import fr.castor.dto.enums.TypeCompte;
 import fr.castor.dto.enums.TypeContact;
+import fr.castor.web.app.constants.JSConstant;
 import fr.castor.web.app.constants.ParamsConstant;
 import fr.castor.web.app.enums.FeedbackMessageLevel;
 import fr.castor.web.app.security.Authentication;
@@ -27,6 +28,7 @@ import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.event.IEvent;
 import org.apache.wicket.extensions.markup.html.basic.SmartLinkLabel;
 import org.apache.wicket.markup.ComponentTag;
+import org.apache.wicket.markup.head.IHeaderResponse;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
@@ -126,6 +128,12 @@ public class Annonce extends MasterPage {
         }
     }
 
+    @Override
+    public void renderHead(IHeaderResponse response) {
+        super.renderHead(response);
+        response.render(JSConstant.fontAwesome);
+    }
+
     private void loadAnnonceInfos(String idAnnonce) {
         userConnected = authentication.getCurrentUserInfo();
         DemandeAnnonceDTO demandeAnnonceDTO = new DemandeAnnonceDTO();
@@ -207,11 +215,7 @@ public class Annonce extends MasterPage {
             @Override
             protected void onComponentTag(ComponentTag tag) {
                 super.onComponentTag(tag);
-                if (!modifierAnnonceContainer.isVisible()) {
-                    tag.remove("class");
-                } else {
-                    tag.put("class", "containerAction");
-                }
+                tag.put("class", "action");
             }
         };
 
@@ -266,7 +270,8 @@ public class Annonce extends MasterPage {
 
             @Override
             public boolean isVisible() {
-                return afficherEnvoyerDevisAnnonce();
+                return false;
+                //return afficherEnvoyerDevisAnnonce();
             }
         };
 
@@ -351,7 +356,7 @@ public class Annonce extends MasterPage {
         Label delaiIntervention = new Label("delaiIntervention", new LoadableDetachableModel<String>() {
             @Override
             protected String load() {
-                return  annonceAffichageDTO.getAnnonce().getDelaiIntervention().getText();
+                return annonceAffichageDTO.getAnnonce().getDelaiIntervention().getText();
             }
         });
         final SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
@@ -835,7 +840,7 @@ public class Annonce extends MasterPage {
             demandeAnnonceDTO.setLoginDemandeur(userConnected.getLogin());
             Integer codeRetourInscription = annonceServiceREST.inscriptionUnArtisan(demandeAnnonceDTO);
             if (codeRetourInscription.equals(CodeRetourService.RETOUR_OK)) {
-                feedBackPanelGeneral.success("Votre inscription a été prise en compte avec succés");
+                feedBackPanelGeneral.success("Votre inscription a été prise en compte avec succés, les coordonnées de l'annonceur sont maintenant disponibles");
             } else if (codeRetourInscription.equals(CodeRetourService.RETOUR_KO)) {
                 feedBackPanelGeneral
                         .error("Problème d'enregistrement avec votre inscription, veuillez réessayer, si le problème persiste");
@@ -958,7 +963,7 @@ public class Annonce extends MasterPage {
 
     /**
      * Principalement utilisé pour l'affichage des liens dans le menu action
-     * <p/>
+     * <p>
      * Check si l'artisan a le bon role et que l'annonce est active
      *
      * @return true si les verifications sont OK !!
