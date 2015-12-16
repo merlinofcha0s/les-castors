@@ -52,7 +52,7 @@ public class TestModificationAnnonce extends AbstractITTest {
      */
     @Test
     public void testModificationAnnonceNominale() {
-        findElement(By.linkText("Modifier votre annonce")).click();
+        findElement(By.id("btn-modif")).click();
         findElement(By.id("motCleField")).sendKeys("Piscine");
         findElement(By.linkText("Piscine")).click();
         findElement(By.id("radioTypeTravauxRenovation")).click();
@@ -74,8 +74,8 @@ public class TestModificationAnnonce extends AbstractITTest {
      */
     @Test
     public void testModificationAnnonceRetourAnnonce() {
-        driver.findElement(By.linkText("Modifier votre annonce")).click();
-        driver.findElement(By.id("etapePrecedente3")).click();
+        findElement(By.id("btn-modif")).click();
+        findElement(By.id("etapePrecedente3")).click();
         WebElement checkUntilBackToAnnonce = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
                 .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("h2.headInModule")));
         Assert.assertNotNull(checkUntilBackToAnnonce);

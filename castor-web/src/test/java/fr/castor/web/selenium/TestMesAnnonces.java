@@ -45,7 +45,7 @@ public class TestMesAnnonces extends AbstractITTest {
         testMesAnnonces("raiden", TypeNotification.INSCRIT_A_ANNONCE, TypeCompte.CLIENT, 4, 4, 1);
 
         findElement(
-                By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[1]/table/tbody/tr[1]/td[2]/a[2]"))
+                By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div/div[2]/div[3]/div/div[1]/table/tbody/tr[1]/td[2]/a[2]"))
                 .click();
 
         Boolean checkConditionAccessToAnnonceViaNotif = (new WebDriverWait(driver, AbstractITTest.TEMPS_ATTENTE_AJAX))
@@ -114,11 +114,11 @@ public class TestMesAnnonces extends AbstractITTest {
 
         if (typeCompte.equals(TypeCompte.CLIENT)) {
             findElement(
-                    By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[2]/table/tbody/tr[1]"))
+                    By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div/div[2]/div[3]/div/div[2]/table/tbody/tr[1]"))
                     .click();
         } else if (typeCompte.equals(TypeCompte.ARTISAN)) {
             findElement(
-                    By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div[2]/div[2]/table/tbody/tr[1]"))
+                    By.xpath("/html/body/div[1]/div[2]/div[2]/div/div[1]/div[1]/div[1]/div/div[2]/div/div[2]/div[3]/div/div[2]/table/tbody/tr"))
                     .click();
         }
 

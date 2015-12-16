@@ -221,7 +221,7 @@ public abstract class AbstractITTest {
 
     protected void testAjoutPhotoIT(WebDriver driver, boolean isAnnonceModification) throws InterruptedException {
         if(isAnnonceModification){
-            findElement(By.linkText("Modifier votre annonce")).click();
+            findElement(By.id("btn-modif")).click();
         } else {
             findElement(By.linkText("Modifier mes informations")).click();
         }
