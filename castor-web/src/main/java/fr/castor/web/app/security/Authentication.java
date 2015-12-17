@@ -8,12 +8,12 @@ import fr.castor.ws.client.service.ArtisanServiceREST;
 import fr.castor.ws.client.service.UtilisateurServiceREST;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
-import org.apache.wicket.authroles.authentication.AuthenticatedWebSession;
+import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
-import javax.inject.Named;
 import java.io.Serializable;
 
 /**
@@ -21,7 +21,7 @@ import java.io.Serializable;
  *
  * @author Casaucau Cyril
  */
-@Named
+@RequestScoped
 public class Authentication implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -51,10 +51,14 @@ public class Authentication implements Serializable {
         Boolean isOk = null;
 
         UsernamePasswordToken token = new UsernamePasswordToken(username, password);
-        token.setRememberMe(true);
+        Subject subject = SecurityUtils.getSubject();
 
         try {
-            SecurityUtils.getSubject().login(token);
+            if (!subject.isAuthenticated()) {
+                subject.login(token);
+                subject.getSession(true);
+            }
+
             isOk = Boolean.TRUE;
         } catch (UnknownAccountException uae) {
             if (LOGGER.isErrorEnabled()) {
@@ -86,13 +90,12 @@ public class Authentication implements Serializable {
         if (isOk) {
             LoginDTO loginDTO = new LoginDTO();
             loginDTO.setLogin(username);
-            AuthenticatedWebSession.get().authenticate(username, "");
             ClientDTO client = utilisateurServiceREST.login(loginDTO);
-            SecurityUtils.getSubject().getSession(true).setAttribute(CLIENT_KEY, client);
+            subject.getSession().setAttribute(CLIENT_KEY, client);
 
             if(rolesUtils.checkRoles(TypeCompte.ARTISAN)){
                 EntrepriseDTO entrepriseDTO = artisanServiceREST.getEntrepriseInformationByArtisanLogin(client.getLogin());
-                SecurityUtils.getSubject().getSession().setAttribute(ENTREPRISE_KEY, entrepriseDTO);
+                subject.getSession().setAttribute(ENTREPRISE_KEY, entrepriseDTO);
             }
         }
         return isOk;

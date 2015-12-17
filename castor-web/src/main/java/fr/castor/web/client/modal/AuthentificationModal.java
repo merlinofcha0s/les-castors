@@ -10,7 +10,9 @@ import fr.castor.web.client.event.LoginEvent;
 import fr.castor.web.client.extend.Contact;
 import fr.castor.web.client.extend.member.client.MesAnnonces;
 import fr.castor.web.client.extend.nouveau.devis.NouveauDevis;
+import fr.castor.web.client.session.BatimenSession;
 import org.apache.wicket.AttributeModifier;
+import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.event.Broadcast;
@@ -83,7 +85,9 @@ public class AuthentificationModal extends ModalCastor {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 
-                boolean authResult = authentication.authenticate(login.getInput(), password.getConvertedInput());
+                BatimenSession session = (BatimenSession) Session.get();
+
+                boolean authResult = session.signIn(login.getInput(), password.getConvertedInput());
 
                 // if authentication succeeds redirect user to the requested
                 // page

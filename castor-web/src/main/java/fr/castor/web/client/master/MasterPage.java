@@ -148,7 +148,6 @@ public abstract class MasterPage extends WebPage {
     }
 
 
-
     public static void triggerEventFeedBackPanel(AjaxRequestTarget target, String message, FeedbackMessageLevel levelMessage) {
         FeedBackPanelEvent feedbackPanelEvent = new FeedBackPanelEvent(target);
         feedbackPanelEvent.setMessage(message);
@@ -335,10 +334,10 @@ public abstract class MasterPage extends WebPage {
 
             @Override
             public void onClick() {
+                SecurityUtils.getSubject().logout();
                 Session.get().invalidate();
                 this.setResponsePage(Accueil.class);
             }
-
         };
 
         logout.setMarkupId("logout");

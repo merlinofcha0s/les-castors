@@ -80,6 +80,11 @@ public class CastorApplication extends AuthenticatedWebApplication {
         return Accueil.class;
     }
 
+    @Override
+    public Session newSession(Request request, Response response) {
+        return new BatimenSession(request);
+    }
+
     /**
      * @see org.apache.wicket.Application#init()
      */
@@ -95,25 +100,40 @@ public class CastorApplication extends AuthenticatedWebApplication {
             LOGGER.debug("Debut init de la Web app.....");
         }
 
-        // Config HTML
-        getMarkupSettings().setDefaultMarkupEncoding("UTF-8");
-        getMarkupSettings().setCompressWhitespace(true);
-        getMarkupSettings().setStripWicketTags(setStripWicketTags);
+        configCSRF();
+        configMarkupSettings();
+        configCacheAndCompression();
+        configPages();
+        configCDI();
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("Init de la Web app.....OK");
+        }
+    }
 
+    private void configCSRF(){
         // Activation du CSRF (Cross site request forgery)
         /*
          * IRequestMapper cryptoMapper; cryptoMapper = new
          * CryptoMapper(getRootRequestMapper(), this);
          * setRootRequestMapper(cryptoMapper);
          */
+    }
+
+    private void configMarkupSettings(){
+        // Config HTML
+        getMarkupSettings().setDefaultMarkupEncoding("UTF-8");
+        getMarkupSettings().setCompressWhitespace(true);
+        getMarkupSettings().setStripWicketTags(setStripWicketTags);
 
         // Config Jquery
         // Pas de http pour éviter le content mix blocking dans le browser
         // (appel d'une url http dans une page https)
         getJavaScriptLibrarySettings().setJQueryReference(
                 new UrlResourceReference(Url.parse("//code.jquery.com/jquery-1.11.2.min.js")));
+    }
 
-        /*getResourceSettings().setCssCompressor(new CssUrlReplacer());
+    private void configCacheAndCompression(){
+         /*getResourceSettings().setCssCompressor(new CssUrlReplacer());
         getResourceSettings().setJavaScriptCompressor(new DefaultJavaScriptCompressor());
         getResourceSettings().setUseMinifiedResources(true);
 
@@ -127,7 +147,9 @@ public class CastorApplication extends AuthenticatedWebApplication {
         /*getStoreSettings().setMaxSizePerSession(Bytes.megabytes(2));
         //Nombre de page max en mémoire
         getStoreSettings().setInmemoryCacheSize(50);*/
+    }
 
+    private  void configPages(){
         // Cfg urls des pages principales
         mountPage(UrlPage.ACCUEIL_URL, Accueil.class);
         mountPage(UrlPage.MES_ANNONCES_URL, MesAnnonces.class);
@@ -155,7 +177,9 @@ public class CastorApplication extends AuthenticatedWebApplication {
         getApplicationSettings().setInternalErrorPage(ErreurInterne.class);
         getApplicationSettings().setAccessDeniedPage(AccesInterdit.class);
         getApplicationSettings().setPageExpiredErrorPage(Expiree.class);
+    }
 
+    private void configCDI(){
         // Init de CDI (Wicket)
         BeanManager manager = null;
         try {
@@ -170,21 +194,5 @@ public class CastorApplication extends AuthenticatedWebApplication {
 
         // Configuration de CDI en enlevant le mode conversation
         new CdiConfiguration(manager).setPropagation(ConversationPropagation.NONE).configure(this);
-
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Init de la Web app.....OK");
-        }
-    }
-
-    /*
-     * (non-Javadoc)
-     * 
-     * @see
-     * org.apache.wicket.protocol.http.WebApplication#newSession(org.apache.
-     * wicket.request.Request, org.apache.wicket.request.Response)
-     */
-    @Override
-    public Session newSession(Request request, Response response) {
-        return new BatimenSession(request);
     }
 }

@@ -12,10 +12,6 @@
         <filter-class>org.apache.shiro.web.servlet.ShiroFilter</filter-class>
     </filter>
 
-    <session-config>
-        <tracking-mode>COOKIE</tracking-mode>
-    </session-config>
-
     <filter-mapping>
         <filter-name>ShiroFilter</filter-name>
         <url-pattern>/*</url-pattern>
