@@ -17,27 +17,21 @@ import fr.castor.web.client.extend.member.client.ModifierMonProfil;
 import fr.castor.web.client.extend.member.client.MonProfil;
 import fr.castor.web.client.extend.nouveau.artisan.NouveauArtisan;
 import fr.castor.web.client.extend.nouveau.devis.NouveauDevis;
-import fr.castor.web.client.session.BatimenSession;
-import org.apache.wicket.Session;
+import fr.castor.web.client.session.CastorSession;
 import org.apache.wicket.authroles.authentication.AbstractAuthenticatedWebSession;
 import org.apache.wicket.authroles.authentication.AuthenticatedWebApplication;
 import org.apache.wicket.cdi.CdiConfiguration;
-import org.apache.wicket.cdi.ConversationPropagation;
 import org.apache.wicket.core.request.mapper.MountedMapper;
 import org.apache.wicket.markup.html.WebPage;
-import org.apache.wicket.request.Request;
-import org.apache.wicket.request.Response;
 import org.apache.wicket.request.Url;
 import org.apache.wicket.request.mapper.parameter.UrlPathPageParametersEncoder;
 import org.apache.wicket.request.resource.UrlResourceReference;
+import org.apache.wicket.settings.IRequestCycleSettings;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wicketstuff.javaee.injection.JavaEEComponentInjector;
 import org.wicketstuff.javaee.naming.global.ModuleJndiNamingStrategy;
 
-import javax.enterprise.inject.spi.BeanManager;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 import java.util.Properties;
 
 /**
@@ -72,17 +66,12 @@ public class CastorApplication extends AuthenticatedWebApplication {
 
     @Override
     protected Class<? extends AbstractAuthenticatedWebSession> getWebSessionClass() {
-        return BatimenSession.class;
+        return CastorSession.class;
     }
 
     @Override
     protected Class<? extends WebPage> getSignInPageClass() {
         return Accueil.class;
-    }
-
-    @Override
-    public Session newSession(Request request, Response response) {
-        return new BatimenSession(request);
     }
 
     /**
@@ -92,7 +81,6 @@ public class CastorApplication extends AuthenticatedWebApplication {
     public void init() {
         getComponentInstantiationListeners().add(new JavaEEComponentInjector(this, new ModuleJndiNamingStrategy()));
         super.init();
-
         // On récup les properties de conf de la web app
         getAppProperties();
 
@@ -100,17 +88,19 @@ public class CastorApplication extends AuthenticatedWebApplication {
             LOGGER.debug("Debut init de la Web app.....");
         }
 
-        configCSRF();
-        configMarkupSettings();
-        configCacheAndCompression();
-        configPages();
-        configCDI();
+        configureCSRF();
+        configureMarkupSettings();
+        configureCacheAndCompression();
+        configurePages();
+        configureCDI();
+        configureRenderingStategy();
+
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Init de la Web app.....OK");
         }
     }
 
-    private void configCSRF(){
+    private void configureCSRF(){
         // Activation du CSRF (Cross site request forgery)
         /*
          * IRequestMapper cryptoMapper; cryptoMapper = new
@@ -119,7 +109,7 @@ public class CastorApplication extends AuthenticatedWebApplication {
          */
     }
 
-    private void configMarkupSettings(){
+    private void configureMarkupSettings(){
         // Config HTML
         getMarkupSettings().setDefaultMarkupEncoding("UTF-8");
         getMarkupSettings().setCompressWhitespace(true);
@@ -132,7 +122,7 @@ public class CastorApplication extends AuthenticatedWebApplication {
                 new UrlResourceReference(Url.parse("//code.jquery.com/jquery-1.11.2.min.js")));
     }
 
-    private void configCacheAndCompression(){
+    private void configureCacheAndCompression(){
          /*getResourceSettings().setCssCompressor(new CssUrlReplacer());
         getResourceSettings().setJavaScriptCompressor(new DefaultJavaScriptCompressor());
         getResourceSettings().setUseMinifiedResources(true);
@@ -149,7 +139,7 @@ public class CastorApplication extends AuthenticatedWebApplication {
         getStoreSettings().setInmemoryCacheSize(50);*/
     }
 
-    private  void configPages(){
+    private  void configurePages(){
         // Cfg urls des pages principales
         mountPage(UrlPage.ACCUEIL_URL, Accueil.class);
         mountPage(UrlPage.MES_ANNONCES_URL, MesAnnonces.class);
@@ -179,20 +169,12 @@ public class CastorApplication extends AuthenticatedWebApplication {
         getApplicationSettings().setPageExpiredErrorPage(Expiree.class);
     }
 
-    private void configCDI(){
-        // Init de CDI (Wicket)
-        BeanManager manager = null;
-        try {
-            // Recuperation du context via le serveur d'application
-            manager = (BeanManager) new InitialContext().lookup("java:comp/BeanManager");
-        } catch (NamingException e) {
-            if (LOGGER.isErrorEnabled()) {
-                LOGGER.error(
-                        "Impossible de récuperer le context bean manager : java:comp/BeanManager pour l'init de CDI", e);
-            }
-        }
+    private void configureRenderingStategy() {
+        getRequestCycleSettings().setRenderStrategy(IRequestCycleSettings.RenderStrategy.ONE_PASS_RENDER);
+    }
 
-        // Configuration de CDI en enlevant le mode conversation
-        new CdiConfiguration(manager).setPropagation(ConversationPropagation.NONE).configure(this);
+    private void configureCDI(){
+        // Init de CDI (Wicket)
+        new CdiConfiguration().configure(this);
     }
 }

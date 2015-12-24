@@ -10,17 +10,14 @@ import fr.castor.web.client.event.LoginEvent;
 import fr.castor.web.client.extend.Contact;
 import fr.castor.web.client.extend.member.client.MesAnnonces;
 import fr.castor.web.client.extend.nouveau.devis.NouveauDevis;
-import fr.castor.web.client.session.BatimenSession;
+import fr.castor.web.client.session.CastorSession;
 import org.apache.wicket.AttributeModifier;
 import org.apache.wicket.Session;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.html.basic.Label;
-import org.apache.wicket.markup.html.form.Form;
-import org.apache.wicket.markup.html.form.PasswordTextField;
-import org.apache.wicket.markup.html.form.StatelessForm;
-import org.apache.wicket.markup.html.form.TextField;
+import org.apache.wicket.markup.html.form.*;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.validation.validator.StringValidator;
 import org.slf4j.Logger;
@@ -85,7 +82,7 @@ public class AuthentificationModal extends ModalCastor {
             @Override
             protected void onSubmit(AjaxRequestTarget target, Form<?> form) {
 
-                BatimenSession session = (BatimenSession) Session.get();
+                CastorSession session = (CastorSession) Session.get();
 
                 boolean authResult = session.signIn(login.getInput(), password.getConvertedInput());
 

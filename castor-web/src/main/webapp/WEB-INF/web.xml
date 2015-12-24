@@ -5,7 +5,7 @@
     <display-name>castor-web</display-name>
 
     <listener>
-        <listener-class>fr.castor.web.app.security.ShiroCastorListener</listener-class>
+        <listener-class>org.apache.shiro.web.env.EnvironmentLoaderListener</listener-class>
     </listener>
     <filter>
         <filter-name>ShiroFilter</filter-name>

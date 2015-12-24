@@ -17,7 +17,7 @@ import fr.castor.web.client.extend.nouveau.artisan.NouveauArtisan;
 import fr.castor.web.client.extend.nouveau.devis.NouveauDevis;
 import fr.castor.web.client.modal.AuthentificationModal;
 import org.apache.shiro.SecurityUtils;
-import org.apache.wicket.Session;
+import org.apache.wicket.Application;
 import org.apache.wicket.ajax.AjaxRequestTarget;
 import org.apache.wicket.behavior.AttributeAppender;
 import org.apache.wicket.event.Broadcast;
@@ -28,14 +28,13 @@ import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.WebPage;
 import org.apache.wicket.markup.html.basic.Label;
 import org.apache.wicket.markup.html.link.Link;
+import org.apache.wicket.markup.html.link.StatelessLink;
 import org.apache.wicket.markup.html.pages.RedirectPage;
 import org.apache.wicket.model.IModel;
 import org.apache.wicket.model.LoadableDetachableModel;
 import org.apache.wicket.model.Model;
 import org.apache.wicket.protocol.http.ClientProperties;
 import org.apache.wicket.protocol.http.WebSession;
-import org.apache.wicket.request.http.WebResponse;
-import org.apache.wicket.util.time.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,7 +68,6 @@ public abstract class MasterPage extends WebPage {
      */
     public MasterPage() {
         super();
-
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Début instantiation de la master page.....");
         }
@@ -88,7 +86,7 @@ public abstract class MasterPage extends WebPage {
         feedBackPanelGeneral.setOutputMarkupId(true);
         htmlTag.add(feedBackPanelGeneral);
 
-        this.add(getLoginDialog());
+        add(getLoginDialog());
     }
 
     /**
@@ -107,18 +105,8 @@ public abstract class MasterPage extends WebPage {
         this.metaDescription = metaDescription;
         this.metaKeywords = metaKeywords;
 
-        StringBuilder titleInHeader = new StringBuilder(title);
-        titleInHeader.append(" - lesCastors.fr");
-
-        // Le titre qui se trouve dans la balise title (et donc qui s'affiche
-        // dans l'onglet du navigateur)
-        Label titleLbl = new Label("title", new Model<>(titleInHeader.toString()));
-        this.add(titleLbl);
-
-        // inserting the waitermodal at the bottom of the page
-        waiterModal = new WaiterModal("waiterModal");
-        this.add(waiterModal);
-
+        initWaiterModal();
+        initTitle(title);
         initComponentConnexion();
         initBreadcrumb();
         initTitleHeader(isPageWithTitleHeader, title, adresseImgBackground);
@@ -135,6 +123,31 @@ public abstract class MasterPage extends WebPage {
         this(metaDescription, metaKeywords, title, isPageWithTitleHeader, adresseImgBackground);
 
         this.useBreadcrumb = useBreadcrumb;
+    }
+
+    private void initWaiterModal(){
+        // inserting the waitermodal at the bottom of the page
+        waiterModal = new WaiterModal("waiterModal");
+        add(waiterModal);
+    }
+
+    private void initTitle(String title){
+        StringBuilder titleInHeader = new StringBuilder(title);
+        titleInHeader.append(" - lesCastors.fr");
+
+        // Le titre qui se trouve dans la balise title (et donc qui s'affiche
+        // dans l'onglet du navigateur)
+        Label titleLbl = new Label("title", new Model<>(titleInHeader.toString()));
+        this.add(titleLbl);
+
+        StatelessLink<Void> home = new StatelessLink<Void>("home") {
+            @Override
+            public void onClick() {
+                setResponsePage(Application.get().getHomePage());
+            }
+        };
+
+        add(home);
     }
 
     private void initBreadcrumb() {
@@ -242,7 +255,7 @@ public abstract class MasterPage extends WebPage {
 
             @Override
             public void onClick() {
-                this.setResponsePage(NouveauDevis.class);
+                setResponsePage(NouveauDevis.class);
             }
 
         };
@@ -335,7 +348,6 @@ public abstract class MasterPage extends WebPage {
             @Override
             public void onClick() {
                 SecurityUtils.getSubject().logout();
-                Session.get().invalidate();
                 this.setResponsePage(Accueil.class);
             }
         };
@@ -476,15 +488,6 @@ public abstract class MasterPage extends WebPage {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("Ajout des resources dans le header.....OK");
         }
-    }
-
-    @Override
-    protected void setHeaders(WebResponse response) {
-        super.setHeaders(response);
-        String version = PropertiesFileWeb.APP.getProperties().getProperty("app.web.version");
-
-        response.setHeader("ETag", version);
-        response.enableCaching(Duration.hours(2), WebResponse.CacheScope.PUBLIC);
     }
 
     /**
@@ -640,42 +643,42 @@ public abstract class MasterPage extends WebPage {
     }
 
     private void initLinkFooter() {
-        Link<String> footerAccueil = new Link<String>("footerAccueil") {
+       StatelessLink<String> footerAccueil = new StatelessLink<String>("footerAccueil") {
             @Override
             public void onClick() {
                 this.setResponsePage(Accueil.class);
             }
         };
 
-        Link<String> footerQuiSommesNous = new Link<String>("footerQuiSommesNous") {
+        StatelessLink<String> footerQuiSommesNous = new StatelessLink<String>("footerQuiSommesNous") {
             @Override
             public void onClick() {
                 this.setResponsePage(QuiSommeNous.class);
             }
         };
 
-        Link<String> footerFAQ = new Link<String>("footerFAQ") {
+        StatelessLink<String> footerFAQ = new StatelessLink<String>("footerFAQ") {
             @Override
             public void onClick() {
                 this.setResponsePage(FAQ.class);
             }
         };
 
-        Link<String> footerCGU = new Link<String>("footerCGU") {
+        StatelessLink<String> footerCGU = new StatelessLink<String>("footerCGU") {
             @Override
             public void onClick() {
                 this.setResponsePage(CGU.class);
             }
         };
 
-        Link<String> footerNosObjectifs = new Link<String>("footerNosObjectifs") {
+        StatelessLink<String> footerNosObjectifs = new StatelessLink<String>("footerNosObjectifs") {
             @Override
             public void onClick() {
                 this.setResponsePage(Objectif.class);
             }
         };
 
-        Link<String> footerNosEngagements = new Link<String>("footerNosEngagements") {
+        StatelessLink<String> footerNosEngagements = new StatelessLink<String>("footerNosEngagements") {
             @Override
             public void onClick() {
                 this.setResponsePage(NosEngagements.class);

@@ -48,8 +48,6 @@ public class Authentication implements Serializable {
      * @return True si l'utilisateur a fourni le bon couple user / mdp
      */
     public Boolean authenticate(String username, String password) {
-        Boolean isOk = null;
-
         UsernamePasswordToken token = new UsernamePasswordToken(username, password);
         Subject subject = SecurityUtils.getSubject();
 
@@ -59,50 +57,48 @@ public class Authentication implements Serializable {
                 subject.getSession(true);
             }
 
-            isOk = Boolean.TRUE;
         } catch (UnknownAccountException uae) {
             if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("Compte inconnu", uae);
             }
-            isOk = Boolean.FALSE;
+            return false;
         } catch (IncorrectCredentialsException ice) {
             if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("Credential incorrect", ice);
             }
-            isOk = Boolean.FALSE;
+            return false;
         } catch (LockedAccountException lae) {
             if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("Compte bloqué", lae);
             }
-            isOk = Boolean.FALSE;
+            return false;
         } catch (ExcessiveAttemptsException eae) {
             if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("Trop d'essai de connexion", eae);
             }
-            isOk = Boolean.FALSE;
+            return false;
         } catch (AuthenticationException ae) {
             if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("Probleme avec l'authentification", ae);
             }
-            isOk = Boolean.FALSE;
+            return false;
         }
 
-        if (isOk) {
+        if (subject.isAuthenticated()) {
             LoginDTO loginDTO = new LoginDTO();
             loginDTO.setLogin(username);
             ClientDTO client = utilisateurServiceREST.login(loginDTO);
             subject.getSession().setAttribute(CLIENT_KEY, client);
 
-            if(rolesUtils.checkRoles(TypeCompte.ARTISAN)){
+            if (rolesUtils.checkRoles(TypeCompte.ARTISAN)) {
                 EntrepriseDTO entrepriseDTO = artisanServiceREST.getEntrepriseInformationByArtisanLogin(client.getLogin());
                 subject.getSession().setAttribute(ENTREPRISE_KEY, entrepriseDTO);
             }
         }
-        return isOk;
+        return subject.isAuthenticated();
     }
 
     /**
-     *
      * @return Les informations du client connecté
      */
     public ClientDTO getCurrentUserInfo() {
@@ -114,12 +110,12 @@ public class Authentication implements Serializable {
      *
      * @return Les informations de l'entreprise
      */
-    public EntrepriseDTO getEntrepriseUserInfo(){
+    public EntrepriseDTO getEntrepriseUserInfo() {
         EntrepriseDTO entrepriseDTO = (EntrepriseDTO) SecurityUtils.getSubject().getSession().getAttribute(ENTREPRISE_KEY);
 
-        if(entrepriseDTO == null){
+        if (entrepriseDTO == null) {
             return new EntrepriseDTO();
-        } else{
+        } else {
             return entrepriseDTO;
         }
     }
@@ -135,6 +131,7 @@ public class Authentication implements Serializable {
 
     /**
      * Stocke en session les informations du client connecté
+     *
      * @param clientDTO
      */
     public void setCurrentUserInfo(ClientDTO clientDTO) {
@@ -153,9 +150,10 @@ public class Authentication implements Serializable {
 
     /**
      * Indique si le client est connecté ou pas.
+     *
      * @return
      */
-    public boolean isAuthenticated(){
+    public boolean isAuthenticated() {
         return SecurityUtils.getSubject().isAuthenticated();
     }
 

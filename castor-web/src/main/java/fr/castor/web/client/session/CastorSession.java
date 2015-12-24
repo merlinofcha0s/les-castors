@@ -11,11 +11,10 @@ import java.util.Locale;
 /**
  * Classe chargée d'authentifier l'utilisateur et de garder en mémoire les
  * informations de son compte.
- * 
+ *
  * @author Casaucau Cyril
- * 
  */
-public class BatimenSession extends AuthenticatedWebSession {
+public class CastorSession extends AuthenticatedWebSession {
 
     private static final long serialVersionUID = -3460138748198816904L;
 
@@ -25,7 +24,7 @@ public class BatimenSession extends AuthenticatedWebSession {
     private Roles roles;
     private String username = null;
 
-    public BatimenSession(Request request) {
+    public CastorSession(Request request) {
         super(request);
     }
 
@@ -42,7 +41,7 @@ public class BatimenSession extends AuthenticatedWebSession {
     @Override
     public boolean authenticate(String username, String password) {
         boolean isAuthenticated = authentication.authenticate(username, password);
-        if(isAuthenticated) {
+        if (isAuthenticated) {
             this.username = username;
         }
         return isAuthenticated;
@@ -53,4 +52,8 @@ public class BatimenSession extends AuthenticatedWebSession {
         return null;
     }
 
+    @Override
+    public void replaceSession() {
+
+    }
 }

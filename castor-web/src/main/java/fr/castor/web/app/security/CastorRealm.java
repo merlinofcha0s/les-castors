@@ -7,14 +7,26 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
-import javax.inject.Inject;
+import javax.enterprise.context.spi.CreationalContext;
+import javax.enterprise.inject.spi.Bean;
+import javax.enterprise.inject.spi.BeanManager;
+import javax.enterprise.inject.spi.CDI;
 import javax.inject.Named;
 
 @Named
 public class CastorRealm extends AuthorizingRealm {
 
-    @Inject
     private UtilisateurServiceREST utilisateurServiceREST;
+
+    public CastorRealm() {
+        //get reference to BeanManager
+        BeanManager bm = CDI.current().getBeanManager();
+        Bean<UtilisateurServiceREST> bean = (Bean<UtilisateurServiceREST>) bm.getBeans(UtilisateurServiceREST.class).iterator().next();
+        CreationalContext<UtilisateurServiceREST> ctx = bm.createCreationalContext(bean);
+
+        //get reference to your CDI managed bean
+        utilisateurServiceREST = (UtilisateurServiceREST) bm.getReference(bean, UtilisateurServiceREST.class, ctx);
+    }
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
