@@ -43,6 +43,7 @@
 
         <!-- Config Arquillian -->
         <jboss.home>D:\dev\wildfly-8.2.1.Final</jboss.home>
+        <jboss.management.port>9991</jboss.management.port>
 
         <!-- Email -->
         <mandrill.api.key>OOBiT-ollMvq7_JaMjyDOQ</mandrill.api.key>
@@ -477,6 +478,7 @@
 
                 <!-- Config Arquillian -->
                 <jboss.home>/opt/wildfly</jboss.home>
+                <jboss.management.port>9990</jboss.management.port>
                 <!-- Email -->
                 <mandrill.api.key>AqM7U8jIxFR7GURuupcsIA</mandrill.api.key>
                 <!-- <mandrill.api.key>OOBiT-ollMvq7_JaMjyDOQ</mandrill.api.key> -->

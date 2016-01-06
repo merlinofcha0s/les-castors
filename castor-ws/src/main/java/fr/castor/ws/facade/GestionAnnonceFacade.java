@@ -150,6 +150,8 @@ public class GestionAnnonceFacade {
                             .getClient().getEmail(), nouvelleAnnonce.getDemandeur().getCleActivation(), urlFrontend);
                 }
             }
+            //On notifie la boite mail de l'équipe
+            emailService.envoiMailAEquipeCreationAnnonce(nouvelleAnnonce);
         } catch (EmailException | MandrillApiError | IOException e) {
             if (LOGGER.isErrorEnabled()) {
                 LOGGER.error("Erreur d'envoi de mail", e);

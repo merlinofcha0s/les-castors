@@ -8,14 +8,13 @@ import fr.castor.core.constant.UrlPage;
 import fr.castor.core.enums.PropertiesFileGeneral;
 import fr.castor.core.exception.EmailException;
 import fr.castor.dto.ContactMailDTO;
-import fr.castor.dto.constant.Categorie;
 import fr.castor.dto.enums.TypeCompte;
 import fr.castor.ws.dao.EmailDAO;
 import fr.castor.ws.entity.Annonce;
-import fr.castor.ws.entity.CategorieMetier;
-import fr.castor.ws.entity.MotCle;
 import fr.castor.ws.entity.Notification;
+import fr.castor.ws.enums.PropertiesFileWS;
 import fr.castor.ws.utils.ClientUtils;
+import fr.castor.ws.utils.EmailUtils;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
@@ -24,7 +23,6 @@ import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import java.io.IOException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Classe de gestion d'envoi de mail.
@@ -39,6 +37,9 @@ public class EmailService {
 
     @Inject
     private EmailDAO emailDAO;
+
+    @Inject
+    private EmailUtils emailUtils;
 
     /**
      * Preparation et envoi d'un mail de confirmation, dans le but d'informer
@@ -64,18 +65,9 @@ public class EmailService {
                 nouvelleAnnonce.getDemandeur().getLogin(), nomDestinataire);
         recipients.put(nomDestinataire.toString(), nouvelleAnnonce.getDemandeur().getEmail());
 
-        String motclesForMail = nouvelleAnnonce.getMotcles().stream().map(motCle -> motCle.getMotCle()).collect(Collectors.joining(", "));
+        String motclesForMail = emailUtils.transformMotsClesToCSV(nouvelleAnnonce.getMotcles());
 
-        Set<String> categorie = new HashSet<>();
-
-        for (MotCle motCle : nouvelleAnnonce.getMotcles()) {
-            for (CategorieMetier categorieMetier : motCle.getCategoriesMetier()) {
-                String nomCateg = Categorie.getNameByCode(categorieMetier.getCategorieMetier());
-                categorie.add(nomCateg);
-            }
-        }
-
-        String categorieForMail = categorie.stream().collect(Collectors.joining(", "));
+        String categorieForMail = emailUtils.transformCategorieToCSV(nouvelleAnnonce.getMotcles());
 
         // On charge le contenu
         Map<String, String> templateContent = new HashMap<>();
@@ -280,5 +272,47 @@ public class EmailService {
 
         notificationMail.setGlobalMergeVars(mergevars);
         return templateContent;
+    }
+
+    /**
+     * Preparation et envoi d'un mail de confirmation, dans le but d'informer
+     * l'utilisateur que l'annonce a correctement été enregistrée.
+     *
+     * @param nouvelleAnnonce L'objet que l'on a recu du frontend
+     * @return vrai si l'envoi s'est bien passé.
+     * @throws EmailException
+     * @throws MandrillApiError
+     * @throws IOException
+     */
+    public boolean envoiMailAEquipeCreationAnnonce(Annonce nouvelleAnnonce) throws EmailException,
+            MandrillApiError, IOException {
+
+        // On prepare l'entete, on ne mets pas de titre.
+        MandrillMessage notificationEquipe = emailDAO.prepareEmail(null);
+
+        // On construit les recepteurs
+        Map<String, String> recipients = new HashMap<>();
+        recipients.put("Equipe les castors", PropertiesFileWS.EMAIL.getProperties().getProperty("email.box.team"));
+
+        StringBuilder lienAccesAnnonce = new StringBuilder();
+        lienAccesAnnonce.append(PropertiesFileGeneral.URL.getProperties().getProperty("url.frontend.web"));
+        lienAccesAnnonce.append(UrlPage.ANNONCE.replace("/", ""));
+        lienAccesAnnonce.append("?idAnnonce=");
+        lienAccesAnnonce.append(nouvelleAnnonce.getHashID());
+
+        // On charge les variables dynamique à remplacer
+        List<MergeVar> mergevars = new LinkedList<>();
+        MergeVar mergeVar = new MergeVar(EmailConstant.TAG_EMAIL_NOTIFICATION_EQUIPE_NOUVELLE_ANNONCE_ID, lienAccesAnnonce.toString());
+        mergevars.add(mergeVar);
+        notificationEquipe.setGlobalMergeVars(mergevars);
+
+        // On charge les recepteurs
+        emailDAO.prepareRecipient(notificationEquipe, recipients, true);
+
+        // On envoi le mail
+        boolean noError = emailDAO.sendEmailTemplate(notificationEquipe,
+                EmailConstant.TEMPLATE_NOTIFICATION_EQUIPE_NOUVELLE_ANNONCE, new HashMap<>());
+
+        return noError;
     }
 }
