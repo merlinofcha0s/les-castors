@@ -93,8 +93,7 @@ public final class MesAnnonces extends MasterPage {
         initMesActionsLink();
         afficherAnciennesAnnonces();
         afficherAnciennesNotifications();
-
-
+        
         this.setOutputMarkupId(true);
     }
 

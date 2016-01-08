@@ -2,6 +2,7 @@ package fr.castor.ws.service;
 
 import fr.castor.core.constant.CodeRetourService;
 import fr.castor.dto.AvisDTO;
+import fr.castor.ws.dao.AnnonceDAO;
 import fr.castor.ws.dao.NotationDAO;
 import fr.castor.ws.entity.Annonce;
 import fr.castor.ws.entity.Artisan;
@@ -30,6 +31,9 @@ public class NotationService {
     @Inject
     private NotationDAO notationDAO;
 
+    @Inject
+    private AnnonceDAO annonceDAO;
+
     /**
      * Crée une entité Avis et la persiste dans la BDD
      * 
@@ -46,16 +50,19 @@ public class NotationService {
     @TransactionAttribute(TransactionAttributeType.MANDATORY)
     public int noterArtisanService(Annonce annonce, Artisan artisan, String commentaire, Double score) {
 
-        Avis nouvelleNotation = new Avis();
-        nouvelleNotation.setAnnonce(annonce);
-        nouvelleNotation.setArtisan(artisan);
-        nouvelleNotation.setCommentaire(commentaire);
-        nouvelleNotation.setScore(score);
-        nouvelleNotation.setDateAvis(new Date());
+        Avis nouvelleAvis = new Avis();
+        nouvelleAvis.setAnnonce(annonce);
+        nouvelleAvis.setArtisan(artisan);
+        nouvelleAvis.setCommentaire(commentaire);
+        nouvelleAvis.setScore(score);
+        nouvelleAvis.setDateAvis(new Date());
 
-        nouvelleNotation = notationDAO.createMandatory(nouvelleNotation);
+        nouvelleAvis = notationDAO.createMandatory(nouvelleAvis);
 
-        if (nouvelleNotation != null) {
+        annonce.setAvis(nouvelleAvis);
+        annonceDAO.update(annonce);
+
+        if (nouvelleAvis != null) {
             return CodeRetourService.RETOUR_OK;
         } else {
             return CodeRetourService.RETOUR_KO;
@@ -66,15 +73,15 @@ public class NotationService {
     public List<AvisDTO> getNotationBySiret(String siret, int maxResult){
         List<AvisDTO> notationsDTO = new ArrayList<>();
 
-        List<Avis> notations = notationDAO.getNotationByEntrepriseSiret(siret, maxResult);
+        List<Avis> listAvis = notationDAO.getNotationByEntrepriseSiret(siret, maxResult);
 
         ModelMapper mapper = new ModelMapper();
 
-        for(Avis notation : notations){
-            AvisDTO notationDTO = mapper.map(notation, AvisDTO.class);
-            notationDTO.setNomEntreprise(notation.getArtisan().getEntreprise().getNomComplet());
+        for(Avis avis : listAvis){
+            AvisDTO notationDTO = mapper.map(avis, AvisDTO.class);
+            notationDTO.setNomEntreprise(avis.getArtisan().getEntreprise().getNomComplet());
 
-            Client client = notation.getAnnonce().getDemandeur();
+            Client client = avis.getAnnonce().getDemandeur();
             StringBuilder nomClient = new StringBuilder();
             ClientUtils.chooseNomClient(client.getNom(), client.getPrenom(), client.getLogin(), nomClient);
 
