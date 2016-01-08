@@ -13,14 +13,28 @@ import java.util.List;
  */
 public class LocalisationEvent extends AbstractEvent {
 
-    private final List<LocalisationDTO> localisationDTOMemeCodePostal;
+    private List<LocalisationDTO> localisationDTOMemeCodePostal;
+    private String codePostal;
 
     public LocalisationEvent(AjaxRequestTarget target, List<LocalisationDTO> localisationDTO) {
         super(target);
         this.localisationDTOMemeCodePostal = localisationDTO;
     }
 
+    public LocalisationEvent(AjaxRequestTarget target, String codePostal) {
+        super(target);
+        this.codePostal = codePostal;
+    }
+
     public List<LocalisationDTO> getLocalisationDTOMemeCodePostal() {
         return localisationDTOMemeCodePostal;
+    }
+
+    public String getCodePostal() {
+        return codePostal;
+    }
+
+    public void setCodePostal(String codePostal) {
+        this.codePostal = codePostal;
     }
 }

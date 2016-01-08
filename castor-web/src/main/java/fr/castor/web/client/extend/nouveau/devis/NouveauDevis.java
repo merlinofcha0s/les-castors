@@ -5,7 +5,6 @@ import fr.castor.core.constant.UrlPage;
 import fr.castor.core.exception.FrontEndException;
 import fr.castor.core.security.HashHelper;
 import fr.castor.dto.ClientDTO;
-import fr.castor.dto.LocalisationDTO;
 import fr.castor.dto.aggregate.CreationAnnonceDTO;
 import fr.castor.web.app.enums.Etape;
 import fr.castor.web.app.security.Authentication;
@@ -455,15 +454,15 @@ public class NouveauDevis extends MasterPage {
 
         if (event.getPayload() instanceof LocalisationEvent) {
             LocalisationEvent localisationEvent = (LocalisationEvent) event.getPayload();
-            if (!localisationEvent.getLocalisationDTOMemeCodePostal().isEmpty()) {
-                nouvelleAnnonce.setCodePostal(localisationEvent.getLocalisationDTOMemeCodePostal().get(0).getCodePostal());
-                nouvelleAnnonce.setDepartement(Integer.valueOf(localisationEvent.getLocalisationDTOMemeCodePostal().get(0).getDepartement()));
+            if (!localisationEvent.getCodePostal().isEmpty()) {
+                nouvelleAnnonce.setCodePostal(localisationEvent.getCodePostal());
+                nouvelleAnnonce.setDepartement(Integer.valueOf(localisationEvent.getCodePostal().substring(0,2)));
             }
 
-            for (LocalisationDTO localisationDTO : localisationEvent.getLocalisationDTOMemeCodePostal()) {
+           /* for (LocalisationDTO localisationDTO : localisationEvent.getLocalisationDTOMemeCodePostal()) {
                 nouvelleAnnonce.getVillesPossbles().clear();
                 nouvelleAnnonce.getVillesPossbles().add(localisationDTO.getCommune());
-            }
+            }*/
 
             nouvelleAnnonce.setNumeroEtape(2);
 

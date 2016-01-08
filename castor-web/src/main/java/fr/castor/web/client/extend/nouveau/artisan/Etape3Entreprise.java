@@ -56,7 +56,7 @@ public class Etape3Entreprise extends Panel {
     private List<CategorieMetierDTO> categoriesSelectionnees;
     private WebMarkupContainer containerActivite;
     private CreationPartenaireDTO nouveauPartenaire;
-    private String INIT_VILLE_TYPE_AHEAD;
+    //private String INIT_VILLE_TYPE_AHEAD;
     private StringBuilder INIT_MULTI_CATEGORIE_CHECKBOX;
     private StringBuilder INIT_TOOLTIP_CATEGORIE;
     private String classCSSTooltip;
@@ -99,7 +99,7 @@ public class Etape3Entreprise extends Panel {
 
         rolesUtils = new RolesUtils();
 
-        if (rolesUtils.checkRoles(TypeCompte.ARTISAN)) {
+        /*if (rolesUtils.checkRoles(TypeCompte.ARTISAN)) {
             if (isInModification) {
                 titreModificationEntrepriseModel.setObject("Modifier mon entreprise");
                 List<LocalisationDTO> localisationDTOs = csvCodePostalReader.getLocalisationDTOs().get(nouveauPartenaire.getAdresse().getCodePostal());
@@ -109,7 +109,7 @@ public class Etape3Entreprise extends Panel {
             } else {
                 titreModificationEntrepriseModel.setObject("Renseignez les informations de l'entreprise");
             }
-        }
+        }*/
 
         Label titreModificationEntreprise = new Label("titreModificationEntreprise", titreModificationEntrepriseModel);
 
@@ -256,11 +256,11 @@ public class Etape3Entreprise extends Panel {
         INIT_MULTI_CATEGORIE_CHECKBOX.append("});");
         INIT_MULTI_CATEGORIE_CHECKBOX.append("});");
 
-        INIT_VILLE_TYPE_AHEAD = JSCommun.buildSourceTypeAhead(nouveauPartenaire.getVillesPossbles(), "#villeField");
+        //INIT_VILLE_TYPE_AHEAD = JSCommun.buildSourceTypeAhead(nouveauPartenaire.getVillesPossbles(), "#villeField");
 
         response.render(OnDomReadyHeaderItem.forScript(INIT_TOOLTIP_CATEGORIE.toString()));
         response.render(OnDomReadyHeaderItem.forScript(INIT_MULTI_CATEGORIE_CHECKBOX.toString()));
-        response.render(OnDomReadyHeaderItem.forScript(INIT_VILLE_TYPE_AHEAD));
+        //response.render(OnDomReadyHeaderItem.forScript(INIT_VILLE_TYPE_AHEAD));
     }
 
     private void getCSSClassForCategorie(ComponentTag tag, boolean isInModification) {
@@ -279,7 +279,7 @@ public class Etape3Entreprise extends Panel {
     }
 
     private void refreshJS(AjaxRequestTarget target) {
-        target.appendJavaScript(INIT_VILLE_TYPE_AHEAD);
+        //target.appendJavaScript(INIT_VILLE_TYPE_AHEAD);
         target.appendJavaScript(INIT_MULTI_CATEGORIE_CHECKBOX);
         target.appendJavaScript("$('.checkbox').checkbox()");
         target.appendJavaScript(INIT_TOOLTIP_CATEGORIE);

@@ -11,7 +11,6 @@ import fr.castor.web.client.event.FeedBackPanelEvent;
 import fr.castor.web.client.extend.nouveau.devis.event.LocalisationEvent;
 import fr.castor.web.client.master.MasterPage;
 import org.apache.wicket.ajax.AjaxRequestTarget;
-import org.apache.wicket.ajax.form.AjaxFormValidatingBehavior;
 import org.apache.wicket.ajax.markup.html.form.AjaxSubmitLink;
 import org.apache.wicket.event.Broadcast;
 import org.apache.wicket.markup.head.CssHeaderItem;
@@ -22,7 +21,6 @@ import org.apache.wicket.markup.html.form.StatelessForm;
 import org.apache.wicket.markup.html.form.TextField;
 import org.apache.wicket.markup.html.panel.Panel;
 import org.apache.wicket.model.Model;
-import org.apache.wicket.util.string.AppendingStringBuffer;
 import org.apache.wicket.validation.validator.PatternValidator;
 
 import javax.inject.Inject;
@@ -69,30 +67,35 @@ public class Etape1 extends Panel {
 
                 Map<String, List<LocalisationDTO>> localisationDTOMap = csvCodePostalReader.getLocalisationDTOs();
 
-                if(localisationDTOMap.containsKey(codePostal.getDefaultModelObject())){
-                    //Chargement des départements que l'on autorise
-                    Properties departementProperties = PropertiesFileWeb.DEPARTEMENT_ALLOWED.getProperties();
-                    String[] departementsAllowed = departementProperties.getProperty("departement.allowed").split(",");
-                    boolean departementIsAllowed = false;
+                //Chargement des départements que l'on autorise
+                Properties departementProperties = PropertiesFileWeb.DEPARTEMENT_ALLOWED.getProperties();
+                String[] departementsAllowed = departementProperties.getProperty("departement.allowed").split(",");
+                boolean departementIsAllowed = false;
 
-                    //Récuperation des informations de localisation
-                    List<LocalisationDTO> localisationsDTO = localisationDTOMap.get(codePostal.getDefaultModelObject());
+                //Récuperation des informations de localisation
+                //List<LocalisationDTO> localisationsDTO = localisationDTOMap.get(codePostal.getDefaultModelObject());
 
-                    //On compare le departement de l'utilisateur avec ceux du fichier
-                    for(String departementAllowed : departementsAllowed){
-                        if(!localisationsDTO.isEmpty() && localisationsDTO.get(0).getDepartement().equals(departementAllowed)){
-                            departementIsAllowed = true;
-                        }
+                String codePostalValeur = "";
+
+                //On compare le departement de l'utilisateur avec ceux du fichier
+                for (String departementAllowed : departementsAllowed) {
+                    codePostalValeur = (String) codePostal.getDefaultModelObject();
+                    String departementExtracted = codePostalValeur.substring(0, 2);
+
+                    if (departementExtracted.equals(departementAllowed)) {
+                        departementIsAllowed = true;
                     }
 
-                    if(departementIsAllowed){
-                        LocalisationEvent localisationEvent = new LocalisationEvent(target, localisationsDTO);
-                        target.getPage().send(target.getPage(), Broadcast.BREADTH, localisationEvent);
-                    }else{
-                        target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Pour le moment, notre service n'est pas disponible dans votre département, veuillez nous contacter pour des amples informations.", FeedbackMessageLevel.ERROR));
-                    }
-                }else{
-                    target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Nous n'avons pas pu trouver votre code postal, veuillez réessayer ultérieurement ou contactez nous", FeedbackMessageLevel.ERROR));
+                   /* if (!localisationsDTO.isEmpty() && localisationsDTO.get(0).getDepartement().equals(departementAllowed)) {
+                        departementIsAllowed = true;
+                    }*/
+                }
+
+                if (departementIsAllowed) {
+                    LocalisationEvent localisationEvent = new LocalisationEvent(target, codePostalValeur);
+                    target.getPage().send(target.getPage(), Broadcast.BREADTH, localisationEvent);
+                } else {
+                    target.getPage().send(target.getPage(), Broadcast.BREADTH, new FeedBackPanelEvent(target, "Pour le moment, notre service n'est pas disponible dans votre département, veuillez nous contacter pour des amples informations.", FeedbackMessageLevel.ERROR));
                 }
             }
 

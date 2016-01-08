@@ -2,7 +2,6 @@ package fr.castor.web.client.extend.nouveau.artisan;
 
 import fr.castor.core.constant.UrlPage;
 import fr.castor.core.exception.FrontEndException;
-import fr.castor.dto.LocalisationDTO;
 import fr.castor.dto.aggregate.CreationPartenaireDTO;
 import fr.castor.web.app.enums.Etape;
 import fr.castor.web.client.component.ContactezNous;
@@ -269,15 +268,15 @@ public class NouveauArtisan extends MasterPage {
 
         if (event.getPayload() instanceof LocalisationEvent) {
             LocalisationEvent localisationEvent = (LocalisationEvent) event.getPayload();
-            if (!localisationEvent.getLocalisationDTOMemeCodePostal().isEmpty()) {
-                nouveauPartenaire.getAdresse().setCodePostal(localisationEvent.getLocalisationDTOMemeCodePostal().get(0).getCodePostal());
-                nouveauPartenaire.getAdresse().setDepartement(Integer.valueOf(localisationEvent.getLocalisationDTOMemeCodePostal().get(0).getDepartement()));
+            if (!localisationEvent.getCodePostal().isEmpty()) {
+                nouveauPartenaire.getAdresse().setCodePostal(localisationEvent.getCodePostal());
+                nouveauPartenaire.getAdresse().setDepartement(Integer.valueOf(localisationEvent.getCodePostal().substring(0,2)));
             }
 
-            for(LocalisationDTO localisationDTO : localisationEvent.getLocalisationDTOMemeCodePostal()){
+           /* for(LocalisationDTO localisationDTO : localisationEvent.getLocalisationDTOMemeCodePostal()){
                 nouveauPartenaire.getVillesPossbles().clear();
                 nouveauPartenaire.getVillesPossbles().add(localisationDTO.getCommune());
-            }
+            }*/
 
             nouveauPartenaire.setNumeroEtape(2);
 

@@ -1,6 +1,5 @@
 package fr.castor.web.client.extend.nouveau.artisan;
 
-import fr.castor.dto.CategorieMetierDTO;
 import fr.castor.dto.aggregate.CreationPartenaireDTO;
 import fr.castor.dto.constant.ValidatorConstant;
 import fr.castor.dto.enums.StatutJuridique;
@@ -8,7 +7,6 @@ import fr.castor.web.client.behaviour.ErrorHighlightBehavior;
 import fr.castor.web.client.behaviour.border.RequiredBorderBehaviour;
 import fr.castor.web.client.component.CastorDatePicker;
 import fr.castor.web.client.validator.SiretValidator;
-import fr.castor.web.client.validator.VilleValidator;
 import org.apache.wicket.markup.html.WebMarkupContainer;
 import org.apache.wicket.markup.html.form.DropDownChoice;
 import org.apache.wicket.markup.html.form.Form;
@@ -19,13 +17,9 @@ import org.apache.wicket.validation.validator.DateValidator;
 import org.apache.wicket.validation.validator.PatternValidator;
 import org.apache.wicket.validation.validator.RangeValidator;
 import org.apache.wicket.validation.validator.StringValidator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Form de l'etape 3 permettant au nouvel artisan de renseigner les informayions
@@ -39,8 +33,8 @@ public class Etape3EntrepriseForm extends Form<CreationPartenaireDTO> {
 
     private WebMarkupContainer fieldContainer;
 
-    @Inject
-    private VilleValidator villeValidator;
+    //@Inject
+    //private VilleValidator villeValidator;
 
     public Etape3EntrepriseForm(final String id, final IModel<CreationPartenaireDTO> model, final boolean isInModification) {
         super(id, model);
@@ -117,8 +111,8 @@ public class Etape3EntrepriseForm extends Form<CreationPartenaireDTO> {
         villeField.add(StringValidator.maximumLength(ValidatorConstant.VILLE_MAX));
         villeField.add(new ErrorHighlightBehavior());
         villeField.add(new RequiredBorderBehaviour());
-        villeValidator.setCodepostalField(codePostalField);
-        villeField.add(villeValidator);
+        //villeValidator.setCodepostalField(codePostalField);
+        //villeField.add(villeValidator);
 
         TextField<Integer> departementField = new TextField<>("adresse.departement");
         departementField.setRequired(true);

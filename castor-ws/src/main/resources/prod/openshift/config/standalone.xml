@@ -482,7 +482,6 @@
         <interface name="public">
             <loopback-address value="${env.OPENSHIFT_WILDFLY_IP}"/>
         </interface>
-        <!-- TODO - only show this if the jacorb subsystem is added  -->
         <interface name="unsecure">
             <!--
               ~  Used for IIOP sockets in the standard configuration.

@@ -63,13 +63,13 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
 
     private FileFieldValidatorAndLoaderBehaviour fileFieldValidatorBehaviour;
     private String idAnnonce;
-    private String initVilleTypeAhead;
+    //private String initVilleTypeAhead;
 
     @Inject
     private TelephonePresentValidator telephonePresentValidator;
 
-    @Inject
-    private VilleValidator villeValidator;
+    //@Inject
+    //private VilleValidator villeValidator;
 
     private MotCle motCleComposant;
 
@@ -186,8 +186,8 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
         villeField.add(StringValidator.maximumLength(ValidatorConstant.VILLE_MAX));
         villeField.add(new ErrorHighlightBehavior());
         villeField.add(new RequiredBorderBehaviour());
-        villeValidator.setCodepostalField(codePostalField);
-        villeField.add(villeValidator);
+       // villeValidator.setCodepostalField(codePostalField);
+        //villeField.add(villeValidator);
 
         WebMarkupContainer containerField = new WebMarkupContainer("containerField");
         containerField.setOutputMarkupId(true);
@@ -264,7 +264,7 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
         add(containerField);
     }
 
-    @Override
+    /*@Override
     protected void onComponentTag(ComponentTag tag) {
         super.onComponentTag(tag);
         initVilleTypeAhead = JSCommun.buildSourceTypeAhead(nouvelleAnnonce.getVillesPossbles(), "#villeField");
@@ -274,7 +274,7 @@ public class Etape3AnnonceForm extends Form<CreationAnnonceDTO> {
     public void renderHead(IHeaderResponse response) {
         initVilleTypeAhead = JSCommun.buildSourceTypeAhead(nouvelleAnnonce.getVillesPossbles(), "#villeField");
         response.render(OnDomReadyHeaderItem.forScript(initVilleTypeAhead));
-    }
+    }*/
 
     public void setIdAnnonce(String idAnnonce) {
         this.idAnnonce = idAnnonce;

@@ -31,9 +31,7 @@ public class HashHelper {
     private HashHelper() {
 
     }
-
-    // TODO Pas sur que ces valeurs soient correct en 2013, a checker.
-
+    
     /**
      * Génère un hash de manière sécurisée
      * 

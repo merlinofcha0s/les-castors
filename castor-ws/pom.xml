@@ -46,10 +46,11 @@
         <jboss.management.port>9991</jboss.management.port>
 
         <!-- Email -->
+        <!-- <mandrill.api.key>AqM7U8jIxFR7GURuupcsIA</mandrill.api.key> -->
         <mandrill.api.key>OOBiT-ollMvq7_JaMjyDOQ</mandrill.api.key>
         <email.active>true</email.active>
         <email.confirmation.by.team>true</email.confirmation.by.team>
-        <email.box.team>contactlescastors@gmail.com</email.box.team>
+        <email.box.team>contactlescastorsintegration@gmail.com</email.box.team>
 
         <!-- URL du frontend -->
         <url.frontend.web>https://127.0.0.1:8181/castor-web/</url.frontend.web>
@@ -484,7 +485,7 @@
                 <!-- <mandrill.api.key>OOBiT-ollMvq7_JaMjyDOQ</mandrill.api.key> -->
                 <email.active>true</email.active>
                 <email.confirmation.by.team>true</email.confirmation.by.team>
-                <email.box.team>contactlescastors@gmail.com</email.box.team>
+                <email.box.team>contactlescastorsintegration@gmail.com</email.box.team>
 
                 <!-- Gestion des images -->
                 <prop.temp.img.dir>/usr/share/castor-temp/img/</prop.temp.img.dir>

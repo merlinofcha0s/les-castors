@@ -4,6 +4,7 @@ import fr.castor.core.constant.UrlPage;
 import fr.castor.web.client.component.ContactezNous;
 import fr.castor.web.client.master.MasterPage;
 import org.apache.wicket.markup.head.IHeaderResponse;
+import org.apache.wicket.markup.html.link.Link;
 
 /**
  * Page nos engagements
@@ -15,8 +16,23 @@ public class NosEngagements extends MasterPage {
     public NosEngagements() {
         super("Nos engagements", "Engagement qualité entreprise artisan particulier", "Nos engagements", true, "img/bg_title1.jpg");
 
+        Link contactezNousArtisan = new Link("contactezNousArtisan") {
+            @Override
+            public void onClick() {
+                setResponsePage(Contact.class);
+            }
+        };
+
+        Link contactezNousClient = new Link("contactezNousClient") {
+            @Override
+            public void onClick() {
+                setResponsePage(Contact.class);
+            }
+        };
+
         ContactezNous contactezNousComposant = new ContactezNous("contactezNous");
-        add(contactezNousComposant);
+
+        add(contactezNousComposant, contactezNousArtisan, contactezNousClient);
     }
 
     @Override
