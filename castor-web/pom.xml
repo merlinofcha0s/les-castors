@@ -42,7 +42,7 @@
         <app.temp.img.dir.test>D:/dev/temp/img/</app.temp.img.dir.test>
 
         <!-- Logs -->
-        <logs.address>c:/logs/log-batimen</logs.address>
+        <logs.address>c:/logs/log-castor</logs.address>
         <logs.archives>${logs.address}/archived</logs.archives>
         <logs.lvl>DEBUG</logs.lvl>
 
@@ -411,12 +411,12 @@
                 <app.address.chrome.driver>/var/lib/chrome-driver/chromedriver</app.address.chrome.driver>
                 <app.temp.img.dir.test>/usr/share/castor-temp/img-test/</app.temp.img.dir.test>
                 <!-- Logs -->
-                <logs.address>/usr/share/log-batimen</logs.address>
+                <logs.address>/usr/share/log-castor</logs.address>
                 <logs.archives>${logs.address}/archived</logs.archives>
                 <logs.lvl>DEBUG</logs.lvl>
 
                 <!-- Logs pour les tests -->
-                <logs.test.address>/usr/share/log-test-batimen</logs.test.address>
+                <logs.test.address>/usr/share/log-test-castor</logs.test.address>
                 <logs.test.archives>${logs.test.address}/archived</logs.test.archives>
                 <logs.test.lvl>DEBUG</logs.test.lvl>
 
@@ -432,7 +432,7 @@
                 <database.name>batimen</database.name>
                 <datasource.url>jdbc:postgresql://${database.address}:5432/${database.name}</datasource.url>
                 <database.login>postgres</database.login>
-                <database.password>0tgtIDKFaB</database.password>
+                <database.password>yourpassword</database.password>
             </properties>
             <build>
                 <resources>
@@ -463,7 +463,7 @@
                         <configuration>
                             <jboss-home>/opt/wildfly</jboss-home>
                             <username>raiden</username>
-                            <password>fDJ.oE$r[h</password>
+                            <password>yourpassword</password>
                             <filename>${project.artifactId}.war</filename>
                             <artifactId>${project.artifactId}</artifactId>
                         </configuration>

@@ -25,12 +25,12 @@
         <database.password>123456</database.password>
 
         <!-- Logs -->
-        <logs.address>c:/logs/log-batimen/dev</logs.address>
+        <logs.address>c:/logs/log-castor/dev</logs.address>
         <logs.archives>${logs.address}/archived</logs.archives>
         <logs.lvl>DEBUG</logs.lvl>
 
         <!-- Logs pour les tests -->
-        <logs.test.address>c:/logs/log-batimen/test</logs.test.address>
+        <logs.test.address>c:/logs/log-castor/test</logs.test.address>
         <logs.test.archives>${logs.test.address}/archived</logs.test.archives>
         <logs.test.lvl>DEBUG</logs.test.lvl>
 
@@ -47,7 +47,7 @@
 
         <!-- Email -->
         <!-- <mandrill.api.key>AqM7U8jIxFR7GURuupcsIA</mandrill.api.key> -->
-        <mandrill.api.key>OOBiT-ollMvq7_JaMjyDOQ</mandrill.api.key>
+        <mandrill.api.key>yourmandrillappkey</mandrill.api.key>
         <email.active>true</email.active>
         <email.confirmation.by.team>true</email.confirmation.by.team>
         <email.box.team>contactlescastorsintegration@gmail.com</email.box.team>
@@ -58,8 +58,8 @@
         <!-- Cloudinary MGT -->
         <prop.temp.img.dir>D:/dev/temp/</prop.temp.img.dir>
         <prop.image.cloudinary.cloud_name>lescastors</prop.image.cloudinary.cloud_name>
-        <prop.image.cloudinary.api_key>445898463279963</prop.image.cloudinary.api_key>
-        <prop.image.cloudinary.api_secret>av_FudaoLvP0Oz5VPqspL8_WPpA</prop.image.cloudinary.api_secret>
+        <prop.image.cloudinary.api_key>APIKEYCLOUDINARY</prop.image.cloudinary.api_key>
+        <prop.image.cloudinary.api_secret>api_secret_cloudinary</prop.image.cloudinary.api_secret>
         <prop.image.is.test>true</prop.image.is.test>
         <app.temp.img.dir.test>D:/dev/temp/img/</app.temp.img.dir.test>
     </properties>
@@ -206,8 +206,6 @@
                     </execution>
                 </executions>
                 <dependencies>
-                    <!--   Yes, you really must have an explicit dependency on the thing you
-                         want to enhance -->
                     <dependency>
                         <groupId>${project.groupId}</groupId>
                         <artifactId>castor-ws</artifactId>
@@ -459,7 +457,7 @@
                 <database.address>127.0.0.1</database.address>
                 <database.name>batimen_test</database.name>
                 <database.login>postgres</database.login>
-                <database.password>0tgtIDKFaB</database.password>
+                <database.password>yourdbpassword</database.password>
 
                 <!-- Logs -->
                 <logs.address>/usr/share/log-batimen</logs.address>
@@ -481,8 +479,7 @@
                 <jboss.home>/opt/wildfly</jboss.home>
                 <jboss.management.port>9990</jboss.management.port>
                 <!-- Email -->
-                <mandrill.api.key>AqM7U8jIxFR7GURuupcsIA</mandrill.api.key>
-                <!-- <mandrill.api.key>OOBiT-ollMvq7_JaMjyDOQ</mandrill.api.key> -->
+                <mandrill.api.key>yourapikey</mandrill.api.key>
                 <email.active>true</email.active>
                 <email.confirmation.by.team>true</email.confirmation.by.team>
                 <email.box.team>contactlescastorsintegration@gmail.com</email.box.team>
@@ -511,7 +508,7 @@
                         <configuration>
                             <jboss-home>/opt/wildfly</jboss-home>
                             <username>raiden</username>
-                            <password>fDJ.oE$r[h</password>
+                            <password>yourwildflypassword</password>
                             <filename>${project.artifactId}.war</filename>
                             <artifactId>${project.artifactId}</artifactId>
                         </configuration>
@@ -571,8 +568,7 @@
                 <hibernate.generate_statistics>false</hibernate.generate_statistics>
 
                 <!-- Email -->
-                <mandrill.api.key>AqM7U8jIxFR7GURuupcsIA</mandrill.api.key>
-                <!-- <mandrill.api.key>OOBiT-ollMvq7_JaMjyDOQ</mandrill.api.key> -->
+                <mandrill.api.key>yourapikey</mandrill.api.key>
                 <email.active>true</email.active>
                 <email.confirmation.by.team>true</email.confirmation.by.team>
                 <email.box.team>contactlescastors@gmail.com</email.box.team>

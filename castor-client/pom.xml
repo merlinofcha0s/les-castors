@@ -131,7 +131,7 @@
                 <ws.isprod>false</ws.isprod>
                 <!-- Accés WS -->
                 <ws.user.login>castoruser</ws.user.login>
-                <ws.user.password>KWIT4A{3*U</ws.user.password>
+                <ws.user.password>yourwebservicepassword</ws.user.password>
             </properties>
         </profile>
         <profile>
@@ -147,7 +147,7 @@
                 <ws.isprod>true</ws.isprod>
                 <!-- Accés WS -->
                 <ws.user.login>castoruserws</ws.user.login>
-                <ws.user.password>L%rkaGqhra</ws.user.password>
+                <ws.user.password>yourwspassword</ws.user.password>
             </properties>
         </profile>
     </profiles>

@@ -1,0 +1,553 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+CAUTION: Do not modify this file unless you know what you are doing.
+         Unexpected results may occur if the code is changed deliberately.
+-->
+<dbmodel>
+<schema name="public" protected="true" fill-color="#e1e1e1" sql-disabled="true">
+</schema>
+
+<database name="batimenDB" encoding="UTF8">
+</database>
+
+<table name="Client" gen-alter-cmds="true">
+	<schema name="public"/>
+	<position x="1100" y="487"/>
+	<column name="id" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="civilite">
+		<type name="character varying" length="4"/>
+	</column>
+	<column name="prenom">
+		<type name="character varying" length="20"/>
+	</column>
+	<column name="nom">
+		<type name="character varying" length="20"/>
+	</column>
+	<column name="numeroTel">
+		<type name="character varying" length="10"/>
+	</column>
+	<column name="login" not-null="true">
+		<type name="character varying" length="40"/>
+	</column>
+	<column name="password" not-null="true">
+		<type name="character varying" length="80"/>
+	</column>
+	<column name="email" not-null="true">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="dateInscription" not-null="true">
+		<type name="date"/>
+	</column>
+	<column name="isActive" not-null="true">
+		<type name="boolean"/>
+	</column>
+	<column name="cleActivation">
+		<type name="varchar" length="64"/>
+	</column>
+<constraint name="id_pk" type="pk-constr" factor="10" table="public.&quot;Client&quot;">
+	<columns names="id" ref-type="src-columns"/>
+</constraint>
+</table>
+
+<table name="Annonce">
+	<schema name="public"/>
+	<position x="1081" y="103"/>
+	<column name="id" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="descriptif" not-null="true">
+		<type name="character varying" length="500"/>
+	</column>
+	<column name="typeContact" not-null="true">
+		<type name="character varying" length="45"/>
+	</column>
+	<column name="delaiIntervention" not-null="true">
+		<type name="int4" length="15"/>
+	</column>
+	<column name="dateCreation" not-null="true">
+		<type name="date"/>
+	</column>
+	<column name="dateMAJ" not-null="true">
+		<type name="date"/>
+	</column>
+	<column name="nbConsultation" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="etatAnnonce" not-null="true">
+		<type name="int4"/>
+	</column>
+	<column name="categorieMetier" not-null="true">
+		<type name="character varying" length="40"/>
+	</column>
+	<column name="sousCategorieMetier" not-null="true">
+		<type name="character varying" length="40"/>
+	</column>
+	<column name="typeTravaux" not-null="true">
+		<type name="int4"/>
+	</column>
+	<column name="hashID" not-null="true">
+		<type name="varchar" length="255"/>
+	</column>
+	<column name="selHashID" not-null="true">
+		<type name="varchar" length="255"/>
+	</column>
+	<constraint name="id_pk_Annonce" type="pk-constr" factor="10" table="public.&quot;Annonce&quot;">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="User_has_many_Annonce" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="13" constr-indexes="1"
+	 src-table="public.&quot;Client&quot;"
+	 dst-table="public.&quot;Annonce&quot;"
+	 src-required="true" dst-required="false">
+	<label ref-type="src-label">
+		<position x="0" y="0"/>
+	</label>
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<table name="Artisan" gen-alter-cmds="true">
+	<schema name="public"/>
+	<position x="1098" y="826"/>
+	<column name="id" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="numeroTelephone" not-null="true">
+		<type name="bigint"/>
+	</column>
+	<column name="login" not-null="true">
+		<type name="character varying" length="40"/>
+	</column>
+	<column name="password" not-null="true">
+		<type name="character varying" length="80"/>
+	</column>
+	<column name="email" not-null="true">
+		<type name="character varying" length="50"/>
+	</column>
+	<column name="dateInscription" not-null="true">
+		<type name="date"/>
+	</column>
+	<column name="civilite" not-null="true">
+		<type name="int4" length="4"/>
+	</column>
+	<column name="prenom" not-null="true">
+		<type name="character varying" length="20"/>
+	</column>
+	<column name="nom" not-null="true">
+		<type name="character varying"/>
+	</column>
+	<column name="cleActivation">
+		<type name="varchar" length="64"/>
+	</column>
+	<column name="isActive" not-null="true">
+		<type name="boolean"/>
+	</column>
+<constraint name="id_artisan" type="pk-constr" factor="10" table="public.&quot;Artisan&quot;">
+	<columns names="id" ref-type="src-columns"/>
+</constraint>
+</table>
+
+<table name="adresse">
+	<schema name="public"/>
+	<position x="556" y="161"/>
+	<column name="id" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="adresse" not-null="true">
+		<type name="character varying" length="255"/>
+	</column>
+	<column name="complementAdresse" not-null="true">
+		<type name="character varying" length="255"/>
+	</column>
+	<column name="codePostal" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="ville" not-null="true">
+		<type name="character varying" length="45"/>
+	</column>
+	<column name="departement" not-null="true">
+		<type name="int4"/>
+	</column>
+	<constraint name="id_adresse" type="pk-constr" factor="10" table="public.adresse">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<table name="Entreprise">
+	<schema name="public"/>
+	<position x="579" y="486"/>
+	<column name="id" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="nomComplet" not-null="true">
+		<type name="character varying" length="40"/>
+	</column>
+	<column name="statutJuridique" not-null="true">
+		<type name="int4" length="5"/>
+	</column>
+	<column name="nbEmployee">
+		<type name="integer"/>
+	</column>
+	<column name="logo">
+		<type name="character varying" length="255"/>
+	</column>
+	<column name="dateCreation" not-null="true">
+		<type name="date"/>
+	</column>
+	<column name="SIRET" not-null="true">
+		<type name="varchar" length="14"/>
+	</column>
+	<column name="specialite">
+		<type name="varchar" length="50"/>
+	</column>
+	<column name="isVerifier">
+		<type name="boolean"/>
+	</column>
+	<constraint name="id_entreprise" type="pk-constr" factor="10" table="public.&quot;Entreprise&quot;">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="Entreprise_has_one_adresse" type="rel11"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="9" constr-indexes="1,2"
+	 src-table="public.adresse"
+	 dst-table="public.&quot;Entreprise&quot;"
+	 src-required="true" dst-required="false">
+	<label ref-type="src-label">
+		<position x="-0.0667725" y="14.6"/>
+	</label>
+</relationship>
+
+<relationship name="Annonce_has_one_adresse" type="rel11"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="14" constr-indexes="2,3"
+	 src-table="public.adresse"
+	 dst-table="public.&quot;Annonce&quot;"
+	 src-required="true" dst-required="false"/>
+
+<table name="Paiement">
+	<schema name="public"/>
+	<position x="36" y="537"/>
+	<column name="id" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="numeroCarte" not-null="true">
+		<type name="character varying" length="255"/>
+	</column>
+	<column name="dateExpiration" not-null="true">
+		<type name="character varying" length="255"/>
+	</column>
+	<column name="codeSecurite" not-null="true">
+		<type name="character varying"/>
+	</column>
+	<constraint name="id_paiement" type="pk-constr" factor="10" table="public.&quot;Paiement&quot;">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="Entreprise_has_one_Paiement" type="rel11"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="10" constr-indexes="3,4"
+	 src-table="public.&quot;Paiement&quot;"
+	 dst-table="public.&quot;Entreprise&quot;"
+	 src-required="true" dst-required="false">
+	<label ref-type="name-label">
+		<position x="0" y="0"/>
+	</label>
+</relationship>
+
+<relationship name="Artisan_has_one_Entreprise" type="rel11"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="11" constr-indexes="1,2"
+	 src-table="public.&quot;Entreprise&quot;"
+	 dst-table="public.&quot;Artisan&quot;"
+	 src-required="true" dst-required="false">
+	<label ref-type="name-label">
+		<position x="-82.0243" y="-19.2985"/>
+	</label>
+</relationship>
+
+<relationship name="many_Artisan_has_many_Annonce" type="relnn"
+	 src-col-pattern="{sc}_{st}" dst-col-pattern="{sc}_{dt}"
+	 pk-pattern="{gt}_pk" uq-pattern="{gt}_uq"
+	 src-fk-pattern="{st}_fk" dst-fk-pattern="{dt}_fk"
+	 src-table="public.&quot;Artisan&quot;"
+	 dst-table="public.&quot;Annonce&quot;"
+	 src-required="false" dst-required="false"	 table-name="many_Artisan_has_many_Annonce">
+	<line>
+		<position x="1569" y="544"/>
+	</line>
+	<label ref-type="name-label">
+		<position x="145.976" y="98.0515"/>
+	</label>
+</relationship>
+
+<table name="avis">
+	<schema name="public"/>
+	<position x="1597" y="902"/>
+	<column name="id">
+		<type name="integer"/>
+	</column>
+	<column name="score" not-null="true">
+		<type name="double precision"/>
+	</column>
+	<column name="commentaire" not-null="true">
+		<type name="character varying" length="500"/>
+	</column>
+	<column name="date" not-null="true">
+		<type name="timestamp"/>
+	</column>
+	<constraint name="id_notation" type="pk-constr" factor="10" table="public.avis">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="Artisan_has_many_notation" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="4" constr-indexes="1"
+	 src-table="public.&quot;Artisan&quot;"
+	 dst-table="public.avis"
+	 src-required="true" dst-required="false"/>
+
+<relationship name="notation_has_one_Annonce" type="rel11"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="15" constr-indexes="4,5"
+	 src-table="public.&quot;Annonce&quot;"
+	 dst-table="public.avis"
+	 src-required="false" dst-required="true">
+	<line>
+		<position x="1741" y="240"/>
+	</line>
+	<label ref-type="src-label">
+		<position x="4.00002" y="-16.8743"/>
+	</label>
+</relationship>
+
+<relationship name="adresse_has_one_Paiement" type="rel11"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="4" constr-indexes="1,2"
+	 src-table="public.&quot;Paiement&quot;"
+	 dst-table="public.adresse"
+	 src-required="false" dst-required="true">
+	<line>
+		<position x="181.5" y="218.2"/>
+	</line>
+	<label ref-type="name-label">
+		<position x="20.7257" y="4.95148"/>
+	</label>
+</relationship>
+
+<table name="CategorieMetier">
+	<schema name="public"/>
+	<position x="764" y="308"/>
+	<column name="id">
+		<type name="bigint"/>
+	</column>
+	<column name="categorieMetier" not-null="true">
+		<type name="smallint"/>
+	</column>
+	<column name="motCle">
+		<type name="varchar" length="5"/>
+	</column>
+</table>
+
+<relationship name="Entreprise_has_many_CategorieMetier" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="3" constr-indexes="0"
+	 src-table="public.&quot;Entreprise&quot;"
+	 dst-table="public.&quot;CategorieMetier&quot;"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="-1.02429" y="12.7015"/>
+	</label>
+</relationship>
+
+<table name="Permissions">
+	<schema name="public"/>
+	<position x="648" y="892"/>
+	<column name="id" not-null="true">
+		<type name="integer"/>
+	</column>
+	<column name="typeCompte" not-null="true">
+		<type name="int4" length="255"/>
+	</column>
+	<constraint name="id" type="pk-constr" factor="10" table="public.&quot;Permissions&quot;">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="Artisan_has_many_Permissions" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="2" constr-indexes="1"
+	 src-table="public.&quot;Artisan&quot;"
+	 dst-table="public.&quot;Permissions&quot;"
+	 src-required="false" dst-required="false"/>
+
+<relationship name="Client_has_many_Permissions" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="3" constr-indexes="2"
+	 src-table="public.&quot;Client&quot;"
+	 dst-table="public.&quot;Permissions&quot;"
+	 src-required="false" dst-required="false">
+	<label ref-type="name-label">
+		<position x="119.476" y="-14.0485"/>
+	</label>
+</relationship>
+
+<table name="notification">
+	<schema name="public"/>
+	<position x="1446" y="647"/>
+	<column name="id">
+		<type name="integer"/>
+	</column>
+	<column name="typeNotification" not-null="true">
+		<type name="smallint"/>
+	</column>
+	<column name="dateNotification" not-null="true">
+		<type name="timestamp"/>
+	</column>
+	<column name="pourQuiNotification" not-null="true">
+		<type name="int4"/>
+	</column>
+	<column name="statutNotification" not-null="true">
+		<type name="int4"/>
+	</column>
+	<constraint name="id" type="pk-constr" factor="10" table="public.notification">
+		<columns names="id" ref-type="src-columns"/>
+	</constraint>
+</table>
+
+<relationship name="Client_has_many_notification" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="5" constr-indexes="1"
+	 src-table="public.&quot;Client&quot;"
+	 dst-table="public.notification"
+	 src-required="false" dst-required="false">
+	<line>
+		<position x="1562.5" y="575.7"/>
+	</line>
+	<label ref-type="name-label">
+		<position x="3.47571" y="-64.0485"/>
+	</label>
+</relationship>
+
+<relationship name="Artisan_has_many_notification" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="6" constr-indexes="2"
+	 src-table="public.&quot;Artisan&quot;"
+	 dst-table="public.notification"
+	 src-required="false" dst-required="false">
+	<line>
+		<position x="1251" y="704.2"/>
+	</line>
+	<label ref-type="src-label">
+		<position x="19.9" y="-3.19995"/>
+	</label>
+	<label ref-type="dst-label">
+		<position x="-4.19998" y="14.7"/>
+	</label>
+	<label ref-type="name-label">
+		<position x="-156.774" y="2.95148"/>
+	</label>
+</relationship>
+
+<relationship name="Entreprise_has_many_Annonce" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="16" constr-indexes="6"
+	 src-table="public.&quot;Entreprise&quot;"
+	 dst-table="public.&quot;Annonce&quot;"
+	 src-required="false" dst-required="false"/>
+
+<table name="image">
+	<schema name="public"/>
+	<position x="293" y="58"/>
+	<column name="id" not-null="true">
+		<type name="bigserial"/>
+	</column>
+	<column name="url" not-null="true">
+		<type name="varchar" length="255"/>
+	</column>
+</table>
+
+<relationship name="Annonce_has_many_image" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="2" constr-indexes="0"
+	 src-table="public.&quot;Annonce&quot;"
+	 dst-table="public.image"
+	 src-required="false" dst-required="false">
+	<line>
+		<position x="1495" y="238"/>
+	<position x="1487" y="85"/>
+	</line>
+	<label ref-type="src-label">
+		<position x="8.00002" y="16.8817"/>
+	</label>
+	<label ref-type="dst-label">
+		<position x="13" y="16.3575"/>
+	</label>
+	<label ref-type="name-label">
+		<position x="114.976" y="-2.54852"/>
+	</label>
+</relationship>
+
+<relationship name="Entreprise_has_many_image" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="3" constr-indexes="1"
+	 src-table="public.&quot;Entreprise&quot;"
+	 dst-table="public.image"
+	 src-required="false" dst-required="false">
+	<line>
+		<position x="725" y="340.45"/>
+	<position x="398.5" y="340.45"/>
+	</line>
+</relationship>
+
+<relationship name="Annonce_has_many_CategorieMetier" type="rel1n"
+	 src-col-pattern="{sc}_{st}"
+	 pk-pattern="{dt}_pk" uq-pattern="{dt}_uq"
+	 src-fk-pattern="{st}_fk"
+	 col-indexes="4" constr-indexes="1"
+	 src-table="public.&quot;Annonce&quot;"
+	 dst-table="public.&quot;CategorieMetier&quot;"
+	 src-required="false" dst-required="false"/>
+
+</dbmodel>
