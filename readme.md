@@ -1,10 +1,10 @@
 ## Synopsis
 
-Project that help people to find good craftsmens. Basically, you sign in, post the work you want to do in your appartment / house, then craftsmen contact you. You can choose between them through their ranks (5 stars) and comments from other client who does their work with them.
+Project that helps people to find good craftsmen. Basically, you sign in, post the work you want to be done in your appartment / house, then craftsmen contact you. You can choose among them referering to their ranks (5 stars) and comments from other clients who does their work with them.
 
 ## Motivation
 
-I've worked alone for the code of this project and the plan was to build a startup based on this website with other colleagues non tech
+I've worked alone to produce the code of this project and my plan was to build a startup based on this website with other non-tech colleagues.
 
 ## Installation
 
@@ -17,7 +17,7 @@ I've worked alone for the code of this project and the plan was to build a start
 - Account in Cloudinary (http://cloudinary.com/)
 - Key for Recaptcha 2 (https://www.google.com/recaptcha/admin)
 
-I have embedded the Wildfly already configured in the runtime folder
+You'll find the "standalone.xml" for the Wildfly configuration in the runtime folder.
 
 ## Build the application
 `mvn clean install`
@@ -38,13 +38,11 @@ Basically there are two kinds of tests, integration test for webservice with arq
 
 ### Webservice test (Arquillian)
 
-For running webservice test you have to get wildfly and fill the jboss.home property in the castor-ws pom.
+In order to run the webservice test you have to get wildfly and fill the jboss.home property in the castor-ws pom.
 
 ### Selenium test
 
-For running selenium test you have to deploy the application (webservice + webapp) on wildlfy.
-For that you can deploy through and IDE (Eclipse or IntelliJ) or manually
-I haven't set up the automatic deployment through maven on dev env
+ In order to run the selenium test you have to deploy the application (webservice + webapp) on Wildlfy. For that you can deploy by means of an IDE (Eclipse or IntelliJ) or manually. I haven't set up the automatic deployment through maven on dev env.
 
 ### Launch test
 
